@@ -1,10 +1,7 @@
 package com.h.pixeldroid.api
 
-import android.util.Log
 import com.h.pixeldroid.objects.*
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory

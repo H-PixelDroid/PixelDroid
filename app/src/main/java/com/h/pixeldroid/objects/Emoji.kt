@@ -9,3 +9,4 @@ data class Emoji(
     //Optional attributes
     val category: String? = null
 )
+

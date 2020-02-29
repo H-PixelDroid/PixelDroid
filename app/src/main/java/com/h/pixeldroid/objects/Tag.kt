@@ -7,3 +7,4 @@ data class Tag(
     //Optional attributes
     val history: List<History>? = emptyList()
 )
+
