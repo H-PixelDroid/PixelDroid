@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.epfl.sdp">
+    package="com.h.pixeldroid">
 
     <application
         android:allowBackup="true"
