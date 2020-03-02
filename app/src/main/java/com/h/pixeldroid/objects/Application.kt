@@ -1,4 +1,9 @@
 package com.h.pixeldroid.objects
 
-class Application {
-}
+data class Application (
+    //Required attributes
+    val name: String,
+    //Optional attributes
+    val website: String? = null,
+    val vapid_key: String? = null
+)
