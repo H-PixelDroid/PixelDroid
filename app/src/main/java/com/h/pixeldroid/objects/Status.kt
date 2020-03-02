@@ -14,12 +14,12 @@ data class Status(
     val visibility: Visibility,
     val sensitive: Boolean,
     val spoiler_text: String,
-    val media_attachments: ArrayList<Attachment>,
+    val media_attachments: List<Attachment>,
     val application: Application,
     //Rendering attributes
-    val mentions: ArrayList<Mention>,
-    val tags: ArrayList<Tag>,
-    val emojis: ArrayList<Emoji>,
+    val mentions: List<Mention>,
+    val tags: List<Tag>,
+    val emojis: List<Emoji>,
     //Informational attributes
     val reblogs_count: Int,
     val favourites_count: Int,

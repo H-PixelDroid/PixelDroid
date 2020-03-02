@@ -4,7 +4,6 @@ package com.h.pixeldroid.objects
 Represents a user and their associated profile.
 https://docs.joinmastodon.org/entities/account/
  */
-
 data class Account(
         //Base attributes
         val id: String,
