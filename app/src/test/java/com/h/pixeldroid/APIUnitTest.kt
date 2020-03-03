@@ -16,7 +16,7 @@ import retrofit2.Call
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class APIUnitTest {
     @get:Rule
     public var wireMockRule = WireMockRule(8089)
     /*@Test
