@@ -15,5 +15,5 @@ data class Attachment(
 )
 
 enum class AttachmentType {
-
+    unknown, image, gifv, video, audio
 }

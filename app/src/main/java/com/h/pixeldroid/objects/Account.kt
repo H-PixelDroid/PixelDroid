@@ -28,8 +28,8 @@ data class Account(
         val followers_count: Int,
         val following_count: Int,
         //Optional attributes
-        val moved: Account?,
-        val fields: List<Field> = emptyList(),
+        val moved: Account? = null,
+        val fields: List<Field>? = emptyList(),
         val bot: Boolean =  false,
         val source: Source? = null
 )

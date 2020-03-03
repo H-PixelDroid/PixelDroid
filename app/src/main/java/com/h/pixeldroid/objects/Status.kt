@@ -42,8 +42,7 @@ data class Status(
     val pinned: Boolean
     )
 {
-    //TODO make this work with the de-serialization
     enum class Visibility {
-        PUBLIC, UNLISTED, PRIVATE, DIRECT
+        public, unlisted, private, direct
     }
 }

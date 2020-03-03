@@ -26,25 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
 
-//Define the Retrofit request//
-
-        val pixelfedAPI = Retrofit.Builder()
-
-//Set the API’s base URL//
-
-            .baseUrl(BASE_URL)
-
-//Specify the converter factory to use for serialization and deserialization//
-
-            .addConverterFactory(GsonConverterFactory.create())
-
-//Add a call adapter factory to support RxJava return types//
-
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-
-//Build the Retrofit instance//
-
-            .build().create(PixelfedAPI::class.java)
+        val pixelfedAPI = PixelfedAPI.create(BASE_URL)
 
         pixelfedAPI.timelinePublic(null, null, null, null, null)
             .enqueue(object : Callback<List<Status>> {
