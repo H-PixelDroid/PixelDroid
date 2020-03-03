@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PixelDroid</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="take_a_picture">Take a Picture</string>
+    <string name="favourite">Favourite</string>
+    <string name="account">Account</string>
 </resources>
