@@ -12,8 +12,8 @@ data class Attachment(
     //TODO meta
     val description: String? = null,
     val blurhash: String? = null
-)
-
-enum class AttachmentType {
-    unknown, image, gifv, video, audio
+) {
+    enum class AttachmentType {
+        unknown, image, gifv, video, audio
+    }
 }
