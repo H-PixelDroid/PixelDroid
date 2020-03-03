@@ -6,7 +6,7 @@ apply plugin: 'jacoco'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
-compileOptions {
+    compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
