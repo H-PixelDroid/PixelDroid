@@ -122,8 +122,13 @@ class APIUnitTest {
             assert( f.media_attachments == listOf(Attachment(id="15888", type= Attachment.AttachmentType.image, url="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB.jpeg",
                 preview_url="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB_thumb.jpeg",
                 remote_url=null, text_url=null, description=null, blurhash=null)) &&
-            f.application.name=="web" && f.application.website==null && f.application.vapid_key==null && f.mentions==emptyList<Mention>() &&
-            f.tags== listOf(Tag(name="hiking", url="https://pixelfed.de/discover/tags/hiking", history=null), Tag(name="nature", url="https://pixelfed.de/discover/tags/nature", history=null), Tag(name="rotavicentina", url="https://pixelfed.de/discover/tags/rotavicentina", history=null))&&
+            f.application.name=="web" && f.application.website==null && f.application.vapid_key==null && f.mentions==emptyList<Mention>())
+
+        val firstTag =f.tags[0]
+        val secondTag= f.tags[1]
+        val thirdTag = f.tags[2]
+
+            assert(firstTag.name=="hiking" && firstTag.url=="https://pixelfed.de/discover/tags/hiking" && firstTag.history==null &&
             f.emojis== emptyList<Emoji>() && f.reblogs_count==0 && f.favourites_count==0&& f.replies_count==0 && f.url=="https://pixelfed.de/p/Miike/140364967936397312")
         assert(f.in_reply_to_id==null && f.in_reply_to_account==null && f.reblog==null && f.poll==null && f.card==null && f.language==null && f.text==null && !f.favourited && !f.reblogged && !f.muted && !f.bookmarked && !f.pinned)
     }
