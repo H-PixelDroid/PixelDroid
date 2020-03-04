@@ -106,7 +106,6 @@ class APIUnitTest {
             tags= listOf(Tag(name="hiking", url="https://pixelfed.de/discover/tags/hiking", history=null), Tag(name="nature", url="https://pixelfed.de/discover/tags/nature", history=null), Tag(name="rotavicentina", url="https://pixelfed.de/discover/tags/rotavicentina", history=null)),
             emojis= emptyList(), reblogs_count=0, favourites_count=0, replies_count=0, url="https://pixelfed.de/p/Miike/140364967936397312",
             in_reply_to_id=null, in_reply_to_account=null, reblog=null, poll=null, card=null, language=null, text=null, favourited=false, reblogged=false, muted=false, bookmarked=false, pinned=false)
-
             assertEquals(referenceFirstStatus, f)
             //same as before, but otherwise coverage is not detected for the data classes
             assert(
@@ -119,10 +118,11 @@ class APIUnitTest {
                         f.account.avatar_static=="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"&&
                         f.account.header==""&& f.account.header_static=="") && !f.account.locked && f.account.emojis== emptyList<Emoji>() && !f.account.discoverable && f.account.created_at=="2019-12-24T15:42:35.000000Z" && f.account.statuses_count==71 && f.account.followers_count==14 && f.account.following_count==0 && f.account.moved==null && f.account.fields==null && !f.account.bot && f.account.source==null && f.content == """Day 8 <a href="https://pixelfed.de/discover/tags/rotavicentina?src=hash" title="#rotavicentina" class="u-url hashtag" rel="external nofollow noopener">#rotavicentina</a> <a href="https://pixelfed.de/discover/tags/hiking?src=hash" title="#hiking" class="u-url hashtag" rel="external nofollow noopener">#hiking</a> <a href="https://pixelfed.de/discover/tags/nature?src=hash" title="#nature" class="u-url hashtag" rel="external nofollow noopener">#nature</a>""" && f.visibility==Status.Visibility.public) && !f.sensitive && f.spoiler_text==""
             )
-            assert( f.media_attachments == listOf(Attachment(id="15888", type= Attachment.AttachmentType.image, url="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB.jpeg",
-                preview_url="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB_thumb.jpeg",
-                remote_url=null, text_url=null, description=null, blurhash=null)) &&
-            f.application.name=="web" && f.application.website==null && f.application.vapid_key==null && f.mentions==emptyList<Mention>())
+            val attchmnt = f.media_attachments[0]
+            assert(attchmnt.id == "15888" && attchmnt.type == Attachment.AttachmentType.image && attchmnt.url=="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB.jpeg" &&
+                    attchmnt.preview_url =="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB_thumb.jpeg" &&
+                    attchmnt.remote_url ==null && attchmnt.text_url==null && attchmnt.description==null && attchmnt.blurhash==null )
+            assert( f.application.name=="web" && f.application.website==null && f.application.vapid_key==null && f.mentions==emptyList<Mention>())
 
         val firstTag =f.tags[0]
         val secondTag= f.tags[1]
