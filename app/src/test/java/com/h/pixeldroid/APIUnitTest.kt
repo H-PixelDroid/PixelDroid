@@ -132,4 +132,24 @@ class APIUnitTest {
             f.emojis== emptyList<Emoji>() && f.reblogs_count==0 && f.favourites_count==0&& f.replies_count==0 && f.url=="https://pixelfed.de/p/Miike/140364967936397312")
         assert(f.in_reply_to_id==null && f.in_reply_to_account==null && f.reblog==null && f.poll==null && f.card==null && f.language==null && f.text==null && !f.favourited && !f.reblogged && !f.muted && !f.bookmarked && !f.pinned)
     }
+
+    @Test
+    fun register_application(){
+        stubFor(
+            post(urlEqualTo("/api/v1/apps"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(""" {"id":3197,"name":"Pixeldroid","website":null,"redirect_uri":"urn:ietf:wg:oauth:2.0:oob","client_id":3197,"client_secret":"hhRwLupqUJPghKsZzpZtxNV67g5DBdPYCqW6XE3m","vapid_key":null}"""
+                        )))
+        val call: Call<Application> = PixelfedAPI.create("http://localhost:8089")
+            .registerApplication("Pixeldroid", "urn:ietf:wg:oauth:2.0:oob", "read write follow")
+        val application: Application = call.execute().body()!!
+        assertEquals("3197", application.client_id)
+        assertEquals("hhRwLupqUJPghKsZzpZtxNV67g5DBdPYCqW6XE3m", application.client_secret)
+        assertEquals("Pixeldroid", application.name)
+        assertEquals(null, application.website)
+        assertEquals(null, application.vapid_key)
+    }
 }
