@@ -4,94 +4,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.h.pixeldroid.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="677dp">
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:background="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-        </ScrollView>
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/bottomAppBar2"
-                style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="bottom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/activity_main_home_btn"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/home"
+                    android:padding="10dp"
+                    android:background="#00FF00"
                     app:srcCompat="@drawable/ic_home_white_24dp" />
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/activity_main_search_btn"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/search"
+                    android:padding="10dp"
+                    android:background="#123456"
                     app:srcCompat="@drawable/ic_search_white_24dp" />
 
                 <ImageButton
-                    android:id="@+id/imageButton3"
+                    android:id="@+id/activity_main_camera_btn"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/take_a_picture"
+                    android:padding="10dp"
+                    android:background="#0000FF"
                     app:srcCompat="@drawable/ic_photo_camera_white_24dp" />
 
                 <ImageButton
-                    android:id="@+id/imageButton4"
+                    android:id="@+id/activity_main_favorite_btn"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/favourite"
+                    android:padding="10dp"
+                    android:background="#987654"
                     app:srcCompat="@drawable/ic_star_white_24dp" />
 
                 <ImageButton
-                    android:id="@+id/imageButton5"
+                    android:id="@+id/activity_main_account_btn"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/account"
+                    android:background="#bbbbbb"
                     app:srcCompat="@drawable/ic_person_white_24dp" />
             </LinearLayout>
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
