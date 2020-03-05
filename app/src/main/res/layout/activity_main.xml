@@ -16,6 +16,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
                 android:orientation="horizontal">
 
                 <ImageButton
@@ -23,8 +24,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@android:color/transparent"
                     android:padding="10dp"
-                    android:background="#00FF00"
                     app:srcCompat="@drawable/ic_home_white_24dp" />
 
                 <ImageButton
@@ -33,7 +34,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:padding="10dp"
-                    android:background="#123456"
+                    android:background="@android:color/transparent"
                     app:srcCompat="@drawable/ic_search_white_24dp" />
 
                 <ImageButton
@@ -42,7 +43,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:padding="10dp"
-                    android:background="#0000FF"
+                    android:background="@android:color/transparent"
                     app:srcCompat="@drawable/ic_photo_camera_white_24dp" />
 
                 <ImageButton
@@ -51,7 +52,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:padding="10dp"
-                    android:background="#987654"
+                    android:background="@android:color/transparent"
                     app:srcCompat="@drawable/ic_star_white_24dp" />
 
                 <ImageButton
@@ -59,7 +60,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#bbbbbb"
+                    android:background="@android:color/transparent"
                     app:srcCompat="@drawable/ic_person_white_24dp" />
             </LinearLayout>
 
