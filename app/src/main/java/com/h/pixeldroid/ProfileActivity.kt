@@ -8,16 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.ImageConverter.Companion.retrieveBitmapFromUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.reflect.Array.get
-import java.nio.file.Paths.get
 
-class ProfileActivity() : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
