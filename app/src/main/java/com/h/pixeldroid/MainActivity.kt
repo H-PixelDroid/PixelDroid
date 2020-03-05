@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.objects.Post
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,6 +15,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,7 +54,6 @@ class MainActivity : AppCompatActivity() {
             .enqueue(object : Callback<List<Status>> {
                 override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
                     if (response.code() == 200) {
-                        Log.e("OK", response.body().toString())
                         statuses = response.body() as ArrayList<Status>?
                     }
                 }
@@ -65,6 +66,14 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener((View.OnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent) }))
+            startActivity(intent)
+        }))
+
+        val postButton = findViewById<Button>(R.id.postButton)
+        postButton.setOnClickListener((View.OnClickListener {
+            val intent = Intent(this, PostActivity::class.java)
+            intent.putExtra("postTag" ,Post(statuses?.get(0)))
+            startActivity(intent)
+        }))
     }
 }
