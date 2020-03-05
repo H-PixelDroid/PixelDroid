@@ -1,35 +1,50 @@
 package com.h.pixeldroid
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.h.pixeldroid.models.Post
-import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
+import com.h.pixeldroid.objects.Post
 
 /**
  * @brief Shows a post using data retrieved from status
- * @param post, must be passed via the intent
+ * @param Profile, must be passed via the intent
  */
 class PostActivity : AppCompatActivity() {
-    companion object {
-        const val POST_TAG = "postTag"
-    }
+
+    //Class used to pass arguments to the activity
+    class Arguments(val post : Post) {
+
+        companion object {
+            fun createFromIntent(intent: Intent): Arguments {
+                return Arguments(
+                    post = intent.getSerializableExtra("postTag") as Post
+                )
+            }
+        }
+        fun startActivity(context: Context) {
+            val intent = Intent(context, PostActivity::class.java)
+            intent.putExtra("postTag", post)
+            context.startActivity(intent)
+        }
+
+    } // Arguments class
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
-        val post : Post? = intent.getSerializableExtra(POST_TAG) as Post?
+        val post : Post? = intent.getSerializableExtra("posTag") as Post?
 
-        post?.setupPost(this)
+        //Set post fields
+        Log.e("LOG: ", post?.getUsername().toString())
+        findViewById<TextView>(R.id.username).text = post?.getUsername()
+        findViewById<TextView>(R.id.description).text = post?.getDescription()
 
-        //Load images into their respective locations
-        if (post != null) {
-            setImageViewFromURL(this@PostActivity, post.getPostUrl(), findViewById(R.id.postPicture))
-            setImageViewFromURL(this@PostActivity, post.getProfilePicUrl(), findViewById(R.id.profilePic))
-        }
+
     }
+
+
 }
