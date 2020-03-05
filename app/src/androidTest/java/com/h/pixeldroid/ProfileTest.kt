@@ -6,7 +6,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.Matchers.not
 
 import org.junit.Rule
@@ -16,8 +15,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ProfileTest {
     @get:Rule
-    var activityRule: ActivityScenarioRule<MainActivity>
-            = ActivityScenarioRule(MainActivity::class.java)
+    var activityRule: ActivityScenarioRule<MainActivityMarie>
+            = ActivityScenarioRule(MainActivityMarie::class.java)
 
     @Test
     fun testFollowersTextView() {
