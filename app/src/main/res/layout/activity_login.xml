@@ -14,7 +14,7 @@
         android:layout_marginEnd="161dp"
         android:layout_marginBottom="425dp"
         android:onClick="connexion"
-        android:text="@string/connect"
+        android:text="Connect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -29,7 +29,7 @@
         android:layout_marginBottom="100dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/pixelfed_url"
+        android:text="pixelfed_url"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
