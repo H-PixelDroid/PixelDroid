@@ -1,24 +1,26 @@
 package com.h.pixeldroid.utils
 
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import com.bumptech.glide.Glide
-import com.h.pixeldroid.models.Post
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class ImageConverter {
     companion object {
-        fun setImageViewFromURL(activity: AppCompatActivity, url : String?, view : ImageView) {
-            Glide.with(activity).load(url).into(view)
-        }
-
-        fun setImageViewFromURL(fragment: Fragment,  url : String?, view : ImageView) {
-            Glide.with(fragment).load(url).into(view)
-        }
-
-        fun setImageViewFromURL(fragmentActivity: FragmentActivity,  url : String?, view : ImageView) {
-            Glide.with(fragmentActivity).load(url).into(view)
+        fun retrieveBitmapFromUrl(src : String?) : Bitmap? {
+            return try {
+                val url: URL = URL(src)
+                val connection : HttpURLConnection = url.openConnection() as HttpURLConnection
+                connection.doInput = true
+                connection.connect()
+                val input : InputStream = connection.inputStream
+                BitmapFactory.decodeStream(input)
+            } catch (e : IOException) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 }
