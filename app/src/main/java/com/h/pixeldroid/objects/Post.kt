@@ -10,7 +10,7 @@ class Post(private val status: Status?) : Serializable {
 
     fun getPostImage(context : AppCompatActivity) : ImageView {
         //Retrieve the url from the list of media attachments
-        val imgUrl = status?.component9()?.get(0)?.component3()
+        val imgUrl = status?.component9()?.get(0)?.component3()!!
 
         //Convert retrieved bitmap to an ImageView and return it
         val imageView: ImageView = ImageView(context)
@@ -34,15 +34,5 @@ class Post(private val status: Status?) : Serializable {
        }
         return name!!
    }
-
-    fun getNLikes() : CharSequence {
-        val nLikes : Int = status?.favourites_count ?: 0
-        return "$nLikes Likes"
-    }
-
-    fun getNShares() : CharSequence {
-        val nShares : Int = status?.reblogs_count ?: 0
-        return "$nShares Shares"
-    }
 
 }
