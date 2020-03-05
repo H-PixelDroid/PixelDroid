@@ -6,12 +6,16 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.ImageConverter.Companion.retrieveBitmapFromUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.reflect.Array.get
+import java.nio.file.Paths.get
 
 class ProfileActivity() : AppCompatActivity() {
 
@@ -35,8 +39,6 @@ class ProfileActivity() : AppCompatActivity() {
 
                             // ImageView : profile picture
                             val profilePicture = findViewById<ImageView>(R.id.profilePicture)
-                            //profilePicture.setImageBitmap()
-                            // TODO : set profile picture from URL => profilePicture.setSomething(account.avatar)
 
                             // TextView : description / bio
                             val description = findViewById<TextView>(R.id.description)
@@ -64,10 +66,10 @@ class ProfileActivity() : AppCompatActivity() {
                         } else {
 
                             val account = statuses!![0].account
+
                             // ImageView : profile picture
                             val profilePicture = findViewById<ImageView>(R.id.profilePicture)
-                            //profilePicture.setImageBitmap()
-                            // TODO : set profile picture from URL => profilePicture.setSomething(account.avatar)
+                            Glide.with(this@ProfileActivity).load(account.avatar).into(profilePicture)
 
                             // TextView : description / bio
                             val description = findViewById<TextView>(R.id.description)
