@@ -9,7 +9,7 @@ import java.net.URL
 
 class ImageConverter {
     companion object {
-        fun retrieveBitmapFromUrl(src : String) : Bitmap? {
+        fun retrieveBitmapFromUrl(src : String?) : Bitmap? {
             return try {
                 val url: URL = URL(src)
                 val connection : HttpURLConnection = url.openConnection() as HttpURLConnection
