@@ -25,5 +25,5 @@ script:
 after_script:
   # Report test coverage to Code Climate
   - export JACOCO_SOURCE_PATH=app/src/main/java/
-  - ./cc-test-reporter format-coverage ./app/build/reports/coverage/debug/report.xml --input-type jacoco
+  - ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
   - ./cc-test-reporter upload-coverage
