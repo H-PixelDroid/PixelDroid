@@ -1,5 +1,6 @@
 package com.h.pixeldroid.objects
 
+
 /*
 Represents a status posted by an account.
 https://docs.joinmastodon.org/entities/status/
