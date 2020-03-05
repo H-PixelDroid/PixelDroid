@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
 import com.h.pixeldroid.settings.ui.*
 
@@ -35,8 +36,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // On startup ONLY, start at the account settings
         if(savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-                AccountFragment()).commit()
+            launchFragment(AccountFragment())
             navigationView.setCheckedItem(R.id.nav_account)
         }
     }
@@ -46,17 +46,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.nav_account -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-                AccountFragment()).commit()
-            R.id.nav_accessibility -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-                AccessibilityFragment()).commit()
-            R.id.nav_settings -> supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-                SettingsFragment()).commit()
+            R.id.nav_account -> launchFragment(AccountFragment())
+            R.id.nav_accessibility -> launchFragment(AccessibilityFragment())
+            R.id.nav_settings -> launchFragment(SettingsFragment())
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)
 
         return true
+    }
+
+    /*
+    Launches the given fragment and put it as the current "activity"
+     */
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
 
     /*
