@@ -1,5 +1,7 @@
 package com.h.pixeldroid.objects
 
+import java.io.Serializable
+
 data class Attachment(
     //Required attributes
     val id: String,
@@ -12,7 +14,7 @@ data class Attachment(
     //TODO meta
     val description: String? = null,
     val blurhash: String? = null
-) {
+) : Serializable {
     enum class AttachmentType {
         unknown, image, gifv, video, audio
     }
