@@ -31,32 +31,7 @@ class ProfileActivity : AppCompatActivity() {
                     if (response.code() == 200) {
                         statuses = response.body() as ArrayList<Status>?
 
-                        if(statuses.isNullOrEmpty()) {
-
-                            // TextView : description / bio
-                            val description = findViewById<TextView>(R.id.description)
-                            description.setText("")
-
-                            // TextView : account name
-                            val accountName = findViewById<TextView>(R.id.accountName)
-                            accountName.setText("No Name")
-
-                            // TextView : number of posts
-                            val nbPosts = findViewById<TextView>(R.id.nbPosts)
-                            nbPosts.setText(0)
-                            nbPosts.setTypeface(null, Typeface.BOLD)
-
-                            // TextView : number of followers
-                            val nbFollowers = findViewById<TextView>(R.id.nbFollowers)
-                            nbFollowers.setText(0)
-                            nbFollowers.setTypeface(null, Typeface.BOLD)
-
-                            // TextView : number of following
-                            val nbFollowing = findViewById<TextView>(R.id.nbFollowing)
-                            nbFollowing.setText(0)
-                            nbFollowing.setTypeface(null, Typeface.BOLD)
-
-                        } else {
+                        if(!statuses.isNullOrEmpty()) {
 
                             val account = statuses!![0].account
 

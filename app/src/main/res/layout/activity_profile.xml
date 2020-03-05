@@ -23,7 +23,7 @@
         android:layout_height="26dp"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="36dp"
-        android:text="TextView"
+        android:text="N/A"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,7 +43,7 @@
         android:layout_height="27dp"
         android:layout_marginStart="152dp"
         android:layout_marginTop="52dp"
-        android:text="TextView"
+        android:text="N/A"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,7 +72,7 @@
         android:layout_width="39dp"
         android:layout_height="27dp"
         android:layout_marginTop="52dp"
-        android:text="TextView"
+        android:text="N/A"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.669"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
         android:layout_width="156dp"
         android:layout_height="22dp"
         android:layout_marginTop="15dp"
-        android:text="Name"
+        android:text="No Username"
         app:layout_constraintStart_toStartOf="@+id/profilePicture"
         app:layout_constraintTop_toBottomOf="@+id/profilePicture" />
 
@@ -92,7 +92,6 @@
         android:layout_width="348dp"
         android:layout_height="85dp"
         android:layout_marginTop="14dp"
-        android:text="Description"
         app:layout_constraintStart_toStartOf="@+id/accountName"
         app:layout_constraintTop_toBottomOf="@+id/accountName" />
 
