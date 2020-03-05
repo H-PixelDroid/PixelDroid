@@ -7,4 +7,3 @@ data class Application (
     val website: String? = null,
     val vapid_key: String? = null
 )
-
