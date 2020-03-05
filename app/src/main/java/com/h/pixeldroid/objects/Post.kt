@@ -35,4 +35,14 @@ class Post(private val status: Status?) : Serializable {
         return name!!
    }
 
+    fun getNLikes() : CharSequence {
+        val nLikes : Int = status?.favourites_count ?: 0
+        return "$nLikes Likes"
+    }
+
+    fun getNShares() : CharSequence {
+        val nShares : Int = status?.reblogs_count ?: 0
+        return "$nShares Shares"
+    }
+
 }
