@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:key="show_time"
+        android:title="Show time"
+        android:icon="@drawable/ic_time"
+        android:defaultValue="true"/>
+
+    <SwitchPreference
+        android:key="night_mode"
+        android:title="Night mode"/>
+
+    <ListPreference
+        android:key="list_languages"
+        android:title="Language"
+        android:icon="@drawable/ic_translate"
+        android:entries="@array/list_languages"
+        android:entryValues="@array/list_languages"
+        android:defaultValue="English"
+        android:summary="%s"/>
+
+    <ListPreference
+        android:key="list_font_size"
+        android:title="Text size"
+        android:icon="@drawable/ic_font_size"
+        android:entries="@array/list_font_size"
+        android:entryValues="@array/list_font_size"
+        android:defaultValue="Medium"
+        android:summary="%s"/>
+
+    <SwitchPreferenceCompat
+        android:key="bluetooth_settings"
+        android:title="Activate bluetooth connection"
+        android:icon="@drawable/ic_bluetooth"
+        android:defaultValue="false"/>
+
+    <Preference
+        android:key="feedback"
+        android:title="Give feedback"
+        android:summary="To give feedback on features or new ideas" />
+
+</PreferenceScreen>
