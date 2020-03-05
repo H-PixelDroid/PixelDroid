@@ -15,7 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivityMarie : AppCompatActivity() {
 
     private var statuses: ArrayList<Status>? = null
     private val BASE_URL = "https://pixelfed.de/"
