@@ -1,28 +1,17 @@
 package com.h.pixeldroid.objects
 
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import com.h.pixeldroid.utils.ImageConverter.Companion.retrieveBitmapFromUrl
 import java.io.Serializable
 
 class Post(private val status: Status?) : Serializable {
-    //val postImage : Bitmap? = retrieveBitmapFromUrl(status?.media_attachments[0]?.url)
+    private val defaultAvatar = "https://raw.githubusercontent.com/pixelfed/pixelfed/dev/public/img/pixelfed-icon-color.png"
 
-    fun getPostImage(context : AppCompatActivity) : ImageView {
-        //Retrieve the url from the list of media attachments
-        val imgUrl = status?.component9()?.get(0)?.component3()!!
-
-        //Convert retrieved bitmap to an ImageView and return it
-        val imageView: ImageView = ImageView(context)
-        imageView.setImageBitmap(retrieveBitmapFromUrl(imgUrl))
-        return imageView
-    }
+    fun getPostUrl() : String? = status?.media_attachments?.get(0)?.url
+    fun getProfilePicUrl() : String? = status?.account?.avatar ?: defaultAvatar
 
     fun getDescription() : CharSequence {
         val description = status?.content as CharSequence
         if(description.isEmpty()) {
-            val default : CharSequence = "No description"
-            return default
+            return "No description"
         }
         return description
     }
