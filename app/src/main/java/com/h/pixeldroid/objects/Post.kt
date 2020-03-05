@@ -10,7 +10,7 @@ class Post(private val status: Status?) : Serializable {
 
     fun getDescription() : CharSequence {
         val description = status?.content as CharSequence
-        if(description.isEmpty()) {
+        if(description.isNullOrEmpty()) {
             return "No description"
         }
         return description
@@ -18,7 +18,7 @@ class Post(private val status: Status?) : Serializable {
 
    fun getUsername() : CharSequence {
        var name = status?.account?.username
-       if (name == null) {
+       if (name.isNullOrEmpty()) {
            name = status?.account?.display_name
        }
         return name!!
