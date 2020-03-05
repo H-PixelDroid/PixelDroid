@@ -6,7 +6,6 @@ import java.io.Serializable
 Represents a user and their associated profile.
 https://docs.joinmastodon.org/entities/account/
  */
-
 data class Account(
         //Base attributes
         val id: String,
@@ -34,4 +33,3 @@ data class Account(
         val bot: Boolean =  false,
         val source: Source? = null
 ) : Serializable
-
