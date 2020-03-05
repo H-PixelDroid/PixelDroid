@@ -15,8 +15,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ProfileTest {
     @get:Rule
-    var activityRule: ActivityScenarioRule<MainActivityMarie>
-            = ActivityScenarioRule(MainActivityMarie::class.java)
+    var activityRule: ActivityScenarioRule<MainActivity>
+            = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
     fun testFollowersTextView() {

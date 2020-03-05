@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".PostActivity"></activity>
         <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".MainActivityMarie">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
