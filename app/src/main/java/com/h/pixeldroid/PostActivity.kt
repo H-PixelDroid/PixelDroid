@@ -42,7 +42,7 @@ class PostActivity : AppCompatActivity() {
         Log.e("LOG: ", post?.getUsername().toString())
         findViewById<TextView>(R.id.username).text = post?.getUsername()
         findViewById<TextView>(R.id.description).text = post?.getDescription()
-
+        findViewById<TextView>(R.id.nlikes).text = post?.getNLikes()
 
     }
 
