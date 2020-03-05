@@ -40,6 +40,15 @@ interface PixelfedAPI {
         @Query("limit") limit: Int? = null
     ): Call<List<Status>>
 
+    @GET()
+    fun getToken(
+        @Query("client_id") client_id: String,
+        @Query("client_secret") client_secret: String,
+        @Query("redirect_uri") redirect_uri: String,
+        @Query("grant_type") grant_type: String
+    ): Call<Token>
+
+
     companion object {
         fun create(baseUrl: String): PixelfedAPI {
             return Retrofit.Builder()
