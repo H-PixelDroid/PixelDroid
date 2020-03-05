@@ -1,15 +1,28 @@
 package com.h.pixeldroid
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import com.h.pixeldroid.objects.Application
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.telecom.Call
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.objects.Status
+import kotlinx.android.synthetic.main.activity_login.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class Login : AppCompatActivity(){
+class Login : AppCompatActivity() {
+
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,13 +31,63 @@ class Login : AppCompatActivity(){
     }
 
     fun connexion(view: View) {
-        val api = PixelfedAPI.create("https://pixelfed.de")
-        val app: Application? = api.registerApplication("PixelDroid", "urn:ietf:wg:oauth:2.0:oob", "read write follow").execute().body()
 
+        val callback = object : Callback<Application> {
+            override fun onResponse(call: Call<Application>, response: Response<Application>) {
+                if (!response.isSuccessful) {
+                    // TODO
+                }
+
+                val credentials = response.body()
+                val clientId = credentials!!.client_id
+                val clientSecret = credentials.client_secret
+                val domain = editText.text.toString()
+
+                preferences = getSharedPreferences(
+                    "com.h.PixelDroid.pref", Context.MODE_PRIVATE
+                )
+                preferences.edit().putString("clientID", clientId)
+                    .putString("clientSecret", clientSecret)
+                    .putString("domain", domain)
+                    .apply()
+
+                if (clientId != null) {
+                    redirect(domain, clientId)
+                }
+            }
+
+            override fun onFailure(call: Call<Application>, t: Throwable) {
+            }
+        }
+
+        val api = PixelfedAPI.create("https://pixelfed.de")
+        api.registerApplication(
+                "pixeldroid",
+                "oauth2redirect://com.h.pixeldroid", "read write follow"
+            )
+            .enqueue(callback)
 
     }
 
-    fun redirect() {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com")))
+    fun redirect(domain: String, client_id: String) {
+
+        val url = "https://" + domain + "/oauth/authorize" + "?" +
+                "client_id" + "=" + client_id + "&" +
+                "redirect_uri" + "=" + "oauth2redirect://com.h.pixeldroid" + "&" +
+                "response_type=code" + "&" +
+                "scope=read write follow"
+
+        browser(this, url)
+    }
+
+    fun browser(context: Context, url: String) {
+        val intent = CustomTabsIntent.Builder().build()
+
+
+        try {
+            intent.launchUrl(context, Uri.parse(url))
+        } catch (e: ActivityNotFoundException) {
+            Log.w("login", "Could not launch browser")
+        }
     }
 }
