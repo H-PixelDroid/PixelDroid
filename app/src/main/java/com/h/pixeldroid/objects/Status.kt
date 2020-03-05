@@ -1,5 +1,7 @@
 package com.h.pixeldroid.objects
 
+import java.io.Serializable
+
 /*
 Represents a status posted by an account.
 https://docs.joinmastodon.org/entities/status/
@@ -39,9 +41,9 @@ data class Status(
     val muted: Boolean,
     val bookmarked: Boolean,
     val pinned: Boolean
-    )
+    ) : Serializable
 {
-    enum class Visibility {
+    enum class Visibility : Serializable {
         public, unlisted, private, direct
     }
 }
