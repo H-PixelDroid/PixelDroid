@@ -33,9 +33,6 @@ class ProfileActivity : AppCompatActivity() {
 
                         if(statuses.isNullOrEmpty()) {
 
-                            // ImageView : profile picture
-                            val profilePicture = findViewById<ImageView>(R.id.profilePicture)
-
                             // TextView : description / bio
                             val description = findViewById<TextView>(R.id.description)
                             description.setText("")
