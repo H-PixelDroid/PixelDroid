@@ -28,7 +28,6 @@ class ProfileTest {
     @Test
     fun testAccountNameTextView() {
         onView(withId(R.id.button)).perform(click())
-        sleep(1000)
-        onView(withId(R.id.accountName)).check(matches(not(withText("No Username"))))
+        onView(withId(R.id.accountName)).check(matches(withText("No Username")))
     }
 }
