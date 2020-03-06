@@ -13,16 +13,22 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.Thread.sleep
 
-@RunWith(AndroidJUnit4::class)
+//@RunWith(AndroidJUnit4::class)
 class ProfileTest {
-    @get:Rule
+    /*@get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
     fun testFollowersTextView() {
-        onView(withId(R.id.activity_main_account_btn)).perform(click())
+        onView(withId(R.id.button)).perform(click())
         onView(withId(R.id.followers)).check(matches(withText("Followers")))
     }
 
+    @Test
+    fun testAccountNameTextView() {
+        onView(withId(R.id.button)).perform(click())
+        sleep((1000 * 5))
+        onView(withId(R.id.accountName)).check(matches(not(withText("No Username"))))
+    }*/
 }
