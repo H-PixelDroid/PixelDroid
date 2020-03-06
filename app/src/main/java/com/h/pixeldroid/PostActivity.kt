@@ -43,7 +43,7 @@ class PostActivity : AppCompatActivity() {
         //Load images into their respective locations
         if (post != null) {
             Glide.with(this@PostActivity).load(post.getPostUrl()).into(findViewById(R.id.postPicture))
-            //Glide.with(this@PostActivity).load(post.getProfilePicUrl()).into(findViewById(R.id.profilePicture))
+            Glide.with(this@PostActivity).load(post.getProfilePicUrl()).into(findViewById(R.id.profilePic))
         }
     }
 }
