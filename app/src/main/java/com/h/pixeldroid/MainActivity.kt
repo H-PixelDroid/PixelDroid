@@ -8,7 +8,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.PostActivity.Companion.POST_TAG
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Post
+import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,7 +45,9 @@ class MainActivity : AppCompatActivity() {
         val postButton = findViewById<Button>(R.id.postButton)
         postButton.setOnClickListener((View.OnClickListener {
             val intent = Intent(this, PostActivity::class.java)
-            intent.putExtra(POST_TAG, Post(statuses?.get(0)))
+            intent.putExtra(POST_TAG,
+                Post(statuses?.get(0))
+            )
             startActivity(intent)
         }))
     }
