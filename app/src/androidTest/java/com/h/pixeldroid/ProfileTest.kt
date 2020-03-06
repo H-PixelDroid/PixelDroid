@@ -11,6 +11,7 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.Thread.sleep
 
 @RunWith(AndroidJUnit4::class)
 class ProfileTest {
@@ -27,6 +28,7 @@ class ProfileTest {
     @Test
     fun testAccountNameTextView() {
         onView(withId(R.id.button)).perform(click())
-        onView(withId(R.id.accountName)).check(matches(not(withText("No Name"))))
+        sleep(1000)
+        onView(withId(R.id.accountName)).check(matches(not(withText("No Username"))))
     }
 }
