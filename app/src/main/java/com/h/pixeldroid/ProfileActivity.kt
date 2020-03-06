@@ -20,10 +20,11 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        var statuses: ArrayList<Status>? = null
+        var statuses: ArrayList<Status>?
         val BASE_URL = "https://pixelfed.de/"
 
         val pixelfedAPI = PixelfedAPI.create(BASE_URL)
+
 
         pixelfedAPI.timelinePublic(null, null, null, null, null)
             .enqueue(object : Callback<List<Status>> {
