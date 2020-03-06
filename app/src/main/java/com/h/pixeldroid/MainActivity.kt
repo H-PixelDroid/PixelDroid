@@ -41,14 +41,5 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-
-        val postButton = findViewById<Button>(R.id.postButton)
-        postButton.setOnClickListener((View.OnClickListener {
-            val intent = Intent(this, PostActivity::class.java)
-            intent.putExtra(POST_TAG,
-                Post(statuses?.get(0))
-            )
-            startActivity(intent)
-        }))
     }
 }

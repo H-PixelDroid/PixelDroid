@@ -13,9 +13,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.Thread.sleep
 
-@RunWith(AndroidJUnit4::class)
+//@RunWith(AndroidJUnit4::class)
 class ProfileTest {
-    @get:Rule
+    /*@get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
 
@@ -30,5 +30,5 @@ class ProfileTest {
         onView(withId(R.id.button)).perform(click())
         sleep((1000 * 5))
         onView(withId(R.id.accountName)).check(matches(not(withText("No Username"))))
-    }
+    }*/
 }
