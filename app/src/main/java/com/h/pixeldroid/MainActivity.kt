@@ -76,6 +76,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             launchFragment(AccountFragment())
             navigationView.setCheckedItem(R.id.nav_account)
         }
+
+        val button = findViewById<Button>(R.id.button_start_login)
+        button.setOnClickListener((View.OnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent) }))
     }
 
     private fun loadData() {
@@ -153,6 +158,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             super.onBackPressed()
         }
+
     }
 
 }

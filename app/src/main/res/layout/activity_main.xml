@@ -30,6 +30,13 @@
                     android:layout_marginTop="60dp"
                     android:text="Show Post" />
 
+                <Button
+                    android:id="@+id/button_start_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dp"
+                    android:text="start login" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -87,7 +94,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -114,3 +122,4 @@
         app:menu="@menu/activity_main_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
+
