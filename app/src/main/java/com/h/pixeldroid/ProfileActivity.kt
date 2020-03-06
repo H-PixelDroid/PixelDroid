@@ -6,14 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfileActivity() : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,43 +31,13 @@ class ProfileActivity() : AppCompatActivity() {
                     if (response.code() == 200) {
                         statuses = response.body() as ArrayList<Status>?
 
-                        if(statuses.isNullOrEmpty()) {
-
-                            // ImageView : profile picture
-                            val profilePicture = findViewById<ImageView>(R.id.profilePicture)
-                            //profilePicture.setImageBitmap()
-                            // TODO : set profile picture from URL => profilePicture.setSomething(account.avatar)
-
-                            // TextView : description / bio
-                            val description = findViewById<TextView>(R.id.description)
-                            description.setText("")
-
-                            // TextView : account name
-                            val accountName = findViewById<TextView>(R.id.accountName)
-                            accountName.setText("No Name")
-
-                            // TextView : number of posts
-                            val nbPosts = findViewById<TextView>(R.id.nbPosts)
-                            nbPosts.setText(0)
-                            nbPosts.setTypeface(null, Typeface.BOLD)
-
-                            // TextView : number of followers
-                            val nbFollowers = findViewById<TextView>(R.id.nbFollowers)
-                            nbFollowers.setText(0)
-                            nbFollowers.setTypeface(null, Typeface.BOLD)
-
-                            // TextView : number of following
-                            val nbFollowing = findViewById<TextView>(R.id.nbFollowing)
-                            nbFollowing.setText(0)
-                            nbFollowing.setTypeface(null, Typeface.BOLD)
-
-                        } else {
+                        if(!statuses.isNullOrEmpty()) {
 
                             val account = statuses!![0].account
+
                             // ImageView : profile picture
                             val profilePicture = findViewById<ImageView>(R.id.profilePicture)
-                            //profilePicture.setImageBitmap()
-                            // TODO : set profile picture from URL => profilePicture.setSomething(account.avatar)
+                            Glide.with(this@ProfileActivity).load(account.avatar).into(profilePicture)
 
                             // TextView : description / bio
                             val description = findViewById<TextView>(R.id.description)
