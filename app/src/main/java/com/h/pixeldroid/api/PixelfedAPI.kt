@@ -1,10 +1,8 @@
 package com.h.pixeldroid.api
 
-import android.util.Log
-import com.h.pixeldroid.objects.*
+import com.h.pixeldroid.objects.Application
+import com.h.pixeldroid.objects.Status
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,6 +11,8 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.Field
+
+
 /*
     Implements the Pixelfed API
     https://docs.pixelfed.org/technical-documentation/api-v1.html
@@ -39,14 +39,6 @@ interface PixelfedAPI {
         @Query("min_id") min_id: String? = null,
         @Query("limit") limit: Int? = null
     ): Call<List<Status>>
-
-    @GET()
-    fun getToken(
-        @Query("client_id") client_id: String,
-        @Query("client_secret") client_secret: String,
-        @Query("redirect_uri") redirect_uri: String,
-        @Query("grant_type") grant_type: String
-    ): Call<Token>
 
 
     companion object {
