@@ -1,11 +1,11 @@
 package com.h.pixeldroid
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.PostActivity.Companion.POST_TAG
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Post
@@ -13,9 +13,6 @@ import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,26 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
 
-//Define the Retrofit request//
-
-        val pixelfedAPI = Retrofit.Builder()
-
-//Set the API’s base URL//
-
-            .baseUrl(BASE_URL)
-
-//Specify the converter factory to use for serialization and deserialization//
-
-            .addConverterFactory(GsonConverterFactory.create())
-
-//Add a call adapter factory to support RxJava return types//
-
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-
-//Build the Retrofit instance//
-
-            .build().create(PixelfedAPI::class.java)
-
+        val pixelfedAPI= PixelfedAPI.create(BASE_URL)
         pixelfedAPI.timelinePublic(null, null, null, null, null)
             .enqueue(object : Callback<List<Status>> {
                 override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
@@ -63,17 +41,11 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener((View.OnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
-        }))
-
 
         val postButton = findViewById<Button>(R.id.postButton)
         postButton.setOnClickListener((View.OnClickListener {
             val intent = Intent(this, PostActivity::class.java)
-            intent.putExtra(POST_TAG ,Post(statuses?.get(0)))
+            intent.putExtra(POST_TAG, Post(statuses?.get(0)))
             startActivity(intent)
         }))
     }
