@@ -2,19 +2,15 @@ package com.h.pixeldroid
 
 import android.content.ActivityNotFoundException
 import android.content.Context
-import com.h.pixeldroid.objects.Application
-import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.objects.Application
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
