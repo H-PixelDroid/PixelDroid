@@ -1,11 +1,13 @@
 package com.h.pixeldroid
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.*
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class PostUnitTest {
     private val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
         created_at="2020-03-03T08:00:16.000000Z",
