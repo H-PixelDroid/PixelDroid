@@ -51,6 +51,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.google.android.material:material:1.1.0'
 }
 
 
@@ -69,9 +70,13 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
     def kotlinDebugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([kotlinDebugTree])
-    executionData = fileTree(dir: project.buildDir, includes: [
-            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/debugAndroidTest/connected/*coverage.ec'
-    ])
+    getSourceDirectories().from(files([mainSrc]))
+    getClassDirectories().from(files([kotlinDebugTree]))
+    getExecutionData().from(fileTree(dir: project.buildDir, includes: [
+
+            'outputs/code_coverage/debugAndroidTest/connected/*coverage.ec',
+
+            'jacoco/testDebugUnitTest.exec'
+
+    ]))
 }
