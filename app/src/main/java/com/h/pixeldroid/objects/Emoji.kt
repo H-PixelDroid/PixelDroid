@@ -1,5 +1,7 @@
 package com.h.pixeldroid.objects
 
+import java.io.Serializable
+
 data class Emoji(
     //Required attributes
     val shortcode: String,
@@ -8,4 +10,4 @@ data class Emoji(
     val visible_in_picker: Boolean,
     //Optional attributes
     val category: String? = null
-)
+) : Serializable

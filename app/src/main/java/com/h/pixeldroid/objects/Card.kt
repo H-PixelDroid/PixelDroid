@@ -1,5 +1,7 @@
 package com.h.pixeldroid.objects
 
+import java.io.Serializable
+
 data class Card(
     //Required attributes
     val url: String, //URL
@@ -16,7 +18,7 @@ data class Card(
     val height: Int? = null,
     val image: String? = null, //URL
     val embed_url: String? = null //URL
-) {
+) : Serializable {
     enum class CardType {
         link, photo, video, rich
     }

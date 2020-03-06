@@ -1,5 +1,6 @@
 package com.h.pixeldroid.objects
 
+import java.io.Serializable
 
 /*
 Represents a user and their associated profile.
@@ -32,4 +33,4 @@ data class Account(
         val fields: List<Field>? = emptyList(),
         val bot: Boolean =  false,
         val source: Source? = null
-)
+) : Serializable
