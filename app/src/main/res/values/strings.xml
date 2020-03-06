@@ -1,8 +1,33 @@
 <resources>
     <string name="app_name">PixelDroid</string>
+
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="take_a_picture">Take a Picture</string>
     <string name="favourite">Favourite</string>
     <string name="account">Account</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_slideshow">Account name</string>
+    <string name="menu_subtitle">Account informations</string>
+
+    <string name="menu_account">My Profile</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_accessibility">Accessibility</string>
+
+    <string-array name="list_languages">
+        <item>English</item>
+        <item>Français</item>
+        <item>日本人</item>
+
+    </string-array>
+    <string-array name="list_font_size">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Big</item>
+    </string-array>
+
 </resources>
