@@ -16,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class Login : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var preferences: SharedPreferences
 
