@@ -82,13 +82,6 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener((View.OnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
-        }))
-
-
         val postButton = findViewById<Button>(R.id.postButton)
         postButton.setOnClickListener((View.OnClickListener {
             val intent = Intent(this, PostActivity::class.java)
