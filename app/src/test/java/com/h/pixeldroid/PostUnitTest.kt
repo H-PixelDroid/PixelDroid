@@ -9,7 +9,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class PostTest {
+class PostUnitTest {
     val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
         created_at="2020-03-03T08:00:16.000000Z",
         account= Account(id="115114166443970560", username="Miike", acct="Miike",
