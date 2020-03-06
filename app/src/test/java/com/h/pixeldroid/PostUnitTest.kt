@@ -1,6 +1,5 @@
 package com.h.pixeldroid
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.*
 import org.junit.Assert
