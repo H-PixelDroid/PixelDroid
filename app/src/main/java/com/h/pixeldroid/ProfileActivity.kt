@@ -37,7 +37,7 @@ class ProfileActivity : AppCompatActivity() {
 
                             // ImageView : profile picture
                             val profilePicture = findViewById<ImageView>(R.id.profilePicture)
-                            // Glide.with(this@ProfileActivity).load(account.avatar).into(profilePicture)
+                            Glide.with(this@ProfileActivity).load(account.avatar).into(profilePicture)
 
                             // TextView : description / bio
                             val description = findViewById<TextView>(R.id.description)
