@@ -25,7 +25,6 @@ class ProfileActivity : AppCompatActivity() {
 
         val pixelfedAPI = PixelfedAPI.create(BASE_URL)
 
-
         pixelfedAPI.timelinePublic(null, null, null, null, null)
             .enqueue(object : Callback<List<Status>> {
                 override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
@@ -37,7 +36,6 @@ class ProfileActivity : AppCompatActivity() {
                             val account = statuses!![0].account
 
                             setContent(account)
-
                         }
                     }
                 }
@@ -46,34 +44,33 @@ class ProfileActivity : AppCompatActivity() {
                     Log.e("Ouch, not OK", t.toString())
                 }
             })
-
     }
 
     private fun setContent(account: Account) {
         // ImageView : profile picture
-        val profilePicture = findViewById<ImageView>(R.id.profilePicture)
+        val profilePicture = findViewById<ImageView>(R.id.profilePictureImageView)
         Glide.with(applicationContext).load(account.avatar).into(profilePicture)
 
         // TextView : description / bio
-        val description = findViewById<TextView>(R.id.description)
+        val description = findViewById<TextView>(R.id.descriptionTextView)
         description.text = account.note
 
         // TextView : account name
-        val accountName = findViewById<TextView>(R.id.accountName)
+        val accountName = findViewById<TextView>(R.id.accountNameTextView)
         accountName.text = account.username
 
         // TextView : number of posts
-        val nbPosts = findViewById<TextView>(R.id.nbPosts)
+        val nbPosts = findViewById<TextView>(R.id.nbPostsTextView)
         nbPosts.text = account.statuses_count.toString()
         nbPosts.setTypeface(null, Typeface.BOLD)
 
         // TextView : number of followers
-        val nbFollowers = findViewById<TextView>(R.id.nbFollowers)
+        val nbFollowers = findViewById<TextView>(R.id.nbFollowersTextView)
         nbFollowers.text = account.followers_count.toString()
         nbFollowers.setTypeface(null, Typeface.BOLD)
 
         // TextView : number of following
-        val nbFollowing = findViewById<TextView>(R.id.nbFollowing)
+        val nbFollowing = findViewById<TextView>(R.id.nbFollowingTextView)
         nbFollowing.text = account.following_count.toString()
         nbFollowing.setTypeface(null, Typeface.BOLD)
     }

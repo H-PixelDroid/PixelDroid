@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/profilePicture"
+        android:id="@+id/profilePictureImageView"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="16dp"
@@ -18,91 +18,101 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/nbFollowing"
-        android:layout_width="38dp"
-        android:layout_height="26dp"
+        android:id="@+id/nbFollowingTextView"
+        android:layout_width="39dp"
+        android:layout_height="27dp"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="36dp"
-        android:text="N/A"
+        android:text="-"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/posts"
+        android:id="@+id/postsTextView"
         android:layout_width="40dp"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
         android:text="Posts"
-        app:layout_constraintEnd_toEndOf="@+id/nbPosts"
-        app:layout_constraintStart_toStartOf="@+id/nbPosts"
-        app:layout_constraintTop_toBottomOf="@+id/nbPosts" />
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/nbPostsTextView"
+        app:layout_constraintStart_toStartOf="@+id/nbPostsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/nbPostsTextView" />
 
     <TextView
-        android:id="@+id/nbPosts"
+        android:id="@+id/nbPostsTextView"
         android:layout_width="39dp"
         android:layout_height="27dp"
         android:layout_marginStart="152dp"
         android:layout_marginTop="52dp"
-        android:text="N/A"
+        android:text="-"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/followers"
+        android:id="@+id/followersTextView"
         android:layout_width="65dp"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
         android:text="Followers"
-        app:layout_constraintEnd_toEndOf="@+id/nbFollowers"
-        app:layout_constraintStart_toStartOf="@+id/nbFollowers"
-        app:layout_constraintTop_toBottomOf="@+id/nbFollowers" />
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/nbFollowersTextView"
+        app:layout_constraintStart_toStartOf="@+id/nbFollowersTextView"
+        app:layout_constraintTop_toBottomOf="@+id/nbFollowersTextView" />
 
     <TextView
-        android:id="@+id/following"
+        android:id="@+id/followingTextView"
         android:layout_width="65dp"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
         android:text="Following"
-        app:layout_constraintEnd_toEndOf="@+id/nbFollowing"
-        app:layout_constraintStart_toStartOf="@+id/nbFollowing"
-        app:layout_constraintTop_toBottomOf="@+id/nbFollowing" />
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@+id/nbFollowingTextView"
+        app:layout_constraintStart_toStartOf="@+id/nbFollowingTextView"
+        app:layout_constraintTop_toBottomOf="@+id/nbFollowingTextView" />
 
     <TextView
-        android:id="@+id/nbFollowers"
+        android:id="@+id/nbFollowersTextView"
         android:layout_width="39dp"
         android:layout_height="27dp"
+        android:layout_marginStart="242dp"
         android:layout_marginTop="52dp"
-        android:text="N/A"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.669"
+        android:gravity="center"
+        android:text="-"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/accountName"
+        android:id="@+id/accountNameTextView"
         android:layout_width="156dp"
         android:layout_height="22dp"
         android:layout_marginTop="15dp"
         android:text="No Username"
-        app:layout_constraintStart_toStartOf="@+id/profilePicture"
-        app:layout_constraintTop_toBottomOf="@+id/profilePicture" />
+        app:layout_constraintStart_toStartOf="@+id/profilePictureImageView"
+        app:layout_constraintTop_toBottomOf="@+id/profilePictureImageView" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/descriptionTextView"
         android:layout_width="348dp"
         android:layout_height="85dp"
         android:layout_marginTop="14dp"
-        app:layout_constraintStart_toStartOf="@+id/accountName"
-        app:layout_constraintTop_toBottomOf="@+id/accountName" />
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="300sp"
+        android:autoSizeMinTextSize="2sp"
+        android:autoSizeStepGranularity="2sp"
+        app:layout_constraintStart_toStartOf="@+id/accountNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/accountNameTextView" />
 
     <Button
         android:id="@+id/followButton"
-        android:layout_width="150dp"
-        android:layout_height="38dp"
+        android:layout_width="125dp"
+        android:layout_height="37dp"
         android:layout_marginTop="14dp"
+        android:gravity="center"
         android:text="Follow"
-        app:layout_constraintStart_toStartOf="@+id/description"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        app:layout_constraintStart_toStartOf="@+id/descriptionTextView"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
 
     <ImageButton
         android:id="@+id/postsButton"
@@ -110,6 +120,7 @@
         android:layout_height="42dp"
         android:layout_marginStart="152dp"
         android:layout_marginTop="20dp"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/followButton"
         app:srcCompat="@android:drawable/ic_dialog_dialer" />
@@ -119,6 +130,7 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_marginStart="4dp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/postsButton"

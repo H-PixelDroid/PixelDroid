@@ -22,13 +22,13 @@ class ProfileTest {
     @Test
     fun testFollowersTextView() {
         onView(withId(R.id.button)).perform(click())
-        onView(withId(R.id.followers)).check(matches(withText("Followers")))
+        onView(withId(R.id.followersTextView)).check(matches(withText("Followers")))
     }
 
     @Test
     fun testAccountNameTextView() {
         onView(withId(R.id.button)).perform(click())
         sleep((1000 * 5))
-        onView(withId(R.id.accountName)).check(matches(not(withText("No Username"))))
+        onView(withId(R.id.accountNameTextView)).check(matches(not(withText("No Username"))))
     }
 }
