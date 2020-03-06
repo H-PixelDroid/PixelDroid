@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,32 +36,8 @@ class ProfileActivity : AppCompatActivity() {
 
                             val account = statuses!![0].account
 
-                            // ImageView : profile picture
-                            val profilePicture = findViewById<ImageView>(R.id.profilePicture)
-                            Glide.with(applicationContext).load(account.avatar).into(profilePicture)
+                            setContent(account)
 
-                            // TextView : description / bio
-                            val description = findViewById<TextView>(R.id.description)
-                            description.setText(account.note)
-
-                            // TextView : account name
-                            val accountName = findViewById<TextView>(R.id.accountName)
-                            accountName.setText(account.username)
-
-                            // TextView : number of posts
-                            val nbPosts = findViewById<TextView>(R.id.nbPosts)
-                            nbPosts.text = account.statuses_count.toString()
-                            nbPosts.setTypeface(null, Typeface.BOLD)
-
-                            // TextView : number of followers
-                            val nbFollowers = findViewById<TextView>(R.id.nbFollowers)
-                            nbFollowers.text = account.followers_count.toString()
-                            nbFollowers.setTypeface(null, Typeface.BOLD)
-
-                            // TextView : number of following
-                            val nbFollowing = findViewById<TextView>(R.id.nbFollowing)
-                            nbFollowing.text = account.following_count.toString()
-                            nbFollowing.setTypeface(null, Typeface.BOLD)
                         }
                     }
                 }
@@ -70,5 +47,34 @@ class ProfileActivity : AppCompatActivity() {
                 }
             })
 
+    }
+
+    private fun setContent(account: Account) {
+        // ImageView : profile picture
+        val profilePicture = findViewById<ImageView>(R.id.profilePicture)
+        Glide.with(applicationContext).load(account.avatar).into(profilePicture)
+
+        // TextView : description / bio
+        val description = findViewById<TextView>(R.id.description)
+        description.text = account.note
+
+        // TextView : account name
+        val accountName = findViewById<TextView>(R.id.accountName)
+        accountName.text = account.username
+
+        // TextView : number of posts
+        val nbPosts = findViewById<TextView>(R.id.nbPosts)
+        nbPosts.text = account.statuses_count.toString()
+        nbPosts.setTypeface(null, Typeface.BOLD)
+
+        // TextView : number of followers
+        val nbFollowers = findViewById<TextView>(R.id.nbFollowers)
+        nbFollowers.text = account.followers_count.toString()
+        nbFollowers.setTypeface(null, Typeface.BOLD)
+
+        // TextView : number of following
+        val nbFollowing = findViewById<TextView>(R.id.nbFollowing)
+        nbFollowing.text = account.following_count.toString()
+        nbFollowing.setTypeface(null, Typeface.BOLD)
     }
 }
