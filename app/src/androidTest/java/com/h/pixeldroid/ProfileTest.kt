@@ -25,9 +25,4 @@ class ProfileTest {
         onView(withId(R.id.followers)).check(matches(withText("Followers")))
     }
 
-    @Test
-    fun testAccountNameTextView() {
-        onView(withId(R.id.button)).perform(click())
-        onView(withId(R.id.following)).check(matches(withText("Following")))
-    }
 }
