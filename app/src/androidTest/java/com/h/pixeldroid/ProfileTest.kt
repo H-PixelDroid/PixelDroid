@@ -28,6 +28,6 @@ class ProfileTest {
     @Test
     fun testAccountNameTextView() {
         onView(withId(R.id.button)).perform(click())
-        onView(withId(R.id.following)).check(matches(not(withText("Following"))))
+        onView(withId(R.id.following)).check(matches(withText("Following")))
     }
 }

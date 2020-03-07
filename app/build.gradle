@@ -62,6 +62,8 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.11.0") {
         exclude group: "com.android.support"
     }
+    implementation "com.github.bumptech.glide:okhttp-integration:4.11.0"
+
     testImplementation "com.github.tomakehurst:wiremock-jre8:2.26.3"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13'
