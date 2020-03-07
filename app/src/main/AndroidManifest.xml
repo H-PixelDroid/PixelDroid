@@ -21,7 +21,9 @@
                     android:host="${applicationId}"
                     android:scheme="@string/auth_scheme" />
             </intent-filter>
-        </activity>        <activity android:name=".MainActivity">
+        </activity>        
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
