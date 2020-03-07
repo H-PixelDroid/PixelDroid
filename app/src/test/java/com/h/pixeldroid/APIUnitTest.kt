@@ -5,7 +5,6 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.*
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.Call
