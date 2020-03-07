@@ -59,8 +59,7 @@ class LoginActivity : AppCompatActivity() {
         try{
             HttpUrl.Builder().host(normalizedDomain).scheme("https").build()
         } catch (e: IllegalArgumentException) {
-            failedRegistration(getString(R.string.invalid_domain))
-            return
+            return failedRegistration(getString(R.string.invalid_domain))
         }
 
         preferences.edit()
@@ -80,8 +79,7 @@ class LoginActivity : AppCompatActivity() {
         val callback = object : Callback<Application> {
             override fun onResponse(call: Call<Application>, response: Response<Application>) {
                 if (!response.isSuccessful) {
-                    failedRegistration()
-                    return
+                    return failedRegistration()
                 }
 
                 val credentials = response.body()
@@ -97,8 +95,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Application>, t: Throwable) {
-                failedRegistration()
-                return
+                return failedRegistration()
             }
         }
         PixelfedAPI.create("https://$normalizedDomain").registerApplication(
@@ -123,8 +120,7 @@ class LoginActivity : AppCompatActivity() {
             if (browserIntent.resolveActivity(packageManager) != null) {
                 startActivity(browserIntent)
             } else {
-                failedRegistration(getString(R.string.browser_launch_failed))
-                return
+                return failedRegistration(getString(R.string.browser_launch_failed))
             }
         }
         connect_instance_button.isEnabled = true
@@ -138,27 +134,25 @@ class LoginActivity : AppCompatActivity() {
         val clientSecret = preferences.getString("clientSecret", "")
 
         if (code == null || domain.isNullOrEmpty() || clientId.isNullOrEmpty() || clientSecret.isNullOrEmpty()) {
-            failedRegistration(getString(R.string.auth_failed))
-            return
+            return failedRegistration(getString(R.string.auth_failed))
         }
 
         //Successful authorization
         val callback = object : Callback<Token> {
             override fun onResponse(call: Call<Token>, response: Response<Token>) {
                 if (!response.isSuccessful || response.body() == null) {
-                    failedRegistration(getString(R.string.token_error))
-                    return
+                    return failedRegistration(getString(R.string.token_error))
                 }
                 authenticationSuccessful(domain, response.body()!!.access_token)
             }
 
             override fun onFailure(call: Call<Token>, t: Throwable) {
-                failedRegistration(getString(R.string.token_error))
+                return failedRegistration(getString(R.string.token_error))
             }
         }
 
-        val pixelfedAPI = PixelfedAPI.create("https://$domain")
-        pixelfedAPI.obtainToken(
+        PixelfedAPI.create("https://$domain")
+            .obtainToken(
             clientId, clientSecret, "$OAUTH_SCHEME://$PACKAGE_ID", SCOPE, code,
             "authorization_code"
         ).enqueue(callback)
