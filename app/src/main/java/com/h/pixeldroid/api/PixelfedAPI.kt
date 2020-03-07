@@ -43,7 +43,7 @@ interface PixelfedAPI {
         @Field("grant_type") grant_type: String? = null
     ): Call<Token>
 
-            @GET("/api/v1/timelines/public")
+    @GET("/api/v1/timelines/public")
     fun timelinePublic(
         @Query("local") local: Boolean? = null,
         @Query("max_id") max_id: String? = null,
