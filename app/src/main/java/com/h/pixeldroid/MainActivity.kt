@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationView
 import com.h.pixeldroid.settings.ui.*
 import android.util.Log
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.PostActivity.Companion.POST_TAG
 import com.h.pixeldroid.api.PixelfedAPI
@@ -23,9 +24,6 @@ import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,19 +36,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val homepage_button : ImageButton = findViewById(R.id.activity_main_home_btn)
-        val search_button : ImageButton = findViewById(R.id.activity_main_search_btn)
-        val camera_button : ImageButton = findViewById(R.id.activity_main_camera_btn)
-        val favorite_button : ImageButton = findViewById(R.id.activity_main_favorite_btn)
-        val account_button : ImageButton = findViewById(R.id.activity_main_account_btn)
+        val mainLinearLayout : LinearLayout = findViewById(R.id.main_linear_layout)
 
-        homepage_button.setOnClickListener(
+        val homepageButton : ImageButton = findViewById(R.id.activity_main_home_btn)
+        val searchButton : ImageButton = findViewById(R.id.activity_main_search_btn)
+        val cameraButton : ImageButton = findViewById(R.id.activity_main_camera_btn)
+        val favoriteButton : ImageButton = findViewById(R.id.activity_main_favorite_btn)
+        val accountButton : ImageButton = findViewById(R.id.activity_main_account_btn)
+
+        homepageButton.setOnClickListener(
             View.OnClickListener {
                 startActivity(Intent(this, MainActivity::class.java))
             }
         )
 
-        account_button.setOnClickListener((View.OnClickListener {
+        accountButton.setOnClickListener((View.OnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }))

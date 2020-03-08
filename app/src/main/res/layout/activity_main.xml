@@ -14,7 +14,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="bottom"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:id="@+id/main_linear_layout">
 
             <LinearLayout
                 android:layout_width="match_parent"
