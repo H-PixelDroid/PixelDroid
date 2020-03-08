@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     /*
-    Launches the given fragment and put it as the current "activity"
+    Launches the given activity and put it as the current one
      */
     private fun launchActivity(activity: AppCompatActivity) {
         val intent = Intent(this, activity::class.java)
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     /*
-    Makes it possible to drag the settings menu from the left
+    Closes the drawer if we are clicking behind it
      */
     override fun onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
