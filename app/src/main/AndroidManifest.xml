@@ -41,7 +41,12 @@
                     android:scheme="@string/auth_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProfileActivity" />
-    </application>
+        <activity android:name=".ProfileActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity"/>
+        </activity>
+
+</application>
 
 </manifest>
