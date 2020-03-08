@@ -15,12 +15,26 @@
         <item>English</item>
         <item>Français</item>
         <item>日本人</item>
-
     </string-array>
+
     <string-array name="list_font_size">
         <item>Small</item>
         <item>Medium</item>
         <item>Big</item>
     </string-array>
 
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="invalid_domain">"Invalid domain"</string>
+    <string name="registration_failed">"Could not register the application with this server"</string>
+    <string name="browser_launch_failed">"Could not launch a browser, do you have one?"</string>
+    <string name="auth_failed">"Could not authenticate"</string>
+    <string name="token_error">"Error getting token"</string>
 </resources>

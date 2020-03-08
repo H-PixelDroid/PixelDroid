@@ -1,6 +1,6 @@
 package com.h.pixeldroid
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.NonNull
@@ -20,6 +20,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import android.view.View
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,6 +51,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             launchFragment(AccountFragment())
             navigationView.setCheckedItem(R.id.nav_account)
         }
+
+        val button_login = findViewById<Button>(R.id.button_start_login)
+        button_login.setOnClickListener((View.OnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent) }))
+
+        val button = findViewById<Button>(R.id.button)
+        button.setOnClickListener((View.OnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent) }))
     }
 
     /*
