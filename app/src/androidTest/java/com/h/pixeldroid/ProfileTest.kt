@@ -22,7 +22,7 @@ class ProfileTest {
     @Test
     fun testFollowersTextView() {
         onView(withId(R.id.button)).perform(click())
-        onView(withId(R.id.followersTextView)).check(matches(withText("Followers")))
+        onView(withId(R.id.followButton)).check(matches(withText("Follow")))
     }
 
     @Test
