@@ -27,6 +27,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Show a profile" />
+
+        <Button
+            android:id="@+id/button_camera"
+            android:layout_width="162dp"
+            android:layout_height="wrap_content"
+            android:text="Camera" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
