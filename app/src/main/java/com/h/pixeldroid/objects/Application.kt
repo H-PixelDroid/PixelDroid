@@ -7,6 +7,9 @@ data class Application (
     val name: String,
     //Optional attributes
     val website: String? = null,
-    val vapid_key: String? = null
+    val vapid_key: String? = null,
+    //Client Attributes
+    val client_id: String? = null,
+    val client_secret: String? = null
 ) : Serializable
 
