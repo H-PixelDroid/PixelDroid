@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.h.pixeldroid.models.Post
+import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
 
 /**
  * @brief Shows a post using data retrieved from status
@@ -27,8 +28,8 @@ class PostActivity : AppCompatActivity() {
 
         //Load images into their respective locations
         if (post != null) {
-            Glide.with(this@PostActivity).load(post.getPostUrl()).into(findViewById(R.id.postPicture))
-            Glide.with(this@PostActivity).load(post.getProfilePicUrl()).into(findViewById(R.id.profilePic))
+            setImageViewFromURL(this@PostActivity, post.getPostUrl(), findViewById(R.id.postPicture))
+            setImageViewFromURL(this@PostActivity, post.getProfilePicUrl(), findViewById(R.id.profilePic))
         }
     }
 }
