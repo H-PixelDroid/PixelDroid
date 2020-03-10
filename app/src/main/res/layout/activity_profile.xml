@@ -66,10 +66,10 @@
         android:layout_width="348dp"
         android:layout_height="85dp"
         android:layout_marginTop="14dp"
-        android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="300sp"
         android:autoSizeMinTextSize="2sp"
         android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
         app:layout_constraintStart_toStartOf="@+id/accountNameTextView"
         app:layout_constraintTop_toBottomOf="@+id/accountNameTextView" />
 
@@ -105,5 +105,14 @@
         app:layout_constraintStart_toEndOf="@+id/postsButton"
         app:layout_constraintTop_toTopOf="@+id/postsButton"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="409dp"
+        android:layout_height="428dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postsButton">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
