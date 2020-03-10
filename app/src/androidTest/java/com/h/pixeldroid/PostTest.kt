@@ -59,10 +59,10 @@ class PostTest {
         onView(withId(R.id.nlikes)).check(matches(withText("7 Likes")))
     }
 
-    /*@Test
+    @Test
     fun testSharesTextView() {
         onView(withId(R.id.nshares)).check(matches(withText("21 Shares")))
-    }*/
+    }
 
     @Test
     fun testDescriptionView() {
