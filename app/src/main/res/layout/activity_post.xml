@@ -8,9 +8,8 @@
 
     <ImageView
         android:id="@+id/postPicture"
-        android:layout_width="413dp"
-        android:layout_height="244dp"
-        android:src="@drawable/ic_launcher_foreground"
+        android:layout_width="415dp"
+        android:layout_height="409dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
