@@ -3,20 +3,21 @@ package com.h.pixeldroid
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.SurfaceTexture
-import android.hardware.camera2.CameraCaptureSession
-import android.hardware.camera2.CameraDevice
-import android.hardware.camera2.CameraManager
+import android.hardware.camera2.*
+import android.hardware.camera2.CameraDevice.TEMPLATE_PREVIEW
+import android.hardware.camera2.params.OutputConfiguration
 import android.hardware.camera2.params.SessionConfiguration
 import android.hardware.camera2.params.SessionConfiguration.SESSION_REGULAR
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.view.Surface
 import android.view.TextureView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getMainExecutor
+
 
 class CameraActivity : AppCompatActivity() {
     
@@ -24,36 +25,40 @@ class CameraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        val textureView = TextureView(this)
-        var surfaceTextureListener = textureView.surfaceTextureListener
-        setContentView(textureView)
+        val textureView = findViewById<TextureView>(R.id.textureView2)
+        textureView.surfaceTextureListener
+
         val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
-
-
-        val idList = manager.cameraIdList
-        val characteristic = manager.getCameraCharacteristics(idList[0])
-
-        val callback = object : CameraDevice.StateCallback() {
+        val cameraCallback = object : CameraDevice.StateCallback() {
             @RequiresApi(Build.VERSION_CODES.P)
             override fun onOpened(camera: CameraDevice) {
-                val config = null
+
                 val sessionCallback = object : CameraCaptureSession.StateCallback() {
                     override fun onConfigureFailed(session: CameraCaptureSession) {
                         TODO("Not yet implemented")
                     }
 
                     override fun onConfigured(session: CameraCaptureSession) {
-                        TODO("Not yet implemented")
+
+
+                        val requestBuilder = camera.createCaptureRequest(TEMPLATE_PREVIEW)
+
+                        requestBuilder.addTarget(Surface(textureView.surfaceTexture))
+                        session.setRepeatingRequest(requestBuilder.build(), null, null)
                     }
 
                 }
 
+                val outputConfigs =
+                    listOf<OutputConfiguration>(OutputConfiguration(Surface(textureView.surfaceTexture)))
                 camera.createCaptureSession(SessionConfiguration(
                     SESSION_REGULAR,
-                    null,
+                    outputConfigs,
                     AsyncTask.THREAD_POOL_EXECUTOR,
                     sessionCallback))
+
+
             }
 
             override fun onDisconnected(camera: CameraDevice) {
@@ -66,22 +71,24 @@ class CameraActivity : AppCompatActivity() {
 
         }
 
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            Toast.makeText(applicationContext,"Hello non-existant camera", Toast.LENGTH_SHORT).show()
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ),
+                200
+            )
+
             return
         }
-        manager.openCamera(idList[0], callback, null)
-
+        manager.openCamera(manager.cameraIdList[0], cameraCallback, null)
     }
 }
