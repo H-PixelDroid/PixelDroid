@@ -26,6 +26,8 @@
             android:id="@+id/profilePic"
             android:layout_width="44dp"
             android:layout_height="54dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="22dp"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintBottom_toTopOf="@+id/postPicture"
             app:layout_constraintEnd_toStartOf="@+id/username"
@@ -38,11 +40,12 @@
             android:id="@+id/username"
             android:layout_width="259dp"
             android:layout_height="21dp"
-            android:layout_marginEnd="48dp"
+            android:layout_marginEnd="76dp"
             android:text="TextView"
             app:layout_constraintBottom_toTopOf="@+id/postPicture"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.458" />
 
         <TextView
             android:id="@+id/nlikes"
@@ -85,8 +88,8 @@
 
         <TextView
             android:id="@+id/description"
-            android:layout_width="352dp"
-            android:layout_height="101dp"
+            android:layout_width="342dp"
+            android:layout_height="99dp"
             android:layout_marginTop="112dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
