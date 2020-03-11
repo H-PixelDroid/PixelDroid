@@ -1,16 +1,23 @@
 package com.h.pixeldroid.models
 
+import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.Fragment
 import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.ImageConverter
 import java.io.Serializable
 
 class Post(private val status: Status?) : Serializable {
+    companion object {
+        const val POST_TAG = "postTag"
+        const val POST_FRAG_TAG = "postFragTag"
+    }
 
     fun getPostUrl() : String? = status?.media_attachments?.get(0)?.url
     fun getProfilePicUrl() : String? = status?.account?.avatar
@@ -41,18 +48,30 @@ class Post(private val status: Status?) : Serializable {
         return "$nShares Shares"
     }
 
-    fun setupPost(context: AppCompatActivity) {
+    fun setupPost(fragment: Fragment, context : Context, rootView : View) {
         //Setup username as a button that opens the profile
-        val username = context.findViewById<TextView>(R.id.username)
+        val username = rootView.findViewById<TextView>(R.id.username)
         username.text = this.getUsername()
         username.setOnClickListener((View.OnClickListener {
             val intent = Intent(context, ProfileActivity::class.java)
             context.startActivity(intent)
         }))
 
-        context.findViewById<TextView>(R.id.description).text = this.getDescription()
-        context.findViewById<TextView>(R.id.nlikes).text = this.getNLikes()
-        context.findViewById<TextView>(R.id.nshares).text = this.getNShares()
+        rootView.findViewById<TextView>(R.id.description).text = this.getDescription()
+        rootView.findViewById<TextView>(R.id.nlikes).text = this.getNLikes()
+        rootView.findViewById<TextView>(R.id.nshares).text = this.getNShares()
+
+        //Setup post and profile images
+        ImageConverter.setImageViewFromURL(
+            fragment,
+            getPostUrl(),
+            rootView.findViewById(R.id.postPicture)
+        )
+        ImageConverter.setImageViewFromURL(
+            fragment,
+            getProfilePicUrl(),
+            rootView.findViewById(R.id.profilePic)
+        )
     }
 
 }

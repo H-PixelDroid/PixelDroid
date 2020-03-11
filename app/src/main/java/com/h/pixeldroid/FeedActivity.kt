@@ -1,27 +1,16 @@
 package com.h.pixeldroid
 
-import android.app.Activity
-import android.content.Intent
-import android.content.Intent.ACTION_VIEW
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.TextView
+import androidx.fragment.app.FragmentManager
+import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.models.Post
+import com.h.pixeldroid.models.Post.Companion.POST_FRAG_TAG
 import com.h.pixeldroid.objects.*
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
-import androidx.test.rule.ActivityTestRule
-import com.h.pixeldroid.models.Post.Companion.POST_TAG
 
-
-@RunWith(AndroidJUnit4::class)
-class PostTest {
-   /* private val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
+class FeedActivity : AppCompatActivity() {
+    private val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
         created_at="2020-03-03T08:00:16.000000Z",
         account= Account(id="115114166443970560", username="Miike", acct="Miike",
             url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
@@ -41,31 +30,22 @@ class PostTest {
         tags= listOf(Tag(name="hiking", url="https://pixelfed.de/discover/tags/hiking", history=null), Tag(name="nature", url="https://pixelfed.de/discover/tags/nature", history=null), Tag(name="rotavicentina", url="https://pixelfed.de/discover/tags/rotavicentina", history=null)),
         emojis= emptyList(), reblogs_count=21, favourites_count=7, replies_count=0, url="https://pixelfed.de/p/Miike/140364967936397312",
         in_reply_to_id=null, in_reply_to_account=null, reblog=null, poll=null, card=null, language=null, text=null, favourited=false, reblogged=false, muted=false, bookmarked=false, pinned=false)
-    private val post = Post(status)
 
-    @get:Rule
-    //var activityRule = ActivityTestRule(PostActivity::class.java)
-    private var launchedActivity: Activity? = null
 
-    @Before
-    fun setup() {
-        val intent = Intent(ACTION_VIEW).putExtra(POST_TAG, post)
-        //launchedActivity = activityRule.launchActivity(intent)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_feed)
+        findViewById<TextView>(R.id.FeedText).text = "Feed"
+
+        //Connect to PixelFed to retrieve the public timeline
+        /*val api = PixelfedAPI.create("https://pixelfed.de")
+        val statuses = api.timelinePublic().execute().body()*/
+
+        val post = Post(status)
+
+        val postFragment = PostFragment.newInstance(post)
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.postFragment, postFragment, POST_FRAG_TAG)
     }
-
-    @Test
-    fun testLikesTextView() {
-        onView(withId(R.id.nlikes)).check(matches(withText("7 Likes")))
-    }
-
-    @Test
-    fun testSharesTextView() {
-        onView(withId(R.id.nshares)).check(matches(withText("21 Shares")))
-    }
-
-    @Test
-    fun testDescriptionView() {
-        onView(withId(R.id.description)).check(matches(withText(status.content)))
-    }*/
-
 }
