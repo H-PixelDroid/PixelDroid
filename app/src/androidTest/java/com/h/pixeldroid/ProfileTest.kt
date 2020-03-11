@@ -11,6 +11,7 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.Thread.sleep
 
 @RunWith(AndroidJUnit4::class)
 class ProfileTest {
@@ -19,14 +20,9 @@ class ProfileTest {
             = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun testAccountNameTextView() {
-        onView(withId(R.id.activity_main_account_btn)).perform(click())
-        onView(withId(R.id.accountName)).check(matches(withText("No Username")))
-    }
-
-    @Test
     fun testFollowersTextView() {
-        onView(withId(R.id.activity_main_account_btn)).perform(click())
+        onView(withId(R.id.button)).perform(click())
         onView(withId(R.id.followers)).check(matches(withText("Followers")))
     }
+
 }

@@ -5,7 +5,6 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.*
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.Call
@@ -151,5 +150,35 @@ class APIUnitTest {
         assertEquals("Pixeldroid", application.name)
         assertEquals(null, application.website)
         assertEquals(null, application.vapid_key)
+    }
+    @Test
+    fun obtainToken(){
+        stubFor(
+            post(urlEqualTo("/oauth/token"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""{
+  "access_token": "ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0",
+  "token_type": "Bearer",
+  "scope": "read write follow push",
+  "created_at": 1573979017
+}"""
+                        )))
+        val OAUTH_SCHEME = "oauth2redirect"
+        val SCOPE = "read write follow"
+        val PACKAGE_ID = "com.h.pixeldroid"
+        val call: Call<Token> = PixelfedAPI.create("http://localhost:8089")
+            .obtainToken("123", "ssqdfqsdfqds", "$OAUTH_SCHEME://$PACKAGE_ID", SCOPE, "abc",
+                "authorization_code")
+        val token: Token = call.execute().body()!!
+        assertEquals("ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0", token.access_token)
+        assertEquals("Bearer", token.token_type)
+        assertEquals("read write follow push", token.scope)
+        assertEquals(1573979017, token.created_at)
+        assertEquals(Token("ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0", "Bearer", "read write follow push",1573979017), token)
+
+
     }
 }
