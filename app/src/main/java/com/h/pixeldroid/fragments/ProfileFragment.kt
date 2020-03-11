@@ -1,6 +1,7 @@
 package com.h.pixeldroid.fragments
 
-import android.content.Intent
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -8,11 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.h.pixeldroid.LoginActivity
+import com.h.pixeldroid.BuildConfig
 
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
@@ -22,41 +22,41 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-const val BASE_URL = "https://pixelfed.de/"
 
 class ProfileFragment : Fragment() {
+    private lateinit var preferences: SharedPreferences
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_profile, container, false)
+        preferences = this.activity!!.getSharedPreferences(
+            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
+        )
+        return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
 
-        var statuses: ArrayList<Status>?
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val pixelfedAPI = PixelfedAPI.create(BASE_URL)
+        val pixelfedAPI = PixelfedAPI.create("https://${preferences.getString("domain", "")}")
+        val accessToken = preferences.getString("accessToken", "")
 
-        pixelfedAPI.timelinePublic(null, null, null, null, null)
-            .enqueue(object : Callback<List<Status>> {
-                override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
+        pixelfedAPI.verifyCredentials("Bearer $accessToken")
+            .enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
                     if (response.code() == 200) {
-                        statuses = response.body() as ArrayList<Status>?
+                        val account = response.body()!!
 
-                        if(!statuses.isNullOrEmpty()) {
+                        setContent(view, account)
 
-                            val account = statuses!![0].account
-
-                            setContent(view, account)
-
-                        }
                     }
                 }
 
-                override fun onFailure(call: Call<List<Status>>, t: Throwable) {
-                    Log.e("Ouch, not OK", t.toString())
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("ProfileFragment:", t.toString())
                 }
             })
-
-        return view
     }
 
     private fun setContent(view: View, account: Account) {

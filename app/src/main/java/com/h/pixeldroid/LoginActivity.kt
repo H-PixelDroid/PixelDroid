@@ -49,6 +49,9 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+    }
+
     private fun onClickConnect() {
 
         connect_instance_button.isEnabled = false

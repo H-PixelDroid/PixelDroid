@@ -1,11 +1,10 @@
 package com.h.pixeldroid
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.LinearLayout
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -24,26 +23,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
-
-
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        preferences = getSharedPreferences(
+            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
+        )
+
+        //Check if we have logged in and gotten an access token
+        if(!preferences.contains("accessToken")){
+            launchActivity(LoginActivity())
+        }
 
         // Setup the drawer
         drawerLayout = findViewById(R.id.drawer_layout)
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
+        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), ProfileFragment())
+
         viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                return when(position){
-                    0 -> HomeFragment()
-                    4 -> ProfileFragment()
-                    else -> Fragment()
-                }
+                return tabs[position]
             }
 
             override fun getItemCount(): Int {
@@ -58,7 +63,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 2 -> tab.icon = getDrawable(R.drawable.ic_photo_camera_white_24dp)
                 3 -> tab.icon = getDrawable(R.drawable.ic_star_white_24dp)
                 4 -> tab.icon = getDrawable(R.drawable.ic_person_white_24dp)
-
             }
         }.attach()
     }
