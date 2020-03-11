@@ -9,71 +9,28 @@
     tools:openDrawer="start"
     tools:context="com.h.pixeldroid.MainActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/main_linear_layout">
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-
-        <LinearLayout
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/activity_main_home_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:padding="10dp"
-                app:srcCompat="@drawable/ic_home_white_24dp" />
-
-            <ImageButton
-                android:id="@+id/activity_main_search_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_search_white_24dp" />
-
-            <ImageButton
-                android:id="@+id/activity_main_camera_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_photo_camera_white_24dp" />
-
-            <ImageButton
-                android:id="@+id/activity_main_favorite_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_star_white_24dp" />
-
-            <ImageButton
-                android:id="@+id/activity_main_account_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_person_white_24dp" />
-        </LinearLayout>
-
+            app:tabMode="fixed"
+            app:tabBackground="@color/colorPrimary">
+        </com.google.android.material.tabs.TabLayout>
     </LinearLayout>
+
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
