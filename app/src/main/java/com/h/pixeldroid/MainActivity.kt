@@ -20,5 +20,10 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener((View.OnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent) }))
+
+        val feedButton = findViewById<Button>(R.id.feedButton)
+        feedButton.setOnClickListener((View.OnClickListener {
+            startActivity(Intent(this, FeedActivity::class.java))
+        }))
     }
 }
