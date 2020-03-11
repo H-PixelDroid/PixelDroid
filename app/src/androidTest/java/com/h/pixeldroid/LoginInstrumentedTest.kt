@@ -39,42 +39,44 @@ class LoginInstrumentedTest {
     fun clickConnect() {
         onView(withId(R.id.connect_instance_button)).check(matches(withText("Connect")))
     }
+
     @Test
     fun invalidURL() {
         onView(withId(R.id.editText)).perform(ViewActions.replaceText("/jdi"), ViewActions.closeSoftKeyboard())
         onView(withId(R.id.connect_instance_button)).perform(click())
         onView(withId(R.id.editText)).check(matches(hasErrorText("Invalid domain")))
     }
+
     @Test
     fun notPixelfedInstance() {
         onView(withId(R.id.editText)).perform(ViewActions.replaceText("localhost"), ViewActions.closeSoftKeyboard())
         onView(withId(R.id.connect_instance_button)).perform(click())
         onView(withId(R.id.editText)).check(matches(hasErrorText("Could not register the application with this server")))
     }
-
-
 }
 
-@RunWith(AndroidJUnit4::class)
-class LoginCheckIntent {
-    @get:Rule
-    val intentsTestRule = IntentsTestRule(LoginActivity::class.java)
-    @Test
-    fun launchesIntent() {
-        val expectedIntent: Matcher<Intent> = allOf(
-            hasAction(ACTION_VIEW),
-            hasDataString(containsString("pixelfed.social"))
-        )
+//@RunWith(AndroidJUnit4::class)
+//class LoginCheckIntent {
+//    @get:Rule
+//    val intentsTestRule = IntentsTestRule(LoginActivity::class.java)
+//
+//    @Test
+//    fun launchesIntent() {
+//        val expectedIntent: Matcher<Intent> = allOf(
+//            hasAction(ACTION_VIEW),
+//            hasDataString(containsString("pixelfed.social"))
+//        )
+//
+//        onView(withId(R.id.editText)).perform(ViewActions.replaceText("pixelfed.social"), ViewActions.closeSoftKeyboard())
+//        onView(withId(R.id.connect_instance_button)).perform(click())
+//
+//        Thread.sleep(5000)
+//
+//        intended(expectedIntent)
+//
+//    }
+//}
 
-        onView(withId(R.id.editText)).perform(ViewActions.replaceText("pixelfed.social"), ViewActions.closeSoftKeyboard())
-        onView(withId(R.id.connect_instance_button)).perform(click())
-
-        Thread.sleep(5000)
-
-        intended(expectedIntent)
-
-    }
-}
 @RunWith(AndroidJUnit4::class)
 class AfterIntent {
 
@@ -87,6 +89,7 @@ class AfterIntent {
         val intent = Intent(ACTION_VIEW, Uri.parse("oauth2redirect://com.h.pixeldroid?code=sdfdqsf"))
         launchedActivity = rule.launchActivity(intent)
     }
+
     @Test
     fun usesIntent() {
 

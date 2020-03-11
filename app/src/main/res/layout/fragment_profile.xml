@@ -28,16 +28,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/posts"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        android:text="Posts"
-        app:layout_constraintEnd_toEndOf="@+id/nbPosts"
-        app:layout_constraintStart_toStartOf="@+id/nbPosts"
-        app:layout_constraintTop_toBottomOf="@+id/nbPosts" />
-
-    <TextView
         android:id="@+id/nbPosts"
         android:layout_width="39dp"
         android:layout_height="27dp"
@@ -46,6 +36,16 @@
         android:text="N/A"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/posts"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:text="Posts"
+        app:layout_constraintEnd_toEndOf="@+id/nbPosts"
+        app:layout_constraintStart_toStartOf="@+id/nbPosts"
+        app:layout_constraintTop_toBottomOf="@+id/nbPosts" />
 
     <TextView
         android:id="@+id/followers"

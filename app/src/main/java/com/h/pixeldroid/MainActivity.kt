@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
 import com.h.pixeldroid.fragments.HomeFragment
+import com.h.pixeldroid.fragments.ProfileFragment
 import com.h.pixeldroid.motions.OnSwipeListener
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,10 +29,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val accountButton : ImageButton = findViewById(R.id.activity_main_account_btn)
 
         homepageButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            launchFragment(HomeFragment())
         }
         accountButton.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+            launchFragment(ProfileFragment())
         }
 
         // Setup the drawer
@@ -40,11 +41,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
 
         val onSwipeListener = object: OnSwipeListener(this) {
-            override fun onSwipeRight() = drawerLayout.openDrawer(GravityCompat.START)
+            override fun onSwipeRight() = swipeRight()
+            override fun onSwipeLeft() = swipeLeft()
         }
         mainLinearLayout.setOnTouchListener(onSwipeListener)
 
+        // default fragment that displays when we open the app
         launchFragment(HomeFragment())
+    }
+
+    private fun swipeRight() {
+        // TODO: correctly switch between tabs
+        drawerLayout.openDrawer(GravityCompat.START)
+    }
+
+    private fun swipeLeft() {
+        // TODO: correctly switch between tabs
+        launchFragment(ProfileFragment())
     }
 
     /*
@@ -60,7 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
         when (item.itemId){
             R.id.nav_settings -> launchActivity(SettingsActivity())
-            R.id.nav_account -> launchActivity(ProfileActivity())
+            R.id.nav_account -> launchFragment(ProfileFragment())
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)
