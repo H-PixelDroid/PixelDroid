@@ -54,10 +54,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation ("com.github.bumptech.glide:glide:4.11.0") {
+    implementation("com.github.bumptech.glide:glide:4.11.0") {
         exclude group: "com.android.support"
     }
     implementation "androidx.browser:browser:1.2.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "com.github.tomakehurst:wiremock-jre8:2.26.2"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13'

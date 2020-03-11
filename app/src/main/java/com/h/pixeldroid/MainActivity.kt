@@ -6,21 +6,21 @@ import android.view.View
 import android.widget.ImageButton
 import android.view.MenuItem
 import androidx.annotation.NonNull
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
-import com.h.pixeldroid.settings.ui.*
 import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.PostActivity.Companion.POST_TAG
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.HomeFragment
 import com.h.pixeldroid.objects.Post
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.settings.ui.*
+import com.h.pixeldroid.motions.OnSwipeListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,32 +44,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val favoriteButton : ImageButton = findViewById(R.id.activity_main_favorite_btn)
         val accountButton : ImageButton = findViewById(R.id.activity_main_account_btn)
 
-        homepageButton.setOnClickListener(
-            View.OnClickListener {
-                startActivity(Intent(this, MainActivity::class.java))
-            }
-        )
+        homepageButton.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
 
         accountButton.setOnClickListener((View.OnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }))
 
-        loadData()
-
-        // setup the top toolbar
-        val toolbar : Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+//        loadData()
 
         // Setup the drawer
         drawerLayout = findViewById(R.id.drawer_layout)
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
-            R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        val onSwipeListener = object: OnSwipeListener(this) {
+            override fun onSwipeRight() = drawerLayout.openDrawer(GravityCompat.START)
+        }
+        mainLinearLayout.setOnTouchListener(onSwipeListener)
 
         // On startup ONLY, start at the account settings
         if(savedInstanceState == null) {
@@ -77,10 +71,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             navigationView.setCheckedItem(R.id.nav_account)
         }
 
-        val button = findViewById<Button>(R.id.button_start_login)
-        button.setOnClickListener((View.OnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent) }))
+//        val button = findViewById<Button>(R.id.button_start_login)
+//        button.setOnClickListener((View.OnClickListener {
+//            val intent = Intent(this, LoginActivity::class.java)
+//            startActivity(intent) }))
+
+
+        launchFragment(HomeFragment())
     }
 
     private fun loadData() {
