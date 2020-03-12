@@ -1,10 +1,11 @@
-package com.h.pixeldroid
+package com.h.pixeldroid.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.h.pixeldroid.R
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.models.Post.Companion.POST_TAG
 
