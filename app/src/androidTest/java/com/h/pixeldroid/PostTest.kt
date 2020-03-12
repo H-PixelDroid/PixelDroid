@@ -19,7 +19,6 @@ import androidx.test.rule.ActivityTestRule
 import com.h.pixeldroid.models.Post.Companion.POST_TAG
 
 
-@RunWith(AndroidJUnit4::class)
 class PostTest {
    /* private val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
         created_at="2020-03-03T08:00:16.000000Z",
