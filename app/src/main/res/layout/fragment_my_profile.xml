@@ -5,88 +5,96 @@
     android:layout_height="match_parent"
     tools:context=".MyProfileFragment">
 
-    <ImageView
-        android:id="@+id/profilePictureImageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        tools:srcCompat="@tools:sample/avatars" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="230dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="150dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/nbPostsTextView"
-            android:layout_width="15dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="-\nPosts" />
-
-        <TextView
-            android:id="@+id/nbFollowersTextView"
-            android:layout_width="15dp"
+        <ImageView
+            android:id="@+id/profilePictureImageView"
+            android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="-\nFollowers" />
+            tools:layout_editor_absoluteX="15dp"
+            tools:layout_editor_absoluteY="80dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:layout_width="240dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="150dp"
+            tools:layout_editor_absoluteX="150dp"
+            tools:layout_editor_absoluteY="80dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/nbPostsTextView"
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="-\nPosts" />
+
+            <TextView
+                android:id="@+id/nbFollowersTextView"
+                android:layout_width="15dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="-\nFollowers" />
+
+            <TextView
+                android:id="@+id/nbFollowingTextView"
+                android:layout_width="15dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="-\nFollowing" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/nbFollowingTextView"
-            android:layout_width="15dp"
-            android:layout_height="120dp"
-            android:layout_weight="1"
+            android:id="@+id/accountNameTextView"
+            android:layout_width="156dp"
+            android:layout_height="22dp"
+            android:text="No Username"
+            tools:layout_editor_absoluteX="15dp"
+            tools:layout_editor_absoluteY="218dp" />
+
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="348dp"
+            android:layout_height="85dp"
+            android:autoSizeMaxTextSize="300sp"
+            android:autoSizeMinTextSize="2sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
+            tools:layout_editor_absoluteX="15dp"
+            tools:layout_editor_absoluteY="250dp" />
+
+        <Button
+            android:id="@+id/followButton"
+            android:layout_width="350dp"
+            android:layout_height="37dp"
             android:gravity="center"
-            android:text="-\nFollowing" />
-    </LinearLayout>
+            android:text="Modify Profile"
+            tools:layout_editor_absoluteX="15dp"
+            tools:layout_editor_absoluteY="350dp" />
 
-    <TextView
-        android:id="@+id/accountNameTextView"
-        android:layout_width="156dp"
-        android:layout_height="22dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginStart="16dp"
-        android:text="No Username" />
+        <ImageButton
+            android:id="@+id/postsButton"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="160dp"
+            tools:layout_editor_absoluteY="400dp" />
 
-    <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="348dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginStart="16dp"
-        android:autoSizeMaxTextSize="300sp"
-        android:autoSizeMinTextSize="2sp"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform" />
+        <ImageButton
+            android:id="@+id/collectionButton"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="205dp"
+            tools:layout_editor_absoluteY="400dp" />
 
-    <Button
-        android:id="@+id/followButton"
-        android:layout_width="350dp"
-        android:layout_height="37dp"
-        android:layout_marginTop="300dp"
-        android:layout_marginStart="30dp"
-        android:gravity="center"
-        android:text="Modify Profile" />
-
-    <ImageButton
-        android:id="@+id/postsButton"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="350dp"
-        android:gravity="center" />
-
-    <ImageButton
-        android:id="@+id/collectionButton"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="350dp"
-        android:gravity="center" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
