@@ -62,7 +62,7 @@ class ProfileFragment : Fragment() {
     private fun setContent(view: View, account: Account) {
         // ImageView : profile picture
         val profilePicture = view.findViewById<ImageView>(R.id.profilePicture)
-        Glide.with(view.context).load(account.avatar).into(profilePicture)
+        Glide.with(view.context.applicationContext).load(account.avatar).into(profilePicture)
 
         // TextView : description / bio
         val description = view.findViewById<TextView>(R.id.description)
