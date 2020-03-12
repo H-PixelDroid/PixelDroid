@@ -7,28 +7,72 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context=".MainActivity">
+    tools:context="com.h.pixeldroid.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="67dp"
-        tools:layout_editor_absoluteY="299dp">
+        android:id="@+id/main_linear_layout">
 
-        <Button
-            android:id="@+id/button_start_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:text="start login" />
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Show a profile" />
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/activity_main_home_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:padding="10dp"
+                app:srcCompat="@drawable/ic_home_white_24dp" />
+
+            <ImageButton
+                android:id="@+id/activity_main_search_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_search_white_24dp" />
+
+            <ImageButton
+                android:id="@+id/activity_main_camera_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_photo_camera_white_24dp" />
+
+            <ImageButton
+                android:id="@+id/activity_main_favorite_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_star_white_24dp" />
+
+            <ImageButton
+                android:id="@+id/activity_main_account_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_person_white_24dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -40,6 +84,5 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/activity_main_drawer" />
 
-
-
 </androidx.drawerlayout.widget.DrawerLayout>
+

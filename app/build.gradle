@@ -75,6 +75,7 @@ dependencies {
     }
     implementation "com.github.bumptech.glide:okhttp-integration:4.11.0"
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "com.github.tomakehurst:wiremock-jre8:2.26.3"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13'
