@@ -25,7 +25,6 @@ class ProfileActivity : AppCompatActivity() {
 
         val pixelfedAPI = PixelfedAPI.create(BASE_URL)
 
-
         pixelfedAPI.timelinePublic(null, null, null, null, null)
             .enqueue(object : Callback<List<Status>> {
                 override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
