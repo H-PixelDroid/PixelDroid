@@ -1,5 +1,6 @@
 package com.h.pixeldroid.utils
 
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,6 +20,10 @@ class ImageConverter {
 
         fun setImageViewFromURL(fragmentActivity: FragmentActivity,  url : String?, view : ImageView) {
             Glide.with(fragmentActivity).load(url).into(view)
+        }
+
+        fun setImageViewFromURL(fragView: View, url : String?, view : ImageView) {
+            Glide.with(fragView).load(url).into(view)
         }
     }
 }
