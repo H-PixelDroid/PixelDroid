@@ -16,7 +16,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.fragments.HomeFragment
-import com.h.pixeldroid.fragments.ProfileFragment
+import com.h.pixeldroid.fragments.MyProfileFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), ProfileFragment())
+        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), MyProfileFragment())
 
         viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
