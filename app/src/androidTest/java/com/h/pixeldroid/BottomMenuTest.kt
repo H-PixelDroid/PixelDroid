@@ -1,8 +1,7 @@
 package com.h.pixeldroid
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.swipeLeft
-import androidx.test.espresso.action.ViewActions.swipeRight
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -13,21 +12,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class SwipeTest {
+class BottomMenuTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun swipingRightOnHomepageShowsSettings() {
-        onView(withId(R.id.main_linear_layout)).perform(swipeRight())
-        onView(withId(R.id.nav_view)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun swipeLeftOnHomePageShowsProfile() {
-        // to modify when we add more tabs
-        onView(withId(R.id.main_linear_layout)).perform(swipeLeft())
+    fun testFollowersTextView() {
+        onView(withId(R.id.activity_main_account_btn)).perform(click())
         onView(withId(R.id.profile_main_container)).check(matches(isDisplayed()))
     }
 }
