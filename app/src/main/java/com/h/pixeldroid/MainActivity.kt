@@ -1,5 +1,6 @@
 package com.h.pixeldroid
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -19,6 +20,7 @@ import com.h.pixeldroid.motions.OnSwipeListener
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
+    private val newPostsActivityRequestCode = Activity.RESULT_OK
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
 
-    /*
+    /**
     When clicking in the drawer menu, go to the corresponding activity
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
@@ -83,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    /*
+    /**
     Launches the given activity and put it as the current one
      */
     private fun launchActivity(activity: AppCompatActivity) {
@@ -91,8 +93,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(intent)
     }
 
-    /*
-    Closes the drawer if we are clicking behind it
+    /**
+    Closes the drawer if it is open, when we press the back button
      */
     override fun onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){

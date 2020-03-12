@@ -44,7 +44,7 @@ android {
 
     }
 
-
+    apply plugin: 'kotlin-kapt'
 }
 
 dependencies {
@@ -65,6 +65,10 @@ dependencies {
     implementation "androidx.browser:browser:1.2.0"
     implementation 'com.google.android.material:material:1.1.0'
 
+    def room_version = "2.2.4"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
 
     implementation("com.github.bumptech.glide:glide:4.11.0") {
         exclude group: "com.android.support"
