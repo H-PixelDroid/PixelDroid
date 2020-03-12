@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
+
+
+    <ImageView
+        android:id="@+id/profilePictureImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <LinearLayout
+        android:layout_width="230dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/nbPostsTextView"
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="-\nPosts" />
+
+        <TextView
+            android:id="@+id/nbFollowersTextView"
+            android:layout_width="15dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="-\nFollowers" />
+
+        <TextView
+            android:id="@+id/nbFollowingTextView"
+            android:layout_width="15dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="-\nFollowing" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/accountNameTextView"
+        android:layout_width="156dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="15dp"
+        android:text="No Username"
+        app:layout_constraintStart_toStartOf="@+id/profilePictureImageView"
+        app:layout_constraintTop_toBottomOf="@+id/profilePictureImageView" />
+
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="348dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="14dp"
+        android:autoSizeMaxTextSize="300sp"
+        android:autoSizeMinTextSize="2sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        app:layout_constraintStart_toStartOf="@+id/accountNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/accountNameTextView" />
+
+    <Button
+        android:id="@+id/followButton"
+        android:layout_width="125dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="14dp"
+        android:gravity="center"
+        android:text="Follow"
+        app:layout_constraintStart_toStartOf="@+id/descriptionTextView"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
+
+    <ImageButton
+        android:id="@+id/postsButton"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/followButton"
+        app:srcCompat="@android:drawable/ic_dialog_dialer" />
+
+    <ImageButton
+        android:id="@+id/collectionButton"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/postsButton"
+        app:layout_constraintTop_toTopOf="@+id/postsButton"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="409dp"
+        android:layout_height="428dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postsButton">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
