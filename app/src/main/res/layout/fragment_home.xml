@@ -3,7 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.HomeFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/feedList"
+        android:name="com.h.pixeldroid.FeedFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".FeedActivity"
+        tools:listitem="@layout/post_fragment" />
 
     <LinearLayout
         android:layout_width="match_parent"
