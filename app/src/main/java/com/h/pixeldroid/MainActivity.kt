@@ -51,13 +51,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun swipeRight() {
-        // TODO: correctly switch between tabs and animate
+        // TODO: correctly switch between tabs
         drawerLayout.openDrawer(GravityCompat.START)
     }
 
     private fun swipeLeft() {
-        // TODO: correctly switch between tabs and animate
-        launchFragment(ProfileFragment())
+        // TODO: correctly switch between tabs
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left)
+            .replace(R.id.fragment_container, ProfileFragment()).commit()
     }
 
     /*
