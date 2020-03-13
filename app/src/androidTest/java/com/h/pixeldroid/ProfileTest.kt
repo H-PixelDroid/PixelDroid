@@ -51,7 +51,6 @@ class ProfileTest {
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
 
-
     @Before
     fun before(){
         val server = MockWebServer()
@@ -70,9 +69,7 @@ class ProfileTest {
             ViewActions.swipeLeft()
         ).perform(ViewActions.swipeLeft())
         Thread.sleep(1000)
-        onView(withId(R.id.followers)).check(matches(withText("Followers")))
-        onView(withId(R.id.accountName)).check(matches(withText("deerbard_photo")))
-
+        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
-
 }
