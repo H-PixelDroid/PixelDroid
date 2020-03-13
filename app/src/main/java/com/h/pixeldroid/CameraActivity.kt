@@ -32,17 +32,18 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
 
         textureView = findViewById<TextureView>(R.id.textureView2)!!
-        textureView.surfaceTextureListener
+        textureView.surfaceTextureListener = textureListener;
 
     }
 
-    var textureListener: SurfaceTextureListener = object : SurfaceTextureListener {
+    private var textureListener: SurfaceTextureListener = object : SurfaceTextureListener {
         override fun onSurfaceTextureAvailable(
             surface: SurfaceTexture,
             width: Int,
             height: Int
         ) {
             //open your camera here
+            Toast.makeText(applicationContext,"Capture Session failed",Toast.LENGTH_SHORT).show();
             openCamera(surface)
         }
 
