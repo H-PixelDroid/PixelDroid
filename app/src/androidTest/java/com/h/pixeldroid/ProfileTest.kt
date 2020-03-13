@@ -76,10 +76,4 @@ class ProfileTest {
 
 
     }
-
-    @Test
-    fun randomUsernameCorrectlyLoadedTest() {
-        Thread.sleep(5000) // wait for the username to load (to modify once we know how)
-        onView(withId(R.id.accountName)).check(matches(not(withText(R.string.no_username))))
-    }
 }

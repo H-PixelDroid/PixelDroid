@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }.attach()
     }
-    
+
     /**
     When clicking in the drawer menu, go to the corresponding activity
      */
