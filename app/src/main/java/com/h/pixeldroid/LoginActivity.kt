@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
         val normalizedDomain = normalizeDomain(editText.text.toString())
 
         try{
-            HttpUrl.Builder().host(normalizedDomain).build()
+            HttpUrl.Builder().host(normalizedDomain).scheme("https").build()
         } catch (e: IllegalArgumentException) {
             return failedRegistration(getString(R.string.invalid_domain))
         }
@@ -67,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
         preferences.edit()
             .putString("domain", "https://$normalizedDomain")
             .apply()
-        registerAppToServer(normalizedDomain)
+        registerAppToServer("https://$normalizedDomain")
 
     }
 
