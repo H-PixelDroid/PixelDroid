@@ -43,7 +43,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), MyProfileFragment())
+        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(),
+            MyProfileFragment()
+        )
 
         viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
