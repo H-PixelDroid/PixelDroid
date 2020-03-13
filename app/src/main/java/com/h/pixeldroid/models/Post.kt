@@ -3,6 +3,7 @@ package com.h.pixeldroid.models
 import android.content.Context
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Status
