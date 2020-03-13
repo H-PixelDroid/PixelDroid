@@ -41,6 +41,7 @@ class FeedInstrumentedTest {
 
     @Test
     fun swipingDownOnHomepageShowsMorePosts() {
+        Thread.sleep(5000)
 
         val firstDesc = withId(R.id.description)
         onView(withId(R.id.view_pager)).perform(swipeUp()).perform(swipeDown()).perform(swipeDown())
