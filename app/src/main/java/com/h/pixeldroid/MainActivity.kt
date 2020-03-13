@@ -71,14 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }.attach()
     }
-
-    /*
-    Launches the given fragment and put it as the current "activity"
-     */
-    private fun launchFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
-    }
-
+    
     /**
     When clicking in the drawer menu, go to the corresponding activity
      */
