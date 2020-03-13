@@ -39,7 +39,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pixelfedAPI = PixelfedAPI.create("https://${preferences.getString("domain", "")}")
+        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         val accessToken = preferences.getString("accessToken", "")
 
         pixelfedAPI.verifyCredentials("Bearer $accessToken")
