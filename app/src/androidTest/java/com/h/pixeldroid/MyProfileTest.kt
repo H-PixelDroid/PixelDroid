@@ -1,22 +1,17 @@
 package com.h.pixeldroid
 
 import android.content.Context
-import androidx.core.view.get
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.h.pixeldroid.objects.Account
-import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -24,7 +19,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class ProfileTest {
+class MyProfileTest {
     private val accountJson = "{\n" +
             "      \"id\": \"1450\",\n" +
             "      \"username\": \"deerbard_photo\",\n" +
@@ -52,7 +47,6 @@ class ProfileTest {
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
 
-
     @Before
     fun before(){
         val server = MockWebServer()
@@ -71,9 +65,8 @@ class ProfileTest {
             ViewActions.swipeLeft()
         ).perform(ViewActions.swipeLeft())
         Thread.sleep(1000)
-        onView(withId(R.id.followers)).check(matches(withText("Followers")))
-        onView(withId(R.id.accountName)).check(matches(withText("deerbard_photo")))
 
+        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
-
 }
