@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
+
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -17,6 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.fragments.HomeFragment
 import com.h.pixeldroid.fragments.MyProfileFragment
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
 
         val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), MyProfileFragment())
+
         setupTabs(tabs)
     }
 
@@ -70,7 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }.attach()
     }
 
-    /*
+    /**
     When clicking in the drawer menu, go to the corresponding activity
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
@@ -83,7 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    /*
+    /**
     Launches the given activity and put it as the current one
      */
     private fun launchActivity(activity: AppCompatActivity) {
@@ -91,8 +94,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(intent)
     }
 
-    /*
-    Closes the drawer if we are clicking behind it
+    /**
+    Closes the drawer if it is open, when we press the back button
      */
     override fun onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
