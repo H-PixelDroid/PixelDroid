@@ -28,7 +28,7 @@ class SwipeTest {
         val preferences = getInstrumentation()
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", "localhost").apply()
+        preferences.edit().putString("domain", "http://localhost").apply()
         ActivityScenario.launch(MainActivity::class.java)
     }
 
