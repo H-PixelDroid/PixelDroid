@@ -59,27 +59,27 @@ class LoginInstrumentedTest {
     }
 }
 
-@RunWith(AndroidJUnit4::class)
-class LoginCheckIntent {
-    @get:Rule
-    val intentsTestRule = IntentsTestRule(LoginActivity::class.java)
-
-    @Test
-    fun launchesIntent() {
-        val expectedIntent: Matcher<Intent> = allOf(
-            hasAction(ACTION_VIEW),
-            hasDataString(containsString("pixelfed.social"))
-        )
-
-        onView(withId(R.id.editText)).perform(ViewActions.replaceText("pixelfed.social"), ViewActions.closeSoftKeyboard())
-        onView(withId(R.id.connect_instance_button)).perform(click())
-
-        Thread.sleep(5000)
-
-        intended(expectedIntent)
-
-    }
-}
+//@RunWith(AndroidJUnit4::class)
+//class LoginCheckIntent {
+//    @get:Rule
+//    val intentsTestRule = IntentsTestRule(LoginActivity::class.java)
+//
+//    @Test
+//    fun launchesIntent() {
+//        val expectedIntent: Matcher<Intent> = allOf(
+//            hasAction(ACTION_VIEW),
+//            hasDataString(containsString("pixelfed.social"))
+//        )
+//
+//        onView(withId(R.id.editText)).perform(ViewActions.replaceText("pixelfed.social"), ViewActions.closeSoftKeyboard())
+//        onView(withId(R.id.connect_instance_button)).perform(click())
+//
+//        Thread.sleep(5000)
+//
+//        intended(expectedIntent)
+//
+//    }
+//}
 
 @RunWith(AndroidJUnit4::class)
 class AfterIntent {

@@ -49,6 +49,9 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+    }
+
     private fun onClickConnect() {
 
         connect_instance_button.isEnabled = false
@@ -62,9 +65,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         preferences.edit()
-            .putString("domain", normalizedDomain)
+            .putString("domain", "https://$normalizedDomain")
             .apply()
-        registerAppToServer(normalizedDomain)
+        registerAppToServer("https://$normalizedDomain")
 
     }
 
@@ -97,14 +100,14 @@ class LoginActivity : AppCompatActivity() {
                 return failedRegistration()
             }
         }
-        PixelfedAPI.create("https://$normalizedDomain").registerApplication(
+        PixelfedAPI.create(normalizedDomain).registerApplication(
             APP_NAME,"$OAUTH_SCHEME://$PACKAGE_ID", SCOPE
         ).enqueue(callback)
     }
 
     private fun promptOAuth(normalizedDomain: String, client_id: String) {
 
-        val url = "https://$normalizedDomain/oauth/authorize?" +
+        val url = "$normalizedDomain/oauth/authorize?" +
                 "client_id" + "=" + client_id + "&" +
                 "redirect_uri" + "=" + "$OAUTH_SCHEME://$PACKAGE_ID" + "&" +
                 "response_type=code" + "&" +
@@ -150,7 +153,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        PixelfedAPI.create("https://$domain")
+        PixelfedAPI.create("$domain")
             .obtainToken(
             clientId, clientSecret, "$OAUTH_SCHEME://$PACKAGE_ID", SCOPE, code,
             "authorization_code"
