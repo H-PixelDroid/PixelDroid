@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
+
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
     private lateinit var preferences: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +73,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     /*
+    Launches the given fragment and put it as the current "activity"
+     */
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+    }
+
+    /**
     When clicking in the drawer menu, go to the corresponding activity
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
@@ -83,7 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    /*
+    /**
     Launches the given activity and put it as the current one
      */
     private fun launchActivity(activity: AppCompatActivity) {
@@ -91,8 +100,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(intent)
     }
 
-    /*
-    Closes the drawer if we are clicking behind it
+    /**
+    Closes the drawer if it is open, when we press the back button
      */
     override fun onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){

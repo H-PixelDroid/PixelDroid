@@ -17,7 +17,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 class SwipeTest {
     @get:Rule
@@ -36,5 +35,6 @@ class SwipeTest {
     fun swipingRightOnHomepageShowsSettings() {
         onView(withId(R.id.view_pager)).perform(swipeLeft()).perform(swipeLeft()).perform(swipeLeft()).perform(swipeLeft())
         onView(withId(R.id.nbFollowers)).check(matches(isDisplayed()))
+
     }
 }

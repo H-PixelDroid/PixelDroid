@@ -16,6 +16,7 @@ import com.h.pixeldroid.objects.Account
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -73,6 +74,12 @@ class ProfileTest {
         onView(withId(R.id.followers)).check(matches(withText("Followers")))
         onView(withId(R.id.accountName)).check(matches(withText("deerbard_photo")))
 
+
     }
 
+    @Test
+    fun randomUsernameCorrectlyLoadedTest() {
+        Thread.sleep(5000) // wait for the username to load (to modify once we know how)
+        onView(withId(R.id.accountName)).check(matches(not(withText(R.string.no_username))))
+    }
 }
