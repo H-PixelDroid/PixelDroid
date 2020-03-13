@@ -36,15 +36,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //Check if we have logged in and gotten an access token
         if(!preferences.contains("accessToken")){
             launchActivity(LoginActivity())
+        } else {
+            // Setup the drawer
+            drawerLayout = findViewById(R.id.drawer_layout)
+            val navigationView: NavigationView = findViewById(R.id.nav_view)
+            navigationView.setNavigationItemSelectedListener(this)
+
+            val tabs =
+                arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), ProfileFragment())
+            setupTabs(tabs)
         }
-
-        // Setup the drawer
-        drawerLayout = findViewById(R.id.drawer_layout)
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-
-        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), ProfileFragment())
-        setupTabs(tabs)
     }
 
     private fun setupTabs(tabs: Array<Fragment>){

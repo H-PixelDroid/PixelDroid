@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pixelfedAPI = PixelfedAPI.create("https://${preferences.getString("domain", "")}")
+        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         val accessToken = preferences.getString("accessToken", "")
         var statuses: ArrayList<Status>? = null
         val newPosts = ArrayList<Post>()
