@@ -2,6 +2,7 @@ package com.h.pixeldroid.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
+
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +14,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.h.pixeldroid.BuildConfig
-
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
@@ -21,7 +21,6 @@ import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 class ProfileFragment : Fragment() {
     private lateinit var preferences: SharedPreferences

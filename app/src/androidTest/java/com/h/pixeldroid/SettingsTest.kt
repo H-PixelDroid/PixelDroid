@@ -4,11 +4,6 @@ import android.content.Context
 import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.CoordinatesProvider
-import androidx.test.espresso.action.GeneralClickAction
-import androidx.test.espresso.action.Press
-import androidx.test.espresso.action.Tap
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers.isClosed
@@ -37,6 +32,7 @@ class SettingsTest {
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", "http://localhost").apply()
         ActivityScenario.launch(MainActivity::class.java)
+
     }
 
     @Test

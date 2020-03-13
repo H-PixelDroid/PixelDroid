@@ -16,6 +16,7 @@ import com.h.pixeldroid.objects.Account
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -71,7 +72,7 @@ class ProfileTest {
         ).perform(ViewActions.swipeLeft())
         Thread.sleep(1000)
         onView(withId(R.id.followers)).check(matches(withText("Followers")))
-        //onView(withId(R.id.accountName)).check(matches(withText("deerbard_photo")))
+        onView(withId(R.id.accountName)).check(matches(withText("deerbard_photo")))
 
     }
 

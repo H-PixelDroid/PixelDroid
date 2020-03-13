@@ -1,13 +1,9 @@
 package com.h.pixeldroid.models
 
 import android.content.Context
-import android.content.Intent
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
-import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter
@@ -52,10 +48,6 @@ class Post(private val status: Status?) : Serializable {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
         username.text = this.getUsername()
-        username.setOnClickListener((View.OnClickListener {
-            val intent = Intent(context, ProfileActivity::class.java)
-            context.startActivity(intent)
-        }))
 
         rootView.findViewById<TextView>(R.id.description).text = this.getDescription()
         rootView.findViewById<TextView>(R.id.nlikes).text = this.getNLikes()
