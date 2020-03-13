@@ -45,7 +45,7 @@ class MyProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pixelfedAPI = PixelfedAPI.create("https://${preferences.getString("domain", "")}")
+        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         val accessToken = preferences.getString("accessToken", "")
 
         pixelfedAPI.verifyCredentials("Bearer $accessToken")
@@ -94,7 +94,7 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun onClickEditButton() {
-        val url = "https://${preferences.getString("domain", "")}/settings/home"
+        val url = "${preferences.getString("domain", "")}/settings/home"
 
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         if(activity != null && browserIntent.resolveActivity(activity!!.packageManager) != null) {

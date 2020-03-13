@@ -1,6 +1,7 @@
 package com.h.pixeldroid
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
@@ -15,6 +16,7 @@ import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matcher
@@ -86,6 +88,9 @@ class AfterIntent {
 
     @Before
     fun setup() {
+        val preferences = InstrumentationRegistry.getInstrumentation()
+            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
+        preferences.edit().putString("domain", "http://localhost").apply()
         val intent = Intent(ACTION_VIEW, Uri.parse("oauth2redirect://com.h.pixeldroid?code=sdfdqsf"))
         launchedActivity = rule.launchActivity(intent)
     }
