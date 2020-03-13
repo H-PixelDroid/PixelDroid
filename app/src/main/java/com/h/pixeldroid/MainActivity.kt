@@ -17,7 +17,8 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.fragments.HomeFragment
-import com.h.pixeldroid.fragments.ProfileFragment
+import com.h.pixeldroid.fragments.MyProfileFragment
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -25,7 +26,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
     private lateinit var preferences: SharedPreferences
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), ProfileFragment())
+        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), MyProfileFragment())
+
         setupTabs(tabs)
     }
 

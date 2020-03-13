@@ -34,7 +34,6 @@ class SwipeTest {
     @Test
     fun swipingRightOnHomepageShowsSettings() {
         onView(withId(R.id.view_pager)).perform(swipeLeft()).perform(swipeLeft()).perform(swipeLeft()).perform(swipeLeft())
-        onView(withId(R.id.nbFollowers)).check(matches(isDisplayed()))
-
+        onView(withId(R.id.nbFollowersTextView)).check(matches(isDisplayed()))
     }
 }
