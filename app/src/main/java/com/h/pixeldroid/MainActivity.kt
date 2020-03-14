@@ -16,6 +16,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.HomeFragment
 import com.h.pixeldroid.fragments.MyProfileFragment
 
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        val tabs = arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), MyProfileFragment())
+        val tabs = arrayOf(HomeFragment(), Fragment(), CameraFragment(), Fragment(), MyProfileFragment())
 
         setupTabs(tabs)
     }
