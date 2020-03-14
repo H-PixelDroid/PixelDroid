@@ -86,6 +86,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
 
+    def fragment_version = "1.2.2"
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
+
 }
 
 tasks.withType(Test) {
