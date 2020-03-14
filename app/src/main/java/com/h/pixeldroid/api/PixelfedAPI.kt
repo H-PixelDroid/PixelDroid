@@ -1,5 +1,6 @@
 package com.h.pixeldroid.api
 
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Application
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.objects.Token
@@ -7,11 +8,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
-import retrofit2.http.Field
+import retrofit2.http.*
 
 
 /*
@@ -52,6 +49,23 @@ interface PixelfedAPI {
         @Query("limit") limit: Int? = null
     ): Call<List<Status>>
 
+
+    @GET("/api/v1/timelines/home")
+    fun timelineHome(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Query("max_id") max_id: String? = null,
+        @Query("since_id") since_id: String? = null,
+        @Query("min_id") min_id: String? = null,
+        @Query("limit") limit: Int? = null,
+        @Query("local") local: Boolean? = null
+    ): Call<List<Status>>
+
+    @GET("/api/v1/accounts/verify_credentials")
+    fun verifyCredentials(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String
+        ): Call<Account>
 
     companion object {
         fun create(baseUrl: String): PixelfedAPI {
