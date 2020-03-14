@@ -57,7 +57,7 @@ class CameraActivity : AppCompatActivity() {
     }
 
 
-    fun openCamera() {
+    private fun openCamera() {
 
         val manager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
@@ -98,11 +98,11 @@ class CameraActivity : AppCompatActivity() {
         }
 
         override fun onDisconnected(camera: CameraDevice) {
-            Toast.makeText(applicationContext,"CameraDevice disconnected",Toast.LENGTH_SHORT).show()
+            cameraDevice.close()
         }
 
         override fun onError(camera: CameraDevice, error: Int) {
-            Toast.makeText(applicationContext,"CameraDevice error",Toast.LENGTH_SHORT).show()
+            cameraDevice.close()
         }
 
     }
