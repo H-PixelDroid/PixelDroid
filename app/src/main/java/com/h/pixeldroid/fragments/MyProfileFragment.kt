@@ -31,7 +31,7 @@ class MyProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        preferences = this.activity!!.getSharedPreferences(
+        preferences = this.requireActivity().getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
         val view = inflater.inflate(R.layout.fragment_my_profile, container, false)
@@ -97,7 +97,7 @@ class MyProfileFragment : Fragment() {
         val url = "${preferences.getString("domain", "")}/settings/home"
 
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        if(activity != null && browserIntent.resolveActivity(activity!!.packageManager) != null) {
+        if(activity != null && browserIntent.resolveActivity(requireActivity().packageManager) != null) {
             startActivity(browserIntent)
         } else {
             val text = "Cannot open this link"
