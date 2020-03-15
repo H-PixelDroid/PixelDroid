@@ -1,6 +1,7 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
 import androidx.recyclerview.widget.RecyclerView
@@ -52,10 +53,18 @@ class FeedRecyclerViewAdapter(
 
         //Set the the text views
         holder.username.text = post.getUsername()
+        holder.username.setTypeface(null, Typeface.BOLD)
+
         holder.usernameDesc.text = post.getUsername()
+        holder.usernameDesc.setTypeface(null, Typeface.BOLD)
+
         holder.description.text = post.getDescription()
+
         holder.nlikes.text = post.getNLikes()
+        holder.nlikes.setTypeface(null, Typeface.BOLD)
+
         holder.nshares.text = post.getNShares()
+        holder.nshares.setTypeface(null, Typeface.BOLD)
     }
 
     override fun getItemCount(): Int = posts.size

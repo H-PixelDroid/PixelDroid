@@ -1,6 +1,7 @@
 package com.h.pixeldroid.models
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
@@ -49,10 +50,23 @@ class Post(private val status: Status?) : Serializable {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
         username.text = this.getUsername()
+        username.setTypeface(null, Typeface.BOLD)
 
-        rootView.findViewById<TextView>(R.id.description).text = this.getDescription()
-        rootView.findViewById<TextView>(R.id.nlikes).text = this.getNLikes()
-        rootView.findViewById<TextView>(R.id.nshares).text = this.getNShares()
+        val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
+        usernameDesc.text = this.getUsername()
+        usernameDesc.setTypeface(null, Typeface.BOLD)
+
+        val description = rootView.findViewById<TextView>(R.id.description)
+        description.text = this.getDescription()
+        description.setTypeface(null, Typeface.BOLD)
+
+        val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
+        nlikes.text = this.getNLikes()
+        nlikes.setTypeface(null, Typeface.BOLD)
+
+        val nshares = rootView.findViewById<TextView>(R.id.nshares)
+        nshares.text = this.getNShares()
+        nshares.setTypeface(null, Typeface.BOLD)
 
         //Setup post and profile images
         ImageConverter.setImageViewFromURL(
