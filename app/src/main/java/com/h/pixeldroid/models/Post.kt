@@ -58,7 +58,6 @@ class Post(private val status: Status?) : Serializable {
 
         val description = rootView.findViewById<TextView>(R.id.description)
         description.text = this.getDescription()
-        description.setTypeface(null, Typeface.BOLD)
 
         val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
         nlikes.text = this.getNLikes()
