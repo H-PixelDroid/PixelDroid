@@ -10,8 +10,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.RecordedRequest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,11 +48,20 @@ class MyProfileTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
+    private val dispatcher: Dispatcher = object : Dispatcher() {
+        @Throws(InterruptedException::class)
+        override fun dispatch(request: RecordedRequest): MockResponse {
+            when (request.path) {
+                "/api/v1/accounts/verify_credentials" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(accountJson)
+            }
+            return MockResponse().setResponseCode(404)
+        }
+    }
 
     @Before
     fun before(){
         val server = MockWebServer()
-        server.enqueue(MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setBody(accountJson))
+        server.dispatcher = dispatcher
         server.start()
         val baseUrl = server.url("")
         val preferences = InstrumentationRegistry.getInstrumentation()
