@@ -62,5 +62,14 @@ class ImageConverter {
             Glide.with(view).load(url).apply(RequestOptions().circleCrop())
                 .placeholder(R.drawable.ic_default_user).into(image)
         }
+
+        /**
+         * @brief Loads a default image into a given image view
+         * @param view, the view in which this is happening
+         * @param image, the imageView into which we will load the image
+         */
+        fun setDefaultImage(view : View, image : ImageView) {
+            Glide.with(view).load(R.drawable.ic_default_user).into(image)
+        }
     }
 }
