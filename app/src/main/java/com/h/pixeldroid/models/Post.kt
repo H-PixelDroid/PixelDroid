@@ -45,7 +45,7 @@ class Post(private val status: Status?) : Serializable {
         return "$nShares Shares"
     }
 
-    fun setupPost(fragment: Fragment, context : Context, rootView : View) {
+    fun setupPost(fragment: Fragment, rootView : View) {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
         username.text = this.getUsername()

@@ -28,7 +28,7 @@ class PostFragment : Fragment() {
     ): View? {
         val post = arguments?.getSerializable(POST_TAG) as Post?
         val root = inflater.inflate(R.layout.post_fragment, container, false)
-        post?.setupPost(this, context!!, root)
+        post?.setupPost(this, root)
         return root
     }
 

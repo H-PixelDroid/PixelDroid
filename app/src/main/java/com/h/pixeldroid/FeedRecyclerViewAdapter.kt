@@ -45,6 +45,7 @@ class FeedRecyclerViewAdapter(
         setRoundImageFromURL(holder.postView, post.getProfilePicUrl(), holder.profilePic!!)
         setImageViewFromURL(holder.postView, post.getPostUrl(), holder.postPic)
 
+        //Set the image back to a placeholder if the original is too big
         if(holder.postPic.height > metrics.heightPixels) {
             setDefaultImage(holder.postView, holder.postPic)
         }
