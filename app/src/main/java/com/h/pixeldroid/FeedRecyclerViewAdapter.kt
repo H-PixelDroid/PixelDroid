@@ -1,14 +1,18 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.util.DisplayMetrics
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.Dimension
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
+import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
 
 /**
  * [RecyclerView.Adapter] that can display a list of [Post]s
@@ -29,11 +33,17 @@ class FeedRecyclerViewAdapter(
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
+        val metrics = DisplayMetrics()
 
-        if(post.getProfilePicUrl() != null) {
-            setImageViewFromURL(holder.postView, post.getProfilePicUrl(), holder.profilePic!!)
-        }
+        //Limit the height of the different images
+        holder.profilePic?.maxHeight = metrics.heightPixels
+        holder.postPic.maxHeight = metrics.heightPixels
+
+        //Set the two images
+        setRoundImageFromURL(holder.postView, post.getProfilePicUrl(), holder.profilePic!!)
         setImageViewFromURL(holder.postView, post.getPostUrl(), holder.postPic)
+
+        //Set the the text views
         holder.username.text = post.getUsername()
         holder.usernameDesc.text = post.getUsername()
         holder.description.text = post.getDescription()
