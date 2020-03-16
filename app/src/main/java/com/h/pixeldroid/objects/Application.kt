@@ -1,5 +1,7 @@
 package com.h.pixeldroid.objects
 
+import java.io.Serializable
+
 data class Application (
     //Required attributes
     val name: String,
@@ -9,4 +11,5 @@ data class Application (
     //Client Attributes
     val client_id: String? = null,
     val client_secret: String? = null
-)
+) : Serializable
+
