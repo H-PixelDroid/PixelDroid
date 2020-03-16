@@ -1,6 +1,7 @@
 package com.h.pixeldroid
 
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.h.pixeldroid.fragments.CameraFragment
 import org.junit.Test
@@ -11,6 +12,8 @@ class CameraTest {
     @Test
     fun testFragment() {
         val scenario = launchFragmentInContainer<CameraFragment>()
-
+        scenario.moveToState(Lifecycle.State.CREATED)
+        scenario.moveToState(Lifecycle.State.RESUMED)
+        scenario.moveToState(Lifecycle.State.DESTROYED)
     }
 }
