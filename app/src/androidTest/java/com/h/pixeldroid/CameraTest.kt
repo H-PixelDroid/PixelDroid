@@ -5,6 +5,7 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.h.pixeldroid.fragments.CameraFragment
+import kotlinx.android.synthetic.main.fragment_camera.*
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -18,7 +19,12 @@ class CameraTest {
         scenario.moveToState(Lifecycle.State.CREATED)
         scenario.moveToState(Lifecycle.State.RESUMED)
 
-        
+        scenario.onFragment { fragment ->
+            assert(fragment.isAdded)
+            assert(fragment.isResumed)
+            assert(fragment.isVisible)
+            assert(fragment.textureView.isAvailable)
+        }
 
         scenario.moveToState(Lifecycle.State.DESTROYED)
     }
