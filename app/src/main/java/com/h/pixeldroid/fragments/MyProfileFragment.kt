@@ -19,6 +19,8 @@ import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,7 +69,7 @@ class MyProfileFragment : Fragment() {
     private fun setContent(view: View, account: Account) {
         // ImageView : profile picture
         val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)
-        Glide.with(view.context).load(account.avatar).into(profilePicture)
+        setRoundImageFromURL(view, account.avatar, profilePicture)
 
         // TextView : description / bio
         val description = view.findViewById<TextView>(R.id.descriptionTextView)
