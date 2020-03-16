@@ -15,10 +15,10 @@ class CameraTest {
         val scenario = launchFragment<CameraFragment>()
         scenario.recreate()
 
-        scenario.moveToState(Lifecycle.State.STARTED)
         scenario.moveToState(Lifecycle.State.CREATED)
         scenario.moveToState(Lifecycle.State.RESUMED)
 
+        
 
         scenario.moveToState(Lifecycle.State.DESTROYED)
     }
