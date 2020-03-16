@@ -16,8 +16,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class FeedActivity : AppCompatActivity() {
-    var feed : RecyclerView? = null
-    var adapter : FeedRecyclerViewAdapter? = null
+    lateinit var feed : RecyclerView
+    lateinit var adapter : FeedRecyclerViewAdapter
     var posts : List<Post> = ArrayList()
 
     fun setContent(newPosts : ArrayList<Post>) {
@@ -25,7 +25,7 @@ class FeedActivity : AppCompatActivity() {
         feed?.setHasFixedSize(true)
         feed?.layoutManager = LinearLayoutManager(this)
         posts = newPosts
-        adapter = FeedRecyclerViewAdapter(posts, this)
+        adapter = FeedRecyclerViewAdapter(context = this)
         feed?.adapter = adapter
     }
 

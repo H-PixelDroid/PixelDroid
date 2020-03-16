@@ -16,14 +16,21 @@ import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.utils.ImageConverter.Companion.setDefaultImage
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
 import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
+import java.util.ArrayList
 
 /**
  * [RecyclerView.Adapter] that can display a list of [Post]s
  */
 class FeedRecyclerViewAdapter(
-    private val posts: List<Post>,
     private val context : Context
 ) : RecyclerView.Adapter<FeedRecyclerViewAdapter.ViewHolder>() {
+    private val posts: ArrayList<Post> = ArrayList<Post>()
+
+    fun addPosts(newPosts : List<Post>) {
+        val size = posts.size
+        posts.addAll(newPosts)
+        notifyItemRangeInserted(size, newPosts.size)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)

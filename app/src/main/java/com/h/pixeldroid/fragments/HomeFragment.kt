@@ -24,28 +24,28 @@ import retrofit2.Response
 
 class HomeFragment : Fragment() {
     private lateinit var preferences: SharedPreferences
-    var feed : RecyclerView? = null
-    var adapter : FeedRecyclerViewAdapter? = null
-    var posts : List<Post> = ArrayList()
+    private lateinit var feed : RecyclerView
+    private lateinit var adapter : FeedRecyclerViewAdapter
+    private lateinit var posts : List<Post>
 
-    fun setContent(newPosts : ArrayList<Post>, view : View) {
-        feed = view.findViewById(R.id.feedList)
-        feed?.setHasFixedSize(true)
-        feed?.layoutManager = LinearLayoutManager(context)
+    fun setContent(newPosts : ArrayList<Post>) {
         posts = newPosts
-        adapter = FeedRecyclerViewAdapter(posts, context!!)
-        feed?.adapter = adapter
+        adapter.addPosts(posts)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
         preferences = this.activity!!.getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        feed = view.findViewById(R.id.feedList)
+        feed.layoutManager = LinearLayoutManager(context)
+        adapter = FeedRecyclerViewAdapter(context!!)
+        feed.adapter = adapter
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
                             for (status in statuses!!) {
                                 newPosts.add(Post(status))
                             }
-                            setContent(newPosts, view)
+                            setContent(newPosts)
                             Log.e("POSTS", newPosts.toString())
                         }
 
