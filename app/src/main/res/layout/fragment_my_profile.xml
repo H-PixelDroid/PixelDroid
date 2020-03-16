@@ -10,114 +10,114 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/profilePictureImageView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
-
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="230dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/nbPostsTextView"
-                android:layout_width="15dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="-\nPosts" />
 
-            <TextView
-                android:id="@+id/nbFollowersTextView"
-                android:layout_width="15dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="-\nFollowers" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/nbFollowingTextView"
-                android:layout_width="15dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="-\nFollowing" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="20dp">
+
+                    <ImageView
+                        android:id="@+id/profilePictureImageView"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="10"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/nbPostsTextView"
+                            android:layout_width="15dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="-\nPosts" />
+
+                        <TextView
+                            android:id="@+id/nbFollowersTextView"
+                            android:layout_width="15dp"
+                            android:layout_height="120dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="-\nFollowers" />
+
+                        <TextView
+                            android:id="@+id/nbFollowingTextView"
+                            android:layout_width="15dp"
+                            android:layout_height="120dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="-\nFollowing" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <TextView
+                    android:id="@+id/accountNameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Username"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp">
+
+                <TextView
+                    android:id="@+id/descriptionTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp">
+
+                <Button
+                    android:id="@+id/editButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@color/colorPrimary"
+                    android:text="Edit profile"
+                    android:textColor="@color/cardview_light_background"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/accountNameTextView"
-            android:layout_width="156dp"
-            android:layout_height="22dp"
-            android:layout_marginTop="15dp"
-            android:text="No Username"
-            app:layout_constraintStart_toStartOf="@+id/profilePictureImageView"
-            app:layout_constraintTop_toBottomOf="@+id/profilePictureImageView" />
-
-        <TextView
-            android:id="@+id/descriptionTextView"
-            android:layout_width="348dp"
-            android:layout_height="85dp"
-            android:layout_marginTop="14dp"
-            android:autoSizeMaxTextSize="300sp"
-            android:autoSizeMinTextSize="2sp"
-            android:autoSizeStepGranularity="2sp"
-            android:autoSizeTextType="uniform"
-            app:layout_constraintStart_toStartOf="@+id/accountNameTextView"
-            app:layout_constraintTop_toBottomOf="@+id/accountNameTextView" />
-
-        <Button
-            android:id="@+id/editButton"
-            android:layout_width="350dp"
-            android:layout_height="37dp"
-            android:layout_marginTop="14dp"
-            android:gravity="center"
-            android:text="Edit profile"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/cardview_light_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
-
-        <LinearLayout
-            android:layout_width="409dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="340dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                android:id="@+id/postsButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="@color/cardview_shadow_end_color"
-                android:gravity="right"
-                app:srcCompat="@android:drawable/ic_dialog_dialer" />
-
-            <ImageButton
-                android:id="@+id/collectionButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="@color/cardview_shadow_end_color"
-                android:gravity="left"
-                app:srcCompat="@android:drawable/ic_menu_gallery" />
-        </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

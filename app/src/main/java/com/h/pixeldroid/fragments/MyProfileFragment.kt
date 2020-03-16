@@ -76,6 +76,7 @@ class MyProfileFragment : Fragment() {
         // TextView : account name
         val accountName = view.findViewById<TextView>(R.id.accountNameTextView)
         accountName.text = account.username
+        accountName.setTypeface(null, Typeface.BOLD)
 
         // TextView : number of posts
         val nbPosts = view.findViewById<TextView>(R.id.nbPostsTextView)
