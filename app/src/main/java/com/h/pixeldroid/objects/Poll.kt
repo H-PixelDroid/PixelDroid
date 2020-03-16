@@ -1,5 +1,7 @@
 package com.h.pixeldroid.objects
 
-class Poll {
+import java.io.Serializable
+
+class Poll : Serializable {
 
 }
