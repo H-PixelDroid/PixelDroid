@@ -53,11 +53,14 @@ class HomeFragment : Fragment() {
 
         val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         val accessToken = preferences.getString("accessToken", "")
-        var statuses: ArrayList<Status>? = null
+        var statuses: ArrayList<Status>?
         val newPosts = ArrayList<Post>()
 
-        pixelfedAPI.timelinePublic(null, null, null, null, null)
-            .enqueue(object : Callback<List<Status>> {
+        //Check that the access token isn't null and set the timeline accordingly
+        val api = if(accessToken == null) pixelfedAPI.timelinePublic()
+                else pixelfedAPI.timelineHome("Bearer $accessToken")
+
+        api.enqueue(object : Callback<List<Status>> {
                 override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
                     if (response.code() == 200) {
                         statuses = response.body() as ArrayList<Status>?
