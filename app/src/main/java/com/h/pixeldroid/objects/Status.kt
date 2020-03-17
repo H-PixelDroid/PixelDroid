@@ -1,5 +1,6 @@
 package com.h.pixeldroid.objects
 
+import java.io.Serializable
 
 /*
 Represents a status posted by an account.
@@ -40,9 +41,9 @@ data class Status(
     val muted: Boolean,
     val bookmarked: Boolean,
     val pinned: Boolean
-    )
+    ) : Serializable
 {
-    enum class Visibility {
+    enum class Visibility : Serializable {
         public, unlisted, private, direct
     }
 }

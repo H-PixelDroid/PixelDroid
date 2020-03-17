@@ -15,12 +15,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
-
+        
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
@@ -41,6 +42,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/activity_main_drawer" />
-
+    
 </androidx.drawerlayout.widget.DrawerLayout>
 
