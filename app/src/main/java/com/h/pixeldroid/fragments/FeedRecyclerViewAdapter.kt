@@ -1,20 +1,16 @@
-package com.h.pixeldroid
+package com.h.pixeldroid.fragments
 
 import android.content.Context
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.Dimension
-import com.bumptech.glide.ListPreloader
-import com.bumptech.glide.util.ViewPreloadSizeProvider
-import com.h.pixeldroid.fragments.PostFragment
+
+import com.h.pixeldroid.R
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.utils.ImageConverter.Companion.setDefaultImage
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
@@ -28,7 +24,6 @@ class FeedRecyclerViewAdapter(
     private val context : Context
 ) : RecyclerView.Adapter<FeedRecyclerViewAdapter.ViewHolder>() {
     private val posts: ArrayList<Post> = ArrayList<Post>()
-    private val preloadSizeProvider = ViewPreloadSizeProvider<PostFragment>()
 
     fun addPosts(newPosts : List<Post>) {
         val size = posts.size
