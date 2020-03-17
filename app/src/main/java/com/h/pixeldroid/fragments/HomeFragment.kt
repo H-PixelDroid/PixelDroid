@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
-import com.h.pixeldroid.FeedRecyclerViewAdapter
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.models.Post
@@ -56,7 +55,7 @@ class HomeFragment : Fragment() {
         var statuses: ArrayList<Status>? = null
         val newPosts = ArrayList<Post>()
 
-        pixelfedAPI.timelinePublic(null, null, null, null, null)
+        pixelfedAPI.timelineHome("Bearer $accessToken")
             .enqueue(object : Callback<List<Status>> {
                 override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
                     if (response.code() == 200) {
@@ -66,14 +65,13 @@ class HomeFragment : Fragment() {
                                 newPosts.add(Post(status))
                             }
                             setContent(newPosts)
-                            Log.e("POSTS", newPosts.toString())
                         }
 
                     }
                 }
 
                 override fun onFailure(call: Call<List<Status>>, t: Throwable) {
-                    Log.e("Ouch, not OK", t.toString())
+                    Log.e("HomeFragment", t.toString())
                 }
             })
     }
