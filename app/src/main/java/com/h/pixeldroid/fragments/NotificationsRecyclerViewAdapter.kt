@@ -58,7 +58,7 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
             .placeholder(R.drawable.ic_default_user).into(holder.avatar)
 
         Glide.with(holder.mView).load(notification.status?.media_attachments?.get(0)?.preview_url ?: "")
-            .placeholder(R.drawable.ic_default_user).into(holder.photoThumbnail)
+            .placeholder(R.drawable.ic_picture_fallback).into(holder.photoThumbnail)
 
         setNotificationType(notification.type, notification.account.username, holder.notificationType)
         
