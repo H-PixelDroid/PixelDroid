@@ -59,9 +59,27 @@ tools:context=".fragments.PostFragment">
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/LikeShareConstraint"
                 android:layout_width="match_parent"
-                android:layout_height="1dp">
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                >
 
+                <LinearLayout
+                    android:layout_width="409dp"
+                    android:layout_height="28dp"
+                    android:orientation="horizontal"
+                    tools:layout_editor_absoluteX="1dp"
+                    tools:layout_editor_absoluteY="1dp">
+
+                    <ImageView
+                        android:id="@+id/liker"
+                        android:layout_width="0dp"
+                        android:gravity="start"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_bluetooth" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout

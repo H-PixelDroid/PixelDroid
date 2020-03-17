@@ -7,11 +7,14 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
+import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter
 import java.io.Serializable
 
 class Post(private val status: Status?) : Serializable {
+    val id : String = status?.id ?: "0"
+
     companion object {
         const val POST_TAG = "postTag"
         const val POST_FRAG_TAG = "postFragTag"
@@ -36,13 +39,17 @@ class Post(private val status: Status?) : Serializable {
         return name!!
    }
 
-    fun getNLikes() : CharSequence {
-        val nLikes : Int = status?.favourites_count ?: 0
+    fun getNLikes(add : Int = 0) : CharSequence {
+        val nLikes : Int = (status?.favourites_count ?: 0) + add
         return "$nLikes Likes"
     }
 
-    fun getNShares() : CharSequence {
-        val nShares : Int = status?.reblogs_count ?: 0
+    fun isLiked() : Boolean {
+        return status?.favourited ?: false
+    }
+
+    fun getNShares(add : Int = 0) : CharSequence {
+        val nShares : Int = (status?.reblogs_count ?: 0) + add
         return "$nShares Shares"
     }
 

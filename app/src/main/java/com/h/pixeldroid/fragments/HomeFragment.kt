@@ -16,6 +16,7 @@ import com.h.pixeldroid.FeedRecyclerViewAdapter
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.models.Post
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
@@ -56,11 +57,25 @@ class HomeFragment : Fragment() {
         var statuses: ArrayList<Status>?
         val newPosts = ArrayList<Post>()
 
-        //Check that the access token isn't null and set the timeline accordingly
-        val api = if(accessToken == null) pixelfedAPI.timelinePublic()
-                else pixelfedAPI.timelineHome("Bearer $accessToken")
+        //Get the user's account data and pass it on to the adapter
+        pixelfedAPI.verifyCredentials("Bearer $accessToken")
+            .enqueue(object : Callback<Account> {
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("Ouch, not OK", t.toString())
+                }
 
-        api.enqueue(object : Callback<List<Status>> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    val user = response.body() as Account
+
+                    //Give the adapter access to the created api
+                    adapter.addApiAccess(pixelfedAPI, accessToken!!, user)
+                }
+
+            })
+
+        //Fill up the post list
+        pixelfedAPI.timelineHome("Bearer $accessToken")
+            .enqueue(object : Callback<List<Status>> {
                 override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
                     if (response.code() == 200) {
                         statuses = response.body() as ArrayList<Status>?
