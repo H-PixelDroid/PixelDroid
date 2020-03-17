@@ -6,11 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".PostActivity">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/postFragmentSingle"
-        android:name="com.h.pixeldroid.fragments.PostFragment"
-        android:layout_width="81dp"
-        android:layout_height="14dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

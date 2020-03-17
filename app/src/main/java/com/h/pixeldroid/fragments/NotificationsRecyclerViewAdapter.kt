@@ -10,10 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
+import com.h.pixeldroid.models.Post
+import com.h.pixeldroid.models.Post.Companion.POST_TAG
 import com.h.pixeldroid.objects.Notification
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
@@ -35,9 +39,22 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
         }
     }
     private fun openActivity(notification: Notification){
-        val url = notification.status?.url ?: notification.account.url
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        context.startActivity(browserIntent)
+        val intent: Intent
+        when (notification.type){
+            Notification.NotificationType.mention, Notification.NotificationType.favourite-> {
+                intent = Intent(context, PostActivity::class.java)
+                intent.putExtra(POST_TAG, Post(notification.status))
+            }
+            Notification.NotificationType.reblog-> {
+                Toast.makeText(context,"Can't see reblogs yet, sorry!",Toast.LENGTH_SHORT).show()
+                return
+            }
+            Notification.NotificationType.follow -> {
+                val url = notification.status?.url ?: notification.account.url
+                intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            }
+        }
+        context.startActivity(intent)
     }
 
     fun addNotifications(newNotifications: List<Notification>){
