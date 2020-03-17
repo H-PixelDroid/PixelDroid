@@ -43,7 +43,6 @@
                     android:scheme="@string/auth_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".FeedActivity" />
     </application>
 
 </manifest>
