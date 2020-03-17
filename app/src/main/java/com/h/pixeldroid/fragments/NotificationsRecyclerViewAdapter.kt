@@ -57,11 +57,16 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
         Glide.with(holder.mView).load(notification.account.avatar_static).apply(RequestOptions().circleCrop())
             .placeholder(R.drawable.ic_default_user).into(holder.avatar)
 
-        Glide.with(holder.mView).load(notification.status?.media_attachments?.get(0)?.preview_url ?: "")
-            .placeholder(R.drawable.ic_picture_fallback).into(holder.photoThumbnail)
+        val previewUrl = notification.status?.media_attachments?.get(0)?.preview_url
+        if(!previewUrl.isNullOrBlank()){
+            Glide.with(holder.mView).load(previewUrl)
+                .placeholder(R.drawable.ic_picture_fallback).into(holder.photoThumbnail)
+        } else{
+            holder.photoThumbnail.visibility = View.GONE
+        }
 
         setNotificationType(notification.type, notification.account.username, holder.notificationType)
-        
+
         holder.postDescription.text = notification.status?.content ?: ""
 
 
@@ -70,6 +75,7 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
             setOnClickListener(mOnClickListener)
         }
     }
+
     private fun setNotificationType(type: Notification.NotificationType, username: String,
                                     textView: TextView){
         val context = textView.context
