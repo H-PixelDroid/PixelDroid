@@ -59,5 +59,6 @@
     <string name="start_login">Start Login</string>
     <string name="no_username">No Username</string>
     <string name="upload_a_picture">Upload a picture</string>
+    <string name="take_a_picture">Take a picture</string>
 
 </resources>
