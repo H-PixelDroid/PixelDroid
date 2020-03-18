@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 class CameraTest {
     @Test
     fun testFragment() {
-        val scenario = launchFragment<CameraFragment>()
+        val scenario = launchFragmentInContainer<CameraFragment>()
         scenario.recreate()
 
         scenario.moveToState(Lifecycle.State.CREATED)
