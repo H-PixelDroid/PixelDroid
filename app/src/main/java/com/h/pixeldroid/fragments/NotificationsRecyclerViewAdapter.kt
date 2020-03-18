@@ -100,32 +100,29 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
     private fun setNotificationType(type: Notification.NotificationType, username: String,
                                     textView: TextView){
         val context = textView.context
-        val drawable: Drawable?
-        val format: String
-        when(type) {
+        val (format: String, drawable: Drawable?) = when(type) {
             Notification.NotificationType.follow -> {
-                drawable = context.getDrawable(R.drawable.ic_follow)
-                format = context.getString(R.string.followed_notification)
+                setNotificationTypeTextView(context, R.string.followed_notification, R.drawable.ic_follow)
             }
             Notification.NotificationType.mention -> {
-                format = context.getString(R.string.mention_notification)
-                drawable = context.getDrawable(R.drawable.ic_apenstaart)
+                setNotificationTypeTextView(context, R.string.mention_notification, R.drawable.ic_apenstaart)
             }
 
             Notification.NotificationType.reblog -> {
-                format = context.getString(R.string.shared_notification)
-                drawable = context.getDrawable(R.drawable.ic_share)
+                setNotificationTypeTextView(context, R.string.shared_notification, R.drawable.ic_share)
             }
 
             Notification.NotificationType.favourite -> {
-                format = context.getString(R.string.liked_notification)
-                drawable = context.getDrawable(R.drawable.ic_heart)
+                setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_heart)
             }
         }
         textView.text = format.format(username)
         textView.setCompoundDrawablesWithIntrinsicBounds(
             drawable,null,null,null
         )
+    }
+    private fun setNotificationTypeTextView(context: Context, format: Int, drawable: Int): Pair<String, Drawable?> {
+        return Pair(context.getString(format), context.getDrawable(drawable))
     }
 
     override fun getItemCount(): Int = notifications.size
