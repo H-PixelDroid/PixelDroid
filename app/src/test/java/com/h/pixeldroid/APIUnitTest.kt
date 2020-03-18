@@ -34,7 +34,30 @@ class APIUnitTest {
         tags= listOf(Tag(name="hiking", url="https://pixelfed.de/discover/tags/hiking", history=null), Tag(name="nature", url="https://pixelfed.de/discover/tags/nature", history=null), Tag(name="rotavicentina", url="https://pixelfed.de/discover/tags/rotavicentina", history=null)),
         emojis= emptyList(), reblogs_count=0, favourites_count=0, replies_count=0, url="https://pixelfed.de/p/Miike/140364967936397312",
         in_reply_to_id=null, in_reply_to_account=null, reblog=null, poll=null, card=null, language=null, text=null, favourited=false, reblogged=false, muted=false, bookmarked=false, pinned=false)
-
+    val sampleNotification = Notification("45723", Notification.NotificationType.favourite,
+        "2020-03-14T15:01:49+00:00",
+        Account("79574199701737472", "Spaziergaenger",
+            "Spaziergaenger", "https://pixelfed.de/Spaziergaenger",
+            "anonymous", "", "https://pixelfed.de/storage/avatars/007/957/419/970/173/747/2/KEg4YgCgsmzdgyVztszz_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+            "https://pixelfed.de/storage/avatars/007/957/419/970/173/747/2/KEg4YgCgsmzdgyVztszz_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+            locked=false, followers_count = 40, following_count = 0, statuses_count = 891, created_at = "1568728767", header = "", discoverable = true, emojis = emptyList(), header_static = ""),
+        Status("144456497894658048","https://pixelfed.de/p/dante/144456497894658048",
+            "https://pixelfed.de/p/dante/144456497894658048", in_reply_to_id = null,
+            in_reply_to_account = null, reblog = null,content = "Saturn V launch", emojis = emptyList(), reblogs_count = 0,
+            favourites_count = 1, reblogged = false, favourited = false, muted = false, sensitive = false,
+            spoiler_text = "", visibility = Status.Visibility.public, application = Application("web", null),
+            language = null, pinned = false, mentions = emptyList(), tags = emptyList(), replies_count = 0,
+            account = Account("136453537340198912", "dante", "dante", locked = false, following_count = 3,
+                followers_count = 1,statuses_count = 1, note = "", url = "https://pixelfed.de/dante",
+                avatar = "https://pixelfed.de/storage/avatars/default.png?v=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+                emojis = emptyList(), header_static = "", header = "", created_at = "1582289858", avatar_static = "https://pixelfed.de/storage/avatars/default.png?v=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+                discoverable = true, display_name = "Dante"), media_attachments = listOf(
+                Attachment("16583",Attachment.AttachmentType.image, "https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/0fa8bbe19cc23442034913a7c97fbe4527c1d63a/vs2vouJ86OvzxhK9ewhPlfPf4Y9IoQ5CHfiBIqad.jpeg",
+                    "https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/0fa8bbe19cc23442034913a7c97fbe4527c1d63a/vs2vouJ86OvzxhK9ewhPlfPf4Y9IoQ5CHfiBIqad_thumb.jpeg",
+                    null, null, null, null)
+            )
+            , bookmarked = false, card = null, poll = null, text= null,url= "https://pixelfed.de/p/dante/144456497894658048")
+    )
     @get:Rule
     public var wireMockRule = WireMockRule(8089)
     /*@Test
