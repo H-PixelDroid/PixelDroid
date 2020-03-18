@@ -132,9 +132,5 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
         val postDescription: TextView = mView.notification_post_description
         val avatar: ImageView = mView.notification_avatar
         val photoThumbnail: ImageView = mView.notification_photo_thumbnail
-
-        override fun toString(): String {
-            return super.toString() + " '" + postDescription.text + "'"
-        }
     }
 }
