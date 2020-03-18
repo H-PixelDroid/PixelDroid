@@ -1,12 +1,18 @@
 package com.h.pixeldroid.fragments
 
+import android.widget.Button
+import android.widget.ImageView
+import kotlinx.android.synthetic.main.fragment_camera.*
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Context.CAMERA_SERVICE
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -24,14 +30,22 @@ class CameraFragment : Fragment() {
     private lateinit var requestBuilder: CaptureRequest.Builder
     private lateinit var captureSession: CameraCaptureSession
 
+    private var uploadedPictureView: ImageView? = null
+
+
+    val PICK_IMAGE_REQUEST = 1
+    val TAG = "Camera Fragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_camera, container, false)
-
-        // Soon : buttons and stuff
+        val view = inflater.inflate(R.layout.fragment_camera, container, false)
+        val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
+        uploadedPictureView = view.findViewById(R.id.uploadedPictureView)
+        uploadPictureButton.setOnClickListener{
+            uploadPicture()
+        }
 
         return view
     }
@@ -128,10 +142,30 @@ class CameraFragment : Fragment() {
                 requestBuilder.addTarget(Surface(textureView.surfaceTexture))
                 captureSession.setRepeatingRequest(requestBuilder.build(), null, null)
 
-            } catch (e : CameraAccessException) {
+            } catch (e: CameraAccessException) {
                 e.printStackTrace()
             }
         }
+    }
 
+
+    private fun uploadPicture() {
+        Intent().apply {
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(
+                Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
+            )
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
+            if(data == null || data.data == null){
+                Log.w(TAG, "No picture uploaded")
+                return
+            }
+            uploadedPictureView?.setImageURI(data.data)
+        }
     }
 }

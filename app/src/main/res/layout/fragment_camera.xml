@@ -5,8 +5,28 @@
     android:layout_height="match_parent"
     tools:context=".fragments.CameraFragment">
 
+    <Button
+        android:id="@+id/uploadPictureButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="@string/upload_a_picture"
+        android:textColor="@color/cardview_light_background"
+        tools:ignore="PrivateResource" />
+
+    <ImageView
+        android:id="@+id/uploadedPictureView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <TextureView
         android:id="@+id/textureView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </FrameLayout>
+

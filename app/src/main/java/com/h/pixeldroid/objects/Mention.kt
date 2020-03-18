@@ -1,4 +1,6 @@
 package com.h.pixeldroid.objects
 
-class Mention {
+import java.io.Serializable
+
+class Mention : Serializable {
 }
