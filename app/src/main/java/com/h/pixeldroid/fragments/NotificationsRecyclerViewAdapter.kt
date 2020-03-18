@@ -22,9 +22,7 @@ import com.h.pixeldroid.objects.Notification
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
+ * [RecyclerView.Adapter] that can display a [Notification]
  */
 class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecyclerViewAdapter.ViewHolder>() {
     private val notifications: ArrayList<Notification> = arrayListOf()
@@ -46,7 +44,7 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
                 intent.putExtra(POST_TAG, Post(notification.status))
             }
             Notification.NotificationType.reblog-> {
-                Toast.makeText(context,"Can't see reblogs yet, sorry!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Can't see shares yet, sorry!",Toast.LENGTH_SHORT).show()
                 return
             }
             Notification.NotificationType.follow -> {
@@ -57,6 +55,11 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
         context.startActivity(intent)
     }
 
+    fun initializeWith(newNotifications: List<Notification>){
+        notifications.clear()
+        notifications.addAll(newNotifications)
+        notifyDataSetChanged()
+    }
     fun addNotifications(newNotifications: List<Notification>){
         val oldSize = notifications.size
         notifications.addAll(newNotifications)
@@ -65,6 +68,7 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_notifications, parent, false)
+
         context = view.context
         return ViewHolder(view)
     }
