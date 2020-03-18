@@ -110,7 +110,7 @@ class MockedServerTest {
         onView(withText("Dobios liked your post")).check(matches(withId(R.id.notification_type)))
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeDown())
         Thread.sleep(1000)
-        onView(withText("Dobios liked your post")).check(matches(withId(R.id.notification_type)))
+        onView(withText("Dobios followed you")).check(matches(withId(R.id.notification_type)))
 
     }
 
