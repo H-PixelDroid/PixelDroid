@@ -69,16 +69,18 @@ tools:context=".fragments.PostFragment">
                     android:layout_width="409dp"
                     android:layout_height="28dp"
                     android:orientation="horizontal"
-                    tools:layout_editor_absoluteX="1dp"
-                    tools:layout_editor_absoluteY="1dp">
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/liker"
                         android:layout_width="0dp"
-                        android:gravity="start"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_bluetooth" />
+                        android:gravity="start"
+                        android:src="@drawable/ic_heart" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
