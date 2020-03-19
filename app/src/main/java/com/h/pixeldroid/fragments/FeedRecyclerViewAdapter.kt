@@ -99,7 +99,7 @@ class FeedRecyclerViewAdapter(
                             val resp = Post(response.body())
                             holder.nlikes.text = resp.getNLikes()
                             Log.e("POST", "unLiked")
-                            post.liked = response.body()?.favourited!!
+                            post.liked = !post.liked
                             Log.e("isLIKE", post.liked.toString())
 
                         } else {
@@ -121,7 +121,7 @@ class FeedRecyclerViewAdapter(
                             val resp = Post(response.body())
                             holder.nlikes.text = resp.getNLikes()
                             Log.e("POST", "liked")
-                            post.liked = response.body()?.favourited!!
+                            post.liked = !post.liked
                             Log.e("isLIKE", post.liked.toString())
                         } else {
                             Log.e("RESPOSE_CODE", response.code().toString())
