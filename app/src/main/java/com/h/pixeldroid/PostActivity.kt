@@ -1,13 +1,11 @@
 package com.h.pixeldroid
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.SurfaceControl
-import android.view.View
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.fragments.PostFragment
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.models.Post.Companion.POST_TAG
+
 
 class PostActivity : AppCompatActivity() {
     lateinit var postFragment : PostFragment
@@ -17,7 +15,11 @@ class PostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_post)
 
         val post = intent.getSerializableExtra(POST_TAG) as Post
-        postFragment = PostFragment.newInstance(post)
+
+        postFragment = PostFragment()
+        val arguments = Bundle()
+        arguments.putSerializable(POST_TAG, post)
+        postFragment.arguments = arguments
 
         supportFragmentManager.beginTransaction()
             .add(R.id.postFragmentSingle, postFragment).commit()
