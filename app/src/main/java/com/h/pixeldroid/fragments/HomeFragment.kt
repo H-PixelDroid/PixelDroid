@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
-import com.h.pixeldroid.FeedRecyclerViewAdapter
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.models.Post
@@ -57,23 +56,9 @@ class HomeFragment : Fragment() {
         var statuses: ArrayList<Status>?
         val newPosts = ArrayList<Post>()
 
-        //Get the user's account data and pass it on to the adapter
-        pixelfedAPI.verifyCredentials("Bearer $accessToken")
-            .enqueue(object : Callback<Account> {
-                override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("Ouch, not OK", t.toString())
-                }
+        //Give the adapter access to the created api
+        adapter.addApiAccess(pixelfedAPI, accessToken!!)
 
-                override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                    val user = response.body() as Account
-
-                    //Give the adapter access to the created api
-                    adapter.addApiAccess(pixelfedAPI, accessToken!!, user)
-                }
-
-            })
-
-        //Fill up the post list
         pixelfedAPI.timelineHome("Bearer $accessToken")
             .enqueue(object : Callback<List<Status>> {
                 override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
@@ -84,14 +69,13 @@ class HomeFragment : Fragment() {
                                 newPosts.add(Post(status))
                             }
                             setContent(newPosts)
-                            Log.e("POSTS", newPosts.toString())
                         }
 
                     }
                 }
 
                 override fun onFailure(call: Call<List<Status>>, t: Throwable) {
-                    Log.e("Ouch, not OK", t.toString())
+                    Log.e("HomeFragment", t.toString())
                 }
             })
     }

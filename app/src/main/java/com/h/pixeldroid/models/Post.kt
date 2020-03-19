@@ -39,6 +39,9 @@ class Post(val status: Status?) : Serializable {
        }
         return name!!
    }
+    fun getUsernameDescription() : CharSequence {
+        return status?.account?.display_name ?: ""
+    }
 
     fun getNLikes(add : Int = 0) : CharSequence {
         val nLikes = status?.favourites_count
@@ -61,7 +64,7 @@ class Post(val status: Status?) : Serializable {
         username.setTypeface(null, Typeface.BOLD)
 
         val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
-        usernameDesc.text = this.getUsername()
+        usernameDesc.text = this.getUsernameDescription()
         usernameDesc.setTypeface(null, Typeface.BOLD)
 
         val description = rootView.findViewById<TextView>(R.id.description)

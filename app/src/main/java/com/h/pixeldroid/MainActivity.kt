@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.fragments.HomeFragment
 import com.h.pixeldroid.fragments.MyProfileFragment
+import com.h.pixeldroid.fragments.NotificationsFragment
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -43,9 +44,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawerLayout = findViewById(R.id.drawer_layout)
             val navigationView: NavigationView = findViewById(R.id.nav_view)
             navigationView.setNavigationItemSelectedListener(this)
+            
+            val tabs = arrayOf(HomeFragment(),
+                               Fragment(), Fragment(), 
+                               NotificationsFragment(),
+                               MyProfileFragment())
 
-            val tabs =
-                arrayOf(HomeFragment(), Fragment(), Fragment(), Fragment(), MyProfileFragment())
 
             setupTabs(tabs)
         }
@@ -68,7 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 0 -> tab.icon = getDrawable(R.drawable.ic_home_white_24dp)
                 1 -> tab.icon = getDrawable(R.drawable.ic_search_white_24dp)
                 2 -> tab.icon = getDrawable(R.drawable.ic_photo_camera_white_24dp)
-                3 -> tab.icon = getDrawable(R.drawable.ic_star_white_24dp)
+                3 -> tab.icon = getDrawable(R.drawable.ic_heart)
                 4 -> tab.icon = getDrawable(R.drawable.ic_person_white_24dp)
             }
         }.attach()

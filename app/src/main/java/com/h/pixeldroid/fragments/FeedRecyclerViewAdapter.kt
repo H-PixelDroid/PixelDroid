@@ -1,30 +1,24 @@
-package com.h.pixeldroid
+package com.h.pixeldroid.fragments
 
 import android.content.Context
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
-import android.net.wifi.hotspot2.pps.Credential
+
 import android.util.DisplayMetrics
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.Dimension
-import com.bumptech.glide.ListPreloader
-import com.bumptech.glide.util.ViewPreloadSizeProvider
+import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.PostFragment
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setDefaultImage
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
 import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
-import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +33,6 @@ class FeedRecyclerViewAdapter(
     private val posts: ArrayList<Post> = ArrayList<Post>()
     private lateinit var api : PixelfedAPI
     private lateinit var credential : String
-    private lateinit var user : Account
 
     fun addPosts(newPosts : List<Post>) {
         val size = posts.size
@@ -47,10 +40,9 @@ class FeedRecyclerViewAdapter(
         notifyItemRangeInserted(size, newPosts.size)
     }
 
-    fun addApiAccess(pixelfedApi : PixelfedAPI, userCredentials : String, checkedUser : Account) {
+    fun addApiAccess(pixelfedApi : PixelfedAPI, userCredentials : String) {
         api = pixelfedApi
         credential = "Bearer $userCredentials"
-        user = checkedUser
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

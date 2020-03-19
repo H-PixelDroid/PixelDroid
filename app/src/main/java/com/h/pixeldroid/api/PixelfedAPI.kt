@@ -1,15 +1,12 @@
 package com.h.pixeldroid.api
 
-import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.objects.Application
-import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.objects.Token
-import io.reactivex.Single
+import com.h.pixeldroid.objects.*
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import retrofit2.http.Field
 
 
 /*
@@ -79,6 +76,23 @@ interface PixelfedAPI {
         @Query("limit") limit: Int? = null,
         @Query("local") local: Boolean? = null
     ): Call<List<Status>>
+
+    /*
+    Note: as of 0.10.8, Pixelfed does not seem to respect the Mastodon API documentation,
+    you *need* to pass one of the so-called "optional" arguments. See:
+    https://github.com/pixelfed/pixelfed/blob/dev/app/Http/Controllers/Api/ApiV1Controller.php
+    An example that works: specify min_id as 1 (not 0 though)
+     */
+    @GET("/api/v1/notifications")
+    fun notifications(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Query("max_id") max_id: String? = null,
+        @Query("since_id") since_id: String? = null,
+        @Query("min_id") min_id: String? = null,
+        @Query("exclude_types") limit: String? = null,
+        @Query("account_id") exclude_types: Boolean? = null
+    ): Call<List<Notification>>
 
     @GET("/api/v1/accounts/verify_credentials")
     fun verifyCredentials(
