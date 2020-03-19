@@ -1,24 +1,11 @@
 package com.h.pixeldroid
 
 import android.Manifest
-import android.content.Context
 import android.os.Build
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
 import androidx.test.InstrumentationRegistry.getTargetContext
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.ViewAssertion
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.h.pixeldroid.fragments.CameraFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -30,34 +17,27 @@ import androidx.test.rule.GrantPermissionRule;
 
 @RunWith(AndroidJUnit4::class)
 class CameraTest {
-    @get:Rule
-    var activityRule: ActivityScenarioRule<MainActivity>
-            = ActivityScenarioRule(MainActivity::class.java)
 
     @get:Rule
     val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
 
-
-    @Before
-    fun before(){
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", "http://localhost").apply()
-        ActivityScenario.launch(MainActivity::class.java)
-
-    }
-
     @Test
     fun testFragment() {
+        val scenario = launchFragmentInContainer<CameraFragment>()
+        scenario.recreate()
 
-        // Let's create the camera fragment
-        Espresso.onView(ViewMatchers.withId(R.id.view_pager))
-            .perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft())
+        scenario.moveToState(Lifecycle.State.CREATED)
+        scenario.moveToState(Lifecycle.State.RESUMED)
 
-        Thread.sleep(1000)
 
-        Espresso.onView(withId(R.id.textureView)).check(matches(isDisplayed()))
+        scenario.onFragment { fragment ->
+            assert(fragment.isAdded)
+            assert(fragment.isResumed)
+            assert(fragment.isVisible)
+            assert(fragment.textureView.isAvailable)
+        }
+
+        scenario.moveToState(Lifecycle.State.DESTROYED)
     }
 }

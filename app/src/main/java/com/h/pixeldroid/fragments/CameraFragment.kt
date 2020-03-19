@@ -41,6 +41,8 @@ class CameraFragment : Fragment() {
 
         textureView = view.findViewById(R.id.textureView)!!
         textureView.surfaceTextureListener = this.textureListener
+
+
     }
 
     private var textureListener = object : TextureView.SurfaceTextureListener {
