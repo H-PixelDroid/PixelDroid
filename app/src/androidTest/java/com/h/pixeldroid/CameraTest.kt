@@ -38,7 +38,7 @@ class CameraTest {
         Espresso.onView(ViewMatchers.withId(R.id.view_pager))
             .perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft())
 
-        Thread.sleep(1000)
+        Thread.sleep(500)
 
         Espresso.onView(withId(R.id.takePictureButton)).perform(click())
     }
