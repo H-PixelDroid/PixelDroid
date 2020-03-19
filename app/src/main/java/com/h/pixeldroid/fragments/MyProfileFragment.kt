@@ -14,12 +14,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
 import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,6 +38,7 @@ class MyProfileFragment : Fragment() {
         )
         val view = inflater.inflate(R.layout.fragment_my_profile, container, false)
 
+        // Edit button redirects to pixelfed's "edit account" page
         val editButton: Button = view.findViewById(R.id.editButton)
         editButton.setOnClickListener((View.OnClickListener { onClickEditButton() }))
 
@@ -57,7 +58,40 @@ class MyProfileFragment : Fragment() {
                         val account = response.body()!!
 
                         setContent(view, account)
+
+                        // Populate profile page with user's posts
+                        pixelfedAPI.accountPosts("Bearer $accessToken", account_id = account.id).enqueue(object : Callback<List<Status>> {
+                            override fun onFailure(call: Call<List<Status>>, t: Throwable) {
+                                Log.e("ProfileFragment.Posts:", t.toString())
+                            }
+
+                            override fun onResponse(
+                                call: Call<List<Status>>,
+                                response: Response<List<Status>>
+                            ) {
+                                val statuses = response.body()!!
+                                // Display first post
+                                if(statuses.isNotEmpty()) {
+                                    val post1 = statuses[0].media_attachments[0].preview_url
+                                    val post1View = view.findViewById<ImageView>(R.id.post1)
+                                    setImageViewFromURL(view, post1, post1View)
+                                }
+                                // Display second post
+                                if(statuses.size >= 2) {
+                                    val post2 = statuses[1].media_attachments[0].preview_url
+                                    val post2View = view.findViewById<ImageView>(R.id.post2)
+                                    setImageViewFromURL(view, post2, post2View)
+                                }
+                                // Display third post
+                                if(statuses.size >= 3) {
+                                    val post3 = statuses[2].media_attachments[0].preview_url
+                                    val post3View = view.findViewById<ImageView>(R.id.post3)
+                                    setImageViewFromURL(view, post3, post3View)
+                                }
+                            }
+                        })
                     }
+
                 }
 
                 override fun onFailure(call: Call<Account>, t: Throwable) {
@@ -66,6 +100,7 @@ class MyProfileFragment : Fragment() {
             })
     }
 
+        // Populate myProfile page with user's data
     private fun setContent(view: View, account: Account) {
         // ImageView : profile picture
         val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)

@@ -1,14 +1,12 @@
 package com.h.pixeldroid.api
 
-import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.objects.Application
-import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.objects.Token
+import com.h.pixeldroid.objects.*
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import retrofit2.http.Field
 
 
 /*
@@ -66,6 +64,12 @@ interface PixelfedAPI {
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String
         ): Call<Account>
+
+    @GET("/api/v1/accounts/{id}/statuses")
+    fun accountPosts(
+        @Header("Authorization") authorization: String,
+        @Path("id") account_id: String? = null
+    ): Call<List<Status>>
 
     companion object {
         fun create(baseUrl: String): PixelfedAPI {

@@ -105,7 +105,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp">
+                android:layout_marginLeft="50dp"
+                android:layout_marginBottom="15dp">
 
                 <Button
                     android:id="@+id/editButton"
@@ -115,6 +116,77 @@
                     android:text="Edit profile"
                     android:textColor="@color/cardview_light_background"
                     app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="1dp">
+
+                    <ImageButton
+                        android:id="@+id/postsButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
+                        android:src="@android:drawable/ic_dialog_dialer" />
+
+                    <ImageButton
+                        android:id="@+id/collectionButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
+                        android:src="@android:drawable/ic_menu_gallery" />
+
+                    <ImageButton
+                        android:id="@+id/bookmarkButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
+                        android:src="@android:drawable/ic_input_get" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+                    <ImageView
+                        android:id="@+id/post1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <ImageView
+                        android:id="@+id/post2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <ImageView
+                        android:id="@+id/post3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        tools:srcCompat="@tools:sample/avatars" />
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
