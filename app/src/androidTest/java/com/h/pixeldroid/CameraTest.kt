@@ -5,6 +5,14 @@ import android.os.Build
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
 import androidx.test.InstrumentationRegistry.getTargetContext
+import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.ViewAssertion
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.h.pixeldroid.fragments.CameraFragment
@@ -24,19 +32,14 @@ class CameraTest {
 
     @Test
     fun testFragment() {
-        val scenario = launchFragmentInContainer<CameraFragment>()
-        scenario.recreate()
+        ActivityScenario.launch(MainActivity::class.java)
 
-        scenario.moveToState(Lifecycle.State.CREATED)
-        scenario.moveToState(Lifecycle.State.RESUMED)
+        // Let's create the camera fragment
+        Espresso.onView(ViewMatchers.withId(R.id.view_pager))
+            .perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft())
 
-        scenario.onFragment { fragment ->
-            assert(fragment.isAdded)
-            assert(fragment.isResumed)
-            assert(fragment.isVisible)
-            assert(fragment.textureView.isAvailable)
-        }
+        Thread.sleep(1000)
 
-        scenario.moveToState(Lifecycle.State.DESTROYED)
+        Espresso.onView(withId(R.id.takePictureButton)).perform(click())
     }
 }
