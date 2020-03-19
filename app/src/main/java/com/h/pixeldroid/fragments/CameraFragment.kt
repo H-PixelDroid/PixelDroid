@@ -1,26 +1,37 @@
 package com.h.pixeldroid.fragments
 
-import android.widget.Button
-import android.widget.ImageView
-import kotlinx.android.synthetic.main.fragment_camera.*
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Context.CAMERA_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
+import android.hardware.camera2.CameraCaptureSession.CaptureCallback
+import android.media.Image
+import android.media.ImageReader
+import android.media.ImageReader.OnImageAvailableListener
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.*
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import android.widget.Button
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
+import java.nio.ByteBuffer
+
 
 class CameraFragment : Fragment() {
+
+    private lateinit var previewsize: Size
+    private lateinit var jpegSizes: Array<Size>
+
 
     private lateinit var    textureView: TextureView
     private lateinit var surfaceTexture: SurfaceTexture
@@ -41,10 +52,17 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
-        val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
         uploadedPictureView = view.findViewById(R.id.uploadedPictureView)
+
+
+        val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
         uploadPictureButton.setOnClickListener{
             uploadPicture()
+        }
+
+        val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
+        uploadPictureButton.setOnClickListener{
+            takePicture()
         }
 
         return view
@@ -57,7 +75,7 @@ class CameraFragment : Fragment() {
         textureView.surfaceTextureListener = this.textureListener
     }
 
-    private var textureListener = object : TextureView.SurfaceTextureListener {
+    private val textureListener = object : TextureView.SurfaceTextureListener {
         override fun onSurfaceTextureAvailable(
             surface: SurfaceTexture,
             width: Int,
@@ -97,20 +115,20 @@ class CameraFragment : Fragment() {
         }
 
         try {
-            manager.openCamera(manager.cameraIdList[0], cameraCallback, null)
+            manager.openCamera(manager.cameraIdList[0], previewStateCallback, null)
         } catch (e : CameraAccessException) {
             e.printStackTrace()
         }
     }
 
-    private val cameraCallback = object : CameraDevice.StateCallback() {
+    private val previewStateCallback = object : CameraDevice.StateCallback() {
         override fun onOpened(camera: CameraDevice) {
             cameraDevice = camera
 
             try {
                 cameraDevice.createCaptureSession(
                     listOf(Surface(surfaceTexture)),
-                    sessionCallback,
+                    previewSessionCallback,
                     null
                 )
             } catch (e: CameraAccessException) {
@@ -130,7 +148,7 @@ class CameraFragment : Fragment() {
 
     }
 
-    private val sessionCallback = object : CameraCaptureSession.StateCallback() {
+    private val previewSessionCallback = object : CameraCaptureSession.StateCallback() {
         override fun onConfigureFailed(session: CameraCaptureSession) {
         }
 
@@ -148,6 +166,68 @@ class CameraFragment : Fragment() {
         }
     }
 
+    private fun takePicture() {
+        val characteristics = manager.getCameraCharacteristics(cameraDevice.id)
+
+        jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!.
+                    getOutputSizes(ImageFormat.JPEG)
+
+        var width = 640
+        var height = 480
+        if (jpegSizes.isNotEmpty()) {
+            width = jpegSizes[0].width
+            height = jpegSizes[0].height
+        }
+        val reader: ImageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
+        val outputSurfaces: MutableList<Surface> = ArrayList(2)
+        outputSurfaces.add(reader.surface)
+        outputSurfaces.add(Surface(textureView.surfaceTexture))
+
+        val requestBuilder =
+            cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+        requestBuilder.addTarget(reader.surface)
+        requestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+        
+    }
+
+    private val captureStateCallback = object : CameraCaptureSession.StateCallback() {
+        override fun onConfigureFailed(session: CameraCaptureSession) {
+
+            try {
+                session.capture(requestBuilder.build(), captureCallback, null)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+
+        }
+
+        override fun onConfigured(session: CameraCaptureSession) {
+            TODO("Not yet implemented")
+        }
+
+    }
+
+    private val captureCallback = object : CaptureCallback() {
+        override fun onCaptureStarted(
+            session: CameraCaptureSession,
+            request: CaptureRequest,
+            timestamp: Long,
+            frameNumber: Long
+        ) {
+            super.onCaptureStarted(session, request, timestamp, frameNumber)
+        }
+
+        override fun onCaptureCompleted(
+            session: CameraCaptureSession,
+            request: CaptureRequest,
+            result: TotalCaptureResult
+        ) {
+            super.onCaptureCompleted(session, request, result)
+            //createCameraPreview()
+        }
+
+
+    }
 
     private fun uploadPicture() {
         Intent().apply {
