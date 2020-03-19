@@ -96,24 +96,49 @@ class FeedRecyclerViewAdapter(
 
         //Activate the liker
         holder.liker.setOnClickListener {
-            lateinit var apiAction : Call<Status>
-            if(post.isLiked()) {
-                apiAction = api.unlikePost(credential, post.id)
-                Log.e("POST", "unLiked")
+            if (post.liked) {
+                api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
+                    override fun onFailure(call: Call<Status>, t: Throwable) {
+                        Log.e("Hmmmm not good", t.toString())
+                    }
+
+                    override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                        if(response.code() == 200) {
+                            val resp = Post(response.body())
+                            holder.nlikes.text = resp.getNLikes()
+                            Log.e("POST", "unLiked")
+                            post.liked = response.body()?.favourited!!
+                            Log.e("isLIKE", post.liked.toString())
+
+                        } else {
+                            Log.e("RESPOSE_CODE", response.code().toString())
+                        }
+
+                    }
+
+                })
+
             } else {
-                apiAction = api.likePost(credential, post.id)
-                Log.e("POST", "Liked")
+                api.likePost(credential, post.id).enqueue(object : Callback<Status> {
+                    override fun onFailure(call: Call<Status>, t: Throwable) {
+                        Log.e("Hmmmm not good", t.toString())
+                    }
+
+                    override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                        if(response.code() == 200) {
+                            val resp = Post(response.body())
+                            holder.nlikes.text = resp.getNLikes()
+                            Log.e("POST", "liked")
+                            post.liked = response.body()?.favourited!!
+                            Log.e("isLIKE", post.liked.toString())
+                        } else {
+                            Log.e("RESPOSE_CODE", response.code().toString())
+                        }
+                    }
+
+                })
+
             }
-            apiAction.enqueue(object : Callback<Status> {
-                override fun onFailure(call: Call<Status>, t: Throwable) {
-                    Log.e("Hmmmm not good", t.toString())
-                }
-
-                override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                    holder.nlikes.text = Post(response.body()).getNLikes()
-                }
-
-            })
         }
     }
 

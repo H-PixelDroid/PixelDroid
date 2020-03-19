@@ -12,8 +12,9 @@ import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter
 import java.io.Serializable
 
-class Post(private val status: Status?) : Serializable {
+class Post(val status: Status?) : Serializable {
     val id : String = status?.id ?: "0"
+    var liked : Boolean = status?.favourited ?: false
 
     companion object {
         const val POST_TAG = "postTag"
@@ -40,12 +41,12 @@ class Post(private val status: Status?) : Serializable {
    }
 
     fun getNLikes(add : Int = 0) : CharSequence {
-        val nLikes : Int = (status?.favourites_count ?: 0) + add
+        val nLikes = status?.favourites_count
         return "$nLikes Likes"
     }
 
     fun isLiked() : Boolean {
-        return status?.favourited ?: false
+        return liked
     }
 
     fun getNShares(add : Int = 0) : CharSequence {

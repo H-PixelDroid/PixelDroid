@@ -3,8 +3,7 @@ package com.h.pixeldroid
 import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.swipeDown
-import androidx.test.espresso.action.ViewActions.swipeUp
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -47,4 +46,17 @@ class FeedInstrumentedTest {
         onView(withId(R.id.view_pager)).perform(swipeUp()).perform(swipeDown()).perform(swipeDown())
         onView(withId(R.id.description)).check(matches(firstDesc))
     }
+
+    @Test
+    fun likingAPostActuallyLikesAndUnlikes() {
+        Thread.sleep(1000)
+        val firstLikes = withId(R.id.nlikes)
+        onView(withId(R.id.liker)).perform(click())
+        onView(withId(R.id.nlikes)).check(matches(not(firstLikes)))
+        Thread.sleep(1000)
+        onView(withId(R.id.liker)).perform(click())
+        onView(withId(R.id.nlikes)).check(matches(firstLikes))
+    }
+
+
 }
