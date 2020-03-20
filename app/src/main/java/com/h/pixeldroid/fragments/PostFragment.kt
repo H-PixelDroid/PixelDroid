@@ -12,16 +12,6 @@ import com.h.pixeldroid.models.Post.Companion.POST_TAG
 
 class PostFragment : Fragment() {
 
-    companion object {
-        fun newInstance(post : Post) : PostFragment {
-            val postFragment = PostFragment()
-            val arguments = Bundle()
-            arguments.putSerializable(POST_TAG, post)
-            postFragment.arguments = arguments
-            return postFragment
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -31,13 +31,13 @@ class SwipeTest {
         ActivityScenario.launch(MainActivity::class.java)
     }
 
-    fun swipingLeftOnSearchShowsCameraFragment() {
-        val tab: TabLayout = onView(withId(R.id.tabs))
-
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(swipeLeft())
-        onView(withId(R.id.camera_fragment_main_linear_layout)).check(matches(isDisplayed()))
-    }
+//    fun swipingLeftOnSearchShowsCameraFragment() {
+//        val tab: TabLayout = onView(withId(R.id.tabs))
+//
+//        onView(withId(R.id.main_activity_main_linear_layout))
+//            .perform(swipeLeft())
+//        onView(withId(R.id.camera_fragment_main_linear_layout)).check(matches(isDisplayed()))
+//    }
 
     @Test
     fun swipingRightOnFavoriteShowsCameraFragment() {
