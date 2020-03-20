@@ -11,6 +11,7 @@
 
 
     <LinearLayout
+        android:id="@+id/main_activity_main_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
