@@ -36,6 +36,9 @@ class Post(private val postEnt: PostEntity?) : Serializable {
        }
         return name!!
    }
+    fun getUsernameDescription() : CharSequence {
+        return status?.account?.display_name ?: ""
+    }
 
     fun getNLikes() : CharSequence {
         val nLikes : Int = postEnt?.nbLikes ?: 0
@@ -54,7 +57,7 @@ class Post(private val postEnt: PostEntity?) : Serializable {
         username.setTypeface(null, Typeface.BOLD)
 
         val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
-        usernameDesc.text = this.getUsername()
+        usernameDesc.text = this.getUsernameDescription()
         usernameDesc.setTypeface(null, Typeface.BOLD)
 
         val description = rootView.findViewById<TextView>(R.id.description)
