@@ -128,8 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="1dp">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageButton
                         android:id="@+id/postsButton"
@@ -159,32 +158,31 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
                     <ImageView
                         android:id="@+id/post1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
                         android:layout_weight="1"
-                        android:layout_margin="10dp"
+                        android:layout_margin="5dp"
                         tools:srcCompat="@tools:sample/avatars" />
 
                     <ImageView
                         android:id="@+id/post2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
                         android:layout_weight="1"
-                        android:layout_margin="10dp"
+                        android:layout_margin="5dp"
                         tools:srcCompat="@tools:sample/avatars" />
 
                     <ImageView
                         android:id="@+id/post3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
                         android:layout_weight="1"
-                        android:layout_margin="10dp"
+                        android:layout_margin="5dp"
                         tools:srcCompat="@tools:sample/avatars" />
                 </LinearLayout>
 
