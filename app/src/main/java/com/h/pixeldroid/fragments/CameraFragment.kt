@@ -2,8 +2,6 @@ package com.h.pixeldroid.fragments
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import com.h.pixeldroid.R
 
 const val PICK_IMAGE_REQUEST = 1
@@ -27,8 +24,8 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
-        val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
-        uploadedPictureView = view.findViewById(R.id.uploadedPictureView)
+        val uploadPictureButton: Button = view.findViewById(R.id.upload_picture_button)
+        uploadedPictureView = view.findViewById(R.id.uploaded_picture_view)
         uploadPictureButton.setOnClickListener{
             uploadPicture()
         }

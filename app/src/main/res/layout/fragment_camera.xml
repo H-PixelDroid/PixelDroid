@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/camera_fragment_main_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -8,7 +9,7 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/uploadPictureButton"
+        android:id="@+id/upload_picture_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -19,7 +20,7 @@
         android:textColor="@color/cardview_light_background"/>
 
     <ImageView
-        android:id="@+id/uploadedPictureView"
+        android:id="@+id/uploaded_picture_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
