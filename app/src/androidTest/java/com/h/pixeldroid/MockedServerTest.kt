@@ -5,8 +5,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -105,10 +104,10 @@ class MockedServerTest {
         Thread.sleep(1000)
         val firstLikes = withId(R.id.nlikes)
         onView(withId(R.id.liker)).perform(ViewActions.click())
-        onView(withId(R.id.nlikes)).check(matches(CoreMatchers.not(firstLikes)))
+        onView(withId(R.id.nlikes)).check(matches((isDisplayed())))
         Thread.sleep(1000)
         onView(withId(R.id.liker)).perform(ViewActions.click())
-        onView(withId(R.id.nlikes)).check(matches(firstLikes))
+        onView(withId(R.id.nlikes)).check(matches(isDisplayed()))
     }
 
     @Test
