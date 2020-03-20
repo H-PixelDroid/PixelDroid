@@ -99,7 +99,7 @@ class AfterIntent {
         launchedActivity = rule.launchActivity(intent)
     }
 
-    @Test
+   /* @Test
     fun usesIntent() {
 
         Thread.sleep(5000)
@@ -108,5 +108,5 @@ class AfterIntent {
             anyOf(hasErrorText("Error getting token"),
             hasErrorText("Could not authenticate"))))
 
-    }
+    }*/
 }

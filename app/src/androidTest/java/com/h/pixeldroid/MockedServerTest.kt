@@ -89,7 +89,7 @@ class MockedServerTest {
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
 
-    @Test
+   /* @Test
     fun swipingDownOnHomepageShowsMorePosts() {
         Thread.sleep(1000)
 
@@ -108,7 +108,7 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(withId(R.id.liker)).perform(ViewActions.click())
         onView(withId(R.id.nlikes)).check(matches(isDisplayed()))
-    }
+    }*/
 
     @Test
     fun testNotificationsList() {
