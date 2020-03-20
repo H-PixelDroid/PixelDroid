@@ -14,6 +14,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.hamcrest.CoreMatchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -99,6 +100,17 @@ class MockedServerTest {
         )
         onView(withId(R.id.description)).check(matches(firstDesc))
     }
+    @Test
+    fun likingAPostActuallyLikesAndUnlikes() {
+        Thread.sleep(1000)
+        val firstLikes = withId(R.id.nlikes)
+        onView(withId(R.id.liker)).perform(ViewActions.click())
+        onView(withId(R.id.nlikes)).check(matches(CoreMatchers.not(firstLikes)))
+        Thread.sleep(1000)
+        onView(withId(R.id.liker)).perform(ViewActions.click())
+        onView(withId(R.id.nlikes)).check(matches(firstLikes))
+    }
+
     @Test
     fun testNotificationsList() {
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(
