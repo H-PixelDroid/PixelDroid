@@ -31,23 +31,25 @@ class SwipeTest {
         ActivityScenario.launch(MainActivity::class.java)
     }
 
-//    fun swipingLeftOnSearchShowsCameraFragment() {
-//        val tab: TabLayout = onView(withId(R.id.tabs))
-//
-//        onView(withId(R.id.main_activity_main_linear_layout))
-//            .perform(swipeLeft())
-//        onView(withId(R.id.camera_fragment_main_linear_layout)).check(matches(isDisplayed()))
-//    }
+    fun swipingLeftOnSearchShowsCameraFragment() {
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(swipeLeft()) // go to search
+            .perform(swipeLeft())
+        onView(withId(R.id.camera_fragment_main_linear_layout)).check(matches(isDisplayed()))
+    }
 
     @Test
-    fun swipingRightOnFavoriteShowsCameraFragment() {
+    fun swipingRightOnNotificationsShowsCameraFragment() {
         onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+            .perform(swipeLeft()) // go to notifications
             .perform(swipeRight())
         onView(withId(R.id.camera_fragment_main_linear_layout)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun swipingLeftOnShowsProfileFragment() {
+    fun swipingLeftShowsProfileFragment() {
         onView(withId(R.id.view_pager))
             .perform(swipeLeft())
             .perform(swipeLeft())
