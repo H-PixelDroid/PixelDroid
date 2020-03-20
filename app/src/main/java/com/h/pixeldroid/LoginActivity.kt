@@ -9,6 +9,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.PostDao
 import com.h.pixeldroid.objects.Application
 import com.h.pixeldroid.objects.Token
 import kotlinx.android.synthetic.main.activity_login.*
@@ -172,5 +174,4 @@ class LoginActivity : AppCompatActivity() {
         connect_instance_button.isEnabled = true
         editText.error = message
     }
-
 }

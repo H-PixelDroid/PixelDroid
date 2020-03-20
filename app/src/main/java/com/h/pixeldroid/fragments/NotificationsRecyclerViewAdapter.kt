@@ -3,6 +3,7 @@ package com.h.pixeldroid.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
@@ -14,11 +15,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.models.Post.Companion.POST_TAG
 import com.h.pixeldroid.objects.Notification
+import com.h.pixeldroid.utils.PostEntityConverter
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
 /**
@@ -41,7 +44,9 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
         when (notification.type){
             Notification.NotificationType.mention, Notification.NotificationType.favourite-> {
                 intent = Intent(context, PostActivity::class.java)
-                intent.putExtra(POST_TAG, Post(notification.status))
+                intent.putExtra(POST_TAG, Post(PostEntityConverter
+                    .statusToPostEntity(notification.status!!)
+                ))
             }
             Notification.NotificationType.reblog-> {
                 Toast.makeText(context,"Can't see shares yet, sorry!",Toast.LENGTH_SHORT).show()

@@ -20,6 +20,7 @@ import com.h.pixeldroid.db.PostEntity
 import com.h.pixeldroid.db.PostViewModel
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.PostEntityConverter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -80,21 +81,7 @@ class HomeFragment : Fragment() {
                             val domain = preferences.getString("domain", "")
 
                             for (status in statuses!!) {
-
-                                val postEnt = PostEntity(
-                                    uid = 0, // auto-generate the key
-                                    domain = domain,
-                                    username = status.account.username,
-                                    displayName = status.account.display_name,
-                                    description = status.content,
-                                    accountID = status.account.id,
-                                    nbLikes = status.favourites_count,
-                                    nbShares = status.reblogs_count,
-                                    ImageURL = status.media_attachments[0].url,
-                                    profileImgUrl = status.account.avatar,
-                                    date = Calendar.getInstance().time
-                                    )
-
+                                val postEnt = PostEntityConverter.statusToPostEntity(status)
                                 postViewModel?.insertPosts(arrayListOf(postEnt))
                             }
                         }

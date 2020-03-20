@@ -30,17 +30,21 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getByID(id: Int) = repository.getByID(id)
+    fun getById(id: Int) = repository.getById(id)
 
     fun getAllByDate() = repository.getAllByDate()
 
     fun getOldestPost() = repository.getOldestPost()
 
-    fun getPostsCount() = repository.getPostsCount()
+    fun getPostsCount(): Int {
+        return repository.getPostsCount()?.value ?: 0
+    }
 
     fun addDateToPost(postId: Int, date: Date) { repository.addDateToPost(postId, date) }
 
     fun getAll() = repository.getAll()
+
+    fun deleteAll() = repository.deleteAll()
 
     /**
      * Checks if we can add one post into the database

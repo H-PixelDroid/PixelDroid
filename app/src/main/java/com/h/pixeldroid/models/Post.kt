@@ -37,7 +37,7 @@ class Post(private val postEnt: PostEntity?) : Serializable {
         return name!!
    }
     fun getUsernameDescription() : CharSequence {
-        return status?.account?.display_name ?: ""
+        return postEnt?.displayName ?: ""
     }
 
     fun getNLikes() : CharSequence {

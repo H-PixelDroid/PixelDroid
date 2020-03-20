@@ -26,7 +26,7 @@ class PostRepository(application: Application) : CoroutineScope {
 
     fun getAll() = postDao?.getAll()
 
-    fun getByID(id: Int) = postDao?.getById(id)
+    fun getById(id: Int) = postDao?.getById(id)
 
     fun getAllByDate() = postDao?.getAllByDate()
 
@@ -35,6 +35,8 @@ class PostRepository(application: Application) : CoroutineScope {
     fun getPostsCount() = postDao?.getPostsCount()
 
     fun deleteOldestPost() = postDao?.deleteOldestPost()
+
+    fun deleteAll() = postDao?.deleteAll()
 
     fun addDateToPost(postId: Int, date: Date) {
         launch  { addDateToPostBG(postId, date) }
