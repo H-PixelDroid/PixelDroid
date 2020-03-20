@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.h.pixeldroid.R
+import com.h.pixeldroid.db.PostEntity
 import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.utils.ImageConverter.Companion.setDefaultImage
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
@@ -22,13 +23,9 @@ import java.util.ArrayList
 class FeedRecyclerViewAdapter(
     private val context : Context
 ) : RecyclerView.Adapter<FeedRecyclerViewAdapter.ViewHolder>() {
-    private val posts: ArrayList<Post> = ArrayList<Post>()
 
-    fun addPosts(newPosts : List<Post>) {
-        val size = posts.size
-        posts.addAll(newPosts)
-        notifyItemRangeInserted(size, newPosts.size)
-    }
+    private var posts: ArrayList<Post> = ArrayList()
+    private var postsEnt = emptyList<PostEntity>() // Cached copy of words
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -73,6 +70,19 @@ class FeedRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int = posts.size
+
+    internal fun setPosts(posts: List<PostEntity>) {
+        this.postsEnt = posts
+
+        this.posts.clear()
+        this.postsEnt.forEach(){
+            this.posts.add(Post(it))
+        }
+        notifyDataSetChanged()
+
+        val size = posts.size
+        notifyItemRangeInserted(size, posts.size)
+    }
 
     /**
      * Represents the posts that will be contained within the feed

@@ -10,7 +10,6 @@ import androidx.room.TypeConverters
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun postDao(): PostDao
-    val MAX_NUMBER_OF_POSTS = 100
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

@@ -7,21 +7,22 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
+import com.h.pixeldroid.db.PostEntity
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter
 import java.io.Serializable
 
-class Post(private val status: Status?) : Serializable {
+class Post(private val postEnt: PostEntity?) : Serializable {
     companion object {
         const val POST_TAG = "postTag"
         const val POST_FRAG_TAG = "postFragTag"
     }
 
-    fun getPostUrl() : String? = status?.media_attachments?.get(0)?.url
-    fun getProfilePicUrl() : String? = status?.account?.avatar
+    fun getPostUrl() : String? = postEnt?.ImageURL
+    fun getProfilePicUrl() : String? = postEnt?.profileImgUrl
 
     fun getDescription() : CharSequence {
-        val description = status?.content as CharSequence
+        val description = postEnt?.description as CharSequence
         if(description.isEmpty()) {
             return "No description"
         }
@@ -29,20 +30,20 @@ class Post(private val status: Status?) : Serializable {
     }
 
    fun getUsername() : CharSequence {
-       var name = status?.account?.username
+       var name = postEnt?.username
        if (name.isNullOrEmpty()) {
-           name = status?.account?.display_name
+           name = postEnt?.displayName
        }
         return name!!
    }
 
     fun getNLikes() : CharSequence {
-        val nLikes : Int = status?.favourites_count ?: 0
+        val nLikes : Int = postEnt?.nbLikes ?: 0
         return "$nLikes Likes"
     }
 
     fun getNShares() : CharSequence {
-        val nShares : Int = status?.reblogs_count ?: 0
+        val nShares : Int = postEnt?.nbShares ?: 0
         return "$nShares Shares"
     }
 
