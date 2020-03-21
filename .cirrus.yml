@@ -1,0 +1,33 @@
+connected_check_task:
+  name: Run Android instrumented tests
+  env:
+    API_LEVEL: 23
+    TARGET: default
+    ARCH: x86
+    CC_TEST_REPORTER_ID: ENCRYPTED[437c27bfb64040626acf7f420701b9391f80e46bcdc9b1a11f5a8a8ed35ee5f66576f7289bb71ff7e18c822219e8a620]
+  container:
+    image: reactivecircus/android-emulator-23:latest
+    kvm: true
+    cpu: 8
+    memory: 24G
+  create_device_script:
+    echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
+  start_emulator_background_script:
+    $ANDROID_HOME/emulator/emulator -avd "api-${API_LEVEL}" -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+  wait_for_emulator_script:
+    adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 3; done; input keyevent 82'
+  disable_animations_script: |
+    adb shell settings put global window_animation_scale 0.0
+    adb shell settings put global transition_animation_scale 0.0
+    adb shell settings put global animator_duration_scale 0.0
+  prepare_codeclimate_script:
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
+  run_instrumented_tests_script:
+    ./gradlew build connectedCheck jacocoTestReport
+  report_codeclimate_script:
+    # Report test coverage to Code Climate
+    - export JACOCO_SOURCE_PATH=app/src/main/java/
+    - ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
+    - ./cc-test-reporter upload-coverage
