@@ -35,7 +35,7 @@ class SettingsTest {
 
     }
 
-    @Test
+    /*@Test
     fun testDrawerSettingsButton() {
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout))
@@ -47,6 +47,6 @@ class SettingsTest {
 
         // Check that settings activity was opened.
         onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
-    }
+    }*/
 
 }
