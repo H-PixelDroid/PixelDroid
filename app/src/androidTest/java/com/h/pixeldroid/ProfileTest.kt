@@ -1,4 +1,4 @@
-package com.h.pixeldroid
+/*package com.h.pixeldroid
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -18,17 +18,4 @@ class ProfileTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
-
-    @Test
-    fun testFollowersTextView() {
-        onView(withId(R.id.button)).perform(click())
-        onView(withId(R.id.followButton)).check(matches(withText("Follow")))
-    }
-
-    @Test
-    fun testAccountNameTextView() {
-        onView(withId(R.id.button)).perform(click())
-        sleep((1000 * 5))
-        onView(withId(R.id.accountNameTextView)).check(matches(not(withText("No Username"))))
-    }
-}
+}*/
