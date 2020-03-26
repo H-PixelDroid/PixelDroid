@@ -2,14 +2,23 @@ package com.h.pixeldroid.models
 
 import android.content.Context
 import android.graphics.Typeface
+import android.media.Image
+import android.util.Log
 import android.view.View
+import android.widget.AutoCompleteTextView
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
+import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.Serializable
 
 class Post(val status: Status?) : Serializable {
@@ -43,7 +52,7 @@ class Post(val status: Status?) : Serializable {
         return status?.account?.display_name ?: ""
     }
 
-    fun getNLikes(add : Int = 0) : CharSequence {
+    fun getNLikes() : CharSequence {
         val nLikes = status?.favourites_count
         return "$nLikes Likes"
     }

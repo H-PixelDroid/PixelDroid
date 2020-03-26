@@ -57,6 +57,33 @@ interface PixelfedAPI {
         @Path("id") statusId: String
     ) : Call<List<Account>>
 
+    //Used in our case to post a comment
+    @FormUrlEncoded
+    @POST("/api/v1/statuses")
+    fun commentStatus(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Field("status") statusText : String,
+        @Field("in_reply_to_id") in_reply_to_id : String,
+        @Field("media_ids[]") media_ids : List<String> = emptyList(),
+        @Field("poll[options][]") poll_options : List<String>? = null,
+        @Field("poll[expires_in]") poll_expires : List<String>? = null,
+        @Field("poll[multiple]") poll_multiple : List<String>? = null,
+        @Field("poll[hide_totals]") poll_hideTotals : List<String>? = null,
+        @Field("sensitive") sensitive : Boolean? = null,
+        @Field("spoiler_text") spoiler_text : String? = null,
+        @Field("visibility") visibility : String? = null,
+        @Field("scheduled_at") scheduled_at : String? = null,
+        @Field("language") language : String? = null
+    ) : Call<Status>
+
+    //Used in our case to retrieve comments for a given status
+    @GET("/api/v1/statuses/{id}/context")
+    fun statusComments(
+        @Path("id") statusId: String,
+        @Header("Authorization") authorization: String? = null
+    ) : Call<Context>
+
     @GET("/api/v1/timelines/public")
     fun timelinePublic(
         @Query("local") local: Boolean? = null,
