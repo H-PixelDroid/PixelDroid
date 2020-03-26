@@ -66,7 +66,7 @@ class LoginInstrumentedTest {
 
 @RunWith(AndroidJUnit4::class)
 class LoginCheckIntent {
-    @Rule
+    @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
     @get:Rule
     val intentsTestRule = IntentsTestRule(LoginActivity::class.java)
@@ -90,7 +90,7 @@ class LoginCheckIntent {
 
 @RunWith(AndroidJUnit4::class)
 class AfterIntent {
-    @Rule
+    @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
 
     @get:Rule
