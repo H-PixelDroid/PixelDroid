@@ -76,8 +76,8 @@ class Post(private val status: Status?) : Serializable {
             getPostUrl(),
             rootView.findViewById(R.id.postPicture)
         )
-        ImageConverter.setImageViewFromURL(
-            fragment,
+        ImageConverter.setRoundImageFromURL(
+            rootView,
             getProfilePicUrl(),
             rootView.findViewById(R.id.profilePic)
         )
