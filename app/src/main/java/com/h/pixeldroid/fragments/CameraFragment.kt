@@ -5,12 +5,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
-import android.hardware.camera2.CameraCaptureSession.CaptureCallback
 import android.media.Image
 import android.media.ImageReader
 import android.media.ImageReader.OnImageAvailableListener
@@ -24,9 +22,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
-import com.h.pixeldroid.objects.Status
-import java.io.*
-import java.nio.ByteBuffer
+import java.io.FileNotFoundException
+import java.io.IOException
 
 
 class CameraFragment : Fragment() {
@@ -183,6 +180,15 @@ class CameraFragment : Fragment() {
         requestBuilder.addTarget(reader.surface)
         requestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
 
+        val rotation = this.requireContext().getSystemService(Context.WINDOW_SERVICE)
+        requestBuilder.set(
+            CaptureRequest.JPEG_ORIENTATION,
+            getJpegOrientation(
+                manager.getCameraCharacteristics(cameraDevice.id),
+                activity?.windowManager?.defaultDisplay?.rotation!!
+            )
+        )
+
         reader.setOnImageAvailableListener(readerListener, null)
 
         val  captureListener = object : CameraCaptureSession.CaptureCallback() {
@@ -216,7 +222,7 @@ class CameraFragment : Fragment() {
         cameraDevice.createCaptureSession(outputSurfaces, stateCallback , null);
     }
 
-    private val  readerListener = OnImageAvailableListener { reader ->
+    private val readerListener = OnImageAvailableListener { reader ->
         lateinit var image : Image
         try {
             image = reader.acquireLatestImage()
@@ -227,7 +233,7 @@ class CameraFragment : Fragment() {
             val bitMap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             uploadedPictureView?.setImageBitmap(bitMap)
 
-            Toast.makeText(this.context, "AKALA MIAMIAM", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this.context, "AKALA MIAMIAM", Toast.LENGTH_LONG).show();
 
 
         } catch (e: FileNotFoundException) {
@@ -237,6 +243,24 @@ class CameraFragment : Fragment() {
         } finally {
             image.close()
         }
+    }
+
+    private fun getJpegOrientation(c: CameraCharacteristics, deviceOrientation: Int): Int {
+        var deviceOrientation = deviceOrientation
+        if (deviceOrientation == OrientationEventListener.ORIENTATION_UNKNOWN) return 0
+        val sensorOrientation = c[CameraCharacteristics.SENSOR_ORIENTATION]!!
+
+        // Round device orientation to a multiple of 90
+        deviceOrientation = (deviceOrientation + 45) / 90 * 90
+
+        // Reverse device orientation for front-facing cameras
+        val facingFront =
+            c[CameraCharacteristics.LENS_FACING] === CameraCharacteristics.LENS_FACING_FRONT
+        if (facingFront) deviceOrientation = -deviceOrientation
+
+        // Calculate desired JPEG orientation relative to camera orientation to make
+        // the image upright relative to the device orientation
+        return (sensorOrientation + deviceOrientation + 360) % 360
     }
 
 
@@ -258,7 +282,7 @@ class CameraFragment : Fragment() {
                 Log.w(TAG, "No picture uploaded")
                 return
             }
-            uploadedPictureView?.setImageURI(data.data)
+             uploadedPictureView?.setImageURI(data.data)
         }
     }
 }
