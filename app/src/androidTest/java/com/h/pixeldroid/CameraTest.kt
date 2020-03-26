@@ -45,17 +45,18 @@ class CameraTest {
         preferences.edit().putString("domain", "http://localhost").apply()
         ActivityScenario.launch(MainActivity::class.java)
 
-    }
-
-    @Test
-    fun testFragment() {
-
-        // Let's create the camera fragment
         Espresso.onView(ViewMatchers.withId(R.id.view_pager))
             .perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft())
 
-        Thread.sleep(500)
+    }
 
+    @Test
+    fun testTakePictureButton() {
         Espresso.onView(withId(R.id.takePictureButton)).perform(click())
+    }
+
+    @Test
+    fun testUploadPictureButton() {
+        Espresso.onView(withId(R.id.uploadPictureButton)).perform(click())
     }
 }
