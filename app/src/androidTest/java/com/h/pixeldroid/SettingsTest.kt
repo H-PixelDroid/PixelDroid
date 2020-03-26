@@ -25,7 +25,7 @@ class SettingsTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
-    @Rule
+    @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
 
     @Before

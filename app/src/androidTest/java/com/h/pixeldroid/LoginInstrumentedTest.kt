@@ -38,7 +38,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class LoginInstrumentedTest {
-    @Rule
+    @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
     @get:Rule
     var activityRule: ActivityScenarioRule<LoginActivity>

@@ -16,7 +16,7 @@ class AppDatabaseTest {
     private var postDao: PostDao? = null
     private var db: AppDatabase? = null
     private var postTest = PostEntity(1, "test", date= Calendar.getInstance().time)
-    @Rule
+    @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
     @Before
     fun setup() {
