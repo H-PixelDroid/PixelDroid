@@ -14,11 +14,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
+import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +32,8 @@ import retrofit2.Response
 
 class MyProfileFragment : Fragment() {
     private lateinit var preferences: SharedPreferences
+    private lateinit var adapter : ProfilePostsRecyclerViewAdapter
+    private lateinit var recycler : RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +44,14 @@ class MyProfileFragment : Fragment() {
         )
         val view = inflater.inflate(R.layout.fragment_my_profile, container, false)
 
+        // Edit button redirects to pixelfed's "edit account" page
         val editButton: Button = view.findViewById(R.id.editButton)
         editButton.setOnClickListener((View.OnClickListener { onClickEditButton() }))
+
+        recycler = view.findViewById(R.id.profilePostsRecyclerView)
+        recycler.layoutManager = GridLayoutManager(context, 3)
+        adapter = ProfilePostsRecyclerViewAdapter(context!!)
+        recycler.adapter = adapter
 
         return view
     }
@@ -55,6 +69,25 @@ class MyProfileFragment : Fragment() {
                         val account = response.body()!!
 
                         setContent(view, account)
+
+                        // Populate profile page with user's posts
+                        pixelfedAPI.accountPosts("Bearer $accessToken", account_id = account.id).enqueue(object : Callback<List<Status>> {
+                            override fun onFailure(call: Call<List<Status>>, t: Throwable) {
+                                Log.e("ProfileFragment.Posts:", t.toString())
+                            }
+
+                            override fun onResponse(
+                                call: Call<List<Status>>,
+                                response: Response<List<Status>>
+                            ) {
+                                val posts = ArrayList<Post>()
+                                val statuses = response.body()!!
+                                for(status in statuses) {
+                                    posts.add(Post(status))
+                                }
+                                adapter.addPosts(posts)
+                            }
+                        })
                     }
                 }
 
@@ -64,10 +97,11 @@ class MyProfileFragment : Fragment() {
             })
     }
 
+    // Populate myProfile page with user's data
     private fun setContent(view: View, account: Account) {
         // ImageView : profile picture
         val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)
-        Glide.with(view.context).load(account.avatar).into(profilePicture)
+        setRoundImageFromURL(view, account.avatar, profilePicture)
 
         // TextView : description / bio
         val description = view.findViewById<TextView>(R.id.descriptionTextView)
@@ -76,6 +110,7 @@ class MyProfileFragment : Fragment() {
         // TextView : account name
         val accountName = view.findViewById<TextView>(R.id.accountNameTextView)
         accountName.text = account.username
+        accountName.setTypeface(null, Typeface.BOLD)
 
         // TextView : number of posts
         val nbPosts = view.findViewById<TextView>(R.id.nbPostsTextView)

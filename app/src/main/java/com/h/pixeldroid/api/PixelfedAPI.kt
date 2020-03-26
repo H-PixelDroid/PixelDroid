@@ -127,6 +127,12 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String
         ): Call<Account>
 
+    @GET("/api/v1/accounts/{id}/statuses")
+    fun accountPosts(
+        @Header("Authorization") authorization: String,
+        @Path("id") account_id: String? = null
+    ): Call<List<Status>>
+
     companion object {
         fun create(baseUrl: String): PixelfedAPI {
             return Retrofit.Builder()
