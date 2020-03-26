@@ -25,6 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.ArrayList
+import kotlin.math.log
 
 /**
  * [RecyclerView.Adapter] that can display a list of [Post]s
@@ -135,6 +136,39 @@ class FeedRecyclerViewAdapter(
             }
         }
 
+        //Show all comments of a post
+        api.statusComments(post.id, credential).enqueue(object : Callback<com.h.pixeldroid.objects.Context> {
+            override fun onFailure(call: Call<com.h.pixeldroid.objects.Context>, t: Throwable) {
+                Log.e("COMMENT FETCH ERROR", t.toString())
+            }
+
+            override fun onResponse(
+                call: Call<com.h.pixeldroid.objects.Context>,
+                response: Response<com.h.pixeldroid.objects.Context>
+            ) {
+                if(response.code() == 200) {
+                    val statuses = response.body()!!.descendants
+                    for (status in statuses) {
+                        val container = CardView(context)
+                        //Retrieve the username and comment
+                        val user = TextView(context)
+                        user.text = status.account.username
+                        user.setTypeface(null, Typeface.BOLD)
+                        val comment = TextView(context)
+                        comment.text = status.text!!
+
+                        //Fill out the container and add it to our viewHolder
+                        //container.addView(user)
+                        container.addView(comment)
+                        holder.commentCont.addView(container)
+                    }
+                } else {
+                    Log.e("COMMENT ERROR", "${response.code().toString()} with body ${response.errorBody()}")
+                }
+            }
+
+        })
+
         //Activate commenter
         holder.commenter.setOnClickListener {
             //Open text input
@@ -161,37 +195,6 @@ class FeedRecyclerViewAdapter(
                 })
             }
         }
-
-        //Show all comments of a post
-        api.statusComments(post.id, credential).enqueue(object : Callback<com.h.pixeldroid.objects.Context> {
-            override fun onFailure(call: Call<com.h.pixeldroid.objects.Context>, t: Throwable) {
-                Log.e("COMMENT FETCH ERROR", t.toString())
-            }
-
-            override fun onResponse(
-                call: Call<com.h.pixeldroid.objects.Context>,
-                response: Response<com.h.pixeldroid.objects.Context>
-            ) {
-                if(response.code() == 200) {
-                    val statuses = response.body()!!.descendants
-                    for(status in statuses) {
-                        val container = CardView(context)
-                        //Retrieve the username and comment
-                        val user = TextView(context)
-                        user.text = status.account.username
-                        user.setTypeface(null, Typeface.BOLD)
-                        val comment = TextView(context)
-                        comment.text = status.text!!
-
-                        //Fill out the container and add it to our viewHolder
-                        container.addView(user)
-                        container.addView(comment)
-                        holder.commentCont.addView(container)
-                    }
-                }
-            }
-
-        })
     }
 
     override fun getItemCount(): Int = posts.size
