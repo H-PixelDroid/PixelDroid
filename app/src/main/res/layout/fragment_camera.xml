@@ -20,8 +20,8 @@
 
     <Button
         android:id="@+id/uploadPictureButton"
-        android:layout_width="86dp"
-        android:layout_height="63dp"
+        android:layout_width="37dp"
+        android:layout_height="31dp"
         android:layout_margin="15dp"
         android:layout_marginBottom="31dp"
         android:background="@android:drawable/ic_menu_gallery"
@@ -38,8 +38,8 @@
 
     <Button
         android:id="@+id/takePictureButton"
-        android:layout_width="74dp"
-        android:layout_height="60dp"
+        android:layout_width="36dp"
+        android:layout_height="30dp"
         android:layout_margin="15dp"
         android:layout_marginStart="14dp"
         android:background="@drawable/ic_launcher_foreground"
@@ -56,8 +56,8 @@
 
     <ImageView
         android:id="@+id/uploadedPictureView"
-        android:layout_width="375dp"
-        android:layout_height="618dp"
+        android:layout_width="384dp"
+        android:layout_height="653dp"
         android:layout_margin="15dp"
         android:layout_marginStart="14dp"
         android:layout_marginEnd="14dp"
