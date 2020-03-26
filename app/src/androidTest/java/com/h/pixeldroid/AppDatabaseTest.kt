@@ -6,10 +6,8 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.PostDao
 import com.h.pixeldroid.db.PostEntity
 import com.h.pixeldroid.utils.*
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import java.util.Calendar
 
@@ -18,7 +16,8 @@ class AppDatabaseTest {
     private var postDao: PostDao? = null
     private var db: AppDatabase? = null
     private var postTest = PostEntity(1, "test", date= Calendar.getInstance().time)
-
+    @Rule
+    var globalTimeout: Timeout = Timeout.seconds(100)
     @Before
     fun setup() {
         AppDatabase.TEST_MODE = true

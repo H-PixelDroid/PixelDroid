@@ -15,6 +15,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import kotlin.concurrent.thread
 
@@ -24,6 +25,8 @@ class SettingsTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
+    @Rule
+    var globalTimeout: Timeout = Timeout.seconds(100)
 
     @Before
     fun before(){
@@ -35,7 +38,7 @@ class SettingsTest {
 
     }
 
-    /*@Test
+    @Test
     fun testDrawerSettingsButton() {
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout))
@@ -47,6 +50,6 @@ class SettingsTest {
 
         // Check that settings activity was opened.
         onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
-    }*/
+    }
 
 }
