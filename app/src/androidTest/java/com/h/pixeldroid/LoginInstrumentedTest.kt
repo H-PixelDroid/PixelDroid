@@ -83,7 +83,7 @@ class LoginCheckIntent {
     }
 }
 
-@RunWith(AndroidJUnit4::class)
+/*@RunWith(AndroidJUnit4::class)
 class AfterIntent {
 
     @get:Rule
@@ -109,4 +109,4 @@ class AfterIntent {
             hasErrorText("Could not authenticate"))))
 
     }
-}
+}*/

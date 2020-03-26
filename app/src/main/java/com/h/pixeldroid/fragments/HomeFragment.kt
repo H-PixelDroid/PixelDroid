@@ -15,6 +15,7 @@ import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.models.Post
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
@@ -52,8 +53,11 @@ class HomeFragment : Fragment() {
 
         val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         val accessToken = preferences.getString("accessToken", "")
-        var statuses: ArrayList<Status>? = null
+        var statuses: ArrayList<Status>?
         val newPosts = ArrayList<Post>()
+
+        //Give the adapter access to the created api
+        adapter.addApiAccess(pixelfedAPI, accessToken!!)
 
         pixelfedAPI.timelineHome("Bearer $accessToken")
             .enqueue(object : Callback<List<Status>> {

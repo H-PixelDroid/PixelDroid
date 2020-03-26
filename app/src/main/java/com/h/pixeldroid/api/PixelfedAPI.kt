@@ -38,6 +38,25 @@ interface PixelfedAPI {
         @Field("grant_type") grant_type: String? = null
     ): Call<Token>
 
+    @POST("api/v1/statuses/{id}/favourite")
+    fun likePost(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Path("id") statusId: String
+    ) : Call<Status>
+
+    @POST("/api/v1/statuses/{id}/unfavourite")
+    fun unlikePost(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Path("id") statusId: String
+    ) : Call<Status>
+
+    @POST("/api/v1/statuses/{id}/favourited_by")
+    fun postLikedBy(
+        @Path("id") statusId: String
+    ) : Call<List<Account>>
+
     @GET("/api/v1/timelines/public")
     fun timelinePublic(
         @Query("local") local: Boolean? = null,
@@ -46,7 +65,6 @@ interface PixelfedAPI {
         @Query("min_id") min_id: String? = null,
         @Query("limit") limit: Int? = null
     ): Call<List<Status>>
-
 
     @GET("/api/v1/timelines/home")
     fun timelineHome(

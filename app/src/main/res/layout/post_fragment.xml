@@ -59,9 +59,29 @@ tools:context=".fragments.PostFragment">
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/LikeShareConstraint"
                 android:layout_width="match_parent"
-                android:layout_height="1dp">
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                >
 
+                <LinearLayout
+                    android:layout_width="409dp"
+                    android:layout_height="28dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/liker"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:src="@drawable/ic_heart" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -74,7 +94,7 @@ tools:context=".fragments.PostFragment">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="0dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="50"
                     tools:text="TextView" />
