@@ -19,6 +19,7 @@ class Post(private val status: Status?) : Serializable {
 
     fun getPostUrl() : String? = status?.media_attachments?.get(0)?.url
     fun getProfilePicUrl() : String? = status?.account?.avatar
+    fun getPostPreviewURL() : String? = status?.media_attachments?.get(0)?.preview_url
 
     fun getDescription() : CharSequence {
         val description = status?.content as CharSequence

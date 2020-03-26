@@ -79,15 +79,6 @@ class MockedServerTest {
         preferences.edit().putString("domain", baseUrl.toString()).apply()
         ActivityScenario.launch(MainActivity::class.java)
     }
-    @Test
-    fun testFollowersTextView() {
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft()).perform(
-            ViewActions.swipeLeft()
-        ).perform(ViewActions.swipeLeft())
-        Thread.sleep(1000)
-        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
-    }
 
     @Test
     fun swipingDownOnHomepageShowsMorePosts() {
@@ -126,6 +117,17 @@ class MockedServerTest {
         onView(withText("Dobios liked your post")).perform(ViewActions.click())
         Thread.sleep(1000)
         onView(withText("Geonosys")).check(matches(withId(R.id.username)))
+    }
+    @Test
+    fun testMyProfileTextViews() {
+        onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft()).perform(
+            ViewActions.swipeLeft()
+        ).perform(ViewActions.swipeLeft())
+        Thread.sleep(1000)
+
+        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
+        onView(withId(R.id.editButton)).check(matches(withText("Edit profile")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
 
 }

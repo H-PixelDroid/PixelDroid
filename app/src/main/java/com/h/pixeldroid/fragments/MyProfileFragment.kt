@@ -14,9 +14,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
@@ -28,6 +32,8 @@ import retrofit2.Response
 
 class MyProfileFragment : Fragment() {
     private lateinit var preferences: SharedPreferences
+    private lateinit var adapter : ProfilePostsRecyclerViewAdapter
+    private lateinit var recycler : RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +47,11 @@ class MyProfileFragment : Fragment() {
         // Edit button redirects to pixelfed's "edit account" page
         val editButton: Button = view.findViewById(R.id.editButton)
         editButton.setOnClickListener((View.OnClickListener { onClickEditButton() }))
+
+        recycler = view.findViewById(R.id.profilePostsRecyclerView)
+        recycler.layoutManager = GridLayoutManager(context, 3)
+        adapter = ProfilePostsRecyclerViewAdapter(context!!)
+        recycler.adapter = adapter
 
         return view
     }
@@ -69,29 +80,15 @@ class MyProfileFragment : Fragment() {
                                 call: Call<List<Status>>,
                                 response: Response<List<Status>>
                             ) {
+                                val posts = ArrayList<Post>()
                                 val statuses = response.body()!!
-                                // Display first post
-                                if(statuses.isNotEmpty()) {
-                                    val post1 = statuses[0].media_attachments[0].preview_url
-                                    val post1View = view.findViewById<ImageView>(R.id.post1)
-                                    setImageViewFromURL(view, post1, post1View)
+                                for(status in statuses) {
+                                    posts.add(Post(status))
                                 }
-                                // Display second post
-                                if(statuses.size >= 2) {
-                                    val post2 = statuses[1].media_attachments[0].preview_url
-                                    val post2View = view.findViewById<ImageView>(R.id.post2)
-                                    setImageViewFromURL(view, post2, post2View)
-                                }
-                                // Display third post
-                                if(statuses.size >= 3) {
-                                    val post3 = statuses[2].media_attachments[0].preview_url
-                                    val post3View = view.findViewById<ImageView>(R.id.post3)
-                                    setImageViewFromURL(view, post3, post3View)
-                                }
+                                adapter.addPosts(posts)
                             }
                         })
                     }
-
                 }
 
                 override fun onFailure(call: Call<Account>, t: Throwable) {
@@ -100,7 +97,7 @@ class MyProfileFragment : Fragment() {
             })
     }
 
-        // Populate myProfile page with user's data
+    // Populate myProfile page with user's data
     private fun setContent(view: View, account: Account) {
         // ImageView : profile picture
         val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)

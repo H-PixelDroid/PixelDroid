@@ -31,7 +31,7 @@ class MyProfileTest {
         ActivityScenario.launch(MainActivity::class.java)
     }
     @Test
-    fun testFollowersTextView() {
+    fun testTextViewsContent() {
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft()).perform(
             ViewActions.swipeLeft()
         ).perform(ViewActions.swipeLeft())
