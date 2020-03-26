@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -18,12 +20,12 @@ import android.util.Size
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
+import com.h.pixeldroid.objects.Status
+import java.io.*
 import java.nio.ByteBuffer
 
 
@@ -61,18 +63,14 @@ class CameraFragment : Fragment() {
         }
 
         val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
-        uploadPictureButton.setOnClickListener{
+        takePictureButton.setOnClickListener{
             takePicture()
         }
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         textureView = view.findViewById(R.id.textureView)!!
         textureView.surfaceTextureListener = this.textureListener
+
+        return view
     }
 
     private val textureListener = object : TextureView.SurfaceTextureListener {
@@ -179,55 +177,70 @@ class CameraFragment : Fragment() {
             height = jpegSizes[0].height
         }
         val reader: ImageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
-        val outputSurfaces: MutableList<Surface> = ArrayList(2)
-        outputSurfaces.add(reader.surface)
-        outputSurfaces.add(Surface(textureView.surfaceTexture))
 
         val requestBuilder =
             cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
         requestBuilder.addTarget(reader.surface)
         requestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
-        
-    }
 
-    private val captureStateCallback = object : CameraCaptureSession.StateCallback() {
-        override fun onConfigureFailed(session: CameraCaptureSession) {
+        reader.setOnImageAvailableListener(readerListener, null)
 
-            try {
-                session.capture(requestBuilder.build(), captureCallback, null)
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+        val  captureListener = object : CameraCaptureSession.CaptureCallback() {
+
+            override fun onCaptureCompleted(
+                session: CameraCaptureSession,
+                request: CaptureRequest,
+                result: TotalCaptureResult
+            ) {
+                super.onCaptureCompleted(session, request, result);
+
+            }
+        }
+
+        val outputSurfaces = ArrayList<Surface>(1);
+        outputSurfaces.add(reader.surface)
+
+        val stateCallback = object : CameraCaptureSession.StateCallback() {
+            override fun onConfigured(session: CameraCaptureSession) {
+                try {
+                    session.capture(requestBuilder.build(), captureListener, null);
+                } catch (e :CameraAccessException) {
+                    e.printStackTrace();
+                }
             }
 
+            override fun onConfigureFailed(session: CameraCaptureSession) {
+            }
         }
 
-        override fun onConfigured(session: CameraCaptureSession) {
-            TODO("Not yet implemented")
-        }
-
+        cameraDevice.createCaptureSession(outputSurfaces, stateCallback , null);
     }
 
-    private val captureCallback = object : CaptureCallback() {
-        override fun onCaptureStarted(
-            session: CameraCaptureSession,
-            request: CaptureRequest,
-            timestamp: Long,
-            frameNumber: Long
-        ) {
-            super.onCaptureStarted(session, request, timestamp, frameNumber)
+    private val  readerListener = OnImageAvailableListener { reader ->
+        lateinit var image : Image
+        try {
+            image = reader.acquireLatestImage()
+            val buffer = image.planes[0].buffer;
+            var bytes = ByteArray(buffer.capacity())
+            buffer.get(bytes);
+
+            val bitMap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            uploadedPictureView?.setImageBitmap(bitMap)
+
+            Toast.makeText(this.context, "AKALA MIAMIAM", Toast.LENGTH_LONG).show();
+
+
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace();
+        } catch (e: IOException) {
+            e.printStackTrace();
+        } finally {
+            image.close()
         }
-
-        override fun onCaptureCompleted(
-            session: CameraCaptureSession,
-            request: CaptureRequest,
-            result: TotalCaptureResult
-        ) {
-            super.onCaptureCompleted(session, request, result)
-            //createCameraPreview()
-        }
-
-
     }
+
+
+    // Ulysse's part
 
     private fun uploadPicture() {
         Intent().apply {
