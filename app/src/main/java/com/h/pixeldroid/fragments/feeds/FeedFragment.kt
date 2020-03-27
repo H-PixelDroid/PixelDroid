@@ -9,12 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.PostViewModel
+import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.DatabaseUtils
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import retrofit2.Call
@@ -33,15 +37,28 @@ open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
     protected lateinit var adapter : FeedsRecyclerViewAdapter<T, VH>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
+    private var postViewModel: PostViewModel? = null
+
     protected fun doRequest(call: Call<List<T>>){
         call.enqueue(object : Callback<List<T>> {
             override fun onResponse(call: Call<List<T>>, response: Response<List<T>>) {
+
+                val notifications: ArrayList<T>
+
                 if (response.code() == 200) {
-                    val notifications = response.body()!! as ArrayList<T>
-                    setContent(notifications)
+                    notifications = response.body()!! as ArrayList<T>
+                    insertToDBIfStatus(notifications)
                 } else{
                     Toast.makeText(context,"Something went wrong while loading", Toast.LENGTH_SHORT).show()
+
+                    @Suppress("UNCHECKED_CAST")
+                    notifications = DatabaseUtils.postEntityListToStatusList(
+                        ArrayList(postViewModel?.getAllByDate()!!)
+                    ) as ArrayList<T>
                 }
+
+                setContent(notifications)
+
                 swipeRefreshLayout.isRefreshing = false
                 progressBar.visibility = View.GONE
             }
@@ -58,6 +75,15 @@ open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
         adapter.initializeWith(content)
     }
 
+    protected fun insertToDBIfStatus(notifs : ArrayList<T>) {
+        notifs.forEach() {
+            when (it) {
+                Status::class -> {
+                    postViewModel?.insertStatusAsPost(it as Status)
+                }
+            }
+        }
+    }
 
     protected fun onCreateView(inflater: LayoutInflater, container: ViewGroup?): View? {
         val view = inflater.inflate(R.layout.fragment_feed, container, false)
@@ -66,9 +92,10 @@ open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
         // Set the adapter
         list.layoutManager = LinearLayoutManager(context)
 
+        postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
+
         return view
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.h.pixeldroid.R
+import com.h.pixeldroid.db.PostViewModel
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.DatabaseUtils
 import com.h.pixeldroid.utils.ImageConverter.Companion.setDefaultImage
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
 import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
@@ -19,10 +21,13 @@ import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
  */
 class HomeRecyclerViewAdapter() : FeedsRecyclerViewAdapter<Status, HomeRecyclerViewAdapter.ViewHolder>() {
 
+    private var postViewModel: PostViewModel? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.post_fragment, parent, false)
         context = view.context
+
         return ViewHolder(view)
     }
 
@@ -30,7 +35,7 @@ class HomeRecyclerViewAdapter() : FeedsRecyclerViewAdapter<Status, HomeRecyclerV
      * Binds the different elements of the Post Model to the view holder
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val post = feedContent[position]
+        val status = feedContent[position]
         val metrics = DisplayMetrics()
 
         //Limit the height of the different images
@@ -38,8 +43,8 @@ class HomeRecyclerViewAdapter() : FeedsRecyclerViewAdapter<Status, HomeRecyclerV
         holder.postPic.maxHeight = metrics.heightPixels
 
         //Set the two images
-        setRoundImageFromURL(holder.postView, post.getProfilePicUrl(), holder.profilePic!!)
-        setImageViewFromURL(holder.postView, post.getPostUrl(), holder.postPic)
+        setRoundImageFromURL(holder.postView, status.getProfilePicUrl(), holder.profilePic!!)
+        setImageViewFromURL(holder.postView, status.getPostUrl(), holder.postPic)
 
         //Set the image back to a placeholder if the original is too big
         if(holder.postPic.height > metrics.heightPixels) {
@@ -47,18 +52,18 @@ class HomeRecyclerViewAdapter() : FeedsRecyclerViewAdapter<Status, HomeRecyclerV
         }
 
         //Set the the text views
-        holder.username.text = post.getUsername()
+        holder.username.text = status.getUsername()
         holder.username.setTypeface(null, Typeface.BOLD)
 
-        holder.usernameDesc.text = post.getUsername()
+        holder.usernameDesc.text = status.getUsername()
         holder.usernameDesc.setTypeface(null, Typeface.BOLD)
 
-        holder.description.text = post.getDescription()
+        holder.description.text = status.getDescription()
 
-        holder.nlikes.text = post.getNLikes()
+        holder.nlikes.text = status.getNLikes()
         holder.nlikes.setTypeface(null, Typeface.BOLD)
 
-        holder.nshares.text = post.getNShares()
+        holder.nshares.text = status.getNShares()
         holder.nshares.setTypeface(null, Typeface.BOLD)
     }
 

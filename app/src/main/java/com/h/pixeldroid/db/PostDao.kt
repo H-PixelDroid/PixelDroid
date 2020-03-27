@@ -11,25 +11,31 @@ import java.util.Date
 @Dao
 interface PostDao {
     @Query("SELECT * FROM posts")
-    fun getAll(): LiveData<List<PostEntity>>
+    fun getAll(): List<PostEntity>
+
+    @Query("SELECT * FROM posts ORDER BY date DESC")
+    fun getAllByDate(): LiveData<List<PostEntity>>
 
     @Query("SELECT * FROM posts WHERE uid = :postId")
-    fun getById(postId: Int): PostEntity
+    fun getById(postId: Long): LiveData<PostEntity>
+
+    @Query("SELECT * FROM posts WHERE date IN (SELECT min(date) FROM posts) ")
+    fun getOldestPost(): LiveData<PostEntity>
 
     @Query("SELECT count(*) FROM posts")
-    fun getPostsCount(): Int
+    fun getPostCount(): Int
 
     @Query("UPDATE posts SET date = :date WHERE uid = :postId")
-    fun addDateToPost(postId: Int, date: Date)
+    fun addDateToPost(postId: Long, date: Date)
 
     @Query("DELETE FROM posts")
     fun deleteAll()
 
     @Query("DELETE FROM posts WHERE date IN (SELECT min(date) FROM posts) ")
-    fun deleteOldestPost(): Int
+    fun deleteOldestPost()
 
     @Insert(onConflict = REPLACE)
-    fun insertAll(vararg posts: PostEntity)
+    fun insertPost(post: PostEntity): Long
 
     @Delete
     fun delete(post: PostEntity)
