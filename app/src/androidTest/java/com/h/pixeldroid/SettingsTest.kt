@@ -15,6 +15,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import kotlin.concurrent.thread
 
@@ -24,6 +25,8 @@ class SettingsTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
+    @get:Rule
+    var globalTimeout: Timeout = Timeout.seconds(100)
 
     @Before
     fun before(){

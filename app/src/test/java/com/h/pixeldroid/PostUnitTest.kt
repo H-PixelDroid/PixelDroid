@@ -1,6 +1,5 @@
 package com.h.pixeldroid
 
-import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.*
 import org.junit.Assert
 import org.junit.Test
@@ -26,45 +25,42 @@ class PostUnitTest {
         tags= listOf(Tag(name="hiking", url="https://pixelfed.de/discover/tags/hiking", history=null), Tag(name="nature", url="https://pixelfed.de/discover/tags/nature", history=null), Tag(name="rotavicentina", url="https://pixelfed.de/discover/tags/rotavicentina", history=null)),
         emojis= emptyList(), reblogs_count=0, favourites_count=0, replies_count=0, url="https://pixelfed.de/p/Miike/140364967936397312",
         in_reply_to_id=null, in_reply_to_account=null, reblog=null, poll=null, card=null, language=null, text=null, favourited=false, reblogged=false, muted=false, bookmarked=false, pinned=false)
-    private val post = Post(status)
 
     @Test
-    fun getPostUrlReturnsAValidURL() = Assert.assertNotNull(post.getPostUrl())
+    fun getPostUrlReturnsAValidURL() = Assert.assertNotNull(status.getPostUrl())
 
     @Test
-    fun getProfilePicUrlReturnsAValidURL() = Assert.assertNotNull(post.getProfilePicUrl())
+    fun getProfilePicUrlReturnsAValidURL() = Assert.assertNotNull(status.getProfilePicUrl())
 
     @Test
     fun getDescriptionReturnsDefaultIfEmpty() {
         val emptyDescStatus = status.copy(content = "")
-        val emptyDescPost = Post(emptyDescStatus)
-        Assert.assertEquals( "No description", emptyDescPost.getDescription())
+        Assert.assertEquals( "No description", emptyDescStatus.getDescription())
     }
 
     @Test
-    fun getDescriptionReturnsAValidDesc() = Assert.assertNotNull(post.getDescription())
+    fun getDescriptionReturnsAValidDesc() = Assert.assertNotNull(status.getDescription())
 
     @Test
-    fun getDescriptionReturnsACorrectDesc() = Assert.assertEquals(status.content, post.getDescription())
+    fun getDescriptionReturnsACorrectDesc() = Assert.assertEquals(status.content, status.getDescription())
 
     @Test
-    fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account.username, post.getUsername())
+    fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account.username, status.getUsername())
 
     @Test
     fun getUsernameReturnsOtherNameIfUsernameIsNull() {
         val emptyDescStatus = status.copy(account = status.account.copy(username = ""))
-        val spePost = Post(emptyDescStatus)
-        Assert.assertEquals(status.account.display_name, spePost.getUsername())
+        Assert.assertEquals(status.account.display_name, emptyDescStatus.getUsername())
     }
 
     @Test
     fun getNLikesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.favourites_count} Likes", post.getNLikes())
+        Assert.assertEquals("${status.favourites_count} Likes", status.getNLikes())
     }
 
     @Test
     fun getNSharesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.reblogs_count} Shares", post.getNShares())
+        Assert.assertEquals("${status.reblogs_count} Shares", status.getNShares())
     }
 
 }

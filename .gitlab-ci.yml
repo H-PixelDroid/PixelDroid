@@ -1,0 +1,37 @@
+image: reactivecircus/android-emulator-23:latest
+
+variables:
+  API_LEVEL: "23"
+  API_LEVEL: "23"
+  ARCH: "x86"
+  TARGET: "default"
+  #CC_TEST_REPORTER_ID defined in GitLab CI settings
+
+stages:
+    - test
+    - report
+
+test:
+    stage: test
+    script:
+        - echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
+        - $ANDROID_HOME/emulator/emulator -avd "api-${API_LEVEL}" -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none &
+        - chmod +x android-wait-for-emulator.sh
+        - ./android-wait-for-emulator.sh
+        - adb shell settings put global window_animation_scale 0.0
+        - adb shell settings put global transition_animation_scale 0.0
+        - adb shell settings put global animator_duration_scale 0.0
+
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+
+        - ./gradlew build connectedCheck jacocoTestReport
+
+report_codeclimate_script:
+    stage: report
+    script:
+        # Report test coverage to Code Climate
+        - export JACOCO_SOURCE_PATH=app/src/main/java/
+        - ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
+        - ./cc-test-reporter upload-coverage

@@ -1,4 +1,4 @@
-package com.h.pixeldroid.fragments
+package com.h.pixeldroid.fragments.feeds
 
 
 import android.content.Context
@@ -16,17 +16,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
-import com.h.pixeldroid.models.Post
-import com.h.pixeldroid.models.Post.Companion.POST_TAG
+import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.objects.Notification
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [Notification]
  */
-class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecyclerViewAdapter.ViewHolder>() {
-    private val notifications: ArrayList<Notification> = arrayListOf()
-    private lateinit var context: Context
+class NotificationsRecyclerViewAdapter: FeedsRecyclerViewAdapter<Notification, NotificationsRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
 
@@ -41,7 +38,7 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
         when (notification.type){
             Notification.NotificationType.mention, Notification.NotificationType.favourite-> {
                 intent = Intent(context, PostActivity::class.java)
-                intent.putExtra(POST_TAG, Post(notification.status))
+                intent.putExtra(POST_TAG, notification.status)
             }
             Notification.NotificationType.reblog-> {
                 Toast.makeText(context,"Can't see shares yet, sorry!",Toast.LENGTH_SHORT).show()
@@ -55,14 +52,9 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
         context.startActivity(intent)
     }
 
-    fun initializeWith(newNotifications: List<Notification>){
-        notifications.clear()
-        notifications.addAll(newNotifications)
-        notifyDataSetChanged()
-    }
     fun addNotifications(newNotifications: List<Notification>){
-        val oldSize = notifications.size
-        notifications.addAll(newNotifications)
+        val oldSize = feedContent.size
+        feedContent.addAll(newNotifications)
         notifyItemRangeInserted(oldSize, newNotifications.size)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -74,11 +66,11 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val notification = notifications[position]
+        val notification = feedContent[position]
         Glide.with(holder.mView).load(notification.account.avatar_static).apply(RequestOptions().circleCrop())
             .placeholder(R.drawable.ic_default_user).into(holder.avatar)
 
-        val previewUrl = notification.status?.media_attachments?.get(0)?.preview_url
+        val previewUrl = notification.status?.media_attachments?.getOrNull(0)?.preview_url
         if(!previewUrl.isNullOrBlank()){
             Glide.with(holder.mView).load(previewUrl)
                 .placeholder(R.drawable.ic_picture_fallback).into(holder.photoThumbnail)
@@ -125,7 +117,6 @@ class NotificationsRecyclerViewAdapter: RecyclerView.Adapter<NotificationsRecycl
         return Pair(context.getString(format), context.getDrawable(drawable))
     }
 
-    override fun getItemCount(): Int = notifications.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val notificationType: TextView = mView.notification_type
