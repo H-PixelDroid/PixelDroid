@@ -72,7 +72,7 @@ interface PixelfedAPI {
         @Field("poll[hide_totals]") poll_hideTotals : List<String>? = null,
         @Field("sensitive") sensitive : Boolean? = null,
         @Field("spoiler_text") spoiler_text : String? = null,
-        @Field("visibility") visibility : String? = null,
+        @Field("visibility") visibility : String = "public",
         @Field("scheduled_at") scheduled_at : String? = null,
         @Field("language") language : String? = null
     ) : Call<Status>

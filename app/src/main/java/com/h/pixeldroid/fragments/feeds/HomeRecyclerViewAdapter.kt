@@ -157,6 +157,8 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
 
         //Activate commenter
         holder.commenter.setOnClickListener {
+            Log.e("ID", post.id)
+            Log.e("ACCESS_TOKEN", credential)
             //Open text input
             val textIn = holder.comment.textView?.text.toString()
             if(textIn.isNullOrEmpty()) {
@@ -172,10 +174,12 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
                         if(response.code() == 200) {
 
                             val comment = TextView(context)
-                            comment.text = response.body()!!.text
+                            comment.text = response.body()!!.text.toString()
                             holder.commentCont.addView(comment)
                             Toast.makeText(context,"Comment posted!",Toast.LENGTH_SHORT).show()
-                            Log.e("COMMENT SUCCESS", "posted: ${comment.text}")
+                            Log.e("COMMENT SUCCESS", "posted: ${textIn}")
+                        } else {
+                            Log.e("ERROR_CODE", response.code().toString())
                         }
                     }
                 })
