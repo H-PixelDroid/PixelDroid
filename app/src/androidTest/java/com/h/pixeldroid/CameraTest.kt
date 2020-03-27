@@ -28,14 +28,9 @@ import androidx.test.rule.GrantPermissionRule;
 
 @RunWith(AndroidJUnit4::class)
 class CameraTest {
-    @get:Rule
-    var activityRule: ActivityScenarioRule<MainActivity>
-            = ActivityScenarioRule(MainActivity::class.java)
 
     @get:Rule
     val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
-
-
 
     @Before
     fun before(){
@@ -51,7 +46,7 @@ class CameraTest {
     }
 
     @Test
-    fun testTakePictureButton() {
+    fun  testTakePictureButton() {
         Espresso.onView(withId(R.id.takePictureButton)).perform(click())
     }
 
