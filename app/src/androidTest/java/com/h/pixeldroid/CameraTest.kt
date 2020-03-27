@@ -40,18 +40,27 @@ class CameraTest {
         preferences.edit().putString("domain", "http://localhost").apply()
         ActivityScenario.launch(MainActivity::class.java)
 
-        Espresso.onView(ViewMatchers.withId(R.id.view_pager))
-            .perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft())
-
     }
 
     @Test
     fun  testTakePictureButton() {
+
+        Espresso.onView(ViewMatchers.withId(R.id.view_pager))
+            .perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft())
+        Thread.sleep(1000)
+
+
         Espresso.onView(withId(R.id.takePictureButton)).perform(click())
     }
 
     @Test
     fun testUploadPictureButton() {
+
+        Espresso.onView(ViewMatchers.withId(R.id.view_pager))
+            .perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft())
+        Thread.sleep(1000)
+
+
         Espresso.onView(withId(R.id.uploadPictureButton)).perform(click())
     }
 }
