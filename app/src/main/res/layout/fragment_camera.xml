@@ -9,15 +9,28 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/camera_fragment_new_post_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_margin="15dp"
+        android:text="@string/create_a_new_post"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/cardview_light_background"
+        tools:ignore="PrivateResource" />
+
+    <Button
         android:id="@+id/upload_picture_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="15dp"
+        android:padding="10dp"
         android:layout_margin="15dp"
-        android:text="@string/upload_a_picture"
+        android:text= "@string/upload_a_picture"
         android:background="@color/colorPrimary"
-        android:textColor="@color/cardview_light_background"/>
+        android:textColor="@color/cardview_light_background"
+        tools:ignore="PrivateResource" />
 
     <ImageView
         android:id="@+id/uploaded_picture_view"
