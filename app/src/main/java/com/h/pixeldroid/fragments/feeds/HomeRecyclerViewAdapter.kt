@@ -160,11 +160,12 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
             Log.e("ID", post.id)
             Log.e("ACCESS_TOKEN", credential)
             //Open text input
-            val textIn = holder.comment.textView?.text.toString()
+            val textIn = holder.comment.textView?.text
             if(textIn.isNullOrEmpty()) {
                 Toast.makeText(context,"Comment must not be empty!",Toast.LENGTH_SHORT).show()
             } else {
-                api.commentStatus(credential, textIn, post.id).enqueue(object : Callback<Status> {
+                val nonNullText = textIn.toString()
+                api.commentStatus(credential, nonNullText, post.id).enqueue(object : Callback<Status> {
                     override fun onFailure(call: Call<Status>, t: Throwable) {
                         Log.e("COMMENT ERROR", t.toString())
                         Toast.makeText(context,"Comment error!",Toast.LENGTH_SHORT).show()
