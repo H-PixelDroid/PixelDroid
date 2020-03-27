@@ -51,8 +51,6 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
-        uploadedPictureView = view.findViewById(R.id.uploadedPictureView)
-
 
         val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
         uploadPictureButton.setOnClickListener{
