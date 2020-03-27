@@ -13,7 +13,6 @@ import androidx.cardview.widget.CardView
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.models.Post
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
@@ -25,13 +24,7 @@ import retrofit2.Response
 import java.util.ArrayList
 
 class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credential : String) : FeedsRecyclerViewAdapter<Status, HomeRecyclerViewAdapter.ViewHolder>() {
-    private val posts: ArrayList<Post> = ArrayList<Post>()
 
-    fun addPosts(newPosts : List<Post>) {
-        val size = posts.size
-        posts.addAll(newPosts)
-        notifyItemRangeInserted(size, newPosts.size)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -44,7 +37,7 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
      * Binds the different elements of the Post Model to the view holder
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val post = Post(feedContent[position])
+        val post = feedContent[position]
         val metrics = DisplayMetrics()
 
         //Limit the height of the different images
@@ -77,7 +70,7 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
 
         //Activate the liker
         holder.liker.setOnClickListener {
-            if (post.liked) {
+            if (post.favourited) {
                 api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
                     override fun onFailure(call: Call<Status>, t: Throwable) {
                         Log.e("UNLIKE ERROR", t.toString())
@@ -85,11 +78,10 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
 
                     override fun onResponse(call: Call<Status>, response: Response<Status>) {
                         if(response.code() == 200) {
-                            val resp = Post(response.body())
+                            val resp = response.body()!!
                             holder.nlikes.text = resp.getNLikes()
                             Log.e("POST", "unLiked")
-                            post.liked = !post.liked
-                            Log.e("isLIKE", post.liked.toString())
+                            Log.e("isLIKE", post.favourited.toString())
 
                         } else {
                             Log.e("RESPOSE_CODE", response.code().toString())
@@ -107,11 +99,10 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
 
                     override fun onResponse(call: Call<Status>, response: Response<Status>) {
                         if(response.code() == 200) {
-                            val resp = Post(response.body())
+                            val resp = response.body()!!
                             holder.nlikes.text = resp.getNLikes()
                             Log.e("POST", "liked")
-                            post.liked = !post.liked
-                            Log.e("isLIKE", post.liked.toString())
+                            Log.e("isLIKE", post.favourited.toString())
                         } else {
                             Log.e("RESPOSE_CODE", response.code().toString())
                         }
