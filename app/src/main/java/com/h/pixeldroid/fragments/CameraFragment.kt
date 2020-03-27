@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.*
+import android.view.OrientationEventListener.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -178,7 +179,6 @@ class CameraFragment : Fragment() {
         requestBuilder.addTarget(reader.surface)
         requestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
 
-        val rotation = this.requireContext().getSystemService(Context.WINDOW_SERVICE)
         requestBuilder.set(
             CaptureRequest.JPEG_ORIENTATION,
             getJpegOrientation(
@@ -196,20 +196,20 @@ class CameraFragment : Fragment() {
                 request: CaptureRequest,
                 result: TotalCaptureResult
             ) {
-                super.onCaptureCompleted(session, request, result);
+                super.onCaptureCompleted(session, request, result)
 
             }
         }
 
-        val outputSurfaces = ArrayList<Surface>(1);
+        val outputSurfaces = ArrayList<Surface>(1)
         outputSurfaces.add(reader.surface)
 
         val stateCallback = object : CameraCaptureSession.StateCallback() {
             override fun onConfigured(session: CameraCaptureSession) {
                 try {
-                    session.capture(requestBuilder.build(), captureListener, null);
+                    session.capture(requestBuilder.build(), captureListener, null)
                 } catch (e :CameraAccessException) {
-                    e.printStackTrace();
+                    e.printStackTrace()
                 }
             }
 
@@ -225,7 +225,7 @@ class CameraFragment : Fragment() {
         try {
             image = reader.acquireLatestImage()
             val buffer = image.planes[0].buffer;
-            var bytes = ByteArray(buffer.capacity())
+            val bytes = ByteArray(buffer.capacity())
             buffer.get(bytes);
 
             val bitMap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -245,7 +245,7 @@ class CameraFragment : Fragment() {
 
     private fun getJpegOrientation(c: CameraCharacteristics, deviceOrientation: Int): Int {
         var deviceOrientation = deviceOrientation
-        if (deviceOrientation == OrientationEventListener.ORIENTATION_UNKNOWN) return 0
+        if (deviceOrientation == ORIENTATION_UNKNOWN) return 0
         val sensorOrientation = c[CameraCharacteristics.SENSOR_ORIENTATION]!!
 
         // Round device orientation to a multiple of 90
