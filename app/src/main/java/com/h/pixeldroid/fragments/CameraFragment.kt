@@ -12,6 +12,7 @@ import android.hardware.camera2.*
 import android.media.Image
 import android.media.ImageReader
 import android.media.ImageReader.OnImageAvailableListener
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
@@ -19,29 +20,30 @@ import android.view.*
 import android.view.OrientationEventListener.*
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.net.URI
 
 
 class CameraFragment : Fragment() {
 
-    private lateinit var previewsize: Size
     private lateinit var jpegSizes: Array<Size>
 
+    private lateinit var         textureView: TextureView
+    private lateinit var      surfaceTexture: SurfaceTexture
+    private lateinit var uploadedPictureView: ImageView
 
-    private lateinit var    textureView: TextureView
-    private lateinit var surfaceTexture: SurfaceTexture
 
     private lateinit var        manager: CameraManager
     private lateinit var   cameraDevice: CameraDevice
     private lateinit var requestBuilder: CaptureRequest.Builder
     private lateinit var captureSession: CameraCaptureSession
 
-    private var uploadedPictureView: ImageView? = null
 
 
     val PICK_IMAGE_REQUEST = 1
@@ -53,6 +55,13 @@ class CameraFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
 
+        uploadedPictureView = view.findViewById(R.id.uploadedPictureView)
+        uploadedPictureView.visibility = View.GONE
+
+        textureView = view.findViewById(R.id.textureView)!!
+        textureView.surfaceTextureListener = this.textureListener
+
+
         val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
         uploadPictureButton.setOnClickListener{
             uploadPicture()
@@ -60,11 +69,13 @@ class CameraFragment : Fragment() {
 
         val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
         takePictureButton.setOnClickListener{
-            takePicture()
+            if (uploadedPictureView.visibility == View.VISIBLE ) {
+                uploadedPictureView.visibility = View.GONE
+                openCamera()
+            } else {
+                takePicture()
+            }
         }
-
-        textureView = view.findViewById(R.id.textureView)!!
-        textureView.surfaceTextureListener = this.textureListener
 
         return view
     }
@@ -189,20 +200,15 @@ class CameraFragment : Fragment() {
 
         reader.setOnImageAvailableListener(readerListener, null)
 
-        val  captureListener = object : CameraCaptureSession.CaptureCallback() {
-
+        val captureListener = object : CameraCaptureSession.CaptureCallback() {
             override fun onCaptureCompleted(
                 session: CameraCaptureSession,
                 request: CaptureRequest,
                 result: TotalCaptureResult
             ) {
                 super.onCaptureCompleted(session, request, result)
-
             }
         }
-
-        val outputSurfaces = ArrayList<Surface>(1)
-        outputSurfaces.add(reader.surface)
 
         val stateCallback = object : CameraCaptureSession.StateCallback() {
             override fun onConfigured(session: CameraCaptureSession) {
@@ -217,6 +223,9 @@ class CameraFragment : Fragment() {
             }
         }
 
+        val outputSurfaces = ArrayList<Surface>(1)
+        outputSurfaces.add(reader.surface)
+
         cameraDevice.createCaptureSession(outputSurfaces, stateCallback , null);
     }
 
@@ -228,8 +237,11 @@ class CameraFragment : Fragment() {
             val bytes = ByteArray(buffer.capacity())
             buffer.get(bytes);
 
-            val bitMap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            uploadedPictureView?.setImageBitmap(bitMap)
+            val filename = "temp_capture.png"
+            val file = File.createTempFile(filename, null, context?.cacheDir)
+            file.writeBytes(bytes)
+
+            picturePreview(file.toUri() as Uri?)
 
             //Toast.makeText(this.context, "AKALA MIAMIAM", Toast.LENGTH_LONG).show();
 
@@ -261,7 +273,6 @@ class CameraFragment : Fragment() {
         return (sensorOrientation + deviceOrientation + 360) % 360
     }
 
-
     // Ulysse's part
 
     private fun uploadPicture() {
@@ -280,7 +291,13 @@ class CameraFragment : Fragment() {
                 Log.w(TAG, "No picture uploaded")
                 return
             }
-             uploadedPictureView?.setImageURI(data.data)
+             picturePreview(data.data)
         }
+    }
+
+    private fun picturePreview(uri: Uri?) {
+        uploadedPictureView.visibility = View.VISIBLE
+        uploadedPictureView?.setImageURI(uri)
+
     }
 }

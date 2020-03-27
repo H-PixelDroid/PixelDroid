@@ -57,8 +57,8 @@
 
     <ImageView
         android:id="@+id/uploadedPictureView"
-        android:layout_width="384dp"
-        android:layout_height="653dp"
+        android:layout_width="366dp"
+        android:layout_height="532dp"
         android:layout_margin="15dp"
         android:layout_marginStart="14dp"
         android:layout_marginEnd="14dp"
