@@ -21,10 +21,15 @@ class PostCreationTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
-    @Test
-    fun onCameraFragmentStartPostCreation() {
+
+    @Before
+    fun setup() {
         onView(withId(R.id.main_activity_main_linear_layout))
             .perform(swipeLeft()).perform(swipeLeft())
-        onView(withId(R.id.camera_fragment_new_post_button)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun onCameraFragmentStartPostCreation() {
+        onView(withId(R.id.camera_fragment_create_new_post_text)).check(matches(isDisplayed()))
     }
 }

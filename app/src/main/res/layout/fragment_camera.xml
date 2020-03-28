@@ -8,16 +8,14 @@
     tools:context=".fragments.CameraFragment"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/camera_fragment_new_post_button"
+    <TextView
+        android:id="@+id/camera_fragment_create_new_post_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
         android:layout_margin="15dp"
         android:text="@string/create_a_new_post"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/cardview_light_background"
         tools:ignore="PrivateResource" />
 
     <Button
