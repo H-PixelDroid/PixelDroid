@@ -1,6 +1,5 @@
 package com.h.pixeldroid.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -14,13 +13,13 @@ interface PostDao {
     fun getAll(): List<PostEntity>
 
     @Query("SELECT * FROM posts ORDER BY date DESC")
-    fun getAllByDate(): LiveData<List<PostEntity>>
+    fun getAllByDate(): List<PostEntity>
 
     @Query("SELECT * FROM posts WHERE uid = :postId")
-    fun getById(postId: Long): LiveData<PostEntity>
+    fun getById(postId: Long): PostEntity
 
     @Query("SELECT * FROM posts WHERE date IN (SELECT min(date) FROM posts) ")
-    fun getOldestPost(): LiveData<PostEntity>
+    fun getOldestPost(): PostEntity
 
     @Query("SELECT count(*) FROM posts")
     fun getPostCount(): Int

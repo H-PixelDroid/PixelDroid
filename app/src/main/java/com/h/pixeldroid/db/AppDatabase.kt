@@ -30,7 +30,7 @@ abstract class AppDatabase : RoomDatabase() {
                 } else {
                     Room.databaseBuilder(
                         context.applicationContext, AppDatabase::class.java, "posts_database"
-                    ).build()
+                    ).allowMainThreadQueries().build()
                 }
 
                 INSTANCE = instance

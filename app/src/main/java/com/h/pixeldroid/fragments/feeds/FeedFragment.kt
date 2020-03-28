@@ -92,7 +92,7 @@ open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
         // Set the adapter
         list.layoutManager = LinearLayoutManager(context)
 
-        postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
+        //postViewModel = ViewModelProvider(this).get(PostViewModel::class.java)
 
         return view
     }

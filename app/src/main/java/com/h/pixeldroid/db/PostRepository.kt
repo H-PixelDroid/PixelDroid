@@ -2,7 +2,6 @@ package com.h.pixeldroid.db
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,13 +23,7 @@ class PostRepository(application: Application) : CoroutineScope {
 
     val allPosts = postDao?.getAllByDate()
 
-    fun getAll(): List<PostEntity>? {
-        Log.d("test1", "here")
-        val posts = postDao?.getAll()
-        Log.d("test1", "here"+posts?.get(0)?.uid)
-
-        return posts
-    }
+    fun getAll() =  postDao?.getAll()
 
     fun getById(id: Long) = postDao?.getById(id)
 
@@ -51,6 +44,8 @@ class PostRepository(application: Application) : CoroutineScope {
     fun insertPost(post: PostEntity) {
         var uid: Long = 0
         launch  { uid = insertPostBG(post) }
+
+        Log.d("test1", "uid = " + post.uid.toString() + " return = " + uid.toString())
     }
 
     private suspend fun addDateToPostBG(postId: Long, date: Date){
@@ -59,7 +54,7 @@ class PostRepository(application: Application) : CoroutineScope {
         }
     }
 
-    private suspend fun insertPostBG(post: PostEntity): Long{
+    private suspend fun insertPostBG(post: PostEntity): Long {
         var uid: Long = 0
         withContext(Dispatchers.IO){
             uid = postDao?.insertPost(post)!!

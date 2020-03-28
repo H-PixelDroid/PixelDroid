@@ -11,7 +11,7 @@ import kotlin.collections.ArrayList
 class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: PostRepository = PostRepository(application)
-    val allPosts: LiveData<List<PostEntity>>?
+    val allPosts: List<PostEntity>?
     val MAX_NUMBER_OF_POSTS = 100
 
     init {
@@ -39,33 +39,26 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         insertPost(postToAdd)
     }
 
-    fun getById(id: Long): PostEntity {
+    fun getById(id: Long): PostEntity? {
         Log.d("test1", id.toString())
-        val post = repository.getById(id)?.value!!
+        val post = repository.getById(id)
 
-        Log.d("test1", post.uid.toString())
-        Log.d("test1", post.status.id)
+        Log.d("test1", post?.uid.toString())
+        Log.d("test1", post?.status?.id!!)
 
         return post
     }
 
-    fun getAllByDate() : List<PostEntity> {
-        return repository.getAllByDate()?.value!!
-    }
+    fun getAllByDate() = repository.getAllByDate()
 
-    fun getOldestPost(): PostEntity {
-        return repository.getOldestPost()?.value!!
-    }
+    fun getOldestPost() = repository.getOldestPost()
 
-    fun getPostCount(): Int {
-        return repository.getPostCount()!!
-    }
+    fun getPostCount() = repository.getPostCount()!!
 
     fun addDateToPost(postId: Long, date: Date) { repository.addDateToPost(postId, date) }
 
-    fun getAll(): List<PostEntity> {
-        val posts = repository
-            .getAll()
+    fun getAll(): List<PostEntity>? {
+        val posts = repository.getAll()
         Log.d("test1", posts?.size.toString())
         Log.d("test1", posts?.get(0)?.uid.toString())
         Log.d("test1", posts?.get(0)?.status?.id!!)
