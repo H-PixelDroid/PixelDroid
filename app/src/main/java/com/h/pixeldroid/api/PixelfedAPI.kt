@@ -38,6 +38,52 @@ interface PixelfedAPI {
         @Field("grant_type") grant_type: String? = null
     ): Call<Token>
 
+    @POST("api/v1/statuses/{id}/favourite")
+    fun likePost(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Path("id") statusId: String
+    ) : Call<Status>
+
+    @POST("/api/v1/statuses/{id}/unfavourite")
+    fun unlikePost(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Path("id") statusId: String
+    ) : Call<Status>
+
+    @POST("/api/v1/statuses/{id}/favourited_by")
+    fun postLikedBy(
+        @Path("id") statusId: String
+    ) : Call<List<Account>>
+
+    //Used in our case to post a comment
+    @FormUrlEncoded
+    @POST("/api/v1/statuses")
+    fun commentStatus(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Field("status") statusText : String,
+        @Field("in_reply_to_id") in_reply_to_id : String,
+        @Field("media_ids[]") media_ids : List<String> = emptyList(),
+        @Field("poll[options][]") poll_options : List<String>? = null,
+        @Field("poll[expires_in]") poll_expires : List<String>? = null,
+        @Field("poll[multiple]") poll_multiple : List<String>? = null,
+        @Field("poll[hide_totals]") poll_hideTotals : List<String>? = null,
+        @Field("sensitive") sensitive : Boolean? = null,
+        @Field("spoiler_text") spoiler_text : String? = null,
+        @Field("visibility") visibility : String = "public",
+        @Field("scheduled_at") scheduled_at : String? = null,
+        @Field("language") language : String? = null
+    ) : Call<Status>
+
+    //Used in our case to retrieve comments for a given status
+    @GET("/api/v1/statuses/{id}/context")
+    fun statusComments(
+        @Path("id") statusId: String,
+        @Header("Authorization") authorization: String? = null
+    ) : Call<Context>
+
     @GET("/api/v1/timelines/public")
     fun timelinePublic(
         @Query("local") local: Boolean? = null,
@@ -46,7 +92,6 @@ interface PixelfedAPI {
         @Query("min_id") min_id: String? = null,
         @Query("limit") limit: Int? = null
     ): Call<List<Status>>
-
 
     @GET("/api/v1/timelines/home")
     fun timelineHome(
@@ -81,6 +126,12 @@ interface PixelfedAPI {
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String
         ): Call<Account>
+
+    @GET("/api/v1/accounts/{id}/statuses")
+    fun accountPosts(
+        @Header("Authorization") authorization: String,
+        @Path("id") account_id: String? = null
+    ): Call<List<Status>>
 
     companion object {
         fun create(baseUrl: String): PixelfedAPI {

@@ -27,6 +27,7 @@ import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 
 
@@ -37,6 +38,8 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class LoginInstrumentedTest {
+    @get:Rule
+    var globalTimeout: Timeout = Timeout.seconds(100)
     @get:Rule
     var activityRule: ActivityScenarioRule<LoginActivity>
             = ActivityScenarioRule(LoginActivity::class.java)
@@ -64,6 +67,8 @@ class LoginInstrumentedTest {
 @RunWith(AndroidJUnit4::class)
 class LoginCheckIntent {
     @get:Rule
+    var globalTimeout: Timeout = Timeout.seconds(100)
+    @get:Rule
     val intentsTestRule = IntentsTestRule(LoginActivity::class.java)
 
     @Test
@@ -83,8 +88,10 @@ class LoginCheckIntent {
     }
 }
 
-@RunWith(AndroidJUnit4::class)
+/*@RunWith(AndroidJUnit4::class)
 class AfterIntent {
+    @get:Rule
+    var globalTimeout: Timeout = Timeout.seconds(100)
 
     @get:Rule
     val rule = ActivityTestRule(LoginActivity::class.java)
@@ -109,4 +116,4 @@ class AfterIntent {
             hasErrorText("Could not authenticate"))))
 
     }
-}
+}*/

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
@@ -42,19 +43,25 @@ class LoginActivity : AppCompatActivity() {
 
         val url = intent.data
 
+        //Check if the activity was started after the authentication
         if (url == null || !url.toString().startsWith("$OAUTH_SCHEME://$PACKAGE_ID")) return
+
+        loadingAnimation(true)
 
         val code = url.getQueryParameter("code")
         authenticate(code)
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        loadingAnimation(false)
+    }
+
     override fun onBackPressed() {
     }
 
     private fun onClickConnect() {
-
-        connect_instance_button.isEnabled = false
 
         val normalizedDomain = normalizeDomain(editText.text.toString())
 
@@ -63,6 +70,8 @@ class LoginActivity : AppCompatActivity() {
         } catch (e: IllegalArgumentException) {
             return failedRegistration(getString(R.string.invalid_domain))
         }
+
+        loadingAnimation(true)
 
         preferences.edit()
             .putString("domain", "https://$normalizedDomain")
@@ -125,7 +134,6 @@ class LoginActivity : AppCompatActivity() {
                 return failedRegistration(getString(R.string.browser_launch_failed))
             }
         }
-        connect_instance_button.isEnabled = true
     }
 
     private fun authenticate(code: String?) {
@@ -169,8 +177,19 @@ class LoginActivity : AppCompatActivity() {
 
     private fun failedRegistration(message: String =
                                        getString(R.string.registration_failed)){
-        connect_instance_button.isEnabled = true
+        loadingAnimation(false)
         editText.error = message
+    }
+
+    private fun loadingAnimation(on: Boolean){
+        if(on) {
+            domainTextInputLayout.visibility = View.GONE
+            progressLayout.visibility = View.VISIBLE
+        }
+        else {
+            domainTextInputLayout.visibility = View.VISIBLE
+            progressLayout.visibility = View.GONE
+        }
     }
 
 }
