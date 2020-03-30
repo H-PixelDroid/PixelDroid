@@ -15,6 +15,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -93,7 +94,7 @@ class MockedServerTest {
     fun swipingDownOnHomepageShowsMorePosts() {
         Thread.sleep(1000)
 
-        val firstDesc = withId(R.id.description)
+        val firstDesc = allOf(withId(R.id.description))
         onView(withId(R.id.view_pager))
             .perform(ViewActions.swipeUp())
             .perform(ViewActions.swipeDown())
