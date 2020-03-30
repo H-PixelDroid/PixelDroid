@@ -55,8 +55,9 @@ data class Status(
         const val POST_FRAG_TAG = "postFragTag"
     }
 
-    fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
-    fun getProfilePicUrl() : String? = account?.avatar
+    fun getPostUrl() : String? = media_attachments.getOrNull(0)?.url
+    fun getProfilePicUrl() : String? = account.avatar
+    fun getPostPreviewURL() : String? = media_attachments.getOrNull(0)?.preview_url
 
     fun getDescription() : CharSequence {
         val description = content as CharSequence
@@ -114,8 +115,8 @@ data class Status(
             getPostUrl(),
             rootView.findViewById(R.id.postPicture)
         )
-        ImageConverter.setImageViewFromURL(
-            fragment,
+        ImageConverter.setRoundImageFromURL(
+            rootView,
             getProfilePicUrl(),
             rootView.findViewById(R.id.profilePic)
         )
