@@ -117,7 +117,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/linearLayout2"
@@ -143,38 +143,19 @@
                     android:src="@android:drawable/ic_menu_gallery" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-                <ImageView
-                    android:id="@+id/post1"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:layout_margin="5dp"
-                    tools:srcCompat="@tools:sample/avatars" />
-
-                <ImageView
-                    android:id="@+id/post2"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:layout_margin="5dp"
-                    tools:srcCompat="@tools:sample/avatars" />
-
-                <ImageView
-                    android:id="@+id/post3"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_weight="1"
-                    android:layout_margin="5dp"
-                    tools:srcCompat="@tools:sample/avatars" />
-            </LinearLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/profilePostsRecyclerView"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".fragments.MyProfileFragment"
+            tools:listitem="@layout/fragment_profile_posts"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

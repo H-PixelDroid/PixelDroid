@@ -33,5 +33,9 @@ data class Account(
         val fields: List<Field>? = emptyList(),
         val bot: Boolean =  false,
         val source: Source? = null
-) : Serializable
+) : Serializable {
+        companion object {
+                const val ACCOUNT_TAG = "AccountTag"
+        }
+}
 

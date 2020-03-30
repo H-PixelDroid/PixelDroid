@@ -26,7 +26,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class MyProfileFragment : Fragment() {
     private lateinit var preferences: SharedPreferences
     private lateinit var adapter : ProfilePostsRecyclerViewAdapter
@@ -45,7 +44,8 @@ class MyProfileFragment : Fragment() {
         val editButton: Button = view.findViewById(R.id.editButton)
         editButton.setOnClickListener((View.OnClickListener { onClickEditButton() }))
 
-        recycler = view.findViewById(R.id.profilePostsRecyclerView)
+        // Set RecyclerView as a grid with 3 columns
+        recycler = view.findViewById(R.id.myProfilePostsRecyclerView)
         recycler.layoutManager = GridLayoutManager(context, 3)
         adapter = ProfilePostsRecyclerViewAdapter(context!!)
         recycler.adapter = adapter
