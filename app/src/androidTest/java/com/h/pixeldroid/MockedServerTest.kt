@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.android.material.tabs.TabLayout
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -77,13 +78,12 @@ class MockedServerTest {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
-        ActivityScenario.launch(MainActivity::class.java)
     }
     @Test
     fun testFollowersTextView() {
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft()).perform(
-            ViewActions.swipeLeft()
-        ).perform(ViewActions.swipeLeft())
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        }
         Thread.sleep(1000)
         onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
@@ -94,16 +94,17 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         val firstDesc = withId(R.id.description)
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown()).perform(
-            ViewActions.swipeDown()
-        )
-        onView(withId(R.id.description)).check(matches(firstDesc))
+        onView(withId(R.id.view_pager))
+            .perform(ViewActions.swipeUp())
+            .perform(ViewActions.swipeDown())
+            .perform(ViewActions.swipeDown())
+        onView(firstDesc).check(matches(firstDesc))
     }
     @Test
     fun testNotificationsList() {
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(
-            ViewActions.swipeLeft()
-        ).perform(ViewActions.swipeLeft())
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
         Thread.sleep(1000)
 
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
@@ -115,9 +116,9 @@ class MockedServerTest {
     }
     @Test
     fun clickNotification() {
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(
-            ViewActions.swipeLeft()
-        ).perform(ViewActions.swipeLeft())
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
         Thread.sleep(1000)
 
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())

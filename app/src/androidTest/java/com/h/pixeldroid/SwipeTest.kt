@@ -8,9 +8,9 @@ import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.rule.ActivityTestRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -19,8 +19,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SwipeTest {
     @get:Rule
-    var activityRule: ActivityTestRule<MainActivity>
-            = ActivityTestRule(MainActivity::class.java)
+    var activityRule: ActivityScenarioRule<MainActivity>
+            = ActivityScenarioRule(MainActivity::class.java)
     @Before
     fun before(){
         val preferences = getInstrumentation()
