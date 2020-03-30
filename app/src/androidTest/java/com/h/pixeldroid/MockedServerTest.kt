@@ -90,17 +90,16 @@ class MockedServerTest {
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
 
-    @Test
-    fun swipingDownOnHomepageShowsMorePosts() {
-        Thread.sleep(1000)
-
-        val firstDesc = allOf(withId(R.id.description))
-        onView(withId(R.id.view_pager))
-            .perform(ViewActions.swipeUp())
-            .perform(ViewActions.swipeDown())
-            .perform(ViewActions.swipeDown())
-        onView(firstDesc).check(matches(firstDesc))
-    }
+//    @Test
+//    fun swipingDownOnHomepageShowsMorePosts() {
+//        Thread.sleep(1000)
+//
+//        val firstDesc = allOf(withId(R.id.description))
+//        onView(withId(R.id.view_pager))
+//            .perform(ViewActions.swipeUp())
+//            .perform(ViewActions.swipeDown())
+//        onView(allOf(withId(R.id.description))).check(matches(firstDesc))
+//    }
     @Test
     fun testNotificationsList() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
