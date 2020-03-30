@@ -2,9 +2,11 @@ package com.h.pixeldroid.objects
 
 import android.graphics.Typeface
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
+import com.h.pixeldroid.objects.Account.Companion.openProfile
 import com.h.pixeldroid.utils.ImageConverter
 import java.io.Serializable
 
@@ -93,6 +95,7 @@ data class Status(
         val username = rootView.findViewById<TextView>(R.id.username)
         username.text = this.getUsername()
         username.setTypeface(null, Typeface.BOLD)
+        username.setOnClickListener { openProfile(rootView.context, account) }
 
         val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
         usernameDesc.text = this.getUsernameDescription()
@@ -115,12 +118,16 @@ data class Status(
             getPostUrl(),
             rootView.findViewById(R.id.postPicture)
         )
+
+        val profilePic = rootView.findViewById<ImageView>(R.id.profilePic)
         ImageConverter.setRoundImageFromURL(
             rootView,
             getProfilePicUrl(),
-            rootView.findViewById(R.id.profilePic)
+            profilePic
         )
+        profilePic.setOnClickListener { openProfile(rootView.context, account) }
     }
+
     enum class Visibility : Serializable {
         public, unlisted, private, direct
     }

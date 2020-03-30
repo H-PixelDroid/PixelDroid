@@ -1,13 +1,13 @@
 package com.h.pixeldroid.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
-import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 
 
 class PostFragment : Fragment() {
@@ -21,5 +21,4 @@ class PostFragment : Fragment() {
         status?.setupPost(this, root)
         return root
     }
-
 }
