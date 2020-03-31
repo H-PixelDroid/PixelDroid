@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
-
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -16,10 +15,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.HomeFragment
 import com.h.pixeldroid.fragments.MyProfileFragment
 import com.h.pixeldroid.fragments.NotificationsFragment
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -46,10 +45,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             navigationView.setNavigationItemSelectedListener(this)
             
             val tabs = arrayOf(HomeFragment(),
-                               Fragment(), Fragment(), 
+                               Fragment(),
+                               CameraFragment(),
                                NotificationsFragment(),
                                MyProfileFragment())
-
 
             setupTabs(tabs)
         }
