@@ -17,7 +17,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
-import kotlin.concurrent.thread
 
 
 @RunWith(AndroidJUnit4::class)
@@ -34,8 +33,6 @@ class SettingsTest {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", "http://localhost").apply()
-        ActivityScenario.launch(MainActivity::class.java)
-
     }
 
     @Test
