@@ -3,14 +3,13 @@ package com.h.pixeldroid
 import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.swipeLeft
-import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import com.google.android.material.tabs.TabLayout
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -24,12 +23,34 @@ class PostCreationTest {
 
     @Before
     fun setup() {
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(swipeLeft()).perform(swipeLeft())
+        val preferences = getInstrumentation()
+            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
+        preferences.edit().putString("accessToken", "azerty").apply()
+        preferences.edit().putString("domain", "http://localhost").apply()
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+            a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(2)?.select()
+        }
+    }
+
+    // UI elements correctly displayed
+    @Test
+    fun testUIDisplayTitle() {
+        Thread.sleep(1000)
+        val title = R.string.create_a_new_post
+        onView(withText(title)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun onCameraFragmentStartPostCreation() {
-        onView(withId(R.id.camera_fragment_create_new_post_text)).check(matches(isDisplayed()))
+    fun testUIDisplayTakePictureButton() {
+        Thread.sleep(1000)
+        val text = R.string.take_a_picture
+        onView(withText(text)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testUIDisplayUploadPictureButton() {
+        Thread.sleep(1000)
+        val text = R.string.upload_a_picture
+        onView(withText(text)).check(matches(isDisplayed()))
     }
 }
