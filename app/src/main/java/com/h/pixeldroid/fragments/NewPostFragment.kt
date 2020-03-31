@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.os.Environment.getExternalStoragePublicDirectory
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,8 +14,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+
+/**
+ * This fragment is the entry point to create a post.
+ * You can either upload an existing picture or take a new one.
+ * once the URI of the picture to be posted is set, it will send
+ * it to the post creation activity where you can modify it,
+ * add a description and more.
+ */
 
 const val PICK_IMAGE_REQUEST = 1
 const val IMAGE_CAPTURE_REQUEST = 2
@@ -55,9 +68,30 @@ class NewPostFragment : Fragment() {
                     pictureUri = data.data
                 else Log.w(TAG, "Upload of picture failed.")
             else if (requestCode == IMAGE_CAPTURE_REQUEST) {
-                val dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                try {
+                    pictureUri = createImageFile().toUri()
+                }
+                catch (err: IOException) {
+                    Log.e(TAG, "Saving new picture failed: ${err.message}")
+                }
             }
+        if (pictureUri != null) {
+            startActivity(Intent(activity, PostCreationActivity::class.java))
+        }
     }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+            "PixelFed_${timeStamp}", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        )
+    }
+
 
     private fun uploadPicture() {
         val context = requireContext().applicationContext
@@ -93,6 +127,5 @@ class NewPostFragment : Fragment() {
             }
         }
     }
-
 
 }
