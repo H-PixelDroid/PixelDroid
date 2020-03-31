@@ -65,7 +65,7 @@ dependencies {
     implementation "androidx.browser:browser:1.2.0"
     implementation 'com.google.android.material:material:1.1.0'
 
-    def room_version = "2.2.4"
+    def room_version = "2.2.5"
     implementation "androidx.room:room-runtime:$room_version"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
@@ -89,6 +89,8 @@ dependencies {
 
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.4.0")
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
