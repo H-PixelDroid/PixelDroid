@@ -15,7 +15,6 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import org.hamcrest.CoreMatchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -80,6 +79,7 @@ class MockedServerTest {
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
     }
+
     @Test
     fun testFollowersTextView() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
@@ -90,16 +90,6 @@ class MockedServerTest {
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
 
-//    @Test
-//    fun swipingDownOnHomepageShowsMorePosts() {
-//        Thread.sleep(1000)
-//
-//        val firstDesc = allOf(withId(R.id.description))
-//        onView(withId(R.id.view_pager))
-//            .perform(ViewActions.swipeUp())
-//            .perform(ViewActions.swipeDown())
-//        onView(allOf(withId(R.id.description))).check(matches(firstDesc))
-//    }
     @Test
     fun testNotificationsList() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
