@@ -62,6 +62,7 @@
     <string name="liked_notification">%1$s liked your post</string>
     <string name="create_a_new_post">Create a new post!</string>
     <string name="take_a_picture">Take a picture</string>
-    <string name="upload_a_picture" />
+    <string name="upload_a_picture">Upload a picture</string>
+    <string name="or">or</string>
 
 </resources>

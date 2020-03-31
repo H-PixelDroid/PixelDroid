@@ -2,52 +2,29 @@ package com.h.pixeldroid.fragments
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
-import android.graphics.ImageFormat
-import android.graphics.SurfaceTexture
-import android.hardware.camera2.*
-import android.media.Image
-import android.media.ImageReader
-import android.media.ImageReader.OnImageAvailableListener
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStoragePublicDirectory
+import android.provider.MediaStore
 import android.util.Log
-import android.util.Size
-import android.view.*
-import android.view.OrientationEventListener.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import androidx.core.app.ActivityCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.net.URI
 
+const val PICK_IMAGE_REQUEST = 1
+const val IMAGE_CAPTURE_REQUEST = 2
+const val TAG = "New Post Fragment"
 
 class NewPostFragment : Fragment() {
 
-    private lateinit var jpegSizes: Array<Size>
-
-    private lateinit var         textureView: TextureView
-    private lateinit var      surfaceTexture: SurfaceTexture
-    private lateinit var uploadedPictureView: ImageView
-
-
-    private lateinit var        manager: CameraManager
-    private lateinit var   cameraDevice: CameraDevice
-    private lateinit var requestBuilder: CaptureRequest.Builder
-    private lateinit var captureSession: CameraCaptureSession
-
-
-
-    val PICK_IMAGE_REQUEST = 1
-    val TAG = "Camera Fragment"
+    private var pictureUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,225 +32,51 @@ class NewPostFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_new_post, container, false)
 
-        uploadedPictureView = view.findViewById(R.id.uploadedPictureView)
-        uploadedPictureView.visibility = View.GONE
-
-        textureView = view.findViewById(R.id.textureView)!!
-        textureView.surfaceTextureListener = this.textureListener
-
-
         val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
         uploadPictureButton.setOnClickListener{
             uploadPicture()
         }
 
-        val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
-        takePictureButton.setOnClickListener{
-            if (uploadedPictureView.visibility == View.VISIBLE ) {
-                uploadedPictureView.visibility = View.GONE
+        if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+            val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
+            takePictureButton.setOnClickListener{
                 openCamera()
-            } else {
-                takePicture()
             }
         }
 
         return view
     }
 
-    private val textureListener = object : TextureView.SurfaceTextureListener {
-        override fun onSurfaceTextureAvailable(
-            surface: SurfaceTexture,
-            width: Int,
-            height: Int
-        ) {
-            surfaceTexture = surface
-            openCamera()
-        }
-
-        override fun onSurfaceTextureSizeChanged(
-            surface: SurfaceTexture,
-            width: Int,
-            height: Int
-        ) {}
-
-        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-            return false
-        }
-
-        override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK
+            && data != null)
+            if (requestCode == PICK_IMAGE_REQUEST)
+                if (data.data != null)
+                    pictureUri = data.data
+                else Log.w(TAG, "Upload of picture failed.")
+            else if (requestCode == IMAGE_CAPTURE_REQUEST) {
+                val dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            }
     }
 
-    private fun openCamera() {
-
+    private fun uploadPicture() {
         val context = requireContext().applicationContext
-        manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED)
         {
-
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(
-                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), 200)
             return
         }
 
-        try {
-            manager.openCamera(manager.cameraIdList[0], previewStateCallback, null)
-        } catch (e : CameraAccessException) {
-            e.printStackTrace()
-        }
-    }
-
-    private val previewStateCallback = object : CameraDevice.StateCallback() {
-        override fun onOpened(camera: CameraDevice) {
-            cameraDevice = camera
-
-            try {
-                cameraDevice.createCaptureSession(
-                    listOf(Surface(surfaceTexture)),
-                    previewSessionCallback,
-                    null
-                )
-            } catch (e: CameraAccessException) {
-                e.printStackTrace()
-            }
-
-
-        }
-
-        override fun onDisconnected(camera: CameraDevice) {
-            cameraDevice.close()
-        }
-
-        override fun onError(camera: CameraDevice, error: Int) {
-            cameraDevice.close()
-        }
-
-    }
-
-    private val previewSessionCallback = object : CameraCaptureSession.StateCallback() {
-        override fun onConfigureFailed(session: CameraCaptureSession) {
-        }
-
-        override fun onConfigured(session: CameraCaptureSession) {
-            captureSession = session
-
-            try {
-                requestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-                requestBuilder.addTarget(Surface(textureView.surfaceTexture))
-                captureSession.setRepeatingRequest(requestBuilder.build(), null, null)
-
-            } catch (e: CameraAccessException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    private fun takePicture() {
-        val characteristics = manager.getCameraCharacteristics(cameraDevice.id)
-
-        jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!.
-                    getOutputSizes(ImageFormat.JPEG)
-
-        var width = 640
-        var height = 480
-        if (jpegSizes.isNotEmpty()) {
-            width = jpegSizes[0].width
-            height = jpegSizes[0].height
-        }
-        val reader: ImageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
-
-        val requestBuilder =
-            cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-        requestBuilder.addTarget(reader.surface)
-        requestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
-
-        requestBuilder.set(
-            CaptureRequest.JPEG_ORIENTATION,
-            getJpegOrientation(
-                manager.getCameraCharacteristics(cameraDevice.id),
-                activity?.windowManager?.defaultDisplay?.rotation!!
-            )
-        )
-
-        reader.setOnImageAvailableListener(readerListener, null)
-
-        val captureListener = object : CameraCaptureSession.CaptureCallback() {
-            override fun onCaptureCompleted(
-                session: CameraCaptureSession,
-                request: CaptureRequest,
-                result: TotalCaptureResult
-            ) {
-                super.onCaptureCompleted(session, request, result)
-            }
-        }
-
-        val stateCallback = object : CameraCaptureSession.StateCallback() {
-            override fun onConfigured(session: CameraCaptureSession) {
-                try {
-                    session.capture(requestBuilder.build(), captureListener, null)
-                } catch (e :CameraAccessException) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onConfigureFailed(session: CameraCaptureSession) {
-            }
-        }
-
-        val outputSurfaces = ArrayList<Surface>(1)
-        outputSurfaces.add(reader.surface)
-
-        cameraDevice.createCaptureSession(outputSurfaces, stateCallback , null);
-    }
-
-    private val readerListener = OnImageAvailableListener { reader ->
-        lateinit var image : Image
-        try {
-            image = reader.acquireLatestImage()
-            val buffer = image.planes[0].buffer;
-            val bytes = ByteArray(buffer.capacity())
-            buffer.get(bytes);
-
-            val filename = "temp_capture.png"
-            val file = File.createTempFile(filename, null, context?.cacheDir)
-            file.writeBytes(bytes)
-
-            picturePreview(file.toUri() as Uri?)
-
-            //Toast.makeText(this.context, "AKALA MIAMIAM", Toast.LENGTH_LONG).show();
-
-
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace();
-        } catch (e: IOException) {
-            e.printStackTrace();
-        } finally {
-            image.close()
-        }
-    }
-
-    private fun getJpegOrientation(c: CameraCharacteristics, deviceOrientation: Int): Int {
-        var deviceOrientation = deviceOrientation
-        if (deviceOrientation == ORIENTATION_UNKNOWN) return 0
-        val sensorOrientation = c[CameraCharacteristics.SENSOR_ORIENTATION]!!
-
-        // Round device orientation to a multiple of 90
-        deviceOrientation = (deviceOrientation + 45) / 90 * 90
-
-        // Reverse device orientation for front-facing cameras
-        val facingFront =
-            c[CameraCharacteristics.LENS_FACING] === CameraCharacteristics.LENS_FACING_FRONT
-        if (facingFront) deviceOrientation = -deviceOrientation
-
-        // Calculate desired JPEG orientation relative to camera orientation to make
-        // the image upright relative to the device orientation
-        return (sensorOrientation + deviceOrientation + 360) % 360
-    }
-
-    private fun uploadPicture() {
         Intent().apply {
             type = "image/*"
             action = Intent.ACTION_GET_CONTENT
@@ -283,19 +86,13 @@ class NewPostFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
-            if(data == null || data.data == null){
-                Log.w(TAG, "No picture uploaded")
-                return
+    private fun openCamera() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
+                startActivityForResult(takePictureIntent, IMAGE_CAPTURE_REQUEST)
             }
-             picturePreview(data.data)
         }
     }
 
-    private fun picturePreview(uri: Uri?) {
-        uploadedPictureView.visibility = View.VISIBLE
-        uploadedPictureView.setImageURI(uri)
 
-    }
 }

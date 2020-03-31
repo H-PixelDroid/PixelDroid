@@ -1,74 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/camera_fragment_main_linear_layout"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.NewPostFragment">
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
 
-    <TextureView
-        android:id="@+id/textureView"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        android:text="@string/create_a_new_post"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25sp"
+        android:layout_marginBottom="50dp"/>
 
     <Button
         android:id="@+id/uploadPictureButton"
-        android:layout_width="37dp"
-        android:layout_height="31dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:layout_marginBottom="31dp"
-        android:background="@android:drawable/ic_menu_gallery"
         android:gravity="center"
         android:padding="15dp"
+        android:text="@string/upload_a_picture"
+        android:background="@color/colorPrimary"
         android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/takePictureButton"
-        app:layout_constraintHorizontal_bias="0.08"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        tools:ignore="PrivateResource" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/or"/>
 
     <Button
         android:id="@+id/takePictureButton"
-        android:layout_width="36dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:layout_marginStart="14dp"
-        android:background="?android:attr/listChoiceIndicatorSingle"
         android:gravity="center"
         android:padding="15dp"
+        android:text="@string/take_a_picture"
+        android:background="@color/colorPrimary"
         android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="MissingConstraints,PrivateResource" />
+        tools:ignore="PrivateResource" />
 
-    <ImageView
-        android:id="@+id/uploadedPictureView"
-        android:layout_width="366dp"
-        android:layout_height="532dp"
-        android:layout_margin="15dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="14dp"
-        android:contentDescription="@string/upload_a_picture"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textureView"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toEndOf="@+id/textureView"
-        app:layout_constraintTop_toTopOf="@+id/textureView"
-        app:layout_constraintVertical_bias="0.147"
-        tools:ignore="MissingConstraints"
-        tools:srcCompat="@tools:sample/avatars" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 
