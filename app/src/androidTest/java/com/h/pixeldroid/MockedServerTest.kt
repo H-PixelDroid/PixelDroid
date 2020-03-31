@@ -1,10 +1,15 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.DrawerActions
+import androidx.test.espresso.contrib.DrawerMatchers
+import androidx.test.espresso.contrib.NavigationViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -121,5 +126,42 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(withText("Geonosys")).check(matches(withId(R.id.username)))
     }
+    @Test
+    fun testDrawerSettingsButton() {
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout))
+            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+            .perform(DrawerActions.open()); // Open Drawer
 
+        // Start the screen of your activity.
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
+
+        // Check that settings activity was opened.
+        onView(withText(R.string.signature_title)).check(matches(ViewMatchers.isDisplayed()))
+    }
+
+    @Test
+    fun swipingLeftStopsAtProfile() {
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeLeft()) // search
+            .perform(ViewActions.swipeLeft()) // camera
+            .perform(ViewActions.swipeLeft()) // notifications
+            .perform(ViewActions.swipeLeft()) // profile
+            .perform(ViewActions.swipeLeft()) // should stop at profile
+        onView(withId(R.id.nbFollowersTextView)).check(matches(ViewMatchers.isDisplayed()))
+    }
+
+    @Test
+    fun swipingRightStopsAtHomepage() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        } // go to the last tab
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeRight()) // notifications
+            .perform(ViewActions.swipeRight()) // camera
+            .perform(ViewActions.swipeRight()) // search
+            .perform(ViewActions.swipeRight()) // homepage
+            .perform(ViewActions.swipeRight()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(ViewMatchers.isDisplayed()))
+    }
 }
