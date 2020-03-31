@@ -37,12 +37,12 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        preferences = this.activity!!.getSharedPreferences(
+        preferences = this.requireActivity().getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
         feed = view.findViewById(R.id.feedList)
         feed.layoutManager = LinearLayoutManager(context)
-        adapter = FeedRecyclerViewAdapter(context!!)
+        adapter = FeedRecyclerViewAdapter(this.requireContext())
         feed.adapter = adapter
         return view
     }
@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
 
         val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         val accessToken = preferences.getString("accessToken", "")
-        var statuses: ArrayList<Status>? = null
+        var statuses: ArrayList<Status>?
         val newPosts = ArrayList<Post>()
 
         pixelfedAPI.timelineHome("Bearer $accessToken")
