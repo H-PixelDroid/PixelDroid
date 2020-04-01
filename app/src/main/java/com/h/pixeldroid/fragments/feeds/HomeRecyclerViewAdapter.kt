@@ -2,17 +2,21 @@ package com.h.pixeldroid.fragments.feeds
 
 import android.content.Intent
 import android.graphics.Typeface
+import android.service.autofill.Validators.not
+import android.text.Editable
 
 import android.util.DisplayMetrics
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
@@ -27,6 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.ArrayList
+import java.util.stream.IntStream.range
 
 class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credential : String) : FeedsRecyclerViewAdapter<Status, HomeRecyclerViewAdapter.ViewHolder>() {
 
@@ -152,13 +157,25 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
             }
 
         })
+        //Set comment initial visibility
+        holder.commentIn.visibility = GONE
+
+        //Toggle comment button
+        holder.commenter.setOnClickListener {
+            when(holder.commentIn.visibility) {
+                VISIBLE   -> holder.commentIn.visibility = GONE
+                INVISIBLE -> holder.commentIn.visibility = VISIBLE
+                GONE      -> holder.commentIn.visibility = VISIBLE
+            }
+        }
 
         //Activate commenter
-        holder.commenter.setOnClickListener {
+        holder.submitCmnt.setOnClickListener {
             Log.e("ID", post.id)
             Log.e("ACCESS_TOKEN", credential)
+            val textIn = holder.comment.text
+
             //Open text input
-            val textIn = holder.comment.textView?.text
             if(textIn.isNullOrEmpty()) {
                 Toast.makeText(context,"Comment must not be empty!",Toast.LENGTH_SHORT).show()
             } else {
@@ -170,13 +187,11 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
                     }
 
                     override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                        //Check that the received response code is valid
                         if(response.code() == 200) {
-
-                            val comment = TextView(context)
-                            comment.text = response.body()!!.text.toString()
-                            holder.commentCont.addView(comment)
-                            Toast.makeText(context,"Comment posted!",Toast.LENGTH_SHORT).show()
-                            Log.e("COMMENT SUCCESS", "posted: ${textIn}")
+                            holder.commentIn.visibility = GONE
+                            Toast.makeText(context,"Comment: \"$textIn\" posted!",Toast.LENGTH_SHORT).show()
+                            Log.e("COMMENT SUCCESS", "posted: $textIn")
                         } else {
                             Log.e("ERROR_CODE", response.code().toString())
                         }
@@ -200,8 +215,10 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
         val nlikes      : TextView  = postView.findViewById(R.id.nlikes)
         val nshares     : TextView  = postView.findViewById(R.id.nshares)
         val liker       : ImageView = postView.findViewById(R.id.liker)
+        val submitCmnt  : ImageButton = postView.findViewById(R.id.submitComment)
         val commenter   : ImageView = postView.findViewById(R.id.commenter)
         val comment     : TextInputEditText = postView.findViewById(R.id.editComment)
         val commentCont : LinearLayout = postView.findViewById(R.id.commentContainer)
+        val commentIn   : LinearLayout = postView.findViewById(R.id.commentIn)
     }
 }
