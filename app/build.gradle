@@ -76,6 +76,11 @@ dependencies {
         exclude group: "com.android.support"
     }
     implementation "com.github.bumptech.glide:okhttp-integration:4.11.0"
+    implementation ("com.github.bumptech.glide:recyclerview-integration:4.11.0") {
+        // Excludes the support library because it's already included by Glide.
+        transitive = false
+    }
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "com.github.tomakehurst:wiremock-jre8:2.26.3"
