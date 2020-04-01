@@ -1,5 +1,9 @@
 package com.h.pixeldroid.objects
 
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.ContextCompat.startActivity
+import com.h.pixeldroid.ProfileActivity
 import java.io.Serializable
 
 /*
@@ -33,5 +37,16 @@ data class Account(
         val fields: List<Field>? = emptyList(),
         val bot: Boolean =  false,
         val source: Source? = null
-) : Serializable
+) : Serializable {
+        companion object {
+                const val ACCOUNT_TAG = "AccountTag"
+
+                // Open profile activity with given account
+                fun openProfile(context: Context, account: Account) {
+                        val intent = Intent(context, ProfileActivity::class.java)
+                        intent.putExtra(Account.ACCOUNT_TAG, account)
+                        startActivity(context, intent, null)
+                }
+        }
+}
 

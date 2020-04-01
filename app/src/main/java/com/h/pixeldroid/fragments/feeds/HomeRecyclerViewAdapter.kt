@@ -1,5 +1,6 @@
 package com.h.pixeldroid.fragments.feeds
 
+import android.content.Intent
 import android.graphics.Typeface
 
 import android.util.DisplayMetrics
@@ -10,9 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat.startActivity
 import com.google.android.material.textfield.TextInputEditText
+import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.objects.Account.Companion.openProfile
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
@@ -42,6 +47,7 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
 
         //Limit the height of the different images
         holder.profilePic?.maxHeight = metrics.heightPixels
+        holder.profilePic?.setOnClickListener{ openProfile(context, post.account) }
         holder.postPic.maxHeight = metrics.heightPixels
 
         //Set the two images
@@ -56,6 +62,7 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
         //Set the the text views
         holder.username.text = post.getUsername()
         holder.username.setTypeface(null, Typeface.BOLD)
+        holder.username.setOnClickListener{ openProfile(context, post.account) }
 
         holder.usernameDesc.text = post.getUsername()
         holder.usernameDesc.setTypeface(null, Typeface.BOLD)

@@ -1,10 +1,8 @@
 package com.h.pixeldroid.fragments.feeds
 
-
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.h.pixeldroid.PostActivity
+import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
+import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.objects.Notification
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
@@ -45,8 +45,8 @@ class NotificationsRecyclerViewAdapter: FeedsRecyclerViewAdapter<Notification, N
                 return
             }
             Notification.NotificationType.follow -> {
-                val url = notification.status?.url ?: notification.account.url
-                intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                intent = Intent(context, ProfileActivity::class.java)
+                intent.putExtra(ACCOUNT_TAG, notification.account)
             }
         }
         context.startActivity(intent)
