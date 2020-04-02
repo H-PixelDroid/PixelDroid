@@ -14,7 +14,6 @@ import android.media.ImageReader.OnImageAvailableListener
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import android.view.*
 import android.view.OrientationEventListener.*
 import android.widget.Button
@@ -38,12 +37,10 @@ class CameraFragment : Fragment() {
     }
 
     /* Entities necessary to the stream : */
-    private lateinit var streamRequestBuilder: CaptureRequest.Builder
-    private lateinit var          textureView: TextureView
+    private lateinit var textureView: TextureView
 
     /* Entities necessary to the photo capture */
-    private lateinit var uploadedPictureView: ImageView
-    private lateinit var jpegSizes: Array<Size>
+    private lateinit var pictureRequestBuilder: CaptureRequest.Builder
     private val PICK_IMAGE_REQUEST = 1
     private val TAG = "Camera Fragment"
 
@@ -55,9 +52,6 @@ class CameraFragment : Fragment() {
         /* Views */
 
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
-
-        uploadedPictureView = view.findViewById(R.id.uploadedPictureView)
-        uploadedPictureView.visibility = View.GONE
 
         // Get the textureView which displays the camera's stream and set up its listener :
         // it allows us to be sure the textureView is correctly set up before performing any action
@@ -74,12 +68,7 @@ class CameraFragment : Fragment() {
 
         val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
         takePictureButton.setOnClickListener{
-            if (uploadedPictureView.visibility == View.VISIBLE ) {
-                uploadedPictureView.visibility = View.GONE
-                openCamera(Cameras.FRONT)
-            } else {
                 takePicture()
-            }
         }
 
         return view // and start the stream building flow
@@ -166,7 +155,7 @@ class CameraFragment : Fragment() {
 
             try {
                 /* Build the stream with a flow of requests */
-                streamRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                val streamRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                 streamRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
                 session.setRepeatingRequest(streamRequestBuilder.build(), null, null)
 
@@ -180,9 +169,10 @@ class CameraFragment : Fragment() {
     /* START of picture capture flow */
 
     private fun takePicture() {
-        val characteristics = manager.getCameraCharacteristics(cameraDevice.id)
 
-        jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!.
+        /* Get output dimensions of the current camera */
+        val characteristics = manager.getCameraCharacteristics(cameraDevice.id)
+        val jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!.
                     getOutputSizes(ImageFormat.JPEG)
 
         var width = 640
@@ -191,14 +181,24 @@ class CameraFragment : Fragment() {
             width = jpegSizes[0].width
             height = jpegSizes[0].height
         }
+
+
+        /* Build a reader which will contain our picture, and link it to the request builder */
         val reader: ImageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
 
-        val requestBuilder =
+        pictureRequestBuilder =
             cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-        requestBuilder.addTarget(reader.surface)
-        requestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+        pictureRequestBuilder.addTarget(reader.surface)
+        pictureRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
+        pictureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
 
-        requestBuilder.set(
+        reader.setOnImageAvailableListener(readerListener, null)
+        val outputSurfaces = ArrayList<Surface>(1)
+        outputSurfaces.add(reader.surface)
+        outputSurfaces.add(Surface(textureView.surfaceTexture))
+
+        // Handle rotation ?!
+        pictureRequestBuilder.set(
             CaptureRequest.JPEG_ORIENTATION,
             getJpegOrientation(
                 manager.getCameraCharacteristics(cameraDevice.id),
@@ -206,35 +206,30 @@ class CameraFragment : Fragment() {
             )
         )
 
-        reader.setOnImageAvailableListener(readerListener, null)
+        cameraDevice.createCaptureSession(outputSurfaces, picturetateCallback , null);
+    }
 
-        val captureListener = object : CameraCaptureSession.CaptureCallback() {
-            override fun onCaptureCompleted(
-                session: CameraCaptureSession,
-                request: CaptureRequest,
-                result: TotalCaptureResult
-            ) {
-                super.onCaptureCompleted(session, request, result)
+    private val picturetateCallback = object : CameraCaptureSession.StateCallback() {
+        override fun onConfigured(session: CameraCaptureSession) {
+            try {
+                session.capture(pictureRequestBuilder.build(), pictureCaptureListener, null)
+            } catch (e :CameraAccessException) {
+                e.printStackTrace()
             }
         }
 
-        val stateCallback = object : CameraCaptureSession.StateCallback() {
-            override fun onConfigured(session: CameraCaptureSession) {
-                try {
-                    session.capture(requestBuilder.build(), captureListener, null)
-                } catch (e :CameraAccessException) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onConfigureFailed(session: CameraCaptureSession) {
-            }
+        override fun onConfigureFailed(session: CameraCaptureSession) {
         }
+    }
 
-        val outputSurfaces = ArrayList<Surface>(1)
-        outputSurfaces.add(reader.surface)
-
-        cameraDevice.createCaptureSession(outputSurfaces, stateCallback , null);
+    private val pictureCaptureListener = object : CameraCaptureSession.CaptureCallback() {
+        override fun onCaptureCompleted(
+            session: CameraCaptureSession,
+            request: CaptureRequest,
+            result: TotalCaptureResult
+        ) {
+            super.onCaptureCompleted(session, request, result)
+        }
     }
 
     private val readerListener = OnImageAvailableListener { reader ->
@@ -245,14 +240,11 @@ class CameraFragment : Fragment() {
             val bytes = ByteArray(buffer.capacity())
             buffer.get(bytes);
 
-            val filename = "temp_capture.png"
+            val filename = "tmp_capture.png"
             val file = File.createTempFile(filename, null, context?.cacheDir)
             file.writeBytes(bytes)
 
-            picturePreview(file.toUri() as Uri?)
-
-            //Toast.makeText(this.context, "AKALA MIAMIAM", Toast.LENGTH_LONG).show();
-
+            pictureHandle(file.toUri() as Uri?)
 
         } catch (e: FileNotFoundException) {
             e.printStackTrace();
@@ -299,13 +291,10 @@ class CameraFragment : Fragment() {
                 Log.w(TAG, "No picture uploaded")
                 return
             }
-             picturePreview(data.data)
+             pictureHandle(data.data)
         }
     }
 
-    private fun picturePreview(uri: Uri?) {
-        uploadedPictureView.visibility = View.VISIBLE
-        uploadedPictureView?.setImageURI(uri)
-
+    private fun pictureHandle(uri: Uri?) {
     }
 }
