@@ -1,39 +1,32 @@
 package com.h.pixeldroid.fragments.feeds
 
-import android.content.Intent
 import android.graphics.Typeface
-import android.service.autofill.Validators.not
-import android.text.Editable
-
 import android.util.DisplayMetrics
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.*
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.openProfile
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
 import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
-import kotlinx.android.synthetic.main.nav_header.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.ArrayList
-import java.util.stream.IntStream.range
 
-class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credential : String) : FeedsRecyclerViewAdapter<Status, HomeRecyclerViewAdapter.ViewHolder>() {
+class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credential : String)
+    : FeedsRecyclerViewAdapter<Status, HomeRecyclerViewAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -79,6 +72,9 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
 
         holder.nshares.text = post.getNShares()
         holder.nshares.setTypeface(null, Typeface.BOLD)
+
+        Log.e("Credential", credential)
+        Log.e("POST_ID", post.id)
 
         //Activate the liker
         holder.liker.setOnClickListener {
@@ -126,37 +122,61 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
         }
 
         //Show all comments of a post
-        api.statusComments(post.id, credential).enqueue(object : Callback<com.h.pixeldroid.objects.Context> {
-            override fun onFailure(call: Call<com.h.pixeldroid.objects.Context>, t: Throwable) {
-                Log.e("COMMENT FETCH ERROR", t.toString())
-            }
-
-            override fun onResponse(
-                call: Call<com.h.pixeldroid.objects.Context>,
-                response: Response<com.h.pixeldroid.objects.Context>
-            ) {
-                if(response.code() == 200) {
-                    val statuses = response.body()!!.descendants
-                    for (status in statuses) {
-                        val container = CardView(context)
-                        //Retrieve the username and comment
-                        val user = TextView(context)
-                        user.text = status.account.username
-                        user.setTypeface(null, Typeface.BOLD)
-                        val comment = TextView(context)
-                        comment.text = status.text!!
-
-                        //Fill out the container and add it to our viewHolder
-                        //container.addView(user)
-                        container.addView(comment)
-                        holder.commentCont.addView(container)
+        if (post.replies_count == 0) {
+            holder.viewComment.text =  "No comments on this post..."
+        } else {
+            holder.viewComment.text =  "View all ${post.replies_count} comments..."
+            holder.viewComment.setOnClickListener {
+                holder.viewComment.visibility = GONE
+                api.statusComments(post.id, credential).enqueue(object : Callback<com.h.pixeldroid.objects.Context> {
+                    override fun onFailure(call: Call<com.h.pixeldroid.objects.Context>, t: Throwable) {
+                        Log.e("COMMENT FETCH ERROR", t.toString())
                     }
-                } else {
-                    Log.e("COMMENT ERROR", "${response.code().toString()} with body ${response.errorBody()}")
-                }
-            }
 
-        })
+                    override fun onResponse(
+                        call: Call<com.h.pixeldroid.objects.Context>,
+                        response: Response<com.h.pixeldroid.objects.Context>
+                    ) {
+                        if(response.code() == 200) {
+                            val statuses = response.body()!!.descendants
+                            Log.e("COMMENT STATUS", statuses.toString())
+
+                            //Create the new views for each comment
+                            for (status in statuses) {
+                                //Create UI views
+                                val container = CardView(context)
+                                val layout = LinearLayout(context)
+                                val comment = TextView(context)
+                                val user = TextView(context)
+
+                                //Set layout constraints and content
+                                container.layoutParams.width = MATCH_PARENT
+                                container.layoutParams.height = WRAP_CONTENT
+                                layout.layoutParams.width = MATCH_PARENT
+                                layout.layoutParams.height = WRAP_CONTENT
+                                user.text = status.account.username
+                                user.layoutParams.width = MATCH_PARENT
+                                user.layoutParams.height = WRAP_CONTENT
+                                (user.layoutParams as LinearLayout.LayoutParams).weight = 8f
+                                user.typeface = Typeface.DEFAULT_BOLD
+                                comment.text = status.content
+                                comment.layoutParams.width = MATCH_PARENT
+                                comment.layoutParams.height = WRAP_CONTENT
+                                (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
+
+                                //Create comment view hierarchy
+                                layout.addView(user)
+                                layout.addView(comment)
+                                container.addView(layout)
+                            }
+                        } else {
+                            Log.e("COMMENT ERROR", "${response.code().toString()} with body ${response.errorBody()}")
+                        }
+                    }
+                })
+            }
+        }
+
         //Set comment initial visibility
         holder.commentIn.visibility = GONE
 
@@ -220,5 +240,6 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
         val comment     : TextInputEditText = postView.findViewById(R.id.editComment)
         val commentCont : LinearLayout = postView.findViewById(R.id.commentContainer)
         val commentIn   : LinearLayout = postView.findViewById(R.id.commentIn)
+        val viewComment : TextView = postView.findViewById(R.id.ViewComments)
     }
 }

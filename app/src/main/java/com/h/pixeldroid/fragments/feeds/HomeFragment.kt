@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlin.concurrent.fixedRateTimer
 
 class HomeFragment : FeedFragment<Status, HomeRecyclerViewAdapter.ViewHolder>() {
 
