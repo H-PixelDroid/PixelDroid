@@ -158,7 +158,7 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
         }
 
         //This is called to when we get to the bottom of the loaded content, so we want statuses
-        //older than the given key (params.key)
+        //older than the given key (params.key) 
         override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Status>) {
             val call = pixelfedAPI
                 .timelineHome("Bearer $accessToken", max_id=params.key,
