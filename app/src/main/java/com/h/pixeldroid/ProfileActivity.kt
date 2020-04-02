@@ -87,17 +87,17 @@ class ProfileActivity : AppCompatActivity() {
 
         // TextView : number of posts
         val nbPosts = findViewById<TextView>(R.id.nbPostsTextView)
-        nbPosts.text = "${account.statuses_count} \nPosts"
+        nbPosts.text = "${account.statuses_count}\nPosts"
         nbPosts.setTypeface(null, Typeface.BOLD)
 
         // TextView : number of followers
         val nbFollowers = findViewById<TextView>(R.id.nbFollowersTextView)
-        nbFollowers.text = "${account.followers_count} \nFollowers"
+        nbFollowers.text = "${account.followers_count}\nFollowers"
         nbFollowers.setTypeface(null, Typeface.BOLD)
 
         // TextView : number of following
         val nbFollowing = findViewById<TextView>(R.id.nbFollowingTextView)
-        nbFollowing.text = "${account.following_count} \nFollowing"
+        nbFollowing.text = "${account.following_count}\nFollowing"
         nbFollowing.setTypeface(null, Typeface.BOLD)
     }
 }
