@@ -1,6 +1,5 @@
-package com.h.pixeldroid.fragments
+package com.h.pixeldroid.fragments.feeds
 
-import android.content.Context
 import android.graphics.Typeface
 import android.util.DisplayMetrics
 import androidx.recyclerview.widget.RecyclerView
@@ -10,29 +9,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.h.pixeldroid.R
-import com.h.pixeldroid.models.Post
+import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setDefaultImage
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageViewFromURL
 import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
-import java.util.ArrayList
 
 /**
- * [RecyclerView.Adapter] that can display a list of [Post]s
+ * [RecyclerView.Adapter] that can display a list of Posts
  */
-class FeedRecyclerViewAdapter(
-    private val context : Context
-) : RecyclerView.Adapter<FeedRecyclerViewAdapter.ViewHolder>() {
-    private val posts: ArrayList<Post> = ArrayList<Post>()
-
-    fun addPosts(newPosts : List<Post>) {
-        val size = posts.size
-        posts.addAll(newPosts)
-        notifyItemRangeInserted(size, newPosts.size)
-    }
+class HomeRecyclerViewAdapter() : FeedsRecyclerViewAdapter<Status, HomeRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.post_fragment, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.post_fragment, parent, false)
+        context = view.context
         return ViewHolder(view)
     }
 
@@ -40,7 +30,7 @@ class FeedRecyclerViewAdapter(
      * Binds the different elements of the Post Model to the view holder
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val post = posts[position]
+        val post = feedContent[position]
         val metrics = DisplayMetrics()
 
         //Limit the height of the different images
@@ -72,7 +62,7 @@ class FeedRecyclerViewAdapter(
         holder.nshares.setTypeface(null, Typeface.BOLD)
     }
 
-    override fun getItemCount(): Int = posts.size
+    override fun getItemCount(): Int = feedContent.size
 
     /**
      * Represents the posts that will be contained within the feed

@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.h.pixeldroid.R
-import com.h.pixeldroid.models.Post
-import com.h.pixeldroid.models.Post.Companion.POST_TAG
+import com.h.pixeldroid.objects.Status.Companion.POST_TAG
+import com.h.pixeldroid.objects.Status
 
 
 class PostFragment : Fragment() {
@@ -16,9 +16,9 @@ class PostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val post = arguments?.getSerializable(POST_TAG) as Post?
+        val status = arguments?.getSerializable(POST_TAG) as Status?
         val root = inflater.inflate(R.layout.post_fragment, container, false)
-        post?.setupPost(this, root)
+        status?.setupPost(this, root)
         return root
     }
 

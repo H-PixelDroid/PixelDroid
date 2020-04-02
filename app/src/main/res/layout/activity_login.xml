@@ -6,34 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <Button
-        android:id="@+id/connect_instance_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Connect"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/domainTextInputLayout" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/domainTextInputLayout"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:hint="Domain of your instance"
-        app:errorEnabled="true"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textUri" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/domainTextInputLayout"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="Domain of your instance"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textUri" />
+
+                <Button
+                    android:id="@+id/connect_instance_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="36dp"
+                    android:text="Connect" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/progressLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
