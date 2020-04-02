@@ -45,21 +45,21 @@ class PostCreationTest {
     @Test
     fun testUIDisplayTitle() {
         Thread.sleep(1000)
-        val title = R.string.create_a_new_post
-        onView(withText(title)).check(matches(isDisplayed()))
+        onView(withText(R.string.create_a_new_post))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun testUIDisplayTakePictureButton() {
         Thread.sleep(1000)
-        val text = R.string.take_a_picture
-        onView(withText(text)).check(matches(isDisplayed()))
+        onView(withText(R.string.take_a_picture))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun testUIDisplayUploadPictureButton() {
         Thread.sleep(1000)
-        val text = R.string.upload_a_picture
-        onView(withText(text)).check(matches(isDisplayed()))
+        onView(withText(R.string.upload_a_picture))
+            .check(matches(isDisplayed()))
     }
 }

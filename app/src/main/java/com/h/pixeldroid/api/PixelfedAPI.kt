@@ -7,6 +7,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
+import java.io.File
 
 
 /*
@@ -91,5 +92,12 @@ interface PixelfedAPI {
                 .build().create(PixelfedAPI::class.java)
         }
     }
+
+    @POST("/api/v1/media")
+    fun mediaUpload(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Field("file") file: File? = null
+    ): Call<Attachment>
 }
 

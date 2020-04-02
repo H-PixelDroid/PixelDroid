@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.fragments.NewPostFragment
+import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.fragments.MyProfileFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
@@ -35,8 +37,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
 
+        Log.i("Main", preferences.getString("domain", ""))
         //Check if we have logged in and gotten an access token
-        if(!preferences.contains("accessToken")){
+        if(preferences.getString("domain", "")!!.contains("localhost")
+            || !preferences.contains("accessToken")){
             launchActivity(LoginActivity())
         } else {
             // Setup the drawer
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val tabs = arrayOf(
                                HomeFragment(),
                                Fragment(),
-                               NewPostFragment(),
+                               CameraFragment(),
                                NotificationsFragment(),
                                MyProfileFragment())
 
