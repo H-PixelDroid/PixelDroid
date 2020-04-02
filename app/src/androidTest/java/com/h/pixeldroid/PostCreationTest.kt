@@ -13,10 +13,13 @@ import com.google.android.material.tabs.TabLayout
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PostCreationTest {
+    @get:Rule
+    var globalTimeout: Timeout = Timeout.seconds(100)
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
