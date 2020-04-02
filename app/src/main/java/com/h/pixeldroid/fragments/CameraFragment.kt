@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.*
 import android.view.OrientationEventListener.*
 import android.widget.Button
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -95,7 +96,7 @@ class CameraFragment : Fragment() {
     }
 
 
-    private fun openCamera(cameraId: Int) {
+    private fun openCamera(cameraId: Cameras) {
 
         manager = requireContext().applicationContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
@@ -109,12 +110,12 @@ class CameraFragment : Fragment() {
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), 200)
-            openCamera(0)
+            openCamera(cameraId)
         }
 
         /* Open the camera and enter its state callback */
         try {
-            manager.openCamera(manager.cameraIdList[cameraId], previewStateCallback, null)
+            manager.openCamera(manager.cameraIdList[cameraId.ordinal], previewStateCallback, null)
         } catch (e : CameraAccessException) {
             e.printStackTrace()
         }
