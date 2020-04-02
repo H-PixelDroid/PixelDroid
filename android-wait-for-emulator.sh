@@ -7,12 +7,18 @@ set +e
 
 bootanim=""
 failcounter=0
+<<<<<<< HEAD
 #timeout_in_sec=360 # 6 minutes
+=======
+>>>>>>> master
 timeout_in_sec=600 # 10 minutes
 
 until [[ "$bootanim" =~ "stopped" ]]; do
   bootanim=`adb -e shell getprop init.svc.bootanim 2>&1 &`
+<<<<<<< HEAD
 #echo bootanim=\`$bootanim\`
+=======
+>>>>>>> master
   if [[ "$bootanim" =~ "device not found" || "$bootanim" =~ "device offline"
     || "$bootanim" =~ "running" || "$bootanim" =~  "error: no emulators found" ]]; then
     let "failcounter += 1"
@@ -25,4 +31,8 @@ until [[ "$bootanim" =~ "stopped" ]]; do
   sleep 1
 done
 
+<<<<<<< HEAD
 echo "Emulator is ready"
+=======
+echo "Emulator is ready"
+>>>>>>> master

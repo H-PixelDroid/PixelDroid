@@ -77,8 +77,8 @@ class ImageConverter {
          * @param view, the view in which this is happening
          * @param image, the imageView into which we will load the image
          */
-        fun setImageFromDrawable(view : View, image : ImageView, drawable : Int) {
-            Glide.with(view).load(drawable).into(image)
+        fun setDefaultImage(view : View, image : ImageView) {
+            Glide.with(view).load(R.drawable.ic_default_user).into(image)
         }
     }
 }

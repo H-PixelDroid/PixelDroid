@@ -14,14 +14,13 @@ class HomeFragment : FeedFragment<Status, HomeRecyclerViewAdapter.ViewHolder>() 
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container)
-
+        adapter = HomeRecyclerViewAdapter()
+        list.adapter = adapter
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = HomeRecyclerViewAdapter(pixelfedAPI, "Bearer $accessToken")
-        list.adapter = adapter
 
         swipeRefreshLayout.setOnRefreshListener {
             val call = pixelfedAPI.timelineHome("Bearer $accessToken")

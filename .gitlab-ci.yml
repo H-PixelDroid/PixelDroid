@@ -28,9 +28,12 @@ test:
 
         - ./gradlew build connectedCheck jacocoTestReport
 
+<<<<<<< HEAD
 report_codeclimate_script:
     stage: report
     script:
+=======
+>>>>>>> master
         # Report test coverage to Code Climate
         - export JACOCO_SOURCE_PATH=app/src/main/java/
         - ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco

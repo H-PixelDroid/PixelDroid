@@ -77,12 +77,14 @@ class MyProfileFragment : Fragment() {
                                 call: Call<List<Status>>,
                                 response: Response<List<Status>>
                             ) {
-                                val posts = ArrayList<Status>()
-                                val statuses = response.body()!!
-                                for(status in statuses) {
-                                    posts.add(status)
+                                if(response.code() == 200) {
+                                    val posts = ArrayList<Status>()
+                                    val statuses = response.body()!!
+                                    for (status in statuses) {
+                                        posts.add(status)
+                                    }
+                                    adapter.addPosts(posts)
                                 }
-                                adapter.addPosts(posts)
                             }
                         })
                     }
@@ -111,17 +113,17 @@ class MyProfileFragment : Fragment() {
 
         // TextView : number of posts
         val nbPosts = view.findViewById<TextView>(R.id.nbPostsTextView)
-        nbPosts.text = "${account.statuses_count} \nPosts"
+        nbPosts.text = "${account.statuses_count}\nPosts"
         nbPosts.setTypeface(null, Typeface.BOLD)
 
         // TextView : number of followers
         val nbFollowers = view.findViewById<TextView>(R.id.nbFollowersTextView)
-        nbFollowers.text = "${account.followers_count} \nFollowers"
+        nbFollowers.text = "${account.followers_count}\nFollowers"
         nbFollowers.setTypeface(null, Typeface.BOLD)
 
         // TextView : number of following
         val nbFollowing = view.findViewById<TextView>(R.id.nbFollowingTextView)
-        nbFollowing.text = "${account.following_count} \nFollowing"
+        nbFollowing.text = "${account.following_count}\nFollowing"
         nbFollowing.setTypeface(null, Typeface.BOLD)
     }
 

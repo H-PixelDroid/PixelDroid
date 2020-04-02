@@ -1,14 +1,21 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.contrib.DrawerActions
+import androidx.test.espresso.contrib.DrawerMatchers
+import androidx.test.espresso.contrib.NavigationViewActions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.android.material.tabs.TabLayout
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -80,35 +87,23 @@ class MockedServerTest {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
-        ActivityScenario.launch(MainActivity::class.java)
     }
 
     @Test
-    fun swipingDownOnHomepageShowsMorePosts() {
+    fun testFollowersTextView() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        }
         Thread.sleep(1000)
-
-        val firstDesc = withId(R.id.description)
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown()).perform(
-            ViewActions.swipeDown()
-        )
-        onView(withId(R.id.description)).check(matches(firstDesc))
-    }
-    @Test
-    fun likingAPostActuallyLikesAndUnlikes() {
-        Thread.sleep(1000)
-        val firstLikes = withId(R.id.nlikes)
-        onView(withId(R.id.liker)).perform(ViewActions.click())
-        onView(withId(R.id.nlikes)).check(matches((isDisplayed())))
-        Thread.sleep(1000)
-        onView(withId(R.id.liker)).perform(ViewActions.click())
-        onView(withId(R.id.nlikes)).check(matches(isDisplayed()))
+        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
 
     @Test
     fun testNotificationsList() {
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(
-            ViewActions.swipeLeft()
-        ).perform(ViewActions.swipeLeft())
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
         Thread.sleep(1000)
 
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
@@ -120,9 +115,9 @@ class MockedServerTest {
     }
     @Test
     fun clickNotification() {
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(
-            ViewActions.swipeLeft()
-        ).perform(ViewActions.swipeLeft())
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
         Thread.sleep(1000)
 
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
@@ -133,15 +128,41 @@ class MockedServerTest {
         onView(withText("Geonosys")).check(matches(withId(R.id.username)))
     }
     @Test
-    fun testMyProfileTextViews() {
-        onView(withId(R.id.view_pager)).perform(ViewActions.swipeLeft()).perform(ViewActions.swipeLeft()).perform(
-            ViewActions.swipeLeft()
-        ).perform(ViewActions.swipeLeft())
-        Thread.sleep(1000)
+    fun testDrawerSettingsButton() {
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout))
+            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+            .perform(DrawerActions.open()); // Open Drawer
 
-        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
-        onView(withId(R.id.editButton)).check(matches(withText("Edit profile")))
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
+        // Start the screen of your activity.
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
+
+        // Check that settings activity was opened.
+        onView(withText(R.string.signature_title)).check(matches(ViewMatchers.isDisplayed()))
     }
 
+    @Test
+    fun swipingLeftStopsAtProfile() {
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeLeft()) // search
+            .perform(ViewActions.swipeLeft()) // camera
+            .perform(ViewActions.swipeLeft()) // notifications
+            .perform(ViewActions.swipeLeft()) // profile
+            .perform(ViewActions.swipeLeft()) // should stop at profile
+        onView(withId(R.id.nbFollowersTextView)).check(matches(ViewMatchers.isDisplayed()))
+    }
+
+    @Test
+    fun swipingRightStopsAtHomepage() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        } // go to the last tab
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeRight()) // notifications
+            .perform(ViewActions.swipeRight()) // camera
+            .perform(ViewActions.swipeRight()) // search
+            .perform(ViewActions.swipeRight()) // homepage
+            .perform(ViewActions.swipeRight()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(ViewMatchers.isDisplayed()))
+    }
 }
