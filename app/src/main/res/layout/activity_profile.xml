@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -149,13 +150,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/profilePostsRecyclerView"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="16dp"
             app:layoutManager="LinearLayoutManager"
             tools:context=".fragments.MyProfileFragment"
             tools:listitem="@layout/fragment_profile_posts"/>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
