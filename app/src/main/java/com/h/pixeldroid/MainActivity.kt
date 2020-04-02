@@ -46,10 +46,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             
             val tabs = arrayOf(
                 HomeFragment(),
-                               Fragment(),
-                               CameraFragment(),
+                Fragment(),
+                CameraFragment(),
                 NotificationsFragment(),
-                               MyProfileFragment())
+                MyProfileFragment())
 
             setupTabs(tabs)
         }
