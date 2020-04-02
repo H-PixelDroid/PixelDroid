@@ -5,13 +5,13 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.DataSource
 import androidx.paging.ItemKeyedDataSource
@@ -29,10 +29,9 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.fragment_feed.*
+import kotlinx.android.synthetic.main.fragment_feed.swipeRefreshLayout
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 /**
  * A fragment representing a list of Items.
@@ -40,6 +39,8 @@ import retrofit2.Response
 class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.NotificationsRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var profilePicRequest: RequestBuilder<Drawable>
+    lateinit var factory: NotificationsDataSourceFactory
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,10 +50,10 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        val factory = NotificationsDataSourceFactory()
-
+        factory = NotificationsDataSourceFactory()
         content = LivePagedListBuilder(factory, config).build()
 
+        //RequestBuilder that is re-used for every image
         profilePicRequest = Glide.with(this)
             .asDrawable().apply(RequestOptions().circleCrop())
             .placeholder(R.drawable.ic_default_user)
@@ -61,8 +62,13 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         list.adapter = adapter
 
         content.observe(viewLifecycleOwner,
-            Observer { c -> adapter.submitList(c); })
+            Observer { c ->
+                adapter.submitList(c)
+                //after a refresh is done we need to stop the pull to refresh spinner
+                swipeRefreshLayout.isRefreshing = false
+            })
 
+        //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Notification> = ViewPreloadSizeProvider()
         val preloader: RecyclerViewPreloader<Notification> = RecyclerViewPreloader(
             Glide.with(this), adapter, sizeProvider, 4
@@ -77,8 +83,7 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
 
         swipeRefreshLayout.setOnRefreshListener {
-            val call = pixelfedAPI.notifications("Bearer $accessToken", min_id="1")
-            //TODO
+            factory.notificationsLiveData.value!!.invalidate()
         }
     }
 
@@ -193,9 +198,11 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
     inner class NotificationsDataSource: ItemKeyedDataSource<String, Notification>() {
 
+        //We use the id as the key
         override fun getKey(item: Notification): String {
             return item.id
         }
+        //This is called to initialize the list, so we want some of the latest statuses
         override fun loadInitial(
             params: LoadInitialParams<String>,
             callback: LoadInitialCallback<Notification>
@@ -204,7 +211,8 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                 .notifications("Bearer $accessToken", min_id="1", limit="${params.requestedLoadSize}")
             enqueueCall(call, callback)
         }
-
+        //This is called to when we get to the bottom of the loaded content, so we want statuses
+        //older than the given key (params.key)
         override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Notification>) {
             val call = pixelfedAPI
                 .notifications("Bearer $accessToken", max_id=params.key, limit="${params.requestedLoadSize}")
@@ -218,8 +226,13 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
     }
     inner class NotificationsDataSourceFactory: DataSource.Factory<String, Notification>() {
+        lateinit var notificationsLiveData: MutableLiveData<NotificationsDataSource>
+
         override fun create(): DataSource<String, Notification> {
-            return NotificationsDataSource()
+            val dataSource = NotificationsDataSource()
+            notificationsLiveData = MutableLiveData()
+            notificationsLiveData.postValue(dataSource)
+            return dataSource
         }
 
 

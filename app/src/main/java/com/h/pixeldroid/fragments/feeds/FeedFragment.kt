@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.paging.ItemKeyedDataSource
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
@@ -23,10 +22,8 @@ import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.FeedContent
-import com.h.pixeldroid.objects.Notification
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
-import kotlinx.android.synthetic.main.fragment_feed.view.progressBar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -105,19 +102,6 @@ abstract class FeedsRecyclerViewAdapter<T: FeedContent, VH : RecyclerView.ViewHo
     }
 ), PreloadModelProvider<T> {
 
-    protected val feedContent: ArrayList<T> = arrayListOf()
     protected lateinit var context: Context
 
 }
-
-
-
-abstract class FeedDataSource: ItemKeyedDataSource<String, FeedContent>() {
-
-    override fun getKey(item: FeedContent): String {
-        return item.id
-    }
-
-}
-
-abstract class FeedDataSourceFactory: DataSource.Factory<String, FeedContent>()

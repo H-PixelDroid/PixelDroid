@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.DataSource
 import androidx.paging.ItemKeyedDataSource
@@ -29,6 +30,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
+    lateinit var factory: HomeDataSourceFactory
 
 
     override fun onCreateView(
@@ -38,10 +40,10 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        val factory = HomeDataSourceFactory()
-
+        factory = HomeDataSourceFactory()
         content = LivePagedListBuilder(factory, config).build()
 
+        //RequestBuilder that is re-used for every image
         picRequest = Glide.with(this)
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
@@ -50,8 +52,13 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
         list.adapter = adapter
 
         content.observe(viewLifecycleOwner,
-            Observer { c -> adapter.submitList(c); })
+            Observer { c ->
+                adapter.submitList(c)
+                //after a refresh is done we need to stop the pull to refresh spinner
+                swipeRefreshLayout.isRefreshing = false
+            })
 
+        //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Status> = ViewPreloadSizeProvider()
         val preloader: RecyclerViewPreloader<Status> = RecyclerViewPreloader(
             Glide.with(this), adapter, sizeProvider, 4
@@ -64,10 +71,9 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         swipeRefreshLayout.setOnRefreshListener {
-            val call = pixelfedAPI.timelineHome("Bearer $accessToken", limit = "20")
-            //TODO
+            //by invalidating data, loadInitial will be called again
+            factory.postLiveData.value!!.invalidate()
         }
     }
 
@@ -137,9 +143,11 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
 
     inner class HomeDataSource: ItemKeyedDataSource<String, Status>() {
 
+        //We use the id as the key
         override fun getKey(item: Status): String {
             return item.id
         }
+        //This is called to initialize the list, so we want some of the latest statuses
         override fun loadInitial(
             params: LoadInitialParams<String>,
             callback: LoadInitialCallback<Status>
@@ -149,6 +157,8 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             enqueueCall(call, callback)
         }
 
+        //This is called to when we get to the bottom of the loaded content, so we want statuses
+        //older than the given key (params.key)
         override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Status>) {
             val call = pixelfedAPI
                 .timelineHome("Bearer $accessToken", max_id=params.key,
@@ -157,13 +167,19 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
         }
 
         override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<Status>) {
-            //do nothing here, it is expected to pull to refresh to load newer notifications
+            //do nothing here, it is expected to pull to refresh to load newer content
         }
 
     }
     inner class HomeDataSourceFactory: DataSource.Factory<String, Status>() {
+
+        lateinit var postLiveData: MutableLiveData<HomeDataSource>
+
         override fun create(): DataSource<String, Status> {
-            return HomeDataSource()
+            val dataSource = HomeDataSource()
+            postLiveData = MutableLiveData()
+            postLiveData.postValue(dataSource)
+            return dataSource
         }
 
 
