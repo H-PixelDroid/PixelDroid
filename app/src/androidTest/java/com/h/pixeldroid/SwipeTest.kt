@@ -23,6 +23,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import kotlin.concurrent.thread
 
 @RunWith(AndroidJUnit4::class)
 class SwipeTest {
@@ -61,6 +62,7 @@ class SwipeTest {
             .perform(swipeRight()) // search
             .perform(swipeRight()) // homepage
             .perform(swipeRight()) // should stop at homepage
-        onView(withId(R.id.feedList)).check(matches(isDisplayed()))
+        Thread.sleep(2000)
+        onView(withId(R.id.tabs)).check(matches(isDisplayed()))
     }
 }
