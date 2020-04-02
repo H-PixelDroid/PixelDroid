@@ -9,21 +9,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.paging.ItemKeyedDataSource
+import androidx.paging.PagedList
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.ListPreloader.PreloadModelProvider
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.objects.FeedContent
+import com.h.pixeldroid.objects.Notification
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
+import kotlinx.android.synthetic.main.fragment_feed.view.progressBar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
 
-    var content : List<T> = ArrayList()
+open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment() {
+
+    lateinit var content: LiveData<PagedList<T>>
 
     protected var accessToken: String? = null
     protected lateinit var pixelfedAPI: PixelfedAPI
@@ -33,34 +44,14 @@ open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
     protected lateinit var adapter : FeedsRecyclerViewAdapter<T, VH>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    protected fun doRequest(call: Call<List<T>>){
-        call.enqueue(object : Callback<List<T>> {
-            override fun onResponse(call: Call<List<T>>, response: Response<List<T>>) {
-                if (response.code() == 200) {
-                    val notifications = response.body()!! as ArrayList<T>
-                    setContent(notifications)
-                } else{
-                    Toast.makeText(context,"Something went wrong while loading", Toast.LENGTH_SHORT).show()
-                }
-                swipeRefreshLayout.isRefreshing = false
-                progressBar.visibility = View.GONE
-            }
-
-            override fun onFailure(call: Call<List<T>>, t: Throwable) {
-                Toast.makeText(context,"Could not get feed", Toast.LENGTH_SHORT).show()
-                Log.e("FeedFragment", t.toString())
-            }
-        })
-
-    }
-    protected fun setContent(content : ArrayList<T>) {
-        this.content = content
-        adapter.initializeWith(content)
-    }
-
-
-    protected fun onCreateView(inflater: LayoutInflater, container: ViewGroup?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_feed, container, false)
+
+
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         list = swipeRefreshLayout.list
         // Set the adapter
@@ -68,7 +59,6 @@ open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
 
         return view
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,18 +71,53 @@ open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
         accessToken = preferences.getString("accessToken", "")
 
     }
+
+    internal fun enqueueCall(call: Call<List<T>>, callback: ItemKeyedDataSource.LoadCallback<T>){
+        call.enqueue(object : Callback<List<T>> {
+            override fun onResponse(call: Call<List<T>>, response: Response<List<T>>) {
+                if (response.code() == 200) {
+                    val notifications = response.body()!! as ArrayList<T>
+                    callback.onResult(notifications as List<T>)
+                } else{
+                    Toast.makeText(context,"Something went wrong while loading", Toast.LENGTH_SHORT).show()
+                }
+                swipeRefreshLayout.isRefreshing = false
+                progressBar.visibility = View.GONE
+            }
+
+            override fun onFailure(call: Call<List<T>>, t: Throwable) {
+                Toast.makeText(context,"Could not get feed", Toast.LENGTH_SHORT).show()
+                Log.e("FeedFragment", t.toString())
+            }
+        })
+    }
 }
 
-abstract class FeedsRecyclerViewAdapter<T, VH : RecyclerView.ViewHolder?>: RecyclerView.Adapter<VH>() {
+abstract class FeedsRecyclerViewAdapter<T: FeedContent, VH : RecyclerView.ViewHolder?>: PagedListAdapter<T, VH>(
+    object : DiffUtil.ItemCallback<T>() {
+        override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
+            return oldItem.id === newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
+            return oldItem == newItem
+        }
+    }
+), PreloadModelProvider<T> {
 
     protected val feedContent: ArrayList<T> = arrayListOf()
     protected lateinit var context: Context
 
-    override fun getItemCount(): Int = feedContent.size
-
-    open fun initializeWith(content: List<T>){
-        feedContent.clear()
-        feedContent.addAll(content)
-        notifyDataSetChanged()
-    }
 }
+
+
+
+abstract class FeedDataSource: ItemKeyedDataSource<String, FeedContent>() {
+
+    override fun getKey(item: FeedContent): String {
+        return item.id
+    }
+
+}
+
+abstract class FeedDataSourceFactory: DataSource.Factory<String, FeedContent>()
