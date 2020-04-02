@@ -8,7 +8,7 @@ import java.util.Date
 
 @Entity(tableName= "posts")
 data class PostEntity(
-    @PrimaryKey(autoGenerate = true) val uid: Long,
+    @PrimaryKey(autoGenerate = true) val uid: Long = 1,
     @ColumnInfo(name = "status") val status: Status,
     @ColumnInfo(name = "date") val date: Date?
 )

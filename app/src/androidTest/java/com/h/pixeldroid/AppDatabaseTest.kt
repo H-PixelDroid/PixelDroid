@@ -16,10 +16,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import java.util.*
 
@@ -53,7 +50,7 @@ class AppDatabaseTest {
     private lateinit var postViewModel: PostViewModel
     private val gson = Gson()
     var listStatus: Array<Status> = gson.fromJson(feedJson, Array<Status>::class.java)
-    private var postTest = PostEntity(1, status = listStatus.get(0), date = Calendar.getInstance().time)
+    private var postTest = PostEntity(1, status = listStatus[0], date = Calendar.getInstance().time)
 
     @get:Rule
     var activityRule = ActivityTestRule(MainActivity::class.java)
@@ -85,73 +82,55 @@ class AppDatabaseTest {
         preferences.edit().putString("domain", baseUrl.toString()).apply()
         ActivityScenario.launch(MainActivity::class.java)
 
-        AppDatabase.TEST_MODE = true
-        postViewModel =  ViewModelProvider(activityRule.activity).get(PostViewModel::class.java)
+        //AppDatabase.TEST_MODE = true
+        postViewModel = ViewModelProvider(activityRule.activity).get(PostViewModel::class.java)
+        //postViewModel.deleteAll()
+    }
+
+    @After
+    fun tearDown() {
+        //postViewModel.deleteAll()
     }
 
     @Test
     fun testInsertPostItem() {
         postViewModel.insertPost(postTest)
         Assert.assertEquals("140364967936397312", postTest.status.id)
-        //Assert.assertEquals(1, postViewModel.getPostCount())
+        Assert.assertEquals(1, postViewModel.getPostCount())
         Assert.assertEquals(postTest.status.id, postViewModel.getAll()?.get(0)?.status?.id)
     }
 
-/*    private var postTest = PostEntity(1, date= Calendar.getInstance().time)
-    private lateinit var postViewModel: PostViewModel
-
-    @Rule @JvmField
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
-
-    @Before
-    fun setup() {
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "qwertz").apply()
-        preferences.edit().putString("domain", "http://localhost").apply()
-        ActivityScenario.launch(MainActivity::class.java)
-
-        AppDatabase.TEST_MODE = true
-        postViewModel =  ViewModelProvider(activityTestRule.activity).get(PostViewModel::class.java)
-    }
-
-    @After
-    fun tearDown() {
-
-    }
-
-    @Test
-    fun testInsertPostItem() {
-        postViewModel.insertPost(postTest)
-        Assert.assertEquals(1, postViewModel.getPostsCount())
-        //Assert.assertEquals(postTest.domain, postViewModel.getById(postTest.uid)?.value?.domain)
-    }
     @Test
     fun testDeleteAll(){
+        postViewModel.insertPost(postTest)
+        Assert.assertEquals(1, postViewModel.getPostCount())
         postViewModel.deleteAll()
-        Assert.assertEquals(0, postViewModel.getPostsCount())
+        Assert.assertEquals(0, postViewModel.getPostCount())
     }
 
 
     @Test
     fun testUtilsInsertAll() {
-        val postTest2 = PostEntity(2, "test", date = Calendar.getInstance().time)
+        val postTest2 = PostEntity(2, status = listStatus[0], date = Calendar.getInstance().time)
         postViewModel.insertAllPosts(arrayListOf(postTest, postTest2))
-        Assert.assertEquals(2, postViewModel.getPostsCount())
-        Assert.assertEquals(postTest.domain, postViewModel.getById(postTest.uid)?.value?.domain)
-        Assert.assertEquals(postTest2.domain, postViewModel.getById(postTest2.uid)?.value?.domain)
+        Assert.assertEquals(2, postViewModel.getPostCount())
+        Assert.assertEquals(1, postViewModel.getById(postTest.uid)?.uid)
+        Assert.assertEquals(2, postViewModel.getById(postTest2.uid)?.uid)
+        Assert.assertEquals(postTest.status.id, postViewModel.getAll()?.get(0)?.status?.id)
+        Assert.assertEquals(postTest.status.id, postViewModel.getAll()?.get(1)?.status?.id)
     }
     @Test
     fun testUtilsLRU() {
         for(i in 1..postViewModel.MAX_NUMBER_OF_POSTS) {
-            postViewModel.insertAllPosts(arrayListOf(PostEntity(i, i.toString(), date = Calendar.getInstance().time)))
+            postViewModel.insertPost(PostEntity(i.toLong(), status = listStatus[0], date = Calendar.getInstance().time))
             Thread.sleep(10)
         }
-        Assert.assertEquals(postViewModel.MAX_NUMBER_OF_POSTS, postViewModel.getPostsCount())
-        Assert.assertEquals("1", postViewModel.getOldestPost()?.value?.domain)
-        postViewModel.insertAllPosts(arrayListOf(PostEntity(0, "0", date = Calendar.getInstance().time)))
-        Assert.assertEquals(postViewModel.MAX_NUMBER_OF_POSTS, postViewModel.getPostsCount())
-        val eldestPost = postViewModel.getById(1)
-        Assert.assertEquals(null, eldestPost)
-    }*/
+        Assert.assertEquals(postViewModel.MAX_NUMBER_OF_POSTS, postViewModel.getPostCount())
+        Assert.assertEquals("1", postViewModel.getOldestPost()?.uid)
+
+        // if we add another post, the oldest on is automatically removed
+        postViewModel.insertPost(PostEntity(0, status = listStatus[0], date = Calendar.getInstance().time))
+        Assert.assertEquals(postViewModel.MAX_NUMBER_OF_POSTS, postViewModel.getPostCount())
+        Assert.assertEquals(null, postViewModel.getById(1))
+    }
 }
