@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -27,40 +26,46 @@ import com.h.pixeldroid.R
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.net.URI
 
 
 class CameraFragment : Fragment() {
 
-    private lateinit var jpegSizes: Array<Size>
-
-    private lateinit var         textureView: TextureView
-    private lateinit var      surfaceTexture: SurfaceTexture
-    private lateinit var uploadedPictureView: ImageView
-
-
-    private lateinit var        manager: CameraManager
+    private val manager =
+        requireContext().applicationContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     private lateinit var   cameraDevice: CameraDevice
-    private lateinit var requestBuilder: CaptureRequest.Builder
-    private lateinit var captureSession: CameraCaptureSession
+    private enum class Cameras {
+        FRONT, BACK
+    }
 
+    /* Entities necessary to the stream : */
+    private lateinit var streamRequestBuilder: CaptureRequest.Builder
+    private lateinit var          textureView: TextureView
 
-
-    val PICK_IMAGE_REQUEST = 1
-    val TAG = "Camera Fragment"
+    /* Entities necessary to the photo capture */
+    private lateinit var uploadedPictureView: ImageView
+    private lateinit var jpegSizes: Array<Size>
+    private val PICK_IMAGE_REQUEST = 1
+    private val TAG = "Camera Fragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        /* Views */
+
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
 
         uploadedPictureView = view.findViewById(R.id.uploadedPictureView)
         uploadedPictureView.visibility = View.GONE
 
+        // Get the textureView which displays the camera's stream and set up its listener :
+        // it allows us to be sure the textureView is correctly set up before performing any action
         textureView = view.findViewById(R.id.textureView)!!
         textureView.surfaceTextureListener = this.textureListener
 
+
+        /* Buttons */
 
         val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
         uploadPictureButton.setOnClickListener{
@@ -71,13 +76,13 @@ class CameraFragment : Fragment() {
         takePictureButton.setOnClickListener{
             if (uploadedPictureView.visibility == View.VISIBLE ) {
                 uploadedPictureView.visibility = View.GONE
-                openCamera()
+                openCamera(Cameras.FRONT)
             } else {
                 takePicture()
             }
         }
 
-        return view
+        return view // and start the stream building flow
     }
 
     private val textureListener = object : TextureView.SurfaceTextureListener {
@@ -86,8 +91,7 @@ class CameraFragment : Fragment() {
             width: Int,
             height: Int
         ) {
-            surfaceTexture = surface
-            openCamera()
+            openCamera(Cameras.FRONT)
         }
 
         override fun onSurfaceTextureSizeChanged(
@@ -103,12 +107,11 @@ class CameraFragment : Fragment() {
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
     }
 
-    private fun openCamera() {
 
-        val context = requireContext().applicationContext
-        manager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    private fun openCamera(cameraId: Cameras) {
 
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+        /* Ask for Camera and Write permissions and require them if not granted */
+        if (ActivityCompat.checkSelfPermission(requireContext().applicationContext, Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED)
         {
 
@@ -116,11 +119,12 @@ class CameraFragment : Fragment() {
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), 200)
-            return
+            openCamera(cameraId)
         }
 
+        /* Open the camera and enter its state callback */
         try {
-            manager.openCamera(manager.cameraIdList[0], previewStateCallback, null)
+            manager.openCamera(manager.cameraIdList[cameraId.ordinal], previewStateCallback, null)
         } catch (e : CameraAccessException) {
             e.printStackTrace()
         }
@@ -131,8 +135,9 @@ class CameraFragment : Fragment() {
             cameraDevice = camera
 
             try {
+                /* Now that the camera is available, start a stream on the textureView */
                 cameraDevice.createCaptureSession(
-                    listOf(Surface(surfaceTexture)),
+                    listOf(Surface(textureView.surfaceTexture)),
                     previewSessionCallback,
                     null
                 )
@@ -158,18 +163,21 @@ class CameraFragment : Fragment() {
         }
 
         override fun onConfigured(session: CameraCaptureSession) {
-            captureSession = session
 
             try {
-                requestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-                requestBuilder.addTarget(Surface(textureView.surfaceTexture))
-                captureSession.setRepeatingRequest(requestBuilder.build(), null, null)
+                /* Build the stream with a flow of requests */
+                streamRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                streamRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
+                session.setRepeatingRequest(streamRequestBuilder.build(), null, null)
 
             } catch (e: CameraAccessException) {
                 e.printStackTrace()
             }
         }
     }
+
+    /* END of stream building flow */
+    /* START of picture capture flow */
 
     private fun takePicture() {
         val characteristics = manager.getCameraCharacteristics(cameraDevice.id)
