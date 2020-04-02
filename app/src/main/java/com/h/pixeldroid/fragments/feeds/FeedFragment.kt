@@ -73,7 +73,7 @@ open class FeedFragment<T, VH: RecyclerView.ViewHolder?>: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        preferences = activity!!.getSharedPreferences(
+        preferences = requireActivity().getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
 
