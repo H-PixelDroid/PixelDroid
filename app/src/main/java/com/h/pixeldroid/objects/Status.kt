@@ -61,6 +61,7 @@ data class Status(
     fun getProfilePicUrl() : String? = account.avatar
     fun getPostPreviewURL() : String? = media_attachments.getOrNull(0)?.preview_url
 
+
     fun getDescription() : CharSequence {
         val description = content as CharSequence
         if(description.isEmpty()) {
@@ -96,6 +97,7 @@ data class Status(
         username.text = this.getUsername()
         username.setTypeface(null, Typeface.BOLD)
         username.setOnClickListener { openProfile(rootView.context, account) }
+
 
         val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
         usernameDesc.text = this.getUsernameDescription()

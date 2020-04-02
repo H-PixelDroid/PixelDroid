@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlin.concurrent.fixedRateTimer
 
 class HomeFragment : FeedFragment<Status, HomeRecyclerViewAdapter.ViewHolder>() {
 
@@ -15,12 +14,12 @@ class HomeFragment : FeedFragment<Status, HomeRecyclerViewAdapter.ViewHolder>() 
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container)
-
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         adapter = HomeRecyclerViewAdapter(pixelfedAPI, "Bearer $accessToken")
         list.adapter = adapter
 
