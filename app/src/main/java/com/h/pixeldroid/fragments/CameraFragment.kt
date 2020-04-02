@@ -29,8 +29,7 @@ import java.io.IOException
 
 class CameraFragment : Fragment() {
 
-    private val manager =
-        requireContext().applicationContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    private lateinit var manager : CameraManager
     private lateinit var   cameraDevice: CameraDevice
     private enum class Cameras {
         FRONT, BACK
@@ -98,6 +97,9 @@ class CameraFragment : Fragment() {
 
 
     private fun openCamera(cameraId: Cameras) {
+
+        manager = requireContext().applicationContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
 
         /* Ask for Camera and Write permissions and require them if not granted */
         if (ActivityCompat.checkSelfPermission(requireContext().applicationContext, Manifest.permission.CAMERA)
