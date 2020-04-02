@@ -78,7 +78,7 @@ class CameraFragment : Fragment() {
             width: Int,
             height: Int
         ) {
-            openCamera(Cameras.FRONT)
+            openCamera(0)
         }
 
         override fun onSurfaceTextureSizeChanged(
