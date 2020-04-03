@@ -92,6 +92,7 @@ class MockedServerTest {
 
     @Test
     fun clickingCommentButtonOpensCommentSection() {
+        ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
         //Click comment button and then try to see if the commenter exists
         onView(withId(R.id.commenter)).perform(ViewActions.click())
@@ -101,6 +102,7 @@ class MockedServerTest {
 
     @Test
     fun postingACommentClosesCommentInput() {
+        ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
         //Click the comment button and type in a comment
         onView(withId(R.id.commenter)).perform(ViewActions.click())
