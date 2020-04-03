@@ -1,6 +1,7 @@
 package com.h.pixeldroid.api
 
 import com.h.pixeldroid.objects.*
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -8,7 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
 import java.io.File
-
 
 /*
     Implements the Pixelfed API
@@ -93,11 +93,12 @@ interface PixelfedAPI {
         }
     }
 
+    @Multipart
     @POST("/api/v1/media")
     fun mediaUpload(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
-        @Field("file") file: File? = null
+        @Part file: MultipartBody.Part
     ): Call<Attachment>
 }
 
