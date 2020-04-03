@@ -60,7 +60,7 @@ interface PixelfedAPI {
     //Used in our case to post a comment
     @FormUrlEncoded
     @POST("/api/v1/statuses")
-    fun commentStatus(
+    fun postStatus(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Field("status") statusText : String,
@@ -90,7 +90,7 @@ interface PixelfedAPI {
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
         @Query("min_id") min_id: String? = null,
-        @Query("limit") limit: Int? = null
+        @Query("limit") limit: String? = null
     ): Call<List<Status>>
 
     @GET("/api/v1/timelines/home")
@@ -100,7 +100,7 @@ interface PixelfedAPI {
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
         @Query("min_id") min_id: String? = null,
-        @Query("limit") limit: Int? = null,
+        @Query("limit") limit: String? = null,
         @Query("local") local: Boolean? = null
     ): Call<List<Status>>
 

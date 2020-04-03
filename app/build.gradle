@@ -100,6 +100,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
 }
 
