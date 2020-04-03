@@ -32,7 +32,6 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
     lateinit var picRequest: RequestBuilder<Drawable>
     lateinit var factory: HomeDataSourceFactory
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -181,7 +180,5 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             postLiveData.postValue(dataSource)
             return dataSource
         }
-
-
     }
 }

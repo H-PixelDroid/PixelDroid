@@ -28,10 +28,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment() {
 
     lateinit var content: LiveData<PagedList<T>>
+
 
     protected var accessToken: String? = null
     protected lateinit var pixelfedAPI: PixelfedAPI
@@ -47,7 +47,6 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_feed, container, false)
-
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         list = swipeRefreshLayout.list
@@ -103,5 +102,4 @@ abstract class FeedsRecyclerViewAdapter<T: FeedContent, VH : RecyclerView.ViewHo
 ), PreloadModelProvider<T> {
 
     protected lateinit var context: Context
-
 }

@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_feed.swipeRefreshLayout
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 
+
 /**
  * A fragment representing a list of Items.
  */
@@ -58,6 +59,7 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
             .asDrawable().apply(RequestOptions().circleCrop())
             .placeholder(R.drawable.ic_default_user)
 
+
         adapter = NotificationsRecyclerViewAdapter()
         list.adapter = adapter
 
@@ -74,7 +76,6 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
             Glide.with(this), adapter, sizeProvider, 4
         )
         list.addOnScrollListener(preloader)
-
 
         return view
     }
@@ -237,4 +238,5 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
 
     }
+
 }
