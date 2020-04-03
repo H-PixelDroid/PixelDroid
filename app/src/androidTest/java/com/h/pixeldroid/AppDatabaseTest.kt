@@ -83,18 +83,20 @@ class AppDatabaseTest {
         ActivityScenario.launch(MainActivity::class.java)
 
         //AppDatabase.TEST_MODE = true
-        postViewModel = ViewModelProvider(activityRule.activity).get(PostViewModel::class.java)
-        //postViewModel.deleteAll()
+        postViewModel = ViewModelProvider(activityRule.activity, PostViewModel(activityRule.activity.application)).get(PostViewModel::class.java)
+        postViewModel.deleteAll()
     }
 
     @After
     fun tearDown() {
-        //postViewModel.deleteAll()
+//        postViewModel.deleteAll()
     }
 
     @Test
     fun testInsertPostItem() {
+        Log.i("test1", "insert post item")
         postViewModel.insertPost(postTest)
+
         Assert.assertEquals("140364967936397312", postTest.status.id)
         Assert.assertEquals(1, postViewModel.getPostCount())
         Assert.assertEquals(postTest.status.id, postViewModel.getAll()?.get(0)?.status?.id)

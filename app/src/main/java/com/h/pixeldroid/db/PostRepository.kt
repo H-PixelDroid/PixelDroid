@@ -44,7 +44,7 @@ class PostRepository(application: Application) : CoroutineScope {
     fun insertPost(post: PostEntity) {
         var uid: Long = 0
         launch  { uid = insertPostBG(post) }
-        Log.d("test1", "uid = " + post.uid.toString() + " return = " + uid.toString())
+        Log.i("test1", "uid = " + post.uid.toString() + " return = " + uid.toString())
     }
 
     private suspend fun addDateToPostBG(postId: Long, date: Date){

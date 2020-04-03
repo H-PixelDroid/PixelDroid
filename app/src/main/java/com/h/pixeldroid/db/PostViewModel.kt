@@ -2,21 +2,29 @@ package com.h.pixeldroid.db
 
 import android.app.Application
 import android.util.Log
+import androidx.annotation.NonNull
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.h.pixeldroid.objects.Status
 import java.util.*
-import kotlin.collections.ArrayList
 
-class PostViewModel(application: Application) : AndroidViewModel(application) {
+
+class PostViewModel(application: Application) : AndroidViewModel(application), ViewModelProvider.Factory {
 
     private val repository: PostRepository = PostRepository(application)
     val allPosts: List<PostEntity>?
     val MAX_NUMBER_OF_POSTS = 100
+    private lateinit var myApplication: Application
 
     init {
         // Constructs the PostRepository
         allPosts = repository.allPosts
+        myApplication = application
+    }
+
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return PostViewModel(myApplication) as T
     }
 
     fun insertAllPosts(posts: ArrayList<PostEntity>) {
@@ -40,11 +48,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getById(id: Long): PostEntity? {
-        Log.d("test1", id.toString())
+        Log.i("test1", id.toString())
         val post = repository.getById(id)
 
-        Log.d("test1", post?.uid.toString())
-        Log.d("test1", post?.status?.id!!)
+        Log.i("test1", post?.uid.toString())
+        Log.i("test1", post?.status?.id!!)
 
         return post
     }
