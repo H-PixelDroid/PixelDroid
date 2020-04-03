@@ -88,7 +88,7 @@ class LoginCheckIntent {
     }
 }
 
-/*@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4::class)
 class AfterIntent {
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -116,4 +116,4 @@ class AfterIntent {
             hasErrorText("Could not authenticate"))))
 
     }
-}*/
+}
