@@ -2,16 +2,18 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.view.Gravity
+import android.view.View
+import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
 import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -86,6 +88,29 @@ class MockedServerTest {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
+    }
+
+    @Test
+    fun clickingCommentButtonOpensCommentSection() {
+        Thread.sleep(1000)
+        //Click comment button and then try to see if the commenter exists
+        onView(withId(R.id.commenter)).perform(ViewActions.click())
+        Thread.sleep(1000)
+        onView(withId(R.id.commentIn)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun postingACommentClosesCommentInput() {
+        Thread.sleep(1000)
+        //Click the comment button and type in a comment
+        onView(withId(R.id.commenter)).perform(ViewActions.click())
+        Thread.sleep(1000)
+        onView(withId(R.id.editComment)).perform(replaceText("Test"), ViewActions.closeSoftKeyboard())
+
+        //Submit the comment
+        onView(withId(R.id.submitComment)).perform(ViewActions.click())
+        Thread.sleep(1000)
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
 
     @Test
