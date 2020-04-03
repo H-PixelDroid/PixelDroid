@@ -52,6 +52,7 @@ tools:context=".fragments.PostFragment">
 
                 <ImageView
                     android:id="@+id/postPicture"
+                    android:adjustViewBounds="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -73,7 +74,7 @@ tools:context=".fragments.PostFragment">
                     android:id="@+id/nlikes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="50"
@@ -84,10 +85,10 @@ tools:context=".fragments.PostFragment">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="30dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="50"
-                    android:gravity="right"
+                    android:gravity="end"
                     tools:text="TextView" />
             </LinearLayout>
 
@@ -95,7 +96,7 @@ tools:context=".fragments.PostFragment">
                 android:id="@+id/usernameDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 tools:text="TextView" />
 
