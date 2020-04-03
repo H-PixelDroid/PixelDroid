@@ -45,7 +45,7 @@ class PostUnitTest {
     fun getDescriptionReturnsACorrectDesc() = Assert.assertEquals(status.content, status.getDescription())
 
     @Test
-    fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account.username, status.getUsername())
+    fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account.display_name, status.getUsername())
 
     @Test
     fun getUsernameReturnsOtherNameIfUsernameIsNull() {
