@@ -88,10 +88,6 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         return LivePagedListBuilder(factory, config).build()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     /**
      * [RecyclerView.Adapter] that can display a [Notification]
      */

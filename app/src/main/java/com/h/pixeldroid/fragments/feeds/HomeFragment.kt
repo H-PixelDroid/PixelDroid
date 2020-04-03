@@ -78,11 +78,6 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
         return LivePagedListBuilder(factory, config).build()
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */

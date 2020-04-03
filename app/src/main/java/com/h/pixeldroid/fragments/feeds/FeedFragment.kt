@@ -2,7 +2,6 @@ package com.h.pixeldroid.fragments.feeds
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
