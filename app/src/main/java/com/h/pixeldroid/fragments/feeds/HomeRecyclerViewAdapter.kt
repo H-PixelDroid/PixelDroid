@@ -169,7 +169,7 @@ class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credenti
                                 container.addView(layout)
                             }
                         } else {
-                            Log.e("COMMENT ERROR", "${response.code().toString()} with body ${response.errorBody()}")
+                            Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")
                         }
                     }
                 })
