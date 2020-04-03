@@ -55,6 +55,7 @@ class AppDatabaseTest {
     fun testUtilsLRU() {
         for(i in 1..db!!.MAX_NUMBER_OF_POSTS) {
             DatabaseUtils.insertAllPosts(db!!, PostEntity(i, i.toString(), date= Calendar.getInstance().time))
+            Thread.sleep(100)
         }
 
         Assert.assertEquals("1", postDao?.getById(1)!!.domain)
