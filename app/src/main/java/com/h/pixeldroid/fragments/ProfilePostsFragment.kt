@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.dummy.DummyContent.DummyItem
 
 /**
  * A fragment representing a list of Items.
