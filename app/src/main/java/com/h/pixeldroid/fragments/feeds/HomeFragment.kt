@@ -9,10 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.paging.DataSource
-import androidx.paging.ItemKeyedDataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
@@ -25,12 +23,12 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.fragment_home.*
+import retrofit2.Call
 
 
 class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
-    lateinit var factory: HomeDataSourceFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,9 +36,7 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = HomeDataSourceFactory()
-        content = LivePagedListBuilder(factory, config).build()
+        content = makeContent()
 
         //RequestBuilder that is re-used for every image
         picRequest = Glide.with(this)
@@ -67,13 +63,24 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
         return view
     }
 
+    private fun makeContent(): LiveData<PagedList<Status>> {
+        fun makeInitialCall(requestedLoadSize: Int): Call<List<Status>> {
+            return pixelfedAPI
+                .timelineHome("Bearer $accessToken", limit="$requestedLoadSize")
+        }
+        fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Status>> {
+            return pixelfedAPI
+                .timelineHome("Bearer $accessToken", max_id=key,
+                    limit="$requestedLoadSize")
+        }
+        val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
+        factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)
+        return LivePagedListBuilder(factory, config).build()
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        swipeRefreshLayout.setOnRefreshListener {
-            //by invalidating data, loadInitial will be called again
-            factory.postLiveData.value!!.invalidate()
-        }
     }
 
     /**
@@ -136,49 +143,6 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
 
         override fun getPreloadRequestBuilder(item: Status): RequestBuilder<*>? {
             return picRequest.load(item.getPostUrl())
-        }
-    }
-
-
-    inner class HomeDataSource: ItemKeyedDataSource<String, Status>() {
-
-        //We use the id as the key
-        override fun getKey(item: Status): String {
-            return item.id
-        }
-        //This is called to initialize the list, so we want some of the latest statuses
-        override fun loadInitial(
-            params: LoadInitialParams<String>,
-            callback: LoadInitialCallback<Status>
-        ) {
-            val call = pixelfedAPI
-                .timelineHome("Bearer $accessToken", limit="${params.requestedLoadSize}")
-            enqueueCall(call, callback)
-        }
-
-        //This is called to when we get to the bottom of the loaded content, so we want statuses
-        //older than the given key (params.key) 
-        override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Status>) {
-            val call = pixelfedAPI
-                .timelineHome("Bearer $accessToken", max_id=params.key,
-                    limit="${params.requestedLoadSize}")
-            enqueueCall(call, callback)
-        }
-
-        override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<Status>) {
-            //do nothing here, it is expected to pull to refresh to load newer content
-        }
-
-    }
-    inner class HomeDataSourceFactory: DataSource.Factory<String, Status>() {
-
-        lateinit var postLiveData: MutableLiveData<HomeDataSource>
-
-        override fun create(): DataSource<String, Status> {
-            val dataSource = HomeDataSource()
-            postLiveData = MutableLiveData()
-            postLiveData.postValue(dataSource)
-            return dataSource
         }
     }
 }

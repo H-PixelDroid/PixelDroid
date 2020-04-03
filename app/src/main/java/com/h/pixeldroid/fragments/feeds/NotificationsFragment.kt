@@ -11,10 +11,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.paging.DataSource
-import androidx.paging.ItemKeyedDataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
@@ -29,9 +27,8 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.fragment_feed.*
-import kotlinx.android.synthetic.main.fragment_feed.swipeRefreshLayout
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
+import retrofit2.Call
 
 
 /**
@@ -40,8 +37,6 @@ import kotlinx.android.synthetic.main.fragment_notifications.view.*
 class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.NotificationsRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var profilePicRequest: RequestBuilder<Drawable>
-    lateinit var factory: NotificationsDataSourceFactory
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,9 +45,7 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = NotificationsDataSourceFactory()
-        content = LivePagedListBuilder(factory, config).build()
+        content = makeContent()
 
         //RequestBuilder that is re-used for every image
         profilePicRequest = Glide.with(this)
@@ -79,13 +72,24 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
         return view
     }
+
+    private fun makeContent(): LiveData<PagedList<Notification>> {
+        fun makeInitialCall(requestedLoadSize: Int): Call<List<Notification>> {
+            return pixelfedAPI
+                .notifications("Bearer $accessToken", min_id="1", limit="$requestedLoadSize")
+        }
+        fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Notification>> {
+            return pixelfedAPI
+                .notifications("Bearer $accessToken", max_id=key, limit="$requestedLoadSize")
+        }
+
+        val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
+        factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)
+        return LivePagedListBuilder(factory, config).build()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        swipeRefreshLayout.setOnRefreshListener {
-            factory.notificationsLiveData.value!!.invalidate()
-        }
     }
 
     /**
@@ -196,47 +200,4 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
             return profilePicRequest.load(item.account.avatar_static)
         }
     }
-
-    inner class NotificationsDataSource: ItemKeyedDataSource<String, Notification>() {
-
-        //We use the id as the key
-        override fun getKey(item: Notification): String {
-            return item.id
-        }
-        //This is called to initialize the list, so we want some of the latest statuses
-        override fun loadInitial(
-            params: LoadInitialParams<String>,
-            callback: LoadInitialCallback<Notification>
-        ) {
-            val call = pixelfedAPI
-                .notifications("Bearer $accessToken", min_id="1", limit="${params.requestedLoadSize}")
-            enqueueCall(call, callback)
-        }
-        //This is called to when we get to the bottom of the loaded content, so we want statuses
-        //older than the given key (params.key)
-        override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Notification>) {
-            val call = pixelfedAPI
-                .notifications("Bearer $accessToken", max_id=params.key, limit="${params.requestedLoadSize}")
-            enqueueCall(call, callback)
-        }
-
-        override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<Notification>) {
-            //do nothing here, it is expected to pull to refresh to load newer notifications
-        }
-
-
-    }
-    inner class NotificationsDataSourceFactory: DataSource.Factory<String, Notification>() {
-        lateinit var notificationsLiveData: MutableLiveData<NotificationsDataSource>
-
-        override fun create(): DataSource<String, Notification> {
-            val dataSource = NotificationsDataSource()
-            notificationsLiveData = MutableLiveData()
-            notificationsLiveData.postValue(dataSource)
-            return dataSource
-        }
-
-
-    }
-
 }
