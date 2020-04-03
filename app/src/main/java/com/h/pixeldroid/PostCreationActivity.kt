@@ -15,6 +15,7 @@ import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okio.BufferedSink
 import retrofit2.Call
 import retrofit2.Callback
@@ -75,7 +76,8 @@ class PostCreationActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<Attachment>, response: Response<Attachment>) {
                 if (response.code() == 200) {
-                    Toast.makeText(applicationContext, "File uploaded successfully: $response", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "File uploaded successfully!", Toast.LENGTH_LONG).show()
+                    Log.i(TAG, response.raw().toString() + response.body()!!.id)
                 } else {
                     Log.e(TAG, "Server responded: $response" + call.request() + call.request().body)
                     Toast.makeText(applicationContext,"Picture upload error!",Toast.LENGTH_SHORT).show()
