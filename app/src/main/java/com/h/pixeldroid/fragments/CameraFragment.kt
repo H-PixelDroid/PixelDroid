@@ -26,10 +26,11 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 
-
+// A fragment that displays a stream coming from either the front or back cameras of the smartphone,
+// and can capture an image from this stream.
 class CameraFragment : Fragment() {
 
-    private lateinit var manager : CameraManager
+    private lateinit var       manager : CameraManager
     private lateinit var   cameraDevice: CameraDevice
     private enum class Cameras {
         FRONT, BACK
