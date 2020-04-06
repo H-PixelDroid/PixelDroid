@@ -127,6 +127,40 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(withText("6 Likes")).check(matches(withId(R.id.nlikes)))
     }
+
+    @Test
+    fun clickNotificationUser() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
+        Thread.sleep(1000)
+
+        onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
+        Thread.sleep(1000)
+
+        onView(withText("Dobios followed you")).perform(ViewActions.click())
+        Thread.sleep(1000)
+        onView(withText("Dobios")).check(matches(withId(R.id.accountNameTextView)))
+    }
+
+    @Test
+    fun clickNotificationPost() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
+        Thread.sleep(1000)
+
+        onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
+        Thread.sleep(1000)
+
+        onView(withText("Dobios liked your post")).perform(ViewActions.click())
+        Thread.sleep(1000)
+
+        onView(withId(R.id.username)).perform(ViewActions.click())
+        Thread.sleep(1000)
+        onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
+    }
+
     @Test
     fun testDrawerSettingsButton() {
         // Open Drawer to click on navigation.

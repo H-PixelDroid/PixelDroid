@@ -62,12 +62,14 @@ class ProfileActivity : AppCompatActivity() {
                 call: Call<List<Status>>,
                 response: Response<List<Status>>
             ) {
-                val posts = ArrayList<Status>()
-                val statuses = response.body()!!
-                for(status in statuses) {
-                    posts.add(status)
+                if(response.code() == 200) {
+                    val posts = ArrayList<Status>()
+                    val statuses = response.body()!!
+                    for(status in statuses) {
+                        posts.add(status)
+                    }
+                    adapter.addPosts(posts)
                 }
-                adapter.addPosts(posts)
             }
         })
     }
