@@ -20,7 +20,6 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.R
-import com.h.pixeldroid.objects.Account.Companion.openProfile
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.fragment_home.*

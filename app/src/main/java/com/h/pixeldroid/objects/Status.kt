@@ -4,11 +4,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.RequestBuilder
-import com.h.pixeldroid.R
-import com.h.pixeldroid.objects.Account.Companion.openProfile
 import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
@@ -99,7 +95,7 @@ data class Status(
         //Setup username as a button that opens the profile
         rootView.username.text = this.getUsername()
         rootView.username.setTypeface(null, Typeface.BOLD)
-        rootView.username.setOnClickListener { openProfile(rootView.context, account) }
+        rootView.username.setOnClickListener { account.openProfile(rootView.context) }
 
         rootView.usernameDesc.text = this.getUsername()
         rootView.usernameDesc.setTypeface(null, Typeface.BOLD)
@@ -118,7 +114,7 @@ data class Status(
             this.getProfilePicUrl(),
             profilePic
         )
-        profilePic.setOnClickListener { openProfile(rootView.context, account) }
+        profilePic.setOnClickListener { account.openProfile(rootView.context) }
     }
 
     enum class Visibility : Serializable {

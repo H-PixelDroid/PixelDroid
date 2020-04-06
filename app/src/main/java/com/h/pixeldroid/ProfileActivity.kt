@@ -2,18 +2,21 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.objects.Account.Companion.setContent
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,8 +43,36 @@ class ProfileActivity : AppCompatActivity() {
 
         // Set profile according to given account
         val account = intent.getSerializableExtra(ACCOUNT_TAG) as Account
-        setContent(View(this), account)
+
+        setContent(account)
+        // Set profile picture
+        val profilePicture = findViewById<ImageView>(R.id.profilePictureImageView)
+        setRoundImageFromURL(View(this), account.avatar, profilePicture)
+
         setPosts(account)
+    }
+
+    private fun setContent(account: Account) {
+        val profilePicture = findViewById<ImageView>(R.id.profilePictureImageView)
+        setRoundImageFromURL(View(this), account.avatar, profilePicture)
+
+        val description = findViewById<TextView>(R.id.descriptionTextView)
+        description.text = account.note
+
+        val accountName = findViewById<TextView>(R.id.accountNameTextView)
+        accountName.text = account.username
+
+        val nbPosts = findViewById<TextView>(R.id.nbPostsTextView)
+        nbPosts.text = "${account.statuses_count}\nPosts"
+        nbPosts.setTypeface(null, Typeface.BOLD)
+
+        val nbFollowers = findViewById<TextView>(R.id.nbFollowersTextView)
+        nbFollowers.text = "${account.followers_count}\nFollowers"
+        nbFollowers.setTypeface(null, Typeface.BOLD)
+
+        val nbFollowing = findViewById<TextView>(R.id.nbFollowingTextView)
+        nbFollowing.text = "${account.following_count}\nFollowing"
+        nbFollowing.setTypeface(null, Typeface.BOLD)
     }
 
     // Populate profile page with user's posts

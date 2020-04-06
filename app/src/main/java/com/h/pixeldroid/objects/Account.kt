@@ -2,14 +2,8 @@ package com.h.pixeldroid.objects
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import com.h.pixeldroid.ProfileActivity
-import com.h.pixeldroid.R
-import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
 import java.io.Serializable
 
 /*
@@ -46,44 +40,13 @@ data class Account(
 ) : Serializable {
         companion object {
                 const val ACCOUNT_TAG = "AccountTag"
+        }
 
-                // Open profile activity with given account
-                fun openProfile(context: Context, account: Account) {
-                        val intent = Intent(context, ProfileActivity::class.java)
-                        intent.putExtra(Account.ACCOUNT_TAG, account)
-                        startActivity(context, intent, null)
-                }
-
-                // Set views with account's data
-                fun setContent(view: View, account: Account) {
-                        // ImageView : profile picture
-                        val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)
-                        setRoundImageFromURL(view, account.avatar, profilePicture)
-
-                        // TextView : description / bio
-                        val description = view.findViewById<TextView>(R.id.descriptionTextView)
-                        description.text = account.note
-
-                        // TextView : account name
-                        val accountName = view.findViewById<TextView>(R.id.accountNameTextView)
-                        accountName.text = account.username
-                        accountName.setTypeface(null, Typeface.BOLD)
-
-                        // TextView : number of posts
-                        val nbPosts = view.findViewById<TextView>(R.id.nbPostsTextView)
-                        nbPosts.text = "${account.statuses_count}\nPosts"
-                        nbPosts.setTypeface(null, Typeface.BOLD)
-
-                        // TextView : number of followers
-                        val nbFollowers = view.findViewById<TextView>(R.id.nbFollowersTextView)
-                        nbFollowers.text = "${account.followers_count}\nFollowers"
-                        nbFollowers.setTypeface(null, Typeface.BOLD)
-
-                        // TextView : number of following
-                        val nbFollowing = view.findViewById<TextView>(R.id.nbFollowingTextView)
-                        nbFollowing.text = "${account.following_count}\nFollowing"
-                        nbFollowing.setTypeface(null, Typeface.BOLD)
-                }
+        // Open profile activity with given account
+        fun openProfile(context: Context) {
+                val intent = Intent(context, ProfileActivity::class.java)
+                intent.putExtra(Account.ACCOUNT_TAG, this)
+                startActivity(context, intent, null)
         }
 }
 
