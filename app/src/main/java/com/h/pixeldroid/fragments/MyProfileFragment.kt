@@ -3,7 +3,6 @@ package com.h.pixeldroid.fragments
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,16 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.objects.Account.Companion.setContent
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.ImageConverter.Companion.setRoundImageFromURL
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -94,37 +91,6 @@ class MyProfileFragment : Fragment() {
                     Log.e("ProfileFragment:", t.toString())
                 }
             })
-    }
-
-    // Populate myProfile page with user's data
-    private fun setContent(view: View, account: Account) {
-        // ImageView : profile picture
-        val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)
-        setRoundImageFromURL(view, account.avatar, profilePicture)
-
-        // TextView : description / bio
-        val description = view.findViewById<TextView>(R.id.descriptionTextView)
-        description.text = account.note
-
-        // TextView : account name
-        val accountName = view.findViewById<TextView>(R.id.accountNameTextView)
-        accountName.text = account.username
-        accountName.setTypeface(null, Typeface.BOLD)
-
-        // TextView : number of posts
-        val nbPosts = view.findViewById<TextView>(R.id.nbPostsTextView)
-        nbPosts.text = "${account.statuses_count}\nPosts"
-        nbPosts.setTypeface(null, Typeface.BOLD)
-
-        // TextView : number of followers
-        val nbFollowers = view.findViewById<TextView>(R.id.nbFollowersTextView)
-        nbFollowers.text = "${account.followers_count}\nFollowers"
-        nbFollowers.setTypeface(null, Typeface.BOLD)
-
-        // TextView : number of following
-        val nbFollowing = view.findViewById<TextView>(R.id.nbFollowingTextView)
-        nbFollowing.text = "${account.following_count}\nFollowing"
-        nbFollowing.setTypeface(null, Typeface.BOLD)
     }
 
     private fun onClickEditButton() {
