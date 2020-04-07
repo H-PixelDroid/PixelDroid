@@ -2,12 +2,10 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.view.Gravity
-import android.view.View
-import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -22,15 +20,35 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.hamcrest.BaseMatcher
+import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
+import org.junit.runner.Description
 import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
 class MockedServerTest {
+    private fun <T> first(matcher: Matcher<T>): Matcher<T>? {
+        return object : BaseMatcher<T>() {
+            var isFirst = true
+            override fun describeTo(description: org.hamcrest.Description?) {
+                description?.appendText("should return first matching item")
+            }
+
+            override fun matches(item: Any?): Boolean {
+                if (isFirst && matcher.matches(item)) {
+                    isFirst = false
+                    return true
+                }
+                return false
+            }
+
+        }
+    }
     private val accountJson = "{\n" +
             "      \"id\": \"1450\",\n" +
             "      \"username\": \"deerbard_photo\",\n" +
@@ -67,7 +85,10 @@ class MockedServerTest {
         override fun dispatch(request: RecordedRequest): MockResponse {
             when (request.path) {
                 "/api/v1/accounts/verify_credentials" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(accountJson)
-                "/api/v1/timelines/home" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(feedJson)
+            }
+            if(request.path?.startsWith("/api/v1/timelines/home") == true) {
+                return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8")
+                    .setResponseCode(200).setBody(feedJson)
             }
             if(request.path?.startsWith("/api/v1/notifications") == true) {
                 return MockResponse()
@@ -88,31 +109,6 @@ class MockedServerTest {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
-    }
-
-    @Test
-    fun clickingCommentButtonOpensCommentSection() {
-        ActivityScenario.launch(MainActivity::class.java)
-        Thread.sleep(1000)
-        //Click comment button and then try to see if the commenter exists
-        onView(withId(R.id.commenter)).perform(ViewActions.click())
-        Thread.sleep(1000)
-        onView(withId(R.id.commentIn)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun postingACommentClosesCommentInput() {
-        ActivityScenario.launch(MainActivity::class.java)
-        Thread.sleep(1000)
-        //Click the comment button and type in a comment
-        onView(withId(R.id.commenter)).perform(ViewActions.click())
-        Thread.sleep(1000)
-        onView(withId(R.id.editComment)).perform(replaceText("Test"), ViewActions.closeSoftKeyboard())
-
-        //Submit the comment
-        onView(withId(R.id.submitComment)).perform(ViewActions.click())
-        Thread.sleep(1000)
-        onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -191,4 +187,37 @@ class MockedServerTest {
             .perform(ViewActions.swipeRight()) // should stop at homepage
         onView(withId(R.id.list)).check(matches(ViewMatchers.isDisplayed()))
     }
+
+    @Test
+    fun clickingCommentButtonOpensCommentSection() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+        //Click comment button and then try to see if the commenter exists
+        onView(first(withId(R.id.commenter)))
+            .perform(scrollTo())
+            .perform(click())
+        Thread.sleep(1000)
+        onView(first(withId(R.id.commentIn))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun postingACommentClosesCommentInput() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+        onView(first(withId(R.id.commenter)))
+            .perform(scrollTo())
+            .perform(click())
+        Thread.sleep(1000)
+        onView(first(withId(R.id.editComment)))
+            .perform(scrollTo())
+            .perform(replaceText("Test"),closeSoftKeyboard())
+
+        //Submit the comment
+        onView(first(withId(R.id.submitComment)))
+            .perform(scrollTo())
+            .perform(click())
+        Thread.sleep(1000)
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
 }
+

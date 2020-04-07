@@ -22,17 +22,6 @@ class PostFragment : Fragment() {
         val status = arguments?.getSerializable(POST_TAG) as Status?
         val root = inflater.inflate(R.layout.post_fragment, container, false)
         status?.setupPost(root)
-        //Setup post and profile images
-        ImageConverter.setImageViewFromURL(
-            this,
-            status?.getPostUrl(),
-            root.postPicture
-        )
-        ImageConverter.setImageViewFromURL(
-            this,
-            status?.getProfilePicUrl(),
-            root.profilePic
-        )
         return root
     }
 }
