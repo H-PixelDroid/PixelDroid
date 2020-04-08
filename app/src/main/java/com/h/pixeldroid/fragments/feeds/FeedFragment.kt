@@ -119,7 +119,6 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
                         Toast.makeText(context,"Something went wrong while loading", Toast.LENGTH_SHORT).show()
                     }
                     swipeRefreshLayout.isRefreshing = false
-                    progressBar.visibility = View.GONE
                     loadingIndicator.visibility = View.GONE
                 }
 
