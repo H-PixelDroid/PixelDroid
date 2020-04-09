@@ -1,7 +1,7 @@
 package com.h.pixeldroid
 
 import android.content.Context
-import android.content.Intent
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
@@ -10,15 +10,11 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
 import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -37,7 +33,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
-import org.junit.runner.Description
 import org.junit.runner.RunWith
 
 
@@ -60,6 +55,41 @@ class MockedServerTest {
 
         }
     }
+
+    fun getText(matcher: Matcher<View?>?): String? {
+        val stringHolder = arrayOf<String?>(null)
+        onView(matcher).perform(object : ViewAction {
+            override fun getConstraints(): Matcher<View> {
+                return isAssignableFrom(TextView::class.java)
+            }
+
+            override fun getDescription(): String {
+                return "getting text from a TextView"
+            }
+
+            override fun perform(
+                uiController: UiController,
+                view: View
+            ) {
+                val tv = view as TextView //Save, because of check in getConstraints()
+                stringHolder[0] = tv.text.toString()
+            }
+        })
+        return stringHolder[0]
+    }
+
+    private fun clickChildViewWithId(id: Int) = object : ViewAction {
+
+        override fun getConstraints() = null
+
+        override fun getDescription() = "click child view with id $id"
+
+        override fun perform(uiController: UiController, view: View) {
+            val v = view.findViewById<View>(id)
+            v.performClick()
+        }
+    }
+
     private val accountJson = "{\n" +
             "      \"id\": \"1450\",\n" +
             "      \"username\": \"deerbard_photo\",\n" +
@@ -210,13 +240,13 @@ class MockedServerTest {
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout))
             .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()); // Open Drawer
+            .perform(DrawerActions.open()) // Open Drawer
 
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
 
         // Check that settings activity was opened.
-        onView(withText(R.string.signature_title)).check(matches(ViewMatchers.isDisplayed()))
+        onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -227,7 +257,7 @@ class MockedServerTest {
             .perform(ViewActions.swipeLeft()) // notifications
             .perform(ViewActions.swipeLeft()) // profile
             .perform(ViewActions.swipeLeft()) // should stop at profile
-        onView(withId(R.id.nbFollowersTextView)).check(matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.nbFollowersTextView)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -241,19 +271,23 @@ class MockedServerTest {
             .perform(ViewActions.swipeRight()) // search
             .perform(ViewActions.swipeRight()) // homepage
             .perform(ViewActions.swipeRight()) // should stop at homepage
-        onView(withId(R.id.list)).check(matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
 
-    private fun clickChildViewWithId(id: Int) = object : ViewAction {
+    @Test
+    fun clickingLikeButtonWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
 
-        override fun getConstraints() = null
+        //Get initial like count
+        val likes = getText(withId(R.id.nlikes))
 
-        override fun getDescription() = "click child view with id $id"
-
-        override fun perform(uiController: UiController, view: View) {
-            val v = view.findViewById<View>(id)
-            v.performClick()
-        }
+        //Click comment button and then try to see if the commenter exists
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+                (0, clickChildViewWithId(R.id.liker)))
+        Thread.sleep(1000)
+        onView(withId(R.id.nlikes)).check(matches((withText(likes))))
     }
 
     @Test
