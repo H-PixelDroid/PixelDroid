@@ -16,7 +16,7 @@ android {
     }
     defaultConfig {
         applicationId "com.h.pixeldroid"
-        minSdkVersion 24
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -95,14 +95,15 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
-    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
 
-    def fragment_version = '1.2.4'
+    def fragment_version = '1.2.3'
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
 
 }
 
