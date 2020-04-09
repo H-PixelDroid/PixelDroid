@@ -4,8 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -43,23 +42,8 @@ class PostCreationTest {
 
     // UI elements correctly displayed
     @Test
-    fun testUIDisplayTitle() {
+    fun cameraFragmentMainLayoutTest() {
         Thread.sleep(1000)
-        onView(withText(R.string.create_a_new_post))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun testUIDisplayTakePictureButton() {
-        Thread.sleep(1000)
-        onView(withText(R.string.take_a_picture))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun testUIDisplayUploadPictureButton() {
-        Thread.sleep(1000)
-        onView(withText(R.string.upload_a_picture))
-            .check(matches(isDisplayed()))
+        onView(withId(R.id.camera_fragment_main_linear_layout)).check(matches(isDisplayed()))
     }
 }

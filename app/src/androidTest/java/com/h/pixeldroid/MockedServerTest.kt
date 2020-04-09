@@ -1,10 +1,12 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.os.SystemClock
 import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -50,9 +52,14 @@ class MockedServerTest {
 
     @Test
     fun testFollowersTextView() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+//        ActivityScenario.launch(MainActivity::class.java).onActivity{
+//                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+//        }
         Thread.sleep(1000)
         onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
@@ -60,9 +67,13 @@ class MockedServerTest {
 
     @Test
     fun testNotificationsList() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
-        }
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+//        ActivityScenario.launch(MainActivity::class.java).onActivity{
+//                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+//        }
         Thread.sleep(1000)
 
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
@@ -74,9 +85,14 @@ class MockedServerTest {
     }
     @Test
     fun clickNotification() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
-        }
+
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+//        ActivityScenario.launch(MainActivity::class.java).onActivity{
+//                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+//        }
         Thread.sleep(1000)
 
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
@@ -114,9 +130,15 @@ class MockedServerTest {
 
     @Test
     fun swipingRightStopsAtHomepage() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        } // go to the last tab
+
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+            .perform(swipeLeft())
+//        ActivityScenario.launch(MainActivity::class.java).onActivity {
+//                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+//        } // go to the last tab
         Thread.sleep(1000)
         onView(withId(R.id.main_activity_main_linear_layout))
             .perform(ViewActions.swipeRight()) // notifications
