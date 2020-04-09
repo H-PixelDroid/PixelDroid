@@ -121,7 +121,7 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
 
             //Limit the height of the different images
             holder.profilePic?.maxHeight = metrics.heightPixels
-            holder.profilePic?.setOnClickListener{ Account.openProfile(context, post.account) }
+            holder.profilePic?.setOnClickListener{ post.account.openProfile(context) }
             holder.postPic.maxHeight = metrics.heightPixels
 
             //Set the two images
@@ -135,7 +135,7 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             //Set the the text views
             holder.username.text = post.getUsername()
             holder.username.setTypeface(null, Typeface.BOLD)
-            holder.username.setOnClickListener{ Account.openProfile(context, post.account) }
+            holder.username.setOnClickListener{ post.account.openProfile(context) }
 
             holder.usernameDesc.text = post.getUsername()
             holder.usernameDesc.setTypeface(null, Typeface.BOLD)
