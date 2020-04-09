@@ -291,6 +291,38 @@ class MockedServerTest {
     }
 
     @Test
+    fun clickingUsernameOpensProfile() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            (0, clickChildViewWithId(R.id.username)))
+
+        Thread.sleep(1000)
+
+        //Check that the Profile opened
+        onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingProfilePicOpensProfile() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+                (0, clickChildViewWithId(R.id.profilePic)))
+
+        Thread.sleep(1000)
+
+        //Check that the Profile opened
+        onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun clickingCommentButtonOpensCommentSection() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
