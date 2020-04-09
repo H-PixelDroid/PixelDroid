@@ -63,5 +63,11 @@
     <string name="mention_notification">%1$s mentioned you</string>
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
+    <string name="title_activity_photo_edit">PhotoEditActivity</string>
 
+    <string name="lbl_brightness">BRIGHTNESS</string>
+    <string name="lbl_contrast">CONTRAST</string>
+    <string name="lbl_saturation">SATURATION</string>
+    <string name="tab_filters">FILTERS</string>
+    <string name="tab_edit">EDIT</string>
 </resources>
