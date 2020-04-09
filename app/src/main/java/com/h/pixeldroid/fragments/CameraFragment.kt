@@ -124,16 +124,16 @@ class CameraFragment : Fragment() {
         override fun onOpened(camera: CameraDevice) {
             cameraDevice = camera
 
-            try {
-                /* Now that the camera is available, start a stream on the textureView */
-                cameraDevice.createCaptureSession(
-                    listOf(Surface(textureView.surfaceTexture)),
-                    previewSessionCallback,
-                    null
-                )
-            } catch (e: CameraAccessException) {
-                e.printStackTrace()
-            }
+//            try {
+//                /* Now that the camera is available, start a stream on the textureView */
+//                cameraDevice.createCaptureSession(
+//                    listOf(Surface(textureView.surfaceTexture)),
+//                    previewSessionCallback,
+//                    null
+//                )
+//            } catch (e: CameraAccessException) {
+//                e.printStackTrace()
+//            }
 
 
         }
