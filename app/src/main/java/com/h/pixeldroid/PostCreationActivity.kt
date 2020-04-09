@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Status
@@ -32,16 +33,16 @@ class PostCreationActivity : AppCompatActivity() {
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var preferences: SharedPreferences
 
-    private lateinit var picture: Uri
-    private var description: String = "Default description."
+    private lateinit var pictureUri: Uri
+    private var description: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_creation)
 
-        picture = intent.getParcelableExtra("picture_uri") as Uri
+        pictureUri = intent.getParcelableExtra("picture_uri") as Uri
         val pictureFrame = findViewById<ImageView>(R.id.post_creation_picture_frame)
-        pictureFrame.setImageURI(picture)
+        pictureFrame.setImageURI(pictureUri)
 
         preferences = getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
@@ -55,13 +56,51 @@ class PostCreationActivity : AppCompatActivity() {
         // edit the picture
         // TODO
 
-        // ask for a description
-        // TODO
-
-        // upload it to PixelFed
-        findViewById<Button>(R.id.post_creation_upload_media_button).setOnClickListener {
-            upload(File(picture.path!!))
+        // ask for a description and upload it to PixelFed
+        findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
+            if (setDescription()) upload()
         }
+    }
+
+    private fun setDescription(): Boolean {
+        val textField = findViewById<TextInputEditText>(R.id.new_post_description_input_field)
+        val content = textField.text.toString()
+        val maxLength = preferences.getInt("max_toot_chars", 500)
+        if (content.length > maxLength) {
+            // error, too much characters
+            textField.error = "Description must contain $maxLength characters at most."
+            return false
+        }
+        // store the description
+        description = content
+        return true
+    }
+
+    private fun upload() {
+        val picture: File = File(pictureUri.path!!)
+        val rBody: RequestBody = picture.asRequestBody("image/*".toMediaTypeOrNull())
+        val part = MultipartBody.Part.createFormData("file", picture.name, rBody)
+        pixelfedAPI.mediaUpload("Bearer $accessToken", part).enqueue(object:
+            Callback<Attachment> {
+            override fun onFailure(call: Call<Attachment>, t: Throwable) {
+                Log.e(TAG, t.toString() + call.request())
+                Toast.makeText(applicationContext,"Picture upload error!",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(call: Call<Attachment>, response: Response<Attachment>) {
+                if (response.code() == 200) {
+                    val body = response.body()!!
+                    if (body.type.name == "image") {
+                        Toast.makeText(applicationContext, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
+                        post(body.id)
+                    } else
+                        Toast.makeText(applicationContext, "Upload error: wrong picture format.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.e(TAG, "Server responded: $response" + call.request() + call.request().body)
+                    Toast.makeText(applicationContext,"Upload error: bad request format",Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     private fun post(id: String) {
@@ -87,34 +126,6 @@ class PostCreationActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    private fun upload(picture: File): String {
-        var uploadId = ""
-        val rBody: RequestBody = picture.asRequestBody("image/*".toMediaTypeOrNull())
-        val part = MultipartBody.Part.createFormData("file", picture.name, rBody)
-        pixelfedAPI.mediaUpload("Bearer $accessToken", part).enqueue(object:
-            Callback<Attachment> {
-            override fun onFailure(call: Call<Attachment>, t: Throwable) {
-                Log.e(TAG, t.toString() + call.request())
-                Toast.makeText(applicationContext,"Picture upload error!",Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<Attachment>, response: Response<Attachment>) {
-                if (response.code() == 200) {
-                    val body = response.body()!!
-                    if (body.type.name == "image") {
-                        Toast.makeText(applicationContext, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
-                        post(body.id)
-                    } else
-                        Toast.makeText(applicationContext, "Upload error: wrong picture format.", Toast.LENGTH_SHORT).show()
-                } else {
-                    Log.e(TAG, "Server responded: $response" + call.request() + call.request().body)
-                    Toast.makeText(applicationContext,"Upload error: bad request format",Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-        return uploadId
     }
 
 }

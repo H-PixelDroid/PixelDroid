@@ -1,22 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <ImageView
         android:id="@+id/post_creation_picture_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/post_creation_upload_media_button"
-        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="upload"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/cardview_light_background"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_margin="15dp"/>
-</LinearLayout>
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:background="#88000000">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_post_description_input_layout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/description"
+            app:errorEnabled="true"
+            android:layout_gravity="fill_horizontal"
+            android:paddingStart="15dp"
+            android:textColorHint="@color/cardview_light_background"
+            app:errorTextColor="@color/cardview_light_background">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_post_description_input_field"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:inputType="textMultiLine"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/post_creation_send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/send"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/cardview_light_background"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_vertical"
+            tools:ignore="PrivateResource"/>
+
+    </LinearLayout>
+
+</FrameLayout>

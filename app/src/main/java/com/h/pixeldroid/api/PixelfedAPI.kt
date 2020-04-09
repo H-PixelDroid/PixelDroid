@@ -101,7 +101,7 @@ interface PixelfedAPI {
         @Part file: MultipartBody.Part
     ): Call<Attachment>
 
-    //Used in our case to post a comment
+    //Used in our case to post a comment or a new post
     @FormUrlEncoded
     @POST("/api/v1/statuses")
     fun status(
@@ -120,5 +120,11 @@ interface PixelfedAPI {
         @Field("scheduled_at") scheduled_at : String? = null,
         @Field("language") language : String? = null
     ) : Call<Status>
+
+    // get instance configuration
+    @GET("/api/v1/instance")
+    fun instance(
+        @Query("max_toot_chars") max_toot_chars: String? = "500"
+    ) : Call<Instance>
 }
 
