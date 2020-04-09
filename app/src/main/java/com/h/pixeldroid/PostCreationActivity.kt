@@ -56,7 +56,7 @@ class PostCreationActivity : AppCompatActivity() {
         // edit the picture
         // TODO
 
-        // ask for a description and upload it to PixelFed
+        // get the description and send the post to PixelFed
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
             if (setDescription()) upload()
         }

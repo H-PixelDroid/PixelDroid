@@ -37,10 +37,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
 
-        Log.i("Main", preferences.getString("domain", ""))
         //Check if we have logged in and gotten an access token
-        if(preferences.getString("domain", "")!!.contains("localhost")
-            || !preferences.contains("accessToken")){
+        if(!preferences.contains("accessToken")){
             launchActivity(LoginActivity())
         } else {
             // Setup the drawer
