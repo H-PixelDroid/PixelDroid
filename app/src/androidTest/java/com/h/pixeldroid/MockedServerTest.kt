@@ -30,7 +30,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MockedServerTest {
-
     private val mockServer: MockServer = MockServer()
 
     @get:Rule
@@ -85,7 +84,7 @@ class MockedServerTest {
 
         onView(withText("Dobios liked your post")).perform(ViewActions.click())
         Thread.sleep(1000)
-        onView(withText("Geonosys")).check(matches(withId(R.id.username)))
+        onView(withText("6 Likes")).check(matches(withId(R.id.nlikes)))
     }
     @Test
     fun testDrawerSettingsButton() {

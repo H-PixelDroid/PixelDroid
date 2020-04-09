@@ -45,7 +45,7 @@ interface PixelfedAPI {
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
         @Query("min_id") min_id: String? = null,
-        @Query("limit") limit: Int? = null
+        @Query("limit") limit: String? = null
     ): Call<List<Status>>
 
 
@@ -56,7 +56,7 @@ interface PixelfedAPI {
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
         @Query("min_id") min_id: String? = null,
-        @Query("limit") limit: Int? = null,
+        @Query("limit") limit: String? = null,
         @Query("local") local: Boolean? = null
     ): Call<List<Status>>
 

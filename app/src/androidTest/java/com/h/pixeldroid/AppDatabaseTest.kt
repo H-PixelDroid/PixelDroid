@@ -54,6 +54,8 @@ class AppDatabaseTest {
     @Test
     fun testUtilsLRU() {
         for(i in 1..db!!.MAX_NUMBER_OF_POSTS) {
+            //sleep a bit to not have the weird concurrency bugs?
+            Thread.sleep(10)
             DatabaseUtils.insertAllPosts(db!!, PostEntity(i, i.toString(), date= Calendar.getInstance().time))
         }
 
