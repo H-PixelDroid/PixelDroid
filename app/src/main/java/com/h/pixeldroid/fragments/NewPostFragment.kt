@@ -50,12 +50,12 @@ class NewPostFragment : Fragment() {
             uploadPicture()
         }
 
-        if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-            val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
-            takePictureButton.setOnClickListener{
-                openCamera()
-            }
-        }
+//        if (requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+//            val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
+//            takePictureButton.setOnClickListener{
+//                openCamera()
+//            }
+//        }
 
         return view
     }
@@ -122,12 +122,12 @@ class NewPostFragment : Fragment() {
         }
     }
 
-    private fun openCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
-                startActivityForResult(takePictureIntent, IMAGE_CAPTURE_REQUEST)
-            }
-        }
-    }
+//    private fun openCamera() {
+//        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+//            takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
+//                startActivityForResult(takePictureIntent, IMAGE_CAPTURE_REQUEST)
+//            }
+//        }
+//    }
 
 }
