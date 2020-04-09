@@ -1,8 +1,7 @@
 image: reactivecircus/android-emulator-23:latest
 
 variables:
-  API_LEVEL: "23"
-  API_LEVEL: "23"
+  API_LEVEL: "24"
   ARCH: "x86"
   TARGET: "default"
   #CC_TEST_REPORTER_ID defined in GitLab CI settings
