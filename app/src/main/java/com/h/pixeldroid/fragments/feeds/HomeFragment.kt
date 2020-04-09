@@ -97,32 +97,23 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             val post = getItem(position) ?: return
             val metrics = context.resources.displayMetrics
             //Limit the height of the different images
-            holder.profilePic?.maxHeight = metrics.heightPixels
+            holder.profilePic.maxHeight = metrics.heightPixels
             holder.postPic.maxHeight = metrics.heightPixels
 
-            //Set the two images
-            ImageConverter.setRoundImageFromURL(
-                holder.postView,
-                post.getProfilePicUrl(),
-                holder.profilePic!!
-            )
-
-            picRequest.load(post.getPostUrl()).into(holder.postPic)
+            //Set up the the post
+            post.setupPost(holder.postView, picRequest, holder.postPic, holder.profilePic)
 
             //Set the image back to a placeholder if the original is too big
             if(holder.postPic.height > metrics.heightPixels) {
                 ImageConverter.setDefaultImage(holder.postView, holder.postPic)
             }
-
-            //Set the the text views
-            post.setupPost(holder.postView)
         }
 
         /**
          * Represents the posts that will be contained within the feed
          */
         inner class ViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
-            val profilePic  : ImageView? = postView.findViewById(R.id.profilePic)
+            val profilePic  : ImageView = postView.findViewById(R.id.profilePic)
             val postPic     : ImageView = postView.findViewById(R.id.postPicture)
             val username    : TextView = postView.findViewById(R.id.username)
             val usernameDesc: TextView = postView.findViewById(R.id.usernameDesc)

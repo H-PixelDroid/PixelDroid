@@ -1,10 +1,10 @@
 package com.h.pixeldroid.objects
 
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.view.View
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import com.h.pixeldroid.R
+import android.widget.ImageView
+import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
@@ -56,8 +56,9 @@ data class Status(
         const val POST_FRAG_TAG = "postFragTag"
     }
 
-    fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
-    fun getProfilePicUrl() : String? = account?.avatar
+    fun getPostUrl() : String? = media_attachments.getOrNull(0)?.url
+    fun getProfilePicUrl() : String? = account.avatar
+    fun getPostPreviewURL() : String? = media_attachments.getOrNull(0)?.preview_url
 
     fun getDescription() : CharSequence {
         val description = content as CharSequence
@@ -85,10 +86,16 @@ data class Status(
         return "$nShares Shares"
     }
 
-    fun setupPost(rootView : View) {
+    fun setupPost(
+        rootView: View,
+        request: RequestBuilder<Drawable>,
+        postPic: ImageView,
+        profilePic: ImageView
+    ) {
         //Setup username as a button that opens the profile
         rootView.username.text = this.getUsername()
         rootView.username.setTypeface(null, Typeface.BOLD)
+        rootView.username.setOnClickListener { account.openProfile(rootView.context) }
 
         rootView.usernameDesc.text = this.getUsername()
         rootView.usernameDesc.setTypeface(null, Typeface.BOLD)
@@ -101,7 +108,15 @@ data class Status(
         rootView.nshares.text = this.getNShares()
         rootView.nshares.setTypeface(null, Typeface.BOLD)
 
+        request.load(this.getPostUrl()).into(postPic)
+        ImageConverter.setRoundImageFromURL(
+            rootView,
+            this.getProfilePicUrl(),
+            profilePic
+        )
+        profilePic.setOnClickListener { account.openProfile(rootView.context) }
     }
+
     enum class Visibility : Serializable {
         public, unlisted, private, direct
     }
