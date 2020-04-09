@@ -21,6 +21,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".PostCreationActivity" />
         <activity android:name=".PostActivity" />
+        <activity android:name=".ProfileActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings2">

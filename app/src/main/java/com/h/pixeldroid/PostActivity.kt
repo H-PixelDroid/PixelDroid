@@ -6,7 +6,6 @@ import com.h.pixeldroid.fragments.PostFragment
 import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.objects.Status
 
-
 class PostActivity : AppCompatActivity() {
     lateinit var postFragment : PostFragment
 
