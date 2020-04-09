@@ -44,7 +44,17 @@ class PostCreationTest {
 
     // UI elements correctly displayed
     @Test
-    fun uploadPictureButtonisDisplayed() {
+    fun postCreationTitleIsDisplayed() {
+        onView(withText("Create a new post!")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun uploadPictureButtonIsDisplayed() {
         onView(withText("Upload a picture")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun takePictureButtonIsDisplayed() {
+        onView(withText("Take a picture")).check(matches(isDisplayed()))
     }
 }
