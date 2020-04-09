@@ -56,8 +56,8 @@ data class Status(
         const val POST_FRAG_TAG = "postFragTag"
     }
 
-    fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
-    fun getProfilePicUrl() : String? = account?.avatar
+    fun getPostUrl() : String? = media_attachments.getOrNull(0)?.url
+    fun getProfilePicUrl() : String? = account.avatar
 
     fun getDescription() : CharSequence {
         val description = content as CharSequence
@@ -68,20 +68,20 @@ data class Status(
     }
 
     fun getUsername() : CharSequence {
-        var name = account?.display_name
-        if (name.isNullOrEmpty()) {
-            name = account?.username
+        var name = account.display_name
+        if (name.isEmpty()) {
+            name = account.username
         }
-        return name!!
+        return name
     }
 
     fun getNLikes() : CharSequence {
-        val nLikes : Int = favourites_count ?: 0
+        val nLikes = favourites_count
         return "$nLikes Likes"
     }
 
     fun getNShares() : CharSequence {
-        val nShares : Int = reblogs_count ?: 0
+        val nShares = reblogs_count
         return "$nShares Shares"
     }
 

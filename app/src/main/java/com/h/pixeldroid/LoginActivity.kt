@@ -157,7 +157,7 @@ class LoginActivity : AppCompatActivity() {
                 if (!response.isSuccessful || response.body() == null) {
                     return failedRegistration(getString(R.string.token_error))
                 }
-                authenticationSuccessful(domain, response.body()!!.access_token)
+                authenticationSuccessful(response.body()!!.access_token)
             }
 
             override fun onFailure(call: Call<Token>, t: Throwable) {
@@ -172,7 +172,7 @@ class LoginActivity : AppCompatActivity() {
         ).enqueue(callback)
     }
 
-    private fun authenticationSuccessful(domain: String, accessToken: String) {
+    private fun authenticationSuccessful(accessToken: String) {
         preferences.edit().putString("accessToken", accessToken).apply()
         getInstanceConfig()
         val intent = Intent(this, MainActivity::class.java)
