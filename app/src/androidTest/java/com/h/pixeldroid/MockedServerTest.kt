@@ -17,8 +17,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -47,32 +46,6 @@ class MockedServerTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
-
-    private val dispatcher: Dispatcher = object : Dispatcher() {
-        @Throws(InterruptedException::class)
-        override fun dispatch(request: RecordedRequest): MockResponse {
-            when (request.path) {
-                "/api/v1/accounts/verify_credentials" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(accountJson)
-                "/api/v1/timelines/home" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(feedJson)
-            }
-            if(request.path?.startsWith("/api/v1/notifications") == true) {
-                return MockResponse()
-                    .addHeader("Content-Type", "application/json; charset=utf-8")
-                    .setResponseCode(200).setBody(notificationsJson)
-            } else if (request.path?.startsWith("/api/v1/timelines/home") == true) {
-                return MockResponse().addHeader(
-                    "Content-Type",
-                    "application/json; charset=utf-8"
-                ).setResponseCode(200).setBody(feedJson)
-           } else if (request.path?.matches("/api/v1/accounts/[0-9]*/statuses".toRegex()) == true) {
-                return MockResponse().addHeader(
-                    "Content-Type",
-                    "application/json; charset=utf-8"
-                ).setResponseCode(200).setBody(accountStatusesJson)
-            }
-            return MockResponse().setResponseCode(404)
-        }
-    }
 
     @Before
     fun before(){
@@ -157,21 +130,8 @@ class MockedServerTest {
 
         onView(withId(R.id.username)).perform(ViewActions.click())
         Thread.sleep(10000)
-        onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
-    }
+        onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
 
-    @Test
-    fun testDrawerSettingsButton() {
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()); // Open Drawer
-
-        // Start the screen of your activity.
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
-
-        // Check that settings activity was opened.
-        onView(withText(R.string.signature_title)).check(matches(ViewMatchers.isDisplayed()))
     }
 
     @Test
