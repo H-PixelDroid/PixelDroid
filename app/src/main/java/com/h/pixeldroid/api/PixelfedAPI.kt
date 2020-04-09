@@ -123,8 +123,6 @@ interface PixelfedAPI {
 
     // get instance configuration
     @GET("/api/v1/instance")
-    fun instance(
-        @Query("max_toot_chars") max_toot_chars: String? = "500"
-    ) : Call<Instance>
+    fun instance() : Call<Instance>
 }
 

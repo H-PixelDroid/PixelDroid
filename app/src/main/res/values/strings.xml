@@ -70,5 +70,6 @@
     <string name="description">Description...</string>
     <string name="upload">upload</string>
     <string name="send">send</string>
+    <string name="reconnect">Reconnect</string>
 
 </resources>

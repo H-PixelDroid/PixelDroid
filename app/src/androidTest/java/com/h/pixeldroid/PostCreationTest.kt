@@ -15,6 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import kotlin.concurrent.thread
 
 @RunWith(AndroidJUnit4::class)
 class PostCreationTest {
@@ -38,12 +39,12 @@ class PostCreationTest {
         ActivityScenario.launch(MainActivity::class.java).onActivity {
             a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(2)?.select()
         }
+        Thread.sleep(300)
     }
 
     // UI elements correctly displayed
     @Test
-    fun cameraFragmentMainLayoutTest() {
-        Thread.sleep(1000)
-        onView(withId(R.id.camera_fragment_main_linear_layout)).check(matches(isDisplayed()))
+    fun uploadPictureButtonisDisplayed() {
+        onView(withText("Upload a picture")).check(matches(isDisplayed()))
     }
 }

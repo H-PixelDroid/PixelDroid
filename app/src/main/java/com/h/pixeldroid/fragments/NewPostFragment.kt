@@ -76,7 +76,9 @@ class NewPostFragment : Fragment() {
                 }
             }
         if (pictureUri != null) {
-            startActivity(Intent(activity, PostCreationActivity::class.java))
+            startActivity(Intent(activity, PostCreationActivity::class.java)
+                    .putExtra("picture_uri", pictureUri)
+            )
         }
     }
 

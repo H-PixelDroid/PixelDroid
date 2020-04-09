@@ -94,19 +94,6 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(withText("6 Likes")).check(matches(withId(R.id.nlikes)))
     }
-    @Test
-    fun testDrawerSettingsButton() {
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()); // Open Drawer
-
-        // Start the screen of your activity.
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
-
-        // Check that settings activity was opened.
-        onView(withText(R.string.signature_title)).check(matches(ViewMatchers.isDisplayed()))
-    }
 
     @Test
     fun swipingLeftStopsAtProfile() {

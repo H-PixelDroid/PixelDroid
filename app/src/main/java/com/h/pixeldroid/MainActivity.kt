@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val tabs = arrayOf(
                                HomeFragment(),
                                Fragment(),
-                               CameraFragment(),
+                               NewPostFragment(),
                                NotificationsFragment(),
                                MyProfileFragment())
 
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.nav_settings -> launchActivity(SettingsActivity())
+            R.id.nav_reconnect -> launchActivity(LoginActivity())
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)
