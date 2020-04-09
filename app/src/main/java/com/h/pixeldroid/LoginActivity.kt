@@ -210,7 +210,6 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<Instance>, response: Response<Instance>) {
                 if (response.code() == 200) {
-                    Log.e(TAG, response.body().toString())
                     preferences.edit().putInt(
                         "max_toot_chars",
                         response.body()!!.max_toot_chars.toInt()
