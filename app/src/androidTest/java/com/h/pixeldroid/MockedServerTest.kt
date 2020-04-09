@@ -1,6 +1,7 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.content.Intent
 import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -9,6 +10,9 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
 import androidx.test.espresso.contrib.NavigationViewActions
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -21,6 +25,7 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.hamcrest.CoreMatchers
+import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -61,6 +66,7 @@ class MockedServerTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity>
             = ActivityScenarioRule(MainActivity::class.java)
+
     private val dispatcher: Dispatcher = object : Dispatcher() {
         @Throws(InterruptedException::class)
         override fun dispatch(request: RecordedRequest): MockResponse {
@@ -72,6 +78,11 @@ class MockedServerTest {
                 return MockResponse()
                     .addHeader("Content-Type", "application/json; charset=utf-8")
                     .setResponseCode(200).setBody(notificationsJson)
+            } else if (request.path?.startsWith("/api/v1/timelines/home") == true) {
+                return MockResponse().addHeader(
+                    "Content-Type",
+                    "application/json; charset=utf-8"
+                ).setResponseCode(200).setBody(feedJson)
             }
             return MockResponse().setResponseCode(404)
         }

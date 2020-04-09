@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -42,6 +43,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
     protected lateinit var list : RecyclerView
     protected lateinit var adapter : FeedsRecyclerViewAdapter<T, VH>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var loadingIndicator: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +53,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
         val view = inflater.inflate(R.layout.fragment_feed, container, false)
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+        loadingIndicator = view.findViewById(R.id.progressBar)
         list = swipeRefreshLayout.list
         // Set the adapter
         list.layoutManager = LinearLayoutManager(context)
@@ -111,7 +114,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
                         Toast.makeText(context,"Something went wrong while loading", Toast.LENGTH_SHORT).show()
                     }
                     swipeRefreshLayout.isRefreshing = false
-                    progressBar.visibility = View.GONE
+                    loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<List<T>>, t: Throwable) {
