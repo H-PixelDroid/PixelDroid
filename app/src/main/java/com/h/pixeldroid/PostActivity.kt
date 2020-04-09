@@ -8,7 +8,6 @@ import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 
 
 
-
 class PostActivity : AppCompatActivity() {
     lateinit var postFragment : PostFragment
 

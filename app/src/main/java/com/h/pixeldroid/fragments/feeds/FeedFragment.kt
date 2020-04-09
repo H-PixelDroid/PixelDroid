@@ -46,7 +46,6 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var loadingIndicator: ProgressBar
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,7 +55,6 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         loadingIndicator = view.findViewById(R.id.progressBar)
-
         list = swipeRefreshLayout.list
         // Set the adapter
         list.layoutManager = LinearLayoutManager(context)

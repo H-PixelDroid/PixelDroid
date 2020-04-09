@@ -23,7 +23,9 @@ import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.PostActivity
+import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.fragment_feed.*
@@ -117,8 +119,8 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                     return
                 }
                 Notification.NotificationType.follow -> {
-                    val url = notification.status?.url ?: notification.account.url
-                    intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    intent = Intent(context, ProfileActivity::class.java)
+                    intent.putExtra(Account.ACCOUNT_TAG, notification.account)
                 }
             }
             context.startActivity(intent)

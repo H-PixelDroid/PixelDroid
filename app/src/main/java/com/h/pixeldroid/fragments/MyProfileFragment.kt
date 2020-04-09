@@ -80,12 +80,12 @@ class MyProfileFragment : Fragment() {
                                 if(response.code() == 200) {
                                     val posts = ArrayList<Status>()
                                     val statuses = response.body()!!
+
                                     for(status in statuses) {
                                         posts.add(status)
                                     }
                                     adapter.addPosts(posts)
                                 }
-
                             }
                         })
                     }
@@ -99,30 +99,24 @@ class MyProfileFragment : Fragment() {
 
     // Populate myProfile page with user's data
     private fun setContent(view: View, account: Account) {
-        // ImageView : profile picture
         val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)
         setRoundImageFromURL(view, account.avatar, profilePicture)
 
-        // TextView : description / bio
         val description = view.findViewById<TextView>(R.id.descriptionTextView)
         description.text = account.note
 
-        // TextView : account name
         val accountName = view.findViewById<TextView>(R.id.accountNameTextView)
         accountName.text = account.username
         accountName.setTypeface(null, Typeface.BOLD)
 
-        // TextView : number of posts
         val nbPosts = view.findViewById<TextView>(R.id.nbPostsTextView)
         nbPosts.text = "${account.statuses_count}\nPosts"
         nbPosts.setTypeface(null, Typeface.BOLD)
 
-        // TextView : number of followers
         val nbFollowers = view.findViewById<TextView>(R.id.nbFollowersTextView)
         nbFollowers.text = "${account.followers_count}\nFollowers"
         nbFollowers.setTypeface(null, Typeface.BOLD)
 
-        // TextView : number of following
         val nbFollowing = view.findViewById<TextView>(R.id.nbFollowingTextView)
         nbFollowing.text = "${account.following_count}\nFollowing"
         nbFollowing.setTypeface(null, Typeface.BOLD)

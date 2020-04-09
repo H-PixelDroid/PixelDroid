@@ -1,14 +1,13 @@
 package com.h.pixeldroid.objects
 
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
-import com.h.pixeldroid.objects.Account.Companion.openProfile
 import com.h.pixeldroid.utils.ImageConverter
-import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 
 /*
@@ -62,7 +61,6 @@ data class Status(
     fun getProfilePicUrl() : String? = account.avatar
     fun getPostPreviewURL() : String? = media_attachments.getOrNull(0)?.preview_url
 
-
     fun getDescription() : CharSequence {
         val description = content as CharSequence
         if(description.isEmpty()) {
@@ -89,24 +87,31 @@ data class Status(
         return "$nShares Shares"
     }
 
-    fun setupPost(rootView : View) {
+    fun setupPost(
+        rootView: View,
+        request: RequestBuilder<Drawable>,
+        postPic: ImageView,
+        profilePic: ImageView
+    ) {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
         username.text = this.getUsername()
         username.setTypeface(null, Typeface.BOLD)
-        username.setOnClickListener { openProfile(rootView.context, account) }
+        username.setOnClickListener { account.openProfile(rootView.context) }
 
+        val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
+        usernameDesc.text = this.getUsername()
+        usernameDesc.setTypeface(null, Typeface.BOLD)
 
-        rootView.usernameDesc.text = this.getUsername()
-        rootView.usernameDesc.setTypeface(null, Typeface.BOLD)
+        rootView.findViewById<TextView>(R.id.description).text = this.getDescription()
 
-        rootView.description.text = this.getDescription()
+        val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
+        nlikes.text = this.getNLikes()
+        nlikes.setTypeface(null, Typeface.BOLD)
 
-        rootView.nlikes.text = this.getNLikes()
-        rootView.nlikes.setTypeface(null, Typeface.BOLD)
-
-        rootView.nshares.text = this.getNShares()
-        rootView.nshares.setTypeface(null, Typeface.BOLD)
+        val nshares = rootView.findViewById<TextView>(R.id.nshares)
+        nshares.text = this.getNShares()
+        nshares.setTypeface(null, Typeface.BOLD)
 
         //Setup post and profile images
         ImageConverter.setImageViewFromURL(
@@ -115,13 +120,13 @@ data class Status(
             rootView.findViewById(R.id.postPicture)
         )
 
-        val profilePic = rootView.findViewById<ImageView>(R.id.profilePic)
+        request.load(this.getPostUrl()).into(postPic)
         ImageConverter.setRoundImageFromURL(
             rootView,
-            getProfilePicUrl(),
+            this.getProfilePicUrl(),
             profilePic
         )
-        profilePic.setOnClickListener { openProfile(rootView.context, account) }
+        profilePic.setOnClickListener { account.openProfile(rootView.context) }
     }
 
     enum class Visibility : Serializable {
