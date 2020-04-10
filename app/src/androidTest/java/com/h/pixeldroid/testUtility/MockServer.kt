@@ -166,6 +166,11 @@ class MockServer {
                         "Content-Type",
                         "application/json; charset=utf-8"
                     ).setResponseCode(200).setBody(unlikeJson)
+                } else if(request.path?.startsWith("/api/v1/statuses") == true) {
+                    return MockResponse().addHeader(
+                        "Content-Type",
+                        "application/json; charset=utf-8"
+                    ).setResponseCode(200).setBody(unlikeJson)
                 }
                 return MockResponse().setResponseCode(404)
             }

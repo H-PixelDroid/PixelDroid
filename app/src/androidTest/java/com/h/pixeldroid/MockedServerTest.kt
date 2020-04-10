@@ -1,15 +1,19 @@
 package com.h.pixeldroid
 
+import android.R.attr.x
 import android.content.Context
-
+import android.text.Editable
 import android.view.Gravity
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
+import androidx.core.text.set
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.*
+import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -21,12 +25,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.fragments.feeds.HomeFragment
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.RecordedRequest
+import com.h.pixeldroid.testUtility.MockServer
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Matcher
-import com.h.pixeldroid.testUtility.MockServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +41,7 @@ class MockedServerTest {
         return object : BaseMatcher<T>() {
             var isFirst = true
             override fun describeTo(description: org.hamcrest.Description?) {
-                description?.appendText("should return first matching item")
+                description?.appendText("first matching item")
             }
 
             override fun matches(item: Any?): Boolean {
@@ -52,6 +53,21 @@ class MockedServerTest {
             }
 
         }
+    }
+
+    /**
+     * @param percent can be 1 or 0
+     * 1: swipes all the way up
+     * 0: swipes half way up
+     */
+    private fun slowSwipeUp(percent: Boolean) : ViewAction {
+        return ViewActions.actionWithAssertions(
+                GeneralSwipeAction(
+                    Swipe.SLOW,
+                    GeneralLocation.BOTTOM_CENTER,
+                    if(percent) GeneralLocation.TOP_CENTER else GeneralLocation.CENTER,
+                    Press.FINGER)
+                )
     }
 
     fun getText(matcher: Matcher<View?>?): String? {
@@ -87,6 +103,19 @@ class MockedServerTest {
             v.performClick()
         }
     }
+
+    private fun typeTextInViewWithId(id: Int, text: String) = object : ViewAction {
+
+        override fun getConstraints() = null
+
+        override fun getDescription() = "click child view with id $id"
+
+        override fun perform(uiController: UiController, view: View) {
+            val v = view.findViewById<EditText>(id)
+            v.text.append(text)
+        }
+    }
+
     val mockServer = MockServer()
 
 
@@ -294,6 +323,33 @@ class MockedServerTest {
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
                 (0, clickChildViewWithId(R.id.ViewComments)))
+        Thread.sleep(1000)
+        onView(withId(R.id.commentContainer))
+            .check(matches(hasDescendant(withId(R.id.comment))))
+    }
+
+    @Test
+    fun postingACommentWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Open the comment section
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+                (0, clickChildViewWithId(R.id.commenter)))
+
+        onView(withId(R.id.list)).perform(slowSwipeUp(true))
+        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+                (0, typeTextInViewWithId(R.id.editComment, "test")))
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+                (0, clickChildViewWithId(R.id.submitComment)))
+
         Thread.sleep(1000)
         onView(withId(R.id.commentContainer))
             .check(matches(hasDescendant(withId(R.id.comment))))

@@ -3,15 +3,22 @@ package com.h.pixeldroid.objects
 import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
+import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.utils.ImageConverter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.Serializable
 
 /*
@@ -161,6 +168,140 @@ data class Status(
         comment.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
         comment.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
         (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
+    }
+
+    fun setOnClickListeners(
+        holder: HomeFragment.HomeRecyclerViewAdapter.ViewHolder,
+        api: PixelfedAPI,
+        credential : String,
+        post : Status
+    ) {
+        //Activate the liker
+        holder.liker.setOnClickListener {
+            if (holder.isLiked) {
+                api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
+                    override fun onFailure(call: Call<Status>, t: Throwable) {
+                        Log.e("UNLIKE ERROR", t.toString())
+                    }
+
+                    override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                        if(response.code() == 200) {
+                            val resp = response.body()!!
+
+                            //Update shown like count and internal like toggle
+                            holder.nlikes.text = resp.getNLikes()
+                            holder.isLiked = resp.favourited
+                        } else {
+                            Log.e("RESPOSE_CODE", response.code().toString())
+                        }
+
+                    }
+
+                })
+
+            } else {
+                api.likePost(credential, post.id).enqueue(object : Callback<Status> {
+                    override fun onFailure(call: Call<Status>, t: Throwable) {
+                        Log.e("LIKE ERROR", t.toString())
+                    }
+
+                    override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                        if(response.code() == 200) {
+                            val resp = response.body()!!
+
+                            //Update shown like count and internal like toggle
+                            holder.nlikes.text = resp.getNLikes()
+                            holder.isLiked = resp.favourited
+                        } else {
+                            Log.e("RESPOSE_CODE", response.code().toString())
+                        }
+                    }
+
+                })
+
+            }
+        }
+
+        //Show all comments of a post
+        if (post.replies_count == 0) {
+            holder.viewComment.text =  "No comments on this post..."
+        } else {
+            holder.viewComment.text =  "View all ${post.replies_count} comments..."
+            holder.viewComment.setOnClickListener {
+                holder.viewComment.visibility = View.GONE
+                api.statusComments(post.id, credential).enqueue(object :
+                    Callback<com.h.pixeldroid.objects.Context> {
+                    override fun onFailure(call: Call<com.h.pixeldroid.objects.Context>, t: Throwable) {
+                        Log.e("COMMENT FETCH ERROR", t.toString())
+                    }
+
+                    override fun onResponse(
+                        call: Call<com.h.pixeldroid.objects.Context>,
+                        response: Response<com.h.pixeldroid.objects.Context>
+                    ) {
+                        if(response.code() == 200) {
+                            val statuses = response.body()!!.descendants
+
+                            //Create the new views for each comment
+                            for (status in statuses) {
+                                post.addComment(
+                                    holder.context,
+                                    holder.commentCont,
+                                    status.account,
+                                    status.content
+                                )
+                            }
+                        } else {
+                            Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")
+                        }
+                    }
+                })
+            }
+        }
+
+        //Toggle comment button
+        holder.commenter.setOnClickListener {
+            when(holder.commentIn.visibility) {
+                View.VISIBLE -> holder.commentIn.visibility = View.GONE
+                View.INVISIBLE -> holder.commentIn.visibility = View.VISIBLE
+                View.GONE -> holder.commentIn.visibility = View.VISIBLE
+            }
+        }
+
+        //Activate commenter
+        holder.submitCmnt.setOnClickListener {
+            val textIn = holder.comment.text
+
+            //Open text input
+            if(textIn.isNullOrEmpty()) {
+                Toast.makeText(holder.context,"Comment must not be empty!", Toast.LENGTH_SHORT).show()
+            } else {
+                val nonNullText = textIn.toString()
+                api.postStatus(credential, nonNullText, post.id).enqueue(object :
+                    Callback<Status> {
+                    override fun onFailure(call: Call<Status>, t: Throwable) {
+                        Log.e("COMMENT ERROR", t.toString())
+                        Toast.makeText(holder.context,"Comment error!", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                        //Check that the received response code is valid
+                        if(response.code() == 200) {
+                            val resp = response.body()!!
+                            holder.commentIn.visibility = View.GONE
+
+                            //Add the comment to the comment section
+                            post.addComment(holder.context, holder.commentCont, resp.account, resp.content)
+
+                            Toast.makeText(holder.context,"Comment: \"$textIn\" posted!", Toast.LENGTH_SHORT).show()
+                            Log.e("COMMENT SUCCESS", "posted: $textIn")
+                        } else {
+                            Log.e("ERROR_CODE", response.code().toString())
+                        }
+                    }
+                })
+            }
+        }
     }
 
     enum class Visibility : Serializable {
