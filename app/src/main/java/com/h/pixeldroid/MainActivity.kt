@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+<<<<<<< HEAD
         preferences = getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
@@ -108,6 +109,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             super.onBackPressed()
         }
+=======
+        val button_login = findViewById<Button>(R.id.button_start_login)
+        button_login.setOnClickListener((View.OnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent) }))
+
+        val button = findViewById<Button>(R.id.button)
+        button.setOnClickListener((View.OnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent) }))
+
+        val button_camera = findViewById<Button>(R.id.button_camera)
+        button_camera.setOnClickListener((View.OnClickListener {
+            val intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent) }))
+>>>>>>> 4e13d04... added camera activity accessible from main activity
     }
 
 }
