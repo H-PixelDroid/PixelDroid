@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.post_fragment.view.*
 
 
