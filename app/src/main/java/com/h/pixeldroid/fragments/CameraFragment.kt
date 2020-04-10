@@ -35,6 +35,7 @@ class CameraFragment : Fragment() {
 
     /* Entities necessary to the stream : */
     private lateinit var textureView: TextureView
+    private lateinit var surface    : SurfaceTexture
 
     /* Entities necessary to the photo capture */
     private lateinit var pictureRequestBuilder: CaptureRequest.Builder
@@ -45,10 +46,11 @@ class CameraFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        return inflater.inflate(R.layout.fragment_camera, container, false)
+    }
 
-        /* Views */
-
-        val view = inflater.inflate(R.layout.fragment_camera, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Get the textureView which displays the camera's stream and set up its listener :
         // it allows us to be sure the textureView is correctly set up before performing any action
@@ -65,10 +67,9 @@ class CameraFragment : Fragment() {
 
         val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
         takePictureButton.setOnClickListener{
-                takePicture()
+            takePicture()
         }
 
-        return view // and start the stream building flow
     }
 
     private val textureListener = object : TextureView.SurfaceTextureListener {
@@ -77,6 +78,7 @@ class CameraFragment : Fragment() {
             width: Int,
             height: Int
         ) {
+            this@CameraFragment.surface = surface
             openCamera(CameraCharacteristics.LENS_FACING_FRONT)
         }
 
@@ -136,7 +138,7 @@ class CameraFragment : Fragment() {
             try {
                 /* Now that the camera is available, start a stream on the textureView */
                 cameraDevice.createCaptureSession(
-                    listOf(Surface(textureView.surfaceTexture)),
+                    listOf(Surface(surface)),
                     previewSessionCallback,
                     null
                 )
@@ -166,7 +168,7 @@ class CameraFragment : Fragment() {
             try {
                 /* Build the stream with a flow of requests */
                 val streamRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-                streamRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
+                streamRequestBuilder.addTarget(Surface(surface))
                 session.setRepeatingRequest(streamRequestBuilder.build(), null, null)
 
             } catch (e: CameraAccessException) {
