@@ -28,7 +28,7 @@ data class Status(
     val visibility: Visibility,
     val sensitive: Boolean,
     val spoiler_text: String,
-    val media_attachments: List<Attachment>,
+    val media_attachments: List<Attachment>?,
     val application: Application,
     //Rendering attributes
     val mentions: List<Mention>,
@@ -61,9 +61,9 @@ data class Status(
         const val POST_FRAG_TAG = "postFragTag"
     }
 
-    fun getPostUrl() : String? = media_attachments.getOrNull(0)?.url
+    fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
     fun getProfilePicUrl() : String? = account.avatar
-    fun getPostPreviewURL() : String? = media_attachments.getOrNull(0)?.preview_url
+    fun getPostPreviewURL() : String? = media_attachments?.getOrNull(0)?.preview_url
 
     fun getDescription() : CharSequence {
         val description = content as CharSequence
