@@ -130,27 +130,12 @@ data class Status(
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
     }
 
-    fun addComment(context: Context, commentContainer: LinearLayout) {
+    fun addComment(context: Context, commentContainer: LinearLayout, commentAccount: Account, commentContent: String) {
         //Create UI views
         val container = CardView(context)
         val layout = LinearLayout(context)
         val comment = TextView(context)
         val user = TextView(context)
-
-        //Set layout constraints and content
-        container.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        container.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        layout.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        layout.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        user.text = account.username
-        user.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        user.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        (user.layoutParams as LinearLayout.LayoutParams).weight = 8f
-        user.typeface = Typeface.DEFAULT_BOLD
-        comment.text = content
-        comment.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        comment.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
 
         //Create comment view hierarchy
         layout.addView(user)
@@ -158,6 +143,24 @@ data class Status(
         container.addView(layout)
 
         commentContainer.addView(container)
+
+        //Set an id for the created comment (useful for testing)
+        container.id = R.id.comment
+
+        //Set layout constraints and content
+        container.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        container.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        layout.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        layout.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        user.text = commentAccount.username
+        user.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        user.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        (user.layoutParams as LinearLayout.LayoutParams).weight = 8f
+        user.typeface = Typeface.DEFAULT_BOLD
+        comment.text = commentContent
+        comment.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        comment.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
     }
 
     enum class Visibility : Serializable {

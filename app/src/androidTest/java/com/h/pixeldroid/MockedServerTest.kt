@@ -277,5 +277,18 @@ class MockedServerTest {
         onView(withId(R.id.commentIn))
             .check(matches(hasDescendant(withHint("Comment"))))
     }
+
+    @Test
+    fun clickingViewCommentShowsTheComments() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+        //Open the comment section
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+                (0, clickChildViewWithId(R.id.ViewComments)))
+        Thread.sleep(1000)
+        onView(withId(R.id.commentContainer))
+            .check(matches(hasDescendant(withId(R.id.comment))))
+    }
 }
 

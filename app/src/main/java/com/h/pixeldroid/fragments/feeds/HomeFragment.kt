@@ -182,7 +182,12 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
 
                                 //Create the new views for each comment
                                 for (status in statuses) {
-                                    post.addComment(context, holder.commentCont)
+                                    post.addComment(
+                                        context,
+                                        holder.commentCont,
+                                        status.account,
+                                        status.content
+                                    )
                                 }
                             } else {
                                 Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")

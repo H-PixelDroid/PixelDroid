@@ -51,24 +51,22 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
     ): View? {
         val view = inflater.inflate(R.layout.fragment_feed, container, false)
 
+        //Initialize lateinit fields that are needed as soon as the view is created
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         loadingIndicator = view.findViewById(R.id.progressBar)
         list = swipeRefreshLayout.list
-        // Set the adapter
+        preferences = requireActivity().getSharedPreferences(
+            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
+        )
         list.layoutManager = LinearLayoutManager(context)
+        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
+        accessToken = preferences.getString("accessToken", "")
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        preferences = requireActivity().getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-        )
-
-        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        accessToken = preferences.getString("accessToken", "")
 
         swipeRefreshLayout.setOnRefreshListener {
             //by invalidating data, loadInitial will be called again
