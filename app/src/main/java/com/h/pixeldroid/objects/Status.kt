@@ -18,6 +18,12 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.StatusUtils.Companion.addComment
+import com.h.pixeldroid.utils.StatusUtils.Companion.likePostCall
+import com.h.pixeldroid.utils.StatusUtils.Companion.postComment
+import com.h.pixeldroid.utils.StatusUtils.Companion.retrieveComments
+import com.h.pixeldroid.utils.StatusUtils.Companion.toggleCommentInput
+import com.h.pixeldroid.utils.StatusUtils.Companion.unLikePostCall
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -139,44 +145,6 @@ data class Status(
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
     }
 
-    fun addComment(context: Context, commentContainer: LinearLayout, commentAccount: Account, commentContent: String) {
-        //Create UI views
-        val container = CardView(context)
-        val layout = LinearLayout(context)
-        val comment = TextView(context)
-        val user = TextView(context)
-
-        //Create comment view hierarchy
-        layout.addView(user)
-        layout.addView(comment)
-        container.addView(layout)
-
-        commentContainer.addView(container)
-
-        //Set an id for the created comment (useful for testing)
-        container.id = R.id.comment
-
-        //Set overall margin
-        val containerParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        containerParams.setMargins(20, 10, 20, 10)
-        container.layoutParams = containerParams
-
-        //Set layout constraints and content
-        container.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        container.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        layout.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        layout.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        user.text = commentAccount.username
-        user.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        user.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        (user.layoutParams as LinearLayout.LayoutParams).weight = 8f
-        user.typeface = Typeface.DEFAULT_BOLD
-        comment.text = commentContent
-        comment.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        comment.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
-    }
-
     fun activateLiker(
         holder : ViewHolder,
         api: PixelfedAPI,
@@ -185,46 +153,11 @@ data class Status(
         //Activate the liker
         holder.liker.setOnClickListener {
             if (holder.isLiked) {
-                api.unlikePost(credential, id).enqueue(object : Callback<Status> {
-                    override fun onFailure(call: Call<Status>, t: Throwable) {
-                        Log.e("UNLIKE ERROR", t.toString())
-                    }
-
-                    override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                        if(response.code() == 200) {
-                            val resp = response.body()!!
-
-                            //Update shown like count and internal like toggle
-                            holder.nlikes.text = resp.getNLikes()
-                            holder.isLiked = resp.favourited
-                        } else {
-                            Log.e("RESPOSE_CODE", response.code().toString())
-                        }
-
-                    }
-
-                })
-
+                //Unlike the post
+                unLikePostCall(holder, api, credential, this)
             } else {
-                api.likePost(credential, id).enqueue(object : Callback<Status> {
-                    override fun onFailure(call: Call<Status>, t: Throwable) {
-                        Log.e("LIKE ERROR", t.toString())
-                    }
-
-                    override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                        if(response.code() == 200) {
-                            val resp = response.body()!!
-
-                            //Update shown like count and internal like toggle
-                            holder.nlikes.text = resp.getNLikes()
-                            holder.isLiked = resp.favourited
-                        } else {
-                            Log.e("RESPOSE_CODE", response.code().toString())
-                        }
-                    }
-
-                })
-
+                //like the post
+                likePostCall(holder, api, credential, this)
             }
         }
     }
@@ -241,33 +174,9 @@ data class Status(
             holder.viewComment.text =  "View all ${replies_count} comments..."
             holder.viewComment.setOnClickListener {
                 holder.viewComment.visibility = View.GONE
-                api.statusComments(id, credential).enqueue(object :
-                    Callback<com.h.pixeldroid.objects.Context> {
-                    override fun onFailure(call: Call<com.h.pixeldroid.objects.Context>, t: Throwable) {
-                        Log.e("COMMENT FETCH ERROR", t.toString())
-                    }
 
-                    override fun onResponse(
-                        call: Call<com.h.pixeldroid.objects.Context>,
-                        response: Response<com.h.pixeldroid.objects.Context>
-                    ) {
-                        if(response.code() == 200) {
-                            val statuses = response.body()!!.descendants
-
-                            //Create the new views for each comment
-                            for (status in statuses) {
-                                addComment(
-                                    holder.context,
-                                    holder.commentCont,
-                                    status.account,
-                                    status.content
-                                )
-                            }
-                        } else {
-                            Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")
-                        }
-                    }
-                })
+                //Retrieve the comments
+                retrieveComments(holder, api, credential, this)
             }
         }
     }
@@ -278,46 +187,18 @@ data class Status(
         credential: String
     ) {
         //Toggle comment button
-        holder.commenter.setOnClickListener {
-            when(holder.commentIn.visibility) {
-                View.VISIBLE -> holder.commentIn.visibility = View.GONE
-                View.INVISIBLE -> holder.commentIn.visibility = View.VISIBLE
-                View.GONE -> holder.commentIn.visibility = View.VISIBLE
-            }
-        }
+        toggleCommentInput(holder)
 
         //Activate commenter
         holder.submitCmnt.setOnClickListener {
             val textIn = holder.comment.text
-
             //Open text input
             if(textIn.isNullOrEmpty()) {
                 Toast.makeText(holder.context,"Comment must not be empty!", Toast.LENGTH_SHORT).show()
             } else {
-                val nonNullText = textIn.toString()
-                api.postStatus(credential, nonNullText, id).enqueue(object :
-                    Callback<Status> {
-                    override fun onFailure(call: Call<Status>, t: Throwable) {
-                        Log.e("COMMENT ERROR", t.toString())
-                        Toast.makeText(holder.context,"Comment error!", Toast.LENGTH_SHORT).show()
-                    }
 
-                    override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                        //Check that the received response code is valid
-                        if(response.code() == 200) {
-                            val resp = response.body()!!
-                            holder.commentIn.visibility = View.GONE
-
-                            //Add the comment to the comment section
-                            addComment(holder.context, holder.commentCont, resp.account, resp.content)
-
-                            Toast.makeText(holder.context,"Comment: \"$textIn\" posted!", Toast.LENGTH_SHORT).show()
-                            Log.e("COMMENT SUCCESS", "posted: $textIn")
-                        } else {
-                            Log.e("ERROR_CODE", response.code().toString())
-                        }
-                    }
-                })
+                //Post the comment
+                postComment(holder, api, credential, this)
             }
         }
     }
