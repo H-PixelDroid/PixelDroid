@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.OrientationEventListener.ORIENTATION_UNKNOWN
+import android.view.animation.AlphaAnimation
 import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
@@ -32,6 +33,8 @@ class CameraFragment : Fragment() {
 
     private lateinit var        manager: CameraManager
     private lateinit var   cameraDevice: CameraDevice
+
+    private val buttonClick = AlphaAnimation(1f, 0.8f) // Triggered when a photo is taken
 
     /* Entities necessary to the stream : */
     private lateinit var textureView: TextureView
@@ -181,6 +184,7 @@ class CameraFragment : Fragment() {
     /* START of picture capture flow */
 
     private fun takePicture() {
+        requireView().startAnimation(buttonClick)
 
         /* Get output dimensions of the current camera */
         val characteristics = manager.getCameraCharacteristics(cameraDevice.id)
