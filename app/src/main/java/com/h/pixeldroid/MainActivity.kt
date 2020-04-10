@@ -17,7 +17,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.feeds.HomeFragment
-import com.h.pixeldroid.fragments.MyProfileFragment
+import com.h.pixeldroid.fragments.ProfileFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -46,10 +46,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             
             val tabs = arrayOf(
                 HomeFragment(),
-                               Fragment(),
-                               CameraFragment(),
+                Fragment(),
+                CameraFragment(),
                 NotificationsFragment(),
-                               MyProfileFragment())
+                ProfileFragment()
+            )
 
             setupTabs(tabs)
         }

@@ -2,8 +2,14 @@ package com.h.pixeldroid.objects
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import com.h.pixeldroid.ProfileActivity
+import com.h.pixeldroid.R
+import com.h.pixeldroid.utils.ImageConverter
 import java.io.Serializable
 
 /*
@@ -47,6 +53,30 @@ data class Account(
                 val intent = Intent(context, ProfileActivity::class.java)
                 intent.putExtra(Account.ACCOUNT_TAG, this)
                 startActivity(context, intent, null)
+        }
+        // Populate myProfile page with user's data
+        fun setContent(view: View) {
+                val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)
+                ImageConverter.setRoundImageFromURL(view, this.avatar, profilePicture)
+
+                val description = view.findViewById<TextView>(R.id.descriptionTextView)
+                description.text = this.note
+
+                val accountName = view.findViewById<TextView>(R.id.accountNameTextView)
+                accountName.text = this.username
+                accountName.setTypeface(null, Typeface.BOLD)
+
+                val nbPosts = view.findViewById<TextView>(R.id.nbPostsTextView)
+                nbPosts.text = "${this.statuses_count}\nPosts"
+                nbPosts.setTypeface(null, Typeface.BOLD)
+
+                val nbFollowers = view.findViewById<TextView>(R.id.nbFollowersTextView)
+                nbFollowers.text = "${this.followers_count}\nFollowers"
+                nbFollowers.setTypeface(null, Typeface.BOLD)
+
+                val nbFollowing = view.findViewById<TextView>(R.id.nbFollowingTextView)
+                nbFollowing.text = "${this.following_count}\nFollowing"
+                nbFollowing.setTypeface(null, Typeface.BOLD)
         }
 }
 
