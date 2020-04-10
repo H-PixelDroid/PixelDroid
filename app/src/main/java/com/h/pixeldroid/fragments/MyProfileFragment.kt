@@ -38,14 +38,18 @@ class MyProfileFragment : Fragment() {
         preferences = this.activity!!.getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
-        val view = inflater.inflate(R.layout.fragment_my_profile, container, false)
+        val view = inflater.inflate(R.layout.activity_profile, container, false)
 
         // Edit button redirects to pixelfed's "edit account" page
         val editButton: Button = view.findViewById(R.id.editButton)
+        editButton.visibility = View.VISIBLE
+        val followButton: Button = view.findViewById(R.id.followButton)
+        followButton.visibility = View.GONE
+
         editButton.setOnClickListener((View.OnClickListener { onClickEditButton() }))
 
         // Set RecyclerView as a grid with 3 columns
-        recycler = view.findViewById(R.id.myProfilePostsRecyclerView)
+        recycler = view.findViewById(R.id.profilePostsRecyclerView)
         recycler.layoutManager = GridLayoutManager(context, 3)
         adapter = ProfilePostsRecyclerViewAdapter(context!!)
         recycler.adapter = adapter
@@ -65,7 +69,7 @@ class MyProfileFragment : Fragment() {
                     if(response.code() == 200) {
                         val account = response.body()!!
 
-                        setContent(view, account)
+                        account.setContent(view)
 
                         // Populate profile page with user's posts
                         pixelfedAPI.accountPosts("Bearer $accessToken", account_id = account.id).enqueue(object : Callback<List<Status>> {
@@ -94,31 +98,6 @@ class MyProfileFragment : Fragment() {
                     Log.e("ProfileFragment:", t.toString())
                 }
             })
-    }
-
-    // Populate myProfile page with user's data
-    private fun setContent(view: View, account: Account) {
-        val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)
-        setRoundImageFromURL(view, account.avatar, profilePicture)
-
-        val description = view.findViewById<TextView>(R.id.descriptionTextView)
-        description.text = account.note
-
-        val accountName = view.findViewById<TextView>(R.id.accountNameTextView)
-        accountName.text = account.username
-        accountName.setTypeface(null, Typeface.BOLD)
-
-        val nbPosts = view.findViewById<TextView>(R.id.nbPostsTextView)
-        nbPosts.text = "${account.statuses_count}\nPosts"
-        nbPosts.setTypeface(null, Typeface.BOLD)
-
-        val nbFollowers = view.findViewById<TextView>(R.id.nbFollowersTextView)
-        nbFollowers.text = "${account.followers_count}\nFollowers"
-        nbFollowers.setTypeface(null, Typeface.BOLD)
-
-        val nbFollowing = view.findViewById<TextView>(R.id.nbFollowingTextView)
-        nbFollowing.text = "${account.following_count}\nFollowing"
-        nbFollowing.setTypeface(null, Typeface.BOLD)
     }
 
     private fun onClickEditButton() {

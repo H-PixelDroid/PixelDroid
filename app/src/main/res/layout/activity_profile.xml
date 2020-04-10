@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    android:layout_height="match_parent">
 
 
     <LinearLayout
+        android:id="@+id/linearlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -19,9 +19,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="20dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="20dp">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/profilePictureImageView"
@@ -68,8 +68,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp">
 
             <TextView
@@ -84,10 +84,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:id="@+id/descriptionTextView"
@@ -100,8 +100,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="50dp"
             android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
             android:layout_marginBottom="15dp">
 
             <Button
@@ -112,6 +112,16 @@
                 android:text="Follow"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/editButton"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:text="Edit profile"
+                android:textColor="@color/cardview_light_background"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -147,15 +157,15 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profilePostsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/profilePostsRecyclerView"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="16dp"
+            android:layout_marginRight="5dp"
             app:layoutManager="LinearLayoutManager"
             tools:context=".fragments.MyProfileFragment"
-            tools:listitem="@layout/fragment_profile_posts"/>
+            tools:listitem="@layout/fragment_profile_posts" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
