@@ -129,9 +129,8 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.username)).perform(ViewActions.click())
-        Thread.sleep(10000)
-        onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
-
+        Thread.sleep(1000)
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Geonosys")))
     }
 
     @Test
