@@ -3,6 +3,7 @@ package com.h.pixeldroid
 import android.Manifest
 import android.R
 import android.content.Context
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.core.app.ActivityScenario
@@ -42,7 +43,7 @@ class CameraTest {
     }
 
     @Test
-    fun  testTakePictureButton() {
+    fun  takePictureButton() {
         val scenario = launchFragmentInContainer<CameraFragment>()
         scenario.onFragment { fragment ->
         fragment.uploadPictureButton.performClick()
@@ -50,10 +51,13 @@ class CameraTest {
     }
 
     @Test
-    fun testUploadPictureButton() {
+    fun uploadPictureButton() {
         val scenario = launchFragmentInContainer<CameraFragment>()
         scenario.onFragment { fragment ->
             fragment.uploadPictureButton.performClick()
+            assert(!fragment.isVisible)
+            assert(fragment.requireActivity().window.decorView.rootView.isVisible)
+            assert(fragment.requireActivity().isActivityTransitionRunning)
         }
     }
 }
