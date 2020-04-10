@@ -35,7 +35,7 @@ class MyProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        preferences = this.activity!!.getSharedPreferences(
+        preferences = this.requireActivity().getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
         val view = inflater.inflate(R.layout.fragment_my_profile, container, false)
@@ -47,7 +47,7 @@ class MyProfileFragment : Fragment() {
         // Set RecyclerView as a grid with 3 columns
         recycler = view.findViewById(R.id.myProfilePostsRecyclerView)
         recycler.layoutManager = GridLayoutManager(context, 3)
-        adapter = ProfilePostsRecyclerViewAdapter(context!!)
+        adapter = ProfilePostsRecyclerViewAdapter(requireContext())
         recycler.adapter = adapter
 
         return view

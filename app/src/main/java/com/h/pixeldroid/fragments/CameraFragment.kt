@@ -12,10 +12,10 @@ import android.widget.Button
 import android.widget.ImageView
 import com.h.pixeldroid.R
 
-const val PICK_IMAGE_REQUEST = 1
-const val TAG = "Camera Fragment"
-
 class CameraFragment : Fragment() {
+
+    private val PICK_IMAGE_REQUEST = 1
+    private val TAG = "Camera Fragment"
 
     private var uploadedPictureView: ImageView? = null
 

@@ -37,7 +37,7 @@ class ProfilePostsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile_posts_list, container, false)
-        preferences = activity!!.getSharedPreferences(
+        preferences = requireActivity().getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
         pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
@@ -50,7 +50,7 @@ class ProfilePostsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = ProfilePostsRecyclerViewAdapter(context!!)
+                adapter = ProfilePostsRecyclerViewAdapter(requireContext())
             }
         }
         return view

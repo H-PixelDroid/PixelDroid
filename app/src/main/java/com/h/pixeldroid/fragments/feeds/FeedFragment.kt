@@ -25,8 +25,6 @@ import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.FeedContent
-import com.h.pixeldroid.objects.Status
-import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,18 +57,18 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
         // Set the adapter
         list.layoutManager = LinearLayoutManager(context)
 
-        preferences = activity!!.getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-        )
-
-        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        accessToken = preferences.getString("accessToken", "")
-
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        preferences = requireActivity().getSharedPreferences(
+            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
+        )
+
+        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
+        accessToken = preferences.getString("accessToken", "")
 
         swipeRefreshLayout.setOnRefreshListener {
             //by invalidating data, loadInitial will be called again
@@ -78,6 +76,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
         }
 
     }
+
 
     inner class FeedDataSource(private val makeInitialCall: (Int) -> Call<List<T>>,
                                private val makeAfterCall: (Int, String) -> Call<List<T>>
