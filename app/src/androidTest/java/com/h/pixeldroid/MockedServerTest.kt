@@ -312,7 +312,7 @@ class MockedServerTest {
                 (0, clickChildViewWithId(R.id.commenter)))
         Thread.sleep(1000)
         onView(withId(R.id.commentIn))
-            .check(matches(hasDescendant(withHint("Comment"))))
+            .check(matches(hasDescendant(withId(R.id.editComment))))
     }
 
     @Test
