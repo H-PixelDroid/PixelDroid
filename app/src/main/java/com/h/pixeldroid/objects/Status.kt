@@ -1,10 +1,14 @@
 package com.h.pixeldroid.objects
 
+import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
 import com.h.pixeldroid.utils.ImageConverter
@@ -113,13 +117,7 @@ data class Status(
         nshares.text = this.getNShares()
         nshares.setTypeface(null, Typeface.BOLD)
 
-        //Setup post and profile images
-        ImageConverter.setImageViewFromURL(
-            rootView,
-            getPostUrl(),
-            rootView.findViewById(R.id.postPicture)
-        )
-
+        //Setup images
         request.load(this.getPostUrl()).into(postPic)
         ImageConverter.setRoundImageFromURL(
             rootView,
@@ -127,6 +125,39 @@ data class Status(
             profilePic
         )
         profilePic.setOnClickListener { account.openProfile(rootView.context) }
+
+        //Set comment initial visibility
+        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
+    }
+
+    fun addComment(context: Context, commentContainer: LinearLayout) {
+        //Create UI views
+        val container = CardView(context)
+        val layout = LinearLayout(context)
+        val comment = TextView(context)
+        val user = TextView(context)
+
+        //Set layout constraints and content
+        container.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        container.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        layout.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        layout.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        user.text = account.username
+        user.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        user.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        (user.layoutParams as LinearLayout.LayoutParams).weight = 8f
+        user.typeface = Typeface.DEFAULT_BOLD
+        comment.text = content
+        comment.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        comment.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
+
+        //Create comment view hierarchy
+        layout.addView(user)
+        layout.addView(comment)
+        container.addView(layout)
+
+        commentContainer.addView(container)
     }
 
     enum class Visibility : Serializable {

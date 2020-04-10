@@ -334,27 +334,5 @@ class MockedServerTest {
         onView(withId(R.id.commentIn))
             .check(matches(hasDescendant(withHint("Comment"))))
     }
-
-    /*@Test
-    fun postingACommentClosesCommentInput() {
-        ActivityScenario.launch(MainActivity::class.java)
-        Thread.sleep(1000)
-        onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
-                (0, clickChildViewWithId(R.id.commenter)))
-        Thread.sleep(1000)
-        onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
-                (0, replaceText("Test")))
-        closeSoftKeyboard()
-
-        //Submit the comment
-        onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
-                (0, clickChildViewWithId(R.id.submitComment)))
-        Thread.sleep(1000)
-        onView(withId(R.id.commentIn))
-            .check(matches(not(hasDescendant(withHint("Comment")))))
-    }*/
 }
 

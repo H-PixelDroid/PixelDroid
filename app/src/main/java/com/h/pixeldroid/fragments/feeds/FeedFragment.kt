@@ -43,7 +43,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
 
     protected lateinit var list : RecyclerView
     protected lateinit var adapter : FeedsRecyclerViewAdapter<T, VH>
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    protected lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var loadingIndicator: ProgressBar
 
     override fun onCreateView(

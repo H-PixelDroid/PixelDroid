@@ -57,7 +57,6 @@ class AppDatabaseTest {
             //sleep a bit to not have the weird concurrency bugs?
             Thread.sleep(10)
             DatabaseUtils.insertAllPosts(db!!, PostEntity(i, i.toString(), date= Calendar.getInstance().time))
-            Thread.sleep(100)
         }
 
         Assert.assertEquals("1", postDao?.getById(1)!!.domain)

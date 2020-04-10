@@ -1,7 +1,6 @@
 package com.h.pixeldroid.fragments.feeds
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -9,8 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.cardview.widget.CardView
+import android.widget.ImageButton
+import android.widget.Toast
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
@@ -23,12 +25,8 @@ import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.R
-import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Context
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.ImageConverter
-import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,7 +47,7 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        adapter = HomeRecyclerViewAdapter(pixelfedAPI, "Bearer $accessToken")
+        adapter = HomeRecyclerViewAdapter()
         list.adapter = adapter
 
 
@@ -92,9 +90,10 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
-    inner class HomeRecyclerViewAdapter(private val api: PixelfedAPI, private val credential : String)
+    inner class HomeRecyclerViewAdapter()
         : FeedsRecyclerViewAdapter<Status, HomeRecyclerViewAdapter.ViewHolder>() {
-
+        private val api = pixelfedAPI
+        private val credential = "Bearer $accessToken"
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.post_fragment, parent, false)
@@ -112,45 +111,10 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             holder.profilePic.maxHeight = metrics.heightPixels
             holder.postPic.maxHeight = metrics.heightPixels
 
-            //Set the two images
-            ImageConverter.setRoundImageFromURL(
-                holder.postView,
-                post.getProfilePicUrl(),
-                holder.profilePic!!
-            )
+            //Setup the post layout
+            post.setupPost(holder.postView, picRequest, holder.postPic, holder.profilePic)
 
-            //Limit the height of the different images
-            holder.profilePic?.maxHeight = metrics.heightPixels
-            holder.profilePic?.setOnClickListener{ post.account.openProfile(context) }
-            holder.postPic.maxHeight = metrics.heightPixels
-
-            //Set the two images
-            ImageConverter.setRoundImageFromURL(
-                holder.postView,
-                post.getProfilePicUrl(),
-                holder.profilePic!!
-            )
-            picRequest.load(post.getPostUrl()).into(holder.postPic)
-
-            //Set the the text views
-            holder.username.text = post.getUsername()
-            holder.username.setTypeface(null, Typeface.BOLD)
-            holder.username.setOnClickListener{ post.account.openProfile(context) }
-
-            holder.usernameDesc.text = post.getUsername()
-            holder.usernameDesc.setTypeface(null, Typeface.BOLD)
-
-            holder.description.text = post.getDescription()
-
-            holder.nlikes.text = post.getNLikes()
-            holder.nlikes.setTypeface(null, Typeface.BOLD)
-
-            holder.nshares.text = post.getNShares()
-            holder.nshares.setTypeface(null, Typeface.BOLD)
-
-            Log.e("Credential", credential)
-            Log.e("POST_ID", post.id)
-
+            //Set all of the different onclick listeners
             //Activate the liker
             holder.liker.setOnClickListener {
                 if (post.favourited) {
@@ -203,7 +167,7 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
                 holder.viewComment.text =  "View all ${post.replies_count} comments..."
                 holder.viewComment.setOnClickListener {
                     holder.viewComment.visibility = View.GONE
-                    api.statusComments(post.id, credential).enqueue(object : Callback<Context> {
+                    api.statusComments(post.id, credential).enqueue(object : Callback<com.h.pixeldroid.objects.Context> {
                         override fun onFailure(call: Call<com.h.pixeldroid.objects.Context>, t: Throwable) {
                             Log.e("COMMENT FETCH ERROR", t.toString())
                         }
@@ -218,31 +182,7 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
 
                                 //Create the new views for each comment
                                 for (status in statuses) {
-                                    //Create UI views
-                                    val container = CardView(context)
-                                    val layout = LinearLayout(context)
-                                    val comment = TextView(context)
-                                    val user = TextView(context)
-
-                                    //Set layout constraints and content
-                                    container.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                                    container.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                                    layout.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                                    layout.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                                    user.text = status.account.username
-                                    user.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                                    user.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                                    (user.layoutParams as LinearLayout.LayoutParams).weight = 8f
-                                    user.typeface = Typeface.DEFAULT_BOLD
-                                    comment.text = status.content
-                                    comment.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                                    comment.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                                    (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
-
-                                    //Create comment view hierarchy
-                                    layout.addView(user)
-                                    layout.addView(comment)
-                                    container.addView(layout)
+                                    post.addComment(context, holder.commentCont)
                                 }
                             } else {
                                 Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")
@@ -251,9 +191,6 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
                     })
                 }
             }
-
-            //Set comment initial visibility
-            holder.commentIn.visibility = View.GONE
 
             //Toggle comment button
             holder.commenter.setOnClickListener {
