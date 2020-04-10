@@ -281,8 +281,8 @@ class CameraFragment : Fragment() {
 
         // Reverse device orientation for front-facing cameras
         val facingFront =
-            c[CameraCharacteristics.LENS_FACING] === CameraCharacteristics.LENS_FACING_FRONT
-        if (facingFront) deviceOrientation = -deviceOrientation
+            c[CameraCharacteristics.LENS_FACING] == CameraCharacteristics.LENS_FACING_FRONT
+        if (facingFront) deviceOrientation = - deviceOrientation
 
         // Calculate desired JPEG orientation relative to camera orientation to make
         // the image upright relative to the device orientation
