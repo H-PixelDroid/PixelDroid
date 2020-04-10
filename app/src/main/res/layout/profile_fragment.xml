@@ -168,7 +168,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="5dp"
                 app:layoutManager="LinearLayoutManager"
-                tools:context=".fragments.MyProfileFragment"
+                tools:context=".fragments.ProfileFragment"
                 tools:listitem="@layout/fragment_profile_posts" />
         </LinearLayout>
     </ScrollView>
