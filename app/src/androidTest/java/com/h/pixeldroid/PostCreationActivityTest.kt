@@ -2,10 +2,6 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
-import android.net.Uri
-import android.provider.MediaStore
-import androidx.core.net.toUri
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -20,7 +16,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
-import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class PostCreationActivityTest {

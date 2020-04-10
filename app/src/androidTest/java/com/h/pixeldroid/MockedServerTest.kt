@@ -1,18 +1,10 @@
 package com.h.pixeldroid
 
-import android.app.Activity
 import android.content.Context
-import android.os.SystemClock
-import android.content.Intent
-import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.DrawerActions
-import androidx.test.espresso.contrib.DrawerMatchers
-import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -20,12 +12,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.testUtility.MockServer
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
-import org.hamcrest.CoreMatchers
-import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -127,7 +113,7 @@ class MockedServerTest {
 
         onView(withId(R.id.username)).perform(ViewActions.click())
         Thread.sleep(1000)
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("Geonosys")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Dante")))
     }
 
     @Test
