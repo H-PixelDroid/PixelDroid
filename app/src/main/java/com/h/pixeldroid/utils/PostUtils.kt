@@ -2,6 +2,7 @@ package com.h.pixeldroid.utils
 
 import android.graphics.Typeface
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -14,6 +15,7 @@ import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Context
 import com.h.pixeldroid.objects.Status
+import kotlinx.android.synthetic.main.comment.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -108,7 +110,7 @@ class PostUtils {
                         holder.commentIn.visibility = View.GONE
 
                         //Add the comment to the comment section
-                        addComment(holder.context, holder.commentCont, resp.account, resp.content)
+                        addComment(holder.context, holder.commentCont, resp.account.username, resp.content)
 
                         Toast.makeText(holder.context,"Comment: \"$textIn\" posted!", Toast.LENGTH_SHORT).show()
                         Log.e("COMMENT SUCCESS", "posted: $textIn")
@@ -119,42 +121,13 @@ class PostUtils {
             })
         }
 
-        fun addComment(context: android.content.Context, commentContainer: LinearLayout, commentAccount: Account, commentContent: String) {
-            //Create UI views
-            val container = CardView(context)
-            val layout = LinearLayout(context)
-            val comment = TextView(context)
-            val user = TextView(context)
+        fun addComment(context: android.content.Context, commentContainer: LinearLayout, commentUsername: String, commentContent: String) {
 
-            //Create comment view hierarchy
-            layout.addView(user)
-            layout.addView(comment)
-            container.addView(layout)
+            val view = LayoutInflater.from(context)
+                .inflate(R.layout.comment, commentContainer, true)
 
-            commentContainer.addView(container)
-
-            //Set an id for the created comment (useful for testing)
-            container.id = R.id.comment
-
-            //Set overall margin
-            val containerParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            containerParams.setMargins(20, 10, 20, 10)
-            container.layoutParams = containerParams
-
-            //Set layout constraints and content
-            container.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            container.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            layout.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            layout.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            user.text = commentAccount.username
-            user.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            user.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            (user.layoutParams as LinearLayout.LayoutParams).weight = 8f
-            user.typeface = Typeface.DEFAULT_BOLD
-            comment.text = commentContent
-            comment.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            comment.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
+            view.user.text = commentUsername
+            view.commentText.text = commentContent
         }
 
         fun retrieveComments(
@@ -178,7 +151,7 @@ class PostUtils {
 
                         //Create the new views for each comment
                         for (status in statuses) {
-                            addComment(holder.context, holder.commentCont, status.account, status.content)
+                            addComment(holder.context, holder.commentCont, status.account.username, status.content)
                         }
                     } else {
                         Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")
