@@ -15,9 +15,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.OrientationEventListener.*
+import android.view.OrientationEventListener.ORIENTATION_UNKNOWN
 import android.widget.Button
-import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -26,15 +25,13 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 
+
 // A fragment that displays a stream coming from either the front or back cameras of the smartphone,
 // and can capture an image from this stream.
 class CameraFragment : Fragment() {
 
-    private lateinit var       manager : CameraManager
+    private lateinit var        manager: CameraManager
     private lateinit var   cameraDevice: CameraDevice
-    private enum class Cameras {
-        FRONT, BACK
-    }
 
     /* Entities necessary to the stream : */
     private lateinit var textureView: TextureView
@@ -80,7 +77,7 @@ class CameraFragment : Fragment() {
             width: Int,
             height: Int
         ) {
-            openCamera(Cameras.FRONT)
+            openCamera(CameraCharacteristics.LENS_FACING_FRONT)
         }
 
         override fun onSurfaceTextureSizeChanged(
@@ -97,10 +94,9 @@ class CameraFragment : Fragment() {
     }
 
 
-    private fun openCamera(cameraId: Cameras) {
+    private fun openCamera(requiredType: Int) {
 
         manager = requireContext().applicationContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
 
         /* Ask for Camera and Write permissions and require them if not granted */
         if (ActivityCompat.checkSelfPermission(requireContext().applicationContext, Manifest.permission.CAMERA)
@@ -111,15 +107,26 @@ class CameraFragment : Fragment() {
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), 200)
-            openCamera(cameraId)
+            openCamera(requiredType)
         }
+
 
         /* Open the camera and enter its state callback */
         try {
-            manager.openCamera(manager.cameraIdList[cameraId.ordinal], previewStateCallback, null)
-        } catch (e : CameraAccessException) {
-            e.printStackTrace()
-        }
+            for(cameraID in manager.cameraIdList) {
+
+                val characteristics: CameraCharacteristics =
+                    manager.getCameraCharacteristics(cameraID)
+                val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+
+                if (facing != null && facing == requiredType)
+                    manager.openCamera(manager.cameraIdList[facing], previewStateCallback, null)
+
+            }
+
+            } catch (e : CameraAccessException) {
+                e.printStackTrace()
+            }
     }
 
     private val previewStateCallback = object : CameraDevice.StateCallback() {
