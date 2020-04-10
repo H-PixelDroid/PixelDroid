@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
@@ -17,6 +18,7 @@ import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -70,7 +72,8 @@ class LoginActivity : AppCompatActivity() {
         } catch (e: IllegalArgumentException) {
             return failedRegistration(getString(R.string.invalid_domain))
         }
-
+        
+        hideKeyboard()
         loadingAnimation(true)
 
         preferences.edit()
@@ -78,6 +81,15 @@ class LoginActivity : AppCompatActivity() {
             .apply()
         registerAppToServer("https://$normalizedDomain")
 
+    }
+    private fun hideKeyboard() {
+        val view = currentFocus
+        if (view != null) {
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                view.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
     }
 
     private fun normalizeDomain(domain: String): String {
