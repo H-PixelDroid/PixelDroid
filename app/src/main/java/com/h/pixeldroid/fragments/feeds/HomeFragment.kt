@@ -114,10 +114,13 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             //Setup the post layout
             post.setupPost(holder.postView, picRequest, holder.postPic, holder.profilePic)
 
+            //Set initial favorite toggle value
+            holder.isLiked = post.favourited
+
             //Set all of the different onclick listeners
             //Activate the liker
             holder.liker.setOnClickListener {
-                if (post.favourited) {
+                if (holder.isLiked) {
                     api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
                         override fun onFailure(call: Call<Status>, t: Throwable) {
                             Log.e("UNLIKE ERROR", t.toString())
@@ -126,10 +129,10 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
                         override fun onResponse(call: Call<Status>, response: Response<Status>) {
                             if(response.code() == 200) {
                                 val resp = response.body()!!
-                                holder.nlikes.text = resp.getNLikes()
-                                Log.e("POST", "unLiked")
-                                Log.e("isLIKE", post.favourited.toString())
 
+                                //Update shown like count and internal like toggle
+                                holder.nlikes.text = resp.getNLikes()
+                                holder.isLiked = resp.favourited
                             } else {
                                 Log.e("RESPOSE_CODE", response.code().toString())
                             }
@@ -147,9 +150,10 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
                         override fun onResponse(call: Call<Status>, response: Response<Status>) {
                             if(response.code() == 200) {
                                 val resp = response.body()!!
+
+                                //Update shown like count and internal like toggle
                                 holder.nlikes.text = resp.getNLikes()
-                                Log.e("POST", "liked")
-                                Log.e("isLIKE", post.favourited.toString())
+                                holder.isLiked = resp.favourited
                             } else {
                                 Log.e("RESPOSE_CODE", response.code().toString())
                             }
@@ -178,7 +182,6 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
                         ) {
                             if(response.code() == 200) {
                                 val statuses = response.body()!!.descendants
-                                Log.e("COMMENT STATUS", statuses.toString())
 
                                 //Create the new views for each comment
                                 for (status in statuses) {
@@ -208,8 +211,6 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
 
             //Activate commenter
             holder.submitCmnt.setOnClickListener {
-                Log.e("ID", post.id)
-                Log.e("ACCESS_TOKEN", credential)
                 val textIn = holder.comment.text
 
                 //Open text input
@@ -257,6 +258,7 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             val commentCont : LinearLayout = postView.findViewById(R.id.commentContainer)
             val commentIn   : LinearLayout = postView.findViewById(R.id.commentIn)
             val viewComment : TextView = postView.findViewById(R.id.ViewComments)
+            var isLiked : Boolean = false
         }
 
         override fun getPreloadItems(position: Int): MutableList<Status> {

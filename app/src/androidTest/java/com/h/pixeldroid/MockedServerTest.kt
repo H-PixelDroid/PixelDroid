@@ -225,11 +225,19 @@ class MockedServerTest {
         //Get initial like count
         val likes = getText(withId(R.id.nlikes))
 
-        //Click comment button and then try to see if the commenter exists
+        //Like the post
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
                 (0, clickChildViewWithId(R.id.liker)))
-        Thread.sleep(1000)
+        Thread.sleep(100)
+        //Unlike the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+                (0, clickChildViewWithId(R.id.liker)))
+        //...
+        Thread.sleep(100)
+
+        //Profit
         onView(withId(R.id.nlikes)).check(matches((withText(likes))))
     }
 
