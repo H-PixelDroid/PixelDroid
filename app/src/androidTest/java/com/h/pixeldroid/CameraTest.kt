@@ -57,7 +57,6 @@ class CameraTest {
             fragment.uploadPictureButton.performClick()
             assert(!fragment.isVisible)
             assert(fragment.requireActivity().window.decorView.rootView.isVisible)
-            assert(fragment.requireActivity().isActivityTransitionRunning)
         }
     }
 }

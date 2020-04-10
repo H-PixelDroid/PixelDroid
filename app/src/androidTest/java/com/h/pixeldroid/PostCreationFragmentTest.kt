@@ -36,8 +36,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PostCreationFragmentTest {
 
-    @get:Rule
-    val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
+   // @get:Rule
+   // val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(30)
@@ -64,11 +64,5 @@ class PostCreationFragmentTest {
         onView(withId(R.id.uploadPictureButton)).perform(click())
         Thread.sleep(1000)
         intended(expectedIntent)
-    }
-
-    @Test
-    fun newPostUiTest() {
-        onView(withId(R.id.uploadPictureButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.takePictureButton)).check(matches(isDisplayed()))
     }
 }
