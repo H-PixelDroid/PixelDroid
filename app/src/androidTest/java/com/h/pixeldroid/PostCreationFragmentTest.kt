@@ -40,7 +40,7 @@ class PostCreationFragmentTest {
     var globalTimeout: Timeout = Timeout.seconds(30)
     @get:Rule
     var runtimePermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
     @get:Rule
     var intentsTestRule: IntentsTestRule<MainActivity> =
         IntentsTestRule(MainActivity::class.java)

@@ -49,16 +49,17 @@ class NewPostFragment : Fragment() {
     }
 
     private fun uploadPicture() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ), 200)
-            return
-        }
+
+//        if (ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//            != PackageManager.PERMISSION_GRANTED)
+//        {
+//            ActivityCompat.requestPermissions(requireActivity(), arrayOf(
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ), 200)
+//            return
+//        }
 
         Intent().apply {
             type = "image/*"
