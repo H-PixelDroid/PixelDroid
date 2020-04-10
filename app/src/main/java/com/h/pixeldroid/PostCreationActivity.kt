@@ -1,6 +1,7 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
@@ -33,14 +34,14 @@ class PostCreationActivity : AppCompatActivity() {
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var preferences: SharedPreferences
 
-    private lateinit var pictureUri: Uri
     private var description: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_creation)
 
-        pictureUri = intent.getParcelableExtra("picture_uri") as Uri
+        val pictureUri: Uri? = intent.getParcelableExtra("picture_uri")
+
         val pictureFrame = findViewById<ImageView>(R.id.post_creation_picture_frame)
         pictureFrame.setImageURI(pictureUri)
 
@@ -58,7 +59,7 @@ class PostCreationActivity : AppCompatActivity() {
 
         // get the description and send the post to PixelFed
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
-            if (setDescription()) upload()
+            if (setDescription()) upload(pictureUri!!)
         }
     }
 
@@ -76,7 +77,7 @@ class PostCreationActivity : AppCompatActivity() {
         return true
     }
 
-    private fun upload() {
+    private fun upload(pictureUri: Uri) {
         val picture: File = File(pictureUri.path!!)
         val rBody: RequestBody = picture.asRequestBody("image/*".toMediaTypeOrNull())
         val part = MultipartBody.Part.createFormData("file", picture.name, rBody)
@@ -104,8 +105,6 @@ class PostCreationActivity : AppCompatActivity() {
     }
 
     private fun post(id: String) {
-        Log.e(TAG, description)
-        Log.e(TAG, id)
         if (id.isEmpty()) return
         pixelfedAPI.status(
             authorization = "Bearer $accessToken",
