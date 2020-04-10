@@ -11,10 +11,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.view.marginStart
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.HomeFragment
+import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
 import retrofit2.Callback
@@ -154,6 +156,11 @@ data class Status(
         //Set an id for the created comment (useful for testing)
         container.id = R.id.comment
 
+        //Set overall margin
+        val containerParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        containerParams.setMargins(20, 10, 20, 10)
+        container.layoutParams = containerParams
+
         //Set layout constraints and content
         container.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
         container.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -170,16 +177,15 @@ data class Status(
         (comment.layoutParams as LinearLayout.LayoutParams).weight = 2f
     }
 
-    fun setOnClickListeners(
-        holder: HomeFragment.HomeRecyclerViewAdapter.ViewHolder,
+    fun activateLiker(
+        holder : ViewHolder,
         api: PixelfedAPI,
-        credential : String,
-        post : Status
+        credential: String
     ) {
         //Activate the liker
         holder.liker.setOnClickListener {
             if (holder.isLiked) {
-                api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
+                api.unlikePost(credential, id).enqueue(object : Callback<Status> {
                     override fun onFailure(call: Call<Status>, t: Throwable) {
                         Log.e("UNLIKE ERROR", t.toString())
                     }
@@ -200,7 +206,7 @@ data class Status(
                 })
 
             } else {
-                api.likePost(credential, post.id).enqueue(object : Callback<Status> {
+                api.likePost(credential, id).enqueue(object : Callback<Status> {
                     override fun onFailure(call: Call<Status>, t: Throwable) {
                         Log.e("LIKE ERROR", t.toString())
                     }
@@ -221,15 +227,21 @@ data class Status(
 
             }
         }
+    }
 
+    fun showComments(
+        holder : ViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
         //Show all comments of a post
-        if (post.replies_count == 0) {
+        if (replies_count == 0) {
             holder.viewComment.text =  "No comments on this post..."
         } else {
-            holder.viewComment.text =  "View all ${post.replies_count} comments..."
+            holder.viewComment.text =  "View all ${replies_count} comments..."
             holder.viewComment.setOnClickListener {
                 holder.viewComment.visibility = View.GONE
-                api.statusComments(post.id, credential).enqueue(object :
+                api.statusComments(id, credential).enqueue(object :
                     Callback<com.h.pixeldroid.objects.Context> {
                     override fun onFailure(call: Call<com.h.pixeldroid.objects.Context>, t: Throwable) {
                         Log.e("COMMENT FETCH ERROR", t.toString())
@@ -244,7 +256,7 @@ data class Status(
 
                             //Create the new views for each comment
                             for (status in statuses) {
-                                post.addComment(
+                                addComment(
                                     holder.context,
                                     holder.commentCont,
                                     status.account,
@@ -258,7 +270,13 @@ data class Status(
                 })
             }
         }
+    }
 
+    fun activateCommenter(
+        holder : ViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
         //Toggle comment button
         holder.commenter.setOnClickListener {
             when(holder.commentIn.visibility) {
@@ -277,7 +295,7 @@ data class Status(
                 Toast.makeText(holder.context,"Comment must not be empty!", Toast.LENGTH_SHORT).show()
             } else {
                 val nonNullText = textIn.toString()
-                api.postStatus(credential, nonNullText, post.id).enqueue(object :
+                api.postStatus(credential, nonNullText, id).enqueue(object :
                     Callback<Status> {
                     override fun onFailure(call: Call<Status>, t: Throwable) {
                         Log.e("COMMENT ERROR", t.toString())
@@ -291,7 +309,7 @@ data class Status(
                             holder.commentIn.visibility = View.GONE
 
                             //Add the comment to the comment section
-                            post.addComment(holder.context, holder.commentCont, resp.account, resp.content)
+                            addComment(holder.context, holder.commentCont, resp.account, resp.content)
 
                             Toast.makeText(holder.context,"Comment: \"$textIn\" posted!", Toast.LENGTH_SHORT).show()
                             Log.e("COMMENT SUCCESS", "posted: $textIn")
