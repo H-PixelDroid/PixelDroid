@@ -216,10 +216,10 @@ class CameraFragment : Fragment() {
             )
         )
 
-        cameraDevice.createCaptureSession(outputSurfaces, picturetateCallback , null);
+        cameraDevice.createCaptureSession(outputSurfaces, pictureStateCallback , null);
     }
 
-    private val picturetateCallback = object : CameraCaptureSession.StateCallback() {
+    private val pictureStateCallback = object : CameraCaptureSession.StateCallback() {
         override fun onConfigured(session: CameraCaptureSession) {
             try {
                 session.capture(pictureRequestBuilder.build(), pictureCaptureListener, null)

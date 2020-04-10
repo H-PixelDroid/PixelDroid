@@ -3,6 +3,7 @@ package com.h.pixeldroid
 import android.Manifest
 import android.R
 import android.content.Context
+import android.hardware.camera2.CameraCharacteristics
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -38,9 +39,6 @@ class CameraTest {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", "http://localhost").apply()
-
-
-
     }
 
     @Test
@@ -59,6 +57,16 @@ class CameraTest {
             fragment.uploadPictureButton.performClick()
             assert(!fragment.isVisible)
             assert(fragment.requireActivity().window.decorView.rootView.isVisible)
+        }
+    }
+
+    @Test
+    fun openCameraAndTakePicture() {
+        val scenario = launchFragmentInContainer<CameraFragment>()
+        scenario.moveToState(Lifecycle.State.CREATED)
+        scenario.onFragment { fragment ->
+            val activity = fragment.requireActivity()
+            fragment.onCreateView(activity.layoutInflater, activity.findViewById(android.R.id.content), null)
         }
     }
 }
