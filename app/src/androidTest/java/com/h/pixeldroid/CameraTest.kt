@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -53,6 +54,7 @@ class CameraTest {
     @Test
     fun uploadPictureButton() {
         val scenario = launchFragmentInContainer<CameraFragment>()
+        scenario.moveToState(Lifecycle.State.CREATED)
         scenario.onFragment { fragment ->
             fragment.uploadPictureButton.performClick()
             assert(!fragment.isVisible)
