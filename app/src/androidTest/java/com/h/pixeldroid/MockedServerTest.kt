@@ -25,6 +25,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.fragments.feeds.HomeFragment
+import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.testUtility.MockServer
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Matcher
@@ -256,12 +257,12 @@ class MockedServerTest {
 
         //Like the post
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
                 (0, clickChildViewWithId(R.id.liker)))
         Thread.sleep(100)
         //Unlike the post
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
                 (0, clickChildViewWithId(R.id.liker)))
         //...
         Thread.sleep(100)
@@ -277,7 +278,7 @@ class MockedServerTest {
 
         //Get initial like count
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
             (0, clickChildViewWithId(R.id.username)))
 
         Thread.sleep(1000)
@@ -293,7 +294,7 @@ class MockedServerTest {
 
         //Get initial like count
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
                 (0, clickChildViewWithId(R.id.profilePic)))
 
         Thread.sleep(1000)
@@ -308,7 +309,7 @@ class MockedServerTest {
         Thread.sleep(1000)
         //Click comment button and then try to see if the commenter exists
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
                 (0, clickChildViewWithId(R.id.commenter)))
         Thread.sleep(1000)
         onView(withId(R.id.commentIn))
@@ -321,7 +322,7 @@ class MockedServerTest {
         Thread.sleep(1000)
         //Open the comment section
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
                 (0, clickChildViewWithId(R.id.ViewComments)))
         Thread.sleep(1000)
         onView(withId(R.id.commentContainer))
@@ -335,7 +336,7 @@ class MockedServerTest {
 
         //Open the comment section
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
                 (0, clickChildViewWithId(R.id.commenter)))
 
         onView(withId(R.id.list)).perform(slowSwipeUp(true))
@@ -344,10 +345,10 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
                 (0, typeTextInViewWithId(R.id.editComment, "test")))
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<HomeFragment.HomeRecyclerViewAdapter.ViewHolder>
+            .perform(actionOnItemAtPosition<ViewHolder>
                 (0, clickChildViewWithId(R.id.submitComment)))
 
         Thread.sleep(1000)

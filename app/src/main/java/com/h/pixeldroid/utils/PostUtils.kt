@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StatusUtils {
+class PostUtils {
     companion object {
         fun toggleCommentInput(
             holder : ViewHolder

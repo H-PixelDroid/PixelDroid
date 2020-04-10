@@ -1,32 +1,22 @@
 package com.h.pixeldroid.objects
 
-import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
-import androidx.core.view.marginStart
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.utils.ImageConverter
-import com.h.pixeldroid.utils.StatusUtils.Companion.addComment
-import com.h.pixeldroid.utils.StatusUtils.Companion.likePostCall
-import com.h.pixeldroid.utils.StatusUtils.Companion.postComment
-import com.h.pixeldroid.utils.StatusUtils.Companion.retrieveComments
-import com.h.pixeldroid.utils.StatusUtils.Companion.toggleCommentInput
-import com.h.pixeldroid.utils.StatusUtils.Companion.unLikePostCall
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
+import com.h.pixeldroid.utils.PostUtils.Companion.postComment
+import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
+import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
+import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import java.io.Serializable
 
 /*
