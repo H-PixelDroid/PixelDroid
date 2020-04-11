@@ -46,8 +46,6 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        content = makeContent()
-
         //RequestBuilder that is re-used for every image
         profilePicRequest = Glide.with(this)
             .asDrawable().apply(RequestOptions().circleCrop())
@@ -57,12 +55,6 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         adapter = NotificationsRecyclerViewAdapter()
         list.adapter = adapter
 
-        content.observe(viewLifecycleOwner,
-            Observer { c ->
-                adapter.submitList(c)
-                //after a refresh is done we need to stop the pull to refresh spinner
-                swipeRefreshLayout.isRefreshing = false
-            })
 
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Notification> = ViewPreloadSizeProvider()
@@ -72,6 +64,18 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         list.addOnScrollListener(preloader)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        content = makeContent()
+
+        content.observe(viewLifecycleOwner,
+            Observer { c ->
+                adapter.submitList(c)
+                //after a refresh is done we need to stop the pull to refresh spinner
+                swipeRefreshLayout.isRefreshing = false
+            })
     }
 
     private fun makeContent(): LiveData<PagedList<Notification>> {

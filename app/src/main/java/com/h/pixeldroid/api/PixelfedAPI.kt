@@ -60,7 +60,7 @@ interface PixelfedAPI {
     //Used in our case to post a comment
     @FormUrlEncoded
     @POST("/api/v1/statuses")
-    fun commentStatus(
+    fun postStatus(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Field("status") statusText : String,
