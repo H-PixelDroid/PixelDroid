@@ -16,8 +16,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".PhotoEditActivity"
-            android:label="@string/title_activity_photo_edit"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.FullScreen"/>
         <activity android:name=".PostActivity" />
         <activity
             android:name=".SettingsActivity"

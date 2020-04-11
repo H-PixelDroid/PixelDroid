@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.R
 import com.h.pixeldroid.interfaces.FilterListFragmentListener
@@ -35,6 +36,13 @@ class ThumbnailAdapter (private val context: Context,
             selectedIndex = position
             notifyDataSetChanged()
         }
+
+        holder.filterName.text = tbItem.filterName
+
+        if(selectedIndex == position)
+            holder.filterName.setTextColor(ContextCompat.getColor(context, R.color.filterLabelSelected))
+        else
+            holder.filterName.setTextColor(ContextCompat.getColor(context, R.color.filterLabelNormal))
     }
 
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
