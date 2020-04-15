@@ -88,7 +88,7 @@ tools:context=".fragments.PostFragment">
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="start"
-                                android:src="@drawable/ic_heart" />
+                                android:src="@drawable/ic_like_empty" />
 
                             <ImageView
                                 android:id="@+id/commenter"
@@ -96,7 +96,15 @@ tools:context=".fragments.PostFragment">
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="start"
-                                android:src="@drawable/ic_add_black_24dp" />
+                                android:src="@drawable/ic_comment_empty" />
+
+                            <ImageView
+                                android:id="@+id/reposter"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="start"
+                                android:src="@drawable/ic_repost" />
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -168,7 +176,7 @@ tools:context=".fragments.PostFragment">
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="end"
-                            android:src="@drawable/ic_add_black_24dp"
+                            android:src="@drawable/ic_send_blue"
                             android:layout_weight="1"
                             android:contentDescription="Submit button" />
                     </LinearLayout>

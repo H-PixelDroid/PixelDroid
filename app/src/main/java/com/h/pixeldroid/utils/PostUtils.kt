@@ -15,6 +15,7 @@ import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Context
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
 import kotlinx.android.synthetic.main.comment.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,9 +29,18 @@ class PostUtils {
             //Toggle comment button
             holder.commenter.setOnClickListener {
                 when(holder.commentIn.visibility) {
-                    View.VISIBLE -> holder.commentIn.visibility = View.GONE
-                    View.INVISIBLE -> holder.commentIn.visibility = View.VISIBLE
-                    View.GONE -> holder.commentIn.visibility = View.VISIBLE
+                    View.VISIBLE -> {
+                        holder.commentIn.visibility = View.GONE
+                        setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_empty)
+                    }
+                    View.INVISIBLE -> {
+                        holder.commentIn.visibility = View.VISIBLE
+                        setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_blue)
+                    }
+                    View.GONE -> {
+                        holder.commentIn.visibility = View.VISIBLE
+                        setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_blue)
+                    }
                 }
             }
         }
@@ -41,6 +51,10 @@ class PostUtils {
             credential: String,
             post : Status
         ) {
+            //Give click feedback
+            setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_full)
+
+            //Call the api function
             api.likePost(credential, post.id).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("LIKE ERROR", t.toString())
@@ -67,6 +81,10 @@ class PostUtils {
             credential: String,
             post : Status
         ) {
+            //Give click feedback
+            setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_empty)
+
+            //Call the api function
             api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("UNLIKE ERROR", t.toString())

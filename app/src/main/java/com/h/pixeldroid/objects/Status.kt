@@ -140,6 +140,12 @@ data class Status(
         api: PixelfedAPI,
         credential: String
     ) {
+        //Set initial icon state
+        if(holder.isLiked) {
+            ImageConverter.setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_full)
+        } else {
+            ImageConverter.setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_empty)
+        }
         //Activate the liker
         holder.liker.setOnClickListener {
             if (holder.isLiked) {
