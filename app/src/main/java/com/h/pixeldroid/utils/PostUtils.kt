@@ -51,13 +51,11 @@ class PostUtils {
             credential: String,
             post : Status
         ) {
-            //Give click feedback
-            setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_full)
-
             //Call the api function
             api.likePost(credential, post.id).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("LIKE ERROR", t.toString())
+                    holder.liker.isChecked = false
                 }
 
                 override fun onResponse(call: Call<Status>, response: Response<Status>) {
@@ -66,9 +64,10 @@ class PostUtils {
 
                         //Update shown like count and internal like toggle
                         holder.nlikes.text = resp.getNLikes()
-                        holder.isLiked = resp.favourited
+                        holder.liker.isChecked = resp.favourited
                     } else {
-                        Log.e("RESPOSE_CODE", response.code().toString())
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.liker.isChecked = false
                     }
                 }
 
@@ -81,13 +80,11 @@ class PostUtils {
             credential: String,
             post : Status
         ) {
-            //Give click feedback
-            setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_empty)
-
             //Call the api function
             api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("UNLIKE ERROR", t.toString())
+                    holder.liker.isChecked = true
                 }
 
                 override fun onResponse(call: Call<Status>, response: Response<Status>) {
@@ -96,9 +93,10 @@ class PostUtils {
 
                         //Update shown like count and internal like toggle
                         holder.nlikes.text = resp.getNLikes()
-                        holder.isLiked = resp.favourited
+                        holder.liker.isChecked = resp.favourited
                     } else {
-                        Log.e("RESPOSE_CODE", response.code().toString())
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.liker.isChecked = true
                     }
 
                 }

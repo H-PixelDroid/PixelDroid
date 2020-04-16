@@ -43,7 +43,7 @@ class PostFragment : Fragment() {
         val api = PixelfedAPI.create("${preferences.getString("domain", "")}")
 
         //Activate onclickListeners
-        status?.activateLiker(holder, api, "Bearer $accessToken")
+        status?.activateLiker(holder, api, "Bearer $accessToken", status.favourited)
         status?.activateCommenter(holder, api, "Bearer $accessToken")
         status?.showComments(holder, api, "Bearer $accessToken")
 

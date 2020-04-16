@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-tools:context=".fragments.PostFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:sparkbutton="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.PostFragment">
     <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -82,13 +83,20 @@ tools:context=".fragments.PostFragment">
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <ImageView
+                            <at.connyduck.sparkbutton.SparkButton
                                 android:id="@+id/liker"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="start"
-                                android:src="@drawable/ic_like_empty" />
+                                android:clipToPadding="false"
+                                android:importantForAccessibility="no"
+                                android:padding="4dp"
+                                sparkbutton:activeImage="@drawable/ic_like_full"
+                                sparkbutton:iconSize="28dp"
+                                sparkbutton:inactiveImage="@drawable/ic_like_empty"
+                                sparkbutton:primaryColor="@color/heart_red"
+                                sparkbutton:secondaryColor="@color/black" />
 
                             <ImageView
                                 android:id="@+id/commenter"
@@ -98,13 +106,20 @@ tools:context=".fragments.PostFragment">
                                 android:gravity="start"
                                 android:src="@drawable/ic_comment_empty" />
 
-                            <ImageView
+                            <at.connyduck.sparkbutton.SparkButton
                                 android:id="@+id/reposter"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="start"
-                                android:src="@drawable/ic_repost" />
+                                android:clipToPadding="false"
+                                android:importantForAccessibility="no"
+                                android:padding="4dp"
+                                sparkbutton:activeImage="@drawable/ic_share_blue"
+                                sparkbutton:iconSize="28dp"
+                                sparkbutton:inactiveImage="@drawable/ic_share"
+                                sparkbutton:primaryColor="@color/share_blue"
+                                sparkbutton:secondaryColor="@color/black" />
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

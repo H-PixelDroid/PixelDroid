@@ -168,11 +168,11 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                 }
 
                 Notification.NotificationType.reblog -> {
-                    setNotificationTypeTextView(context, R.string.shared_notification, R.drawable.ic_share)
+                    setNotificationTypeTextView(context, R.string.shared_notification, R.drawable.ic_share_blue)
                 }
 
                 Notification.NotificationType.favourite -> {
-                    setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_heart)
+                    setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_like_full)
                 }
             }
             textView.text = format.format(username)

@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
+import at.connyduck.sparkbutton.SparkButton
 import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.RequestBuilder
@@ -105,11 +106,8 @@ class HomeFragment : FeedFragment<Status, ViewHolder>() {
             //Setup the post layout
             post.setupPost(holder.postView, picRequest, holder.postPic, holder.profilePic)
 
-            //Set initial favorite toggle value
-            holder.isLiked = post.favourited
-
             //Activate liker
-            post.activateLiker(holder, api, credential)
+            post.activateLiker(holder, api, credential, post.favourited)
 
             //Show comments
             post.showComments(holder, api, credential)
@@ -140,12 +138,11 @@ class ViewHolder(val postView: View, val context: android.content.Context) : Rec
     val description : TextView  = postView.findViewById(R.id.description)
     val nlikes      : TextView  = postView.findViewById(R.id.nlikes)
     val nshares     : TextView  = postView.findViewById(R.id.nshares)
-    val liker       : ImageView = postView.findViewById(R.id.liker)
+    val liker       : SparkButton = postView.findViewById(R.id.liker)
     val submitCmnt  : ImageButton = postView.findViewById(R.id.submitComment)
     val commenter   : ImageView = postView.findViewById(R.id.commenter)
     val comment     : EditText = postView.findViewById(R.id.editComment)
     val commentCont : LinearLayout = postView.findViewById(R.id.commentContainer)
     val commentIn   : LinearLayout = postView.findViewById(R.id.commentIn)
     val viewComment : TextView = postView.findViewById(R.id.ViewComments)
-    var isLiked : Boolean = false
 }

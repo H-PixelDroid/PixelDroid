@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import at.connyduck.sparkbutton.SparkButton
+import at.connyduck.sparkbutton.SparkEventListener
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
@@ -138,25 +140,24 @@ data class Status(
     fun activateLiker(
         holder : ViewHolder,
         api: PixelfedAPI,
-        credential: String
+        credential: String,
+        isLiked: Boolean
     ) {
-        //Set initial icon state
-        if(holder.isLiked) {
-            ImageConverter.setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_full)
-        } else {
-            ImageConverter.setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_empty)
-        }
+        //Set initial state
+        holder.liker.isChecked = isLiked
+
         //Activate the liker
-        holder.liker.setOnClickListener {
-            if (holder.isLiked) {
-                //Unlike the post
-                unLikePostCall(holder, api, credential, this)
-            } else {
-                //like the post
-                likePostCall(holder, api, credential, this)
+        holder.liker.setEventListener { button, buttonState ->
+                if (buttonState) {
+                    // Button is active
+                    likePostCall(holder, api, credential, this)
+                } else {
+                    // Button is inactive
+                    unLikePostCall(holder, api, credential, this)
+                }
             }
         }
-    }
+
 
     fun showComments(
         holder : ViewHolder,

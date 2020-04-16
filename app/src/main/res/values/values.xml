@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="auth_scheme" translatable="false">oauth2redirect</string>
+    <declare-styleable name="SparkButton">
+        <attr format="dimension|reference" name="iconSize"/>
+        <attr format="reference" name="activeImage"/>
+        <attr format="reference" name="inactiveImage"/>
+        <attr format="reference" name="primaryColor"/>
+        <attr format="reference" name="secondaryColor"/>
+        <attr format="float" name="animationSpeed"/>
+    </declare-styleable>
+    <color name="heart_red">#c42f0a</color>
+    <color name="share_blue">#0000ff</color>
+    <color name="black">#000000</color>
 </resources>
