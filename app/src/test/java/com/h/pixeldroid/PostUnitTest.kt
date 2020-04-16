@@ -35,14 +35,14 @@ class PostUnitTest {
     @Test
     fun getDescriptionReturnsDefaultIfEmpty() {
         val emptyDescStatus = status.copy(content = "")
-        Assert.assertEquals( "No description", emptyDescStatus.getDescription())
+        Assert.assertEquals( "No description", emptyDescStatus.content)
     }
 
     @Test
-    fun getDescriptionReturnsAValidDesc() = Assert.assertNotNull(status.getDescription())
+    fun getDescriptionReturnsAValidDesc() = Assert.assertNotNull(status.content)
 
     @Test
-    fun getDescriptionReturnsACorrectDesc() = Assert.assertEquals(status.content, status.getDescription())
+    fun getDescriptionReturnsACorrectDesc() = Assert.assertEquals(status.content, status.content)
 
     @Test
     fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account.display_name, status.getUsername())
