@@ -264,7 +264,7 @@ class MockedServerTest {
         Thread.sleep(100)
 
         //Profit
-        onView(withId(R.id.nlikes)).check(matches((withText(likes))))
+        onView(first(withId(R.id.nlikes))).check(matches((withText(likes))))
     }
 
     @Test
@@ -321,7 +321,7 @@ class MockedServerTest {
         Thread.sleep(100)
 
         //Profit
-        onView(withId(R.id.nshares)).check(matches((withText(shares))))
+        onView(first(withId(R.id.nshares))).check(matches((withText(shares))))
     }
 
     @Test
@@ -338,7 +338,7 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         //Check that the Profile is shown
-        onView(withId(R.id.username)).check(matches(isDisplayed()))
+        onView(first(withId(R.id.username))).check(matches(isDisplayed()))
     }
 
     @Test
