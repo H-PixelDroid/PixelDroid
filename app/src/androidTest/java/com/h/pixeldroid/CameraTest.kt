@@ -69,4 +69,13 @@ class CameraTest {
             fragment.onCreateView(activity.layoutInflater, activity.findViewById(android.R.id.content), null)
         }
     }
+
+    @Test
+    fun  switchCameraButton() {
+        val scenario = launchFragmentInContainer<CameraFragment>()
+        scenario.onFragment { fragment ->
+            fragment.switch_button.performClick()
+        }
+    }
+
 }
