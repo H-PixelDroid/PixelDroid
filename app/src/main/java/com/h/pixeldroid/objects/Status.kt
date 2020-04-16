@@ -11,9 +11,8 @@ import android.widget.Toast
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.feeds.ViewHolder
+import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.utils.ImageConverter
-import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
 import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
@@ -140,7 +139,7 @@ data class Status(
     }
 
     fun activateReblogger(
-        holder : ViewHolder,
+        holder : PostViewHolder,
         api : PixelfedAPI,
         credential: String,
         isReblogged : Boolean
@@ -149,7 +148,7 @@ data class Status(
         holder.reblogger.isChecked = isReblogged
 
         //Activate the button
-        holder.reblogger.setEventListener { button, buttonState ->
+        holder.reblogger.setEventListener { _, buttonState ->
             if (buttonState) {
                 Log.e("REBLOG", "Reblogged post")
                 // Button is active
@@ -163,7 +162,7 @@ data class Status(
     }
 
     fun activateLiker(
-        holder : ViewHolder,
+        holder : PostViewHolder,
         api: PixelfedAPI,
         credential: String,
         isLiked: Boolean
@@ -172,7 +171,7 @@ data class Status(
         holder.liker.isChecked = isLiked
 
         //Activate the liker
-        holder.liker.setEventListener { button, buttonState ->
+        holder.liker.setEventListener { _, buttonState ->
                 if (buttonState) {
                     // Button is active
                     likePostCall(holder, api, credential, this)
@@ -185,7 +184,7 @@ data class Status(
 
 
     fun showComments(
-        holder : ViewHolder,
+        holder : PostViewHolder,
         api: PixelfedAPI,
         credential: String
     ) {
@@ -204,7 +203,7 @@ data class Status(
     }
 
     fun activateCommenter(
-        holder : ViewHolder,
+        holder : PostViewHolder,
         api: PixelfedAPI,
         credential: String
     ) {

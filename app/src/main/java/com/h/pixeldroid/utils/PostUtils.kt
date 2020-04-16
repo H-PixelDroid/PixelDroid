@@ -1,18 +1,13 @@
 package com.h.pixeldroid.utils
 
-import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.feeds.ViewHolder
-import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.objects.Context
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
@@ -24,7 +19,7 @@ import retrofit2.Response
 class PostUtils {
     companion object {
         fun toggleCommentInput(
-            holder : ViewHolder
+            holder : PostViewHolder
         ) {
             //Toggle comment button
             holder.commenter.setOnClickListener {
@@ -46,7 +41,7 @@ class PostUtils {
         }
 
         fun reblogPost(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status
@@ -75,7 +70,7 @@ class PostUtils {
         }
 
         fun undoReblogPost(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status
@@ -104,7 +99,7 @@ class PostUtils {
         }
 
         fun likePostCall(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status
@@ -133,7 +128,7 @@ class PostUtils {
         }
 
         fun unLikePostCall(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status
@@ -163,7 +158,7 @@ class PostUtils {
         }
 
         fun postComment(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status
@@ -205,7 +200,7 @@ class PostUtils {
         }
 
         fun retrieveComments(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status

@@ -24,7 +24,7 @@ import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 
 
-class HomeFragment : FeedFragment<Status, ViewHolder>() {
+class HomeFragment : FeedFragment<Status, PostViewHolder>() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
 
@@ -83,20 +83,20 @@ class HomeFragment : FeedFragment<Status, ViewHolder>() {
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
     inner class HomeRecyclerViewAdapter()
-        : FeedsRecyclerViewAdapter<Status, ViewHolder>() {
+        : FeedsRecyclerViewAdapter<Status, PostViewHolder>() {
         private val api = pixelfedAPI
         private val credential = "Bearer $accessToken"
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.post_fragment, parent, false)
             context = view.context
-            return ViewHolder(view, context)
+            return PostViewHolder(view, context)
         }
 
         /**
          * Binds the different elements of the Post Model to the view holder
          */
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
             val post = getItem(position) ?: return
             val metrics = context.resources.displayMetrics
             //Limit the height of the different images
@@ -130,7 +130,7 @@ class HomeFragment : FeedFragment<Status, ViewHolder>() {
 /**
  * Represents the posts that will be contained within the feed
  */
-class ViewHolder(val postView: View, val context: android.content.Context) : RecyclerView.ViewHolder(postView) {
+class PostViewHolder(val postView: View, val context: android.content.Context) : RecyclerView.ViewHolder(postView) {
     val profilePic  : ImageView = postView.findViewById(R.id.profilePic)
     val postPic     : ImageView = postView.findViewById(R.id.postPicture)
     val username    : TextView  = postView.findViewById(R.id.username)
