@@ -249,7 +249,7 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         //Get initial like count
-        val likes = getText(withId(R.id.nlikes))
+        val likes = getText(first(withId(R.id.nlikes)))
 
         //Like the post
         onView(withId(R.id.list))
@@ -305,7 +305,7 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         //Get initial like count
-        val shares = getText(withId(R.id.nshares))
+        val shares = getText(first(withId(R.id.nshares)))
 
         //Reblog the post
         onView(withId(R.id.list))
