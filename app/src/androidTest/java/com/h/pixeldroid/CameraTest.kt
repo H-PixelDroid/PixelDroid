@@ -60,8 +60,9 @@ class CameraTest {
     }
 
     @Test
-    fun  switchCameraButton() {
+    fun switchCameraButton() {
         val scenario = launchFragmentInContainer<CameraFragment>()
+        scenario.moveToState(Lifecycle.State.CREATED)
         scenario.onFragment { fragment ->
             fragment.switch_return_button.performClick()
         }
