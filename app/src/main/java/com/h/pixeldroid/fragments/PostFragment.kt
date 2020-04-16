@@ -35,7 +35,7 @@ class PostFragment : Fragment() {
         status?.setupPost(root, picRequest, root.postPicture, root.profilePic)
 
         //Setup arguments needed for the onclicklisteners
-        val holder = ViewHolder(root, context!!)
+        val holder = ViewHolder(root, requireContext())
         val preferences = requireActivity().getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
