@@ -146,6 +146,7 @@ data class Status(
         } else {
             ImageConverter.setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_empty)
         }
+
         //Activate the liker
         holder.liker.setOnClickListener {
             if (holder.isLiked) {
@@ -197,6 +198,14 @@ data class Status(
                 postComment(holder, api, credential, this)
             }
         }
+    }
+
+    fun activateReposter(
+        holder : ViewHolder,
+        api : PixelfedAPI,
+        credential: String
+    ) {
+        holder.
     }
 
     enum class Visibility : Serializable {
