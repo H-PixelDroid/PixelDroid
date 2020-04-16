@@ -35,6 +35,7 @@ class CameraFragment : Fragment() {
     private lateinit var   cameraDevice: CameraDevice
 
     private val buttonClick = AlphaAnimation(1f, 0.8f) // Triggered when a photo is taken
+    private var currentCameraType = CameraCharacteristics.LENS_FACING_FRONT
 
     /* Entities necessary to the stream : */
     private lateinit var textureView: TextureView
@@ -73,6 +74,19 @@ class CameraFragment : Fragment() {
             takePicture()
         }
 
+        val switchCameraButton: Button = view.findViewById(R.id.switch_button)
+        switchCameraButton.setOnClickListener{
+            cameraDevice.close()
+            if (currentCameraType == CameraCharacteristics.LENS_FACING_FRONT) {
+                currentCameraType = CameraCharacteristics.LENS_FACING_BACK
+                openCamera(currentCameraType)
+            } else {
+                currentCameraType = CameraCharacteristics.LENS_FACING_FRONT
+                openCamera(currentCameraType)
+            }
+
+        }
+
     }
 
     private val textureListener = object : TextureView.SurfaceTextureListener {
@@ -82,7 +96,7 @@ class CameraFragment : Fragment() {
             height: Int
         ) {
             this@CameraFragment.surface = surface
-            openCamera(CameraCharacteristics.LENS_FACING_FRONT)
+            openCamera(currentCameraType)
         }
 
         override fun onSurfaceTextureSizeChanged(
