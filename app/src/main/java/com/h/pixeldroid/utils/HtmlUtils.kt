@@ -9,20 +9,14 @@ import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.text.toSpanned
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.getAccountFromId
 import com.h.pixeldroid.objects.Mention
 import com.h.pixeldroid.utils.customSpans.ClickableSpanNoUnderline
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.net.URI
 import java.net.URISyntaxException
-import java.util.*
+import java.util.Locale
 
 
 class HtmlUtils {
@@ -93,7 +87,7 @@ class HtmlUtils {
                     val tag = text.subSequence(1, text.length).toString()
                     customSpan = object : ClickableSpanNoUnderline() {
                         override fun onClick(widget: View) {
-                            Toast.makeText(context,"Click", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, tag, Toast.LENGTH_SHORT).show()
                         }
 
                     }
