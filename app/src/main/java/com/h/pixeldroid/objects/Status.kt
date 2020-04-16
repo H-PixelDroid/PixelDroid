@@ -12,6 +12,7 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
 import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
@@ -205,7 +206,10 @@ data class Status(
         api : PixelfedAPI,
         credential: String
     ) {
-        holder.
+        holder.reposter.setOnClickListener {
+            setImageFromDrawable(holder.postView, holder.reposter, R.drawable.ic_repost_blue)
+
+        }
     }
 
     enum class Visibility : Serializable {
