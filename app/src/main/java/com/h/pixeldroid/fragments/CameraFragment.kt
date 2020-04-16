@@ -228,13 +228,13 @@ class CameraFragment : Fragment() {
         pictureRequestBuilder =
             cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
         pictureRequestBuilder.addTarget(reader.surface)
-        pictureRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
+        //pictureRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
         pictureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
 
         reader.setOnImageAvailableListener(readerListener, null)
         val outputSurfaces = ArrayList<Surface>(1)
         outputSurfaces.add(reader.surface)
-        outputSurfaces.add(Surface(textureView.surfaceTexture))
+        //outputSurfaces.add(Surface(textureView.surfaceTexture))
 
         // Handle rotation ?!
         pictureRequestBuilder.set(
