@@ -46,7 +46,7 @@ class LoginInstrumentedTest {
 
     @Test
     fun clickConnect() {
-        onView(withId(R.id.connect_instance_button)).check(matches(withText("Connect")))
+        onView(withId(R.id.connect_instance_button)).check(matches(withText("Connect to Pixelfed")))
     }
 
     @Test
@@ -72,7 +72,7 @@ class LoginCheckIntent {
     val intentsTestRule = IntentsTestRule(LoginActivity::class.java)
 
     @Test
-    fun launchesIntent() {
+    fun launchesOAuthIntent() {
         val expectedIntent: Matcher<Intent> = allOf(
             hasAction(ACTION_VIEW),
             hasDataString(containsString("pixelfed.social"))
@@ -82,6 +82,20 @@ class LoginCheckIntent {
         onView(withId(R.id.connect_instance_button)).perform(click())
 
         Thread.sleep(5000)
+
+        intended(expectedIntent)
+
+    }
+    @Test
+    fun launchesInstanceInfo() {
+        val expectedIntent: Matcher<Intent> = allOf(
+            hasAction(ACTION_VIEW),
+            hasDataString(containsString("pixelfed.org/join"))
+        )
+
+        onView(withId(R.id.whatsAnInstanceTextView)).perform(click())
+
+        Thread.sleep(1000)
 
         intended(expectedIntent)
 
