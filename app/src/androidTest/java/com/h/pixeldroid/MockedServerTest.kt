@@ -354,7 +354,8 @@ class MockedServerTest {
         //Wait a bit
         Thread.sleep(1000)
 
-        //Check that the Profile is shown
+        //Check that the HashTag was indeed clicked
+        //Doesn't do anything for now
         onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
 
