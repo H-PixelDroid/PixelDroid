@@ -39,7 +39,12 @@ class ProfileFragment : Fragment() {
         account = arguments?.getSerializable("profileTag") as Account?
         val view = inflater.inflate(R.layout.profile_fragment, container, false)
 
-        if(account == null) {
+        if(account != null) {
+            val accessToken = preferences.getString("accessToken", "")
+            val api = PixelfedAPI.create("${preferences.getString("domain", "")}")
+
+            account!!.activateFollow(view, context!!, api, accessToken!!)
+        } else {
             // Edit button redirects to Pixelfed's "edit account" page
             val editButton: Button = view.findViewById(R.id.editButton)
             editButton.visibility = View.VISIBLE
