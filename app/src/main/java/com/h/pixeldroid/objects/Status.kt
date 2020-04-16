@@ -2,6 +2,7 @@ package com.h.pixeldroid.objects
 
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -15,9 +16,11 @@ import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
+import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
 import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
+import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import java.io.Serializable
 
 /*
@@ -136,6 +139,29 @@ data class Status(
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
     }
 
+    fun activateReblogger(
+        holder : ViewHolder,
+        api : PixelfedAPI,
+        credential: String,
+        isReblogged : Boolean
+    ) {
+        //Set initial button state
+        holder.reblogger.isChecked = isReblogged
+
+        //Activate the button
+        holder.reblogger.setEventListener { button, buttonState ->
+            if (buttonState) {
+                Log.e("REBLOG", "Reblogged post")
+                // Button is active
+                reblogPost(holder, api, credential, this)
+            } else {
+                Log.e("REBLOG", "Undo Reblogged post")
+                // Button is inactive
+                undoReblogPost(holder, api, credential, this)
+            }
+        }
+    }
+
     fun activateLiker(
         holder : ViewHolder,
         api: PixelfedAPI,
@@ -196,16 +222,6 @@ data class Status(
                 //Post the comment
                 postComment(holder, api, credential, this)
             }
-        }
-    }
-
-    fun activateReblogger(
-        holder : ViewHolder,
-        api : PixelfedAPI,
-        credential: String
-    ) {
-        holder.reblogger.setOnClickListener {
-
         }
     }
 

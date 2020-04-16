@@ -77,6 +77,7 @@ interface PixelfedAPI {
         @Field("language") language : String? = null
     ) : Call<Status>
 
+    @FormUrlEncoded
     @POST("/api/v1/statuses/{id}/reblog")
     fun reblogStatus(
         @Header("Authorization") authorization: String,

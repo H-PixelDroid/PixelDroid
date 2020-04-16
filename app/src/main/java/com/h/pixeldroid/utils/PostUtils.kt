@@ -45,6 +45,64 @@ class PostUtils {
             }
         }
 
+        fun reblogPost(
+            holder : ViewHolder,
+            api: PixelfedAPI,
+            credential: String,
+            post : Status
+        ) {
+            //Call the api function
+            api.reblogStatus(credential, post.id).enqueue(object : Callback<Status> {
+                override fun onFailure(call: Call<Status>, t: Throwable) {
+                    Log.e("REBLOG ERROR", t.toString())
+                    holder.reblogger.isChecked = false
+                }
+
+                override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                    if(response.code() == 200) {
+                        val resp = response.body()!!
+
+                        //Update shown share count
+                        holder.nshares.text = resp.getNShares()
+                        holder.reblogger.isChecked = resp.reblogged
+                    } else {
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.reblogger.isChecked = false
+                    }
+                }
+
+            })
+        }
+
+        fun undoReblogPost(
+            holder : ViewHolder,
+            api: PixelfedAPI,
+            credential: String,
+            post : Status
+        ) {
+            //Call the api function
+            api.undoReblogStatus(credential, post.id).enqueue(object : Callback<Status> {
+                override fun onFailure(call: Call<Status>, t: Throwable) {
+                    Log.e("REBLOG ERROR", t.toString())
+                    holder.reblogger.isChecked = true
+                }
+
+                override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                    if(response.code() == 200) {
+                        val resp = response.body()!!
+
+                        //Update shown share count
+                        holder.nshares.text = resp.getNShares()
+                        holder.reblogger.isChecked = resp.reblogged
+                    } else {
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.reblogger.isChecked = true
+                    }
+                }
+
+            })
+        }
+
         fun likePostCall(
             holder : ViewHolder,
             api: PixelfedAPI,

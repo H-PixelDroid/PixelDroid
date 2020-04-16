@@ -138,12 +138,15 @@ class ViewHolder(val postView: View, val context: android.content.Context) : Rec
     val description : TextView  = postView.findViewById(R.id.description)
     val nlikes      : TextView  = postView.findViewById(R.id.nlikes)
     val nshares     : TextView  = postView.findViewById(R.id.nshares)
+
+    //Spark buttons
     val liker       : SparkButton = postView.findViewById(R.id.liker)
+    val reblogger   : SparkButton = postView.findViewById(R.id.reblogger)
+
     val submitCmnt  : ImageButton = postView.findViewById(R.id.submitComment)
     val commenter   : ImageView = postView.findViewById(R.id.commenter)
     val comment     : EditText = postView.findViewById(R.id.editComment)
     val commentCont : LinearLayout = postView.findViewById(R.id.commentContainer)
     val commentIn   : LinearLayout = postView.findViewById(R.id.commentIn)
     val viewComment : TextView = postView.findViewById(R.id.ViewComments)
-    val reblogger   : SparkButton = postView.findViewById(R.id.reblogger)
 }
