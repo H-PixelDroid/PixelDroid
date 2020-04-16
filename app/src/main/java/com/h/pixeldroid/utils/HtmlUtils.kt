@@ -68,7 +68,7 @@ class HtmlUtils {
 
         fun parseHTMLText(
             text : String,
-            mentions: List<Mention>,
+            mentions: List<Mention>?,
             api : PixelfedAPI,
             context: Context
         ) : Spanned {
@@ -84,7 +84,7 @@ class HtmlUtils {
                 val end = builder.getSpanEnd(span)
                 val flags = builder.getSpanFlags(span)
                 val text = builder.subSequence(start, end)
-                lateinit var customSpan: ClickableSpan
+                var customSpan: ClickableSpan? = null
 
                 //Handle hashtags
                 if (text[0] == '#') {
