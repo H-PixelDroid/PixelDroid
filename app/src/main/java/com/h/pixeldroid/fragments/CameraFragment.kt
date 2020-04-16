@@ -236,6 +236,15 @@ class CameraFragment : Fragment() {
         outputSurfaces.add(reader.surface)
         //outputSurfaces.add(Surface(textureView.surfaceTexture))
 
+        // Handle rotation ?!
+        pictureRequestBuilder.set(
+            CaptureRequest.JPEG_ORIENTATION,
+            getJpegOrientation(
+                manager.getCameraCharacteristics(cameraDevice.id),
+                activity?.windowManager?.defaultDisplay?.rotation!!
+            )
+        )
+
         cameraDevice.createCaptureSession(outputSurfaces, pictureStateCallback , null);
         flipButtons()
     }
@@ -289,6 +298,24 @@ class CameraFragment : Fragment() {
         } finally {
             image.close()
         }
+    }
+
+    private fun getJpegOrientation(c: CameraCharacteristics, deviceOrientation: Int): Int {
+        var deviceOrientation = deviceOrientation
+        if (deviceOrientation == ORIENTATION_UNKNOWN) return 0
+        val sensorOrientation = c[CameraCharacteristics.SENSOR_ORIENTATION]!!
+
+        // Round device orientation to a multiple of 90
+        deviceOrientation = (deviceOrientation + 45) / 90 * 90
+
+        // Reverse device orientation for front-facing cameras
+        val facingFront =
+            c[CameraCharacteristics.LENS_FACING] == CameraCharacteristics.LENS_FACING_FRONT
+        if (facingFront) deviceOrientation = - deviceOrientation
+
+        // Calculate desired JPEG orientation relative to camera orientation to make
+        // the image upright relative to the device orientation
+        return (sensorOrientation + deviceOrientation + 360) % 360
     }
 
     private fun flipButtons() {
