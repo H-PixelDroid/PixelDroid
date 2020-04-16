@@ -106,6 +106,9 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
             //Setup the post layout
             post.setupPost(holder.postView, picRequest, holder.postPic, holder.profilePic)
 
+            //Set the special HTML text
+            post.setDescription(holder.postView, api)
+
             //Activate liker
             post.activateLiker(holder, api, credential, post.favourited)
 

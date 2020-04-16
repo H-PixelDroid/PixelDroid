@@ -147,6 +147,11 @@ interface PixelfedAPI {
         @Path("id") account_id: String? = null
     ): Call<List<Status>>
 
+    @GET("/api/v1/accounts/{id}")
+    fun getAccount(
+        @Path("id") accountId : String
+    ): Call<Account>
+
     companion object {
         fun create(baseUrl: String): PixelfedAPI {
             return Retrofit.Builder()

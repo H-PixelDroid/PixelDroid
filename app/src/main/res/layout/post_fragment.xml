@@ -67,13 +67,6 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/LikeShareConstraint"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="10dp"
-                        >
-
                         <LinearLayout
                             android:layout_width="409dp"
                             android:layout_height="28dp"
@@ -121,7 +114,6 @@
                                 sparkbutton:primaryColor="@color/share_blue"
                                 sparkbutton:secondaryColor="@color/black" />
                         </LinearLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"

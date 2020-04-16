@@ -1,17 +1,23 @@
 package com.h.pixeldroid.objects
 
+import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.text.toSpanned
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
@@ -73,12 +79,16 @@ data class Status(
     fun getProfilePicUrl() : String? = account.avatar
     fun getPostPreviewURL() : String? = media_attachments?.getOrNull(0)?.preview_url
 
-    fun getDescription() : CharSequence {
-        val description = content as CharSequence
+    /**
+     * @brief returns the parsed version of the HTML description
+     */
+    fun getDescription(api: PixelfedAPI, context: Context) : Spanned {
+        val description = content
         if(description.isEmpty()) {
-            return "No description"
+            return "No description".toSpanned()
         }
-        return description
+        return parseHTMLText(description, mentions, api, context)
+
     }
 
     fun getUsername() : CharSequence {
@@ -115,8 +125,6 @@ data class Status(
         usernameDesc.text = this.getUsername()
         usernameDesc.setTypeface(null, Typeface.BOLD)
 
-        rootView.findViewById<TextView>(R.id.description).text = this.getDescription()
-
         val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
         nlikes.text = this.getNLikes()
         nlikes.setTypeface(null, Typeface.BOLD)
@@ -136,6 +144,11 @@ data class Status(
 
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
+    }
+
+    fun setDescription(rootView: View, api : PixelfedAPI) {
+        rootView.findViewById<TextView>(R.id.description).text =
+            this.getDescription(api, rootView.context)
     }
 
     fun activateReblogger(
