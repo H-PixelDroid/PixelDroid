@@ -1,11 +1,22 @@
 package com.h.pixeldroid.objects
 
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import android.widget.Toast
+import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
+import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
+import com.h.pixeldroid.utils.PostUtils.Companion.postComment
+import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
+import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
+import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import java.io.Serializable
 
 /*
@@ -14,7 +25,7 @@ https://docs.joinmastodon.org/entities/status/
  */
 data class Status(
     //Base attributes
-    val id: String,
+    override val id: String,
     val uri: String,
     val created_at: String, //ISO 8601 Datetime (maybe can use a date type)
     val account: Account,
@@ -22,7 +33,7 @@ data class Status(
     val visibility: Visibility,
     val sensitive: Boolean,
     val spoiler_text: String,
-    val media_attachments: List<Attachment>,
+    val media_attachments: List<Attachment>?,
     val application: Application,
     //Rendering attributes
     val mentions: List<Mention>,
@@ -47,7 +58,7 @@ data class Status(
     val muted: Boolean,
     val bookmarked: Boolean,
     val pinned: Boolean
-    ) : Serializable
+    ) : Serializable, FeedContent()
 {
 
     companion object {
@@ -56,7 +67,8 @@ data class Status(
     }
 
     fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
-    fun getProfilePicUrl() : String? = account?.avatar
+    fun getProfilePicUrl() : String? = account.avatar
+    fun getPostPreviewURL() : String? = media_attachments?.getOrNull(0)?.preview_url
 
     fun getDescription() : CharSequence {
         val description = content as CharSequence
@@ -67,14 +79,11 @@ data class Status(
     }
 
     fun getUsername() : CharSequence {
-        var name = account?.username
+        var name = account?.display_name
         if (name.isNullOrEmpty()) {
-            name = account?.display_name
+            name = account?.username
         }
         return name!!
-    }
-    fun getUsernameDescription() : CharSequence {
-        return account?.display_name ?: ""
     }
 
     fun getNLikes() : CharSequence {
@@ -87,18 +96,23 @@ data class Status(
         return "$nShares Shares"
     }
 
-    fun setupPost(fragment: Fragment, rootView : View) {
+    fun setupPost(
+        rootView: View,
+        request: RequestBuilder<Drawable>,
+        postPic: ImageView,
+        profilePic: ImageView
+    ) {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
         username.text = this.getUsername()
         username.setTypeface(null, Typeface.BOLD)
+        username.setOnClickListener { account.openProfile(rootView.context) }
 
         val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
-        usernameDesc.text = this.getUsernameDescription()
+        usernameDesc.text = this.getUsername()
         usernameDesc.setTypeface(null, Typeface.BOLD)
 
-        val description = rootView.findViewById<TextView>(R.id.description)
-        description.text = this.getDescription()
+        rootView.findViewById<TextView>(R.id.description).text = this.getDescription()
 
         val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
         nlikes.text = this.getNLikes()
@@ -108,18 +122,77 @@ data class Status(
         nshares.text = this.getNShares()
         nshares.setTypeface(null, Typeface.BOLD)
 
-        //Setup post and profile images
-        ImageConverter.setImageViewFromURL(
-            fragment,
-            getPostUrl(),
-            rootView.findViewById(R.id.postPicture)
+        //Setup images
+        request.load(this.getPostUrl()).into(postPic)
+        ImageConverter.setRoundImageFromURL(
+            rootView,
+            this.getProfilePicUrl(),
+            profilePic
         )
-        ImageConverter.setImageViewFromURL(
-            fragment,
-            getProfilePicUrl(),
-            rootView.findViewById(R.id.profilePic)
-        )
+        profilePic.setOnClickListener { account.openProfile(rootView.context) }
+
+        //Set comment initial visibility
+        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
     }
+
+    fun activateLiker(
+        holder : ViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
+        //Activate the liker
+        holder.liker.setOnClickListener {
+            if (holder.isLiked) {
+                //Unlike the post
+                unLikePostCall(holder, api, credential, this)
+            } else {
+                //like the post
+                likePostCall(holder, api, credential, this)
+            }
+        }
+    }
+
+    fun showComments(
+        holder : ViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
+        //Show all comments of a post
+        if (replies_count == 0) {
+            holder.viewComment.text =  "No comments on this post..."
+        } else {
+            holder.viewComment.text =  "View all ${replies_count} comments..."
+            holder.viewComment.setOnClickListener {
+                holder.viewComment.visibility = View.GONE
+
+                //Retrieve the comments
+                retrieveComments(holder, api, credential, this)
+            }
+        }
+    }
+
+    fun activateCommenter(
+        holder : ViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
+        //Toggle comment button
+        toggleCommentInput(holder)
+
+        //Activate commenter
+        holder.submitCmnt.setOnClickListener {
+            val textIn = holder.comment.text
+            //Open text input
+            if(textIn.isNullOrEmpty()) {
+                Toast.makeText(holder.context,"Comment must not be empty!", Toast.LENGTH_SHORT).show()
+            } else {
+
+                //Post the comment
+                postComment(holder, api, credential, this)
+            }
+        }
+    }
+
     enum class Visibility : Serializable {
         public, unlisted, private, direct
     }

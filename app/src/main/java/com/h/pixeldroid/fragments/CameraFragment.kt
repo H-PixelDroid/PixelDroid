@@ -24,11 +24,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
-import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-
 
 // A fragment that displays a stream coming from either the front or back cameras of the smartphone,
 // and can capture an image from this stream.

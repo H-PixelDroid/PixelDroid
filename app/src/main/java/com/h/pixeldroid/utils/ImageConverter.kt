@@ -63,12 +63,22 @@ class ImageConverter {
         }
 
         /**
+         * @brief Loads a given image (via url) as a square image into a given image view
+         * @param view, the view in which this is happening
+         * @param url, the url of the image that will be loaded
+         * @param image, the imageView into which we will load the image
+         */
+        fun setSquareImageFromURL(view : View, url : String?, image : ImageView) {
+            Glide.with(view).load(url).apply(RequestOptions().centerCrop()).into(image)
+        }
+
+        /**
          * @brief Loads a default image into a given image view
          * @param view, the view in which this is happening
          * @param image, the imageView into which we will load the image
          */
-        fun setDefaultImage(view : View, image : ImageView) {
-            Glide.with(view).load(R.drawable.ic_default_user).into(image)
+        fun setImageFromDrawable(view : View, image : ImageView, drawable : Int) {
+            Glide.with(view).load(drawable).into(image)
         }
     }
 }
