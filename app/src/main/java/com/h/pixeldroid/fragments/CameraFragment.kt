@@ -324,7 +324,7 @@ class CameraFragment : Fragment() {
     }
 
     private fun flipCameras() {
-        if (cameraDevice != null) cameraDevice.close()
+        if (::cameraDevice.isInitialized) cameraDevice.close()
 
         if (currentCameraType == CameraCharacteristics.LENS_FACING_FRONT) {
             currentCameraType = CameraCharacteristics.LENS_FACING_BACK
