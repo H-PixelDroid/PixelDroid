@@ -56,12 +56,16 @@
         tools:ignore="MissingConstraints,PrivateResource" />
 
     <Button
-        android:id="@+id/switch_button"
+        android:id="@+id/switch_return_button"
         android:layout_width="36dp"
         android:layout_height="37dp"
         android:background="@android:drawable/ic_menu_camera"
-        tools:layout_editor_absoluteX="18dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

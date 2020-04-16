@@ -74,7 +74,7 @@ class CameraFragment : Fragment() {
             takePicture()
         }
 
-        val switchCameraButton: Button = view.findViewById(R.id.switch_button)
+        val switchCameraButton: Button = view.findViewById(R.id.switch_return_button)
         switchCameraButton.setOnClickListener{
             cameraDevice.close()
             if (currentCameraType == CameraCharacteristics.LENS_FACING_FRONT) {

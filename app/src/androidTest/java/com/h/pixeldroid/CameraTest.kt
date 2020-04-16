@@ -1,23 +1,12 @@
 package com.h.pixeldroid
 
 import android.Manifest
-import android.R
 import android.content.Context
-import android.hardware.camera2.CameraCharacteristics
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import com.h.pixeldroid.fragments.CameraFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
@@ -74,7 +63,7 @@ class CameraTest {
     fun  switchCameraButton() {
         val scenario = launchFragmentInContainer<CameraFragment>()
         scenario.onFragment { fragment ->
-            fragment.switch_button.performClick()
+            fragment.switch_return_button.performClick()
         }
     }
 
