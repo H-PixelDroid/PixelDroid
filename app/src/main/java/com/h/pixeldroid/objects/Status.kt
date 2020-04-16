@@ -139,26 +139,24 @@ data class Status(
     fun activateLiker(
         holder : ViewHolder,
         api: PixelfedAPI,
-        credential: String
+        credential: String,
+        isLiked: Boolean
     ) {
-        //Set initial icon state
-        if(holder.isLiked) {
-            ImageConverter.setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_full)
-        } else {
-            ImageConverter.setImageFromDrawable(holder.postView, holder.liker, R.drawable.ic_like_empty)
-        }
+        //Set initial state
+        holder.liker.isChecked = isLiked
 
         //Activate the liker
-        holder.liker.setOnClickListener {
-            if (holder.isLiked) {
-                //Unlike the post
-                unLikePostCall(holder, api, credential, this)
-            } else {
-                //like the post
-                likePostCall(holder, api, credential, this)
+        holder.liker.setEventListener { button, buttonState ->
+                if (buttonState) {
+                    // Button is active
+                    likePostCall(holder, api, credential, this)
+                } else {
+                    // Button is inactive
+                    unLikePostCall(holder, api, credential, this)
+                }
             }
         }
-    }
+
 
     fun showComments(
         holder : ViewHolder,
@@ -201,13 +199,12 @@ data class Status(
         }
     }
 
-    fun activateReposter(
+    fun activateReblogger(
         holder : ViewHolder,
         api : PixelfedAPI,
         credential: String
     ) {
-        holder.reposter.setOnClickListener {
-            setImageFromDrawable(holder.postView, holder.reposter, R.drawable.ic_repost_blue)
+        holder.reblogger.setOnClickListener {
 
         }
     }
