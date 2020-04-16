@@ -19,7 +19,9 @@ import android.view.OrientationEventListener.ORIENTATION_UNKNOWN
 import android.view.animation.AlphaAnimation
 import android.widget.Button
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
 import java.io.File
@@ -36,6 +38,10 @@ class CameraFragment : Fragment() {
 
     private val buttonClick = AlphaAnimation(1f, 0.8f) // Triggered when a photo is taken
     private var currentCameraType = CameraCharacteristics.LENS_FACING_FRONT
+
+    private lateinit var  switchCameraButton: Button
+    private lateinit var   takePictureButton: Button
+    private lateinit var uploadPictureButton: Button
 
     /* Entities necessary to the stream : */
     private lateinit var textureView: TextureView
@@ -64,27 +70,25 @@ class CameraFragment : Fragment() {
 
         /* Buttons */
 
-        val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
+        uploadPictureButton = view.findViewById(R.id.uploadPictureButton)
         uploadPictureButton.setOnClickListener{
             uploadPicture()
         }
 
-        val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
+        takePictureButton = view.findViewById(R.id.takePictureButton)
         takePictureButton.setOnClickListener{
             takePicture()
         }
 
-        val switchCameraButton: Button = view.findViewById(R.id.switch_return_button)
+        switchCameraButton = view.findViewById(R.id.switch_return_button)
         switchCameraButton.setOnClickListener{
-            cameraDevice.close()
-            if (currentCameraType == CameraCharacteristics.LENS_FACING_FRONT) {
-                currentCameraType = CameraCharacteristics.LENS_FACING_BACK
-                openCamera(currentCameraType)
+            if (takePictureButton.visibility == View.VISIBLE) {
+                flipCameras()
             } else {
-                currentCameraType = CameraCharacteristics.LENS_FACING_FRONT
-                openCamera(currentCameraType)
+                openCamera(currentCameraType) // return to capture
+                takePictureButton.visibility = View.VISIBLE
+                switchCameraButton.background = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_camera)
             }
-
         }
 
     }
@@ -237,6 +241,23 @@ class CameraFragment : Fragment() {
         )
 
         cameraDevice.createCaptureSession(outputSurfaces, pictureStateCallback , null);
+        flipButtons()
+    }
+
+    private fun flipButtons() {
+        takePictureButton.visibility = View.INVISIBLE
+        switchCameraButton.background = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_revert)
+    }
+
+    private fun flipCameras() {
+        cameraDevice.close()
+        if (currentCameraType == CameraCharacteristics.LENS_FACING_FRONT) {
+            currentCameraType = CameraCharacteristics.LENS_FACING_BACK
+            openCamera(currentCameraType)
+        } else {
+            currentCameraType = CameraCharacteristics.LENS_FACING_FRONT
+            openCamera(currentCameraType)
+        }
     }
 
     private val pictureStateCallback = object : CameraCaptureSession.StateCallback() {
