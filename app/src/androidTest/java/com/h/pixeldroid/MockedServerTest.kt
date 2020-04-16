@@ -1,6 +1,7 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.service.autofill.Validators.not
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
@@ -297,6 +298,66 @@ class MockedServerTest {
         //Check that the Profile opened
         onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
     }
+
+    @Test
+    fun clickingReblogButtonWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        val shares = getText(withId(R.id.nshares))
+
+        //Reblog the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.reblogger)))
+        Thread.sleep(100)
+
+        //UnReblog the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.reblogger)))
+        //...
+        Thread.sleep(100)
+
+        //Profit
+        onView(withId(R.id.nshares)).check(matches((withText(shares))))
+    }
+
+    @Test
+    fun clickingMentionOpensProfile() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Click the mention
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.description)))
+
+        //Wait a bit
+        Thread.sleep(1000)
+
+        //Check that the Profile is shown
+        onView(withId(R.id.username)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingHashTagsWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Click the hashtag
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (1, clickChildViewWithId(R.id.description)))
+
+        //Wait a bit
+        Thread.sleep(1000)
+
+        //Check that the Profile is shown
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
 
     @Test
     fun clickingCommentButtonOpensCommentSection() {
