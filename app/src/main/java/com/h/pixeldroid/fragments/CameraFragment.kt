@@ -18,12 +18,13 @@ import android.view.*
 import android.view.OrientationEventListener.ORIENTATION_UNKNOWN
 import android.view.animation.AlphaAnimation
 import android.widget.Button
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.R
+import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -49,6 +50,7 @@ class CameraFragment : Fragment() {
 
     /* Entities necessary to the photo capture */
     private lateinit var pictureRequestBuilder: CaptureRequest.Builder
+    private lateinit var imageView: ImageView
     private val PICK_IMAGE_REQUEST = 1
     private val TAG = "Camera Fragment"
 
@@ -66,6 +68,8 @@ class CameraFragment : Fragment() {
         // it allows us to be sure the textureView is correctly set up before performing any action
         textureView = view.findViewById(R.id.textureView)!!
         textureView.surfaceTextureListener = this.textureListener
+
+        imageView = requireView().findViewById(R.id.imageView)
 
 
         /* Buttons */
@@ -88,6 +92,7 @@ class CameraFragment : Fragment() {
                 openCamera(currentCameraType) // return to capture
                 takePictureButton.visibility = View.VISIBLE
                 switchCameraButton.background = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_camera)
+                imageView.visibility = View.INVISIBLE
             }
         }
 
@@ -244,22 +249,6 @@ class CameraFragment : Fragment() {
         flipButtons()
     }
 
-    private fun flipButtons() {
-        takePictureButton.visibility = View.INVISIBLE
-        switchCameraButton.background = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_revert)
-    }
-
-    private fun flipCameras() {
-        cameraDevice.close()
-        if (currentCameraType == CameraCharacteristics.LENS_FACING_FRONT) {
-            currentCameraType = CameraCharacteristics.LENS_FACING_BACK
-            openCamera(currentCameraType)
-        } else {
-            currentCameraType = CameraCharacteristics.LENS_FACING_FRONT
-            openCamera(currentCameraType)
-        }
-    }
-
     private val pictureStateCallback = object : CameraCaptureSession.StateCallback() {
         override fun onConfigured(session: CameraCaptureSession) {
             try {
@@ -295,7 +284,12 @@ class CameraFragment : Fragment() {
             val file = File.createTempFile(filename, null, context?.cacheDir)
             file.writeBytes(bytes)
 
-            pictureHandle(file.toUri() as Uri?)
+            val uri = file.toUri() as Uri?
+
+            imageView.setImageURI(uri)
+            imageView.visibility = View.VISIBLE
+
+            pictureHandle(uri)
 
         } catch (e: FileNotFoundException) {
             e.printStackTrace();
@@ -322,6 +316,22 @@ class CameraFragment : Fragment() {
         // Calculate desired JPEG orientation relative to camera orientation to make
         // the image upright relative to the device orientation
         return (sensorOrientation + deviceOrientation + 360) % 360
+    }
+
+    private fun flipButtons() {
+        takePictureButton.visibility = View.INVISIBLE
+        switchCameraButton.background = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_revert)
+    }
+
+    private fun flipCameras() {
+        cameraDevice.close()
+        if (currentCameraType == CameraCharacteristics.LENS_FACING_FRONT) {
+            currentCameraType = CameraCharacteristics.LENS_FACING_BACK
+            openCamera(currentCameraType)
+        } else {
+            currentCameraType = CameraCharacteristics.LENS_FACING_FRONT
+            openCamera(currentCameraType)
+        }
     }
 
     // Ulysse's part
