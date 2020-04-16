@@ -28,9 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabMode="fixed"
-            app:tabBackground="@color/colorPrimary">
-        </com.google.android.material.tabs.TabLayout>
+            app:tabBackground="@color/colorPrimary"
+            android:text="Show a profile" />
 
+        <Button
+            android:id="@+id/button_camera"
+            android:layout_width="162dp"
+            android:layout_height="wrap_content"
+            android:text="Camera" />
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
