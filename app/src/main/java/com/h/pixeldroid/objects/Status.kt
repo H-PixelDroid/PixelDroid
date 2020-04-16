@@ -200,6 +200,14 @@ data class Status(
         }
     }
 
+    fun activateReposter(
+        holder : ViewHolder,
+        api : PixelfedAPI,
+        credential: String
+    ) {
+        //holder.
+    }
+
     enum class Visibility : Serializable {
         public, unlisted, private, direct
     }

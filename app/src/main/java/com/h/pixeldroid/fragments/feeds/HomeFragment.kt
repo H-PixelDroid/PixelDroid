@@ -145,4 +145,5 @@ class ViewHolder(val postView: View, val context: android.content.Context) : Rec
     val commentCont : LinearLayout = postView.findViewById(R.id.commentContainer)
     val commentIn   : LinearLayout = postView.findViewById(R.id.commentIn)
     val viewComment : TextView = postView.findViewById(R.id.ViewComments)
+    val reposter    : ImageView = postView.findViewById(R.id.reposter)
 }
