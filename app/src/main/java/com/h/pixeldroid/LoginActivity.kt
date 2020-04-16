@@ -33,6 +33,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         connect_instance_button.setOnClickListener { onClickConnect() }
+        whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
+
         APP_NAME = getString(R.string.app_name)
         OAUTH_SCHEME = getString(R.string.auth_scheme)
         preferences = getSharedPreferences(
@@ -82,6 +84,13 @@ class LoginActivity : AppCompatActivity() {
         registerAppToServer("https://$normalizedDomain")
 
     }
+
+    private fun whatsAnInstance() {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse("https://pixelfed.org/join")
+        startActivity(i)
+    }
+
     private fun hideKeyboard() {
         val view = currentFocus
         if (view != null) {
