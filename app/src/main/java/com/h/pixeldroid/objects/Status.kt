@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -82,12 +83,12 @@ data class Status(
     /**
      * @brief returns the parsed version of the HTML description
      */
-    fun getDescription(api: PixelfedAPI, context: Context) : Spanned {
+    fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned {
         val description = content
         if(description.isEmpty()) {
             return "No description".toSpanned()
         }
-        return parseHTMLText(description, mentions, api, context)
+        return parseHTMLText(description, mentions, api, context, credential)
 
     }
 
@@ -146,9 +147,11 @@ data class Status(
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
     }
 
-    fun setDescription(rootView: View, api : PixelfedAPI) {
-        rootView.findViewById<TextView>(R.id.description).text =
-            this.getDescription(api, rootView.context)
+    fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
+        val desc = rootView.findViewById<TextView>(R.id.description)
+
+        desc.text = this.getDescription(api, rootView.context, credential)
+        desc.movementMethod = LinkMovementMethod.getInstance()
     }
 
     fun activateReblogger(

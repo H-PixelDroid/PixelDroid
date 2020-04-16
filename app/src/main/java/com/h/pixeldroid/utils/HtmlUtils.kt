@@ -10,6 +10,7 @@ import android.text.style.URLSpan
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.text.toSpanned
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
@@ -34,7 +35,7 @@ class HtmlUtils {
             return s.subSequence(0, i + 1)
         }
 
-        fun fromHtml(html: String): Spanned {
+        private fun fromHtml(html: String): Spanned {
             val result: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
             } else {
@@ -70,7 +71,8 @@ class HtmlUtils {
             text : String,
             mentions: List<Mention>?,
             api : PixelfedAPI,
-            context: Context
+            context: Context,
+            credential: String
         ) : Spanned {
             //Convert text to spannable
             val content = fromHtml(text)
@@ -91,8 +93,9 @@ class HtmlUtils {
                     val tag = text.subSequence(1, text.length).toString()
                     customSpan = object : ClickableSpanNoUnderline() {
                         override fun onClick(widget: View) {
-                            //TODO: Implement hashtags
+                            Toast.makeText(context,"Click", Toast.LENGTH_SHORT).show()
                         }
+
                     }
                 }
 
@@ -122,7 +125,7 @@ class HtmlUtils {
                             override fun onClick(widget: View) {
                                 Log.e("MENTION", "CLICKED")
                                 //Retrieve the account for the given profile
-                                getAccountFromId(accountId, api, context)
+                                getAccountFromId(accountId, api, context, credential)
                             }
                         }
                     } else {
@@ -139,7 +142,7 @@ class HtmlUtils {
                 }
             }
 
-            return builder.toSpanned()
+            return builder
         }
     }
 }

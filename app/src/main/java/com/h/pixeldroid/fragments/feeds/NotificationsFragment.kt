@@ -152,7 +152,8 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                     notification.status?.content ?: "",
                     notification.status?.mentions,
                     pixelfedAPI,
-                    context
+                    context,
+                    "Bearer $accessToken"
                 )
 
 

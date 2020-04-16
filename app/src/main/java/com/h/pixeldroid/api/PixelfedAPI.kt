@@ -149,6 +149,7 @@ interface PixelfedAPI {
 
     @GET("/api/v1/accounts/{id}")
     fun getAccount(
+        @Header("Authorization") authorization: String,
         @Path("id") accountId : String
     ): Call<Account>
 

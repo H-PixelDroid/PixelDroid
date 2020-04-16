@@ -55,8 +55,9 @@ data class Account(
         /**
          * @brief Opens an activity of the profile withn the given id
          */
-        fun getAccountFromId(id: String, api : PixelfedAPI, context: Context) {
-            api.getAccount(id).enqueue( object : Callback<Account> {
+        fun getAccountFromId(id: String, api : PixelfedAPI, context: Context, credential: String) {
+            Log.e("ACCOUNT_ID", id)
+            api.getAccount(credential, id).enqueue( object : Callback<Account> {
                 override fun onFailure(call: Call<Account>, t: Throwable) {
                     Log.e("GET ACCOUNT ERROR", t.toString())
                 }
