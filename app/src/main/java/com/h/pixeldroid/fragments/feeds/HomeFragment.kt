@@ -114,6 +114,9 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
 
             //Activate Commenter
             post.activateCommenter(holder, api, credential)
+
+            //Activate Reblogger
+            post.activateReblogger(holder, api ,credential, post.reblogged)
         }
 
         override fun getPreloadItems(position: Int): MutableList<Status> {
