@@ -2,6 +2,7 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.view.Gravity
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
@@ -38,6 +39,7 @@ class DrawerMenuTest {
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
         // Open Drawer to click on navigation.
+        ActivityScenario.launch(MainActivity::class.java)
         onView(withId(R.id.drawer_layout))
             .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
             .perform(DrawerActions.open()) // Open Drawer
@@ -47,7 +49,6 @@ class DrawerMenuTest {
     fun testDrawerProfileButton() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
-        Thread.sleep(1000)
         // Check that settings activity was opened.
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
@@ -56,7 +57,6 @@ class DrawerMenuTest {
     fun testDrawerSettingsButton() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
-        Thread.sleep(1000)
         // Check that settings activity was opened.
         onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
     }
@@ -65,7 +65,6 @@ class DrawerMenuTest {
     fun testDrawerLogoutButton() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout))
-        Thread.sleep(1000)
         // Check that settings activity was opened.
         onView(withId(R.id.connect_instance_button)).check(matches(isDisplayed()))
     }
