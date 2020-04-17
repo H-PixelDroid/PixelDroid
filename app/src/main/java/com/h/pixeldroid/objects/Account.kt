@@ -104,8 +104,10 @@ data class Account(
                 if(response.code() == 200) {
                     view.followButton.setOnClickListener {
                         if (response.body()!![0].following) {
+                            view.followButton.text = "Unfollow"
                             setOnClickUnfollow(view, api, context, credential)
                         } else {
+                            view.followButton.text = "Follow"
                             setOnClickFollow(view, api, context, credential)
                         }
                     }
