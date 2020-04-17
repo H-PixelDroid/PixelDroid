@@ -127,6 +127,9 @@ data class Account(
             override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
                 if(response.code() == 200) {
                     view.followButton.text = "Unfollow"
+                    view.followButton.setOnClickListener {
+                        setOnClickUnfollow(view, api, context, credential)
+                    }
                 } else if(response.code() == 403) {
                     Toast.makeText(context,"This action is not allowed", Toast.LENGTH_SHORT).show()
                 }
@@ -143,6 +146,9 @@ data class Account(
             override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
                 if(response.code() == 200) {
                     view.followButton.text = "Follow"
+                    view.followButton.setOnClickListener {
+                        setOnClickFollow(view, api, context, credential)
+                    }
                 } else if(response.code() == 401) {
                     Toast.makeText(context,"The access token is invalid", Toast.LENGTH_SHORT).show()
                 }
