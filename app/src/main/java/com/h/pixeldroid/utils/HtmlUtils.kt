@@ -10,6 +10,7 @@ import android.text.style.URLSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.text.toSpanned
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account.Companion.getAccountFromId
 import com.h.pixeldroid.objects.Mention
@@ -28,7 +29,7 @@ class HtmlUtils {
             } else {
                 Html.fromHtml(html)
             }
-            return result.trim() as Spanned
+            return result.trim().toSpanned()
         }
 
         private fun getDomain(urlString: String?): String {
