@@ -52,7 +52,7 @@ class ProfileFragment : Fragment() {
         // Set RecyclerView as a grid with 3 columns
         recycler = view.findViewById(R.id.profilePostsRecyclerView)
         recycler.layoutManager = GridLayoutManager(context, 3)
-        adapter = ProfilePostsRecyclerViewAdapter(context!!)
+        adapter = ProfilePostsRecyclerViewAdapter(requireContext())
         recycler.adapter = adapter
 
         return view
