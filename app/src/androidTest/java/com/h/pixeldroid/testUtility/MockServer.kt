@@ -175,10 +175,14 @@ class MockServer {
                         "application/json; charset=utf-8"
                     ).setResponseCode(200).setBody(unlikeJson)
                 } else if (request.path?.matches("/api/v1/accounts/[0-9]*".toRegex()) == true) {
-                    return MockResponse().addHeader(
-                        "Content-Type",
-                        "application/json; charset=utf-8"
-                    ).setResponseCode(200).setBody(accountJson)
+                    return if(request.body.toString() == "") {
+                        MockResponse().setHttp2ErrorCode(401)
+                    } else {
+                        MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(accountJson)
+                    }
                 } else if(request.path?.matches("/api/v1/statuses/[0-9]*/reblog".toRegex()) == true) {
                     return MockResponse().addHeader(
                         "Content-Type",

@@ -364,11 +364,20 @@ class MockedServerTest {
     fun clickingCommentButtonOpensCommentSection() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
-        //Click comment button and then try to see if the commenter exists
+
+        //Click comment button 3 times and then try to see if the commenter exists
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (0, clickChildViewWithId(R.id.commenter)))
-        Thread.sleep(1000)
+        Thread.sleep(100)
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.commenter)))
+        Thread.sleep(100)
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.commenter)))
+
         onView(withId(R.id.commentIn))
             .check(matches(hasDescendant(withId(R.id.editComment))))
     }

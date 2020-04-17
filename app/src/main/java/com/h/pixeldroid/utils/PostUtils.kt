@@ -28,10 +28,6 @@ class PostUtils {
                         holder.commentIn.visibility = View.GONE
                         setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_empty)
                     }
-                    View.INVISIBLE -> {
-                        holder.commentIn.visibility = View.VISIBLE
-                        setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_blue)
-                    }
                     View.GONE -> {
                         holder.commentIn.visibility = View.VISIBLE
                         setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_blue)

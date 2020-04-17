@@ -83,7 +83,7 @@ data class Status(
     /**
      * @brief returns the parsed version of the HTML description
      */
-    fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned {
+    private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned {
         val description = content
         if(description.isEmpty()) {
             return "No description".toSpanned()
@@ -94,7 +94,7 @@ data class Status(
 
     fun getUsername() : CharSequence {
         var name = account?.display_name
-        if (name.isNullOrEmpty()) {
+        if (name.isEmpty()) {
             name = account?.username
         }
         return name!!
