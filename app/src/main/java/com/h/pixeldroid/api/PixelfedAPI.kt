@@ -98,6 +98,15 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String? = null
     ) : Call<Context>
 
+    @GET("/api/v1/timelines/public")
+    fun timelinePublic(
+        @Query("local") local: Boolean? = null,
+        @Query("max_id") max_id: String? = null,
+        @Query("since_id") since_id: String? = null,
+        @Query("min_id") min_id: String? = null,
+        @Query("limit") limit: String? = null
+    ): Call<List<Status>>
+
     @GET("/api/v1/timelines/home")
     fun timelineHome(
         //The authorization header needs to be of the form "Bearer <token>"

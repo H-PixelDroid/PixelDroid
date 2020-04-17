@@ -268,6 +268,27 @@ class MockedServerTest {
     }
 
     @Test
+    fun clickingLikeButtonFails() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        val likes = getText(first(withId(R.id.nlikes)))
+
+        //Like the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (2, clickChildViewWithId(R.id.liker)))
+        Thread.sleep(100)
+
+        //...
+        Thread.sleep(100)
+
+        //Profit
+        onView((withId(R.id.list))).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun clickingUsernameOpensProfile() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
@@ -393,6 +414,18 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(withId(R.id.commentContainer))
             .check(matches(hasDescendant(withId(R.id.comment))))
+    }
+
+    @Test
+    fun clickingViewCommentFails() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+        //Open the comment section
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (2, clickChildViewWithId(R.id.ViewComments)))
+        Thread.sleep(1000)
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
 
     @Test
