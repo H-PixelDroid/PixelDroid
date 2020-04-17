@@ -150,10 +150,10 @@ interface PixelfedAPI {
         @Path("id") account_id: String? = null
     ): Call<List<Status>>
 
-    @GET("/api/v1/accounts/{id}/relationships")
+    @GET("/api/v1/accounts/relationships")
     fun checkRelationships(
         @Header("Authorization") authorization : String,
-        @Path("id") account_ids : List<String>
+        @Query("id[]") account_ids : List<String>
     ) : Call<List<Relationship>>
 
     @GET("/api/v1/accounts/{id}/followers")
