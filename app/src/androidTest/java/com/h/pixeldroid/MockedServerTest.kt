@@ -1,16 +1,10 @@
 package com.h.pixeldroid
 
 import android.content.Context
-import android.service.autofill.Validators.not
 import android.view.Gravity
-import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.*
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -22,9 +16,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
-import com.h.pixeldroid.testUtility.MockServer
-import org.hamcrest.BaseMatcher
-import org.hamcrest.Matcher
+import com.h.pixeldroid.testUtility.*
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,84 +31,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MockedServerTest {
-    private fun <T> first(matcher: Matcher<T>): Matcher<T>? {
-        return object : BaseMatcher<T>() {
-            var isFirst = true
-            override fun describeTo(description: org.hamcrest.Description?) {
-                description?.appendText("first matching item")
-            }
-
-            override fun matches(item: Any?): Boolean {
-                if (isFirst && matcher.matches(item)) {
-                    isFirst = false
-                    return true
-                }
-                return false
-            }
-
-        }
-    }
-
-    /**
-     * @param percent can be 1 or 0
-     * 1: swipes all the way up
-     * 0: swipes half way up
-     */
-    private fun slowSwipeUp(percent: Boolean) : ViewAction {
-        return ViewActions.actionWithAssertions(
-                GeneralSwipeAction(
-                    Swipe.SLOW,
-                    GeneralLocation.BOTTOM_CENTER,
-                    if(percent) GeneralLocation.TOP_CENTER else GeneralLocation.CENTER,
-                    Press.FINGER)
-                )
-    }
-
-    fun getText(matcher: Matcher<View?>?): String? {
-        val stringHolder = arrayOf<String?>(null)
-        onView(matcher).perform(object : ViewAction {
-            override fun getConstraints(): Matcher<View> {
-                return isAssignableFrom(TextView::class.java)
-            }
-
-            override fun getDescription(): String {
-                return "getting text from a TextView"
-            }
-
-            override fun perform(
-                uiController: UiController,
-                view: View
-            ) {
-                val tv = view as TextView //Save, because of check in getConstraints()
-                stringHolder[0] = tv.text.toString()
-            }
-        })
-        return stringHolder[0]
-    }
-
-    private fun clickChildViewWithId(id: Int) = object : ViewAction {
-
-        override fun getConstraints() = null
-
-        override fun getDescription() = "click child view with id $id"
-
-        override fun perform(uiController: UiController, view: View) {
-            val v = view.findViewById<View>(id)
-            v.performClick()
-        }
-    }
-
-    private fun typeTextInViewWithId(id: Int, text: String) = object : ViewAction {
-
-        override fun getConstraints() = null
-
-        override fun getDescription() = "click child view with id $id"
-
-        override fun perform(uiController: UiController, view: View) {
-            val v = view.findViewById<EditText>(id)
-            v.text.append(text)
-        }
-    }
 
     val mockServer = MockServer()
 

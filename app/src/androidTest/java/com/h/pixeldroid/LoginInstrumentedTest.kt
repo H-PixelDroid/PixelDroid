@@ -9,6 +9,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasDataString
@@ -24,6 +25,7 @@ import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matcher
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -69,7 +71,12 @@ class LoginCheckIntent {
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
     @get:Rule
-    val intentsTestRule = IntentsTestRule(LoginActivity::class.java)
+    val intentsTestRule = ActivityTestRule(LoginActivity::class.java)
+
+    @Before
+    fun before() {
+        Intents.init()
+    }
 
     @Test
     fun launchesOAuthIntent() {
@@ -99,6 +106,11 @@ class LoginCheckIntent {
 
         intended(expectedIntent)
 
+    }
+
+    @After
+    fun after() {
+        Intents.release()
     }
 }
 
