@@ -82,7 +82,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
-    inner class HomeRecyclerViewAdapter()
+    inner class HomeRecyclerViewAdapter
         : FeedsRecyclerViewAdapter<Status, PostViewHolder>() {
         private val api = pixelfedAPI
         private val credential = "Bearer $accessToken"

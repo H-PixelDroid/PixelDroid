@@ -21,13 +21,6 @@ import java.util.Locale
 
 class HtmlUtils {
     companion object {
-        private fun trimTrailingWhitespace(s: CharSequence): CharSequence {
-            var i = s.length
-            do {
-                i--
-            } while (i >= 0 && Character.isWhitespace(s[i]))
-            return s.subSequence(0, i + 1)
-        }
 
         private fun fromHtml(html: String): Spanned {
             val result: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -35,15 +28,7 @@ class HtmlUtils {
             } else {
                 Html.fromHtml(html)
             }
-            return trimTrailingWhitespace(result) as Spanned
-        }
-
-        fun toHtml(text: Spanned): String {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.toHtml(text, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE)
-            } else {
-                Html.toHtml(text)
-            }
+            return result.trim() as Spanned
         }
 
         private fun getDomain(urlString: String?): String {
@@ -122,8 +107,6 @@ class HtmlUtils {
                                 getAccountFromId(accountId, api, context, credential)
                             }
                         }
-                    } else {
-                        Log.e("ACCOUNT MENTION", id)
                     }
                 }
 
