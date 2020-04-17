@@ -98,6 +98,7 @@ data class Account(
         api.checkRelationships("Bearer $credential", listOf(id)).enqueue(object : Callback<List<Relationship>> {
             override fun onFailure(call: Call<List<Relationship>>, t: Throwable) {
                 Log.e("FOLLOW ERROR", t.toString())
+                Toast.makeText(context,"Could not get follow status", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<List<Relationship>>, response: Response<List<Relationship>>) {
@@ -123,6 +124,7 @@ data class Account(
         api.follow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
             override fun onFailure(call: Call<Relationship>, t: Throwable) {
                 Log.e("FOLLOW ERROR", t.toString())
+                Toast.makeText(context,"Could not follow", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
@@ -142,6 +144,7 @@ data class Account(
         api.unfollow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
             override fun onFailure(call: Call<Relationship>, t: Throwable) {
                 Log.e("UNFOLLOW ERROR", t.toString())
+                Toast.makeText(context,"Could not unfollow", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
