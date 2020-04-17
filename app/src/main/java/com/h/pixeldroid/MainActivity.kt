@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId){
             R.id.nav_account -> tabs.getTabAt(4)!!.select()
             R.id.nav_settings -> launchActivity(SettingsActivity())
-            R.id.nav_reconnect -> launchActivity(LoginActivity())
+            R.id.nav_logout -> launchActivity(LoginActivity())
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)

@@ -64,6 +64,6 @@
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
     <string name="whats_an_instance">What\'s an instance?</string>
-    <string name="reconnect">Reconnect</string>
+    <string name="logout">Logout</string>
 
 </resources>
