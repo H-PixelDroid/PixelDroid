@@ -47,6 +47,7 @@ class DrawerMenuTest {
     fun testDrawerProfileButton() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
+        Thread.sleep(1000)
         // Check that settings activity was opened.
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
@@ -55,6 +56,7 @@ class DrawerMenuTest {
     fun testDrawerSettingsButton() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
+        Thread.sleep(1000)
         // Check that settings activity was opened.
         onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
     }
@@ -63,6 +65,7 @@ class DrawerMenuTest {
     fun testDrawerLogoutButton() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout))
+        Thread.sleep(1000)
         // Check that settings activity was opened.
         onView(withId(R.id.connect_instance_button)).check(matches(isDisplayed()))
     }
