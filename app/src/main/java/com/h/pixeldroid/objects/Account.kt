@@ -102,12 +102,14 @@ data class Account(
 
             override fun onResponse(call: Call<List<Relationship>>, response: Response<List<Relationship>>) {
                 if(response.code() == 200) {
-                    view.followButton.setOnClickListener {
-                        if (response.body()!![0].following) {
-                            view.followButton.text = "Unfollow"
+                    if (response.body()!![0].following) {
+                        view.followButton.text = "Unfollow"
+                        view.followButton.setOnClickListener {
                             setOnClickUnfollow(view, api, context, credential)
-                        } else {
-                            view.followButton.text = "Follow"
+                        }
+                    } else {
+                        view.followButton.text = "Follow"
+                        view.followButton.setOnClickListener {
                             setOnClickFollow(view, api, context, credential)
                         }
                     }
