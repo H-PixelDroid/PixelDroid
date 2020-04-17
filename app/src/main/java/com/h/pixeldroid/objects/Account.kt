@@ -92,7 +92,7 @@ data class Account(
         view : View,
         context : Context,
         api : PixelfedAPI,
-        credential : String
+        credential : String?
     ) {
         // Get relationship between the two users (credential and this) and set followButton accordingly
         api.checkRelationships("Bearer $credential", listOf(id)).enqueue(object : Callback<List<Relationship>> {
@@ -120,7 +120,7 @@ data class Account(
         })
     }
 
-    private fun setOnClickFollow(view: View, api: PixelfedAPI, context: Context, credential: String) {
+    private fun setOnClickFollow(view: View, api: PixelfedAPI, context: Context, credential: String?) {
         api.follow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
             override fun onFailure(call: Call<Relationship>, t: Throwable) {
                 Log.e("FOLLOW ERROR", t.toString())
@@ -140,7 +140,7 @@ data class Account(
         })
     }
 
-    private fun setOnClickUnfollow(view: View, api: PixelfedAPI, context: Context, credential: String) {
+    private fun setOnClickUnfollow(view: View, api: PixelfedAPI, context: Context, credential: String?) {
         api.unfollow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
             override fun onFailure(call: Call<Relationship>, t: Throwable) {
                 Log.e("UNFOLLOW ERROR", t.toString())

@@ -84,10 +84,7 @@ class ProfileFragment : Fragment() {
                     }
                 })
         } else {
-            val accessToken = preferences.getString("accessToken", "")
-            val api = PixelfedAPI.create("${preferences.getString("domain", "")}")
-
-                account!!.activateFollow(view, context!!, api, accessToken!!)
+            account!!.activateFollow(view, context!!, pixelfedAPI, accessToken)
             account!!.setContent(view)
             setPosts(account!!)
         }
