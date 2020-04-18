@@ -44,9 +44,6 @@ class ProfileFragment : Fragment() {
             // Edit button redirects to Pixelfed's "edit account" page
             val editButton: Button = view.findViewById(R.id.editButton)
             editButton.visibility = View.VISIBLE
-            val followButton: Button = view.findViewById(R.id.followButton)
-            followButton.visibility = View.GONE
-
             editButton.setOnClickListener((View.OnClickListener { onClickEditButton() }))
         }
 

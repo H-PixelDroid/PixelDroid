@@ -103,16 +103,12 @@ data class Account(
 
             override fun onResponse(call: Call<List<Relationship>>, response: Response<List<Relationship>>) {
                 if(response.code() == 200) {
-                    if (response.body()!![0].following) {
+                    if(response.body()!![0].following) {
                         view.followButton.text = "Unfollow"
-                        view.followButton.setOnClickListener {
-                            setOnClickUnfollow(view, api, context, credential)
-                        }
+                        setOnClickUnfollow(view, api, context, credential)
                     } else {
                         view.followButton.text = "Follow"
-                        view.followButton.setOnClickListener {
-                            setOnClickFollow(view, api, context, credential)
-                        }
+                        setOnClickFollow(view, api, context, credential)
                     }
                     view.followButton.visibility = View.VISIBLE
                 }
@@ -121,42 +117,50 @@ data class Account(
     }
 
     private fun setOnClickFollow(view: View, api: PixelfedAPI, context: Context, credential: String?) {
-        api.follow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
-            override fun onFailure(call: Call<Relationship>, t: Throwable) {
-                Log.e("FOLLOW ERROR", t.toString())
-                Toast.makeText(context,"Could not follow", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
-                if(response.code() == 200) {
-                    view.followButton.text = "Unfollow"
-                    view.followButton.setOnClickListener {
-                        setOnClickUnfollow(view, api, context, credential)
-                    }
-                } else if(response.code() == 403) {
-                    Toast.makeText(context,"This action is not allowed", Toast.LENGTH_SHORT).show()
+        view.followButton.setOnClickListener {
+            api.follow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
+                override fun onFailure(call: Call<Relationship>, t: Throwable) {
+                    Log.e("FOLLOW ERROR", t.toString())
+                    Toast.makeText(context, "Could not follow", Toast.LENGTH_SHORT).show()
                 }
-            }
-        })
+
+                override fun onResponse(
+                    call: Call<Relationship>,
+                    response: Response<Relationship>
+                ) {
+                    if (response.code() == 200) {
+                        view.followButton.text = "Unfollow"
+                        setOnClickUnfollow(view, api, context, credential)
+                    } else if (response.code() == 403) {
+                        Toast.makeText(context, "This action is not allowed", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
+        }
     }
 
     private fun setOnClickUnfollow(view: View, api: PixelfedAPI, context: Context, credential: String?) {
-        api.unfollow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
-            override fun onFailure(call: Call<Relationship>, t: Throwable) {
-                Log.e("UNFOLLOW ERROR", t.toString())
-                Toast.makeText(context,"Could not unfollow", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
-                if(response.code() == 200) {
-                    view.followButton.text = "Follow"
-                    view.followButton.setOnClickListener {
-                        setOnClickFollow(view, api, context, credential)
-                    }
-                } else if(response.code() == 401) {
-                    Toast.makeText(context,"The access token is invalid", Toast.LENGTH_SHORT).show()
+        view.followButton.setOnClickListener {
+            api.unfollow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
+                override fun onFailure(call: Call<Relationship>, t: Throwable) {
+                    Log.e("UNFOLLOW ERROR", t.toString())
+                    Toast.makeText(context, "Could not unfollow", Toast.LENGTH_SHORT).show()
                 }
-            }
-        })
+
+                override fun onResponse(
+                    call: Call<Relationship>,
+                    response: Response<Relationship>
+                ) {
+                    if (response.code() == 200) {
+                        view.followButton.text = "Follow"
+                        setOnClickFollow(view, api, context, credential)
+                    } else if (response.code() == 401) {
+                        Toast.makeText(context, "The access token is invalid", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
+        }
     }
 }
