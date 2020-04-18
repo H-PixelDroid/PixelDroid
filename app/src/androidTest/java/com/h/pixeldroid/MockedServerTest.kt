@@ -1,19 +1,15 @@
 package com.h.pixeldroid
 
-import android.R.attr.x
 import android.content.Context
-import android.text.Editable
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.text.set
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.*
-import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -24,7 +20,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
-import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.testUtility.MockServer
 import org.hamcrest.BaseMatcher
@@ -117,7 +112,7 @@ class MockedServerTest {
         }
     }
 
-    val mockServer = MockServer()
+    private val mockServer = MockServer()
 
 
     @get:Rule
@@ -206,20 +201,6 @@ class MockedServerTest {
         onView(withId(R.id.username)).perform(ViewActions.click())
         Thread.sleep(10000)
         onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
-    }
-
-    @Test
-    fun testDrawerSettingsButton() {
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()) // Open Drawer
-
-        // Start the screen of your activity.
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
-
-        // Check that settings activity was opened.
-        onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
     }
 
     @Test
