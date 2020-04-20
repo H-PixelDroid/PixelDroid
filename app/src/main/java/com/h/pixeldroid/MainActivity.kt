@@ -55,15 +55,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             setupTabs(tabs)
         }
-
-        // Setup the drawer
-        drawerLayout = findViewById(R.id.drawer_layout)
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-
-        val tabs = arrayOf(HomeFragment(), Fragment(), CameraFragment(), Fragment(), ProfileFragment())
-
-        setupTabs(tabs)
     }
 
     private fun setupTabs(tabs: Array<Fragment>){

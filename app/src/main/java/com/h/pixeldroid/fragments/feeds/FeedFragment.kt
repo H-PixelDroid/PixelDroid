@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
 import androidx.paging.ItemKeyedDataSource
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
@@ -126,10 +127,10 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
     inner class FeedDataSourceFactory(
         private val makeInitialCall: (Int) -> Call<List<T>>,
         private val makeAfterCall: (Int, String) -> Call<List<T>>
-    ): androidx.paging.DataSource.Factory<String, T>() {
+    ): DataSource.Factory<String, T>() {
         lateinit var liveData: MutableLiveData<FeedDataSource>
 
-        override fun create(): androidx.paging.DataSource<String, T> {
+        override fun create(): DataSource<String, T> {
             val dataSource = FeedDataSource(::makeInitialCall.get(), ::makeAfterCall.get())
             liveData = MutableLiveData()
             liveData.postValue(dataSource)
