@@ -135,7 +135,8 @@ class CameraFragment : Fragment() {
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), 200)
-            openCamera(requiredType)
+            //openCamera(requiredType)
+            return
         }
 
 
