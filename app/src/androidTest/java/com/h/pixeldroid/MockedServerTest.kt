@@ -140,6 +140,24 @@ class MockedServerTest {
         onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
+    /* WIP TEST
+    @Test
+    fun clickFollowButton() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        }
+        Thread.sleep(1000)
+
+        // Follow
+        onView(withId(R.id.followButton)).perform((ViewActions.click()))
+        Thread.sleep(100)
+        onView(withId(R.id.followButton)).check(matches(withText("Unfollow")))
+
+        // Unfollow
+        onView(withId(R.id.followButton)).perform((ViewActions.click()))
+        Thread.sleep(100)
+        onView(withId(R.id.followButton)).check(matches(withText("Follow")))
+    }*/
 
     @Test
     fun testNotificationsList() {
