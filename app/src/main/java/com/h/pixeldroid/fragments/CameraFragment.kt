@@ -14,11 +14,13 @@ import android.media.ImageReader.OnImageAvailableListener
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.SparseIntArray
 import android.view.*
 import android.view.OrientationEventListener.ORIENTATION_UNKNOWN
 import android.view.animation.AlphaAnimation
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -238,8 +240,8 @@ class CameraFragment : Fragment() {
         pictureRequestBuilder.set(
             CaptureRequest.JPEG_ORIENTATION,
             getJpegOrientation(
-                manager.getCameraCharacteristics(cameraDevice.id),
-                activity?.windowManager?.defaultDisplay?.rotation!!
+               // manager.getCameraCharacteristics(cameraDevice.id),
+               // activity?.windowManager?.defaultDisplay?.rotation!!
             )
         )
 
@@ -313,7 +315,28 @@ class CameraFragment : Fragment() {
 
         // Calculate desired JPEG orientation relative to camera orientation to make
         // the image upright relative to the device orientation
-        return (sensorOrientation + deviceOrientation + 360) % 360
+        val value = (sensorOrientation + deviceOrientation + 360) % 360
+        return value
+    }
+
+    private fun getJpegOrientation(): Int {
+        val rotation = requireActivity().windowManager.defaultDisplay.rotation
+        val characteristics = manager.getCameraCharacteristics(cameraDevice.id)
+        val sensorOrientation =  characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
+
+        val orientations = SparseIntArray(4)
+        orientations.append(Surface.ROTATION_0, 90)
+        orientations.append(Surface.ROTATION_90, 0)
+        orientations.append(Surface.ROTATION_180, 270)
+        orientations.append(Surface.ROTATION_270, 180)
+
+        val surfaceRotation = orientations.get(rotation)
+
+        val jpegOrientation = (surfaceRotation + sensorOrientation!! + 270) % 360
+
+        val string = rotation.toString() + ", "+ sensorOrientation.toString() +", "+ jpegOrientation.toString()
+        Toast.makeText(requireContext(), string, Toast.LENGTH_SHORT).show()
+        return jpegOrientation
     }
 
     private fun flipButtons() {
