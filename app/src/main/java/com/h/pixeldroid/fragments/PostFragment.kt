@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.objects.Status
 

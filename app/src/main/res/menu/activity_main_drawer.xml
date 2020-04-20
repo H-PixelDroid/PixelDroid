@@ -12,7 +12,7 @@
             android:title="@string/menu_settings"
             android:icon="@drawable/ic_settings"/>
         <item
-            android:id="@+id/nav_accessibility"
-            android:title="@string/menu_accessibility" />
+            android:id="@+id/nav_logout"
+            android:title="@string/logout" />
     </group>
 </menu>

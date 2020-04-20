@@ -19,6 +19,7 @@ import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.fragments.ProfileFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -93,7 +94,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
         when (item.itemId){
+            R.id.nav_account -> tabs.getTabAt(4)!!.select()
             R.id.nav_settings -> launchActivity(SettingsActivity())
+            R.id.nav_logout -> launchActivity(LoginActivity())
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)
