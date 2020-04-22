@@ -2,6 +2,7 @@ package com.h.pixeldroid.fragments
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -56,8 +57,8 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
         val r = Runnable {
             val tbImage: Bitmap?
             if (bitmap == null) {
-                tbImage =
-                    BitmapUtils.getBitmapFromAssets(activity!!, PhotoEditActivity.NAME.IMAGE_NAME, 100, 100)
+                Log.i("testImage", PhotoEditActivity.NAME.IMAGE_NAME)
+                tbImage = BitmapUtils.getBitmapFromAssets(activity!!, PhotoEditActivity.NAME.IMAGE_NAME, 100, 100)
             } else {
                 tbImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false)
             }

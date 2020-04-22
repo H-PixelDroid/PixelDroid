@@ -76,8 +76,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
-    implementation "com.karumi:dexter:4.1.0"
-    implementation "info.androidhive:imagefilters:1.0.7"
+    implementation 'com.karumi:dexter:4.1.0'
+    implementation 'info.androidhive:imagefilters:1.0.7'
 
     implementation("com.github.bumptech.glide:glide:4.11.0") {
         exclude group: "com.android.support"

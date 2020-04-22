@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.R
 
 const val PICK_IMAGE_REQUEST = 1
@@ -25,9 +26,15 @@ class CameraFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
         val uploadPictureButton: Button = view.findViewById(R.id.upload_picture_button)
+        val editPictureButton: Button = view.findViewById(R.id.edit_picture_button)
         uploadedPictureView = view.findViewById(R.id.uploaded_picture_view)
         uploadPictureButton.setOnClickListener{
             uploadPicture()
+        }
+
+        editPictureButton.setOnClickListener{
+            val intent = Intent (activity, PhotoEditActivity::class.java)
+            activity!!.startActivity(intent)
         }
 
         // Inflate the layout for this fragment

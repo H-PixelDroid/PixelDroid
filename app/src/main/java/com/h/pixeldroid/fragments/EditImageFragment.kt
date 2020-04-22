@@ -51,18 +51,18 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-        var progress = progress
+        var prog = progress
 
         if(listener != null) {
             when(seekBar!!.id) {
                 R.id.seekbar_brightness -> listener!!.onBrightnessChange(progress - 100)
                 R.id.seekbar_saturation -> {
-                    progress += 10
-                    val tempProgress = .10f * progress
+                    prog += 10
+                    val tempProgress = .10f * prog
                     listener!!.onSaturationChange(tempProgress)
                 }
                 R.id.seekbar_contrast -> {
-                    val tempProgress = .10f * progress
+                    val tempProgress = .10f * prog
                     listener!!.onSaturationChange(tempProgress)
                 }
             }

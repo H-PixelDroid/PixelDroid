@@ -18,6 +18,16 @@
         android:text="@string/upload_a_picture"
         android:background="@color/colorPrimary"
         android:textColor="@color/cardview_light_background"/>
+    <Button
+        android:id="@+id/edit_picture_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:layout_margin="15dp"
+        android:text="Edit a picture"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/cardview_light_background"/>
 
     <ImageView
         android:id="@+id/uploaded_picture_view"

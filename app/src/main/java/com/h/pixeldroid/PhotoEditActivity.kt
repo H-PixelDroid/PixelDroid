@@ -153,7 +153,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                         val path = BitmapUtils.insertImage(contentResolver, finalImage, System.currentTimeMillis().toString() + "_profile.jpg", "")
                         if(!TextUtils.isEmpty(path)) {
                             val snackBar = Snackbar.make(coordinator_edit, "Image saved to gallery", Snackbar.LENGTH_LONG)
-                                .setAction("OPEN", {openImage(path)})
+                                .setAction("OPEN") {openImage(path)}
                             snackBar.show()
                         } else {
                             val snackBar = Snackbar.make(coordinator_edit, "Unable to save image", Snackbar.LENGTH_LONG)
