@@ -3,7 +3,6 @@ package com.h.pixeldroid.fragments.feeds
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,10 +22,11 @@ import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.PostActivity
+import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Status
-import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 import retrofit2.Call
 
@@ -45,8 +45,6 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        content = makeContent()
-
         //RequestBuilder that is re-used for every image
         profilePicRequest = Glide.with(this)
             .asDrawable().apply(RequestOptions().circleCrop())
@@ -56,12 +54,6 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         adapter = NotificationsRecyclerViewAdapter()
         list.adapter = adapter
 
-        content.observe(viewLifecycleOwner,
-            Observer { c ->
-                adapter.submitList(c)
-                //after a refresh is done we need to stop the pull to refresh spinner
-                swipeRefreshLayout.isRefreshing = false
-            })
 
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Notification> = ViewPreloadSizeProvider()
@@ -71,6 +63,18 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         list.addOnScrollListener(preloader)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        content = makeContent()
+
+        content.observe(viewLifecycleOwner,
+            Observer { c ->
+                adapter.submitList(c)
+                //after a refresh is done we need to stop the pull to refresh spinner
+                swipeRefreshLayout.isRefreshing = false
+            })
     }
 
     private fun makeContent(): LiveData<PagedList<Notification>> {
@@ -113,8 +117,8 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                     return
                 }
                 Notification.NotificationType.follow -> {
-                    val url = notification.status?.url ?: notification.account.url
-                    intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    intent = Intent(context, ProfileActivity::class.java)
+                    intent.putExtra(Account.ACCOUNT_TAG, notification.account)
                 }
             }
             context.startActivity(intent)

@@ -1,12 +1,22 @@
 package com.h.pixeldroid.objects
 
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import android.widget.Toast
+import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.R
+import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.feeds.ViewHolder
 import com.h.pixeldroid.utils.ImageConverter
-import kotlinx.android.synthetic.main.post_fragment.view.*
+import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
+import com.h.pixeldroid.utils.PostUtils.Companion.postComment
+import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
+import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
+import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import java.io.Serializable
 
 /*
@@ -23,7 +33,7 @@ data class Status(
     val visibility: Visibility,
     val sensitive: Boolean,
     val spoiler_text: String,
-    val media_attachments: List<Attachment>,
+    val media_attachments: List<Attachment>?,
     val application: Application,
     //Rendering attributes
     val mentions: List<Mention>,
@@ -57,7 +67,8 @@ data class Status(
     }
 
     fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
-    fun getProfilePicUrl() : String? = account?.avatar
+    fun getProfilePicUrl() : String? = account.avatar
+    fun getPostPreviewURL() : String? = media_attachments?.getOrNull(0)?.preview_url
 
     fun getDescription() : CharSequence {
         val description = content as CharSequence
@@ -85,23 +96,103 @@ data class Status(
         return "$nShares Shares"
     }
 
-    fun setupPost(rootView : View) {
+    fun setupPost(
+        rootView: View,
+        request: RequestBuilder<Drawable>,
+        postPic: ImageView,
+        profilePic: ImageView
+    ) {
         //Setup username as a button that opens the profile
-        rootView.username.text = this.getUsername()
-        rootView.username.setTypeface(null, Typeface.BOLD)
+        val username = rootView.findViewById<TextView>(R.id.username)
+        username.text = this.getUsername()
+        username.setTypeface(null, Typeface.BOLD)
+        username.setOnClickListener { account.openProfile(rootView.context) }
 
-        rootView.usernameDesc.text = this.getUsername()
-        rootView.usernameDesc.setTypeface(null, Typeface.BOLD)
+        val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
+        usernameDesc.text = this.getUsername()
+        usernameDesc.setTypeface(null, Typeface.BOLD)
 
-        rootView.description.text = this.getDescription()
+        rootView.findViewById<TextView>(R.id.description).text = this.getDescription()
 
-        rootView.nlikes.text = this.getNLikes()
-        rootView.nlikes.setTypeface(null, Typeface.BOLD)
+        val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
+        nlikes.text = this.getNLikes()
+        nlikes.setTypeface(null, Typeface.BOLD)
 
-        rootView.nshares.text = this.getNShares()
-        rootView.nshares.setTypeface(null, Typeface.BOLD)
+        val nshares = rootView.findViewById<TextView>(R.id.nshares)
+        nshares.text = this.getNShares()
+        nshares.setTypeface(null, Typeface.BOLD)
 
+        //Setup images
+        request.load(this.getPostUrl()).into(postPic)
+        ImageConverter.setRoundImageFromURL(
+            rootView,
+            this.getProfilePicUrl(),
+            profilePic
+        )
+        profilePic.setOnClickListener { account.openProfile(rootView.context) }
+
+        //Set comment initial visibility
+        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
     }
+
+    fun activateLiker(
+        holder : ViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
+        //Activate the liker
+        holder.liker.setOnClickListener {
+            if (holder.isLiked) {
+                //Unlike the post
+                unLikePostCall(holder, api, credential, this)
+            } else {
+                //like the post
+                likePostCall(holder, api, credential, this)
+            }
+        }
+    }
+
+    fun showComments(
+        holder : ViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
+        //Show all comments of a post
+        if (replies_count == 0) {
+            holder.viewComment.text =  "No comments on this post..."
+        } else {
+            holder.viewComment.text =  "View all ${replies_count} comments..."
+            holder.viewComment.setOnClickListener {
+                holder.viewComment.visibility = View.GONE
+
+                //Retrieve the comments
+                retrieveComments(holder, api, credential, this)
+            }
+        }
+    }
+
+    fun activateCommenter(
+        holder : ViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
+        //Toggle comment button
+        toggleCommentInput(holder)
+
+        //Activate commenter
+        holder.submitCmnt.setOnClickListener {
+            val textIn = holder.comment.text
+            //Open text input
+            if(textIn.isNullOrEmpty()) {
+                Toast.makeText(holder.context,"Comment must not be empty!", Toast.LENGTH_SHORT).show()
+            } else {
+
+                //Post the comment
+                postComment(holder, api, credential, this)
+            }
+        }
+    }
+
     enum class Visibility : Serializable {
         public, unlisted, private, direct
     }

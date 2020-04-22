@@ -64,6 +64,8 @@
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
     <string name="title_activity_photo_edit">PhotoEditActivity</string>
+    <string name="whats_an_instance">What\'s an instance?</string>
+    <string name="logout">Logout</string>
 
     <string name="lbl_brightness">BRIGHTNESS</string>
     <string name="lbl_contrast">CONTRAST</string>

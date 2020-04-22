@@ -18,6 +18,8 @@
             android:name=".PhotoEditActivity"
             android:theme="@style/AppTheme.NoActionBar.FullScreen"/>
         <activity android:name=".PostActivity" />
+        <activity android:name=".ProfileActivity"/>
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings2">
@@ -36,7 +38,8 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

@@ -7,8 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
@@ -21,12 +20,10 @@ import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.ImageConverter
-import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 
 
-class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.ViewHolder>() {
+class HomeFragment : FeedFragment<Status, ViewHolder>() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
 
@@ -36,8 +33,6 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        content = makeContent()
-
         //RequestBuilder that is re-used for every image
         picRequest = Glide.with(this)
             .asDrawable().fitCenter()
@@ -46,12 +41,6 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
         adapter = HomeRecyclerViewAdapter()
         list.adapter = adapter
 
-        content.observe(viewLifecycleOwner,
-            Observer { c ->
-                adapter.submitList(c)
-                //after a refresh is done we need to stop the pull to refresh spinner
-                swipeRefreshLayout.isRefreshing = false
-            })
 
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Status> = ViewPreloadSizeProvider()
@@ -61,6 +50,17 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
         list.addOnScrollListener(preloader)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        content = makeContent()
+        content.observe(viewLifecycleOwner,
+            Observer { c ->
+                adapter.submitList(c)
+                //after a refresh is done we need to stop the pull to refresh spinner
+                swipeRefreshLayout.isRefreshing = false
+            })
     }
 
     private fun makeContent(): LiveData<PagedList<Status>> {
@@ -81,13 +81,15 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
-    inner class HomeRecyclerViewAdapter: FeedsRecyclerViewAdapter<Status, HomeRecyclerViewAdapter.ViewHolder>() {
-
+    inner class HomeRecyclerViewAdapter()
+        : FeedsRecyclerViewAdapter<Status, ViewHolder>() {
+        private val api = pixelfedAPI
+        private val credential = "Bearer $accessToken"
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.post_fragment, parent, false)
             context = view.context
-            return ViewHolder(view)
+            return ViewHolder(view, context)
         }
 
         /**
@@ -97,38 +99,23 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             val post = getItem(position) ?: return
             val metrics = context.resources.displayMetrics
             //Limit the height of the different images
-            holder.profilePic?.maxHeight = metrics.heightPixels
+            holder.profilePic.maxHeight = metrics.heightPixels
             holder.postPic.maxHeight = metrics.heightPixels
 
-            //Set the two images
-            ImageConverter.setRoundImageFromURL(
-                holder.postView,
-                post.getProfilePicUrl(),
-                holder.profilePic!!
-            )
+            //Setup the post layout
+            post.setupPost(holder.postView, picRequest, holder.postPic, holder.profilePic)
 
-            picRequest.load(post.getPostUrl()).into(holder.postPic)
+            //Set initial favorite toggle value
+            holder.isLiked = post.favourited
 
-            //Set the image back to a placeholder if the original is too big
-            if(holder.postPic.height > metrics.heightPixels) {
-                ImageConverter.setDefaultImage(holder.postView, holder.postPic)
-            }
+            //Activate liker
+            post.activateLiker(holder, api, credential)
 
-            //Set the the text views
-            post.setupPost(holder.postView)
-        }
+            //Show comments
+            post.showComments(holder, api, credential)
 
-        /**
-         * Represents the posts that will be contained within the feed
-         */
-        inner class ViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
-            val profilePic  : ImageView? = postView.findViewById(R.id.profilePic)
-            val postPic     : ImageView = postView.findViewById(R.id.postPicture)
-            val username    : TextView = postView.findViewById(R.id.username)
-            val usernameDesc: TextView = postView.findViewById(R.id.usernameDesc)
-            val description : TextView = postView.findViewById(R.id.description)
-            val nlikes      : TextView = postView.findViewById(R.id.nlikes)
-            val nshares     : TextView = postView.findViewById(R.id.nshares)
+            //Activate Commenter
+            post.activateCommenter(holder, api, credential)
         }
 
         override fun getPreloadItems(position: Int): MutableList<Status> {
@@ -140,4 +127,25 @@ class HomeFragment : FeedFragment<Status, HomeFragment.HomeRecyclerViewAdapter.V
             return picRequest.load(item.getPostUrl())
         }
     }
+}
+
+/**
+ * Represents the posts that will be contained within the feed
+ */
+class ViewHolder(val postView: View, val context: android.content.Context) : RecyclerView.ViewHolder(postView) {
+    val profilePic  : ImageView = postView.findViewById(R.id.profilePic)
+    val postPic     : ImageView = postView.findViewById(R.id.postPicture)
+    val username    : TextView  = postView.findViewById(R.id.username)
+    val usernameDesc: TextView  = postView.findViewById(R.id.usernameDesc)
+    val description : TextView  = postView.findViewById(R.id.description)
+    val nlikes      : TextView  = postView.findViewById(R.id.nlikes)
+    val nshares     : TextView  = postView.findViewById(R.id.nshares)
+    val liker       : ImageView = postView.findViewById(R.id.liker)
+    val submitCmnt  : ImageButton = postView.findViewById(R.id.submitComment)
+    val commenter   : ImageView = postView.findViewById(R.id.commenter)
+    val comment     : EditText = postView.findViewById(R.id.editComment)
+    val commentCont : LinearLayout = postView.findViewById(R.id.commentContainer)
+    val commentIn   : LinearLayout = postView.findViewById(R.id.commentIn)
+    val viewComment : TextView = postView.findViewById(R.id.ViewComments)
+    var isLiked : Boolean = false
 }

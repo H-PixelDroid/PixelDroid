@@ -2,7 +2,6 @@
 
 # Originally written by Ralf Kistner <ralf@embarkmobile.com>, but placed in the public domain
 
-#set -x
 set +e
 
 bootanim=""
