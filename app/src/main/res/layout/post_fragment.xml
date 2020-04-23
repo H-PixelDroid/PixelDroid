@@ -1,200 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-tools:context=".fragments.PostFragment">
-    <ScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-        <androidx.cardview.widget.CardView
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:sparkbutton="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.PostFragment">
+    <androidx.cardview.widget.CardView
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+
+            <ImageView
+                android:id="@+id/profilePic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_default_user"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+                app:layout_constraintStart_toEndOf="@+id/profilePic"
+                app:layout_constraintTop_toTopOf="@+id/profilePic"
+                tools:text="Account" />
+
+            <ImageView
+                android:id="@+id/postPicture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintTop_toBottomOf="@+id/profilePic"
+                tools:src="@color/browser_actions_bg_grey"/>
 
-                <LinearLayout
-                    android:id="@+id/linearLayout3"
+            <ImageView
+                android:id="@+id/commenter"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:importantForAccessibility="no"
+                android:padding="4dp"
+                android:src="@drawable/ic_comment_empty"
+                app:layout_constraintBottom_toBottomOf="@+id/liker"
+                app:layout_constraintEnd_toStartOf="@id/reblogger"
+                app:layout_constraintStart_toEndOf="@id/liker"
+                app:layout_constraintTop_toTopOf="@id/liker"
+                />
+
+            <at.connyduck.sparkbutton.SparkButton
+                android:id="@+id/liker"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:clipToPadding="false"
+                android:importantForAccessibility="no"
+                android:padding="4dp"
+                sparkbutton:activeImage="@drawable/ic_like_full"
+                sparkbutton:iconSize="28dp"
+                sparkbutton:inactiveImage="@drawable/ic_like_empty"
+                sparkbutton:primaryColor="@color/heart_red"
+                sparkbutton:secondaryColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@id/commenter"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="@id/profilePic"
+                app:layout_constraintTop_toBottomOf="@id/postPicture"/>
+
+            <at.connyduck.sparkbutton.SparkButton
+                android:id="@+id/reblogger"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:clipToPadding="false"
+                android:importantForAccessibility="no"
+                android:padding="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/commenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/commenter"
+                app:layout_constraintTop_toTopOf="@+id/commenter"
+                sparkbutton:activeImage="@drawable/ic_reblog_blue"
+                sparkbutton:iconSize="28dp"
+                sparkbutton:inactiveImage="@drawable/ic_reblog"
+                sparkbutton:primaryColor="@color/share_blue"
+                sparkbutton:secondaryColor="@color/black"/>
+
+
+            <TextView
+                android:id="@+id/nlikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                app:layout_constraintEnd_toEndOf="@+id/liker"
+                app:layout_constraintStart_toStartOf="@+id/liker"
+                app:layout_constraintTop_toBottomOf="@+id/liker"
+                tools:text="2 Likes" />
+
+            <TextView
+                android:id="@+id/nshares"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:gravity="right"
+                app:layout_constraintEnd_toEndOf="@+id/reblogger"
+                app:layout_constraintStart_toStartOf="@+id/reblogger"
+                app:layout_constraintTop_toBottomOf="@+id/reblogger"
+                tools:text="3 Shares" />
+
+            <TextView
+                android:id="@+id/usernameDesc"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/profilePic"
+                app:layout_constraintTop_toBottomOf="@+id/nlikes"
+                tools:text="Account"/>
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hyphenationFrequency="full"
+                app:layout_constraintStart_toStartOf="@+id/usernameDesc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usernameDesc"
+                tools:text="This is a description, describing stuff.\nIt contains multiple lines, and that's okay. It's also got some really long lines, and we love it for it." />
+
+            <LinearLayout
+                android:id="@+id/commentIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/description"
+                tools:layout_editor_absoluteX="10dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3">
+
+                    <EditText
+                        android:id="@+id/editComment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Comment"
+                        android:importantForAutofill="no"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/submitComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:contentDescription="Submit button"
+                    android:src="@drawable/ic_send_blue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/commentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteY="315dp"
+                app:layout_constraintTop_toBottomOf="@+id/commentIn">
+
+                <TextView
+                    android:id="@+id/ViewComments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp"
+                    tools:text="TextView"/>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp">
+            </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/profilePic"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/ic_default_user"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <TextView
-                            android:id="@+id/username"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/profilePic"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.516"
-                            tools:text="TextView" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/postPicture"
-                            android:adjustViewBounds="true"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/LikeShareConstraint"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="10dp"
-                        >
-
-                        <LinearLayout
-                            android:layout_width="409dp"
-                            android:layout_height="28dp"
-                            android:orientation="horizontal"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <ImageView
-                                android:id="@+id/liker"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="start"
-                                android:src="@drawable/ic_heart" />
-
-                            <ImageView
-                                android:id="@+id/commenter"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="start"
-                                android:src="@drawable/ic_add_black_24dp" />
-                        </LinearLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/nlikes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="50"
-                            tools:text="TextView" />
-
-                        <TextView
-                            android:id="@+id/nshares"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginRight="30dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight="50"
-                            android:gravity="right"
-                            tools:text="TextView" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/usernameDesc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-
-                        tools:text="TextView" />
-
-                    <TextView
-                        android:id="@+id/description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"
-                        tools:text="TextView" />
-
-                    <LinearLayout
-                        android:id="@+id/commentIn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginStart="10dp"
-                        android:orientation="horizontal">
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="3">
-                            <EditText
-                                android:id="@+id/editComment"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:hint="Comment" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                        <ImageButton
-                            android:id="@+id/submitComment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="end"
-                            android:src="@drawable/ic_add_black_24dp"
-                            android:layout_weight="1"
-                            android:contentDescription="Submit button" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/commentContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/ViewComments"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginBottom="10dp"
-                            tools:text="TextView">
-                        </TextView>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-    </ScrollView>
 
 </FrameLayout>
