@@ -26,7 +26,7 @@ https://docs.joinmastodon.org/entities/account/
 
 data class Account(
     //Base attributes
-    val id: String,
+    override val id: String,
     val username: String,
     val acct: String,
     val url: String, //HTTPS URL
@@ -50,15 +50,16 @@ data class Account(
     val fields: List<Field>? = emptyList(),
     val bot: Boolean =  false,
     val source: Source? = null
-) : Serializable {
+) : Serializable, FeedContent() {
     companion object {
         const val ACCOUNT_TAG = "AccountTag"
+        const val ACCOUNT_ID_TAG = "AccountIdTag"
     }
 
     // Open profile activity with given account
     fun openProfile(context: Context) {
         val intent = Intent(context, ProfileActivity::class.java)
-        intent.putExtra(Account.ACCOUNT_TAG, this)
+        intent.putExtra(ACCOUNT_TAG, this)
         startActivity(context, intent, null)
     }
 

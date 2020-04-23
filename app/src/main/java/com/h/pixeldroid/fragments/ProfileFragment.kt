@@ -11,13 +11,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
+import com.h.pixeldroid.FollowersActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
+import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Status
+import kotlinx.android.synthetic.main.profile_fragment.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,15 +41,14 @@ class ProfileFragment : Fragment() {
         preferences = this.requireActivity().getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )
-        account = arguments?.getSerializable("profileTag") as Account?
+        account = arguments?.getSerializable(ACCOUNT_TAG) as Account?
         val view = inflater.inflate(R.layout.profile_fragment, container, false)
-
 
         if(account == null) {
             // Edit button redirects to Pixelfed's "edit account" page
             val editButton: Button = view.findViewById(R.id.editButton)
             editButton.visibility = View.VISIBLE
-            editButton.setOnClickListener((View.OnClickListener { onClickEditButton() }))
+            editButton.setOnClickListener{ onClickEditButton() }
         }
 
         // Set RecyclerView as a grid with 3 columns
@@ -81,9 +85,12 @@ class ProfileFragment : Fragment() {
                     }
                 })
         } else {
-            account!!.activateFollow(view, context!!, pixelfedAPI, accessToken)
+            account!!.activateFollow(view, requireContext(), pixelfedAPI, accessToken)
             account!!.setContent(view)
             setPosts(account!!)
+            
+            // Open followers list
+            view.nbFollowersTextView.setOnClickListener{ onClickFollowers() }
         }
     }
     // Populate profile page with user's posts
@@ -122,5 +129,11 @@ class ProfileFragment : Fragment() {
             val text = "Cannot open this link"
             Log.e("ProfileFragment", text)
         }
+    }
+
+    private fun onClickFollowers() {
+        val intent = Intent(context, FollowersActivity::class.java)
+        intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
+        ContextCompat.startActivity(requireContext(), intent, null)
     }
 }
