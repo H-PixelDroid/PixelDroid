@@ -37,7 +37,7 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
         tbItemList = ArrayList()
         adapter = ThumbnailAdapter(requireActivity(), tbItemList, this)
 
-        recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.itemAnimator = DefaultItemAnimator()
 

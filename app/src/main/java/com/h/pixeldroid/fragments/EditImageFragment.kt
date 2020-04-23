@@ -18,7 +18,7 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
     internal lateinit var seekbarContrast: SeekBar
 
     private var BRIGHTNESS_START = 100
-    private var SATURATION_START = 10
+    private var SATURATION_START = 0
     private var CONTRAST_START = 10
 
     override fun onCreateView(

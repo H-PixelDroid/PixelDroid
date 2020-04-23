@@ -35,7 +35,6 @@ class CameraFragment : Fragment() {
 
         editPictureButton.setOnClickListener{
             val intent = Intent (activity, PhotoEditActivity::class.java)
-            intent.putExtra("uri", Uri.parse("https://pixelfed.de/p/Miike/140364967936397312"))
             activity!!.startActivity(intent)
         }
 
