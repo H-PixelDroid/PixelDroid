@@ -15,7 +15,6 @@ import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.testUtility.MockServer
@@ -27,7 +26,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
-import java.util.regex.Matcher
 
 
 @RunWith(AndroidJUnit4::class)
@@ -56,7 +54,7 @@ class EditPhotoTest {
 
         // Launch PhotoEditActivity
         ActivityScenario.launch(MainActivity::class.java).onActivity { a ->
-            a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(2)?.select()
+            a.findViewById<TabLayout>(R.id.tabs).getTabAt(2)?.select()
         }
         Espresso.onView(withId(R.id.edit_picture_button)).perform(click())
     }
@@ -100,12 +98,12 @@ class EditPhotoTest {
     @Test
     fun FiltersIsSwipeableAndClickeable() {
         Espresso.onView(withId(R.id.viewPager)).perform(swipeLeft())
-        Espresso.onView(withId(R.id.tabs_edit_photo)).perform(selectTabAtPosition(1))
+        Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
     }
 
     @Test
     fun BirghtnessSaturationContrastTest() {
-        Espresso.onView(withId(R.id.tabs_edit_photo)).perform(selectTabAtPosition(1))
+        Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
 
         val change = 5
         Espresso.onView(withId(R.id.seekbar_brightness)).perform(setProgress(change))

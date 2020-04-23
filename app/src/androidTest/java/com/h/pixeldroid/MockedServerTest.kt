@@ -130,7 +130,7 @@ class MockedServerTest {
     @Test
     fun testFollowersTextView() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(4)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
         }
         Thread.sleep(1000)
         onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
@@ -140,7 +140,7 @@ class MockedServerTest {
     @Test
     fun testNotificationsList() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(3)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
         }
         Thread.sleep(1000)
 
@@ -154,7 +154,7 @@ class MockedServerTest {
     @Test
     fun clickNotification() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(3)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
         }
         Thread.sleep(1000)
 
@@ -169,7 +169,7 @@ class MockedServerTest {
     @Test
     fun clickNotificationUser() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(3)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
         }
         Thread.sleep(1000)
 
@@ -184,7 +184,7 @@ class MockedServerTest {
     @Test
     fun clickNotificationPost() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(3)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
         }
         Thread.sleep(1000)
 
@@ -213,7 +213,7 @@ class MockedServerTest {
     @Test
     fun swipingRightStopsAtHomepage() {
         ActivityScenario.launch(MainActivity::class.java).onActivity {
-                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(4)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
         } // go to the last tab
         onView(withId(R.id.main_activity_main_linear_layout))
             .perform(ViewActions.swipeRight()) // notifications

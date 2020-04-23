@@ -20,14 +20,14 @@
 
     <com.h.pixeldroid.utils.NonSwipeableViewPager
         android:id="@+id/viewPager"
-        android:layout_above="@+id/tabs_edit_photo"
+        android:layout_above="@+id/tabs"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_below="@+id/image_preview"
         android:layout_width="match_parent"
         android:layout_height="80dp" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs_edit_photo"
+        android:id="@+id/tabs"
         app:tabGravity="fill"
         app:tabMode="fixed"
         android:layout_alignParentBottom="true"

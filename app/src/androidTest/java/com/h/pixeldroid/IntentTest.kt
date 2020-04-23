@@ -50,7 +50,7 @@ class IntentTest {
     @Test
     fun launchesIntent() {
         ActivityScenario.launch(MainActivity::class.java).onActivity { a ->
-            a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(4)?.select()
+            a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
         }
         val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
             IntentMatchers.hasAction(Intent.ACTION_VIEW),

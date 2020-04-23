@@ -73,7 +73,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         loadImage()
 
         viewPager = findViewById(R.id.viewPager)
-        tabLayout = findViewById(R.id.tabs_edit_photo)
+        tabLayout = findViewById(R.id.tabs)
         setupViewPager(viewPager)
         tabLayout.setupWithViewPager(viewPager)
     }

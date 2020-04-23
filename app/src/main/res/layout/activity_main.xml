@@ -24,7 +24,7 @@
             android:layout_weight="1" />
         
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs_edit_photo"
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabMode="fixed"
