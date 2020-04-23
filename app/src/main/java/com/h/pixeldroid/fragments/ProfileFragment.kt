@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
-import com.h.pixeldroid.FollowersActivity
+import com.h.pixeldroid.FollowsActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
@@ -46,13 +46,6 @@ class ProfileFragment : Fragment() {
         )
         account = arguments?.getSerializable(ACCOUNT_TAG) as Account?
         val view = inflater.inflate(R.layout.profile_fragment, container, false)
-
-        if(account == null) {
-            // Edit button redirects to Pixelfed's "edit account" page
-            val editButton: Button = view.findViewById(R.id.editButton)
-            editButton.visibility = View.VISIBLE
-            editButton.setOnClickListener{ onClickEditButton() }
-        }
 
         // Set RecyclerView as a grid with 3 columns
         recycler = view.findViewById(R.id.profilePostsRecyclerView)
@@ -92,6 +85,12 @@ class ProfileFragment : Fragment() {
                         Log.e("ProfileFragment:", t.toString())
                     }
                 })
+
+            // Edit button redirects to Pixelfed's "edit account" page
+            val editButton: Button = view.findViewById(R.id.editButton)
+            editButton.visibility = View.VISIBLE
+            editButton.setOnClickListener{ onClickEditButton() }
+
         } else {
             account!!.activateFollow(view, requireContext(), pixelfedAPI, accessToken)
             account!!.setContent(view)
@@ -134,46 +133,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun onClickFollowers() {
-        val intent = Intent(context, FollowersActivity::class.java)
+        val intent = Intent(context, FollowsActivity::class.java)
         intent.putExtra(FOLLOWING_TAG, true)
+        intent.putExtra(ACCOUNT_ID_TAG, account?.id)
 
-        if(account == null) {
-            pixelfedAPI.verifyCredentials("Bearer $accessToken").enqueue(object : Callback<Account> {
-                override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("Cannot get account id", t.toString())
-                }
-
-                override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                    if(response.code() == 200) {
-                        intent.putExtra(ACCOUNT_ID_TAG, response.body()!!.id)
-                    }
-                }
-            })
-        } else {
-            intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
-        }
         ContextCompat.startActivity(requireContext(), intent, null)
     }
 
     private fun onClickFollowing() {
-        val intent = Intent(context, FollowersActivity::class.java)
+        val intent = Intent(context, FollowsActivity::class.java)
         intent.putExtra(FOLLOWING_TAG, false)
-
-        if(account == null) {
-            pixelfedAPI.verifyCredentials("Bearer $accessToken").enqueue(object : Callback<Account> {
-                override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("Cannot get account id", t.toString())
-                }
-
-                override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                    if(response.code() == 200) {
-                        intent.putExtra(ACCOUNT_ID_TAG, response.body()!!.id)
-                    }
-                }
-            })
-        } else {
-            intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
-        }
+        intent.putExtra(ACCOUNT_ID_TAG, account?.id)
 
         ContextCompat.startActivity(requireContext(), intent, null)
     }
