@@ -357,8 +357,6 @@ class MockedServerTest {
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (0, clickChildViewWithId(R.id.commenter)))
 
-        onView(withId(R.id.list)).perform(slowSwipeUp(true))
-        onView(withId(R.id.list)).perform(slowSwipeUp(false))
         onView(withId(R.id.list)).perform(slowSwipeUp(false))
         Thread.sleep(1000)
 
