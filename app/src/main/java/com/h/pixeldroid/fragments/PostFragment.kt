@@ -14,7 +14,6 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.objects.Status
-
 import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 import kotlinx.android.synthetic.main.post_fragment.view.*
 
@@ -35,6 +34,7 @@ class PostFragment : Fragment() {
 
         //Setup arguments needed for the onclicklisteners
         val holder = PostViewHolder(root, context!!)
+
         val preferences = requireActivity().getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
         )

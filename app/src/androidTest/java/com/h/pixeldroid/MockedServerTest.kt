@@ -1,14 +1,10 @@
 package com.h.pixeldroid
 
 import android.content.Context
-import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.DrawerActions
-import androidx.test.espresso.contrib.DrawerMatchers
-import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -16,12 +12,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
-import com.h.pixeldroid.testUtility.*
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
+import com.h.pixeldroid.testUtility.MockServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +28,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MockedServerTest {
 
-    val mockServer = MockServer()
+    private val mockServer = MockServer()
 
 
     @get:Rule
@@ -121,20 +117,6 @@ class MockedServerTest {
         onView(withId(R.id.username)).perform(ViewActions.click())
         Thread.sleep(10000)
         onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
-    }
-
-    @Test
-    fun testDrawerSettingsButton() {
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()) // Open Drawer
-
-        // Start the screen of your activity.
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
-
-        // Check that settings activity was opened.
-        onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
     }
 
     @Test
