@@ -35,7 +35,7 @@ class CameraFragment : Fragment() {
 
         editPictureButton.setOnClickListener{
             val intent = Intent (activity, PhotoEditActivity::class.java)
-            activity!!.startActivity(intent)
+            requireActivity().startActivity(intent)
         }
 
         // Inflate the layout for this fragment

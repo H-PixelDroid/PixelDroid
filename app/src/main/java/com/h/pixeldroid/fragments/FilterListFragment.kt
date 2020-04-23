@@ -55,7 +55,7 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
             val tbImage: Bitmap?
             if (bitmap == null) {
                 //tbImage = BitmapUtils.getBitmapFromGallery(activity!!, PhotoEditActivity.URI.picture_uri!!, 100, 100)
-                tbImage = BitmapUtils.getBitmapFromAssets(context!!, "chat.jpg", 100, 100)
+                tbImage = BitmapUtils.getBitmapFromAssets(requireContext(), "chat.jpg", 100, 100)
             } else {
                 tbImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false)
             }
