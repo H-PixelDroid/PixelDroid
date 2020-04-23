@@ -9,6 +9,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
@@ -55,14 +56,14 @@ class LoginInstrumentedTest {
     @Test
     fun invalidURL() {
         onView(withId(R.id.editText)).perform(ViewActions.replaceText("/jdi"), ViewActions.closeSoftKeyboard())
-        onView(withId(R.id.connect_instance_button)).perform(click())
+        onView(withId(R.id.connect_instance_button)).perform(scrollTo()).perform(click())
         onView(withId(R.id.editText)).check(matches(hasErrorText("Invalid domain")))
     }
 
     @Test
     fun notPixelfedInstance() {
         onView(withId(R.id.editText)).perform(ViewActions.replaceText("localhost"), ViewActions.closeSoftKeyboard())
-        onView(withId(R.id.connect_instance_button)).perform(click())
+        onView(withId(R.id.connect_instance_button)).perform(scrollTo()).perform(click())
         onView(withId(R.id.editText)).check(matches(hasErrorText("Could not register the application with this server")))
     }
 }
@@ -86,11 +87,12 @@ class LoginCheckIntent {
             hasAction(ACTION_VIEW),
             hasDataString(containsString("pixelfed.social"))
         )
+        Thread.sleep(1000)
 
-        onView(withId(R.id.editText)).perform(ViewActions.replaceText("pixelfed.social"), ViewActions.closeSoftKeyboard())
-        onView(withId(R.id.connect_instance_button)).perform(click())
+        onView(withId(R.id.editText)).perform(scrollTo()).perform(ViewActions.replaceText("pixelfed.social"), ViewActions.closeSoftKeyboard())
+        onView(withId(R.id.connect_instance_button)).perform(scrollTo()).perform(click())
 
-        Thread.sleep(5000)
+        Thread.sleep(3000)
 
         intended(expectedIntent)
 
@@ -103,9 +105,9 @@ class LoginCheckIntent {
             hasDataString(containsString("pixelfed.org/join"))
         )
 
-        onView(withId(R.id.whatsAnInstanceTextView)).perform(click())
+        onView(withId(R.id.whatsAnInstanceTextView)).perform(scrollTo()).perform(click())
 
-        Thread.sleep(1000)
+        Thread.sleep(10000)
 
         intended(expectedIntent)
 
