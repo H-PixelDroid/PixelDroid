@@ -350,7 +350,7 @@ class MockedServerTest {
     @Test
     fun postingACommentWorks() {
         ActivityScenario.launch(MainActivity::class.java)
-        Thread.sleep(1000000)
+        Thread.sleep(1000)
 
         //Open the comment section
         onView(withId(R.id.list))
