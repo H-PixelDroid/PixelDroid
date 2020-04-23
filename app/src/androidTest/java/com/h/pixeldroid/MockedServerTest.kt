@@ -1,7 +1,6 @@
 package com.h.pixeldroid
 
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -11,9 +10,6 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.DrawerActions
-import androidx.test.espresso.contrib.DrawerMatchers
-import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -134,7 +130,7 @@ class MockedServerTest {
     @Test
     fun testFollowersTextView() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(4)?.select()
         }
         Thread.sleep(1000)
         onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
@@ -144,7 +140,7 @@ class MockedServerTest {
     @Test
     fun testNotificationsList() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(3)?.select()
         }
         Thread.sleep(1000)
 
@@ -158,7 +154,7 @@ class MockedServerTest {
     @Test
     fun clickNotification() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(3)?.select()
         }
         Thread.sleep(1000)
 
@@ -173,7 +169,7 @@ class MockedServerTest {
     @Test
     fun clickNotificationUser() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(3)?.select()
         }
         Thread.sleep(1000)
 
@@ -188,7 +184,7 @@ class MockedServerTest {
     @Test
     fun clickNotificationPost() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(3)?.select()
         }
         Thread.sleep(1000)
 
@@ -217,7 +213,7 @@ class MockedServerTest {
     @Test
     fun swipingRightStopsAtHomepage() {
         ActivityScenario.launch(MainActivity::class.java).onActivity {
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs_edit_photo).getTabAt(4)?.select()
         } // go to the last tab
         onView(withId(R.id.main_activity_main_linear_layout))
             .perform(ViewActions.swipeRight()) // notifications

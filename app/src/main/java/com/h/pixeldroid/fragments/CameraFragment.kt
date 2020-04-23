@@ -2,6 +2,7 @@ package com.h.pixeldroid.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -34,6 +35,7 @@ class CameraFragment : Fragment() {
 
         editPictureButton.setOnClickListener{
             val intent = Intent (activity, PhotoEditActivity::class.java)
+            intent.putExtra("uri", Uri.parse("https://pixelfed.de/p/Miike/140364967936397312"))
             activity!!.startActivity(intent)
         }
 

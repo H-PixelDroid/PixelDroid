@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
+import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.api.PixelfedAPI
 
 
@@ -50,7 +51,10 @@ class ProfilePostsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = ProfilePostsRecyclerViewAdapter(requireContext())
+                adapter =
+                    ProfilePostsRecyclerViewAdapter(
+                        requireContext()
+                    )
             }
         }
         return view

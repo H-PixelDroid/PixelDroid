@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
+import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
@@ -52,7 +53,9 @@ class ProfileFragment : Fragment() {
         // Set RecyclerView as a grid with 3 columns
         recycler = view.findViewById(R.id.profilePostsRecyclerView)
         recycler.layoutManager = GridLayoutManager(context, 3)
-        adapter = ProfilePostsRecyclerViewAdapter(requireContext())
+        adapter = ProfilePostsRecyclerViewAdapter(
+            requireContext()
+        )
         recycler.adapter = adapter
 
         return view

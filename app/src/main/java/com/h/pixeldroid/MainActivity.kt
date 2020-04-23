@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return 5
             }
         }
-        tabLayout = findViewById(R.id.tabs)
+        tabLayout = findViewById(R.id.tabs_edit_photo)
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when(position){
                 0 -> tab.icon = getDrawable(R.drawable.ic_home_white_24dp)
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.nav_account -> tabs.getTabAt(4)!!.select()
+            R.id.nav_account -> tabs_edit_photo.getTabAt(4)!!.select()
             R.id.nav_settings -> launchActivity(SettingsActivity())
             R.id.nav_logout -> launchActivity(LoginActivity())
         }

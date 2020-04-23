@@ -1,4 +1,4 @@
-package com.h.pixeldroid.fragments
+package com.h.pixeldroid.adapters
 
 import android.content.Context
 import android.content.Intent

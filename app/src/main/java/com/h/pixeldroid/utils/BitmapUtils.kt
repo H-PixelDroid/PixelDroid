@@ -10,6 +10,7 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import com.h.pixeldroid.PhotoEditActivity
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
@@ -38,8 +39,10 @@ object BitmapUtils {
     }
 
     fun getBitmapFromGallery(context: Context, path: Uri, width: Int, height: Int): Bitmap {
+        Log.d("edit", path.toString())
         val filePatchColumn = arrayOf(MediaStore.Images.Media.DATA)
         val cursor = context.contentResolver.query(path, filePatchColumn, null, null, null)
+        Log.d("edit", (cursor!=null).toString())
         cursor!!.moveToFirst()
         val columnIndex = cursor.getColumnIndex(filePatchColumn[0])
         val picturePath = cursor.getString(columnIndex)
@@ -52,46 +55,6 @@ object BitmapUtils {
         options.inJustDecodeBounds = false
 
         return BitmapFactory.decodeFile(picturePath, options)
-    }
-
-    fun insertImage(cr: ContentResolver, source: Bitmap?, title: String, description: String): String? {
-        val values = ContentValues()
-        values.put(MediaStore.Images.Media.TITLE, title)
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, title)
-        values.put(MediaStore.Images.Media.DESCRIPTION, description)
-        values.put(MediaStore.Images.Media.MIME_TYPE, "images/jpeg")
-        values.put(MediaStore.Images.Media.DATE_ADDED, currentTimeMillis())
-        values.put(MediaStore.Images.Media.DATE_TAKEN, currentTimeMillis())
-
-        var uri: Uri? = null
-        var stringUri: String? = null
-        try {
-            uri = cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            if(source != null) {
-                val imageOut = cr.openOutputStream(uri!!)
-                try {
-                    source.compress(Bitmap.CompressFormat.JPEG, 50, imageOut)
-                } finally {
-                    imageOut!!.close()
-                }
-
-                val id = ContentUris.parseId(uri)
-                val miniThumb = MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MINI_KIND, null)
-                storeThumbnail(cr, miniThumb, id, 50f, 50f, MediaStore.Images.Thumbnails.MINI_KIND)
-            }
-        } catch(e: Exception) {
-            if(uri != null) {
-                cr.delete(uri, null, null)
-                uri = null
-            }
-            e.printStackTrace()
-        }
-
-        if(uri != null) {
-            stringUri = uri.toString()
-        }
-
-        return stringUri
     }
 
     private fun storeThumbnail(cr: ContentResolver, miniThumb: Bitmap?, id: Long, width: Float, height: Float, mini_kind: Int): Bitmap? {

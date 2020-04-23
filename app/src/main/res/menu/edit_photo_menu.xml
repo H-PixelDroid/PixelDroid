@@ -5,9 +5,9 @@
     >
 
     <item
-        android:id="@+id/action_open"
+        android:id="@+id/action_upload"
         android:orderInCategory="100"
-        android:title="OPEN"
+        android:title="CREATE POST"
         app:showAsAction="always"/>
 
     <item
