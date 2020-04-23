@@ -54,6 +54,7 @@ data class Account(
     companion object {
         const val ACCOUNT_TAG = "AccountTag"
         const val ACCOUNT_ID_TAG = "AccountIdTag"
+        const val FOLLOWING_TAG = "FollowingTag"
     }
 
     // Open profile activity with given account
@@ -104,14 +105,16 @@ data class Account(
 
             override fun onResponse(call: Call<List<Relationship>>, response: Response<List<Relationship>>) {
                 if(response.code() == 200) {
-                    if(response.body()!![0].following) {
-                        view.followButton.text = "Unfollow"
-                        setOnClickUnfollow(view, api, context, credential)
-                    } else {
-                        view.followButton.text = "Follow"
-                        setOnClickFollow(view, api, context, credential)
+                    if(response.body()!!.isNotEmpty()) {
+                        if (response.body()!![0].following) {
+                            view.followButton.text = "Unfollow"
+                            setOnClickUnfollow(view, api, context, credential)
+                        } else {
+                            view.followButton.text = "Follow"
+                            setOnClickFollow(view, api, context, credential)
+                        }
+                        view.followButton.visibility = View.VISIBLE
                     }
-                    view.followButton.visibility = View.VISIBLE
                 }
             }
         })

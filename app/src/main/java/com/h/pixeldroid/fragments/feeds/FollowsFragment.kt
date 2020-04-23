@@ -21,6 +21,7 @@ import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
+import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
 import kotlinx.android.synthetic.main.fragment_follows.view.*
 import retrofit2.Call
 
@@ -54,7 +55,8 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
-        content = makeContent(id)
+        val following = arguments?.getSerializable(FOLLOWING_TAG) as Boolean
+        content = makeContent(id, following)
 
         content.observe(viewLifecycleOwner,
             Observer { c ->
@@ -64,12 +66,20 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
             })
     }
 
-    private fun makeContent(id : String) : LiveData<PagedList<Account>> {
+    private fun makeContent(id : String, following : Boolean) : LiveData<PagedList<Account>> {
         fun makeInitialCall(requestedLoadSize: Int): Call<List<Account>> {
-            return pixelfedAPI.followers(id, "Bearer $accessToken", limit=requestedLoadSize)
+            if(following) {
+                return pixelfedAPI.followers(id, "Bearer $accessToken", limit = requestedLoadSize)
+            } else {
+                return pixelfedAPI.following(id, "Bearer $accessToken", limit = requestedLoadSize)
+            }
         }
         fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Account>> {
-            return pixelfedAPI.followers(id, "Bearer $accessToken", max_id = key, limit=requestedLoadSize)
+            if(following) {
+                return pixelfedAPI.followers(id, "Bearer $accessToken", max_id = key, limit=requestedLoadSize)
+            } else {
+                return pixelfedAPI.following(id, "Bearer $accessToken", max_id = key, limit=requestedLoadSize)
+            }
         }
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
         factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)

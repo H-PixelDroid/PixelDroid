@@ -21,6 +21,7 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
+import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
 import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.profile_fragment.view.*
 import retrofit2.Call
@@ -29,9 +30,11 @@ import retrofit2.Response
 
 
 class ProfileFragment : Fragment() {
-    private lateinit var preferences: SharedPreferences
+    private lateinit var preferences : SharedPreferences
+    private lateinit var pixelfedAPI : PixelfedAPI
     private lateinit var adapter : ProfilePostsRecyclerViewAdapter
     private lateinit var recycler : RecyclerView
+    private var accessToken : String? = null
     private var account: Account? = null
 
     override fun onCreateView(
@@ -63,8 +66,13 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        val accessToken = preferences.getString("accessToken", "")
+        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
+        accessToken = preferences.getString("accessToken", "")
+
+        // On click open followers list
+        view.nbFollowersTextView.setOnClickListener{ onClickFollowers() }
+        // On click open followers list
+        view.nbFollowingTextView.setOnClickListener{ onClickFollowing() }
 
         if(account == null) {
             pixelfedAPI.verifyCredentials("Bearer $accessToken")
@@ -88,16 +96,10 @@ class ProfileFragment : Fragment() {
             account!!.activateFollow(view, requireContext(), pixelfedAPI, accessToken)
             account!!.setContent(view)
             setPosts(account!!)
-            
-            // Open followers list
-            view.nbFollowersTextView.setOnClickListener{ onClickFollowers() }
         }
     }
     // Populate profile page with user's posts
     private fun setPosts(account: Account) {
-        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        val accessToken = preferences.getString("accessToken", "")
-
         pixelfedAPI.accountPosts("Bearer $accessToken", account_id = account.id).enqueue(object :
             Callback<List<Status>> {
             override fun onFailure(call: Call<List<Status>>, t: Throwable) {
@@ -133,7 +135,30 @@ class ProfileFragment : Fragment() {
 
     private fun onClickFollowers() {
         val intent = Intent(context, FollowersActivity::class.java)
+        intent.putExtra(FOLLOWING_TAG, true)
+
+        if(account == null) {
+            pixelfedAPI.verifyCredentials("Bearer $accessToken").enqueue(object : Callback<Account> {
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("Cannot get account id", t.toString())
+                }
+
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if(response.code() == 200) {
+                        intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
+                    }
+                }
+            })
+        } else {
+            intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
+        }
+        ContextCompat.startActivity(requireContext(), intent, null)
+    }
+
+    private fun onClickFollowing() {
+        val intent = Intent(context, FollowersActivity::class.java)
         intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
+        intent.putExtra(FOLLOWING_TAG, false)
         ContextCompat.startActivity(requireContext(), intent, null)
     }
 }
