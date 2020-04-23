@@ -33,18 +33,6 @@ class PostUnitTest {
     fun getProfilePicUrlReturnsAValidURL() = Assert.assertNotNull(status.getProfilePicUrl())
 
     @Test
-    fun getDescriptionReturnsDefaultIfEmpty() {
-        val emptyDescStatus = status.copy(content = "")
-        Assert.assertEquals( "No description", emptyDescStatus.getDescription())
-    }
-
-    @Test
-    fun getDescriptionReturnsAValidDesc() = Assert.assertNotNull(status.getDescription())
-
-    @Test
-    fun getDescriptionReturnsACorrectDesc() = Assert.assertEquals(status.content, status.getDescription())
-
-    @Test
     fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account.display_name, status.getUsername())
 
     @Test

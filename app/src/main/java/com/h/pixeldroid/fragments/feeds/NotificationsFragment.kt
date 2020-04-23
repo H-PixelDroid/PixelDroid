@@ -27,6 +27,7 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 import retrofit2.Call
 
@@ -145,7 +146,15 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
             setNotificationType(notification.type, notification.account.username, holder.notificationType)
 
-            holder.postDescription.text = notification.status?.content ?: ""
+            //Convert HTML to clickable text
+            holder.postDescription.text =
+                parseHTMLText(
+                    notification.status?.content ?: "",
+                    notification.status?.mentions,
+                    pixelfedAPI,
+                    context,
+                    "Bearer $accessToken"
+                )
 
 
             with(holder.mView) {
@@ -167,11 +176,11 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                 }
 
                 Notification.NotificationType.reblog -> {
-                    setNotificationTypeTextView(context, R.string.shared_notification, R.drawable.ic_share)
+                    setNotificationTypeTextView(context, R.string.shared_notification, R.drawable.ic_reblog_blue)
                 }
 
                 Notification.NotificationType.favourite -> {
-                    setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_heart)
+                    setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_like_full)
                 }
             }
             textView.text = format.format(username)

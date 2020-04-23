@@ -15,9 +15,9 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.profile_fragment.view.*
 import retrofit2.Call
-import java.io.Serializable
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.Serializable
 
 /*
 Represents a user and their associated profile.
@@ -55,6 +55,33 @@ data class Account(
         const val ACCOUNT_TAG = "AccountTag"
         const val ACCOUNT_ID_TAG = "AccountIdTag"
         const val FOLLOWING_TAG = "FollowingTag"
+
+        /**
+         * @brief Opens an activity of the profile withn the given id
+         */
+        fun getAccountFromId(id: String, api : PixelfedAPI, context: Context, credential: String) {
+            Log.e("ACCOUNT_ID", id)
+            api.getAccount(credential, id).enqueue( object : Callback<Account> {
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("GET ACCOUNT ERROR", t.toString())
+                }
+
+                override fun onResponse(
+                    call: Call<Account>,
+                    response: Response<Account>
+                ) {
+                    if(response.code() == 200) {
+                        val account = response.body()!!
+
+                        //Open the account page in a seperate activity
+                        account.openProfile(context)
+                    } else {
+                        Log.e("ERROR CODE", response.code().toString())
+                    }
+                }
+
+            })
+        }
     }
 
     // Open profile activity with given account
