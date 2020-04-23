@@ -277,9 +277,9 @@ class CameraFragment : Fragment() {
         lateinit var image : Image
         try {
             image = reader.acquireLatestImage()
-            val buffer = image.planes[0].buffer;
+            val buffer = image.planes[0].buffer
             val bytes = ByteArray(buffer.capacity())
-            buffer.get(bytes);
+            buffer.get(bytes)
 
             val filename = "tmp_capture.png"
             val file = File.createTempFile(filename, null, context?.cacheDir)
@@ -293,9 +293,9 @@ class CameraFragment : Fragment() {
             pictureHandle(uri)
 
         } catch (e: FileNotFoundException) {
-            e.printStackTrace();
+            e.printStackTrace()
         } catch (e: IOException) {
-            e.printStackTrace();
+            e.printStackTrace()
         } finally {
             image.close()
         }
