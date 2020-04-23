@@ -50,18 +50,43 @@ tools:context=".fragments.PostFragment">
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.516"
                             tools:text="TextView" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout2"
+                        android:id="@+id/postConstraint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <ImageView
-                            android:id="@+id/postPicture"
-                            android:adjustViewBounds="true"
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/postPager"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+                        </androidx.viewpager2.widget.ViewPager2>
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/postTabs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/postPager"
+                            app:tabMode="auto">
+                        </com.google.android.material.tabs.TabLayout>
+
+                        <ImageView
+                            android:id="@+id/postPicture"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
