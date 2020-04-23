@@ -3,7 +3,6 @@ package com.h.pixeldroid.objects
 import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.opengl.Visibility
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -31,7 +30,9 @@ import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
+
 import kotlinx.android.synthetic.main.post_fragment.view.*
+
 import java.io.Serializable
 
 /*
