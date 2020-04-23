@@ -318,7 +318,7 @@ class MockedServerTest {
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (0, clickChildViewWithId(R.id.commenter)))
 
-        onView(withId(R.id.commentIn))
+        onView(first(withId(R.id.commentIn)))
             .check(matches(hasDescendant(withId(R.id.editComment))))
     }
 
@@ -331,7 +331,7 @@ class MockedServerTest {
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (0, clickChildViewWithId(R.id.ViewComments)))
         Thread.sleep(1000)
-        onView(withId(R.id.commentContainer))
+        onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
     }
 
@@ -350,7 +350,7 @@ class MockedServerTest {
     @Test
     fun postingACommentWorks() {
         ActivityScenario.launch(MainActivity::class.java)
-        Thread.sleep(1000)
+        Thread.sleep(1000000)
 
         //Open the comment section
         onView(withId(R.id.list))
@@ -370,7 +370,7 @@ class MockedServerTest {
                 (0, clickChildViewWithId(R.id.submitComment)))
 
         Thread.sleep(1000)
-        onView(withId(R.id.commentContainer))
+        onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
     }
 }

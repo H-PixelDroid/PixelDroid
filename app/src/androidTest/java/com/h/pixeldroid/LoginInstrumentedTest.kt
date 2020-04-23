@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -80,6 +81,7 @@ class LoginCheckIntent {
 
     @Test
     fun launchesOAuthIntent() {
+        ActivityScenario.launch(LoginActivity::class.java)
         val expectedIntent: Matcher<Intent> = allOf(
             hasAction(ACTION_VIEW),
             hasDataString(containsString("pixelfed.social"))
@@ -95,6 +97,7 @@ class LoginCheckIntent {
     }
     @Test
     fun launchesInstanceInfo() {
+        ActivityScenario.launch(LoginActivity::class.java)
         val expectedIntent: Matcher<Intent> = allOf(
             hasAction(ACTION_VIEW),
             hasDataString(containsString("pixelfed.org/join"))
