@@ -1,49 +1,110 @@
 package com.h.pixeldroid.utils
 
-import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.feeds.ViewHolder
-import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.objects.Context
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable
 import kotlinx.android.synthetic.main.comment.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PostUtils {
+abstract class PostUtils {
     companion object {
         fun toggleCommentInput(
-            holder : ViewHolder
+            holder : PostViewHolder
         ) {
             //Toggle comment button
             holder.commenter.setOnClickListener {
                 when(holder.commentIn.visibility) {
-                    View.VISIBLE -> holder.commentIn.visibility = View.GONE
-                    View.INVISIBLE -> holder.commentIn.visibility = View.VISIBLE
-                    View.GONE -> holder.commentIn.visibility = View.VISIBLE
+                    View.VISIBLE -> {
+                        holder.commentIn.visibility = View.GONE
+                        setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_empty)
+                    }
+                    View.GONE -> {
+                        holder.commentIn.visibility = View.VISIBLE
+                        setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_blue)
+                    }
                 }
             }
         }
 
-        fun likePostCall(
-            holder : ViewHolder,
+        fun reblogPost(
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status
         ) {
+            //Call the api function
+            api.reblogStatus(credential, post.id).enqueue(object : Callback<Status> {
+                override fun onFailure(call: Call<Status>, t: Throwable) {
+                    Log.e("REBLOG ERROR", t.toString())
+                    holder.reblogger.isChecked = false
+                }
+
+                override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                    if(response.code() == 200) {
+                        val resp = response.body()!!
+
+                        //Update shown share count
+                        holder.nshares.text = resp.getNShares()
+                        holder.reblogger.isChecked = resp.reblogged
+                    } else {
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.reblogger.isChecked = false
+                    }
+                }
+
+            })
+        }
+
+        fun undoReblogPost(
+            holder : PostViewHolder,
+            api: PixelfedAPI,
+            credential: String,
+            post : Status
+        ) {
+            //Call the api function
+            api.undoReblogStatus(credential, post.id).enqueue(object : Callback<Status> {
+                override fun onFailure(call: Call<Status>, t: Throwable) {
+                    Log.e("REBLOG ERROR", t.toString())
+                    holder.reblogger.isChecked = true
+                }
+
+                override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                    if(response.code() == 200) {
+                        val resp = response.body()!!
+
+                        //Update shown share count
+                        holder.nshares.text = resp.getNShares()
+                        holder.reblogger.isChecked = resp.reblogged
+                    } else {
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.reblogger.isChecked = true
+                    }
+                }
+
+            })
+        }
+
+        fun likePostCall(
+            holder : PostViewHolder,
+            api: PixelfedAPI,
+            credential: String,
+            post : Status
+        ) {
+            //Call the api function
             api.likePost(credential, post.id).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("LIKE ERROR", t.toString())
+                    holder.liker.isChecked = false
                 }
 
                 override fun onResponse(call: Call<Status>, response: Response<Status>) {
@@ -52,9 +113,10 @@ class PostUtils {
 
                         //Update shown like count and internal like toggle
                         holder.nlikes.text = resp.getNLikes()
-                        holder.isLiked = resp.favourited
+                        holder.liker.isChecked = resp.favourited
                     } else {
-                        Log.e("RESPOSE_CODE", response.code().toString())
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.liker.isChecked = false
                     }
                 }
 
@@ -62,14 +124,16 @@ class PostUtils {
         }
 
         fun unLikePostCall(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status
         ) {
+            //Call the api function
             api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("UNLIKE ERROR", t.toString())
+                    holder.liker.isChecked = true
                 }
 
                 override fun onResponse(call: Call<Status>, response: Response<Status>) {
@@ -78,9 +142,10 @@ class PostUtils {
 
                         //Update shown like count and internal like toggle
                         holder.nlikes.text = resp.getNLikes()
-                        holder.isLiked = resp.favourited
+                        holder.liker.isChecked = resp.favourited
                     } else {
-                        Log.e("RESPOSE_CODE", response.code().toString())
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.liker.isChecked = true
                     }
 
                 }
@@ -89,7 +154,7 @@ class PostUtils {
         }
 
         fun postComment(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status
@@ -131,7 +196,7 @@ class PostUtils {
         }
 
         fun retrieveComments(
-            holder : ViewHolder,
+            holder : PostViewHolder,
             api: PixelfedAPI,
             credential: String,
             post : Status

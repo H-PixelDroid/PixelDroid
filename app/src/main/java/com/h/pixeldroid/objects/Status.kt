@@ -1,37 +1,36 @@
 package com.h.pixeldroid.objects
 
+import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.opengl.Visibility
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.content.Context
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.text.toSpanned
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestBuilder
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.CameraFragment
-import com.h.pixeldroid.fragments.PostFragment
-import com.h.pixeldroid.fragments.ProfileFragment
-import com.h.pixeldroid.fragments.feeds.HomeFragment
-import com.h.pixeldroid.fragments.feeds.NotificationsFragment
-import com.h.pixeldroid.fragments.feeds.ViewHolder
+import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
+import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
 import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
+import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 
@@ -86,12 +85,16 @@ data class Status(
     fun getProfilePicUrl() : String? = account.avatar
     fun getPostPreviewURL() : String? = media_attachments?.getOrNull(0)?.preview_url
 
-    fun getDescription() : CharSequence {
-        val description = content as CharSequence
+    /**
+     * @brief returns the parsed version of the HTML description
+     */
+    private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned {
+        val description = content
         if(description.isEmpty()) {
-            return "No description"
+            return "No description".toSpanned()
         }
-        return description
+        return parseHTMLText(description, mentions, api, context, credential)
+
     }
 
     fun getUsername() : CharSequence {
@@ -166,8 +169,6 @@ data class Status(
         usernameDesc.text = this.getUsername()
         usernameDesc.setTypeface(null, Typeface.BOLD)
 
-        rootView.findViewById<TextView>(R.id.description).text = this.getDescription()
-
         val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
         nlikes.text = this.getNLikes()
         nlikes.setTypeface(null, Typeface.BOLD)
@@ -189,25 +190,60 @@ data class Status(
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
     }
 
-    fun activateLiker(
-        holder : ViewHolder,
-        api: PixelfedAPI,
-        credential: String
+    fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
+        val desc = rootView.findViewById<TextView>(R.id.description)
+
+        desc.text = this.getDescription(api, rootView.context, credential)
+        desc.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    fun activateReblogger(
+        holder : PostViewHolder,
+        api : PixelfedAPI,
+        credential: String,
+        isReblogged : Boolean
     ) {
-        //Activate the liker
-        holder.liker.setOnClickListener {
-            if (holder.isLiked) {
-                //Unlike the post
-                unLikePostCall(holder, api, credential, this)
+        //Set initial button state
+        holder.reblogger.isChecked = isReblogged
+
+        //Activate the button
+        holder.reblogger.setEventListener { _, buttonState ->
+            if (buttonState) {
+                Log.e("REBLOG", "Reblogged post")
+                // Button is active
+                reblogPost(holder, api, credential, this)
             } else {
-                //like the post
-                likePostCall(holder, api, credential, this)
+                Log.e("REBLOG", "Undo Reblogged post")
+                // Button is inactive
+                undoReblogPost(holder, api, credential, this)
             }
         }
     }
 
+    fun activateLiker(
+        holder : PostViewHolder,
+        api: PixelfedAPI,
+        credential: String,
+        isLiked: Boolean
+    ) {
+        //Set initial state
+        holder.liker.isChecked = isLiked
+
+        //Activate the liker
+        holder.liker.setEventListener { _, buttonState ->
+                if (buttonState) {
+                    // Button is active
+                    likePostCall(holder, api, credential, this)
+                } else {
+                    // Button is inactive
+                    unLikePostCall(holder, api, credential, this)
+                }
+            }
+        }
+
+
     fun showComments(
-        holder : ViewHolder,
+        holder : PostViewHolder,
         api: PixelfedAPI,
         credential: String
     ) {
@@ -226,7 +262,7 @@ data class Status(
     }
 
     fun activateCommenter(
-        holder : ViewHolder,
+        holder : PostViewHolder,
         api: PixelfedAPI,
         credential: String
     ) {

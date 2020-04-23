@@ -77,6 +77,20 @@ interface PixelfedAPI {
         @Field("language") language : String? = null
     ) : Call<Status>
 
+    @FormUrlEncoded
+    @POST("/api/v1/statuses/{id}/reblog")
+    fun reblogStatus(
+        @Header("Authorization") authorization: String,
+        @Path("id") statusId: String,
+        @Field("visibility") visibility: String? = null
+    ) : Call<Status>
+
+    @POST("/api/v1/statuses/{id}/unreblog")
+    fun undoReblogStatus(
+        @Path("id") statusId: String,
+        @Header("Authorization") authorization: String
+    ) : Call<Status>
+
     //Used in our case to retrieve comments for a given status
     @GET("/api/v1/statuses/{id}/context")
     fun statusComments(
@@ -132,6 +146,12 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String,
         @Path("id") account_id: String? = null
     ): Call<List<Status>>
+
+    @GET("/api/v1/accounts/{id}")
+    fun getAccount(
+        @Header("Authorization") authorization: String,
+        @Path("id") accountId : String
+    ): Call<Account>
 
     companion object {
         fun create(baseUrl: String): PixelfedAPI {
