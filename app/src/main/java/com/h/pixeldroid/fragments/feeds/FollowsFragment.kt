@@ -90,7 +90,7 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_notifications, parent, false)
+                .inflate(R.layout.fragment_follows, parent, false)
             context = view.context
             return ViewHolder(view)
         }

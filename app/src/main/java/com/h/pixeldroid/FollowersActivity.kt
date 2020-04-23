@@ -7,6 +7,7 @@ import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
 
 class FollowersActivity : AppCompatActivity() {
+    var followsFragment = FollowsFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,9 +20,9 @@ class FollowersActivity : AppCompatActivity() {
         val arguments = Bundle()
         arguments.putSerializable(ACCOUNT_ID_TAG, id)
         arguments.putSerializable(FOLLOWING_TAG, following)
-        FollowsFragment().arguments = arguments
+        followsFragment.arguments = arguments
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.followsFragment, FollowsFragment()).commit()
+            .add(R.id.followsFragment, followsFragment).commit()
     }
 }

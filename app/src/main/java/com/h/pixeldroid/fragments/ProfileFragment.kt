@@ -157,8 +157,24 @@ class ProfileFragment : Fragment() {
 
     private fun onClickFollowing() {
         val intent = Intent(context, FollowersActivity::class.java)
-        intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
         intent.putExtra(FOLLOWING_TAG, false)
+
+        if(account == null) {
+            pixelfedAPI.verifyCredentials("Bearer $accessToken").enqueue(object : Callback<Account> {
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("Cannot get account id", t.toString())
+                }
+
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if(response.code() == 200) {
+                        intent.putExtra(ACCOUNT_ID_TAG, response.body()!!.id)
+                    }
+                }
+            })
+        } else {
+            intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
+        }
+
         ContextCompat.startActivity(requireContext(), intent, null)
     }
 }
