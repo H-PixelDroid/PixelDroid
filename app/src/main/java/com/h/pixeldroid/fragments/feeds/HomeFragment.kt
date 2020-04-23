@@ -39,7 +39,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        adapter = HomeRecyclerViewAdapter()
+        adapter = HomeRecyclerViewAdapter(this)
         list.adapter = adapter
 
 
@@ -82,7 +82,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
-    inner class HomeRecyclerViewAdapter
+    inner class HomeRecyclerViewAdapter(private val homeFragment: HomeFragment)
         : FeedsRecyclerViewAdapter<Status, PostViewHolder>() {
         private val api = pixelfedAPI
         private val credential = "Bearer $accessToken"
@@ -104,7 +104,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
             holder.postPic.maxHeight = metrics.heightPixels
 
             //Setup the post layout
-            post.setupPost(holder.postView, picRequest, holder.postPic, holder.profilePic)
+            post.setupPost(holder.postView, picRequest, homeFragment)
 
             //Set the special HTML text
             post.setDescription(holder.postView, api, credential)

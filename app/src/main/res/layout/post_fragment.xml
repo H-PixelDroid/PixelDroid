@@ -39,14 +39,44 @@
                 app:layout_constraintTop_toTopOf="@+id/profilePic"
                 tools:text="Account" />
 
-            <ImageView
-                android:id="@+id/postPicture"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/postConstraint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
-                app:layout_constraintTop_toBottomOf="@+id/profilePic"
-                tools:src="@color/browser_actions_bg_grey"/>
+                app:layout_constraintTop_toBottomOf="@+id/profilePic">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/postPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                </androidx.viewpager2.widget.ViewPager2>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/postTabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/postPager"
+                    app:tabMode="auto">
+                </com.google.android.material.tabs.TabLayout>
+
+                <ImageView
+                    android:id="@+id/postPicture"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@color/browser_actions_bg_grey"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/commenter"
@@ -78,7 +108,7 @@
                 app:layout_constraintEnd_toStartOf="@id/commenter"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="@id/profilePic"
-                app:layout_constraintTop_toBottomOf="@id/postPicture"/>
+                app:layout_constraintTop_toBottomOf="@id/postConstraint"/>
 
             <at.connyduck.sparkbutton.SparkButton
                 android:id="@+id/reblogger"
