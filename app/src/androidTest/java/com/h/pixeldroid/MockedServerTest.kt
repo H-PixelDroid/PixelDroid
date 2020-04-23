@@ -145,6 +145,21 @@ class MockedServerTest {
     }
 
     @Test
+    fun clickingTabOnAlbumShowsNextPhoto() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+            a -> run {
+                //Wait for the feed to load
+                Thread.sleep(1000)
+                //Pick the second photo
+                a.findViewById<TabLayout>(R.id.postTabs).getTabAt(1)?.select()
+            }
+        }
+
+        //Check that the tabs are shown
+        onView(first(withId(R.id.postTabs))).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun clickingLikeButtonWorks() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
