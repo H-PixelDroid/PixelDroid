@@ -118,7 +118,4 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
             return profilePicRequest.load(item.avatar_static)
         }
     }
-
-
-
 }

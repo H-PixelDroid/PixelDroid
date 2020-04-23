@@ -145,7 +145,7 @@ class ProfileFragment : Fragment() {
 
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
                     if(response.code() == 200) {
-                        intent.putExtra(ACCOUNT_ID_TAG, account!!.id)
+                        intent.putExtra(ACCOUNT_ID_TAG, response.body()!!.id)
                     }
                 }
             })
