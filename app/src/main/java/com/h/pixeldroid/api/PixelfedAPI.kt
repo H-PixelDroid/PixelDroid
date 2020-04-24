@@ -57,14 +57,14 @@ interface PixelfedAPI {
         @Path("id") statusId: String
     ) : Call<List<Account>>
 
-    //Used in our case to post a comment
+    //Used in our case to post a comment or a status
     @FormUrlEncoded
     @POST("/api/v1/statuses")
     fun postStatus(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Field("status") statusText : String,
-        @Field("in_reply_to_id") in_reply_to_id : String,
+        @Field("in_reply_to_id") in_reply_to_id : String? = null,
         @Field("media_ids[]") media_ids : List<String> = emptyList(),
         @Field("poll[options][]") poll_options : List<String>? = null,
         @Field("poll[expires_in]") poll_expires : List<String>? = null,
@@ -170,26 +170,6 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String,
         @Part file: MultipartBody.Part
     ): Call<Attachment>
-
-    //Used in our case to post a comment or a new post
-    @FormUrlEncoded
-    @POST("/api/v1/statuses")
-    fun status(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
-        @Field("status") statusText : String,
-        @Field("in_reply_to_id") in_reply_to_id : String = "",
-        @Field("media_ids[]") media_ids : List<String> = emptyList(),
-        @Field("poll[options][]") poll_options : List<String>? = null,
-        @Field("poll[expires_in]") poll_expires : List<String>? = null,
-        @Field("poll[multiple]") poll_multiple : List<String>? = null,
-        @Field("poll[hide_totals]") poll_hideTotals : List<String>? = null,
-        @Field("sensitive") sensitive : Boolean? = null,
-        @Field("spoiler_text") spoiler_text : String? = null,
-        @Field("visibility") visibility : String = "public",
-        @Field("scheduled_at") scheduled_at : String? = null,
-        @Field("language") language : String? = null
-    ) : Call<Status>
 
     // get instance configuration
     @GET("/api/v1/instance")

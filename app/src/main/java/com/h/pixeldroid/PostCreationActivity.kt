@@ -30,7 +30,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 class PostCreationActivity : AppCompatActivity() {
 
@@ -92,6 +92,7 @@ class PostCreationActivity : AppCompatActivity() {
             fos.close()
         } catch (error: IOException) {
             error.printStackTrace()
+            throw error
         }
     }
 
@@ -136,7 +137,7 @@ class PostCreationActivity : AppCompatActivity() {
 
     private fun post(id: String) {
         if (id.isEmpty()) return
-        pixelfedAPI.status(
+        pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
             statusText = description,
             media_ids = listOf(id)
