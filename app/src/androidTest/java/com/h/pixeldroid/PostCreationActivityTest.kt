@@ -19,8 +19,10 @@ import org.junit.Test
 import org.junit.rules.ExpectedException
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.lang.Exception
 
 @RunWith(AndroidJUnit4::class)
 class PostCreationActivityTest {
@@ -51,5 +53,16 @@ class PostCreationActivityTest {
         onView(withId(R.id.post_creation_send_button)).perform(click())
         // should stay on page since upload fail
         onView(withId(R.id.new_post_description_input_field)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun wrongUriThrowsRedirectsToMainActivity() {
+        val uri: Uri = Uri.parse("wrong_uri")
+        val intent = Intent(
+            InstrumentationRegistry.getInstrumentation().targetContext,
+            PostCreationActivity::class.java)
+            .putExtra("picture_uri", uri)
+        ActivityScenario.launch<PostCreationActivity>(intent)
+        onView(withId(R.id.main_activity_main_linear_layout)).check(matches(isDisplayed()))
     }
 }
