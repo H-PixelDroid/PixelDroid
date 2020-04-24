@@ -141,9 +141,10 @@ data class Account(
                             setOnClickFollow(view, api, context, credential)
                         }
                         view.followButton.visibility = View.VISIBLE
-                    } else {
-                        Toast.makeText(context,"Could not display follow button", Toast.LENGTH_SHORT).show()
                     }
+                } else {
+                    Toast.makeText(context, "Could not display follow button", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         })

@@ -79,10 +79,10 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
         fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Account>> {
             if(following) {
                 return pixelfedAPI.followers(id, "Bearer $accessToken",
-                    max_id = key, limit = requestedLoadSize)
+                    since_id = key, limit = requestedLoadSize)
             } else {
                 return pixelfedAPI.following(id, "Bearer $accessToken",
-                    max_id = key, limit = requestedLoadSize)
+                    since_id = key, limit = requestedLoadSize)
             }
         }
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()

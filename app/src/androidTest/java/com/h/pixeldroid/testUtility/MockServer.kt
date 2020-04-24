@@ -1,6 +1,5 @@
 package com.h.pixeldroid.testUtility
 
-import com.h.pixeldroid.objects.Account
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -239,7 +238,7 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(unfollowRelationshipJson)
                     }
-                    request.path?.matches("/api/v1/accounts/relationships".toRegex()) == true -> {
+                    request.path?.startsWith("/api/v1/accounts/relationships") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
