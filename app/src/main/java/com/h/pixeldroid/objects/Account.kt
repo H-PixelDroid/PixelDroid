@@ -7,11 +7,13 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.utils.ImageConverter
+import kotlinx.android.synthetic.main.profile_fragment.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +26,7 @@ https://docs.joinmastodon.org/entities/account/
 
 data class Account(
     //Base attributes
-    val id: String,
+    override val id: String,
     val username: String,
     val acct: String,
     val url: String, //HTTPS URL
@@ -48,9 +50,11 @@ data class Account(
     val fields: List<Field>? = emptyList(),
     val bot: Boolean =  false,
     val source: Source? = null
-) : Serializable {
+) : Serializable, FeedContent() {
     companion object {
         const val ACCOUNT_TAG = "AccountTag"
+        const val ACCOUNT_ID_TAG = "AccountIdTag"
+        const val FOLLOWING_TAG = "FollowingTag"
 
         /**
          * @brief Opens an activity of the profile withn the given id
@@ -83,9 +87,10 @@ data class Account(
     // Open profile activity with given account
     fun openProfile(context: Context) {
         val intent = Intent(context, ProfileActivity::class.java)
-        intent.putExtra(Account.ACCOUNT_TAG, this)
+        intent.putExtra(ACCOUNT_TAG, this)
         startActivity(context, intent, null)
     }
+
     // Populate myProfile page with user's data
     fun setContent(view: View) {
         val profilePicture = view.findViewById<ImageView>(R.id.profilePictureImageView)
@@ -110,5 +115,86 @@ data class Account(
         nbFollowing.text = "${this.following_count}\nFollowing"
         nbFollowing.setTypeface(null, Typeface.BOLD)
     }
-}
 
+    // Activate follow button
+    fun activateFollow(
+        view : View,
+        context : Context,
+        api : PixelfedAPI,
+        credential : String?
+    ) {
+        // Get relationship between the two users (credential and this) and set followButton accordingly
+        api.checkRelationships("Bearer $credential", listOf(id)).enqueue(object : Callback<List<Relationship>> {
+            override fun onFailure(call: Call<List<Relationship>>, t: Throwable) {
+                Log.e("FOLLOW ERROR", t.toString())
+                Toast.makeText(context,"Could not get follow status", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(call: Call<List<Relationship>>, response: Response<List<Relationship>>) {
+                if(response.code() == 200) {
+                    if(response.body()!!.isNotEmpty()) {
+                        if (response.body()!![0].following) {
+                            view.followButton.text = "Unfollow"
+                            setOnClickUnfollow(view, api, context, credential)
+                        } else {
+                            view.followButton.text = "Follow"
+                            setOnClickFollow(view, api, context, credential)
+                        }
+                        view.followButton.visibility = View.VISIBLE
+                    }
+                } else {
+                    Toast.makeText(context, "Could not display follow button", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        })
+    }
+
+    private fun setOnClickFollow(view: View, api: PixelfedAPI, context: Context, credential: String?) {
+        view.followButton.setOnClickListener {
+            api.follow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
+                override fun onFailure(call: Call<Relationship>, t: Throwable) {
+                    Log.e("FOLLOW ERROR", t.toString())
+                    Toast.makeText(context, "Could not follow", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onResponse(
+                    call: Call<Relationship>,
+                    response: Response<Relationship>
+                ) {
+                    if (response.code() == 200) {
+                        view.followButton.text = "Unfollow"
+                        setOnClickUnfollow(view, api, context, credential)
+                    } else if (response.code() == 403) {
+                        Toast.makeText(context, "This action is not allowed", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
+        }
+    }
+
+    private fun setOnClickUnfollow(view: View, api: PixelfedAPI, context: Context, credential: String?) {
+        view.followButton.setOnClickListener {
+            api.unfollow(id, "Bearer $credential").enqueue(object : Callback<Relationship> {
+                override fun onFailure(call: Call<Relationship>, t: Throwable) {
+                    Log.e("UNFOLLOW ERROR", t.toString())
+                    Toast.makeText(context, "Could not unfollow", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onResponse(
+                    call: Call<Relationship>,
+                    response: Response<Relationship>
+                ) {
+                    if (response.code() == 200) {
+                        view.followButton.text = "Follow"
+                        setOnClickFollow(view, api, context, credential)
+                    } else if (response.code() == 401) {
+                        Toast.makeText(context, "The access token is invalid", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
+        }
+    }
+}
