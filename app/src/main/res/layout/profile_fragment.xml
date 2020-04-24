@@ -11,7 +11,6 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/linearlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -35,7 +34,6 @@
                         tools:srcCompat="@tools:sample/avatars" />
 
                     <LinearLayout
-                        android:id="@+id/linearLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="10"
@@ -110,11 +108,11 @@
 
                 <Button
                     android:id="@+id/followButton"
-                    android:layout_width="100dp"
-                    android:layout_height="30dp"
-                    android:background="@color/browser_actions_divider_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Follow"
                     android:textColor="@color/colorPrimary"
+                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -135,7 +133,6 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/linearLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -164,9 +161,7 @@
                 android:id="@+id/profilePostsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="5dp"
+                android:layout_margin="5dp"
                 app:layoutManager="LinearLayoutManager"
                 tools:context=".fragments.ProfileFragment"
                 tools:listitem="@layout/fragment_profile_posts" />

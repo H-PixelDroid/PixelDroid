@@ -1,6 +1,5 @@
 package com.h.pixeldroid.testUtility
 
-import com.h.pixeldroid.objects.Account
 import okhttp3.HttpUrl
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -128,6 +127,11 @@ class MockServer {
 
     val reblogJson = """{"id":"156491373246287872","created_at":"2020-04-16T20:00:50.000000Z","in_reply_to_id":null,"in_reply_to_account_id":null,"sensitive":false,"spoiler_text":"","visibility":"public","language":"en","uri":"https:\/\/pixelfed.de\/p\/machintuck\/156491373246287872","url":"https:\/\/pixelfed.de\/p\/machintuck\/156491373246287872","replies_count":1,"reblogs_count":14,"favourites_count":2,"reblogged":true,"favourited":false,"muted":false,"bookmarked":false,"pinned":false,"content":"<a class=\"u-url mention\" href=\"https:\/\/pixelfed.de\/Dobios\" rel=\"external nofollow noopener\">@Dobios<\/a> <a class=\"u-url mention\" href=\"https:\/\/pixelfed.de\/Dante\" rel=\"external nofollow noopener\">@Dante<\/a>","reblog":null,"application":{"name":"web","website":null},"mentions":[{"id":"136800034732773376","url":"https:\/\/pixelfed.de\/Dobios","username":"Dobios","acct":"Dobios"},{"id":"136453537340198912","url":"https:\/\/pixelfed.de\/dante","username":"dante","acct":"dante"}],"tags":[{"name":"mushroom","url":"https:\/\/pixelfed.de\/discover\/tags\/mushroom"},{"name":"commentsstillbroken","url":"https:\/\/pixelfed.de\/discover\/tags\/commentsstillbroken"},{"name":"fixyourapi","url":"https:\/\/pixelfed.de\/discover\/tags\/fixyourapi"},{"name":"pls","url":"https:\/\/pixelfed.de\/discover\/tags\/pls"}],"emojis":[],"card":null,"poll":null,"account":{"id":"145183325781364736","username":"machintuck","acct":"machintuck","display_name":"Arthur","locked":false,"created_at":"2020-03-16T15:06:42.000000Z","followers_count":4,"following_count":4,"statuses_count":5,"note":"","url":"https:\/\/pixelfed.de\/machintuck","avatar":"https:\/\/pixelfed.de\/storage\/avatars\/014\/518\/332\/578\/136\/473\/6\/gbdKtKOhTkNA5UxCzeAQ_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35","avatar_static":"https:\/\/pixelfed.de\/storage\/avatars\/014\/518\/332\/578\/136\/473\/6\/gbdKtKOhTkNA5UxCzeAQ_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35","header":"","header_static":"","emojis":[],"moved":null,"fields":null,"bot":false,"software":"pixelfed","is_admin":false},"media_attachments":[{"id":"19228","type":"image","url":"https:\/\/pixelfed.de\/storage\/m\/d0931bf747b992a1c83e055753526516f2706111\/9b4393bfd32c643a265bd1c557b981f167d60969\/lbOqQOMeHLGmhYgehhZUBJ4JvjtKulh83BA97LoP.jpeg","remote_url":null,"preview_url":"https:\/\/pixelfed.de\/storage\/m\/d0931bf747b992a1c83e055753526516f2706111\/9b4393bfd32c643a265bd1c557b981f167d60969\/lbOqQOMeHLGmhYgehhZUBJ4JvjtKulh83BA97LoP_thumb.jpeg","text_url":null,"meta":null,"description":null}]}"""
 
+    val followRelationshipJson = """{"id":"136800034732773376","following":true,"followed_by":true,"blocking":false,"muting":false,"muting_notifications":null,"requested":false,"domain_blocking":null,"showing_reblogs":null,"endorsed":false}"""
+    val unfollowRelationshipJson = """{"id":"136800034732773376","following":false,"followed_by":true,"blocking":false,"muting":false,"muting_notifications":null,"requested":false,"domain_blocking":null,"showing_reblogs":null,"endorsed":false}"""
+    val relationshipJson = """[{"id":"136800034732773376","following":true,"followed_by":true,"blocking":false,"muting":false,"muting_notifications":null,"requested":false,"domain_blocking":null,"showing_reblogs":null,"endorsed":false}]"""
+    val followersJson = """[{"id":"118664651939647488","username":"ete2","acct":"ete2","display_name":"Christian","locked":false,"created_at":"2020-01-03T10:50:57.000000Z","followers_count":22,"following_count":3,"statuses_count":20,"note":"Nature lover - hobby photographer","url":"https:\/\/pixelfed.de\/ete2","avatar":"https:\/\/pixelfed.de\/storage\/avatars\/011\/866\/465\/193\/964\/748\/8\/pUY03jBlOeOqjNDMWwYM_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35","avatar_static":"https:\/\/pixelfed.de\/storage\/avatars\/011\/866\/465\/193\/964\/748\/8\/pUY03jBlOeOqjNDMWwYM_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35","header":"","header_static":"","emojis":[],"moved":null,"fields":null,"bot":false,"software":"pixelfed","is_admin":false},{"id":"136800034732773376","username":"Dobios","acct":"Dobios","display_name":"Andrew Dobis","locked":false,"created_at":"2020-02-22T11:54:29.000000Z","followers_count":7,"following_count":5,"statuses_count":3,"note":"","url":"https:\/\/pixelfed.de\/Dobios","avatar":"https:\/\/pixelfed.de\/storage\/avatars\/013\/680\/003\/473\/277\/337\/6\/AnBpDi92CAuuNjOYkyqg_avatar.jpeg?v=4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a","avatar_static":"https:\/\/pixelfed.de\/storage\/avatars\/013\/680\/003\/473\/277\/337\/6\/AnBpDi92CAuuNjOYkyqg_avatar.jpeg?v=4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a","header":"","header_static":"","emojis":[],"moved":null,"fields":null,"bot":false,"software":"pixelfed","is_admin":false},{"id":"144813993922531328","username":"Clement","acct":"Clement","display_name":"Andrea","locked":false,"created_at":"2020-03-15T14:39:06.000000Z","followers_count":2,"following_count":4,"statuses_count":0,"note":"","url":"https:\/\/pixelfed.de\/Clement","avatar":"https:\/\/pixelfed.de\/storage\/avatars\/default.png?v=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9","avatar_static":"https:\/\/pixelfed.de\/storage\/avatars\/default.png?v=5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9","header":"","header_static":"","emojis":[],"moved":null,"fields":null,"bot":false,"software":"pixelfed","is_admin":false}]"""
+    val followersAfterJson = """[]"""
 
     fun start() {
         server.dispatcher = getDispatcher()
@@ -222,6 +226,48 @@ class MockServer {
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(unlikeJson)
+                    }
+                    request.path?.matches("/api/v1/accounts/[0-9]*/follow".toRegex()) == true -> {
+                        return MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(followRelationshipJson)
+                    }
+                    request.path?.matches("/api/v1/accounts/[0-9]*/unfollow".toRegex()) == true -> {
+                        return MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(unfollowRelationshipJson)
+                    }
+                    request.path?.startsWith("/api/v1/accounts/relationships") == true -> {
+                        return MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(relationshipJson)
+                    }
+                    request.path?.matches("/api/v1/accounts/[0-9]*/followers\\?limit=[0-9]*".toRegex()) == true -> {
+                        return MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(followersJson)
+                    }
+                    request.path?.matches("/api/v1/accounts/[0-9]*/followers\\?since_id=[0-9]*&limit=[0-9]*".toRegex()) == true -> {
+                        return MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(followersAfterJson)
+                    }
+                    request.path?.matches("/api/v1/accounts/[0-9]*/following\\?limit=[0-9]*".toRegex()) == true -> {
+                        return MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(followersJson)
+                    }
+                    request.path?.matches("/api/v1/accounts/[0-9]*/following\\?since_id=[0-9]*&limit=[0-9]*".toRegex()) == true -> {
+                        return MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(followersAfterJson)
                     }
                     else -> return MockResponse().setResponseCode(404)
                 }
