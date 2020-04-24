@@ -56,24 +56,61 @@ class MockedServerTest {
         onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
-    /* WIP TEST
+    // WIP TEST
     @Test
     fun clickFollowButton() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.username)))
+
+        Thread.sleep(1000)
+
+        // Unfollow
+        onView(withId(R.id.followButton)).perform((ViewActions.click()))
+        Thread.sleep(1000)
+        onView(withId(R.id.followButton)).check(matches(withText("Follow")))
+
+        // Follow
+        onView(withId(R.id.followButton)).perform((ViewActions.click()))
+        Thread.sleep(1000)
+        onView(withId(R.id.followButton)).check(matches(withText("Unfollow")))
+    }
+
+    @Test
+    fun clickFollowers() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
                 a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
         }
         Thread.sleep(1000)
+        // Open followers list
+        onView(withId(R.id.nbFollowersTextView)).perform((ViewActions.click()))
+        Thread.sleep(10000)
+        // Open follower's profile
+        onView(withText("ete2")).perform((ViewActions.click()))
+        Thread.sleep(1000)
 
-        // Follow
-        onView(withId(R.id.followButton)).perform((ViewActions.click()))
-        Thread.sleep(100)
-        onView(withId(R.id.followButton)).check(matches(withText("Unfollow")))
+        onView(withId(R.id.username)).check(matches(withText("ete2")))
+    }
 
-        // Unfollow
-        onView(withId(R.id.followButton)).perform((ViewActions.click()))
-        Thread.sleep(100)
-        onView(withId(R.id.followButton)).check(matches(withText("Follow")))
-    }*/
+    @Test
+    fun clickFollowing() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        }
+        Thread.sleep(1000)
+        // Open followers list
+        onView(withId(R.id.nbFollowingTextView)).perform((ViewActions.click()))
+        Thread.sleep(1000)
+        // Open following's profile
+        onView(withText("Dobios")).perform((ViewActions.click()))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.username)).check(matches(withText("Dobios")))
+    }
 
     @Test
     fun testNotificationsList() {
