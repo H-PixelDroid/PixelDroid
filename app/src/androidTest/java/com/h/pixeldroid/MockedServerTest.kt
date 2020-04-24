@@ -88,12 +88,12 @@ class MockedServerTest {
         Thread.sleep(1000)
         // Open followers list
         onView(withId(R.id.nbFollowersTextView)).perform((ViewActions.click()))
-        Thread.sleep(10000)
+        Thread.sleep(1000)
         // Open follower's profile
         onView(withText("ete2")).perform((ViewActions.click()))
         Thread.sleep(1000)
 
-        onView(withId(R.id.username)).check(matches(withText("ete2")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
     }
 
     @Test
@@ -109,7 +109,7 @@ class MockedServerTest {
         onView(withText("Dobios")).perform((ViewActions.click()))
         Thread.sleep(1000)
 
-        onView(withId(R.id.username)).check(matches(withText("Dobios")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Dobios")))
     }
 
     @Test

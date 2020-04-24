@@ -245,25 +245,25 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(relationshipJson)
                     }
-                    request.path?.matches("/api/v1/accounts/[0-9]*/followers?limit=[0-9]*".toRegex()) == true -> {
+                    request.path?.matches("/api/v1/accounts/[0-9]*/followers\\?limit=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(followersJson)
                     }
-                    request.path?.matches("/api/v1/accounts/[0-9]*/followers?since_id=[0-9]*&limit=[0-9]*".toRegex()) == true -> {
+                    request.path?.matches("/api/v1/accounts/[0-9]*/followers\\?since_id=[0-9]*&limit=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(followersAfterJson)
                     }
-                    request.path?.matches("/api/v1/accounts/[0-9]*/following?limit=[0-9]*".toRegex()) == true -> {
+                    request.path?.matches("/api/v1/accounts/[0-9]*/following\\?limit=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(followersJson)
                     }
-                    request.path?.matches("/api/v1/accounts/[0-9]*/following?since_id=[0-9]*&limit=[0-9]*".toRegex()) == true -> {
+                    request.path?.matches("/api/v1/accounts/[0-9]*/following\\?since_id=[0-9]*&limit=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
