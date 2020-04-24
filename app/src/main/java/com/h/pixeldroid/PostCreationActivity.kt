@@ -25,8 +25,10 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.*
-import java.lang.Error
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -38,7 +40,7 @@ class PostCreationActivity : AppCompatActivity() {
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var preferences: SharedPreferences
     private lateinit var pictureFrame: ImageView
-    private var image: File? = null
+    private lateinit var image: File
 
     private var description: String = ""
 
@@ -48,18 +50,10 @@ class PostCreationActivity : AppCompatActivity() {
 
         val imageUri: Uri = intent.getParcelableExtra<Uri>("picture_uri")!!
 
-        try {
-            saveImage(imageUri)
-        } catch (error: FileNotFoundException) {
-            image = null
-        }
-
-        if (image == null || image?.toUri() == null) {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
-        }
+        saveImage(imageUri)
 
         pictureFrame = findViewById<ImageView>(R.id.post_creation_picture_frame)
-        pictureFrame.setImageURI(image?.toUri())
+        pictureFrame.setImageURI(image.toUri())
 
         preferences = getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
@@ -82,32 +76,24 @@ class PostCreationActivity : AppCompatActivity() {
     private fun saveImage(imageUri: Uri) {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val fileName = "PixelDroid_$timeStamp.png"
-
-        if (!File(imageUri.path!!).exists()) {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
-        }
-
-        image = File(
-            applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-            fileName)
-
-        var stream: FileInputStream? = null
         try {
-            stream = applicationContext.contentResolver
+            val stream = applicationContext.contentResolver
                 .openAssetFileDescriptor(imageUri, "r")!!
                 .createInputStream()
-        } catch (error: FileNotFoundException) {
+            val bm = BitmapFactory.decodeStream(stream)
+            val bos = ByteArrayOutputStream()
+            bm.compress(Bitmap.CompressFormat.PNG, 0, bos)
+            image = File(
+                applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                fileName)
+            val fos = FileOutputStream(image)
+            fos.write(bos.toByteArray())
+            fos.flush()
+            fos.close()
+        } catch (error: IOException) {
             error.printStackTrace()
             throw error
         }
-
-        val bm = BitmapFactory.decodeStream(stream)
-        val bos = ByteArrayOutputStream()
-        bm.compress(Bitmap.CompressFormat.PNG, 0, bos)
-        val fos = FileOutputStream(image!!)
-        fos.write(bos.toByteArray())
-        fos.flush()
-        fos.close()
     }
 
     private fun setDescription(): Boolean {
@@ -125,8 +111,8 @@ class PostCreationActivity : AppCompatActivity() {
     }
 
     private fun upload() {
-        val rBody: RequestBody = image!!.asRequestBody("image/*".toMediaTypeOrNull())
-        val part = MultipartBody.Part.createFormData("file", image!!.name, rBody)
+        val rBody: RequestBody = image.asRequestBody("image/*".toMediaTypeOrNull())
+        val part = MultipartBody.Part.createFormData("file", image.name, rBody)
         pixelfedAPI.mediaUpload("Bearer $accessToken", part).enqueue(object:
             Callback<Attachment> {
             override fun onFailure(call: Call<Attachment>, t: Throwable) {
