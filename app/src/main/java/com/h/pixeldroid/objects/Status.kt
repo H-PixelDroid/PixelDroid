@@ -179,13 +179,18 @@ data class Status(
         nshares.setTypeface(null, Typeface.BOLD)
 
         //Setup images
-        setupPostPics(rootView, request, homeFragment)
         ImageConverter.setRoundImageFromURL(
             rootView,
             this.getProfilePicUrl(),
             rootView.profilePic
         )
         rootView.profilePic.setOnClickListener { account.openProfile(rootView.context) }
+
+        //Setup post pic only if there are media attachments
+        if(!media_attachments.isNullOrEmpty()) {
+            setupPostPics(rootView, request, homeFragment)
+        }
+
 
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
