@@ -8,7 +8,11 @@
             android:id="@+id/nav_account"
             android:title="@string/menu_account" />
         <item
-            android:id="@+id/nav_reconnect"
-            android:title="@string/reconnect"/>
+            android:id="@+id/nav_settings"
+            android:title="@string/menu_settings"
+            android:icon="@drawable/ic_settings"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/logout" />
     </group>
 </menu>

@@ -15,10 +15,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.fragments.NewPostFragment
+import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.feeds.HomeFragment
-import com.h.pixeldroid.fragments.MyProfileFragment
+import com.h.pixeldroid.fragments.ProfileFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -45,11 +47,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             navigationView.setNavigationItemSelectedListener(this)
             
             val tabs = arrayOf(
-                               HomeFragment(),
-                               Fragment(),
-                               NewPostFragment(),
-                               NotificationsFragment(),
-                               MyProfileFragment())
+                HomeFragment(),
+                Fragment(),
+                CameraFragment(),
+                NotificationsFragment(),
+                ProfileFragment()
+            )
 
             setupTabs(tabs)
         }
@@ -83,7 +86,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.nav_reconnect -> launchActivity(LoginActivity())
+            R.id.nav_account -> tabs.getTabAt(4)!!.select()
+            R.id.nav_settings -> launchActivity(SettingsActivity())
+            R.id.nav_logout -> launchActivity(LoginActivity())
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)

@@ -1,7 +1,6 @@
 package com.h.pixeldroid
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
@@ -14,16 +13,13 @@ import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Status
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okio.BufferedSink
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Multipart
 import java.io.File
 
 class PostCreationActivity : AppCompatActivity() {
@@ -78,7 +74,7 @@ class PostCreationActivity : AppCompatActivity() {
     }
 
     private fun upload(pictureUri: Uri) {
-        val picture: File = File(pictureUri.path!!)
+        val picture = File(pictureUri.path!!)
         val rBody: RequestBody = picture.asRequestBody("image/*".toMediaTypeOrNull())
         val part = MultipartBody.Part.createFormData("file", picture.name, rBody)
         pixelfedAPI.mediaUpload("Bearer $accessToken", part).enqueue(object:

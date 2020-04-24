@@ -5,12 +5,18 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
+import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import com.h.pixeldroid.testUtility.MockServer
 import org.junit.Before
 import org.junit.Rule
@@ -21,7 +27,8 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MockedServerTest {
-    private val mockServer: MockServer = MockServer()
+
+    private val mockServer = MockServer()
     private lateinit var activityScenario: ActivityScenario<MainActivity>
 
     @get:Rule
@@ -112,8 +119,8 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.username)).perform(ViewActions.click())
-        Thread.sleep(1000)
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("Dante")))
+        Thread.sleep(10000)
+        onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
     }
 
     @Test
@@ -124,9 +131,7 @@ class MockedServerTest {
             .perform(ViewActions.swipeLeft()) // notifications
             .perform(ViewActions.swipeLeft()) // profile
             .perform(ViewActions.swipeLeft()) // should stop at profile
-
-        Thread.sleep(1000)
-        onView(withId(R.id.nbFollowersTextView)).check(matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.nbFollowersTextView)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -142,8 +147,232 @@ class MockedServerTest {
             .perform(ViewActions.swipeRight()) // search
             .perform(ViewActions.swipeRight()) // homepage
             .perform(ViewActions.swipeRight()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingTabOnAlbumShowsNextPhoto() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+            a -> run {
+                //Wait for the feed to load
+                Thread.sleep(1000)
+                //Pick the second photo
+                a.findViewById<TabLayout>(R.id.postTabs).getTabAt(1)?.select()
+            }
+        }
+
+        //Check that the tabs are shown
+        onView(first(withId(R.id.postTabs))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingLikeButtonWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        val likes = getText(first(withId(R.id.nlikes)))
+
+        //Like the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.liker)))
+        Thread.sleep(100)
+        //Unlike the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.liker)))
+        //...
+        Thread.sleep(100)
+
+        //Profit
+        onView(first(withId(R.id.nlikes))).check(matches((withText(likes))))
+    }
+
+    @Test
+    fun clickingLikeButtonFails() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        val likes = getText(first(withId(R.id.nlikes)))
+
+        //Like the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (2, clickChildViewWithId(R.id.liker)))
+        Thread.sleep(100)
+
+        //...
+        Thread.sleep(100)
+
+        //Profit
+        onView((withId(R.id.list))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingUsernameOpensProfile() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+            (0, clickChildViewWithId(R.id.username)))
 
         Thread.sleep(1000)
-        onView(withId(R.id.list)).check(matches(ViewMatchers.isDisplayed()))
+
+        //Check that the Profile opened
+        onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingProfilePicOpensProfile() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.profilePic)))
+
+        Thread.sleep(1000)
+
+        //Check that the Profile opened
+        onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingReblogButtonWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        val shares = getText(first(withId(R.id.nshares)))
+
+        //Reblog the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.reblogger)))
+        Thread.sleep(100)
+
+        //UnReblog the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.reblogger)))
+        //...
+        Thread.sleep(100)
+
+        //Profit
+        onView(first(withId(R.id.nshares))).check(matches((withText(shares))))
+    }
+
+    @Test
+    fun clickingMentionOpensProfile() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Click the mention
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.description)))
+
+        //Wait a bit
+        Thread.sleep(1000)
+
+        //Check that the Profile is shown
+        onView(first(withId(R.id.username))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingHashTagsWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Click the hashtag
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (1, clickChildViewWithId(R.id.description)))
+
+        //Wait a bit
+        Thread.sleep(1000)
+
+        //Check that the HashTag was indeed clicked
+        //Doesn't do anything for now
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+
+    @Test
+    fun clickingCommentButtonOpensCommentSection() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Click comment button 3 times and then try to see if the commenter exists
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.commenter)))
+        Thread.sleep(100)
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.commenter)))
+        Thread.sleep(100)
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.commenter)))
+
+        onView(first(withId(R.id.commentIn)))
+            .check(matches(hasDescendant(withId(R.id.editComment))))
+    }
+
+    @Test
+    fun clickingViewCommentShowsTheComments() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+        //Open the comment section
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.ViewComments)))
+        Thread.sleep(1000)
+        onView(first(withId(R.id.commentContainer)))
+            .check(matches(hasDescendant(withId(R.id.comment))))
+    }
+
+    @Test
+    fun clickingViewCommentFails() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+        //Open the comment section
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (2, clickChildViewWithId(R.id.ViewComments)))
+        Thread.sleep(1000)
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun postingACommentWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Open the comment section
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.commenter)))
+
+        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, typeTextInViewWithId(R.id.editComment, "test")))
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.submitComment)))
+
+        Thread.sleep(1000)
+        onView(first(withId(R.id.commentContainer)))
+            .check(matches(hasDescendant(withId(R.id.comment))))
     }
 }
+

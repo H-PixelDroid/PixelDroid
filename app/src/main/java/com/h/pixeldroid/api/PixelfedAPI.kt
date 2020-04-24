@@ -8,7 +8,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
-import java.io.File
 
 /*
     Implements the Pixelfed API
@@ -61,7 +60,7 @@ interface PixelfedAPI {
     //Used in our case to post a comment
     @FormUrlEncoded
     @POST("/api/v1/statuses")
-    fun commentStatus(
+    fun postStatus(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Field("status") statusText : String,
@@ -76,6 +75,20 @@ interface PixelfedAPI {
         @Field("visibility") visibility : String = "public",
         @Field("scheduled_at") scheduled_at : String? = null,
         @Field("language") language : String? = null
+    ) : Call<Status>
+
+    @FormUrlEncoded
+    @POST("/api/v1/statuses/{id}/reblog")
+    fun reblogStatus(
+        @Header("Authorization") authorization: String,
+        @Path("id") statusId: String,
+        @Field("visibility") visibility: String? = null
+    ) : Call<Status>
+
+    @POST("/api/v1/statuses/{id}/unreblog")
+    fun undoReblogStatus(
+        @Path("id") statusId: String,
+        @Header("Authorization") authorization: String
     ) : Call<Status>
 
     //Used in our case to retrieve comments for a given status
@@ -133,6 +146,12 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String,
         @Path("id") account_id: String? = null
     ): Call<List<Status>>
+
+    @GET("/api/v1/accounts/{id}")
+    fun getAccount(
+        @Header("Authorization") authorization: String,
+        @Path("id") accountId : String
+    ): Call<Account>
 
     companion object {
         fun create(baseUrl: String): PixelfedAPI {

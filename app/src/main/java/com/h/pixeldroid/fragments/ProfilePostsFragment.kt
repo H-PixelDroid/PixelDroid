@@ -14,6 +14,7 @@ import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 
+
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the

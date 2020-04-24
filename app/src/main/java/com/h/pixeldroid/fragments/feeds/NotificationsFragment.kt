@@ -27,7 +27,7 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Status
-import kotlinx.android.synthetic.main.fragment_feed.*
+import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 import retrofit2.Call
 
@@ -46,8 +46,6 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        content = makeContent()
-
         //RequestBuilder that is re-used for every image
         profilePicRequest = Glide.with(this)
             .asDrawable().apply(RequestOptions().circleCrop())
@@ -57,12 +55,6 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         adapter = NotificationsRecyclerViewAdapter()
         list.adapter = adapter
 
-        content.observe(viewLifecycleOwner,
-            Observer { c ->
-                adapter.submitList(c)
-                //after a refresh is done we need to stop the pull to refresh spinner
-                swipeRefreshLayout.isRefreshing = false
-            })
 
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Notification> = ViewPreloadSizeProvider()
@@ -72,6 +64,18 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         list.addOnScrollListener(preloader)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        content = makeContent()
+
+        content.observe(viewLifecycleOwner,
+            Observer { c ->
+                adapter.submitList(c)
+                //after a refresh is done we need to stop the pull to refresh spinner
+                swipeRefreshLayout.isRefreshing = false
+            })
     }
 
     private fun makeContent(): LiveData<PagedList<Notification>> {
@@ -142,7 +146,15 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
             setNotificationType(notification.type, notification.account.username, holder.notificationType)
 
-            holder.postDescription.text = notification.status?.content ?: ""
+            //Convert HTML to clickable text
+            holder.postDescription.text =
+                parseHTMLText(
+                    notification.status?.content ?: "",
+                    notification.status?.mentions,
+                    pixelfedAPI,
+                    context,
+                    "Bearer $accessToken"
+                )
 
 
             with(holder.mView) {
@@ -164,11 +176,11 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                 }
 
                 Notification.NotificationType.reblog -> {
-                    setNotificationTypeTextView(context, R.string.shared_notification, R.drawable.ic_share)
+                    setNotificationTypeTextView(context, R.string.shared_notification, R.drawable.ic_reblog_blue)
                 }
 
                 Notification.NotificationType.favourite -> {
-                    setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_heart)
+                    setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_like_full)
                 }
             }
             textView.text = format.format(username)

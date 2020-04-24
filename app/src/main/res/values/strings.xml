@@ -60,16 +60,18 @@
     <string name="mention_notification">%1$s mentioned you</string>
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
+
     <string name="create_a_new_post">Create a new post!</string>
     <string name="take_a_picture">Take a picture</string>
     <string name="upload_a_picture">Upload a picture</string>
     <string name="or">or</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="description">Description...</string>
+    <string name="description">Description…</string>
     <string name="upload">upload</string>
     <string name="send">send</string>
     <string name="reconnect">Reconnect</string>
+
+    <string name="whats_an_instance">What\'s an instance?</string>
+    <string name="logout">Logout</string>
 
 </resources>

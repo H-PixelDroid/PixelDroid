@@ -3,8 +3,10 @@ package com.h.pixeldroid
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.fragments.PostFragment
-import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.objects.Status.Companion.POST_TAG
+
+
 
 class PostActivity : AppCompatActivity() {
     lateinit var postFragment : PostFragment
