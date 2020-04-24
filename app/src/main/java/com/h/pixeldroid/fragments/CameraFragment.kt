@@ -13,6 +13,8 @@ import android.media.ImageReader
 import android.media.ImageReader.OnImageAvailableListener
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.util.Log
 import android.util.SparseIntArray
 import android.view.*
@@ -33,6 +35,9 @@ import java.io.IOException
 // A fragment that displays a stream coming from either the front or back cameras of the smartphone,
 // and can capture an image from this stream.
 class CameraFragment : Fragment() {
+
+    private lateinit var mBackgroundHandler: Handler
+    private lateinit var mBackgroundThread: HandlerThread
 
     private lateinit var        manager: CameraManager
     private lateinit var   cameraDevice: CameraDevice
@@ -95,6 +100,8 @@ class CameraFragment : Fragment() {
                 imageView.visibility = View.INVISIBLE
             }
         }
+
+        startBackgroundThread()
 
     }
 
@@ -167,7 +174,7 @@ class CameraFragment : Fragment() {
                 cameraDevice.createCaptureSession(
                     listOf(Surface(surface)),
                     previewSessionCallback,
-                    null
+                    mBackgroundHandler
                 )
             } catch (e: CameraAccessException) {
                 e.printStackTrace()
@@ -196,7 +203,7 @@ class CameraFragment : Fragment() {
                 /* Build the stream with a flow of requests */
                 val streamRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                 streamRequestBuilder.addTarget(Surface(surface))
-                session.setRepeatingRequest(streamRequestBuilder.build(), null, null)
+                session.setRepeatingRequest(streamRequestBuilder.build(), null, mBackgroundHandler)
 
             } catch (e: CameraAccessException) {
                 e.printStackTrace()
@@ -241,8 +248,8 @@ class CameraFragment : Fragment() {
         pictureRequestBuilder.set(
             CaptureRequest.JPEG_ORIENTATION,
             getJpegOrientation(
-                // manager.getCameraCharacteristics(cameraDevice.id),
-                // activity?.windowManager?.defaultDisplay?.rotation!!
+             //    manager.getCameraCharacteristics(cameraDevice.id),
+             //    activity?.windowManager?.defaultDisplay?.rotation!!
             )
         )
 
@@ -326,7 +333,8 @@ class CameraFragment : Fragment() {
         val sensorOrientation =  characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
 
         val orientations = SparseIntArray(4)
-        orientations.append(Surface.ROTATION_0, 90)
+        orientations.append(Surface.ROTATION_0, 0)
+        //orientations.append(Surface.ROTATION_0, 90)
         orientations.append(Surface.ROTATION_90, 0)
         orientations.append(Surface.ROTATION_180, 270)
         orientations.append(Surface.ROTATION_270, 180)
@@ -337,6 +345,7 @@ class CameraFragment : Fragment() {
 
         val string = rotation.toString() + ", "+ sensorOrientation.toString() +", "+ jpegOrientation.toString()
         Toast.makeText(requireContext(), string, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "LOLILOL", Toast.LENGTH_SHORT).show()
         return jpegOrientation
     }
 
@@ -355,6 +364,39 @@ class CameraFragment : Fragment() {
             currentCameraType = CameraCharacteristics.LENS_FACING_FRONT
             openCamera(currentCameraType)
         }
+    }
+
+    private fun startBackgroundThread() {
+        mBackgroundThread = HandlerThread("Camera Background")
+        mBackgroundThread.start()
+        mBackgroundHandler = Handler(mBackgroundThread.getLooper())
+    }
+    private fun stopBackgroundThread() {
+        mBackgroundThread.quitSafely()
+        try {
+            mBackgroundThread.join()
+           // mBackgroundThread = null
+           // mBackgroundHandler = null
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e(TAG, "onResume")
+        startBackgroundThread()
+        if (textureView.isAvailable) {
+            openCamera(currentCameraType)
+        } else {
+            textureView.surfaceTextureListener = textureListener
+        }
+    }
+    override fun onPause() {
+        Log.e(TAG, "onPause")
+        //closeCamera()
+        stopBackgroundThread()
+        super.onPause()
     }
 
     // Ulysse's part

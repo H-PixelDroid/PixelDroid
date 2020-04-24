@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.h.pixeldroid">
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -25,8 +26,10 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
