@@ -15,7 +15,6 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.objects.Status.Companion.POST_TAG
-import kotlinx.android.synthetic.main.post_fragment.view.*
 
 
 class PostFragment : Fragment() {

@@ -1,13 +1,13 @@
 package com.h.pixeldroid.api
 
 import com.h.pixeldroid.objects.*
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
-
 
 /*
     Implements the Pixelfed API
@@ -74,14 +74,14 @@ interface PixelfedAPI {
         @Path("id") statusId: String
     ) : Call<List<Account>>
 
-    //Used in our case to post a comment
+    //Used in our case to post a comment or a status
     @FormUrlEncoded
     @POST("/api/v1/statuses")
     fun postStatus(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Field("status") statusText : String,
-        @Field("in_reply_to_id") in_reply_to_id : String,
+        @Field("in_reply_to_id") in_reply_to_id : String? = null,
         @Field("media_ids[]") media_ids : List<String> = emptyList(),
         @Field("poll[options][]") poll_options : List<String>? = null,
         @Field("poll[expires_in]") poll_expires : List<String>? = null,
@@ -203,5 +203,17 @@ interface PixelfedAPI {
                 .build().create(PixelfedAPI::class.java)
         }
     }
+
+    @Multipart
+    @POST("/api/v1/media")
+    fun mediaUpload(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Part file: MultipartBody.Part
+    ): Call<Attachment>
+
+    // get instance configuration
+    @GET("/api/v1/instance")
+    fun instance() : Call<Instance>
 }
 

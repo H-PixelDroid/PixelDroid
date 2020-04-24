@@ -6,12 +6,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Application
+import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Token
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.HttpUrl
@@ -21,6 +23,8 @@ import retrofit2.Response
 
 
 class LoginActivity : AppCompatActivity() {
+
+    private val TAG = "Login Activity"
 
     private lateinit var OAUTH_SCHEME: String
     private val PACKAGE_ID = BuildConfig.APPLICATION_ID
@@ -81,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
         preferences.edit()
             .putString("domain", "https://$normalizedDomain")
             .apply()
+        getInstanceConfig()
         registerAppToServer("https://$normalizedDomain")
 
     }
@@ -174,7 +179,7 @@ class LoginActivity : AppCompatActivity() {
                 if (!response.isSuccessful || response.body() == null) {
                     return failedRegistration(getString(R.string.token_error))
                 }
-                authenticationSuccessful(domain, response.body()!!.access_token)
+                authenticationSuccessful(response.body()!!.access_token)
             }
 
             override fun onFailure(call: Call<Token>, t: Throwable) {
@@ -189,7 +194,7 @@ class LoginActivity : AppCompatActivity() {
         ).enqueue(callback)
     }
 
-    private fun authenticationSuccessful(domain: String, accessToken: String) {
+    private fun authenticationSuccessful(accessToken: String) {
         preferences.edit().putString("accessToken", accessToken).apply()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -211,6 +216,32 @@ class LoginActivity : AppCompatActivity() {
             domainTextInputLayout.visibility = View.VISIBLE
             progressLayout.visibility = View.GONE
         }
+    }
+
+    private fun getInstanceConfig() {
+        // to get max post description length, can be enhanced for other things
+        // see /api/v1/instance
+        PixelfedAPI.create(preferences.getString("domain", "")!!)
+            .instance().enqueue(object : Callback<Instance> {
+
+            override fun onFailure(call: Call<Instance>, t: Throwable) {
+                Log.e(TAG, "Request to fetch instance config failed.")
+                preferences.edit().putInt("max_toot_chars", 500).apply()
+            }
+
+            override fun onResponse(call: Call<Instance>, response: Response<Instance>) {
+                if (response.code() == 200) {
+                    preferences.edit().putInt(
+                        "max_toot_chars",
+                        response.body()!!.max_toot_chars.toInt()
+                    ).apply()
+                } else {
+                    Log.e(TAG, "Server response to fetch instance config failed.")
+                    preferences.edit().putInt("max_toot_chars", 500).apply()
+                }
+            }
+
+        })
     }
 
 }

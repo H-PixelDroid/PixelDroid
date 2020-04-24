@@ -29,7 +29,7 @@ import org.junit.runner.RunWith
 class MockedServerTest {
 
     private val mockServer = MockServer()
-
+    private lateinit var activityScenario: ActivityScenario<MainActivity>
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -45,13 +45,15 @@ class MockedServerTest {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
     }
 
     @Test
     fun testFollowersTextView() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
+        activityScenario.onActivity{
                 a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
         }
+
         Thread.sleep(1000)
         onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
@@ -136,29 +138,31 @@ class MockedServerTest {
 
     @Test
     fun testNotificationsList() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
+        activityScenario.onActivity{
                 a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
         }
-        Thread.sleep(1000)
 
+        Thread.sleep(1000)
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
         onView(withText("Dobios liked your post")).check(matches(withId(R.id.notification_type)))
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeDown())
+
         Thread.sleep(1000)
         onView(withText("Dobios followed you")).check(matches(withId(R.id.notification_type)))
 
     }
     @Test
     fun clickNotification() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
+        activityScenario.onActivity{
                 a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
         }
-        Thread.sleep(1000)
 
+        Thread.sleep(1000)
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
-        Thread.sleep(1000)
 
+        Thread.sleep(1000)
         onView(withText("Dobios liked your post")).perform(ViewActions.click())
+
         Thread.sleep(1000)
         onView(withText("6 Likes")).check(matches(withId(R.id.nlikes)))
     }
@@ -209,9 +213,11 @@ class MockedServerTest {
 
     @Test
     fun swipingRightStopsAtHomepage() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
+        activityScenario.onActivity {
                 a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
         } // go to the last tab
+
+        Thread.sleep(1000)
         onView(withId(R.id.main_activity_main_linear_layout))
             .perform(ViewActions.swipeRight()) // notifications
             .perform(ViewActions.swipeRight()) // camera
@@ -444,6 +450,11 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
+    }
+
+    @Test
+    fun instanceConfigurationTest() {
+
     }
 }
 

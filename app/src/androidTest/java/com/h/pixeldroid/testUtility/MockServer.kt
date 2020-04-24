@@ -127,6 +127,36 @@ class MockServer {
 
     val reblogJson = """{"id":"156491373246287872","created_at":"2020-04-16T20:00:50.000000Z","in_reply_to_id":null,"in_reply_to_account_id":null,"sensitive":false,"spoiler_text":"","visibility":"public","language":"en","uri":"https:\/\/pixelfed.de\/p\/machintuck\/156491373246287872","url":"https:\/\/pixelfed.de\/p\/machintuck\/156491373246287872","replies_count":1,"reblogs_count":14,"favourites_count":2,"reblogged":true,"favourited":false,"muted":false,"bookmarked":false,"pinned":false,"content":"<a class=\"u-url mention\" href=\"https:\/\/pixelfed.de\/Dobios\" rel=\"external nofollow noopener\">@Dobios<\/a> <a class=\"u-url mention\" href=\"https:\/\/pixelfed.de\/Dante\" rel=\"external nofollow noopener\">@Dante<\/a>","reblog":null,"application":{"name":"web","website":null},"mentions":[{"id":"136800034732773376","url":"https:\/\/pixelfed.de\/Dobios","username":"Dobios","acct":"Dobios"},{"id":"136453537340198912","url":"https:\/\/pixelfed.de\/dante","username":"dante","acct":"dante"}],"tags":[{"name":"mushroom","url":"https:\/\/pixelfed.de\/discover\/tags\/mushroom"},{"name":"commentsstillbroken","url":"https:\/\/pixelfed.de\/discover\/tags\/commentsstillbroken"},{"name":"fixyourapi","url":"https:\/\/pixelfed.de\/discover\/tags\/fixyourapi"},{"name":"pls","url":"https:\/\/pixelfed.de\/discover\/tags\/pls"}],"emojis":[],"card":null,"poll":null,"account":{"id":"145183325781364736","username":"machintuck","acct":"machintuck","display_name":"Arthur","locked":false,"created_at":"2020-03-16T15:06:42.000000Z","followers_count":4,"following_count":4,"statuses_count":5,"note":"","url":"https:\/\/pixelfed.de\/machintuck","avatar":"https:\/\/pixelfed.de\/storage\/avatars\/014\/518\/332\/578\/136\/473\/6\/gbdKtKOhTkNA5UxCzeAQ_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35","avatar_static":"https:\/\/pixelfed.de\/storage\/avatars\/014\/518\/332\/578\/136\/473\/6\/gbdKtKOhTkNA5UxCzeAQ_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35","header":"","header_static":"","emojis":[],"moved":null,"fields":null,"bot":false,"software":"pixelfed","is_admin":false},"media_attachments":[{"id":"19228","type":"image","url":"https:\/\/pixelfed.de\/storage\/m\/d0931bf747b992a1c83e055753526516f2706111\/9b4393bfd32c643a265bd1c557b981f167d60969\/lbOqQOMeHLGmhYgehhZUBJ4JvjtKulh83BA97LoP.jpeg","remote_url":null,"preview_url":"https:\/\/pixelfed.de\/storage\/m\/d0931bf747b992a1c83e055753526516f2706111\/9b4393bfd32c643a265bd1c557b981f167d60969\/lbOqQOMeHLGmhYgehhZUBJ4JvjtKulh83BA97LoP_thumb.jpeg","text_url":null,"meta":null,"description":null}]}"""
 
+    val mediaUploadResponseJson = """
+        {
+          "id": "22348641",
+          "type": "image",
+          "url": "https://files.mastodon.social/media_attachments/files/022/348/641/original/cebc6d51be03e509.jpeg",
+          "preview_url": "https://files.mastodon.social/media_attachments/files/022/348/641/small/cebc6d51be03e509.jpeg",
+          "remote_url": null,
+          "text_url": "https://mastodon.social/media/4Zj6ewxzzzDi0g8JnZQ",
+          "meta": {
+            "focus": {
+              "x": -0.69,
+              "y": 0.42
+            },
+            "original": {
+              "width": 640,
+              "height": 480,
+              "size": "640x480",
+              "aspect": 1.3333333333333333
+            },
+            "small": {
+              "width": 461,
+              "height": 346,
+              "size": "461x346",
+              "aspect": 1.3323699421965318
+            }
+          },
+          "description": "test uploaded via api",
+          "blurhash": "UFBWY:8_0Jxv4mx]t8t64.%M-:IUWGWAt6M}"
+        }
+    """
     val followRelationshipJson = """{"id":"136800034732773376","following":true,"followed_by":true,"blocking":false,"muting":false,"muting_notifications":null,"requested":false,"domain_blocking":null,"showing_reblogs":null,"endorsed":false}"""
     val unfollowRelationshipJson = """{"id":"136800034732773376","following":false,"followed_by":true,"blocking":false,"muting":false,"muting_notifications":null,"requested":false,"domain_blocking":null,"showing_reblogs":null,"endorsed":false}"""
     val relationshipJson = """[{"id":"136800034732773376","following":true,"followed_by":true,"blocking":false,"muting":false,"muting_notifications":null,"requested":false,"domain_blocking":null,"showing_reblogs":null,"endorsed":false}]"""
@@ -145,6 +175,7 @@ class MockServer {
                 when (request.path) {
                     "/api/v1/accounts/verify_credentials" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(accountJson)
                     "/api/v1/timelines/home" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(feedJson)
+                    "/api/v1/media" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(mediaUploadResponseJson)
                 }
                 when {
                     request.path?.startsWith("/api/v1/notifications") == true -> {
