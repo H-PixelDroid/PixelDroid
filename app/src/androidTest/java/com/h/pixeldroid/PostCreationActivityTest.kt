@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.PerformException
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -16,11 +15,8 @@ import com.h.pixeldroid.testUtility.MockServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.ExpectedException
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
-import java.io.FileNotFoundException
-import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class PostCreationActivityTest {
@@ -49,7 +45,7 @@ class PostCreationActivityTest {
     @Test
     fun createPost() {
         onView(withId(R.id.post_creation_send_button)).perform(click())
-        // should stay on page since upload fail
-        onView(withId(R.id.new_post_description_input_field)).check(matches(isDisplayed()))
+        // should send on main activity
+        onView(withId(R.id.main_activity_main_linear_layout)).check(matches(isDisplayed()))
     }
 }
