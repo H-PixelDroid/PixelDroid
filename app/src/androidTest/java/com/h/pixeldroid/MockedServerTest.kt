@@ -374,5 +374,10 @@ class MockedServerTest {
         onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
     }
+
+    @Test
+    fun instanceConfigurationTest() {
+
+    }
 }
 

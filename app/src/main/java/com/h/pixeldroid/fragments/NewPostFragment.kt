@@ -49,6 +49,8 @@ class NewPostFragment : Fragment() {
         Intent().apply {
             type = "image/*"
             action = Intent.ACTION_GET_CONTENT
+            addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             startActivityForResult(
                 Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
             )

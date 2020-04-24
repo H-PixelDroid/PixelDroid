@@ -85,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
         preferences.edit()
             .putString("domain", "https://$normalizedDomain")
             .apply()
+        getInstanceConfig()
         registerAppToServer("https://$normalizedDomain")
 
     }
@@ -195,7 +196,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun authenticationSuccessful(accessToken: String) {
         preferences.edit().putString("accessToken", accessToken).apply()
-        getInstanceConfig()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()

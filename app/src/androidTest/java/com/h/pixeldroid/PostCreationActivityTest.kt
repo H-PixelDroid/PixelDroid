@@ -2,6 +2,7 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -24,8 +25,6 @@ class PostCreationActivityTest {
 
     @get:Rule
     val globalTimeout: Timeout = Timeout.seconds(30)
-    @get:Rule
-    val rule = ActivityScenarioRule(PostCreationActivity::class.java)
 
     @Before
     fun setup() {
@@ -36,7 +35,10 @@ class PostCreationActivityTest {
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
 
+        val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
         val intent = Intent(context, PostCreationActivity::class.java)
+            .putExtra("picture_uri", uri)
+
         ActivityScenario.launch<PostCreationActivity>(intent)
     }
 
