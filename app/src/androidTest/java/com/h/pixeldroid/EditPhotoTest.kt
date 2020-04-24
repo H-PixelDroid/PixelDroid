@@ -15,6 +15,7 @@ import androidx.test.espresso.action.Swipe
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -107,13 +108,11 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.image_preview)).check(ViewAssertions.matches(isDisplayed()))
     }
 
-    /*
     @Test
     fun FiltersIsSwipeableAndClickeable() {
-        Espresso.onView(withId(R.id.viewPager)).perform(swipeSlowLeft())
-        Thread.sleep(1000)
+        //Espresso.onView(withId(R.id.viewPager)).perform(swipeSlowLeft())
         Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
-    }*/
+    }
 
     @Test
     fun BirghtnessSaturationContrastTest() {
@@ -133,7 +132,8 @@ class EditPhotoTest {
 
     @Test
     fun SaveButtonSavesToGallery() {
-
+        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.action_save)).perform(click())
     }
 
     /*
