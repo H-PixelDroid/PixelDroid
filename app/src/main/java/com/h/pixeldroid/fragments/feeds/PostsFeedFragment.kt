@@ -24,7 +24,7 @@ import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 
 
-class HomeFragment : FeedFragment<Status, PostViewHolder>() {
+open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
 
@@ -39,7 +39,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        adapter = HomeRecyclerViewAdapter(this)
+        adapter = PostsFeedRecyclerViewAdapter(this)
         list.adapter = adapter
 
 
@@ -55,6 +55,10 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        stuff()
+    }
+
+    internal open fun stuff(){
         content = makeContent()
         content.observe(viewLifecycleOwner,
             Observer { c ->
@@ -82,7 +86,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
-    inner class HomeRecyclerViewAdapter(private val homeFragment: HomeFragment)
+    inner class PostsFeedRecyclerViewAdapter(private val postsFeedFragment: PostsFeedFragment)
         : FeedsRecyclerViewAdapter<Status, PostViewHolder>() {
         private val api = pixelfedAPI
         private val credential = "Bearer $accessToken"
@@ -104,7 +108,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
             holder.postPic.maxHeight = metrics.heightPixels
 
             //Setup the post layout
-            post.setupPost(holder.postView, picRequest, homeFragment)
+            post.setupPost(holder.postView, picRequest, postsFeedFragment)
 
             //Set the special HTML text
             post.setDescription(holder.postView, api, credential)

@@ -25,7 +25,7 @@ import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
 import kotlinx.android.synthetic.main.fragment_follows.view.*
 import retrofit2.Call
 
-class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerViewAdapter.ViewHolder>() {
+open class AccountListFragment : FeedFragment<Account, AccountListFragment.FollowsRecyclerViewAdapter.ViewHolder>() {
     lateinit var profilePicRequest: RequestBuilder<Drawable>
 
     override fun onCreateView(
@@ -54,6 +54,10 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        stuff()
+
+    }
+    internal open fun stuff() {
         val id = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
         val following = arguments?.getSerializable(FOLLOWING_TAG) as Boolean
         content = makeContent(id, following)
@@ -66,13 +70,13 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
             })
     }
 
-    private fun makeContent(id : String, following : Boolean) : LiveData<PagedList<Account>> {
+        private fun makeContent(id : String, following : Boolean) : LiveData<PagedList<Account>> {
         fun makeInitialCall(requestedLoadSize: Int): Call<List<Account>> {
-            if(following) {
-                return pixelfedAPI.followers(id, "Bearer $accessToken",
+            return if(following) {
+                pixelfedAPI.followers(id, "Bearer $accessToken",
                     limit = requestedLoadSize)
             } else {
-                return pixelfedAPI.following(id, "Bearer $accessToken",
+                pixelfedAPI.following(id, "Bearer $accessToken",
                     limit = requestedLoadSize)
             }
         }

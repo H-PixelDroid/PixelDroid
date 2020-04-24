@@ -25,6 +25,7 @@ import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.FeedContent
+import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,7 +43,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
     protected lateinit var list : RecyclerView
     protected lateinit var adapter : FeedsRecyclerViewAdapter<T, VH>
     protected lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var loadingIndicator: ProgressBar
+    internal lateinit var loadingIndicator: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,8 +77,8 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
     }
 
 
-    inner class FeedDataSource(private val makeInitialCall: (Int) -> Call<List<T>>,
-                               private val makeAfterCall: (Int, String) -> Call<List<T>>
+    open inner class FeedDataSource(private val makeInitialCall: ((Int) -> Call<List<T>>)?,
+                                    private val makeAfterCall: ((Int, String) -> Call<List<T>>)?
     ): ItemKeyedDataSource<String, T>() {
 
         //We use the id as the key
@@ -89,13 +90,13 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
             params: LoadInitialParams<String>,
             callback: LoadInitialCallback<T>
         ) {
-            enqueueCall(makeInitialCall(params.requestedLoadSize), callback)
+            enqueueCall(makeInitialCall!!(params.requestedLoadSize), callback)
         }
 
         //This is called to when we get to the bottom of the loaded content, so we want statuses
         //older than the given key (params.key)
         override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<T>) {
-            enqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
+            enqueueCall(makeAfterCall!!(params.requestedLoadSize, params.key), callback)
         }
 
         override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<T>) {
@@ -124,9 +125,9 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
             })
         }
     }
-    inner class FeedDataSourceFactory(
-        private val makeInitialCall: (Int) -> Call<List<T>>,
-        private val makeAfterCall: (Int, String) -> Call<List<T>>
+    open inner class FeedDataSourceFactory(
+        private val makeInitialCall: ((Int) -> Call<List<T>>)?,
+        private val makeAfterCall: ((Int, String) -> Call<List<T>>)?
     ): DataSource.Factory<String, T>() {
         lateinit var liveData: MutableLiveData<FeedDataSource>
 
