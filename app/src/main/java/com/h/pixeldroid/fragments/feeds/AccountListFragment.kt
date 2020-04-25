@@ -45,7 +45,7 @@ open class AccountListFragment : FeedFragment<Account, AccountListFragment.Follo
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Account> = ViewPreloadSizeProvider()
         val preloader: RecyclerViewPreloader<Account> = RecyclerViewPreloader(
-            Glide.with(this), adapter, sizeProvider, 4
+            Glide.with(this), adapter as AccountListFragment.FollowsRecyclerViewAdapter, sizeProvider, 4
         )
         list.addOnScrollListener(preloader)
 
@@ -101,7 +101,8 @@ open class AccountListFragment : FeedFragment<Account, AccountListFragment.Follo
         return LivePagedListBuilder(factory, config).build()
     }
 
-    inner class FollowsRecyclerViewAdapter : FeedsRecyclerViewAdapter<Account,FollowsRecyclerViewAdapter.ViewHolder>() {
+    inner class FollowsRecyclerViewAdapter : FeedsRecyclerViewAdapter<Account,FollowsRecyclerViewAdapter.ViewHolder>(),
+        ListPreloader.PreloadModelProvider<Account> {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)

@@ -46,7 +46,7 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Status> = ViewPreloadSizeProvider()
         val preloader: RecyclerViewPreloader<Status> = RecyclerViewPreloader(
-            Glide.with(this), adapter, sizeProvider, 4
+            Glide.with(this), adapter as PostsFeedFragment.PostsFeedRecyclerViewAdapter, sizeProvider, 4
         )
         list.addOnScrollListener(preloader)
 
@@ -84,7 +84,8 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
     inner class PostsFeedRecyclerViewAdapter(private val postsFeedFragment: PostsFeedFragment)
-        : FeedsRecyclerViewAdapter<Status, PostViewHolder>() {
+        : FeedsRecyclerViewAdapter<Status, PostViewHolder>(),
+        ListPreloader.PreloadModelProvider<Status> {
         private val api = pixelfedAPI
         private val credential = "Bearer $accessToken"
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {

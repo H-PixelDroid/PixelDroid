@@ -1,4 +1,4 @@
-package com.h.pixeldroid.fragments.feeds
+package com.h.pixeldroid.fragments.feeds.search
 
 import android.os.Bundle
 import android.util.Log
@@ -7,18 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.h.pixeldroid.fragments.feeds.AccountListFragment
+import com.h.pixeldroid.fragments.feeds.FeedFragment
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Results
-import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchFeedFragment: PostsFeedFragment(){
+class SearchAccountFragment: AccountListFragment(){
 
     private lateinit var query: String
 
@@ -34,45 +33,39 @@ class SearchFeedFragment: PostsFeedFragment(){
         return view
     }
 
-    inner class SearchFeedDataSource(
-    ) : FeedDataSource(null, null){
+    inner class SearchAccountListDataSource: FeedDataSource(null, null){
 
         private fun makeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken",
                     limit="$requestedLoadSize", q=query,
-                    type = Results.SearchType.statuses)
+                    type = Results.SearchType.accounts)
         }
         private fun makeAfterCall(requestedLoadSize: Int, key: String): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken", max_id=key,
                     limit="$requestedLoadSize", q = query,
-                    type = Results.SearchType.statuses)
+                    type = Results.SearchType.accounts)
         }
         override fun loadInitial(
             params: LoadInitialParams<String>,
-            callback: LoadInitialCallback<Status>
+            callback: LoadInitialCallback<Account>
         ) {
             enqueueCall(makeInitialCall(params.requestedLoadSize), callback)
         }
 
         //This is called to when we get to the bottom of the loaded content, so we want statuses
         //older than the given key (params.key)
-        override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Status>) {
+        override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Account>) {
             enqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
         }
-
-        override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<Status>) {
-            //do nothing here, it is expected to pull to refresh to load newer notifications
-        }
-
-        private fun enqueueCall(call: Call<Results>, callback: LoadCallback<Status>){
+        private fun enqueueCall(call: Call<Results>, callback: LoadCallback<Account>){
 
             call.enqueue(object : Callback<Results> {
                 override fun onResponse(call: Call<Results>, response: Response<Results>) {
                     if (response.code() == 200) {
-                        val notifications = response.body()!!.statuses as ArrayList<Status>
-                        callback.onResult(notifications as List<Status>)
+                        val notifications = response.body()!!.accounts as ArrayList<Account>
+                        callback.onResult(notifications as List<Account>)
 
                     } else{
                         Toast.makeText(context,"Something went wrong while loading", Toast.LENGTH_SHORT).show()
@@ -91,9 +84,13 @@ class SearchFeedFragment: PostsFeedFragment(){
 
     }
 
-    override fun makeContent(): LiveData<PagedList<Status>> {
+    override fun makeContent(): LiveData<PagedList<Account>> {
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = FeedFragment<Status, PostViewHolder>().FeedDataSourceFactory(SearchFeedDataSource())
+        factory =
+            FeedFragment<Account, FollowsRecyclerViewAdapter.ViewHolder>()
+                .FeedDataSourceFactory(
+                SearchAccountListDataSource()
+            )
         return LivePagedListBuilder(factory, config).build()
     }
 }

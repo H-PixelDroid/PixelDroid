@@ -150,7 +150,7 @@ abstract class FeedsRecyclerViewAdapter<T: FeedContent, VH : RecyclerView.ViewHo
             return oldItem == newItem
         }
     }
-), PreloadModelProvider<T> {
+){
 
     protected lateinit var context: Context
 }

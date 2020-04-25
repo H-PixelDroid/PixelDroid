@@ -11,10 +11,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
-import com.h.pixeldroid.fragments.feeds.SearchAccountListFragment
-import com.h.pixeldroid.fragments.feeds.SearchFeedFragment
-import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.fragments.feeds.search.SearchAccountFragment
+import com.h.pixeldroid.fragments.feeds.search.SearchHashtagFragment
+import com.h.pixeldroid.fragments.feeds.search.SearchPostsFragment
+import com.h.pixeldroid.objects.Results
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var preferences: SharedPreferences
@@ -23,26 +23,42 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val query = intent.getSerializableExtra("searchFeed") as String
+        var rawQuery = intent.getSerializableExtra("searchFeed") as String
+        rawQuery = rawQuery.trim()
 
-        val searchFeedFragment = SearchFeedFragment()
-        val searchAccountListFragment = SearchAccountListFragment()
+        val searchType = if (rawQuery.startsWith("#")){
+            Results.SearchType.hashtags
+        } else if(rawQuery.startsWith("@")){
+            Results.SearchType.accounts
+        } else Results.SearchType.statuses
+
+        if(searchType != Results.SearchType.statuses) rawQuery = rawQuery.drop(1)
+
+        val query = rawQuery
+        val searchFeedFragment =
+            SearchPostsFragment()
+        val searchAccountListFragment =
+            SearchAccountFragment()
+        val searchHashtagFragment: Fragment = SearchHashtagFragment()
         val arguments = Bundle()
         arguments.putSerializable("searchFeed", query)
         searchFeedFragment.arguments = arguments
         searchAccountListFragment.arguments = arguments
+        searchHashtagFragment.arguments = arguments
 
         val tabs = arrayOf(
             searchFeedFragment,
             searchAccountListFragment,
-            Fragment()
+            searchHashtagFragment
         )
 
-        setupTabs(tabs)
-
+        setupTabs(tabs, searchType)
     }
 
-    private fun setupTabs(tabs: Array<Fragment>){
+    private fun setupTabs(
+        tabs: Array<Fragment>,
+        searchType: Results.SearchType
+    ){
         val viewPager = findViewById<ViewPager2>(R.id.search_view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
@@ -61,6 +77,12 @@ class SearchActivity : AppCompatActivity() {
                 2 -> tab.text = "HASHTAGS"
             }
         }.attach()
+        when(searchType){
+            Results.SearchType.statuses ->  tabLayout.selectTab(tabLayout.getTabAt(0))
+            Results.SearchType.accounts ->  tabLayout.selectTab(tabLayout.getTabAt(1))
+            Results.SearchType.hashtags ->  tabLayout.selectTab(tabLayout.getTabAt(2))
+
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -75,7 +97,5 @@ class SearchActivity : AppCompatActivity() {
     private fun search(query: String){
         Log.e("search", "")
     }
-
-
 }
 
