@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.DataSource
@@ -33,8 +34,7 @@ class SearchAccountListFragment: AccountListFragment(){
         return view
     }
 
-    inner class SearchAccountListDataSource(
-    ) : FeedDataSource(null, null){
+    inner class SearchAccountListDataSource: FeedDataSource(null, null){
 
         private fun makeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
@@ -90,29 +90,12 @@ class SearchAccountListFragment: AccountListFragment(){
 
     }
 
-    override fun stuff() {
+    override fun makeContent(): LiveData<PagedList<Account>> {
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = SearchFeedDataSourceFactory()
-        content = LivePagedListBuilder(factory, config).build()
-        content.observe(viewLifecycleOwner,
-            Observer { c ->
-                adapter.submitList(c)
-                //after a refresh is done we need to stop the pull to refresh spinner
-                swipeRefreshLayout.isRefreshing = false
-            })
+        factory =
+            FeedFragment<Account, FollowsRecyclerViewAdapter.ViewHolder>().FeedDataSourceFactory(
+                SearchAccountListDataSource()
+            )
+        return LivePagedListBuilder(factory, config).build()
     }
-
-    inner class SearchFeedDataSourceFactory: FeedFragment<Account, FollowsRecyclerViewAdapter.ViewHolder>.FeedDataSourceFactory(null, null) {
-
-        override fun create(): DataSource<String, Account> {
-            val dataSource = SearchAccountListDataSource()
-            liveData = MutableLiveData()
-            liveData.postValue(dataSource)
-            return dataSource
-        }
-
-
-    }
-
-
 }

@@ -34,7 +34,7 @@ import retrofit2.Response
 open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment() {
 
     lateinit var content: LiveData<PagedList<T>>
-    lateinit var factory: FeedDataSourceFactory
+    lateinit var factory: FeedDataSourceFactory<FeedDataSource>
 
     protected var accessToken: String? = null
     protected lateinit var pixelfedAPI: PixelfedAPI
@@ -125,14 +125,12 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
             })
         }
     }
-    open inner class FeedDataSourceFactory(
-        private val makeInitialCall: ((Int) -> Call<List<T>>)?,
-        private val makeAfterCall: ((Int, String) -> Call<List<T>>)?
+    open inner class FeedDataSourceFactory<DS: FeedDataSource>(
+        private val dataSource: DS
     ): DataSource.Factory<String, T>() {
-        lateinit var liveData: MutableLiveData<FeedDataSource>
+        lateinit var liveData: MutableLiveData<DS>
 
         override fun create(): DataSource<String, T> {
-            val dataSource = FeedDataSource(::makeInitialCall.get(), ::makeAfterCall.get())
             liveData = MutableLiveData()
             liveData.postValue(dataSource)
             return dataSource

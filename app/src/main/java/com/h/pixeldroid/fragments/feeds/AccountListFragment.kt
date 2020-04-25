@@ -54,13 +54,7 @@ open class AccountListFragment : FeedFragment<Account, AccountListFragment.Follo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        stuff()
-
-    }
-    internal open fun stuff() {
-        val id = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
-        val following = arguments?.getSerializable(FOLLOWING_TAG) as Boolean
-        content = makeContent(id, following)
+        content = makeContent()
 
         content.observe(viewLifecycleOwner,
             Observer { c ->
@@ -70,27 +64,40 @@ open class AccountListFragment : FeedFragment<Account, AccountListFragment.Follo
             })
     }
 
-        private fun makeContent(id : String, following : Boolean) : LiveData<PagedList<Account>> {
+    internal open fun makeContent(): LiveData<PagedList<Account>> {
+        val id = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
+        val following = arguments?.getSerializable(FOLLOWING_TAG) as Boolean
         fun makeInitialCall(requestedLoadSize: Int): Call<List<Account>> {
-            return if(following) {
-                pixelfedAPI.followers(id, "Bearer $accessToken",
-                    limit = requestedLoadSize)
+            return if (following) {
+                pixelfedAPI.followers(
+                    id, "Bearer $accessToken",
+                    limit = requestedLoadSize
+                )
             } else {
-                pixelfedAPI.following(id, "Bearer $accessToken",
-                    limit = requestedLoadSize)
+                pixelfedAPI.following(
+                    id, "Bearer $accessToken",
+                    limit = requestedLoadSize
+                )
             }
         }
+
         fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Account>> {
-            if(following) {
-                return pixelfedAPI.followers(id, "Bearer $accessToken",
-                    since_id = key, limit = requestedLoadSize)
+            return if (following) {
+                pixelfedAPI.followers(
+                    id, "Bearer $accessToken",
+                    since_id = key, limit = requestedLoadSize
+                )
             } else {
-                return pixelfedAPI.following(id, "Bearer $accessToken",
-                    since_id = key, limit = requestedLoadSize)
+                pixelfedAPI.following(
+                    id, "Bearer $accessToken",
+                    since_id = key, limit = requestedLoadSize
+                )
             }
         }
+
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)
+        val dataSource = FeedDataSource(::makeInitialCall, ::makeAfterCall)
+        factory = FeedDataSourceFactory(dataSource)
         return LivePagedListBuilder(factory, config).build()
     }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.DataSource
@@ -90,29 +91,9 @@ class SearchFeedFragment: PostsFeedFragment(){
 
     }
 
-    override fun stuff() {
+    override fun makeContent(): LiveData<PagedList<Status>> {
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = SearchFeedDataSourceFactory()
-        content = LivePagedListBuilder(factory, config).build()
-        content.observe(viewLifecycleOwner,
-            Observer { c ->
-                adapter.submitList(c)
-                //after a refresh is done we need to stop the pull to refresh spinner
-                swipeRefreshLayout.isRefreshing = false
-            })
+        factory = FeedFragment<Status, PostViewHolder>().FeedDataSourceFactory(SearchFeedDataSource())
+        return LivePagedListBuilder(factory, config).build()
     }
-
-    inner class SearchFeedDataSourceFactory: FeedFragment<Status, PostViewHolder>.FeedDataSourceFactory(null, null) {
-
-        override fun create(): DataSource<String, Status> {
-            val dataSource = SearchFeedDataSource()
-            liveData = MutableLiveData()
-            liveData.postValue(dataSource)
-            return dataSource
-        }
-
-
-    }
-
-
 }

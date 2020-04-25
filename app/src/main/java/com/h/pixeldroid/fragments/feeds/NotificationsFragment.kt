@@ -89,8 +89,9 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         }
 
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)
-        return LivePagedListBuilder(factory, config).build()
+        val dataSource = FeedDataSource(::makeInitialCall, ::makeAfterCall)
+        factory = FeedDataSourceFactory(dataSource)
+        return LivePagedListBuilder<String, Notification>(factory, config).build()
     }
 
     /**

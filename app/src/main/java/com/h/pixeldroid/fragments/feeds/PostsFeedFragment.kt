@@ -55,10 +55,6 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        stuff()
-    }
-
-    internal open fun stuff(){
         content = makeContent()
         content.observe(viewLifecycleOwner,
             Observer { c ->
@@ -68,7 +64,7 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             })
     }
 
-    private fun makeContent(): LiveData<PagedList<Status>> {
+    internal open fun makeContent(): LiveData<PagedList<Status>> {
         fun makeInitialCall(requestedLoadSize: Int): Call<List<Status>> {
             return pixelfedAPI
                 .timelineHome("Bearer $accessToken", limit="$requestedLoadSize")
@@ -79,7 +75,8 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
                     limit="$requestedLoadSize")
         }
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)
+        val dataSource = FeedDataSource(::makeInitialCall, ::makeAfterCall)
+        factory = FeedDataSourceFactory(dataSource)
         return LivePagedListBuilder(factory, config).build()
     }
 
