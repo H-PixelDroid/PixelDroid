@@ -102,7 +102,6 @@ class CameraFragment : Fragment() {
         }
 
         startBackgroundThread()
-
     }
 
     private val textureListener = object : TextureView.SurfaceTextureListener {
@@ -174,7 +173,7 @@ class CameraFragment : Fragment() {
                 cameraDevice.createCaptureSession(
                     listOf(Surface(surface)),
                     previewSessionCallback,
-                    mBackgroundHandler
+                    null
                 )
             } catch (e: CameraAccessException) {
                 e.printStackTrace()
@@ -345,7 +344,6 @@ class CameraFragment : Fragment() {
 
         val string = rotation.toString() + ", "+ sensorOrientation.toString() +", "+ jpegOrientation.toString()
         Toast.makeText(requireContext(), string, Toast.LENGTH_SHORT).show()
-        Toast.makeText(requireContext(), "LOLILOL", Toast.LENGTH_SHORT).show()
         return jpegOrientation
     }
 
@@ -369,7 +367,7 @@ class CameraFragment : Fragment() {
     private fun startBackgroundThread() {
         mBackgroundThread = HandlerThread("Camera Background")
         mBackgroundThread.start()
-        mBackgroundHandler = Handler(mBackgroundThread.getLooper())
+        mBackgroundHandler = Handler(mBackgroundThread.looper)
     }
     private fun stopBackgroundThread() {
         mBackgroundThread.quitSafely()
