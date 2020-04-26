@@ -4,7 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -15,9 +20,15 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.NewPostFragment
 import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
+import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.utils.ImageConverter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -39,21 +50,51 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(!preferences.contains("accessToken")){
             launchActivity(LoginActivity())
         } else {
-            // Setup the drawer
-            drawerLayout = findViewById(R.id.drawer_layout)
-            val navigationView: NavigationView = findViewById(R.id.nav_view)
-            navigationView.setNavigationItemSelectedListener(this)
-            
-            val tabs = arrayOf(
-                HomeFragment(),
-                Fragment(),
-                NewPostFragment(),
-                NotificationsFragment(),
-                Fragment()
-            )
-
-            setupTabs(tabs)
+            setupDrawer()
         }
+    }
+
+    private fun setupDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        val tabs = arrayOf(
+            HomeFragment(),
+            Fragment(),
+            NewPostFragment(),
+            NotificationsFragment(),
+            Fragment()
+        )
+        setupTabs(tabs)
+
+        // Setup views
+        val accessToken = preferences.getString("accessToken", "")
+        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
+
+        pixelfedAPI.verifyCredentials("Bearer $accessToken")
+            .enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if (response.code() == 200) {
+                        val account = response.body()!!
+
+                        // Set profile picture
+                        val avatar = findViewById<ImageView>(R.id.drawer_avatar)
+                        ImageConverter.setRoundImageFromURL(
+                            View(applicationContext), account.avatar, avatar)
+                        avatar.setOnClickListener{ launchActivity(ProfileActivity()) }
+
+                        // Set account name
+                        val accountName = findViewById<TextView>(R.id.drawer_account_name)
+                        accountName.text = account.display_name
+                        accountName.setOnClickListener{ launchActivity(ProfileActivity()) }
+                    }
+                }
+
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("ProfileActivity:", t.toString())
+                }
+            })
     }
 
     private fun setupTabs(tabs: Array<Fragment>){

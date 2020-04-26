@@ -66,7 +66,23 @@ class DrawerMenuTest {
     fun testDrawerProfileButton() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
-        // Check that settings activity was opened.
+        // Check that profile activity was opened.
+        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testDrawerAvatarClick() {
+        // Start the screen of your activity.
+        onView(withId(R.id.drawer_avatar)).perform(ViewActions.click())
+        // Check that profile activity was opened.
+        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testDrawerAccountNameClick() {
+        // Start the screen of your activity.
+        onView(withId(R.id.drawer_account_name)).perform(ViewActions.click())
+        // Check that profile activity was opened.
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
 
@@ -77,10 +93,10 @@ class DrawerMenuTest {
         Thread.sleep(1000)
 
         // Open followers list
-        onView(withId(R.id.nbFollowersTextView)).perform((ViewActions.click()))
+        onView(withId(R.id.nbFollowersTextView)).perform(ViewActions.click())
         Thread.sleep(1000)
         // Open follower's profile
-        onView(withText("ete2")).perform((ViewActions.click()))
+        onView(withText("ete2")).perform(ViewActions.click())
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
@@ -88,19 +104,14 @@ class DrawerMenuTest {
 
     @Test
     fun clickFollowing() {
-        // Open Drawer to click on navigation.
-        ActivityScenario.launch(MainActivity::class.java)
-        onView(withId(R.id.drawer_layout))
-            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()) // Open Drawer
         // Open My Profile from drawer
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
         Thread.sleep(1000)
         // Open followers list
-        onView(withId(R.id.nbFollowingTextView)).perform((ViewActions.click()))
+        onView(withId(R.id.nbFollowingTextView)).perform(ViewActions.click())
         Thread.sleep(1000)
         // Open following's profile
-        onView(withText("Dobios")).perform((ViewActions.click()))
+        onView(withText("Dobios")).perform(ViewActions.click())
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Dobios")))

@@ -81,7 +81,7 @@ data class Account(
      */
     fun openProfile(context: Context) {
         val intent = Intent(context, ProfileActivity::class.java)
-        intent.putExtra(ACCOUNT_TAG, this)
+        intent.putExtra(ACCOUNT_TAG, this as Serializable)
         startActivity(context, intent, null)
     }
 }

@@ -47,18 +47,7 @@ class MockedServerTest {
         preferences.edit().putString("domain", baseUrl.toString()).apply()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
     }
-/*
-    @Test
-    fun testFollowersTextView() {
-        activityScenario.onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
 
-        Thread.sleep(1000)
-        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
-    }
-*/
     @Test
     fun clickFollowButton() {
         ActivityScenario.launch(MainActivity::class.java)
@@ -418,11 +407,6 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
-    }
-
-    @Test
-    fun instanceConfigurationTest() {
-
     }
 }
 
