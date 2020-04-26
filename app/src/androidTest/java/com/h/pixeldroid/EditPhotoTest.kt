@@ -62,7 +62,7 @@ class EditPhotoTest {
             a.findViewById<TabLayout>(R.id.tabs).getTabAt(2)?.select()
         }
         Thread.sleep(1000)
-        Espresso.onView(withId(R.id.edit_picture_button)).perform(click())
+        Espresso.onView(withId(R.id.editPhotoButton)).perform(click())
     }
 
     private fun selectTabAtPosition(tabIndex: Int): ViewAction {
