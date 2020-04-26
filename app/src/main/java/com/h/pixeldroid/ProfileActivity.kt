@@ -18,7 +18,7 @@ class ProfileActivity : AppCompatActivity() {
 
         profileFragment = ProfileFragment()
         val arguments = Bundle()
-        arguments.putSerializable("profileTag", account)
+        arguments.putSerializable(ACCOUNT_TAG, account)
         profileFragment.arguments = arguments
 
         supportFragmentManager.beginTransaction()

@@ -105,6 +105,13 @@ dependencies {
     implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+
+    def fragment_version = '1.2.4'
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
+
 }
 
 tasks.withType(Test) {

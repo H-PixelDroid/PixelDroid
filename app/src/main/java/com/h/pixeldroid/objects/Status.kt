@@ -107,12 +107,12 @@ data class Status(
     }
 
     fun getNLikes() : CharSequence {
-        val nLikes : Int = favourites_count ?: 0
+        val nLikes = favourites_count
         return "$nLikes Likes"
     }
 
     fun getNShares() : CharSequence {
-        val nShares : Int = reblogs_count ?: 0
+        val nShares = reblogs_count
         return "$nShares Shares"
     }
 
@@ -257,7 +257,7 @@ data class Status(
         if (replies_count == 0) {
             holder.viewComment.text =  "No comments on this post..."
         } else {
-            holder.viewComment.text =  "View all ${replies_count} comments..."
+            holder.viewComment.text =  "View all $replies_count comments..."
             holder.viewComment.setOnClickListener {
                 holder.viewComment.visibility = View.GONE
 
