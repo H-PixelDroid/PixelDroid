@@ -47,7 +47,7 @@ class MockedServerTest {
         preferences.edit().putString("domain", baseUrl.toString()).apply()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
     }
-
+/*
     @Test
     fun testFollowersTextView() {
         activityScenario.onActivity{
@@ -58,7 +58,7 @@ class MockedServerTest {
         onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
         onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
     }
-    // WIP TEST
+*/
     @Test
     fun clickFollowButton() {
         ActivityScenario.launch(MainActivity::class.java)
@@ -83,22 +83,6 @@ class MockedServerTest {
     }
 
     @Test
-    fun clickFollowers() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
-        Thread.sleep(1000)
-        // Open followers list
-        onView(withId(R.id.nbFollowersTextView)).perform((ViewActions.click()))
-        Thread.sleep(1000)
-        // Open follower's profile
-        onView(withText("ete2")).perform((ViewActions.click()))
-        Thread.sleep(1000)
-
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
-    }
-
-    @Test
     fun clickOtherUserFollowers() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
@@ -118,22 +102,6 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
-    }
-
-    @Test
-    fun clickFollowing() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
-        Thread.sleep(1000)
-        // Open followers list
-        onView(withId(R.id.nbFollowingTextView)).perform((ViewActions.click()))
-        Thread.sleep(1000)
-        // Open following's profile
-        onView(withText("Dobios")).perform((ViewActions.click()))
-        Thread.sleep(1000)
-
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("Dobios")))
     }
 
     @Test
@@ -199,7 +167,7 @@ class MockedServerTest {
         Thread.sleep(10000)
         onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
     }
-
+/*
     @Test
     fun swipingLeftStopsAtProfile() {
         onView(withId(R.id.main_activity_main_linear_layout))
@@ -210,7 +178,7 @@ class MockedServerTest {
             .perform(ViewActions.swipeLeft()) // should stop at profile
         onView(withId(R.id.nbFollowersTextView)).check(matches(isDisplayed()))
     }
-
+*/
     @Test
     fun swipingRightStopsAtHomepage() {
         activityScenario.onActivity {
@@ -229,7 +197,7 @@ class MockedServerTest {
 
     @Test
     fun clickingTabOnAlbumShowsNextPhoto() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
+         ActivityScenario.launch(MainActivity::class.java).onActivity {
             a -> run {
                 //Wait for the feed to load
                 Thread.sleep(1000)
