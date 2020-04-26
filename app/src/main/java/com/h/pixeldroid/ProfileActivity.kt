@@ -103,7 +103,7 @@ class ProfileActivity : AppCompatActivity() {
         description.text = account!!.note
 
         val accountName = findViewById<TextView>(R.id.accountNameTextView)
-        accountName.text = account!!.username
+        accountName.text = account!!.display_name
         accountName.setTypeface(null, Typeface.BOLD)
 
         val nbPosts = findViewById<TextView>(R.id.nbPostsTextView)

@@ -99,7 +99,7 @@ class DrawerMenuTest {
         onView(withText("ete2")).perform(ViewActions.click())
         Thread.sleep(1000)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))
     }
 
     @Test
@@ -114,6 +114,6 @@ class DrawerMenuTest {
         onView(withText("Dobios")).perform(ViewActions.click())
         Thread.sleep(1000)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("Dobios")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Andrew Dobis")))
     }
 }

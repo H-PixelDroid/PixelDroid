@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         // Set profile picture
                         val avatar = findViewById<ImageView>(R.id.drawer_avatar)
                         ImageConverter.setRoundImageFromURL(
-                            View(applicationContext), account.avatar, avatar)
+                            View(applicationContext), account.avatar_static, avatar)
                         avatar.setOnClickListener{ launchActivity(ProfileActivity()) }
 
                         // Set account name

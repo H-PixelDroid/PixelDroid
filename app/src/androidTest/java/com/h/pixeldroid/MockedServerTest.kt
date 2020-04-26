@@ -90,7 +90,7 @@ class MockedServerTest {
         onView(withText("ete2")).perform((ViewActions.click()))
         Thread.sleep(1000)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))
     }
 
     @Test
@@ -136,7 +136,7 @@ class MockedServerTest {
 
         onView(withText("Dobios followed you")).perform(ViewActions.click())
         Thread.sleep(1000)
-        onView(withText("Dobios")).check(matches(withId(R.id.accountNameTextView)))
+        onView(withText("Andrew Dobis")).check(matches(withId(R.id.accountNameTextView)))
     }
 
     @Test
