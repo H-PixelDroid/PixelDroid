@@ -9,9 +9,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.text.toSpanned
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -291,5 +289,15 @@ data class Status(
 
     enum class Visibility : Serializable {
         public, unlisted, private, direct
+    }
+
+
+    fun imagePopUpMenu(view: View) {
+        view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
+            val popup = PopupMenu(view.context, it)
+            popup.inflate(R.menu.image_popup_menu)
+            popup.show()
+            true
+        }
     }
 }
