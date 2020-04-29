@@ -7,9 +7,10 @@ data class Tag(
     val name: String,
     val url: String,
     //Optional attributes
-    val history: List<History>? = emptyList(),
-
+    val history: List<History>? = emptyList()) : Serializable, FeedContent() {
     //needed to be a FeedContent, this inheritance is a bit fickle. Do not use.
-    override val id: String = "tag"
-) : Serializable, FeedContent()
+    override val id: String
+        get() = "tag"
+
+}
 
