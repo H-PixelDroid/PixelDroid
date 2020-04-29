@@ -85,9 +85,9 @@ class CameraFragment : Fragment() {
             if (takePictureButton.visibility == View.VISIBLE) {
                 flipCameras()
             } else {
-                textureView.surfaceTextureListener = this.textureListener
                 takePictureButton.visibility = View.VISIBLE
                 switchCameraButton.background = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_camera)
+                openCamera(currentCameraType)
             }
         }
 
@@ -137,7 +137,6 @@ class CameraFragment : Fragment() {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), 200)
             textureView.surfaceTextureListener = this.textureListener
-            //openCamera(requiredType)
             return
         }
 
@@ -227,18 +226,19 @@ class CameraFragment : Fragment() {
 
         /* Build a reader which will contain our picture, and link it to the request builder */
         val reader: ImageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
+        reader.setOnImageAvailableListener(readerListener, mBackgroundHandler)
 
         pictureRequestBuilder =
             cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+
         pictureRequestBuilder.addTarget(reader.surface)
-        Log.e(TAG, "takePicture first call to Surface")
+        //Log.e(TAG, "takePicture first call to Surface")
         pictureRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
         pictureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
 
-        reader.setOnImageAvailableListener(readerListener, mBackgroundHandler)
         val outputSurfaces = ArrayList<Surface>(1)
         outputSurfaces.add(reader.surface)
-        Log.e(TAG, "takePicture second call to Surface")
+        //Log.e(TAG, "takePicture second call to Surface")
         outputSurfaces.add(Surface(textureView.surfaceTexture))
 
         // Handle rotation ?!
@@ -327,8 +327,8 @@ class CameraFragment : Fragment() {
         val sensorOrientation =  characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
 
         val orientations = SparseIntArray(4)
-        orientations.append(Surface.ROTATION_0, 0)
-        //orientations.append(Surface.ROTATION_0, 90)
+        //orientations.append(Surface.ROTATION_0, 0)
+        orientations.append(Surface.ROTATION_0, 90)
         orientations.append(Surface.ROTATION_90, 0)
         orientations.append(Surface.ROTATION_180, 270)
         orientations.append(Surface.ROTATION_270, 180)
