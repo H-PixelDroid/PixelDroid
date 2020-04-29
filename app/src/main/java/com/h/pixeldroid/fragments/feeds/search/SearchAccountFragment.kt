@@ -35,6 +35,10 @@ class SearchAccountFragment: AccountListFragment(){
 
     inner class SearchAccountListDataSource: FeedDataSource(null, null){
 
+        override fun newSource(): FeedDataSource {
+            return SearchAccountListDataSource()
+        }
+
         private fun makeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken",

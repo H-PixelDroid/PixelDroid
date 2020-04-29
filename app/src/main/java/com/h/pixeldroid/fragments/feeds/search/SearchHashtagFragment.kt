@@ -66,6 +66,10 @@ class SearchHashtagFragment: FeedFragment<Tag, SearchHashtagFragment.TagsRecycle
 
     inner class SearchTagsListDataSource: FeedDataSource(null, null){
 
+        override fun newSource(): FeedDataSource {
+            return SearchTagsListDataSource()
+        }
+
         private fun makeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken",

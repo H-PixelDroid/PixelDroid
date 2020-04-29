@@ -37,6 +37,10 @@ class SearchPostsFragment: PostsFeedFragment(){
     inner class SearchFeedDataSource(
     ) : FeedDataSource(null, null){
 
+        override fun newSource(): FeedDataSource {
+            return SearchFeedDataSource()
+        }
+
         private fun makeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken",

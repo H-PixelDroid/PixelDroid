@@ -76,10 +76,13 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
 
     }
 
-
     open inner class FeedDataSource(private val makeInitialCall: ((Int) -> Call<List<T>>)?,
                                     private val makeAfterCall: ((Int, String) -> Call<List<T>>)?
     ): ItemKeyedDataSource<String, T>() {
+        
+        fun newSource(): FeedDataSource {
+            return FeedDataSource(makeInitialCall, makeAfterCall)
+        }
 
         //We use the id as the key
         override fun getKey(item: T): String {
@@ -131,8 +134,9 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
         lateinit var liveData: MutableLiveData<DS>
 
         override fun create(): DataSource<String, T> {
+            val dataSource = dataSource.newSource()
             liveData = MutableLiveData()
-            liveData.postValue(dataSource)
+            liveData.postValue(dataSource as DS)
             return dataSource
         }
 
