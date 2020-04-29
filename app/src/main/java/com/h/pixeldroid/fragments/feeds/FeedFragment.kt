@@ -79,8 +79,8 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
     open inner class FeedDataSource(private val makeInitialCall: ((Int) -> Call<List<T>>)?,
                                     private val makeAfterCall: ((Int, String) -> Call<List<T>>)?
     ): ItemKeyedDataSource<String, T>() {
-        
-        fun newSource(): FeedDataSource {
+
+        open fun newSource(): FeedDataSource {
             return FeedDataSource(makeInitialCall, makeAfterCall)
         }
 
