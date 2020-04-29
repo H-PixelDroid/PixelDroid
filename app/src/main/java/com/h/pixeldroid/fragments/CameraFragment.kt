@@ -21,7 +21,6 @@ import android.view.*
 import android.view.OrientationEventListener.ORIENTATION_UNKNOWN
 import android.view.animation.AlphaAnimation
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,6 +30,7 @@ import com.h.pixeldroid.R
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import kotlin.properties.Delegates
 
 // A fragment that displays a stream coming from either the front or back cameras of the smartphone,
 // and can capture an image from this stream.
@@ -55,7 +55,6 @@ class CameraFragment : Fragment() {
 
     /* Entities necessary to the photo capture */
     private lateinit var pictureRequestBuilder: CaptureRequest.Builder
-    private lateinit var imageView: ImageView
     private val PICK_IMAGE_REQUEST = 1
     private val TAG = "Camera Fragment"
 
@@ -68,14 +67,6 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Get the textureView which displays the camera's stream and set up its listener :
-        // it allows us to be sure the textureView is correctly set up before performing any action
-        textureView = view.findViewById(R.id.textureView)!!
-        textureView.surfaceTextureListener = this.textureListener
-
-        imageView = requireView().findViewById(R.id.imageView)
-
 
         /* Buttons */
 
@@ -94,12 +85,16 @@ class CameraFragment : Fragment() {
             if (takePictureButton.visibility == View.VISIBLE) {
                 flipCameras()
             } else {
-                openCamera(currentCameraType) // return to capture
+                textureView.surfaceTextureListener = this.textureListener
                 takePictureButton.visibility = View.VISIBLE
                 switchCameraButton.background = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_camera)
-                imageView.visibility = View.INVISIBLE
             }
         }
+
+        // Get the textureView which displays the camera's stream and set up its listener :
+        // it allows us to be sure the textureView is correctly set up before performing any action
+        textureView = view.findViewById(R.id.textureView)!!
+        textureView.surfaceTextureListener = this.textureListener
 
         startBackgroundThread()
     }
@@ -141,6 +136,7 @@ class CameraFragment : Fragment() {
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), 200)
+            textureView.surfaceTextureListener = this.textureListener
             //openCamera(requiredType)
             return
         }
@@ -155,7 +151,7 @@ class CameraFragment : Fragment() {
                 val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
 
                 if (facing != null && facing == requiredType)
-                    manager.openCamera(manager.cameraIdList[facing], previewStateCallback, null)
+                    manager.openCamera(manager.cameraIdList[facing], previewStateCallback, mBackgroundHandler)
 
             }
 
@@ -171,9 +167,9 @@ class CameraFragment : Fragment() {
             try {
                 /* Now that the camera is available, start a stream on the textureView */
                 cameraDevice.createCaptureSession(
-                    listOf(Surface(surface)),
+                    listOf(Surface(textureView.surfaceTexture)),
                     previewSessionCallback,
-                    null
+                    mBackgroundHandler
                 )
             } catch (e: CameraAccessException) {
                 e.printStackTrace()
@@ -201,7 +197,7 @@ class CameraFragment : Fragment() {
             try {
                 /* Build the stream with a flow of requests */
                 val streamRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-                streamRequestBuilder.addTarget(Surface(surface))
+                streamRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
                 session.setRepeatingRequest(streamRequestBuilder.build(), null, mBackgroundHandler)
 
             } catch (e: CameraAccessException) {
@@ -235,13 +231,15 @@ class CameraFragment : Fragment() {
         pictureRequestBuilder =
             cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
         pictureRequestBuilder.addTarget(reader.surface)
-        //pictureRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
+        Log.e(TAG, "takePicture first call to Surface")
+        pictureRequestBuilder.addTarget(Surface(textureView.surfaceTexture))
         pictureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
 
-        reader.setOnImageAvailableListener(readerListener, null)
+        reader.setOnImageAvailableListener(readerListener, mBackgroundHandler)
         val outputSurfaces = ArrayList<Surface>(1)
         outputSurfaces.add(reader.surface)
-        //outputSurfaces.add(Surface(textureView.surfaceTexture))
+        Log.e(TAG, "takePicture second call to Surface")
+        outputSurfaces.add(Surface(textureView.surfaceTexture))
 
         // Handle rotation ?!
         pictureRequestBuilder.set(
@@ -252,14 +250,14 @@ class CameraFragment : Fragment() {
             )
         )
 
-        cameraDevice.createCaptureSession(outputSurfaces, pictureStateCallback , null);
+        cameraDevice.createCaptureSession(outputSurfaces, pictureStateCallback , mBackgroundHandler);
         flipButtons()
     }
 
     private val pictureStateCallback = object : CameraCaptureSession.StateCallback() {
         override fun onConfigured(session: CameraCaptureSession) {
             try {
-                session.capture(pictureRequestBuilder.build(), pictureCaptureListener, null)
+                session.capture(pictureRequestBuilder.build(), pictureCaptureListener, mBackgroundHandler)
             } catch (e :CameraAccessException) {
                 e.printStackTrace()
             }
@@ -292,9 +290,6 @@ class CameraFragment : Fragment() {
             file.writeBytes(bytes)
 
             val uri = file.toUri() as Uri?
-
-            imageView.setImageURI(uri)
-            imageView.visibility = View.VISIBLE
 
             pictureHandle(uri)
 
@@ -343,7 +338,7 @@ class CameraFragment : Fragment() {
         val jpegOrientation = (surfaceRotation + sensorOrientation!! + 270) % 360
 
         val string = rotation.toString() + ", "+ sensorOrientation.toString() +", "+ jpegOrientation.toString()
-        Toast.makeText(requireContext(), string, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), string, Toast.LENGTH_SHORT).show()
         return jpegOrientation
     }
 
@@ -392,7 +387,7 @@ class CameraFragment : Fragment() {
     }
     override fun onPause() {
         Log.e(TAG, "onPause")
-        //closeCamera()
+        cameraDevice.close()
         stopBackgroundThread()
         super.onPause()
     }
