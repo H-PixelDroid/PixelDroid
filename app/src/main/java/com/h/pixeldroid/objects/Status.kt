@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -293,8 +294,9 @@ data class Status(
 
 
     fun imagePopUpMenu(view: View) {
+        val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
         view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
-            val popup = PopupMenu(view.context, it)
+            val popup = PopupMenu(view.context, anchor)
             popup.inflate(R.menu.image_popup_menu)
             popup.show()
             true

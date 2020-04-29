@@ -77,6 +77,17 @@
                     tools:src="@color/browser_actions_bg_grey"
                     android:longClickable="true"/>
 
+                <FrameLayout
+                    android:id="@+id/post_fragment_image_popup_menu_anchor"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/postPicture"
+                    app:layout_constraintEnd_toEndOf="@+id/postPicture"
+                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintStart_toStartOf="@+id/postPicture"
+                    app:layout_constraintTop_toTopOf="@+id/postPicture"
+                    app:layout_constraintVertical_bias="0.1" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
