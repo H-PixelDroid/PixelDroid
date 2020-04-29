@@ -73,5 +73,6 @@
 
     <string name="whats_an_instance">What\'s an instance?</string>
     <string name="logout">Logout</string>
+    <string name="save_to_gallery">Save to Gallery...</string>
 
 </resources>

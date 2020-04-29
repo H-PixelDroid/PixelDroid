@@ -5,8 +5,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.h.pixeldroid.BuildConfig
@@ -47,6 +50,14 @@ class PostFragment : Fragment() {
         status?.activateReblogger(holder, api, "Bearer $accessToken", status.reblogged)
         status?.activateCommenter(holder, api, "Bearer $accessToken")
         status?.showComments(holder, api, "Bearer $accessToken")
+
+        val image = root.findViewById<ImageView>(R.id.postPicture)
+        image.setOnLongClickListener {
+            val popup = PopupMenu(root.context, it)
+            popup.inflate(R.menu.image_popup_menu)
+            popup.show()
+            true
+        }
 
         return root
     }

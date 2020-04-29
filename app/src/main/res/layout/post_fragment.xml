@@ -74,7 +74,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@color/browser_actions_bg_grey"/>
+                    tools:src="@color/browser_actions_bg_grey"
+                    android:longClickable="true"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
