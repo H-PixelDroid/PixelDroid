@@ -62,6 +62,7 @@ class PostTest {
     fun saveToGalleryTest() {
         onView(withId(R.id.postPicture)).perform(longClick())
         onView(withText(R.string.save_to_gallery)).inRoot(RootMatchers.isPlatformPopup()).perform(click())
+        Thread.sleep(300)
         onView(withText(R.string.image_download_downloading)).inRoot(
             RootMatchers.hasWindowLayoutParams()
         ).check(matches(isDisplayed()))

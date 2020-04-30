@@ -20,6 +20,7 @@ import androidx.core.text.toSpanned
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.ImageFragment
@@ -202,6 +203,8 @@ data class Status(
 
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
+
+        imagePopUpMenu(rootView, homeFragment.requireActivity())
     }
 
     fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
@@ -304,21 +307,23 @@ data class Status(
 
     fun imagePopUpMenu(view: View, activity: FragmentActivity) {
         val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
-        view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
-            PopupMenu(view.context, anchor).apply {
-                setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.image_popup_menu_save_to_gallery -> {
-                            downloadImage(activity, view.context, getPostUrl()!!)
-                            true
+        if (!media_attachments.isNullOrEmpty() && media_attachments.size == 1) {
+            view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
+                PopupMenu(view.context, anchor).apply {
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.image_popup_menu_save_to_gallery -> {
+                                downloadImage(activity, view.context, getPostUrl()!!)
+                                true
+                            }
+                            else -> false
                         }
-                        else -> false
                     }
+                    inflate(R.menu.image_popup_menu)
+                    show()
                 }
-                inflate(R.menu.image_popup_menu)
-                show()
+                true
             }
-            true
         }
     }
 }

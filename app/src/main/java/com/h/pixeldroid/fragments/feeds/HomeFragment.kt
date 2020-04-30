@@ -120,9 +120,6 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
 
             //Activate Reblogger
             post.activateReblogger(holder, api ,credential, post.reblogged)
-
-            // attach click listener for popup menu
-            post.imagePopUpMenu(holder.postView, activity!!)
         }
 
         override fun getPreloadItems(position: Int): MutableList<Status> {
