@@ -3,21 +3,26 @@ package com.h.pixeldroid
 // different implementations so we list them here to disambiguate.
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Size
 import android.graphics.Matrix
 import android.os.Bundle
+import android.util.Log
 import android.view.Surface
 import android.view.TextureView
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraX
-import androidx.camera.core.Preview
-import androidx.camera.core.PreviewConfig
+import androidx.camera.core.*
+import androidx.camera.core.ImageCapture.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
+import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -80,11 +85,46 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
             updateTransform()
         }
 
+         // Create configuration object for the image capture use case
+    val imageCaptureConfig = ImageCaptureConfig.Builder()
+        .apply {
+            // We don't set a resolution for image capture; instead, we
+            // select a capture mode which will infer the appropriate
+            // resolution based on aspect ration and requested mode
+            setCaptureMode(CaptureMode.MIN_LATENCY)
+        }.build()
+
+        // Build the image capture use case and attach button click listener
+        val imageCapture = ImageCapture(imageCaptureConfig)
+        findViewById<ImageButton>(R.id.capture_button).setOnClickListener {
+            val file = File(externalMediaDirs.first(),
+                "${System.currentTimeMillis()}.jpg")
+
+            imageCapture.takePicture(file, executor, object : OnImageSavedListener {
+                override fun onError(
+                    imageCaptureError: ImageCaptureError,
+                    message: String,
+                    exc: Throwable?
+                ) {
+                    setResult(Activity.RESULT_CANCELED)
+                    finish()
+                }
+
+                override fun onImageSaved(file: File) {
+
+                    val returnIntent = Intent()
+                    returnIntent.putExtra("result",file.toUri())
+                    setResult(Activity.RESULT_OK, returnIntent)
+                    finish()
+                }
+            })
+        }
+
         // Bind use cases to lifecycle
         // If Android Studio complains about "this" being not a LifecycleOwner
         // try rebuilding the project or updating the appcompat dependency to
         // version 1.1.0 or higher.
-        CameraX.bindToLifecycle(this, preview)
+        CameraX.bindToLifecycle(this, preview, imageCapture)
     }
 
     private fun updateTransform() {

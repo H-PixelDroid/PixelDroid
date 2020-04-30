@@ -2,6 +2,7 @@ package com.h.pixeldroid.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ import com.h.pixeldroid.R
 class NewPostFragment : Fragment() {
 
     private val PICK_IMAGE_REQUEST = 1
+    private val CAPTURE_IMAGE_REQUEST = 2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +47,8 @@ class NewPostFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null
-            && requestCode == PICK_IMAGE_REQUEST  && data.data != null)
+            && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)
+            && data.data != null)
 
             startActivity(Intent(activity, PostCreationActivity::class.java)
                 .putExtra("picture_uri", data.data)
@@ -66,6 +69,6 @@ class NewPostFragment : Fragment() {
 
     private fun takePicture() {
         val intent = Intent(requireContext(), CameraActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, CAPTURE_IMAGE_REQUEST)
     }
 }
