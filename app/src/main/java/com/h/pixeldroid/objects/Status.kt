@@ -9,8 +9,13 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.*
 import androidx.core.text.toSpanned
+import android.widget.TextView
+import android.widget.LinearLayout
+import android.widget.Toast
+import android.widget.PopupMenu
+import android.widget.ImageView
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -35,7 +40,7 @@ import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import kotlin.collections.ArrayList
 
 /*
