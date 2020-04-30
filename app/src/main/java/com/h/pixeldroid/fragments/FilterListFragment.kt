@@ -63,29 +63,33 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
             if (tbImage == null)
                 return@Runnable
 
-            ThumbnailsManager.clearThumbs()
-            tbItemList.clear()
-
-            val tbItem = ThumbnailItem()
-            tbItem.image = tbImage
-            tbItem.filterName = "Normal"
-            ThumbnailsManager.addThumb(tbItem)
-
-            val filters = FilterPack.getFilterPack(requireActivity())
-
-            for (filter in filters) {
-                val item = ThumbnailItem()
-                item.image = tbImage
-                item.filter = filter
-                item.filterName = filter.name
-                ThumbnailsManager.addThumb(item)
-            }
+            setupFilter(tbImage)
 
             tbItemList.addAll(ThumbnailsManager.processThumbs(activity))
             requireActivity().runOnUiThread{ adapter.notifyDataSetChanged() }
         }
 
         Thread(r).start()
+    }
+
+    private fun setupFilter(tbImage: Bitmap?) {
+        ThumbnailsManager.clearThumbs()
+        tbItemList.clear()
+
+        val tbItem = ThumbnailItem()
+        tbItem.image = tbImage
+        tbItem.filterName = "Normal"
+        ThumbnailsManager.addThumb(tbItem)
+
+        val filters = FilterPack.getFilterPack(requireActivity())
+
+        for (filter in filters) {
+            val item = ThumbnailItem()
+            item.image = tbImage
+            item.filter = filter
+            item.filterName = filter.name
+            ThumbnailsManager.addThumb(item)
+        }
     }
 
     override fun onFilterSelected(filter: Filter) {

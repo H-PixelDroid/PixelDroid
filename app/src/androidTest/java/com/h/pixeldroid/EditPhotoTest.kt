@@ -2,7 +2,9 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.SeekBar
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.PerformException
@@ -13,13 +15,12 @@ import androidx.test.espresso.action.GeneralSwipeAction
 import androidx.test.espresso.action.Press
 import androidx.test.espresso.action.Swipe
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.swipeLeft
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.testUtility.MockServer
@@ -31,6 +32,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import java.lang.reflect.Method
+import java.util.regex.Matcher
 
 
 @RunWith(AndroidJUnit4::class)
@@ -43,7 +46,7 @@ class EditPhotoTest {
     var globalTimeout: Timeout = Timeout.seconds(100)
 
     @get:Rule
-    var mActivityTestRule = IntentsTestRule(PhotoEditActivity::class.java)
+    var activityTestRule =  ActivityTestRule(PhotoEditActivity::class.java)
 
     @get:Rule
     var mRuntimePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -83,6 +86,22 @@ class EditPhotoTest {
         }
     }
 
+    private fun setSeekBarProgress(newProgress: Int, fromUser: Boolean, seekBar: SeekBar) {
+        var privateSetProgressMethod: Method? = null
+        try {
+            privateSetProgressMethod =
+                ProgressBar::class.java.getDeclaredMethod(
+                    "setProgress",
+                    Integer.TYPE,
+                    java.lang.Boolean.TYPE
+                )
+            privateSetProgressMethod.isAccessible = true
+            privateSetProgressMethod.invoke(seekBar, newProgress, fromUser)
+        } catch (e: ReflectiveOperationException) {
+            e.printStackTrace()
+        }
+    }
+
     private fun setProgress(progress: Int): ViewAction? {
         return object : ViewAction {
             override fun getDescription() =  "Set the progress on a SeekBar"
@@ -91,7 +110,7 @@ class EditPhotoTest {
 
             override fun perform(uiController: UiController, view: View) {
                 val seekBar = view as SeekBar
-                seekBar.progress = progress
+                setSeekBarProgress(progress, true, seekBar)
             }
         }
     }
@@ -105,13 +124,14 @@ class EditPhotoTest {
 
     @Test
     fun PhotoEditActivityHasAnImagePreview() {
-        Espresso.onView(withId(R.id.image_preview)).check(ViewAssertions.matches(isDisplayed()))
+        Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
     }
 
     @Test
     fun FiltersIsSwipeableAndClickeable() {
-        //Espresso.onView(withId(R.id.viewPager)).perform(swipeSlowLeft())
-        Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
+        val myRcView: RecyclerView = activityTestRule.activity.findViewById(R.id.recycler_view)
+        //Espresso.onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        Thread.sleep(1000)
     }
 
     @Test
@@ -120,20 +140,33 @@ class EditPhotoTest {
 
         Thread.sleep(1000)
 
-        val change = 5
+        var change = 5
         Espresso.onView(withId(R.id.seekbar_brightness)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
 
-        Assert.assertEquals(change, mActivityTestRule.activity.seekbar_brightness.progress)
-        Assert.assertEquals(change, mActivityTestRule.activity.seekbar_contrast.progress)
-        Assert.assertEquals(change, mActivityTestRule.activity.seekbar_saturation.progress)
+        Assert.assertEquals(change, activityTestRule.activity.seekbar_brightness.progress)
+        Assert.assertEquals(change, activityTestRule.activity.seekbar_contrast.progress)
+        Assert.assertEquals(change, activityTestRule.activity.seekbar_saturation.progress)
+
+        Thread.sleep(1000)
+
+        change = 15
+        Espresso.onView(withId(R.id.seekbar_brightness)).perform(setProgress(change))
+        Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
+        Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
+
+        Assert.assertEquals(change, activityTestRule.activity.seekbar_brightness.progress)
+        Assert.assertEquals(change, activityTestRule.activity.seekbar_contrast.progress)
+        Assert.assertEquals(change, activityTestRule.activity.seekbar_saturation.progress)
     }
 
     @Test
     fun SaveButtonSavesToGallery() {
         Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.action_save)).perform(click())
+        Thread.sleep(1000)
+        Espresso.onView(withId(R.id.new_post_description_input_layout)).check(matches(isDisplayed()))
     }
 
     /*
