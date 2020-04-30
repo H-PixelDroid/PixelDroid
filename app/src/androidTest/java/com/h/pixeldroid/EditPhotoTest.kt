@@ -17,12 +17,17 @@ import androidx.test.espresso.action.Swipe
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
+import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.testUtility.CustomMatchers
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.MockServer
 import kotlinx.android.synthetic.main.fragment_edit_image.*
 import org.hamcrest.CoreMatchers.allOf
@@ -130,7 +135,7 @@ class EditPhotoTest {
     @Test
     fun FiltersIsSwipeableAndClickeable() {
         val myRcView: RecyclerView = activityTestRule.activity.findViewById(R.id.recycler_view)
-        //Espresso.onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        //Espresso.onView(first(withId(R.id.recycler_view))).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
         Thread.sleep(1000)
     }
 
@@ -162,19 +167,16 @@ class EditPhotoTest {
     }
 
     @Test
-    fun SaveButtonSavesToGallery() {
+    fun SaveButtonLaunchNewPostActivity() {
         Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.action_save)).perform(click())
         Thread.sleep(1000)
         Espresso.onView(withId(R.id.new_post_description_input_layout)).check(matches(isDisplayed()))
     }
 
-    /*
     @Test
-    fun buttonReturnGoesToTheLastIntent() {
-        Espresso.onView(withId(R.id.home)).perform(click())
-
-        Espresso.onView(withId(R.id.edit_picture_button)).check(ViewAssertions.matches(isDisplayed()))
+    fun buttonUpload() {
+        Espresso.onView(withId(R.id.action_upload)).perform(click())
     }
-    */
+
 }

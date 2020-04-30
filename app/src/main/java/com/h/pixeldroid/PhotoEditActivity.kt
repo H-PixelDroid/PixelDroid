@@ -63,7 +63,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
 
         URI.picture_uri = intent.getParcelableExtra("uri")
 
-        Log.d("edit", URI.picture_uri.toString())
+        //Log.d("edit", URI.picture_uri.toString())
 
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Edit"
@@ -79,10 +79,10 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     }
 
     private fun loadImage() {
-        Log.d("edit", "Load image")
+        //Log.d("edit", "Load image")
         //originalImage = MediaStore.Images.Media.getBitmap(contentResolver, URI.picture_uri)
         originalImage = BitmapUtils.getBitmapFromAssets(applicationContext, "chat.jpg", 800, 800)
-        Log.d("edit", "After image")
+        //Log.d("edit", "After image")
 
         filteredImage = originalImage!!.copy(BITMAP_CONFIG, true)
         finalImage = originalImage!!.copy(BITMAP_CONFIG, true)
@@ -131,13 +131,12 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private fun uploadImage(path: String?) {
         val intent = Intent (applicationContext, PostCreationActivity::class.java)
         intent.putExtra("picture_uri", Uri.parse(path))
-        Log.d("edit", intent.toString())
+        //Log.d("edit", intent.toString())
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         applicationContext!!.startActivity(intent)
     }
 
     private fun saveImageToGallery() {
-        Log.d("edit", "Save image")
         // runtime permission and process
         Dexter.withActivity(this)
             .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -145,19 +144,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             .withListener(object:MultiplePermissionsListener{
                 override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                     if(report!!.areAllPermissionsGranted()) {
-
-                        // Save the picture and return its path
-                        val path = MediaStore.Images.Media.insertImage(contentResolver, finalImage, System.currentTimeMillis().toString() + "_profile.jpg", "")
-                        if(!TextUtils.isEmpty(path)) {
-                            val snackBar = Snackbar.make(coordinator_edit, "Image saved to gallery", Snackbar.LENGTH_LONG)
-                                .setAction("OPEN") {openImage(path)}
-                            snackBar.show()
-                            //Thread.sleep(5000)
-                            uploadImage(path)
-                        } else {
-                            val snackBar = Snackbar.make(coordinator_edit, "Unable to save image", Snackbar.LENGTH_LONG)
-                            snackBar.show()
-                        }
+                        permissionsGrantedToSave()
                     } else {
                         Toast.makeText(applicationContext, "Permission denied", Toast.LENGTH_SHORT).show()
                     }
@@ -170,11 +157,15 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             }).check()
     }
 
-    private fun openImage(path: String?) {
-        val intent = Intent()
-        intent.action = Intent.ACTION_VIEW
-        intent.setDataAndType(Uri.parse(path), "image/*")
-        startActivity((intent))
+    private fun permissionsGrantedToSave(){
+        // Save the picture and return its path
+        val path = MediaStore.Images.Media.insertImage(contentResolver, finalImage, System.currentTimeMillis().toString() + "_profile.jpg", "")
+        if(!TextUtils.isEmpty(path)) {
+            uploadImage(path)
+        } else {
+            val snackBar = Snackbar.make(coordinator_edit, "Unable to save image", Snackbar.LENGTH_LONG)
+            snackBar.show()
+        }
     }
 
     override fun onFilterSelected(filter: Filter) {
