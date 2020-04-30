@@ -67,38 +67,43 @@ open class AccountListFragment : FeedFragment<Account, AccountListFragment.Follo
     internal open fun makeContent(): LiveData<PagedList<Account>> {
         val id = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
         val following = arguments?.getSerializable(FOLLOWING_TAG) as Boolean
-        fun makeInitialCall(requestedLoadSize: Int): Call<List<Account>> {
-            return if (following) {
-                pixelfedAPI.followers(
-                    id, "Bearer $accessToken",
-                    limit = requestedLoadSize
-                )
-            } else {
-                pixelfedAPI.following(
-                    id, "Bearer $accessToken",
-                    limit = requestedLoadSize
-                )
-            }
-        }
 
-        fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Account>> {
-            return if (following) {
-                pixelfedAPI.followers(
-                    id, "Bearer $accessToken",
-                    since_id = key, limit = requestedLoadSize
-                )
-            } else {
-                pixelfedAPI.following(
-                    id, "Bearer $accessToken",
-                    since_id = key, limit = requestedLoadSize
-                )
-            }
-        }
+        val (makeInitialCall, makeAfterCall)
+                = makeCalls(following, id)
 
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        val dataSource = FeedDataSource(::makeInitialCall, ::makeAfterCall)
+        val dataSource = FeedDataSource(makeInitialCall, makeAfterCall)
         factory = FeedDataSourceFactory(dataSource)
         return LivePagedListBuilder(factory, config).build()
+    }
+
+    private fun makeCalls(following: Boolean, id: String):
+            Pair<(Int) -> Call<List<Account>>, (Int, String) -> Call<List<Account>>> {
+        val makeInitialCall: (Int) -> Call<List<Account>> =
+            if (following) { requestedLoadSize ->
+                pixelfedAPI.followers(
+                    id, "Bearer $accessToken",
+                    limit = requestedLoadSize
+                )
+            } else { requestedLoadSize ->
+                pixelfedAPI.following(
+                    id, "Bearer $accessToken",
+                    limit = requestedLoadSize
+                )
+            }
+        val makeAfterCall: (Int, String) -> Call<List<Account>> =
+            if (following) { requestedLoadSize, key ->
+                pixelfedAPI.followers(
+                    id, "Bearer $accessToken",
+                    since_id = key, limit = requestedLoadSize
+                )
+            } else { requestedLoadSize, key ->
+                pixelfedAPI.following(
+                    id, "Bearer $accessToken",
+                    since_id = key, limit = requestedLoadSize
+                )
+            }
+        return Pair(makeInitialCall, makeAfterCall)
     }
 
     inner class FollowsRecyclerViewAdapter : FeedsRecyclerViewAdapter<Account,FollowsRecyclerViewAdapter.ViewHolder>(),

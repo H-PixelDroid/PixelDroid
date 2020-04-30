@@ -23,18 +23,24 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        var rawQuery = intent.getSerializableExtra("searchFeed") as String
-        rawQuery = rawQuery.trim()
+        var query = intent.getSerializableExtra("searchFeed") as String
+        query = query.trim()
 
-        val searchType = if (rawQuery.startsWith("#")){
+        val searchType = if (query.startsWith("#")){
             Results.SearchType.hashtags
-        } else if(rawQuery.startsWith("@")){
+        } else if(query.startsWith("@")){
             Results.SearchType.accounts
         } else Results.SearchType.statuses
 
-        if(searchType != Results.SearchType.statuses) rawQuery = rawQuery.drop(1)
+        if(searchType != Results.SearchType.statuses) query = query.drop(1)
 
-        val query = rawQuery
+        val tabs = createSearchTabs(query)
+
+        setupTabs(tabs, searchType)
+    }
+
+    private fun createSearchTabs(query: String): Array<Fragment>{
+
         val searchFeedFragment =
             SearchPostsFragment()
         val searchAccountListFragment =
@@ -45,14 +51,11 @@ class SearchActivity : AppCompatActivity() {
         searchFeedFragment.arguments = arguments
         searchAccountListFragment.arguments = arguments
         searchHashtagFragment.arguments = arguments
-
-        val tabs = arrayOf(
+        return arrayOf(
             searchFeedFragment,
             searchAccountListFragment,
             searchHashtagFragment
         )
-
-        setupTabs(tabs, searchType)
     }
 
     private fun setupTabs(
