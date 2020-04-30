@@ -108,7 +108,7 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             holder.postPic.maxHeight = metrics.heightPixels
 
             //Setup the post layout
-            post.setupPost(holder.postView, picRequest, this@PostsFeedFragment, domain)
+            post.setupPost(holder.postView, picRequest, this@PostsFeedFragment, domain, false)
 
             //Set the special HTML text
             post.setDescription(holder.postView, api, credential)

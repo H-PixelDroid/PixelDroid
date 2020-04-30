@@ -122,12 +122,19 @@ data class Status(
         return "$nShares Shares"
     }
 
-    private fun ISO8601toDate(dateString : String, textView: TextView) {
+    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean) {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.'000000Z'")
+        val now = Date().time
+
         try {
-            val date: Date? = format.parse(dateString)
-            Log.e("DATE", date.toString())
-            textView.text = "Posted on ${date.toString()}"
+            val date: Date = format.parse(dateString)!!
+            val then = date.time
+            val formattedDate = android.text.format.DateUtils
+                .getRelativeTimeSpanString(then, now,
+                    android.text.format.DateUtils.SECOND_IN_MILLIS,
+                    android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
+            textView.text = if(isActivity) "Posted on $date"
+                            else "$formattedDate"
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -183,7 +190,8 @@ data class Status(
         rootView: View,
         request: RequestBuilder<Drawable>,
         homeFragment: Fragment,
-        domain : String
+        domain : String,
+        isActivity : Boolean
     ) {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
@@ -204,7 +212,7 @@ data class Status(
         nshares.setTypeface(null, Typeface.BOLD)
 
         //Convert the date to a readable string
-        ISO8601toDate(created_at, rootView.postDate)
+        ISO8601toDate(created_at, rootView.postDate, isActivity)
 
         rootView.postDomain.text = getStatusDomain(domain)
 

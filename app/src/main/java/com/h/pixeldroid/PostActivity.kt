@@ -12,15 +12,17 @@ import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 
 class PostActivity : AppCompatActivity() {
     lateinit var postFragment : PostFragment
-    val domain = getSharedPreferences(
-        "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-    ).getString("domain", "")!!
+    lateinit var domain : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
         val status = intent.getSerializableExtra(POST_TAG) as Status?
+
+        domain = getSharedPreferences(
+            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
+        ).getString("domain", "")!!
 
         postFragment = PostFragment()
         val arguments = Bundle()

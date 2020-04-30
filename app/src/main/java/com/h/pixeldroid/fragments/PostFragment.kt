@@ -31,7 +31,7 @@ class PostFragment : Fragment() {
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        status?.setupPost(root, picRequest, this, domain)
+        status?.setupPost(root, picRequest, this, domain, true)
 
         //Setup arguments needed for the onclicklisteners
         val holder = PostViewHolder(root, requireContext())
