@@ -1,6 +1,5 @@
 package com.h.pixeldroid.objects
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -10,21 +9,14 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.text.toSpanned
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.ImageFragment
-import com.h.pixeldroid.MainActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
@@ -39,10 +31,7 @@ import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
-import kotlinx.android.synthetic.main.post_fragment.view.postPager
-import kotlinx.android.synthetic.main.post_fragment.view.postPicture
-import kotlinx.android.synthetic.main.post_fragment.view.postTabs
-import kotlinx.android.synthetic.main.post_fragment.view.profilePic
+import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
