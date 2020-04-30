@@ -9,8 +9,8 @@
 
     <TextureView
             android:id="@+id/view_finder"
-            android:layout_width="640px"
-            android:layout_height="640px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
