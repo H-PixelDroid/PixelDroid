@@ -33,6 +33,7 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_camera)
 
         // Add this at the end of onCreate function
 
