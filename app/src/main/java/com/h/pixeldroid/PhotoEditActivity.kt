@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -18,7 +17,6 @@ import com.h.pixeldroid.fragments.EditImageFragment
 import com.h.pixeldroid.fragments.FilterListFragment
 import com.h.pixeldroid.interfaces.EditImageFragmentListener
 import com.h.pixeldroid.interfaces.FilterListFragmentListener
-import com.h.pixeldroid.utils.BitmapUtils
 import com.h.pixeldroid.utils.NonSwipeableViewPager
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -63,8 +61,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
 
         URI.picture_uri = intent.getParcelableExtra("uri")
 
-        //Log.d("edit", URI.picture_uri.toString())
-
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Edit"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -79,10 +75,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     }
 
     private fun loadImage() {
-        //Log.d("edit", "Load image")
-        //originalImage = MediaStore.Images.Media.getBitmap(contentResolver, URI.picture_uri)
-        originalImage = BitmapUtils.getBitmapFromAssets(applicationContext, "chat.jpg", 800, 800)
-        //Log.d("edit", "After image")
+        originalImage = MediaStore.Images.Media.getBitmap(contentResolver, URI.picture_uri)
 
         filteredImage = originalImage!!.copy(BITMAP_CONFIG, true)
         finalImage = originalImage!!.copy(BITMAP_CONFIG, true)
@@ -131,7 +124,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private fun uploadImage(path: String?) {
         val intent = Intent (applicationContext, PostCreationActivity::class.java)
         intent.putExtra("picture_uri", Uri.parse(path))
-        //Log.d("edit", intent.toString())
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         applicationContext!!.startActivity(intent)
     }

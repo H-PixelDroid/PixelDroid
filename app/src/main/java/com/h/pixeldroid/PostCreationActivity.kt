@@ -47,11 +47,8 @@ class PostCreationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_creation)
-        Log.d("edit", "PostCreation")
         val imageUri: Uri = intent.getParcelableExtra<Uri>("picture_uri")!!
-        Log.d("edit", imageUri.toString())
         saveImage(imageUri)
-        Log.d("edit", "savedImage")
 
         pictureFrame = findViewById<ImageView>(R.id.post_creation_picture_frame)
         pictureFrame.setImageURI(image.toUri())

@@ -35,20 +35,14 @@ class NewPostFragment : Fragment() {
             uploadPicture()
         }
 
-        val editPictureButton: Button = view.findViewById(R.id.editPhotoButton)
-        editPictureButton.setOnClickListener{
-            val intent = Intent (activity, PhotoEditActivity::class.java)
-            requireActivity().startActivity(intent)
-        }
-
         return view
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null
             && requestCode == PICK_IMAGE_REQUEST  && data.data != null)
-            startActivity(Intent(activity, PostCreationActivity::class.java)
-                .putExtra("picture_uri", data.data)
+            startActivity(Intent(activity, PhotoEditActivity::class.java)
+                .putExtra("uri", data.data)
             )
     }
 

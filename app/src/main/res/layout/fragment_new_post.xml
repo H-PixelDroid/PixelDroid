@@ -44,17 +44,5 @@
         android:textColor="@color/cardview_light_background"
         tools:ignore="PrivateResource" />
 
-    <Button
-        android:id="@+id/editPhotoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="EDIT"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/cardview_light_background"
-        tools:ignore="PrivateResource" />
-
 </LinearLayout>
 

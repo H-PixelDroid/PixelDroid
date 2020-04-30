@@ -2,6 +2,7 @@ package com.h.pixeldroid.fragments
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.interfaces.FilterListFragmentListener
@@ -54,8 +56,7 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
         val r = Runnable {
             val tbImage: Bitmap?
             if (bitmap == null) {
-                //tbImage = BitmapUtils.getBitmapFromGallery(activity!!, PhotoEditActivity.URI.picture_uri!!, 100, 100)
-                tbImage = BitmapUtils.getBitmapFromAssets(requireContext(), "chat.jpg", 100, 100)
+                tbImage = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, PhotoEditActivity.URI.picture_uri)
             } else {
                 tbImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false)
             }

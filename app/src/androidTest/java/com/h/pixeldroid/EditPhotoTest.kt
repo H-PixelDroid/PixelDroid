@@ -1,6 +1,9 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.SeekBar
@@ -24,9 +27,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
-import com.h.pixeldroid.fragments.feeds.PostViewHolder
-import com.h.pixeldroid.testUtility.CustomMatchers
-import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.MockServer
 import kotlinx.android.synthetic.main.fragment_edit_image.*
@@ -38,8 +38,6 @@ import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import java.lang.reflect.Method
-import java.util.regex.Matcher
-
 
 @RunWith(AndroidJUnit4::class)
 class EditPhotoTest {
@@ -60,17 +58,18 @@ class EditPhotoTest {
     fun before() {
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val preferences = context.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
 
         // Launch PhotoEditActivity
-        ActivityScenario.launch(MainActivity::class.java).onActivity { a ->
-            a.findViewById<TabLayout>(R.id.tabs).getTabAt(2)?.select()
-        }
-        Thread.sleep(1000)
-        Espresso.onView(withId(R.id.editPhotoButton)).perform(click())
+        val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
+        Log.d("testEdit2", uri.toString())
+        val intent = Intent(context, PhotoEditActivity::class.java).putExtra("uri", uri)
+
+
+        ActivityScenario.launch<PhotoEditActivity>(intent)
     }
 
     private fun selectTabAtPosition(tabIndex: Int): ViewAction {
