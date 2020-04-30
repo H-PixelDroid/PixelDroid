@@ -32,7 +32,7 @@ class HtmlUtils {
             return result.trim().toSpanned()
         }
 
-        private fun getDomain(urlString: String?): String {
+        public fun getDomain(urlString: String?): String {
             val uri: URI
             try {
                 uri = URI(urlString!!)

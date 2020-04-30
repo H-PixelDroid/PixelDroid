@@ -21,6 +21,7 @@ import com.h.pixeldroid.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
@@ -34,6 +35,10 @@ import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import kotlinx.android.synthetic.main.post_fragment.view.*
 
 import java.io.Serializable
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /*
 Represents a status posted by an account.
@@ -80,6 +85,7 @@ data class Status(
     companion object {
         const val POST_TAG = "postTag"
         const val POST_FRAG_TAG = "postFragTag"
+        const val DOMAIN_TAG = "domainTag"
     }
 
     fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
@@ -114,6 +120,24 @@ data class Status(
     fun getNShares() : CharSequence {
         val nShares = reblogs_count
         return "$nShares Shares"
+    }
+
+    private fun ISO8601toDate(dateString : String, textView: TextView) {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.'000000Z'")
+        try {
+            val date: Date? = format.parse(dateString)
+            Log.e("DATE", date.toString())
+            textView.text = "Posted on ${date.toString()}"
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun getStatusDomain(domain : String) : String {
+        val accountDomain = getDomain(account.url)
+        return if(getDomain(domain) == accountDomain) ""
+        else " from $accountDomain"
+
     }
 
     private fun setupPostPics(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
@@ -158,7 +182,8 @@ data class Status(
     fun setupPost(
         rootView: View,
         request: RequestBuilder<Drawable>,
-        homeFragment: Fragment
+        homeFragment: Fragment,
+        domain : String
     ) {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
@@ -177,6 +202,11 @@ data class Status(
         val nshares = rootView.findViewById<TextView>(R.id.nshares)
         nshares.text = this.getNShares()
         nshares.setTypeface(null, Typeface.BOLD)
+
+        //Convert the date to a readable string
+        ISO8601toDate(created_at, rootView.postDate)
+
+        rootView.postDomain.text = getStatusDomain(domain)
 
         //Setup images
         ImageConverter.setRoundImageFromURL(

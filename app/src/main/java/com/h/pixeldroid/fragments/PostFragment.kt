@@ -14,6 +14,7 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.objects.Status.Companion.DOMAIN_TAG
 import com.h.pixeldroid.objects.Status.Companion.POST_TAG
 
 
@@ -24,12 +25,13 @@ class PostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val status = arguments?.getSerializable(POST_TAG) as Status?
+        val domain = arguments?.getString(DOMAIN_TAG)!!
         val root = inflater.inflate(R.layout.post_fragment, container, false)
         val picRequest = Glide.with(this)
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        status?.setupPost(root, picRequest, this)
+        status?.setupPost(root, picRequest, this, domain)
 
         //Setup arguments needed for the onclicklisteners
         val holder = PostViewHolder(root, requireContext())
