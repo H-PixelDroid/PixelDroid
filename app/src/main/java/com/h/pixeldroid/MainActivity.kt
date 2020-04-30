@@ -59,6 +59,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             setupTabs(tabs)
         }
+
+
     }
 
     private fun setupTabs(tabs: Array<Fragment>){
