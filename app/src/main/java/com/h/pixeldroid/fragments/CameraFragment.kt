@@ -322,6 +322,7 @@ class CameraFragment : Fragment() {
     }
 
     private fun getJpegOrientation(): Int {
+        Log.e(TAG, "Entering JpegOrientation")
         val rotation = requireActivity().windowManager.defaultDisplay.rotation
         val characteristics = manager.getCameraCharacteristics(cameraDevice.id)
         val sensorOrientation =  characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
@@ -383,6 +384,7 @@ class CameraFragment : Fragment() {
             openCamera(currentCameraType)
         } else {
             textureView.surfaceTextureListener = textureListener
+            openCamera(currentCameraType)
         }
     }
     override fun onPause() {
