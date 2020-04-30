@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.h.pixeldroid.CameraActivity
 import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
 
@@ -34,12 +35,18 @@ class NewPostFragment : Fragment() {
             uploadPicture()
         }
 
+        val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
+        takePictureButton.setOnClickListener{
+            takePicture()
+        }
+
         return view
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null
             && requestCode == PICK_IMAGE_REQUEST  && data.data != null)
+
             startActivity(Intent(activity, PostCreationActivity::class.java)
                 .putExtra("picture_uri", data.data)
             )
@@ -55,5 +62,10 @@ class NewPostFragment : Fragment() {
                 Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
             )
         }
+    }
+
+    private fun takePicture() {
+        val intent = Intent(requireContext(), CameraActivity::class.java)
+        startActivity(intent)
     }
 }
