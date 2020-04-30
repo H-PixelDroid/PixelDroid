@@ -5,9 +5,9 @@ import java.io.Serializable
 data class Attachment(
     //Required attributes
     val id: String,
-    val type: AttachmentType,
+    val type: AttachmentType = AttachmentType.image,
     val url: String, //URL
-    val preview_url: String, //URL
+    val preview_url: String = "", //URL
     //Optional attributes
     val remote_url: String? = null, //URL
     val text_url: String? = null, //URL

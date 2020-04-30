@@ -105,7 +105,6 @@ dependencies {
     def fragment_version = '1.2.4'
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
-
 }
 
 tasks.withType(Test) {
