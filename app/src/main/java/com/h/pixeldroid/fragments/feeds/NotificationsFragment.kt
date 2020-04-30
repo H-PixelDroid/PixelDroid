@@ -59,7 +59,7 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Notification> = ViewPreloadSizeProvider()
         val preloader: RecyclerViewPreloader<Notification> = RecyclerViewPreloader(
-            Glide.with(this), adapter, sizeProvider, 4
+            Glide.with(this), adapter as NotificationsFragment.NotificationsRecyclerViewAdapter, sizeProvider, 4
         )
         list.addOnScrollListener(preloader)
 
@@ -89,14 +89,16 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
         }
 
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)
+        val dataSource = FeedDataSource(::makeInitialCall, ::makeAfterCall)
+        factory = FeedDataSourceFactory(dataSource)
         return LivePagedListBuilder(factory, config).build()
     }
 
     /**
      * [RecyclerView.Adapter] that can display a [Notification]
      */
-    inner class NotificationsRecyclerViewAdapter: FeedsRecyclerViewAdapter<Notification, NotificationsRecyclerViewAdapter.ViewHolder>() {
+    inner class NotificationsRecyclerViewAdapter: FeedsRecyclerViewAdapter<Notification, NotificationsRecyclerViewAdapter.ViewHolder>(),
+        ListPreloader.PreloadModelProvider<Notification> {
 
         private val mOnClickListener: View.OnClickListener
 

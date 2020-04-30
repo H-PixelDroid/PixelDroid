@@ -106,7 +106,7 @@ data class Status(
 
     fun getUsername() : CharSequence {
         var name = account.display_name
-        if (name.isEmpty()) {
+        if (name.isNullOrEmpty()) {
             name = account.username
         }
         return name

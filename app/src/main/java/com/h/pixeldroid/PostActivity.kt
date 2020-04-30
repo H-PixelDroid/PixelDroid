@@ -20,7 +20,7 @@ class PostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
-        val status = intent.getSerializableExtra(POST_TAG) as Status
+        val status = intent.getSerializableExtra(POST_TAG) as Status?
 
         postFragment = PostFragment()
         val arguments = Bundle()
