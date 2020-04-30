@@ -113,7 +113,7 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
                 override fun onImageSaved(file: File) {
 
                     val returnIntent = Intent()
-                    returnIntent.putExtra("result",file.toUri())
+                    returnIntent.data = file.toUri()
                     setResult(Activity.RESULT_OK, returnIntent)
                     finish()
                 }
