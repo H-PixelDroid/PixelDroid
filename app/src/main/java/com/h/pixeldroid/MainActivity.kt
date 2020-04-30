@@ -16,10 +16,12 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.fragments.NewPostFragment
-import com.h.pixeldroid.fragments.feeds.HomeFragment
 import com.h.pixeldroid.fragments.ProfileFragment
+import com.h.pixeldroid.fragments.SearchDiscoverFragment
+import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
     private lateinit var preferences: SharedPreferences
+    private val searchDiscoverFragment: SearchDiscoverFragment = SearchDiscoverFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -47,8 +50,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             navigationView.setNavigationItemSelectedListener(this)
             
             val tabs = arrayOf(
-                HomeFragment(),
-                Fragment(),
+                PostsFeedFragment(),
+                searchDiscoverFragment,
                 NewPostFragment(),
                 NotificationsFragment(),
                 ProfileFragment()

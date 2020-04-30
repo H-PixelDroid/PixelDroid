@@ -106,7 +106,7 @@ class LoginCheckIntent {
 
         onView(withId(R.id.whatsAnInstanceTextView)).perform(scrollTo()).perform(click())
 
-        Thread.sleep(10000)
+        Thread.sleep(3000)
 
         intended(expectedIntent)
 
