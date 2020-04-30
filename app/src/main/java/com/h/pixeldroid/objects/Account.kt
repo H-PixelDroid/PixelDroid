@@ -57,7 +57,7 @@ data class Account(
         const val FOLLOWING_TAG = "FollowingTag"
 
         /**
-         * @brief Opens an activity of the profile withn the given id
+         * @brief Opens an activity of the profile with the given id
          */
         fun getAccountFromId(id: String, api : PixelfedAPI, context: Context, credential: String) {
             Log.e("ACCOUNT_ID", id)

@@ -22,7 +22,7 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
-import kotlinx.android.synthetic.main.fragment_follows.view.*
+import kotlinx.android.synthetic.main.account_list_entry.view.*
 import retrofit2.Call
 
 open class AccountListFragment : FeedFragment<Account, AccountListFragment.FollowsRecyclerViewAdapter.ViewHolder>() {
@@ -111,7 +111,7 @@ open class AccountListFragment : FeedFragment<Account, AccountListFragment.Follo
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_follows, parent, false)
+                .inflate(R.layout.account_list_entry, parent, false)
             context = view.context
             return ViewHolder(view)
         }
@@ -126,8 +126,8 @@ open class AccountListFragment : FeedFragment<Account, AccountListFragment.Follo
         }
 
         inner class ViewHolder(val mView : View) : RecyclerView.ViewHolder(mView) {
-            val avatar : ImageView = mView.follows_avatar
-            val username : TextView = mView.follows_username
+            val avatar : ImageView = mView.account_entry_avatar
+            val username : TextView = mView.account_entry_username
         }
 
         override fun getPreloadItems(position : Int) : MutableList<Account> {

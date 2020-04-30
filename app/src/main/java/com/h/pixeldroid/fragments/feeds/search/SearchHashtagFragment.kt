@@ -28,7 +28,7 @@ import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Results
 import com.h.pixeldroid.objects.Tag
-import kotlinx.android.synthetic.main.fragment_follows.view.*
+import kotlinx.android.synthetic.main.account_list_entry.view.*
 import kotlinx.android.synthetic.main.fragment_tags.view.*
 import retrofit2.Call
 import retrofit2.Callback
