@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             launchActivity(LoginActivity())
         } else {
             setupDrawer()
+            setupTabs()
         }
     }
 
@@ -61,18 +62,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        val tabs = arrayOf(
-            PostsFeedFragment(),
-            searchDiscoverFragment,
-            NewPostFragment(),
-            NotificationsFragment(),
-            Fragment()
-        )
-        setupTabs(tabs)
-
         // Setup views
         val accessToken = preferences.getString("accessToken", "")
         val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
+
+        val drawerHeader = navigationView.getHeaderView(0)
+        val accountName = drawerHeader.findViewById<TextView>(R.id.drawer_account_name)
+        val avatar = drawerHeader.findViewById<ImageView>(R.id.drawer_avatar)
 
         pixelfedAPI.verifyCredentials("Bearer $accessToken")
             .enqueue(object : Callback<Account> {
@@ -81,13 +77,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         val account = response.body()!!
 
                         // Set profile picture
-                        val avatar = findViewById<ImageView>(R.id.drawer_avatar)
                         ImageConverter.setRoundImageFromURL(
                             View(applicationContext), account.avatar_static, avatar)
                         avatar.setOnClickListener{ launchActivity(ProfileActivity()) }
 
                         // Set account name
-                        val accountName = findViewById<TextView>(R.id.drawer_account_name)
                         accountName.text = account.display_name
                         accountName.setOnClickListener{ launchActivity(ProfileActivity()) }
                     }
@@ -99,7 +93,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             })
     }
 
-    private fun setupTabs(tabs: Array<Fragment>){
+    private fun setupTabs(){
+        val tabs = arrayOf(
+            PostsFeedFragment(),
+            searchDiscoverFragment,
+            NewPostFragment(),
+            NotificationsFragment(),
+            Fragment()
+        )
+
         viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
