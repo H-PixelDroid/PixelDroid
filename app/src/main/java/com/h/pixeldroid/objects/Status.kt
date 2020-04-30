@@ -6,11 +6,15 @@ import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.PopupMenu
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.text.toSpanned
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -22,6 +26,7 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.ImageUtils.Companion.downloadImage
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
 import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
@@ -29,9 +34,10 @@ import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
-
-import kotlinx.android.synthetic.main.post_fragment.view.*
-
+import kotlinx.android.synthetic.main.post_fragment.view.postPager
+import kotlinx.android.synthetic.main.post_fragment.view.postPicture
+import kotlinx.android.synthetic.main.post_fragment.view.postTabs
+import kotlinx.android.synthetic.main.post_fragment.view.profilePic
 import java.io.Serializable
 
 /*
@@ -296,9 +302,19 @@ data class Status(
     fun imagePopUpMenu(view: View) {
         val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
         view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
-            val popup = PopupMenu(view.context, anchor)
-            popup.inflate(R.menu.image_popup_menu)
-            popup.show()
+            PopupMenu(view.context, anchor).apply {
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.image_popup_menu_save_to_gallery -> {
+                            downloadImage(view.context, getPostUrl()!!)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                inflate(R.menu.image_popup_menu)
+                show()
+            }
             true
         }
     }
