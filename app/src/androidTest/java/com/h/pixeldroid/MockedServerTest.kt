@@ -89,7 +89,7 @@ class MockedServerTest {
         onView(withId(R.id.searchEditText)).perform(ViewActions.replaceText("@dansup"), ViewActions.closeSoftKeyboard())
 
         onView(withId(R.id.searchButton)).perform(click())
-        Thread.sleep(300000)
+        Thread.sleep(3000)
         onView(first(withId(R.id.account_entry_username))).check(matches(withText("dansup")))
 
     }
