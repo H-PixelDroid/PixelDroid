@@ -27,11 +27,6 @@ class ProfilePostsFragment : Fragment() {
 
     private var columnCount = 3
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

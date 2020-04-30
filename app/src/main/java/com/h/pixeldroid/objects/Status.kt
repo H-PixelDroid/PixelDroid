@@ -50,38 +50,38 @@ https://docs.joinmastodon.org/entities/status/
 data class Status(
     //Base attributes
     override val id: String,
-    val uri: String,
-    val created_at: String, //ISO 8601 Datetime (maybe can use a date type)
+    val uri: String = "",
+    val created_at: String = "", //ISO 8601 Datetime (maybe can use a date type)
     val account: Account,
-    val content: String, //HTML
-    val visibility: Visibility,
-    val sensitive: Boolean,
-    val spoiler_text: String,
-    val media_attachments: List<Attachment>?,
-    val application: Application,
+    val content: String = "", //HTML
+    val visibility: Visibility = Visibility.public,
+    val sensitive: Boolean = false,
+    val spoiler_text: String = "",
+    val media_attachments: List<Attachment>? = null,
+    val application: Application? = null,
     //Rendering attributes
-    val mentions: List<Mention>,
-    val tags: List<Tag>,
-    val emojis: List<Emoji>,
+    val mentions: List<Mention>? = null,
+    val tags: List<Tag>? = null,
+    val emojis: List<Emoji>? = null,
     //Informational attributes
-    val reblogs_count: Int,
-    val favourites_count: Int,
-    val replies_count: Int,
+    val reblogs_count: Int = 0,
+    val favourites_count: Int = 0,
+    val replies_count: Int = 0,
     //Nullable attributes
-    val url: String?, //URL
-    val in_reply_to_id: String?,
-    val in_reply_to_account: String?,
-    val reblog: Status?,
-    val poll: Poll?,
-    val card: Card?,
-    val language: String?, //ISO 639 Part 1 two-letter language code
-    val text: String?,
+    val url: String? = null, //URL
+    val in_reply_to_id: String? = null,
+    val in_reply_to_account: String? = null,
+    val reblog: Status? = null,
+    val poll: Poll? = null,
+    val card: Card? = null,
+    val language: String? = null, //ISO 639 Part 1 two-letter language code
+    val text: String? = null,
     //Authorized user attributes
-    val favourited: Boolean,
-    val reblogged: Boolean,
-    val muted: Boolean,
-    val bookmarked: Boolean,
-    val pinned: Boolean
+    val favourited: Boolean = false,
+    val reblogged: Boolean = false,
+    val muted: Boolean = false,
+    val bookmarked: Boolean = false,
+    val pinned: Boolean = false
     ) : Serializable, FeedContent()
 {
 

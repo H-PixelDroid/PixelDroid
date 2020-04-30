@@ -28,23 +28,23 @@ data class Account(
     //Base attributes
     override val id: String,
     val username: String,
-    val acct: String,
-    val url: String, //HTTPS URL
+    val acct: String = "",
+    val url: String = "", //HTTPS URL
     //Display attributes
-    val display_name: String,
-    val note: String, //HTML
-    val avatar: String, //URL
-    val avatar_static: String, //URL
-    val header: String, //URL
-    val header_static: String, //URL
-    val locked: Boolean,
-    val emojis: List<Emoji>,
-    val discoverable: Boolean,
+    val display_name: String = "",
+    val note: String = "", //HTML
+    val avatar: String = "", //URL
+    val avatar_static: String = "", //URL
+    val header: String = "", //URL
+    val header_static: String = "", //URL
+    val locked: Boolean = false,
+    val emojis: List<Emoji>? = null,
+    val discoverable: Boolean = true,
     //Statistical attributes
-    val created_at: String, //ISO 8601 Datetime (maybe can use a date type)
-    val statuses_count: Int,
-    val followers_count: Int,
-    val following_count: Int,
+    val created_at: String = "", //ISO 8601 Datetime (maybe can use a date type)
+    val statuses_count: Int = 0,
+    val followers_count: Int = 0,
+    val following_count: Int = 0,
     //Optional attributes
     val moved: Account? = null,
     val fields: List<Field>? = emptyList(),

@@ -5,8 +5,10 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
+import android.provider.Settings.Global.getString
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.h.pixeldroid.R
 import java.io.File
 
 class ImageUtils {
@@ -41,7 +43,15 @@ class ImageUtils {
                         downloading = false
                     }
                     val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                    msg = statusMessage(url, directory, status)
+                    msg = when (status) {
+                        DownloadManager.STATUS_FAILED ->
+                            context.getString(R.string.image_download_failed)
+                        DownloadManager.STATUS_RUNNING ->
+                            context.getString(R.string.image_download_downloading)
+                        DownloadManager.STATUS_SUCCESSFUL ->
+                            context.getString(R.string.image_download_success)
+                        else -> ""
+                    }
                     if (msg != lastMsg && msg != "") {
                         activity.runOnUiThread {
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
@@ -53,9 +63,9 @@ class ImageUtils {
             }).start()
         }
 
-        private fun statusMessage(url: String, directory: File, status: Int): String {
+        private fun statusMessage(url: String, directory: File, status: Int, context: Context): String {
             return when (status) {
-                DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
+                DownloadManager.STATUS_FAILED -> context.getString(R.string.image_download_failed)
                 DownloadManager.STATUS_RUNNING -> "Downloading..."
                 DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully in $directory" + File.separator + url.substring(
                     url.lastIndexOf("/") + 1

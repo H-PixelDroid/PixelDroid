@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:tools="http://schemas.android.com/tools"
+<merge xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +18,6 @@
         android:background="#88000000">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/new_post_description_input_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -52,4 +51,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</merge>
