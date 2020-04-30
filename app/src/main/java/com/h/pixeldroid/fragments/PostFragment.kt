@@ -47,7 +47,7 @@ class PostFragment : Fragment() {
         status?.activateReblogger(holder, api, "Bearer $accessToken", status.reblogged)
         status?.activateCommenter(holder, api, "Bearer $accessToken")
         status?.showComments(holder, api, "Bearer $accessToken")
-        status?.imagePopUpMenu(holder.postView)
+        status?.imagePopUpMenu(holder.postView, activity!!)
 
         return root
     }
