@@ -44,7 +44,7 @@
                 android:id="@+id/postDomain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#999999"
+                android:textColor="#b3b3b3"
                 app:layout_constraintBottom_toBottomOf="@+id/profilePic"
                 app:layout_constraintStart_toEndOf="@+id/username"
                 app:layout_constraintTop_toTopOf="@+id/profilePic"/>
@@ -182,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textColor="#999999"
+                android:textColor="#b3b3b3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description"
                 tools:text="time" />
