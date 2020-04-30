@@ -180,6 +180,15 @@ interface PixelfedAPI {
         @Path("id") account_id: String? = null
     ): Call<List<Status>>
 
+    @GET("/api/v1/bookmarks")
+    fun bookmarkedPosts(
+        @Header("Authorization") authorization: String,
+        @Query("limit") limit: String? = null,
+        @Query("max_id") max_id: String? = null,
+        @Query("since_id") since_id: String? = null,
+        @Query("min_id") min_id: String? = null
+    ): Call<List<Status>>
+
     @GET("/api/v1/accounts/relationships")
     fun checkRelationships(
         @Header("Authorization") authorization : String,

@@ -128,43 +128,18 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/profile_tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:tabMode="fixed"
+                app:tabBackground="@color/colorPrimary" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageButton
-                        android:id="@+id/postsButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/colorPrimary"
-                        android:src="@android:drawable/ic_dialog_dialer" />
-
-                    <ImageButton
-                        android:id="@+id/collectionButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/colorPrimary"
-                        android:src="@android:drawable/ic_menu_gallery" />
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profilePostsRecyclerView"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/profile_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                app:layoutManager="LinearLayoutManager"
-                tools:context=".fragments.ProfileFragment"
-                tools:listitem="@layout/fragment_profile_posts" />
+                android:layout_height="match_parent" />
+
         </LinearLayout>
     </ScrollView>
 
