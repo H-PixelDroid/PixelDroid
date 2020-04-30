@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.feeds.FollowsFragment
+import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
@@ -14,7 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class FollowsActivity : AppCompatActivity() {
-    var followsFragment = FollowsFragment()
+    var followsFragment = AccountListFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

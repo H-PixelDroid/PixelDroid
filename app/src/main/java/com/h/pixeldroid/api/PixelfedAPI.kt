@@ -135,6 +135,22 @@ interface PixelfedAPI {
         @Query("local") local: Boolean? = null
     ): Call<List<Status>>
 
+    @GET("/api/v2/search")
+    fun search(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Query("account_id") account_id: String? = null,
+        @Query("max_id") max_id: String? = null,
+        @Query("min_id") min_id: String? = null,
+        @Query("type") type: Results.SearchType? = null,
+        @Query("exclude_unreviewed") exclude_unreviewed: Boolean? = null,
+        @Query("q") q: String,
+        @Query("resolve") resolve: Boolean? = null,
+        @Query("limit") limit: String? = null,
+        @Query("offset") offset: Int? = null,
+        @Query("following") following: Boolean? = null
+    ): Call<Results>
+
     /*
     Note: as of 0.10.8, Pixelfed does not seem to respect the Mastodon API documentation,
     you *need* to pass one of the so-called "optional" arguments. See:

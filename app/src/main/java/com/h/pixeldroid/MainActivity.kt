@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +21,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.NewPostFragment
-import com.h.pixeldroid.fragments.feeds.HomeFragment
+import com.h.pixeldroid.fragments.SearchDiscoverFragment
+import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.ImageConverter
@@ -30,12 +30,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
     private lateinit var preferences: SharedPreferences
+    private val searchDiscoverFragment: SearchDiscoverFragment = SearchDiscoverFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
@@ -60,8 +62,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
 
         val tabs = arrayOf(
-            HomeFragment(),
-            Fragment(),
+            PostsFeedFragment(),
+            searchDiscoverFragment,
             NewPostFragment(),
             NotificationsFragment(),
             Fragment()

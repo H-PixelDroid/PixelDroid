@@ -22,10 +22,10 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
-import kotlinx.android.synthetic.main.fragment_follows.view.*
+import kotlinx.android.synthetic.main.account_list_entry.view.*
 import retrofit2.Call
 
-class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerViewAdapter.ViewHolder>() {
+open class AccountListFragment : FeedFragment<Account, AccountListFragment.FollowsRecyclerViewAdapter.ViewHolder>() {
     lateinit var profilePicRequest: RequestBuilder<Drawable>
 
     override fun onCreateView(
@@ -45,7 +45,7 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Account> = ViewPreloadSizeProvider()
         val preloader: RecyclerViewPreloader<Account> = RecyclerViewPreloader(
-            Glide.with(this), adapter, sizeProvider, 4
+            Glide.with(this), adapter as AccountListFragment.FollowsRecyclerViewAdapter, sizeProvider, 4
         )
         list.addOnScrollListener(preloader)
 
@@ -54,9 +54,7 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val id = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
-        val following = arguments?.getSerializable(FOLLOWING_TAG) as Boolean
-        content = makeContent(id, following)
+        content = makeContent()
 
         content.observe(viewLifecycleOwner,
             Observer { c ->
@@ -66,35 +64,54 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
             })
     }
 
-    private fun makeContent(id : String, following : Boolean) : LiveData<PagedList<Account>> {
-        fun makeInitialCall(requestedLoadSize: Int): Call<List<Account>> {
-            if(following) {
-                return pixelfedAPI.followers(id, "Bearer $accessToken",
-                    limit = requestedLoadSize)
-            } else {
-                return pixelfedAPI.following(id, "Bearer $accessToken",
-                    limit = requestedLoadSize)
-            }
-        }
-        fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Account>> {
-            if(following) {
-                return pixelfedAPI.followers(id, "Bearer $accessToken",
-                    since_id = key, limit = requestedLoadSize)
-            } else {
-                return pixelfedAPI.following(id, "Bearer $accessToken",
-                    since_id = key, limit = requestedLoadSize)
-            }
-        }
+    internal open fun makeContent(): LiveData<PagedList<Account>> {
+        val id = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
+        val following = arguments?.getSerializable(FOLLOWING_TAG) as Boolean
+
+        val (makeInitialCall, makeAfterCall)
+                = makeCalls(following, id)
+
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)
+        val dataSource = FeedDataSource(makeInitialCall, makeAfterCall)
+        factory = FeedDataSourceFactory(dataSource)
         return LivePagedListBuilder(factory, config).build()
     }
 
-    inner class FollowsRecyclerViewAdapter : FeedsRecyclerViewAdapter<Account,FollowsRecyclerViewAdapter.ViewHolder>() {
+    private fun makeCalls(following: Boolean, id: String):
+            Pair<(Int) -> Call<List<Account>>, (Int, String) -> Call<List<Account>>> {
+        val makeInitialCall: (Int) -> Call<List<Account>> =
+            if (following) { requestedLoadSize ->
+                pixelfedAPI.followers(
+                    id, "Bearer $accessToken",
+                    limit = requestedLoadSize
+                )
+            } else { requestedLoadSize ->
+                pixelfedAPI.following(
+                    id, "Bearer $accessToken",
+                    limit = requestedLoadSize
+                )
+            }
+        val makeAfterCall: (Int, String) -> Call<List<Account>> =
+            if (following) { requestedLoadSize, key ->
+                pixelfedAPI.followers(
+                    id, "Bearer $accessToken",
+                    since_id = key, limit = requestedLoadSize
+                )
+            } else { requestedLoadSize, key ->
+                pixelfedAPI.following(
+                    id, "Bearer $accessToken",
+                    since_id = key, limit = requestedLoadSize
+                )
+            }
+        return Pair(makeInitialCall, makeAfterCall)
+    }
+
+    inner class FollowsRecyclerViewAdapter : FeedsRecyclerViewAdapter<Account,FollowsRecyclerViewAdapter.ViewHolder>(),
+        ListPreloader.PreloadModelProvider<Account> {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_follows, parent, false)
+                .inflate(R.layout.account_list_entry, parent, false)
             context = view.context
             return ViewHolder(view)
         }
@@ -109,8 +126,8 @@ class FollowsFragment : FeedFragment<Account, FollowsFragment.FollowsRecyclerVie
         }
 
         inner class ViewHolder(val mView : View) : RecyclerView.ViewHolder(mView) {
-            val avatar : ImageView = mView.follows_avatar
-            val username : TextView = mView.follows_username
+            val avatar : ImageView = mView.account_entry_avatar
+            val username : TextView = mView.account_entry_username
         }
 
         override fun getPreloadItems(position : Int) : MutableList<Account> {
