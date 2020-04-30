@@ -248,6 +248,22 @@ class MockedServerTest {
     }
 
     @Test
+    fun clickNotificationRePost() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
+        Thread.sleep(1000)
+
+        onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
+        Thread.sleep(1000)
+
+        onView(withText("Clement shared your post")).perform(ViewActions.click())
+        Thread.sleep(1000)
+
+        onView(first(withText("Andrea"))).check(matches(withId(R.id.username)))
+    }
+
+    @Test
     fun swipingLeftStopsAtProfile() {
         onView(withId(R.id.main_activity_main_linear_layout))
             .perform(ViewActions.swipeLeft()) // search
