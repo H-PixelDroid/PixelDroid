@@ -20,12 +20,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.ListPreloader.PreloadModelProvider
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.FeedContent
-import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import retrofit2.Call
 import retrofit2.Callback

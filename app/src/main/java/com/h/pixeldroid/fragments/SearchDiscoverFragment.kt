@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
@@ -23,7 +25,6 @@ import com.h.pixeldroid.objects.DiscoverPost
 import com.h.pixeldroid.objects.DiscoverPosts
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter
-import kotlinx.android.synthetic.main.fragment_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,6 +39,8 @@ class SearchDiscoverFragment : Fragment() {
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : DiscoverRecyclerViewAdapter
     private lateinit var accessToken: String
+    private lateinit var discoverProgressBar: ProgressBar
+    private lateinit var discoverRefreshLayout: SwipeRefreshLayout
 
 
 
@@ -69,10 +72,13 @@ class SearchDiscoverFragment : Fragment() {
         )
         api = PixelfedAPI.create("${preferences.getString("domain", "")}")
         accessToken = preferences.getString("accessToken", "") ?: ""
-        
+
+        discoverProgressBar = view.findViewById(R.id.discoverProgressBar)
+        discoverRefreshLayout = view.findViewById(R.id.discoverRefreshLayout)
+
         getDiscover()
 
-        swipeRefreshLayout.setOnRefreshListener {
+        discoverRefreshLayout.setOnRefreshListener {
             getDiscover()
         }
     }
@@ -90,8 +96,8 @@ class SearchDiscoverFragment : Fragment() {
                     if(response.code() == 200) {
                         val discoverPosts = response.body()!!
                         adapter.addPosts(discoverPosts.posts)
-                        searchProgressBar.visibility = View.GONE
-                        swipeRefreshLayout.isRefreshing = false
+                        discoverProgressBar.visibility = View.GONE
+                        discoverRefreshLayout.isRefreshing = false
                     }
                 }
             })
