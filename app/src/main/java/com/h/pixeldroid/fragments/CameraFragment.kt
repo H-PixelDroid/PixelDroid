@@ -12,16 +12,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.ButtonBarLayout
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
 import java.io.File
@@ -35,7 +34,7 @@ private const val REQUEST_CODE_PERMISSIONS = 10
 // This is an array of all the permission specified in the manifest.
 private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
-class CameraActivity : Fragment() {
+class CameraFragment : Fragment() {
 
     private val PICK_IMAGE_REQUEST = 1
     private val CAPTURE_IMAGE_REQUEST = 2
@@ -49,7 +48,6 @@ class CameraActivity : Fragment() {
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
 
         viewFinder = view.findViewById(R.id.view_finder)
-        setupUploadImage()
 
         // Request camera permissions
         if (allPermissionsGranted()) {
@@ -109,6 +107,7 @@ class CameraActivity : Fragment() {
 
         setupImageCapture(imageCapture)
         setupFlipCameras()
+        setupUploadImage()
 
         // Bind use cases to lifecycle
         // If Android Studio complains about "this" being not a LifecycleOwner
@@ -164,7 +163,7 @@ class CameraActivity : Fragment() {
     }
 
     private fun setupImageCapture(imageCapture: ImageCapture) {
-        val takePictureButton = requireView().findViewById<Button>(R.id.takePictureButton)
+        val takePictureButton = requireView().findViewById<AppCompatImageButton>(R.id.capture_button)
         takePictureButton.setOnClickListener {
 
             val file = File.createTempFile(
@@ -193,7 +192,7 @@ class CameraActivity : Fragment() {
     }
 
     private fun setupUploadImage() {
-        val uploadPictureButton: Button = requireView().findViewById(R.id.uploadPictureButton)
+        val uploadPictureButton = requireView().findViewById<AppCompatImageButton>(R.id.upload_button)
         uploadPictureButton.setOnClickListener{
             Intent().apply {
                 type = "image/*"
