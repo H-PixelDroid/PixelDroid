@@ -28,20 +28,30 @@
                 android:id="@+id/profilePic"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_default_user"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/username"
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+            app:layout_constraintStart_toEndOf="@+id/profilePic"
+            app:layout_constraintTop_toTopOf="@+id/profilePic"/>
+
+            <TextView
+                android:id="@+id/postDomain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:textColor="#b3b3b3"
                 app:layout_constraintBottom_toBottomOf="@+id/profilePic"
-                app:layout_constraintStart_toEndOf="@+id/profilePic"
-                app:layout_constraintTop_toTopOf="@+id/profilePic"
-                tools:text="Account" />
+                app:layout_constraintStart_toEndOf="@+id/username"
+                app:layout_constraintTop_toTopOf="@+id/profilePic"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/postConstraint"
@@ -178,17 +188,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hyphenationFrequency="full"
-                app:layout_constraintStart_toStartOf="@+id/usernameDesc"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/usernameDesc"
                 app:layout_constraintTop_toBottomOf="@+id/usernameDesc"
                 tools:text="This is a description, describing stuff.\nIt contains multiple lines, and that's okay. It's also got some really long lines, and we love it for it." />
+
+            <TextView
+                android:id="@+id/postDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textColor="#b3b3b3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description"
+                tools:text="time" />
 
             <LinearLayout
                 android:id="@+id/commentIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/description"
+                app:layout_constraintTop_toBottomOf="@+id/postDate"
                 tools:layout_editor_absoluteX="10dp">
 
                 <com.google.android.material.textfield.TextInputLayout

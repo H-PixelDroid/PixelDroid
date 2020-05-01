@@ -64,7 +64,8 @@ class PostTest {
             id = "12",
             account = Account(
                 id = "12",
-                username = "douze"
+                username = "douze",
+                url = "https://pixelfed.de/douze"
             ),
             media_attachments = listOf(attachment)
         )
@@ -94,7 +95,8 @@ class PostTest {
             id = "12",
             account = Account(
                 id = "12",
-                username = "douze"
+                username = "douze",
+                url = "https://pixelfed.de/douze"
             ),
             media_attachments = listOf(attachment1, attachment2)
         )
@@ -121,7 +123,8 @@ class PostTest {
             id = "12",
             account = Account(
                 id = "12",
-                username = "douze"
+                username = "douze",
+                url = "https://pixelfed.de/douze"
             ),
             media_attachments = listOf(attachment)
         )
@@ -149,7 +152,8 @@ class PostTest {
             id = "12",
             account = Account(
                 id = "12",
-                username = "douze"
+                username = "douze",
+                url = "https://pixelfed.de/douze"
             ),
             media_attachments = listOf(attachment1, attachment2)
         )
