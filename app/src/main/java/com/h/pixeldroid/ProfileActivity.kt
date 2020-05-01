@@ -57,7 +57,11 @@ class ProfileActivity : AppCompatActivity() {
         // Set profile according to given account
         account = intent.getSerializableExtra(ACCOUNT_TAG) as Account?
 
-        if(account == null) {
+        account?.let {
+            setViews()
+            activateFollow()
+            setPosts()
+        } ?: run {
             pixelfedAPI.verifyCredentials("Bearer $accessToken")
                 .enqueue(object : Callback<Account> {
                     override fun onResponse(call: Call<Account>, response: Response<Account>) {
@@ -79,11 +83,6 @@ class ProfileActivity : AppCompatActivity() {
             val editButton = findViewById<Button>(R.id.editButton)
             editButton.visibility = View.VISIBLE
             editButton.setOnClickListener{ onClickEditButton() }
-
-        } else {
-            setViews()
-            activateFollow()
-            setPosts()
         }
 
         // On click open followers list

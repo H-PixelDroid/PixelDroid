@@ -53,7 +53,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             launchActivity(LoginActivity())
         } else {
             setupDrawer()
-            setupTabs()
+
+            val tabs = arrayOf(
+                PostsFeedFragment(),
+                searchDiscoverFragment,
+                NewPostFragment(),
+                NotificationsFragment(),
+                Fragment()
+            )
+
+            setupTabs(tabs)
         }
     }
 
@@ -93,14 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             })
     }
 
-    private fun setupTabs(){
-        val tabs = arrayOf(
-            PostsFeedFragment(),
-            searchDiscoverFragment,
-            NewPostFragment(),
-            NotificationsFragment(),
-            Fragment()
-        )
+    private fun setupTabs(tabs: Array<Fragment>){
 
         viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
