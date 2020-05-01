@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.util.Size
 import android.graphics.Matrix
 import android.os.Bundle
-import android.util.Log
 import android.view.Surface
 import android.view.TextureView
 import android.view.ViewGroup
@@ -24,7 +23,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
 import java.io.File
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 // This is an arbitrary number we are using to keep track of the permission
 // request. Where an app has multiple context for requesting permission,
@@ -38,7 +36,7 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
+        setContentView(R.layout.fragment_camera)
 
         // Add this at the end of onCreate function
 
@@ -57,8 +55,6 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
         updateTransform()
     }
    }
-
-    // Add this after onCreate
 
     private val executor = Executors.newSingleThreadExecutor()
     private lateinit var viewFinder: TextureView
