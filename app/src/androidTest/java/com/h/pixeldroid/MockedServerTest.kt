@@ -235,6 +235,22 @@ class MockedServerTest {
     }
 
     @Test
+    fun swipingLeftStopsAtPublicTimeline() {
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(0)?.select()
+        } // go to the last tab
+
+        Thread.sleep(1000)
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeLeft()) // notifications
+            .perform(ViewActions.swipeLeft()) // camera
+            .perform(ViewActions.swipeLeft()) // search
+            .perform(ViewActions.swipeLeft()) // homepage
+            .perform(ViewActions.swipeLeft()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun clickingTabOnAlbumShowsNextPhoto() {
          ActivityScenario.launch(MainActivity::class.java).onActivity {
             a -> run {
