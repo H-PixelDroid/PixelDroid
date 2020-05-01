@@ -2,6 +2,7 @@ package com.h.pixeldroid.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,8 +33,11 @@ import retrofit2.Response
  */
 
 class SearchDiscoverFragment : Fragment() {
+    private lateinit var api: PixelfedAPI
+    private lateinit var preferences: SharedPreferences
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : DiscoverRecyclerViewAdapter
+    private lateinit var accessToken: String
 
 
 
@@ -60,16 +64,20 @@ class SearchDiscoverFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        preferences = requireActivity().getSharedPreferences(
+            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
+        )
+        api = PixelfedAPI.create("${preferences.getString("domain", "")}")
+        accessToken = preferences.getString("accessToken", "") ?: ""
+        
         getDiscover()
+
+        swipeRefreshLayout.setOnRefreshListener {
+            getDiscover()
+        }
     }
 
     private fun getDiscover() {
-        val preferences = requireActivity().getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-        )
-        val api = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        val accessToken = preferences.getString("accessToken", "") ?: ""
 
         api.discover("Bearer $accessToken")
             .enqueue(object : Callback<DiscoverPosts> {
@@ -83,6 +91,7 @@ class SearchDiscoverFragment : Fragment() {
                         val discoverPosts = response.body()!!
                         adapter.addPosts(discoverPosts.posts)
                         searchProgressBar.visibility = View.GONE
+                        swipeRefreshLayout.isRefreshing = false
                     }
                 }
             })
@@ -94,9 +103,9 @@ class SearchDiscoverFragment : Fragment() {
         private val posts: ArrayList<DiscoverPost> = ArrayList()
 
         fun addPosts(newPosts : List<DiscoverPost>) {
-            val size = posts.size
+            posts.clear()
             posts.addAll(newPosts)
-            notifyItemRangeInserted(size, newPosts.size)
+            notifyDataSetChanged()
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

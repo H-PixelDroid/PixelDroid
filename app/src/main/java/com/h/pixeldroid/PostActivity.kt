@@ -40,6 +40,7 @@ class PostActivity : AppCompatActivity() {
         arguments.putString(DOMAIN_TAG, domain)
 
         if (discoverPost != null) {
+            postProgressBar.visibility = View.VISIBLE
             getDiscoverPost(arguments, discoverPost)
         } else {
             initializeFragment(arguments, status)
@@ -62,6 +63,7 @@ class PostActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Status>, response: Response<Status>) {
                 if(response.code() == 200) {
                     val status = response.body()!!
+                    postProgressBar.visibility = View.GONE
                     initializeFragment(arguments, status)
                 }
             }
@@ -69,7 +71,6 @@ class PostActivity : AppCompatActivity() {
     }
 
     private fun initializeFragment(arguments: Bundle, status: Status?){
-        postProgressBar.visibility = View.GONE
         arguments.putSerializable(POST_TAG, status)
         postFragment.arguments = arguments
         supportFragmentManager.beginTransaction()
