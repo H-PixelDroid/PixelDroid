@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.ButtonBarLayout
@@ -163,7 +164,7 @@ class CameraFragment : Fragment() {
     }
 
     private fun setupImageCapture(imageCapture: ImageCapture) {
-        val takePictureButton = requireView().findViewById<AppCompatImageButton>(R.id.capture_button)
+        val takePictureButton = requireView().findViewById<ImageButton>(R.id.capture_button)
         takePictureButton.setOnClickListener {
 
             val file = File.createTempFile(
@@ -192,7 +193,7 @@ class CameraFragment : Fragment() {
     }
 
     private fun setupUploadImage() {
-        val uploadPictureButton = requireView().findViewById<AppCompatImageButton>(R.id.upload_button)
+        val uploadPictureButton = requireView().findViewById<ImageButton>(R.id.upload_button)
         uploadPictureButton.setOnClickListener{
             Intent().apply {
                 type = "image/*"
