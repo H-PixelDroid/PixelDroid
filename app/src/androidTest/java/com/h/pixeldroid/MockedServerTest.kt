@@ -201,7 +201,7 @@ class MockedServerTest {
         Thread.sleep(10000)
         onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
     }
-/*
+
     @Test
     fun clickNotificationRePost() {
         ActivityScenario.launch(MainActivity::class.java).onActivity{
@@ -218,17 +218,6 @@ class MockedServerTest {
         onView(first(withText("Andrea"))).check(matches(withId(R.id.username)))
     }
 
-    @Test
-    fun swipingLeftStopsAtProfile() {
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(ViewActions.swipeLeft()) // search
-            .perform(ViewActions.swipeLeft()) // camera
-            .perform(ViewActions.swipeLeft()) // notifications
-            .perform(ViewActions.swipeLeft()) // profile
-            .perform(ViewActions.swipeLeft()) // should stop at profile
-        onView(withId(R.id.nbFollowersTextView)).check(matches(isDisplayed()))
-    }
-*/
     @Test
     fun swipingRightStopsAtHomepage() {
         activityScenario.onActivity {
