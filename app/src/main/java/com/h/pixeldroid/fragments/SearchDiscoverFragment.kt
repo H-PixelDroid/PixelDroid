@@ -9,14 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
+import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.SearchActivity
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.objects.DiscoverPost
 import com.h.pixeldroid.objects.DiscoverPosts
+import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.fragment_search.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -80,5 +85,40 @@ class SearchDiscoverFragment : Fragment() {
                         searchProgressBar.visibility = View.GONE
                     }
                 }
-            })    }
+            })
+    }
+    /**
+     * [RecyclerView.Adapter] that can display a list of [DiscoverPost]s
+     */
+    class DiscoverRecyclerViewAdapter: RecyclerView.Adapter<DiscoverRecyclerViewAdapter.ViewHolder>() {
+        private val posts: ArrayList<DiscoverPost> = ArrayList()
+
+        fun addPosts(newPosts : List<DiscoverPost>) {
+            val size = posts.size
+            posts.addAll(newPosts)
+            notifyItemRangeInserted(size, newPosts.size)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.fragment_profile_posts, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val post = posts[position]
+            ImageConverter.setSquareImageFromURL(holder.postView, post.thumb, holder.postPreview)
+            holder.postPreview.setOnClickListener {
+                val intent = Intent(holder.postView.context, PostActivity::class.java)
+                intent.putExtra(Status.DISCOVER_TAG, post)
+                holder.postView.context.startActivity(intent)
+            }
+        }
+
+        override fun getItemCount(): Int = posts.size
+
+        inner class ViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
+            val postPreview: ImageView = postView.findViewById(R.id.postPreview)
+        }
+    }
 }
