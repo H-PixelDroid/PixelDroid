@@ -1,9 +1,13 @@
 package com.h.pixeldroid.objects
 
-import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.provider.MediaStore
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -16,15 +20,15 @@ import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.text.toSpanned
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.ImageFragment
-import com.h.pixeldroid.MainActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
@@ -42,7 +46,10 @@ import kotlinx.android.synthetic.main.post_fragment.view.postPager
 import kotlinx.android.synthetic.main.post_fragment.view.postPicture
 import kotlinx.android.synthetic.main.post_fragment.view.postTabs
 import kotlinx.android.synthetic.main.post_fragment.view.profilePic
+import retrofit2.http.Url
+import java.io.OutputStream
 import java.io.Serializable
+import java.net.URL
 
 /*
 Represents a status posted by an account.
@@ -314,6 +321,10 @@ data class Status(
                         when (item.itemId) {
                             R.id.image_popup_menu_save_to_gallery -> {
                                 downloadImage(activity, view.context, getPostUrl()!!)
+                                true
+                            }
+                            R.id.image_popup_menu_share_picture -> {
+                                downloadImage(activity, view.context, getPostUrl()!!, share = true)
                                 true
                             }
                             else -> false
