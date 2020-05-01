@@ -110,7 +110,7 @@ dependencies {
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
 
-    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    //androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
 }
 

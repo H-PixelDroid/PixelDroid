@@ -13,7 +13,7 @@
         android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" />
 
-    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18"/>
+    //<uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18"/>
 
     <application
         android:allowBackup="true"
@@ -27,8 +27,7 @@
         <activity android:name=".FollowsActivity" />
         <activity android:name=".PostActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".CameraActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".CameraActivity"/>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings2">
