@@ -1,45 +1,35 @@
 package com.h.pixeldroid
 
 import android.Manifest
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.contrib.NavigationViewActions
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.fragment.app.testing.launchFragmentInContainer
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.Timeout
-import androidx.lifecycle.Lifecycle
-import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
-import com.h.pixeldroid.CameraActivity
-import com.h.pixeldroid.PostCreationActivity
-import com.h.pixeldroid.R
+import com.h.pixeldroid.fragments.CameraFragment
+import kotlinx.android.synthetic.main.fragment_camera.*
 
 class CameraTest {
 
     @get:Rule
     val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
-    @get:Rule
-    var activityRule = ActivityScenarioRule(CameraActivity::class.java)
-
 
     @Test
     fun takePictureButton() {
-        assert(activityRule.scenario.state == Lifecycle.State.DESTROYED)
-        onView(withId(R.id.capture_button)).perform(click())
-        Thread.sleep(300)
-        assert(activityRule.scenario.state == Lifecycle.State.DESTROYED)
+        val scenario = launchFragmentInContainer<CameraFragment>()
+        scenario.onFragment { fragment ->
+            fragment.capture_button.performClick()
+            Thread.sleep(300)
+            assert(fragment.isHidden)
+        }
     }
 
-//    @Test
-//    fun rotateAndTakePictureButton() {
-//        val device = UiDevice.getInstance(getInstrumentation())
-//        device.setOrientationLeft()
-//        onView(withId(R.id.capture_button)).perform(click())
-//        Thread.sleep(300)
-//        assert(activityRule.scenario.state == Lifecycle.State.DESTROYED)
-//        device.setOrientationRight()
-//    }
+    @Test
+    fun uploadButton() {
+        val scenario = launchFragmentInContainer<CameraFragment>()
+        scenario.onFragment { fragment ->
+            fragment.upload_button.performClick()
+            Thread.sleep(300)
+            assert(fragment.isHidden)
+        }
+    }
 }
