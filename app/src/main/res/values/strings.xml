@@ -49,4 +49,5 @@
     <string name="image_download_failed">Download has been failed, please try again</string>
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
+    <string name="share_picture">Share picture...</string>
 </resources>
