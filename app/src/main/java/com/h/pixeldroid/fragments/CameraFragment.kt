@@ -1,4 +1,4 @@
-package com.h.pixeldroid
+package com.h.pixeldroid.fragments
 // Your IDE likely can auto-import these classes, but there are several
 // different implementations so we list them here to disambiguate.
 
@@ -8,10 +8,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Size
 import android.graphics.Matrix
+import android.net.Uri
 import android.os.Bundle
-import android.view.Surface
-import android.view.TextureView
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +20,10 @@ import androidx.camera.core.ImageCapture.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import com.h.pixeldroid.PostCreationActivity
+import com.h.pixeldroid.R
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -32,29 +35,40 @@ private const val REQUEST_CODE_PERMISSIONS = 10
 // This is an array of all the permission specified in the manifest.
 private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
-class CameraActivity : AppCompatActivity(), LifecycleOwner {
+class CameraActivity : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private val PICK_IMAGE_REQUEST = 1
+    private val CAPTURE_IMAGE_REQUEST = 2
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_camera)
+        val view = inflater.inflate(R.layout.fragment_camera, container, false)
 
-        // Add this at the end of onCreate function
+        viewFinder = view.findViewById(R.id.view_finder)
+        setupUploadImage()
 
-    viewFinder = findViewById(R.id.view_finder)
+        // Request camera permissions
+        if (allPermissionsGranted()) {
+            viewFinder.post { startCamera() }
+        } else {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
+            )
+        }
 
-    // Request camera permissions
-    if (allPermissionsGranted()) {
-        viewFinder.post { startCamera() }
-    } else {
-        ActivityCompat.requestPermissions(
-            this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+        // Every time the provided texture view changes, recompute layout
+        viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            updateTransform()
+        }
+
+        return view
     }
-
-    // Every time the provided texture view changes, recompute layout
-    viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-        updateTransform()
-    }
-   }
 
     private val executor = Executors.newSingleThreadExecutor()
     private lateinit var viewFinder: TextureView
@@ -81,40 +95,20 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
             updateTransform()
         }
 
-         // Create configuration object for the image capture use case
-    val imageCaptureConfig = ImageCaptureConfig.Builder()
-        .apply {
-            // We don't set a resolution for image capture; instead, we
-            // select a capture mode which will infer the appropriate
-            // resolution based on aspect ration and requested mode
-            setCaptureMode(CaptureMode.MIN_LATENCY)
-        }.build()
+        // Create configuration object for the image capture use case
+        val imageCaptureConfig = ImageCaptureConfig.Builder()
+            .apply {
+                // We don't set a resolution for image capture; instead, we
+                // select a capture mode which will infer the appropriate
+                // resolution based on aspect ration and requested mode
+                setCaptureMode(CaptureMode.MIN_LATENCY)
+            }.build()
 
         // Build the image capture use case and attach button click listener
         val imageCapture = ImageCapture(imageCaptureConfig)
-        findViewById<ImageButton>(R.id.capture_button).setOnClickListener {
-            val file = File(externalMediaDirs.first(),
-                "${System.currentTimeMillis()}.jpg")
 
-            imageCapture.takePicture(file, executor, object : OnImageSavedListener {
-                override fun onError(
-                    imageCaptureError: ImageCaptureError,
-                    message: String,
-                    exc: Throwable?
-                ) {
-                    setResult(Activity.RESULT_CANCELED)
-                    finish()
-                }
-
-                override fun onImageSaved(file: File) {
-
-                    val returnIntent = Intent()
-                    returnIntent.data = file.toUri()
-                    setResult(Activity.RESULT_OK, returnIntent)
-                    finish()
-                }
-            })
-        }
+        setupImageCapture(imageCapture)
+        setupFlipCameras()
 
         // Bind use cases to lifecycle
         // If Android Studio complains about "this" being not a LifecycleOwner
@@ -154,10 +148,9 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
             if (allPermissionsGranted()) {
                 viewFinder.post { startCamera() }
             } else {
-                Toast.makeText(this,
+                Toast.makeText(requireContext(),
                     "Permissions not granted by the user.",
                     Toast.LENGTH_SHORT).show()
-                finish()
             }
         }
     }
@@ -167,6 +160,67 @@ class CameraActivity : AppCompatActivity(), LifecycleOwner {
      */
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-               baseContext, it) == PackageManager.PERMISSION_GRANTED
+               requireContext(), it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun setupImageCapture(imageCapture: ImageCapture) {
+        val takePictureButton = requireView().findViewById<Button>(R.id.takePictureButton)
+        takePictureButton.setOnClickListener {
+
+            val file = File.createTempFile(
+                "${System.currentTimeMillis()}.jpg", null, context?.cacheDir
+            )
+
+            imageCapture.takePicture(file, executor, object : OnImageSavedListener {
+                override fun onError(
+                    imageCaptureError: ImageCaptureError,
+                    message: String,
+                    exc: Throwable?
+                ) {
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                }
+
+                override fun onImageSaved(file: File) {
+                    startPostCreation(file.toUri())
+                }
+            })
+        }
+
+    }
+
+    private fun setupFlipCameras() {
+
+    }
+
+    private fun setupUploadImage() {
+        val uploadPictureButton: Button = requireView().findViewById(R.id.uploadPictureButton)
+        uploadPictureButton.setOnClickListener{
+            Intent().apply {
+                type = "image/*"
+                action = Intent.ACTION_GET_CONTENT
+                addCategory(Intent.CATEGORY_OPENABLE)
+                putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+                startActivityForResult(
+                    Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
+                )
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && data != null
+            && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)
+            && data.data != null) {
+
+            startPostCreation(data.data!!)
+        }
+    }
+
+    private fun startPostCreation(uri: Uri) {
+        startActivity(
+            Intent(activity, PostCreationActivity::class.java)
+                .putExtra("picture_uri", uri)
+        )
+
     }
 }
