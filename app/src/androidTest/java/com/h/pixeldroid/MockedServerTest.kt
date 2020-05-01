@@ -215,7 +215,7 @@ class MockedServerTest {
         onView(withText("Clement shared your post")).perform(ViewActions.click())
         Thread.sleep(1000)
 
-        onView(first(withText("Andrea"))).check(matches(withId(R.id.username)))
+        onView(first(withText("Clement"))).check(matches(withId(R.id.username)))
     }
 
     @Test
