@@ -60,8 +60,7 @@ class MockedServerTest {
 
         onView(withId(R.id.searchButton)).perform(click())
         Thread.sleep(3000)
-        onView(first(withId(R.id.username))).check(matches(withText("Memo")))
-
+        onView(first(withId(R.id.username))).check(matches(withText("memo")))
     }
 
     @Test
@@ -94,18 +93,6 @@ class MockedServerTest {
 
     }
 
-
-    @Test
-    fun testFollowersTextView() {
-        activityScenario.onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
-
-        Thread.sleep(1000)
-        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
-    }
-
     @Test
     fun clickFollowButton() {
         ActivityScenario.launch(MainActivity::class.java)
@@ -130,22 +117,6 @@ class MockedServerTest {
     }
 
     @Test
-    fun clickFollowers() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
-        Thread.sleep(1000)
-        // Open followers list
-        onView(withId(R.id.nbFollowersTextView)).perform((ViewActions.click()))
-        Thread.sleep(1000)
-        // Open follower's profile
-        onView(withText("ete2")).perform((ViewActions.click()))
-        Thread.sleep(1000)
-
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
-    }
-
-    @Test
     fun clickOtherUserFollowers() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
@@ -164,23 +135,7 @@ class MockedServerTest {
         onView(withText("ete2")).perform((ViewActions.click()))
         Thread.sleep(1000)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
-    }
-
-    @Test
-    fun clickFollowing() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
-        Thread.sleep(1000)
-        // Open followers list
-        onView(withId(R.id.nbFollowingTextView)).perform((ViewActions.click()))
-        Thread.sleep(1000)
-        // Open following's profile
-        onView(withText("Dobios")).perform((ViewActions.click()))
-        Thread.sleep(1000)
-
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("Dobios")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))
     }
 
     @Test
@@ -226,7 +181,7 @@ class MockedServerTest {
 
         onView(withText("Dobios followed you")).perform(ViewActions.click())
         Thread.sleep(1000)
-        onView(withText("Dobios")).check(matches(withId(R.id.accountNameTextView)))
+        onView(withText("Andrew Dobis")).check(matches(withId(R.id.accountNameTextView)))
     }
 
     @Test
@@ -260,18 +215,7 @@ class MockedServerTest {
         onView(withText("Clement shared your post")).perform(ViewActions.click())
         Thread.sleep(1000)
 
-        onView(first(withText("Andrea"))).check(matches(withId(R.id.username)))
-    }
-
-    @Test
-    fun swipingLeftStopsAtProfile() {
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(ViewActions.swipeLeft()) // search
-            .perform(ViewActions.swipeLeft()) // camera
-            .perform(ViewActions.swipeLeft()) // notifications
-            .perform(ViewActions.swipeLeft()) // profile
-            .perform(ViewActions.swipeLeft()) // should stop at profile
-        onView(withId(R.id.nbFollowersTextView)).check(matches(isDisplayed()))
+        onView(first(withText("Clement"))).check(matches(withId(R.id.username)))
     }
 
     @Test
@@ -292,7 +236,7 @@ class MockedServerTest {
 
     @Test
     fun clickingTabOnAlbumShowsNextPhoto() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
+         ActivityScenario.launch(MainActivity::class.java).onActivity {
             a -> run {
                 //Wait for the feed to load
                 Thread.sleep(1000)
@@ -513,11 +457,6 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
-    }
-
-    @Test
-    fun instanceConfigurationTest() {
-
     }
 }
 

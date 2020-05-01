@@ -4,7 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -15,12 +19,16 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.NewPostFragment
-import com.h.pixeldroid.fragments.ProfileFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.utils.ImageConverter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -44,26 +52,58 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(!preferences.contains("accessToken")){
             launchActivity(LoginActivity())
         } else {
-            // Setup the drawer
-            drawerLayout = findViewById(R.id.drawer_layout)
-            val navigationView: NavigationView = findViewById(R.id.nav_view)
-            navigationView.setNavigationItemSelectedListener(this)
-            
+            setupDrawer()
+
             val tabs = arrayOf(
                 PostsFeedFragment(),
                 searchDiscoverFragment,
                 NewPostFragment(),
                 NotificationsFragment(),
-                ProfileFragment()
+                Fragment()
             )
 
             setupTabs(tabs)
         }
+    }
 
+    private fun setupDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
 
+        // Setup views
+        val accessToken = preferences.getString("accessToken", "")
+        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
+
+        val drawerHeader = navigationView.getHeaderView(0)
+        val accountName = drawerHeader.findViewById<TextView>(R.id.drawer_account_name)
+        val avatar = drawerHeader.findViewById<ImageView>(R.id.drawer_avatar)
+
+        pixelfedAPI.verifyCredentials("Bearer $accessToken")
+            .enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if (response.code() == 200) {
+                        val account = response.body()!!
+
+                        // Set profile picture
+                        ImageConverter.setRoundImageFromURL(
+                            View(applicationContext), account.avatar_static, avatar)
+                        avatar.setOnClickListener{ launchActivity(ProfileActivity()) }
+
+                        // Set account name
+                        accountName.text = account.display_name
+                        accountName.setOnClickListener{ launchActivity(ProfileActivity()) }
+                    }
+                }
+
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("DRAWER ACCOUNT:", t.toString())
+                }
+            })
     }
 
     private fun setupTabs(tabs: Array<Fragment>){
+
         viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
@@ -91,7 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      */
     override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.nav_account -> tabs.getTabAt(4)!!.select()
+            R.id.nav_account -> launchActivity(ProfileActivity())
             R.id.nav_settings -> launchActivity(SettingsActivity())
             R.id.nav_logout -> launchActivity(LoginActivity())
         }
