@@ -9,11 +9,15 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.core.text.toSpanned
+import android.widget.TextView
+import android.widget.LinearLayout
+import android.widget.Toast
+import android.widget.PopupMenu
+import android.widget.ImageView
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,8 +25,10 @@ import com.h.pixeldroid.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.ImageUtils.Companion.downloadImage
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
 import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
@@ -30,10 +36,17 @@ import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
-
-import kotlinx.android.synthetic.main.post_fragment.view.*
-
+import kotlinx.android.synthetic.main.post_fragment.view.postDate
+import kotlinx.android.synthetic.main.post_fragment.view.postDomain
 import java.io.Serializable
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.post_fragment.view.postPager
+import kotlinx.android.synthetic.main.post_fragment.view.postPicture
+import kotlinx.android.synthetic.main.post_fragment.view.postTabs
+import kotlinx.android.synthetic.main.post_fragment.view.profilePic
 
 /*
 Represents a status posted by an account.
@@ -42,44 +55,45 @@ https://docs.joinmastodon.org/entities/status/
 data class Status(
     //Base attributes
     override val id: String,
-    val uri: String,
-    val created_at: String, //ISO 8601 Datetime (maybe can use a date type)
+    val uri: String = "",
+    val created_at: String = "", //ISO 8601 Datetime (maybe can use a date type)
     val account: Account,
-    val content: String, //HTML
-    val visibility: Visibility,
-    val sensitive: Boolean,
-    val spoiler_text: String,
-    val media_attachments: List<Attachment>?,
-    val application: Application,
+    val content: String = "", //HTML
+    val visibility: Visibility = Visibility.public,
+    val sensitive: Boolean = false,
+    val spoiler_text: String = "",
+    val media_attachments: List<Attachment>? = null,
+    val application: Application? = null,
     //Rendering attributes
-    val mentions: List<Mention>,
-    val tags: List<Tag>,
-    val emojis: List<Emoji>,
+    val mentions: List<Mention>? = null,
+    val tags: List<Tag>? = null,
+    val emojis: List<Emoji>? = null,
     //Informational attributes
-    val reblogs_count: Int,
-    val favourites_count: Int,
-    val replies_count: Int,
+    val reblogs_count: Int = 0,
+    val favourites_count: Int = 0,
+    val replies_count: Int = 0,
     //Nullable attributes
-    val url: String?, //URL
-    val in_reply_to_id: String?,
-    val in_reply_to_account: String?,
-    val reblog: Status?,
-    val poll: Poll?,
-    val card: Card?,
-    val language: String?, //ISO 639 Part 1 two-letter language code
-    val text: String?,
+    val url: String? = null, //URL
+    val in_reply_to_id: String? = null,
+    val in_reply_to_account: String? = null,
+    val reblog: Status? = null,
+    val poll: Poll? = null,
+    val card: Card? = null,
+    val language: String? = null, //ISO 639 Part 1 two-letter language code
+    val text: String? = null,
     //Authorized user attributes
-    val favourited: Boolean,
-    val reblogged: Boolean,
-    val muted: Boolean,
-    val bookmarked: Boolean,
-    val pinned: Boolean
+    val favourited: Boolean = false,
+    val reblogged: Boolean = false,
+    val muted: Boolean = false,
+    val bookmarked: Boolean = false,
+    val pinned: Boolean = false
     ) : Serializable, FeedContent()
 {
 
     companion object {
         const val POST_TAG = "postTag"
         const val POST_FRAG_TAG = "postFragTag"
+        const val DOMAIN_TAG = "domainTag"
     }
 
     fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
@@ -99,9 +113,9 @@ data class Status(
     }
 
     fun getUsername() : CharSequence {
-        var name = account.display_name
-        if (name.isEmpty()) {
-            name = account.username
+        var name = account.username
+        if (name.isNullOrEmpty()) {
+            name = account.display_name?: "NoName"
         }
         return name
     }
@@ -114,6 +128,31 @@ data class Status(
     fun getNShares() : CharSequence {
         val nShares = reblogs_count
         return "$nShares Shares"
+    }
+
+    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean) {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.'000000Z'")
+        val now = Date().time
+
+        try {
+            val date: Date = format.parse(dateString)!!
+            val then = date.time
+            val formattedDate = android.text.format.DateUtils
+                .getRelativeTimeSpanString(then, now,
+                    android.text.format.DateUtils.SECOND_IN_MILLIS,
+                    android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
+            textView.text = if(isActivity) "Posted on $date"
+                            else "$formattedDate"
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun getStatusDomain(domain : String) : String {
+        val accountDomain = getDomain(account.url)
+        return if(getDomain(domain) == accountDomain) ""
+        else " from $accountDomain"
+
     }
 
     private fun setupPostPics(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
@@ -158,7 +197,9 @@ data class Status(
     fun setupPost(
         rootView: View,
         request: RequestBuilder<Drawable>,
-        homeFragment: Fragment
+        homeFragment: Fragment,
+        domain : String,
+        isActivity : Boolean
     ) {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
@@ -178,6 +219,11 @@ data class Status(
         nshares.text = this.getNShares()
         nshares.setTypeface(null, Typeface.BOLD)
 
+        //Convert the date to a readable string
+        ISO8601toDate(created_at, rootView.postDate, isActivity)
+
+        rootView.postDomain.text = getStatusDomain(domain)
+
         //Setup images
         ImageConverter.setRoundImageFromURL(
             rootView,
@@ -194,6 +240,8 @@ data class Status(
 
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
+
+        imagePopUpMenu(rootView, homeFragment.requireActivity())
     }
 
     fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
@@ -291,5 +339,32 @@ data class Status(
 
     enum class Visibility : Serializable {
         public, unlisted, private, direct
+    }
+
+
+    fun imagePopUpMenu(view: View, activity: FragmentActivity) {
+        val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
+        if (!media_attachments.isNullOrEmpty() && media_attachments.size == 1) {
+            view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
+                PopupMenu(view.context, anchor).apply {
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.image_popup_menu_save_to_gallery -> {
+                                downloadImage(activity, view.context, getPostUrl()!!)
+                                true
+                            }
+                            R.id.image_popup_menu_share_picture -> {
+                                downloadImage(activity, view.context, getPostUrl()!!, share = true)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    inflate(R.menu.image_popup_menu)
+                    show()
+                }
+                true
+            }
+        }
     }
 }

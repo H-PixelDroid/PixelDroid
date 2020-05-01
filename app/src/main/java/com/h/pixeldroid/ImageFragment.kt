@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.PopupMenu
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.ImageUtils
 import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 
@@ -38,9 +41,30 @@ class ImageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_image, container, false)
 
+        view.findViewById<ImageView>(R.id.imageImageView).setOnLongClickListener {
+            PopupMenu(view.context, it).apply {
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.image_popup_menu_save_to_gallery -> {
+                            ImageUtils.downloadImage(requireActivity(), view.context, imgUrl)
+                            true
+                        }
+                        R.id.image_popup_menu_share_picture ->  {
+                            ImageUtils.downloadImage(requireActivity(), view.context, imgUrl, share = true)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                inflate(R.menu.image_popup_menu)
+                show()
+            }
+            true
+        }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_image, container, false)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,6 +76,7 @@ class ImageFragment : Fragment() {
             .placeholder(ColorDrawable(Color.GRAY))
 
         picRequest.load(imgUrl).into(imageView)
+
     }
 
     companion object {

@@ -33,7 +33,7 @@ class PostUnitTest {
     fun getProfilePicUrlReturnsAValidURL() = Assert.assertNotNull(status.getProfilePicUrl())
 
     @Test
-    fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account.display_name, status.getUsername())
+    fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account.username, status.getUsername())
 
     @Test
     fun getUsernameReturnsOtherNameIfUsernameIsNull() {

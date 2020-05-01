@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.SpannableString
 import android.text.style.ClickableSpan
+import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
@@ -12,6 +13,10 @@ import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.contrib.DrawerActions
+import androidx.test.espresso.contrib.DrawerMatchers
+import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
@@ -142,9 +147,14 @@ class IntentTest {
 
     @Test
     fun launchesIntent() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity { a ->
-            a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
+        // Open Drawer to click on navigation.
+        ActivityScenario.launch(MainActivity::class.java)
+        Espresso.onView(ViewMatchers.withId(R.id.drawer_layout))
+            .check(ViewAssertions.matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+            .perform(DrawerActions.open()) // Open Drawer
+        Espresso.onView(ViewMatchers.withId(R.id.nav_view))
+            .perform(NavigationViewActions.navigateTo(R.id.nav_account))
+
         val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
             IntentMatchers.hasAction(Intent.ACTION_VIEW),
             IntentMatchers.hasDataString(CoreMatchers.containsString("settings/home"))
