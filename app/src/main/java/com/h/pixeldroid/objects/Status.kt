@@ -42,6 +42,10 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.post_fragment.view.postPager
+import kotlinx.android.synthetic.main.post_fragment.view.postPicture
+import kotlinx.android.synthetic.main.post_fragment.view.postTabs
+import kotlinx.android.synthetic.main.post_fragment.view.profilePic
 
 /*
 Represents a status posted by an account.
@@ -346,6 +350,10 @@ data class Status(
                         when (item.itemId) {
                             R.id.image_popup_menu_save_to_gallery -> {
                                 downloadImage(activity, view.context, getPostUrl()!!)
+                                true
+                            }
+                            R.id.image_popup_menu_share_picture -> {
+                                downloadImage(activity, view.context, getPostUrl()!!, share = true)
                                 true
                             }
                             else -> false

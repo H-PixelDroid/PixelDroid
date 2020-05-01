@@ -51,6 +51,10 @@ class ImageFragment : Fragment() {
                             ImageUtils.downloadImage(requireActivity(), view.context, imgUrl)
                             true
                         }
+                        R.id.image_popup_menu_share_picture ->  {
+                            ImageUtils.downloadImage(requireActivity(), view.context, imgUrl, share = true)
+                            true
+                        }
                         else -> false
                     }
                 }
