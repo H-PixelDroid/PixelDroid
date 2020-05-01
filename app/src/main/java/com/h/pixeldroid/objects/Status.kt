@@ -1,28 +1,21 @@
 package com.h.pixeldroid.objects
 
-import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.provider.MediaStore
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.text.toSpanned
-import androidx.core.view.drawToBitmap
+import android.widget.TextView
+import android.widget.LinearLayout
+import android.widget.Toast
+import android.widget.PopupMenu
+import android.widget.ImageView
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -32,6 +25,7 @@ import com.h.pixeldroid.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.ImageUtils.Companion.downloadImage
@@ -42,14 +36,17 @@ import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
+import kotlinx.android.synthetic.main.post_fragment.view.postDate
+import kotlinx.android.synthetic.main.post_fragment.view.postDomain
+import java.io.Serializable
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import kotlin.collections.ArrayList
 import kotlinx.android.synthetic.main.post_fragment.view.postPager
 import kotlinx.android.synthetic.main.post_fragment.view.postPicture
 import kotlinx.android.synthetic.main.post_fragment.view.postTabs
 import kotlinx.android.synthetic.main.post_fragment.view.profilePic
-import retrofit2.http.Url
-import java.io.OutputStream
-import java.io.Serializable
-import java.net.URL
 
 /*
 Represents a status posted by an account.
@@ -96,6 +93,7 @@ data class Status(
     companion object {
         const val POST_TAG = "postTag"
         const val POST_FRAG_TAG = "postFragTag"
+        const val DOMAIN_TAG = "domainTag"
     }
 
     fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
@@ -130,6 +128,31 @@ data class Status(
     fun getNShares() : CharSequence {
         val nShares = reblogs_count
         return "$nShares Shares"
+    }
+
+    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean) {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.'000000Z'")
+        val now = Date().time
+
+        try {
+            val date: Date = format.parse(dateString)!!
+            val then = date.time
+            val formattedDate = android.text.format.DateUtils
+                .getRelativeTimeSpanString(then, now,
+                    android.text.format.DateUtils.SECOND_IN_MILLIS,
+                    android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
+            textView.text = if(isActivity) "Posted on $date"
+                            else "$formattedDate"
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun getStatusDomain(domain : String) : String {
+        val accountDomain = getDomain(account.url)
+        return if(getDomain(domain) == accountDomain) ""
+        else " from $accountDomain"
+
     }
 
     private fun setupPostPics(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
@@ -174,7 +197,9 @@ data class Status(
     fun setupPost(
         rootView: View,
         request: RequestBuilder<Drawable>,
-        homeFragment: Fragment
+        homeFragment: Fragment,
+        domain : String,
+        isActivity : Boolean
     ) {
         //Setup username as a button that opens the profile
         val username = rootView.findViewById<TextView>(R.id.username)
@@ -193,6 +218,11 @@ data class Status(
         val nshares = rootView.findViewById<TextView>(R.id.nshares)
         nshares.text = this.getNShares()
         nshares.setTypeface(null, Typeface.BOLD)
+
+        //Convert the date to a readable string
+        ISO8601toDate(created_at, rootView.postDate, isActivity)
+
+        rootView.postDomain.text = getStatusDomain(domain)
 
         //Setup images
         ImageConverter.setRoundImageFromURL(
