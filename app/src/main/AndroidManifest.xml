@@ -24,7 +24,8 @@
         <activity android:name=".FollowsActivity" />
         <activity android:name=".PostActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".CameraActivity" />
+        <activity android:name=".CameraActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings2">
