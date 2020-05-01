@@ -238,7 +238,7 @@ class MockedServerTest {
     fun swipingLeftStopsAtPublicTimeline() {
         activityScenario.onActivity {
                 a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(0)?.select()
-        } // go to the last tab
+        }
 
         Thread.sleep(1000)
         onView(withId(R.id.main_activity_main_linear_layout))
@@ -247,6 +247,22 @@ class MockedServerTest {
             .perform(ViewActions.swipeLeft()) // search
             .perform(ViewActions.swipeLeft()) // homepage
             .perform(ViewActions.swipeLeft()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun swipingPublicTimelineWorks() {
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        } // go to the last tab
+
+        Thread.sleep(1000)
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeUp()) // notifications
+            .perform(ViewActions.swipeUp()) // camera
+            .perform(ViewActions.swipeUp()) // search
+            .perform(ViewActions.swipeUp()) // homepage
+            .perform(ViewActions.swipeUp()) // should stop at homepage
         onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
 

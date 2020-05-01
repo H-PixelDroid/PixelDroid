@@ -135,7 +135,7 @@ data class Status(
         if(dateString.matches("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9].[0-9][0-9][0-9][0-9][0-9][0-9]Z".toRegex())) {
             format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
         } else if(dateString.matches("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]+[0-9][0-9]:[0-9][0-9]".toRegex())) {
-            format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.+hh:mm")
+            format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+hh:mm")
         }
         val now = Date().time
 
