@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
                 override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("ProfileActivity:", t.toString())
+                    Log.e("DRAWER ACCOUNT:", t.toString())
                 }
             })
     }
