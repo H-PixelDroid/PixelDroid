@@ -131,7 +131,12 @@ data class Status(
     }
 
     private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean) {
-        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.'000000Z'")
+        var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
+        if(dateString.matches("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9].[0-9][0-9][0-9][0-9][0-9][0-9]Z".toRegex())) {
+            format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
+        } else if(dateString.matches("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]+[0-9][0-9]:[0-9][0-9]".toRegex())) {
+            format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.+hh:mm")
+        }
         val now = Date().time
 
         try {
