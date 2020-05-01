@@ -1,5 +1,6 @@
 package com.h.pixeldroid.fragments
 
+import android.content.Context
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,17 +9,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
+import com.h.pixeldroid.objects.DiscoverPost
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setSquareImageFromURL
 
 /**
- * [RecyclerView.Adapter] that can display a list of [PostMiniature]s and makes a call to the
- * specified [OnListFragmentInteractionListener].
+ * [RecyclerView.Adapter] that can display a list of [DiscoverPost]s
  */
-class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecyclerViewAdapter.ViewHolder>() {
-    private val posts: ArrayList<Status> = ArrayList()
+class DiscoverRecyclerViewAdapter: RecyclerView.Adapter<DiscoverRecyclerViewAdapter.ViewHolder>() {
+    private val posts: ArrayList<DiscoverPost> = ArrayList()
 
-    fun addPosts(newPosts : List<Status>) {
+    fun addPosts(newPosts : List<DiscoverPost>) {
         val size = posts.size
         posts.addAll(newPosts)
         notifyItemRangeInserted(size, newPosts.size)
@@ -32,11 +33,11 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecycler
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
-        setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)
+        setSquareImageFromURL(holder.postView, post.thumb, holder.postPreview)
         holder.postPreview.setOnClickListener {
-            val intent = Intent(holder.postPreview.context, PostActivity::class.java)
-            intent.putExtra(Status.POST_TAG, post)
-            holder.postPreview.context.startActivity(intent)
+            val intent = Intent(holder.postView.context, PostActivity::class.java)
+            intent.putExtra(Status.DISCOVER_TAG, post)
+            holder.postView.context.startActivity(intent)
         }
     }
 

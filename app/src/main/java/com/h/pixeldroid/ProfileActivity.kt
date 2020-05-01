@@ -47,7 +47,7 @@ class ProfileActivity : AppCompatActivity() {
         // Set posts RecyclerView as a grid with 3 columns
         recycler = findViewById(R.id.profilePostsRecyclerView)
         recycler.layoutManager = GridLayoutManager(applicationContext, 3)
-        adapter = ProfilePostsRecyclerViewAdapter(this)
+        adapter = ProfilePostsRecyclerViewAdapter()
         recycler.adapter = adapter
 
         setContent()
@@ -131,12 +131,8 @@ class ProfileActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
                 if(response.code() == 200) {
-                    val posts = ArrayList<Status>()
                     val statuses = response.body()!!
-                    for(status in statuses) {
-                        posts.add(status)
-                    }
-                    adapter.addPosts(posts)
+                    adapter.addPosts(statuses)
                 }
             }
         })
