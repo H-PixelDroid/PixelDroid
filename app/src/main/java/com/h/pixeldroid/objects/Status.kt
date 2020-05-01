@@ -36,7 +36,8 @@ import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
-import kotlinx.android.synthetic.main.post_fragment.view.*
+import kotlinx.android.synthetic.main.post_fragment.view.postDate
+import kotlinx.android.synthetic.main.post_fragment.view.postDomain
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
