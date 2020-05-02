@@ -33,7 +33,7 @@
     <string name="or">or</string>
     <string name="description">Description…</string>
     <string name="send">send</string>
-    <string name="whats_an_instance">What\'s an instance?</string>
+    <string name="whats_an_instance">"What's an instance?"</string>
     <string name="logout">Logout</string>
     <string name="save_to_gallery">Save to Gallery…</string>
     <string name="image_download_failed">Download has been failed, please try again</string>
