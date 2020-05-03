@@ -94,6 +94,7 @@ data class Status(
         const val POST_TAG = "postTag"
         const val POST_FRAG_TAG = "postFragTag"
         const val DOMAIN_TAG = "domainTag"
+        const val DISCOVER_TAG = "discoverTag"
     }
 
     fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
