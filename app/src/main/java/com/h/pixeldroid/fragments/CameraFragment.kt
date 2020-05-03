@@ -172,7 +172,7 @@ class CameraFragment : Fragment() {
         viewFinder.post {
 
             // Keep track of the display in which this view is attached
-            displayId = viewFinder.display.displayId
+            displayId = viewFinder.display?.displayId ?: -1
         }
     }
 
