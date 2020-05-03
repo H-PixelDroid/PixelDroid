@@ -77,6 +77,17 @@ class MockedServerTest {
         onView(first(withId(R.id.tag_name))).check(matches(withText("#caturday")))
 
     }
+    @Test
+    fun openDiscoverPost(){
+        activityScenario.onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
+        }
+        Thread.sleep(1000)
+        onView(withId(R.id.discoverList)).perform(click())
+        Thread.sleep(1000)
+        onView(withId(R.id.username)).check(matches(withText("machintuck")))
+
+    }
 
     @Test
     fun searchAccounts() {
