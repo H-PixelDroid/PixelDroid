@@ -1,55 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PixelDroid</string>
-
     <string name="menu_slideshow">Account name</string>
     <string name="menu_subtitle">Account informations</string>
-
     <string name="menu_account">My Profile</string>
     <string name="menu_settings">Settings</string>
-
     <string name="invalid_domain">"Invalid domain"</string>
     <string name="registration_failed">"Could not register the application with this server"</string>
     <string name="browser_launch_failed">"Could not launch a browser, do you have one?"</string>
     <string name="auth_failed">"Could not authenticate"</string>
     <string name="token_error">"Error getting token"</string>
     <string name="title_activity_settings2">Settings</string>
-
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
-
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
-
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-
     <string name="followed_notification">%1$s followed you</string>
     <string name="mention_notification">%1$s mentioned you</string>
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
-
     <string name="create_a_new_post">Create a new post!</string>
     <string name="take_a_picture">Take a picture</string>
     <string name="upload_a_picture">Upload a picture</string>
     <string name="or">or</string>
-
     <string name="description">Description…</string>
     <string name="send">send</string>
-
-    <string name="whats_an_instance">What\'s an instance?</string>
+    <string name="whats_an_instance">"What's an instance?"</string>
     <string name="logout">Logout</string>
     <string name="save_to_gallery">Save to Gallery…</string>
-
     <string name="image_download_failed">Download has been failed, please try again</string>
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
-    <string name="share_picture">Share picture...</string>
     <string name="capture_button_alt">Capture</string>
     <string name="switch_camera_button_alt">Switch camera</string>
     <string name="gallery_button_alt">Gallery</string>
@@ -62,5 +51,5 @@
     <string name="delete_button_alt">Delete</string>
     <string name="delete_dialog">Delete current photo?</string>
     <string name="delete_title">Confirm</string>
-
+    <string name="share_picture">Share picture…</string>
 </resources>
