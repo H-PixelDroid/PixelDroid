@@ -74,15 +74,15 @@ class PostFragmentUITests {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
-
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
-                a -> a.tabs.getTabAt(2)!!.select()
-        }
         Thread.sleep(300)
     }
 
     @Test
     fun newPostUiTest() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+                a -> a.tabs.getTabAt(2)!!.select()
+        }
+        Thread.sleep(1500)
         onView(withId(R.id.photo_view_button)).check(matches(isDisplayed()))
         onView(withId(R.id.camera_capture_button)).check(matches(isDisplayed()))
     }
