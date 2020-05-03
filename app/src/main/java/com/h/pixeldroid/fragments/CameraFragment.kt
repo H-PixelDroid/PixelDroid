@@ -1,17 +1,15 @@
 package com.h.pixeldroid.fragments
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.hardware.display.DisplayManager
-import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.DisplayMetrics
@@ -19,7 +17,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import android.widget.ImageButton
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.Metadata
@@ -28,15 +25,12 @@ import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,6 +60,8 @@ class CameraFragment : Fragment() {
     private lateinit var outputDirectory: File
 
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+    private val PICK_IMAGE_REQUEST = 1
+    private val CAPTURE_IMAGE_REQUEST = 2
 
     private var displayId: Int = -1
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
@@ -289,7 +285,6 @@ class CameraFragment : Fragment() {
         // Inflate a new view containing all UI for controlling the camera
         val controls = View.inflate(requireContext(), R.layout.camera_ui_container, container)
 
-        val extensionWhitelist = arrayOf("JPG", "PNG")
         // In the background, load latest photo taken (if any) for gallery thumbnail
         lifecycleScope.launch(Dispatchers.IO) {
             // Find the last picture
@@ -313,6 +308,50 @@ class CameraFragment : Fragment() {
             }
         }
 
+        setupImageCapture(controls)
+
+        setupFlipCameras(controls)
+
+        setupUploadImage(controls)
+    }
+
+    private fun setupUploadImage(controls: View) {
+        // Listener for button used to view the most recent photo
+        controls.findViewById<ImageButton>(R.id.photo_view_button).setOnClickListener {
+            Intent().apply {
+                type = "image/*"
+                action = Intent.ACTION_GET_CONTENT
+                addCategory(Intent.CATEGORY_OPENABLE)
+                putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+                startActivityForResult(
+                    Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
+                )
+            }
+        }
+    }
+
+    private fun setupFlipCameras(controls: View) {
+        // Listener for button used to switch cameras
+        controls.findViewById<ImageButton>(R.id.camera_switch_button).setOnClickListener {
+            lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
+                CameraSelector.LENS_FACING_BACK
+            } else {
+                CameraSelector.LENS_FACING_FRONT
+            }
+            // Re-bind use cases to update selected camera, being careful about permissions.
+            if (!allPermissionsGranted()) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    REQUIRED_PERMISSIONS,
+                    REQUEST_CODE_PERMISSIONS
+                )
+            } else {
+                bindCameraUseCases()
+            }
+        }
+    }
+
+    private fun setupImageCapture(controls: View) {
         // Listener for button used to capture photo
         controls.findViewById<ImageButton>(R.id.camera_capture_button).setOnClickListener {
 
@@ -320,7 +359,9 @@ class CameraFragment : Fragment() {
             imageCapture?.let { imageCapture ->
 
                 // Create output file to hold the image
-                val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
+                val photoFile = File.createTempFile(
+                    "${System.currentTimeMillis()}.jpg", null, context?.cacheDir
+                )
 
                 // Setup image capture metadata
                 val metadata = Metadata().apply {
@@ -343,81 +384,35 @@ class CameraFragment : Fragment() {
 
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                             val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
-                            Log.d(TAG, "Photo capture succeeded: $savedUri")
-
-                            // We can only change the foreground Drawable using API level 23+ API
-                            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                // Update the gallery thumbnail with latest picture taken
-                                //setGalleryThumbnail(savedUri)
-                            //}
-
-                            // Implicit broadcasts will be ignored for devices running API level >= 24
-                            // so if you only target API level 24+ you can remove this statement
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                                requireActivity().sendBroadcast(
-                                    Intent(android.hardware.Camera.ACTION_NEW_PICTURE, savedUri)
-                                )
-                            }
-
-                            // If the folder selected is an external media directory, this is
-                            // unnecessary but otherwise other apps will not be able to access our
-                            // images unless we scan them using [MediaScannerConnection]
-                            val mimeType = MimeTypeMap.getSingleton()
-                                .getMimeTypeFromExtension(savedUri.toFile().extension)
-                            MediaScannerConnection.scanFile(
-                                context,
-                                arrayOf(savedUri.toFile().absolutePath),
-                                arrayOf(mimeType)
-                            ) { _, uri ->
-                                Log.d(TAG, "Image capture scanned into media store: $uri")
-                            }
+                            startPostCreation(savedUri)
                         }
                     })
 
-                // We can only change the foreground Drawable using API level 23+ API
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // Display flash animation to indicate that photo was captured
+                container.postDelayed({
+                    container.foreground = ColorDrawable(Color.WHITE)
+                    container.postDelayed(
+                        { container.foreground = null }, ANIMATION_FAST_MILLIS
+                    )
+                }, ANIMATION_SLOW_MILLIS)
 
-                    // Display flash animation to indicate that photo was captured
-                    container.postDelayed({
-                        container.foreground = ColorDrawable(Color.WHITE)
-                        container.postDelayed(
-                            { container.foreground = null }, ANIMATION_FAST_MILLIS)
-                    }, ANIMATION_SLOW_MILLIS)
-                }
             }
-        }
-
-        // Listener for button used to switch cameras
-        controls.findViewById<ImageButton>(R.id.camera_switch_button).setOnClickListener {
-            lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
-                CameraSelector.LENS_FACING_BACK
-            } else {
-                CameraSelector.LENS_FACING_FRONT
-            }
-            // Re-bind use cases to update selected camera, being careful about permissions.
-            if (!allPermissionsGranted()) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    REQUIRED_PERMISSIONS,
-                    REQUEST_CODE_PERMISSIONS
-                )
-            } else {
-                bindCameraUseCases()
-            }
-        }
-
-        // Listener for button used to view the most recent photo
-        controls.findViewById<ImageButton>(R.id.photo_view_button).setOnClickListener {
-            // Only navigate when the gallery has photos
-
         }
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && data != null
+            && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)
+            && data.data != null) {
 
-    fun geturi(){
-        val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        val sortOrder = MediaStore.Images.Media.DATE_TAKEN + " DESC"
-        val query = requireContext().contentResolver.query(uri, null, null, null, sortOrder)
-        query?.close()
+            startPostCreation(data.data!!)
+        }
+    }
+    private fun startPostCreation(uri: Uri) {
+        startActivity(
+            Intent(activity, PostCreationActivity::class.java)
+                .putExtra("picture_uri", uri)
+        )
+
     }
 
     companion object {
