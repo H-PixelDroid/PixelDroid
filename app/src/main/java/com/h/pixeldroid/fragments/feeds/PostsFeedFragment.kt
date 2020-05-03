@@ -24,7 +24,6 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 
-
 open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
