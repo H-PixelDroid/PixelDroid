@@ -202,6 +202,12 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(feedJson)
                     }
+                    request.path?.startsWith("/api/v1/timelines/public") == true -> {
+                        return MockResponse().addHeader(
+                            "Content-Type",
+                            "application/json; charset=utf-8"
+                        ).setResponseCode(200).setBody(feedJson)
+                    }
                     request.path?.startsWith("/api/v1/accounts/0/statuses") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
                     }

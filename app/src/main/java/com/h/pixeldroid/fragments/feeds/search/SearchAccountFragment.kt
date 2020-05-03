@@ -55,15 +55,15 @@ class SearchAccountFragment: AccountListFragment(){
             params: LoadInitialParams<String>,
             callback: LoadInitialCallback<Account>
         ) {
-            enqueueCall(makeInitialCall(params.requestedLoadSize), callback)
+            searchEnqueueCall(makeInitialCall(params.requestedLoadSize), callback)
         }
 
         //This is called to when we get to the bottom of the loaded content, so we want statuses
         //older than the given key (params.key)
         override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Account>) {
-            enqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
+            searchEnqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
         }
-        private fun enqueueCall(call: Call<Results>, callback: LoadCallback<Account>){
+        private fun searchEnqueueCall(call: Call<Results>, callback: LoadCallback<Account>) {
 
             call.enqueue(object : Callback<Results> {
                 override fun onResponse(call: Call<Results>, response: Response<Results>) {
