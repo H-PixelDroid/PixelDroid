@@ -65,7 +65,7 @@ class CameraFragment : Fragment() {
     private lateinit var viewFinder: PreviewView
     private lateinit var outputDirectory: File
 
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
 
     private var displayId: Int = -1
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
@@ -111,6 +111,9 @@ class CameraFragment : Fragment() {
         } else {
             //Bind the viewfinder here, since when leaving the fragment it gets unbound
             bindCameraUseCases()
+
+            // Build UI controls
+            updateCameraUi()
         }
     }
     /**
@@ -174,9 +177,6 @@ class CameraFragment : Fragment() {
 
             // Keep track of the display in which this view is attached
             displayId = viewFinder.display.displayId
-
-            // Build UI controls
-            updateCameraUi()
         }
     }
 
