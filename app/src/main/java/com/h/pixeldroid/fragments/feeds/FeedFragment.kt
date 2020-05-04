@@ -104,7 +104,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
             //do nothing here, it is expected to pull to refresh to load newer notifications
         }
 
-        private fun enqueueCall(call: Call<List<T>>, callback: LoadCallback<T>){
+        protected open fun enqueueCall(call: Call<List<T>>, callback: LoadCallback<T>){
 
             call.enqueue(object : Callback<List<T>> {
                 override fun onResponse(call: Call<List<T>>, response: Response<List<T>>) {
