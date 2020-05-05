@@ -77,6 +77,17 @@ class MockedServerTest {
         onView(first(withId(R.id.tag_name))).check(matches(withText("#caturday")))
 
     }
+    @Test
+    fun openDiscoverPost(){
+        activityScenario.onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
+        }
+        Thread.sleep(1000)
+        onView(withId(R.id.discoverList)).perform(click())
+        Thread.sleep(1000)
+        onView(withId(R.id.username)).check(matches(withText("machintuck")))
+
+    }
 
     @Test
     fun searchAccounts() {
@@ -201,18 +212,23 @@ class MockedServerTest {
         Thread.sleep(10000)
         onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
     }
-/*
+
     @Test
-    fun swipingLeftStopsAtProfile() {
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(ViewActions.swipeLeft()) // search
-            .perform(ViewActions.swipeLeft()) // camera
-            .perform(ViewActions.swipeLeft()) // notifications
-            .perform(ViewActions.swipeLeft()) // profile
-            .perform(ViewActions.swipeLeft()) // should stop at profile
-        onView(withId(R.id.nbFollowersTextView)).check(matches(isDisplayed()))
+    fun clickNotificationRePost() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
+        Thread.sleep(1000)
+
+        onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
+        Thread.sleep(1000)
+
+        onView(withText("Clement shared your post")).perform(ViewActions.click())
+        Thread.sleep(1000)
+
+        onView(first(withText("Clement"))).check(matches(withId(R.id.username)))
     }
-*/
+
     @Test
     fun swipingRightStopsAtHomepage() {
         activityScenario.onActivity {
@@ -226,6 +242,38 @@ class MockedServerTest {
             .perform(ViewActions.swipeRight()) // search
             .perform(ViewActions.swipeRight()) // homepage
             .perform(ViewActions.swipeRight()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun swipingLeftStopsAtPublicTimeline() {
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(0)?.select()
+        }
+
+        Thread.sleep(1000)
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeLeft()) // notifications
+            .perform(ViewActions.swipeLeft()) // camera
+            .perform(ViewActions.swipeLeft()) // search
+            .perform(ViewActions.swipeLeft()) // homepage
+            .perform(ViewActions.swipeLeft()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun swipingPublicTimelineWorks() {
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        } // go to the last tab
+
+        Thread.sleep(1000)
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeUp()) // notifications
+            .perform(ViewActions.swipeUp()) // camera
+            .perform(ViewActions.swipeUp()) // search
+            .perform(ViewActions.swipeUp()) // homepage
+            .perform(ViewActions.swipeUp()) // should stop at homepage
         onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
 

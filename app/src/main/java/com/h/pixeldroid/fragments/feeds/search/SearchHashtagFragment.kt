@@ -92,16 +92,16 @@ class SearchHashtagFragment: FeedFragment<Tag, SearchHashtagFragment.TagsRecycle
             params: LoadInitialParams<String>,
             callback: LoadInitialCallback<Tag>
         ) {
-            enqueueCall(makeInitialCall(params.requestedLoadSize), callback)
+            searchEnqueueCall(makeInitialCall(params.requestedLoadSize), callback)
         }
 
         //This is called to when we get to the bottom of the loaded content, so we want statuses
         //older than the given key (params.key)
         override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Tag>) {
-            enqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
+            searchEnqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
         }
 
-        private fun enqueueCall(call: Call<Results>, callback: LoadCallback<Tag>){
+        private fun searchEnqueueCall(call: Call<Results>, callback: LoadCallback<Tag>){
 
             call.enqueue(object : Callback<Results> {
                 override fun onResponse(call: Call<Results>, response: Response<Results>) {

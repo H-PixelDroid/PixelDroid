@@ -108,16 +108,21 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                 openActivity(notification)
             }
         }
+
+        private fun openPostFromNotifcation(notification: Notification) : Intent {
+            val intent = Intent(context, PostActivity::class.java)
+            intent.putExtra(Status.POST_TAG, notification.status)
+            return  intent
+        }
+
         private fun openActivity(notification: Notification){
             val intent: Intent
             when (notification.type){
                 Notification.NotificationType.mention, Notification.NotificationType.favourite-> {
-                    intent = Intent(context, PostActivity::class.java)
-                    intent.putExtra(Status.POST_TAG, notification.status)
+                    intent = openPostFromNotifcation(notification)
                 }
                 Notification.NotificationType.reblog-> {
-                    Toast.makeText(context,"Can't see shares yet, sorry!", Toast.LENGTH_SHORT).show()
-                    return
+                    intent = openPostFromNotifcation(notification)
                 }
                 Notification.NotificationType.follow -> {
                     intent = Intent(context, ProfileActivity::class.java)

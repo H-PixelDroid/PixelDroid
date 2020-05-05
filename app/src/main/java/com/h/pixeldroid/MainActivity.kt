@@ -24,6 +24,7 @@ import com.h.pixeldroid.fragments.NewPostFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
+import com.h.pixeldroid.fragments.feeds.PublicTimelineFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
@@ -53,7 +54,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             launchActivity(LoginActivity())
         } else {
             setupDrawer()
-            setupTabs()
+
+            val tabs = arrayOf(
+                PostsFeedFragment(),
+                searchDiscoverFragment,
+                NewPostFragment(),
+                NotificationsFragment(),
+                PublicTimelineFragment()
+            )
+
+            setupTabs(tabs)
         }
     }
 
@@ -88,19 +98,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
                 override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("ProfileActivity:", t.toString())
+                    Log.e("DRAWER ACCOUNT:", t.toString())
                 }
             })
     }
 
-    private fun setupTabs(){
-        val tabs = arrayOf(
-            PostsFeedFragment(),
-            searchDiscoverFragment,
-            NewPostFragment(),
-            NotificationsFragment(),
-            Fragment()
-        )
+
+    private fun setupTabs(tabs: Array<Fragment>){
 
         viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
@@ -119,7 +123,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 1 -> tab.icon = getDrawable(R.drawable.ic_search_white_24dp)
                 2 -> tab.icon = getDrawable(R.drawable.ic_photo_camera_white_24dp)
                 3 -> tab.icon = getDrawable(R.drawable.ic_heart)
-                4 -> tab.icon = getDrawable(R.drawable.ic_person_white_24dp)
+                4 -> tab.icon = getDrawable(R.drawable.ic_filter_black_24dp)
             }
         }.attach()
     }

@@ -21,7 +21,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.ProfileBookmarkFragment
 import com.h.pixeldroid.fragments.ProfilePostFragment
-import com.h.pixeldroid.fragments.ProfileTabsFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Relationship
@@ -52,7 +51,13 @@ class ProfileActivity : AppCompatActivity() {
         // Set profile according to given account
         account = intent.getSerializableExtra(ACCOUNT_TAG) as Account?
 
-        if (account == null) {
+        account?.let {
+            setViews()
+            activateFollow()
+
+            val tabs = arrayOf(ProfilePostFragment(), Fragment())
+            setTabs(tabs)
+        } ?: run {
             pixelfedAPI.verifyCredentials("Bearer $accessToken")
                 .enqueue(object : Callback<Account> {
                     override fun onResponse(call: Call<Account>, response: Response<Account>) {
@@ -73,14 +78,7 @@ class ProfileActivity : AppCompatActivity() {
             // Edit button redirects to Pixelfed's "edit account" page
             val editButton = findViewById<Button>(R.id.editButton)
             editButton.visibility = View.VISIBLE
-            editButton.setOnClickListener { onClickEditButton() }
-
-        } else {
-            setViews()
-            activateFollow()
-
-            val tabs = arrayOf(ProfilePostFragment(), Fragment())
-            setTabs(tabs)
+            editButton.setOnClickListener{ onClickEditButton() }
         }
     }
 

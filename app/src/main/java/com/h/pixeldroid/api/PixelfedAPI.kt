@@ -18,6 +18,17 @@ import retrofit2.http.Field
 
 interface PixelfedAPI {
 
+    companion object {
+        fun create(baseUrl: String): PixelfedAPI {
+            return Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build().create(PixelfedAPI::class.java)
+        }
+    }
+
+
     @FormUrlEncoded
     @POST("/api/v1/apps")
     fun registerApplication(
@@ -231,15 +242,11 @@ interface PixelfedAPI {
         @Path("id") accountId : String
     ): Call<Account>
 
-    companion object {
-        fun create(baseUrl: String): PixelfedAPI {
-            return Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build().create(PixelfedAPI::class.java)
-        }
-    }
+    @GET("/api/v1/statuses/{id}")
+    fun getStatus(
+        @Header("Authorization") authorization: String,
+        @Path("id") accountId : String
+    ): Call<Status>
 
     @Multipart
     @POST("/api/v1/media")
@@ -252,5 +259,11 @@ interface PixelfedAPI {
     // get instance configuration
     @GET("/api/v1/instance")
     fun instance() : Call<Instance>
+
+    // get discover
+    @GET("/api/v2/discover/posts")
+    fun discover(
+        @Header("Authorization") authorization: String
+    ) : Call<DiscoverPosts>
 }
 

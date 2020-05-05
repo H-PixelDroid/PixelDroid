@@ -32,9 +32,9 @@ class ProfilePostsRecyclerViewAdapter(
         setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)
 
         holder.postPreview.setOnClickListener {
-            val intent = Intent(context, PostActivity::class.java)
+            val intent = Intent(holder.postPreview.context, PostActivity::class.java)
             intent.putExtra(Status.POST_TAG, post)
-            context.startActivity(intent)
+            holder.postPreview.context.startActivity(intent)
         }
     }
 
