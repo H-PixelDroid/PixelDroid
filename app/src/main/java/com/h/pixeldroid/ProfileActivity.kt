@@ -44,7 +44,6 @@ class ProfileActivity : AppCompatActivity() {
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE)
         pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         accessToken = preferences.getString("accessToken", "")
-        Log.e("ACCESS TOKEN = ", accessToken)
 
         setContent()
     }
