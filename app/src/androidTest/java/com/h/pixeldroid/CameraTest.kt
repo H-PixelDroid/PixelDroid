@@ -1,6 +1,6 @@
 package com.h.pixeldroid
 
-import CameraFragment
+import com.h.pixeldroid.fragments.CameraFragment
 import android.Manifest
 import androidx.fragment.app.testing.launchFragmentInContainer
 import org.junit.Rule

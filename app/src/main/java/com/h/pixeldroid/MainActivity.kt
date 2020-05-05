@@ -1,6 +1,6 @@
 package com.h.pixeldroid
 
-import CameraFragment
+import com.h.pixeldroid.fragments.CameraFragment
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
