@@ -1,7 +1,9 @@
-import android.annotation.SuppressLint
+package com.h.pixeldroid.fragments
+
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -15,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.Metadata
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -32,12 +35,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * Main fragment for this app. Implements all camera operations including:
- * - Viewfinder
- * - Photo taking
- * - Image analysis
- */
+
 class CameraFragment : Fragment() {
 
     private val PICK_IMAGE_REQUEST = 1
@@ -79,16 +77,15 @@ class CameraFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         // Make sure that all permissions are still present, since the
         // user could have removed them while the app was in paused state.
-   //     if (!PermissionsFragment.hasPermissions(requireContext())) {
-   //         Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-   //             CameraFragmentDirections.actionCameraToPermissions()
-   //         )
-   //     }
-        bindCameraUseCases()
+//        if (!PermissionsFragment.hasPermissions(requireContext())) {
+//            Navigation.findNavController(requireActivity(), R.id.fragment_camera).navigate(
+//                CameraFragmentDirections.actionCameraToPermissions()
+//            )
+//        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -106,7 +103,7 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_camera, container, false)
 
-    @SuppressLint("MissingPermission")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         container = view as ConstraintLayout
@@ -120,6 +117,7 @@ class CameraFragment : Fragment() {
         // Every time the orientation of device changes, update rotation for use cases
         displayManager.registerDisplayListener(displayListener, null)
 
+
         // Wait for the views to be properly laid out
         viewFinder.post {
 
@@ -131,17 +129,10 @@ class CameraFragment : Fragment() {
 
             // Bind use cases
             bindCameraUseCases()
+
         }
     }
 
-    /**
-     * Inflate camera controls and update the UI manually upon config changes to avoid removing
-     * and re-adding the view finder from the view hierarchy; this provides a seamless rotation
-     * transition on devices that support it.
-     *
-     * NOTE: The flag is supported starting in Android 8 but there still is a small flash on the
-     * screen for devices that run Android 9 or below.
-     */
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateCameraUi()
@@ -206,9 +197,6 @@ class CameraFragment : Fragment() {
     }
 
     /**
-     *  [androidx.camera.core.ImageAnalysisConfig] requires enum value of
-     *  [androidx.camera.core.AspectRatio]. Currently it has values of 4:3 & 16:9.
-     *
      *  Detecting the most suitable ratio for dimensions provided in @params by counting absolute
      *  of preview ratio to one of the provided values.
      *
@@ -227,15 +215,6 @@ class CameraFragment : Fragment() {
     /** Method used to re-draw the camera UI controls, called every time configuration changes. */
     private fun updateCameraUi() {
 
-        Log.e(TAG, "Entering updateCameraUI")
-
-//        // Remove previous UI if any
-//        container.findViewById<ConstraintLayout>(R.id.fragment_camera)?.let {
-//            container.removeView(it)
-//        }
-//
-//        // Inflate a new view containing all UI for controlling the camera
-//        val controls = View.inflate(requireContext(), R.layout.fragment_camera, container)
         val controls = requireView()
 
         // Listener for button used to capture photo
@@ -247,7 +226,7 @@ class CameraFragment : Fragment() {
 
                 // Create output file to hold the image
                 val photoFile = File.createTempFile(
-                    FILENAME, null, context?.cacheDir
+                    FILENAME, PHOTO_EXTENSION, context?.cacheDir
                 )
 
                 // Setup image capture metadata
@@ -285,7 +264,8 @@ class CameraFragment : Fragment() {
                     container.postDelayed({
                         container.foreground = ColorDrawable(Color.WHITE)
                         container.postDelayed(
-                            { container.foreground = null }, ANIMATION_FAST_MILLIS)
+                            { container.foreground = null }, ANIMATION_FAST_MILLIS
+                        )
                     }, ANIMATION_SLOW_MILLIS)
                 }
             }
@@ -343,6 +323,7 @@ class CameraFragment : Fragment() {
 
         private const val ANIMATION_FAST_MILLIS = 50L
         private const val ANIMATION_SLOW_MILLIS = 100L
+
 
     }
 }
