@@ -44,32 +44,29 @@ class EditPhotoTest {
 
     private val mockServer = MockServer()
     private val imageName = "chat.jpg"
+    private lateinit var activity: PhotoEditActivity
+    private lateinit var activityScenario: ActivityScenario<PhotoEditActivity>
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
-
-    @get:Rule
-    var activityTestRule =  ActivityTestRule(PhotoEditActivity::class.java)
 
     @get:Rule
     var mRuntimePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     @Before
     fun before() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
         val preferences = context.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
 
         // Launch PhotoEditActivity
         val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
-        Log.d("testEdit2", uri.toString())
         val intent = Intent(context, PhotoEditActivity::class.java).putExtra("uri", uri)
 
-
-        ActivityScenario.launch<PhotoEditActivity>(intent)
+        activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}
     }
 
     private fun selectTabAtPosition(tabIndex: Int): ViewAction {
@@ -133,7 +130,7 @@ class EditPhotoTest {
 
     @Test
     fun FiltersIsSwipeableAndClickeable() {
-        val myRcView: RecyclerView = activityTestRule.activity.findViewById(R.id.recycler_view)
+        //val myRcView: RecyclerView = activityTestRule.activity.findViewById(R.id.recycler_view)
         //Espresso.onView(first(withId(R.id.recycler_view))).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
         Thread.sleep(1000)
     }
@@ -149,9 +146,9 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
 
-        Assert.assertEquals(change, activityTestRule.activity.seekbar_brightness.progress)
-        Assert.assertEquals(change, activityTestRule.activity.seekbar_contrast.progress)
-        Assert.assertEquals(change, activityTestRule.activity.seekbar_saturation.progress)
+        Assert.assertEquals(change, activity.seekbar_brightness.progress)
+        Assert.assertEquals(change, activity.seekbar_contrast.progress)
+        Assert.assertEquals(change, activity.seekbar_saturation.progress)
 
         Thread.sleep(1000)
 
@@ -160,9 +157,9 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
 
-        Assert.assertEquals(change, activityTestRule.activity.seekbar_brightness.progress)
-        Assert.assertEquals(change, activityTestRule.activity.seekbar_contrast.progress)
-        Assert.assertEquals(change, activityTestRule.activity.seekbar_saturation.progress)
+        Assert.assertEquals(change, activity.seekbar_brightness.progress)
+        Assert.assertEquals(change, activity.seekbar_contrast.progress)
+        Assert.assertEquals(change, activity.seekbar_saturation.progress)
     }
 
     @Test

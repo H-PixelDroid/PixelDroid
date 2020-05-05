@@ -1,21 +1,31 @@
 package com.h.pixeldroid.fragments
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.h.pixeldroid.R
 import com.h.pixeldroid.interfaces.EditImageFragmentListener
+import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.content_photo_edit.*
+import java.util.*
 
 class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
 
     private var listener: EditImageFragmentListener? = null
 
-    internal lateinit var seekbarBrightness: SeekBar
-    internal lateinit var seekbarSaturation: SeekBar
-    internal lateinit var seekbarContrast: SeekBar
+    private lateinit var seekbarBrightness: SeekBar
+    private lateinit var seekbarSaturation: SeekBar
+    private lateinit var seekbarContrast: SeekBar
 
     private var BRIGHTNESS_START = 100
     private var SATURATION_START = 0
@@ -45,6 +55,13 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
         seekbarContrast.setOnSeekBarChangeListener(this)
         seekbarSaturation.setOnSeekBarChangeListener(this)
 
+        // get reference to button
+        val cropButton: FloatingActionButton = view.findViewById(R.id.cropImageButton)
+        // set on-click listener
+        cropButton.setOnClickListener {
+            startCrop()
+        }
+
         return view
     }
 
@@ -65,6 +82,11 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
                 }
             }
         }
+    }
+
+    private fun startCrop() {
+        if(listener!= null)
+            listener!!.startCrop(this, requireContext())
     }
 
     fun resetControl() {

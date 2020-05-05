@@ -1,15 +1,21 @@
 package com.h.pixeldroid
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.EditPhotoViewPagerAdapter
@@ -23,6 +29,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.yalantis.ucrop.UCrop
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
@@ -30,6 +37,8 @@ import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
 
 import kotlinx.android.synthetic.main.activity_photo_edit.*
 import kotlinx.android.synthetic.main.content_photo_edit.*
+import java.io.File
+import java.util.*
 
 class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditImageFragmentListener {
 
@@ -49,6 +58,9 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     internal var saturationFinal = 1.0f
     internal var contrastFinal = 1.0f
 
+    internal var imageUri: Uri? = null
+    private var resultUri: Uri? = null
+
     object URI {var picture_uri: Uri? = null}
 
     init {
@@ -60,6 +72,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         setContentView(R.layout.activity_photo_edit)
 
         URI.picture_uri = intent.getParcelableExtra("uri")
+
+        resultUri = URI.picture_uri
 
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Edit"
@@ -90,7 +104,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
 
         editImageFragment = EditImageFragment()
         editImageFragment.setListener(this)
-
         adapter.addFragment(filterListFragment, "FILTERS")
         adapter.addFragment(editImageFragment, "EDIT")
 
@@ -194,6 +207,56 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         val myFilter = Filter()
         myFilter.addSubFilter(ContrastSubFilter(contrast))
         image_preview.setImageBitmap(myFilter.processFilter(finalImage.copy(BITMAP_CONFIG, true)))
+    }
+
+    override fun startCrop(frag: Fragment, context: Context) {
+        val destinationUri = StringBuilder(UUID.randomUUID().toString()).append(".jpg").toString()
+        Log.d("crop", URI.picture_uri.toString())
+        val uCrop: UCrop = UCrop.of(URI.picture_uri!!,
+            URI.picture_uri!!)
+        uCrop.start(context, frag)
+        Thread.sleep(5000)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("crop", resultCode.toString())
+        if(requestCode == Activity.RESULT_OK) {
+            Log.d("crop", "result ok")
+            imageUri = data!!.data
+
+            if (requestCode == UCrop.REQUEST_CROP) {
+                Log.d("crop", "request crop")
+                handleCropResult(data)
+            }
+        } else if (requestCode == UCrop.RESULT_ERROR) {
+            handleCropError(data)
+        }
+
+        Log.d("crop", "no result")
+    }
+
+    private fun handleCropResult(data: Intent?) {
+        val resultCrop: Uri? = UCrop.getOutput(data!!)
+        if(resultCrop != null) {
+            image_preview.setImageURI(resultCrop)
+
+            val bitmap = (image_preview.drawable as BitmapDrawable).bitmap
+            originalImage = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+            filteredImage = originalImage!!
+            finalImage = originalImage!!
+        } else {
+            Toast.makeText(this, "Cannot retrieve image", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun handleCropError(data: Intent?) {
+        val resultError = UCrop.getError(data!!)
+        if(resultError != null) {
+            Toast.makeText(this, "" + resultError, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Unexpected Error", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onEditStarted() {

@@ -2,6 +2,7 @@ package com.h.pixeldroid.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,13 @@ class NewPostFragment : Fragment() {
         val uploadPictureButton: Button = view.findViewById(R.id.uploadPictureButton)
         uploadPictureButton.setOnClickListener{
             uploadPicture()
+        }
+
+        val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
+        takePictureButton.setOnClickListener{
+            val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
+            val intent = Intent(context, PhotoEditActivity::class.java).putExtra("uri", uri)
+            startActivity(intent)
         }
 
         return view
