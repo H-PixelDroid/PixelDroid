@@ -1,11 +1,11 @@
 package com.h.pixeldroid
 
+import CameraFragment
 import android.Manifest
 import androidx.fragment.app.testing.launchFragmentInContainer
 import org.junit.Rule
 import org.junit.Test
 import androidx.test.rule.GrantPermissionRule
-import com.h.pixeldroid.fragments.CameraFragment
 import kotlinx.android.synthetic.main.fragment_camera.*
 
 class CameraTest {
