@@ -108,6 +108,18 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String
     ) : Call<Status>
 
+    @POST("/api/v1/statuses/{id}/bookmark")
+    fun bookmarkStatus(
+        @Path("id") statusId: String,
+        @Header("Authorization") authorization: String
+    ) : Call<Status>
+
+    @POST("/api/v1/statuses/{id}/unbookmark")
+    fun undoBookmarkStatus(
+        @Path("id") statusId: String,
+        @Header("Authorization") authorization: String
+    ) : Call<Status>
+
     //Used in our case to retrieve comments for a given status
     @GET("/api/v1/statuses/{id}/context")
     fun statusComments(

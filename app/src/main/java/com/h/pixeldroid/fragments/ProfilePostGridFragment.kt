@@ -1,7 +1,5 @@
 package com.h.pixeldroid.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,17 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
-import com.h.pixeldroid.api.PixelfedAPI
 
 
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
- * [ProfilePostsFragment.OnListFragmentInteractionListener] interface.
+ * [ProfilePostGridFragment.OnListFragmentInteractionListener] interface.
  */
-class ProfilePostsFragment : Fragment() {
+class ProfilePostGridFragment : Fragment() {
     private var columnCount = 3
 
     override fun onCreateView(

@@ -8,5 +8,5 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".fragments.ProfilePostsFragment"
+    tools:context=".fragments.ProfilePostGridFragment"
     tools:listitem="@layout/fragment_profile_posts" />

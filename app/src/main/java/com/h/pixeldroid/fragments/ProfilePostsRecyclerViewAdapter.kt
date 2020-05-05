@@ -21,12 +21,6 @@ class ProfilePostsRecyclerViewAdapter(
 ) : RecyclerView.Adapter<ProfilePostsRecyclerViewAdapter.ViewHolder>() {
     private val posts: ArrayList<Status> = ArrayList()
 
-    fun addPosts(newPosts : List<Status>) {
-        val size = posts.size
-        posts.addAll(newPosts)
-        notifyItemRangeInserted(size, newPosts.size)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_profile_posts, parent, false)
@@ -36,6 +30,7 @@ class ProfilePostsRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
         setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)
+
         holder.postPreview.setOnClickListener {
             val intent = Intent(context, PostActivity::class.java)
             intent.putExtra(Status.POST_TAG, post)
@@ -47,5 +42,12 @@ class ProfilePostsRecyclerViewAdapter(
 
     inner class ViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
         val postPreview: ImageView = postView.findViewById(R.id.postPreview)
+    }
+
+
+    internal fun addPosts(newPosts : List<Status>) {
+        val size = posts.size
+        posts.addAll(newPosts)
+        notifyItemRangeInserted(size, newPosts.size)
     }
 }

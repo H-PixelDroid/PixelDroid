@@ -13,13 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-internal class ProfilePostFragment :  Fragment() {
+internal class ProfileBookmarkFragment : Fragment() {
     private lateinit var preferences: SharedPreferences
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var adapter : ProfilePostsRecyclerViewAdapter
@@ -49,27 +48,26 @@ internal class ProfilePostFragment :  Fragment() {
     }
 
     private fun setPosts() {
-        val account = arguments?.getSerializable(Account.ACCOUNT_TAG) as Account?
-
-        pixelfedAPI.accountPosts("Bearer $accessToken", account_id = account!!.id)
+        pixelfedAPI.bookmarkedPosts("Bearer $accessToken")
             .enqueue(object : Callback<List<Status>> {
 
-                override fun onFailure(call: Call<List<Status>>, t: Throwable) {
-                    Log.e("PROFILE POSTS", t.toString())
-                }
+            override fun onFailure(call: Call<List<Status>>, t: Throwable) {
+                Log.e("PROFILE BOOKMARKS", t.toString())
+            }
 
-                override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
-                    if(response.code() == 200) {
-                        val posts = ArrayList<Status>()
-                        val statuses = response.body()!!
-                        for(status in statuses) {
-                            posts.add(status)
-                        }
-                        adapter.addPosts(posts)
-                    } else {
-                        Log.e("POSTS:", response.code().toString())
+            override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
+                if(response.code() == 200) {
+                    Log.e("BOOKMARKS:", "response")
+                    val bookmarks = ArrayList<Status>()
+                    val statuses = response.body()!!
+                    for(status in statuses) {
+                        bookmarks.add(status)
                     }
+                    adapter.addPosts(bookmarks)
+                } else {
+                    Log.e("BOOKMARKS RESPONSE:", response.code().toString())
                 }
-            })
+            }
+        })
     }
 }

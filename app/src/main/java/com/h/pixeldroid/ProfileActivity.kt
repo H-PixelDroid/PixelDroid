@@ -19,7 +19,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.ProfileBookmarkFragment
 import com.h.pixeldroid.fragments.ProfilePostFragment
+import com.h.pixeldroid.fragments.ProfileTabsFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Relationship
@@ -42,6 +44,7 @@ class ProfileActivity : AppCompatActivity() {
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE)
         pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         accessToken = preferences.getString("accessToken", "")
+        Log.e("ACCESS TOKEN = ", accessToken)
 
         setContent()
     }
@@ -57,7 +60,9 @@ class ProfileActivity : AppCompatActivity() {
                         if (response.code() == 200) {
                             account = response.body()!!
                             setViews()
-                            setTabs()
+
+                            val tabs = arrayOf(ProfilePostFragment(), Fragment(), ProfileBookmarkFragment())
+                            setTabs(tabs)
                         }
                     }
 
@@ -74,7 +79,9 @@ class ProfileActivity : AppCompatActivity() {
         } else {
             setViews()
             activateFollow()
-            setTabs()
+
+            val tabs = arrayOf(ProfilePostFragment(), Fragment())
+            setTabs(tabs)
         }
     }
 
@@ -109,20 +116,18 @@ class ProfileActivity : AppCompatActivity() {
         nbFollowing.setOnClickListener{ onClickFollowing() }
     }
 
-    private fun setTabs() {
-        val tabs = arrayOf( ProfilePostFragment(), Fragment())
-
+    private fun setTabs(tabs: Array<Fragment>) {
         val viewPager = findViewById<ViewPager2>(R.id.profile_view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
                 val arguments = Bundle()
                 arguments.putSerializable(ACCOUNT_TAG, account)
-                tabs[position].arguments = arguments
+                tabs[0].arguments = arguments
                 return tabs[position]
             }
 
             override fun getItemCount(): Int {
-                return 2
+                return tabs.size
             }
         }
 
@@ -130,6 +135,7 @@ class ProfileActivity : AppCompatActivity() {
             when(position){
                 0 -> tab.icon = getDrawable(R.drawable.ic_photo_camera_white_24dp)
                 1 -> tab.icon = getDrawable(R.drawable.ic_heart)
+                2 -> tab.icon = getDrawable(R.drawable.ic_heart)
             }
         }.attach()
     }

@@ -19,7 +19,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-internal class ProfilePostFragment :  Fragment() {
+
+internal open class ProfileTabsFragment : Fragment() {
     private lateinit var preferences: SharedPreferences
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var adapter : ProfilePostsRecyclerViewAdapter
@@ -43,33 +44,6 @@ internal class ProfilePostFragment :  Fragment() {
         adapter = ProfilePostsRecyclerViewAdapter(requireContext())
         recycler.adapter = adapter
 
-        setPosts()
-
         return view
-    }
-
-    private fun setPosts() {
-        val account = arguments?.getSerializable(Account.ACCOUNT_TAG) as Account?
-
-        pixelfedAPI.accountPosts("Bearer $accessToken", account_id = account!!.id)
-            .enqueue(object : Callback<List<Status>> {
-
-                override fun onFailure(call: Call<List<Status>>, t: Throwable) {
-                    Log.e("PROFILE POSTS", t.toString())
-                }
-
-                override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
-                    if(response.code() == 200) {
-                        val posts = ArrayList<Status>()
-                        val statuses = response.body()!!
-                        for(status in statuses) {
-                            posts.add(status)
-                        }
-                        adapter.addPosts(posts)
-                    } else {
-                        Log.e("POSTS:", response.code().toString())
-                    }
-                }
-            })
     }
 }

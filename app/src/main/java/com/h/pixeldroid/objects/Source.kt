@@ -1,5 +1,7 @@
 package com.h.pixeldroid.objects
 
-class Source {
+import java.io.Serializable
+
+class Source : Serializable {
 
 }
