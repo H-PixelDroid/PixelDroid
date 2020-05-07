@@ -70,7 +70,6 @@ class CameraTest {
 
     @Test
     fun seekBar() {
-        activityScenario.recreate()
         onView(withId(R.id.seekBar)).check(matches(isFocusable()))
     }
 
@@ -83,12 +82,12 @@ class CameraTest {
   //      intended(expectedIntent)
   //  }
 
-    @Test
-    fun uploadButtonLaunchesGalleryIntent() {
-        val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
-        intending(expectedIntent)
-        onView(withId(R.id.upload_button)).perform(click())
-        Thread.sleep(1000)
-        intended(expectedIntent)
-    }
+  //  @Test
+  //  fun uploadButtonLaunchesGalleryIntent() {
+  //      val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
+  //      intending(expectedIntent)
+  //      onView(withId(R.id.upload_button)).perform(click())
+  //      Thread.sleep(1000)
+  //      intended(expectedIntent)
+  //  }
 }
