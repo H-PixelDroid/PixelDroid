@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.core.app.ActivityManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
@@ -26,12 +27,15 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.junit.Rule
 import org.junit.Test
 import androidx.test.rule.GrantPermissionRule
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_camera.*
 import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.rules.Timeout
 
 class CameraTest {
+
+    private lateinit var activityScenario: ActivityScenario<MainActivity>
 
     @get:Rule
     val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
@@ -46,10 +50,19 @@ class CameraTest {
 
     @Before
     fun setup() {
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(swipeLeft())
-            .perform(swipeLeft())
-        Thread.sleep(300)
+        activityScenario = ActivityScenario.launch(MainActivity::class.java)
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(2)?.select()
+        }
+
+        Thread.sleep(1000)
+    }
+
+    @Test
+    fun flipCameraButton() {
+        onView(withId(R.id.flip_button)).check(matches(isClickable()))
+        onView(withId(R.id.flip_button)).perform(click())
+        onView(withId(R.id.flip_button)).check(matches(isClickable()))
     }
 
   //  @Test
@@ -68,12 +81,5 @@ class CameraTest {
         onView(withId(R.id.upload_button)).perform(click())
         Thread.sleep(1000)
         intended(expectedIntent)
-    }
-
-    @Test
-    fun flipCameraButton() {
-        onView(withId(R.id.flip_button)).check(matches(isClickable()))
-        onView(withId(R.id.flip_button)).perform(click())
-        onView(withId(R.id.flip_button)).check(matches(isClickable()))
     }
 }
