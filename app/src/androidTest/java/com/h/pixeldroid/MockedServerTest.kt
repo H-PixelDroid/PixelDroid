@@ -77,6 +77,17 @@ class MockedServerTest {
         onView(first(withId(R.id.tag_name))).check(matches(withText("#caturday")))
 
     }
+    @Test
+    fun openDiscoverPost(){
+        activityScenario.onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
+        }
+        Thread.sleep(1000)
+        onView(withId(R.id.discoverList)).perform(click())
+        Thread.sleep(1000)
+        onView(withId(R.id.username)).check(matches(withText("machintuck")))
+
+    }
 
     @Test
     fun searchAccounts() {
@@ -231,6 +242,38 @@ class MockedServerTest {
             .perform(ViewActions.swipeRight()) // search
             .perform(ViewActions.swipeRight()) // homepage
             .perform(ViewActions.swipeRight()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun swipingLeftStopsAtPublicTimeline() {
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(0)?.select()
+        }
+
+        Thread.sleep(1000)
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeLeft()) // notifications
+            .perform(ViewActions.swipeLeft()) // camera
+            .perform(ViewActions.swipeLeft()) // search
+            .perform(ViewActions.swipeLeft()) // homepage
+            .perform(ViewActions.swipeLeft()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun swipingPublicTimelineWorks() {
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        } // go to the last tab
+
+        Thread.sleep(1000)
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeUp()) // notifications
+            .perform(ViewActions.swipeUp()) // camera
+            .perform(ViewActions.swipeUp()) // search
+            .perform(ViewActions.swipeUp()) // homepage
+            .perform(ViewActions.swipeUp()) // should stop at homepage
         onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
 

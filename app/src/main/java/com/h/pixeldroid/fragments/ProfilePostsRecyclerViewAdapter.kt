@@ -1,6 +1,5 @@
 package com.h.pixeldroid.fragments
 
-import android.content.Context
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -16,9 +15,7 @@ import com.h.pixeldroid.utils.ImageConverter.Companion.setSquareImageFromURL
  * [RecyclerView.Adapter] that can display a list of [PostMiniature]s and makes a call to the
  * specified [OnListFragmentInteractionListener].
  */
-class ProfilePostsRecyclerViewAdapter(
-    private val context: Context
-) : RecyclerView.Adapter<ProfilePostsRecyclerViewAdapter.ViewHolder>() {
+class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecyclerViewAdapter.ViewHolder>() {
     private val posts: ArrayList<Status> = ArrayList()
 
     fun addPosts(newPosts : List<Status>) {
@@ -37,9 +34,9 @@ class ProfilePostsRecyclerViewAdapter(
         val post = posts[position]
         setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)
         holder.postPreview.setOnClickListener {
-            val intent = Intent(context, PostActivity::class.java)
+            val intent = Intent(holder.postPreview.context, PostActivity::class.java)
             intent.putExtra(Status.POST_TAG, post)
-            context.startActivity(intent)
+            holder.postPreview.context.startActivity(intent)
         }
     }
 

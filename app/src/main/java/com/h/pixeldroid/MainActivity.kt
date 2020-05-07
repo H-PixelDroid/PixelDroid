@@ -29,6 +29,7 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
+import com.h.pixeldroid.fragments.feeds.PublicTimelineFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 searchDiscoverFragment,
                 CameraFragment(),
                 NotificationsFragment(),
-                Fragment()
+                PublicTimelineFragment()
             )
 
             setupTabs(tabs)
@@ -142,7 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 1 -> tab.icon = getDrawable(R.drawable.ic_search_white_24dp)
                 2 -> tab.icon = getDrawable(R.drawable.ic_photo_camera_white_24dp)
                 3 -> tab.icon = getDrawable(R.drawable.ic_heart)
-                4 -> tab.icon = getDrawable(R.drawable.ic_person_white_24dp)
+                4 -> tab.icon = getDrawable(R.drawable.ic_filter_black_24dp)
             }
         }.attach()
     }
