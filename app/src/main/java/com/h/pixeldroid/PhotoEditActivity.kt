@@ -31,8 +31,6 @@ import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
 import kotlinx.android.synthetic.main.activity_photo_edit.*
 import kotlinx.android.synthetic.main.content_photo_edit.*
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Paths
 
 class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditImageFragmentListener {
 
@@ -130,7 +128,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private fun uploadImage(path: String?) {
         val intent = Intent (applicationContext, PostCreationActivity::class.java)
         intent.putExtra("picture_uri", Uri.parse(path))
-        val fileToDelete = File(path!!)
+        val fileToDelete = File(File(path!!).absolutePath)
         fileToDelete.delete()
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         applicationContext!!.startActivity(intent)

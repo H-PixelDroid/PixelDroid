@@ -3,33 +3,23 @@ package com.h.pixeldroid
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.SeekBar
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.GeneralLocation
-import androidx.test.espresso.action.GeneralSwipeAction
-import androidx.test.espresso.action.Press
-import androidx.test.espresso.action.Swipe
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
-import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.MockServer
 import kotlinx.android.synthetic.main.fragment_edit_image.*
 import org.hamcrest.CoreMatchers.allOf
@@ -39,7 +29,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
-import java.lang.reflect.Method
 
 @RunWith(AndroidJUnit4::class)
 class EditPhotoTest {

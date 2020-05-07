@@ -72,14 +72,13 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
     implementation 'com.karumi:dexter:4.1.0'
     implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.github.yalantis:ucrop:2.2.5-native'
 
     implementation("com.github.bumptech.glide:glide:4.11.0") {
         exclude group: "com.android.support"
@@ -104,7 +103,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
-    androidTestImplementation "android.arch.core:core-testing:1.1.1"
     implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.h.pixeldroid.PhotoEditActivity
-import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
 
 /**
