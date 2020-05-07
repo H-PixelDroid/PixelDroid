@@ -55,13 +55,6 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
         seekbarContrast.setOnSeekBarChangeListener(this)
         seekbarSaturation.setOnSeekBarChangeListener(this)
 
-        // get reference to button
-        val cropButton: FloatingActionButton = view.findViewById(R.id.cropImageButton)
-        // set on-click listener
-        cropButton.setOnClickListener {
-            startCrop()
-        }
-
         return view
     }
 
@@ -82,11 +75,6 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
                 }
             }
         }
-    }
-
-    private fun startCrop() {
-        if(listener!= null)
-            listener!!.startCrop(this, requireContext())
     }
 
     fun resetControl() {

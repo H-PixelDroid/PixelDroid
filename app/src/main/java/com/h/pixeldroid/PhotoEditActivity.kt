@@ -58,7 +58,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     internal var saturationFinal = 1.0f
     internal var contrastFinal = 1.0f
 
-    internal var imageUri: Uri? = null
     private var resultUri: Uri? = null
 
     object URI {var picture_uri: Uri? = null}
@@ -207,56 +206,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         val myFilter = Filter()
         myFilter.addSubFilter(ContrastSubFilter(contrast))
         image_preview.setImageBitmap(myFilter.processFilter(finalImage.copy(BITMAP_CONFIG, true)))
-    }
-
-    override fun startCrop(frag: Fragment, context: Context) {
-        val destinationUri = StringBuilder(UUID.randomUUID().toString()).append(".jpg").toString()
-        Log.d("crop", URI.picture_uri.toString())
-        val uCrop: UCrop = UCrop.of(URI.picture_uri!!,
-            URI.picture_uri!!)
-        uCrop.start(context, frag)
-        Thread.sleep(5000)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d("crop", resultCode.toString())
-        if(requestCode == Activity.RESULT_OK) {
-            Log.d("crop", "result ok")
-            imageUri = data!!.data
-
-            if (requestCode == UCrop.REQUEST_CROP) {
-                Log.d("crop", "request crop")
-                handleCropResult(data)
-            }
-        } else if (requestCode == UCrop.RESULT_ERROR) {
-            handleCropError(data)
-        }
-
-        Log.d("crop", "no result")
-    }
-
-    private fun handleCropResult(data: Intent?) {
-        val resultCrop: Uri? = UCrop.getOutput(data!!)
-        if(resultCrop != null) {
-            image_preview.setImageURI(resultCrop)
-
-            val bitmap = (image_preview.drawable as BitmapDrawable).bitmap
-            originalImage = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-            filteredImage = originalImage!!
-            finalImage = originalImage!!
-        } else {
-            Toast.makeText(this, "Cannot retrieve image", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun handleCropError(data: Intent?) {
-        val resultError = UCrop.getError(data!!)
-        if(resultError != null) {
-            Toast.makeText(this, "" + resultError, Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Unexpected Error", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onEditStarted() {

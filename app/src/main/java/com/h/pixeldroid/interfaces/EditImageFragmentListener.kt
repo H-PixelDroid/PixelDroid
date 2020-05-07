@@ -10,8 +10,6 @@ interface EditImageFragmentListener {
 
     fun onContrastChange(contrast: Float)
 
-    fun startCrop(frag: Fragment, context: Context)
-
     fun onEditStarted()
 
     fun onEditCompleted()
