@@ -20,6 +20,7 @@ import com.h.pixeldroid.R
  */
 
 class NewPostFragment : Fragment() {
+    // Test
 
     private val PICK_IMAGE_REQUEST = 1
 
