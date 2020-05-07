@@ -111,7 +111,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Follow"
-                    android:textColor="@color/colorPrimary"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -119,10 +118,10 @@
                 <Button
                     android:id="@+id/editButton"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="@color/colorPrimary"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimaryTab"
                     android:text="Edit profile"
-                    android:textColor="@color/cardview_light_background"
                     android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -143,7 +142,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/colorPrimary"
+                        android:background="@color/colorPrimaryTab"
                         android:src="@android:drawable/ic_dialog_dialer" />
 
                     <ImageButton
@@ -151,7 +150,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/colorPrimary"
+                        android:background="@color/colorPrimaryTab"
                         android:src="@android:drawable/ic_menu_gallery" />
                 </LinearLayout>
 

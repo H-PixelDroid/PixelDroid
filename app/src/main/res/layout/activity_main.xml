@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabMode="fixed"
-            app:tabBackground="@color/colorPrimary">
+            app:tabBackground="@color/colorPrimaryTab">
         </com.google.android.material.tabs.TabLayout>
 
     </LinearLayout>
