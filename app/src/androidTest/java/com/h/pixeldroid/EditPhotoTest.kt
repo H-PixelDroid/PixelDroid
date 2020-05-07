@@ -169,7 +169,7 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.action_save)).perform(click())
         Thread.sleep(1000)
-        Espresso.onView(withId(R.id.new_post_description_input_layout)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
     }
 
     @Test
