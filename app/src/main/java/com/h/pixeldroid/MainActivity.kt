@@ -200,6 +200,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Toast.makeText(this.applicationContext,
                     "Permissions not granted by the user.",
                     Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }
