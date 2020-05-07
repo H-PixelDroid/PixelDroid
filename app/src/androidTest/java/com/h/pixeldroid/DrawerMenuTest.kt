@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -46,14 +47,6 @@ class DrawerMenuTest {
     }
 
     @Test
-    fun testDrawerProfileButton() {
-        // Start the screen of your activity.
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
-        // Check that settings activity was opened.
-        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
-    }
-
-    @Test
     fun testDrawerSettingsButton() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
@@ -67,5 +60,60 @@ class DrawerMenuTest {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout))
         // Check that settings activity was opened.
         onView(withId(R.id.connect_instance_button)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testDrawerProfileButton() {
+        // Start the screen of your activity.
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
+        // Check that profile activity was opened.
+        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testDrawerAvatarClick() {
+        // Start the screen of your activity.
+        onView(withId(R.id.drawer_avatar)).perform(ViewActions.click())
+        // Check that profile activity was opened.
+        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testDrawerAccountNameClick() {
+        // Start the screen of your activity.
+        onView(withId(R.id.drawer_account_name)).perform(ViewActions.click())
+        // Check that profile activity was opened.
+        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickFollowers() {
+        // Open My Profile from drawer
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
+        Thread.sleep(1000)
+
+        // Open followers list
+        onView(withId(R.id.nbFollowersTextView)).perform(ViewActions.click())
+        Thread.sleep(1000)
+        // Open follower's profile
+        onView(withText("ete2")).perform(ViewActions.click())
+        Thread.sleep(1000)
+
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))
+    }
+
+    @Test
+    fun clickFollowing() {
+        // Open My Profile from drawer
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
+        Thread.sleep(1000)
+        // Open followers list
+        onView(withId(R.id.nbFollowingTextView)).perform(ViewActions.click())
+        Thread.sleep(1000)
+        // Open following's profile
+        onView(withText("Dobios")).perform(ViewActions.click())
+        Thread.sleep(1000)
+
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Andrew Dobis")))
     }
 }

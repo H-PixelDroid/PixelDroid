@@ -215,9 +215,9 @@ fun assertStatusEqualsToReference(actual: Status){
     assert(attchmnt.id == "15888" && attchmnt.type == Attachment.AttachmentType.image && attchmnt.url=="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB.jpeg" &&
             attchmnt.preview_url =="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB_thumb.jpeg" &&
             attchmnt.remote_url ==null && attchmnt.text_url==null && attchmnt.description==null && attchmnt.blurhash==null )
-    assert( actual.application.name=="web" && actual.application.website==null && actual.application.vapid_key==null && actual.mentions==emptyList<Mention>())
+    assert( actual.application!!.name=="web" && actual.application!!.website==null && actual.application!!.vapid_key==null && actual.mentions==emptyList<Mention>())
 
-    val firstTag =actual.tags[0]
+    val firstTag =actual.tags!![0]
 
     assert(firstTag.name=="hiking" && firstTag.url=="https://pixelfed.de/discover/tags/hiking" && firstTag.history==null &&
             actual.emojis== emptyList<Emoji>() && actual.reblogs_count==0 && actual.favourites_count==0&& actual.replies_count==0 && actual.url=="https://pixelfed.de/p/Miike/140364967936397312")

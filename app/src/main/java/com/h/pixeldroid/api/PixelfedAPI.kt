@@ -18,6 +18,17 @@ import retrofit2.http.Field
 
 interface PixelfedAPI {
 
+    companion object {
+        fun create(baseUrl: String): PixelfedAPI {
+            return Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build().create(PixelfedAPI::class.java)
+        }
+    }
+
+
     @FormUrlEncoded
     @POST("/api/v1/apps")
     fun registerApplication(
@@ -135,6 +146,22 @@ interface PixelfedAPI {
         @Query("local") local: Boolean? = null
     ): Call<List<Status>>
 
+    @GET("/api/v2/search")
+    fun search(
+        //The authorization header needs to be of the form "Bearer <token>"
+        @Header("Authorization") authorization: String,
+        @Query("account_id") account_id: String? = null,
+        @Query("max_id") max_id: String? = null,
+        @Query("min_id") min_id: String? = null,
+        @Query("type") type: Results.SearchType? = null,
+        @Query("exclude_unreviewed") exclude_unreviewed: Boolean? = null,
+        @Query("q") q: String,
+        @Query("resolve") resolve: Boolean? = null,
+        @Query("limit") limit: String? = null,
+        @Query("offset") offset: Int? = null,
+        @Query("following") following: Boolean? = null
+    ): Call<Results>
+
     /*
     Note: as of 0.10.8, Pixelfed does not seem to respect the Mastodon API documentation,
     you *need* to pass one of the so-called "optional" arguments. See:
@@ -194,15 +221,11 @@ interface PixelfedAPI {
         @Path("id") accountId : String
     ): Call<Account>
 
-    companion object {
-        fun create(baseUrl: String): PixelfedAPI {
-            return Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build().create(PixelfedAPI::class.java)
-        }
-    }
+    @GET("/api/v1/statuses/{id}")
+    fun getStatus(
+        @Header("Authorization") authorization: String,
+        @Path("id") accountId : String
+    ): Call<Status>
 
     @Multipart
     @POST("/api/v1/media")
@@ -215,5 +238,11 @@ interface PixelfedAPI {
     // get instance configuration
     @GET("/api/v1/instance")
     fun instance() : Call<Instance>
+
+    // get discover
+    @GET("/api/v2/discover/posts")
+    fun discover(
+        @Header("Authorization") authorization: String
+    ) : Call<DiscoverPosts>
 }
 

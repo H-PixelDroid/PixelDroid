@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -49,16 +50,60 @@ class MockedServerTest {
     }
 
     @Test
-    fun testFollowersTextView() {
+    fun searchPosts() {
         activityScenario.onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
         }
 
         Thread.sleep(1000)
-        onView(withId(R.id.nbFollowersTextView)).check(matches(withText("68\nFollowers")))
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("deerbard_photo")))
+        onView(withId(R.id.searchEditText)).perform(ViewActions.replaceText("caturday"), ViewActions.closeSoftKeyboard())
+
+        onView(withId(R.id.searchButton)).perform(click())
+        Thread.sleep(3000)
+        onView(first(withId(R.id.username))).check(matches(withText("memo")))
     }
-    // WIP TEST
+
+    @Test
+    fun searchHashtags() {
+        activityScenario.onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
+        }
+
+        Thread.sleep(1000)
+        onView(withId(R.id.searchEditText)).perform(ViewActions.replaceText("#caturday"), ViewActions.closeSoftKeyboard())
+
+        onView(withId(R.id.searchButton)).perform(click())
+        Thread.sleep(3000)
+        onView(first(withId(R.id.tag_name))).check(matches(withText("#caturday")))
+
+    }
+    @Test
+    fun openDiscoverPost(){
+        activityScenario.onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
+        }
+        Thread.sleep(1000)
+        onView(withId(R.id.discoverList)).perform(click())
+        Thread.sleep(1000)
+        onView(withId(R.id.username)).check(matches(withText("machintuck")))
+
+    }
+
+    @Test
+    fun searchAccounts() {
+        activityScenario.onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
+        }
+
+        Thread.sleep(1000)
+        onView(withId(R.id.searchEditText)).perform(ViewActions.replaceText("@dansup"), ViewActions.closeSoftKeyboard())
+
+        onView(withId(R.id.searchButton)).perform(click())
+        Thread.sleep(3000)
+        onView(first(withId(R.id.account_entry_username))).check(matches(withText("dansup")))
+
+    }
+
     @Test
     fun clickFollowButton() {
         ActivityScenario.launch(MainActivity::class.java)
@@ -83,22 +128,6 @@ class MockedServerTest {
     }
 
     @Test
-    fun clickFollowers() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
-        Thread.sleep(1000)
-        // Open followers list
-        onView(withId(R.id.nbFollowersTextView)).perform((ViewActions.click()))
-        Thread.sleep(1000)
-        // Open follower's profile
-        onView(withText("ete2")).perform((ViewActions.click()))
-        Thread.sleep(1000)
-
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
-    }
-
-    @Test
     fun clickOtherUserFollowers() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
@@ -117,23 +146,7 @@ class MockedServerTest {
         onView(withText("ete2")).perform((ViewActions.click()))
         Thread.sleep(1000)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("ete2")))
-    }
-
-    @Test
-    fun clickFollowing() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        }
-        Thread.sleep(1000)
-        // Open followers list
-        onView(withId(R.id.nbFollowingTextView)).perform((ViewActions.click()))
-        Thread.sleep(1000)
-        // Open following's profile
-        onView(withText("Dobios")).perform((ViewActions.click()))
-        Thread.sleep(1000)
-
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("Dobios")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))
     }
 
     @Test
@@ -179,7 +192,7 @@ class MockedServerTest {
 
         onView(withText("Dobios followed you")).perform(ViewActions.click())
         Thread.sleep(1000)
-        onView(withText("Dobios")).check(matches(withId(R.id.accountNameTextView)))
+        onView(withText("Andrew Dobis")).check(matches(withId(R.id.accountNameTextView)))
     }
 
     @Test
@@ -201,14 +214,19 @@ class MockedServerTest {
     }
 
     @Test
-    fun swipingLeftStopsAtProfile() {
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(ViewActions.swipeLeft()) // search
-            .perform(ViewActions.swipeLeft()) // camera
-            .perform(ViewActions.swipeLeft()) // notifications
-            .perform(ViewActions.swipeLeft()) // profile
-            .perform(ViewActions.swipeLeft()) // should stop at profile
-        onView(withId(R.id.nbFollowersTextView)).check(matches(isDisplayed()))
+    fun clickNotificationRePost() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity{
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(3)?.select()
+        }
+        Thread.sleep(1000)
+
+        onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
+        Thread.sleep(1000)
+
+        onView(withText("Clement shared your post")).perform(ViewActions.click())
+        Thread.sleep(1000)
+
+        onView(first(withText("Clement"))).check(matches(withId(R.id.username)))
     }
 
     @Test
@@ -228,8 +246,40 @@ class MockedServerTest {
     }
 
     @Test
+    fun swipingLeftStopsAtPublicTimeline() {
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(0)?.select()
+        }
+
+        Thread.sleep(1000)
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeLeft()) // notifications
+            .perform(ViewActions.swipeLeft()) // camera
+            .perform(ViewActions.swipeLeft()) // search
+            .perform(ViewActions.swipeLeft()) // homepage
+            .perform(ViewActions.swipeLeft()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun swipingPublicTimelineWorks() {
+        activityScenario.onActivity {
+                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+        } // go to the last tab
+
+        Thread.sleep(1000)
+        onView(withId(R.id.main_activity_main_linear_layout))
+            .perform(ViewActions.swipeUp()) // notifications
+            .perform(ViewActions.swipeUp()) // camera
+            .perform(ViewActions.swipeUp()) // search
+            .perform(ViewActions.swipeUp()) // homepage
+            .perform(ViewActions.swipeUp()) // should stop at homepage
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun clickingTabOnAlbumShowsNextPhoto() {
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
+         ActivityScenario.launch(MainActivity::class.java).onActivity {
             a -> run {
                 //Wait for the feed to load
                 Thread.sleep(1000)
@@ -450,11 +500,6 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
-    }
-
-    @Test
-    fun instanceConfigurationTest() {
-
     }
 }
 

@@ -28,11 +28,6 @@ class ProfilePostsFragment : Fragment() {
 
     private var columnCount = 3
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,7 +46,7 @@ class ProfilePostsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = ProfilePostsRecyclerViewAdapter(requireContext())
+                adapter = ProfilePostsRecyclerViewAdapter()
             }
         }
         return view

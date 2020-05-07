@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,30 +24,30 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
 
-
-class HomeFragment : FeedFragment<Status, PostViewHolder>() {
+open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
+    lateinit var domain : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-
+        domain = preferences.getString("domain", "")!!
         //RequestBuilder that is re-used for every image
         picRequest = Glide.with(this)
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        adapter = HomeRecyclerViewAdapter(this)
+        adapter = PostsFeedRecyclerViewAdapter(this)
         list.adapter = adapter
 
 
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Status> = ViewPreloadSizeProvider()
         val preloader: RecyclerViewPreloader<Status> = RecyclerViewPreloader(
-            Glide.with(this), adapter, sizeProvider, 4
+            Glide.with(this), adapter as PostsFeedFragment.PostsFeedRecyclerViewAdapter, sizeProvider, 4
         )
         list.addOnScrollListener(preloader)
 
@@ -64,7 +65,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
             })
     }
 
-    private fun makeContent(): LiveData<PagedList<Status>> {
+    internal open fun makeContent(): LiveData<PagedList<Status>> {
         fun makeInitialCall(requestedLoadSize: Int): Call<List<Status>> {
             return pixelfedAPI
                 .timelineHome("Bearer $accessToken", limit="$requestedLoadSize")
@@ -75,15 +76,17 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
                     limit="$requestedLoadSize")
         }
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = FeedDataSourceFactory(::makeInitialCall, ::makeAfterCall)
+        val dataSource = FeedDataSource(::makeInitialCall, ::makeAfterCall)
+        factory = FeedDataSourceFactory(dataSource)
         return LivePagedListBuilder(factory, config).build()
     }
 
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
-    inner class HomeRecyclerViewAdapter(private val homeFragment: HomeFragment)
-        : FeedsRecyclerViewAdapter<Status, PostViewHolder>() {
+    inner class PostsFeedRecyclerViewAdapter(private val postsFeedFragment: PostsFeedFragment)
+        : FeedsRecyclerViewAdapter<Status, PostViewHolder>(),
+        ListPreloader.PreloadModelProvider<Status> {
         private val api = pixelfedAPI
         private val credential = "Bearer $accessToken"
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -104,7 +107,7 @@ class HomeFragment : FeedFragment<Status, PostViewHolder>() {
             holder.postPic.maxHeight = metrics.heightPixels
 
             //Setup the post layout
-            post.setupPost(holder.postView, picRequest, homeFragment)
+            post.setupPost(holder.postView, picRequest, this@PostsFeedFragment, domain, false)
 
             //Set the special HTML text
             post.setDescription(holder.postView, api, credential)
@@ -155,4 +158,6 @@ class PostViewHolder(val postView: View, val context: android.content.Context) :
     val commentCont : LinearLayout = postView.findViewById(R.id.commentContainer)
     val commentIn   : LinearLayout = postView.findViewById(R.id.commentIn)
     val viewComment : TextView = postView.findViewById(R.id.ViewComments)
+    val postDate    : TextView = postView.findViewById(R.id.postDate)
+    val postDomain  : TextView = postView.findViewById(R.id.postDomain)
 }
