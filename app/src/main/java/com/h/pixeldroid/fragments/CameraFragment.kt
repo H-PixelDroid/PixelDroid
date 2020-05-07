@@ -198,7 +198,7 @@ class CameraFragment : Fragment() {
 
             // ImageCapture
             imageCapture = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
                 // We request aspect ratio but no resolution to match preview config, but letting
                 // CameraX optimize for whatever specific resolution best fits our use cases
                 .setTargetAspectRatio(screenAspectRatio)
@@ -317,10 +317,10 @@ class CameraFragment : Fragment() {
                     REQUIRED_PERMISSIONS,
                     REQUEST_CODE_PERMISSIONS
                 )
+            } else {
+                // Re-bind use cases to update selected camera
+                bindCameraUseCases()
             }
-
-            // Re-bind use cases to update selected camera
-            bindCameraUseCases()
         }
 
         controls.findViewById<ImageButton>(R.id.upload_button).setOnClickListener{
