@@ -1,5 +1,6 @@
 package com.h.pixeldroid
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
@@ -37,6 +38,8 @@ class PostTest {
 
     private lateinit var context: Context
 
+    @get:Rule
+    val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
 
