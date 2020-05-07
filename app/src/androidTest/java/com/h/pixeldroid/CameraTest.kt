@@ -22,8 +22,8 @@ import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isClickable
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import org.junit.Rule
 import org.junit.Test
 import androidx.test.rule.GrantPermissionRule
@@ -47,6 +47,9 @@ class CameraTest {
     @get:Rule
     var intentsTestRule: IntentsTestRule<MainActivity> =
         IntentsTestRule(MainActivity::class.java)
+    @get:Rule
+    var activityRule: ActivityScenarioRule<MainActivity>
+            = ActivityScenarioRule(MainActivity::class.java)
 
     @Before
     fun setup() {
@@ -63,6 +66,12 @@ class CameraTest {
         onView(withId(R.id.flip_button)).check(matches(isClickable()))
         onView(withId(R.id.flip_button)).perform(click())
         onView(withId(R.id.flip_button)).check(matches(isClickable()))
+    }
+
+    @Test
+    fun seekBar() {
+        activityScenario.recreate()
+        onView(withId(R.id.seekBar)).check(matches(isFocusable()))
     }
 
   //  @Test
