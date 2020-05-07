@@ -1,8 +1,10 @@
 package com.h.pixeldroid.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -17,11 +19,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.Metadata
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -36,6 +40,13 @@ import kotlin.math.min
 
 
 class CameraFragment : Fragment() {
+
+    // This is an arbitrary number we are using to keep track of the permission
+    // request. Where an app has multiple context for requesting permission,
+    // this can help differentiate the different contexts.
+    private val REQUEST_CODE_PERMISSIONS = 10
+    // This is an array of all the permission specified in the manifest.
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     private val PICK_IMAGE_REQUEST = 1
     private val CAPTURE_IMAGE_REQUEST = 2
@@ -77,9 +88,18 @@ class CameraFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewFinder.post {
-            bindCameraUseCases()
-            setUpZoomSlider()
+        // Request camera permissions
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
+            )
+        } else {
+            viewFinder.post {
+                bindCameraUseCases()
+                setUpZoomSlider()
+            }
         }
     }
 
@@ -117,6 +137,16 @@ class CameraFragment : Fragment() {
 
         // Wait for the views to be properly laid out
         viewFinder.post {
+
+            // Request camera permissions
+            if (!allPermissionsGranted()) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    REQUIRED_PERMISSIONS,
+                    REQUEST_CODE_PERMISSIONS
+                )
+            }
+
 
             // Keep track of the display in which this view is attached
             displayId = viewFinder.display.displayId
@@ -324,6 +354,29 @@ class CameraFragment : Fragment() {
                 .putExtra("picture_uri", uri)
         )
 
+    }
+
+    /**
+     * Check if all permission specified in the manifest have been granted
+     */
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * Process result from permission request dialog box, has the request
+     * been granted? If yes, start Camera. Otherwise display a toast
+     */
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (!allPermissionsGranted()) {
+                Toast.makeText(requireContext(),
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     companion object {
