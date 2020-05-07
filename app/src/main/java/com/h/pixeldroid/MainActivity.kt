@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val tabs = arrayOf(
                 PostsFeedFragment(),
                 searchDiscoverFragment,
-                Fragment(),
+                CameraFragment(),
                 NotificationsFragment(),
                 PublicTimelineFragment()
             )
