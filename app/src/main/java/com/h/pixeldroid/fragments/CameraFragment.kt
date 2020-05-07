@@ -98,6 +98,7 @@ class CameraFragment : Fragment() {
         } else {
             viewFinder.post {
                 bindCameraUseCases()
+                updateCameraUi()
                 setUpZoomSlider()
             }
         }
@@ -308,6 +309,16 @@ class CameraFragment : Fragment() {
             } else {
                 CameraSelector.LENS_FACING_FRONT
             }
+
+            // Request camera permissions
+            if (!allPermissionsGranted()) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    REQUIRED_PERMISSIONS,
+                    REQUEST_CODE_PERMISSIONS
+                )
+            }
+
             // Re-bind use cases to update selected camera
             bindCameraUseCases()
         }
@@ -330,7 +341,7 @@ class CameraFragment : Fragment() {
     requireView().findViewById<SeekBar>(R.id.seekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             cameraControl!!.setLinearZoom(progress / seekBar!!.max.toFloat())
-            Log.d(TAG,"Linear zoom : " + (progress / seekBar!!.max.toFloat()).toString())
+            Log.d(TAG,"Linear zoom : " + (progress / seekBar.max.toFloat()).toString())
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {}
