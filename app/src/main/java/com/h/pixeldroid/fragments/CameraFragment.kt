@@ -36,7 +36,7 @@ import kotlin.math.min
 
 
 class CameraFragment : Fragment() {
-
+    // re-Testing pipeline
     private val PICK_IMAGE_REQUEST = 1
     private val CAPTURE_IMAGE_REQUEST = 2
 
