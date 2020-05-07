@@ -146,20 +146,21 @@ class CameraFragment : Fragment() {
                     REQUIRED_PERMISSIONS,
                     REQUEST_CODE_PERMISSIONS
                 )
+            } else {
+
+
+                // Keep track of the display in which this view is attached
+                displayId = viewFinder.display.displayId
+
+                // Build UI controls
+                updateCameraUi()
+
+                // Bind use cases
+                bindCameraUseCases()
+
+                setUpZoomSlider()
+
             }
-
-
-            // Keep track of the display in which this view is attached
-            displayId = viewFinder.display.displayId
-
-            // Build UI controls
-            updateCameraUi()
-
-            // Bind use cases
-            bindCameraUseCases()
-
-            setUpZoomSlider()
-
         }
     }
 
@@ -321,6 +322,7 @@ class CameraFragment : Fragment() {
                 // Re-bind use cases to update selected camera
                 bindCameraUseCases()
             }
+
         }
 
         controls.findViewById<ImageButton>(R.id.upload_button).setOnClickListener{
