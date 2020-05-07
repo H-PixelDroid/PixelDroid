@@ -139,28 +139,7 @@ class CameraFragment : Fragment() {
         // Wait for the views to be properly laid out
         viewFinder.post {
 
-            // Request camera permissions
-            if (!allPermissionsGranted()) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    REQUIRED_PERMISSIONS,
-                    REQUEST_CODE_PERMISSIONS
-                )
-            } else {
-
-
-                // Keep track of the display in which this view is attached
-                displayId = viewFinder.display.displayId
-
-                // Build UI controls
-                updateCameraUi()
-
-                // Bind use cases
-                bindCameraUseCases()
-
-                setUpZoomSlider()
-
-            }
+            displayId = viewFinder.display?.displayId ?: -1
         }
     }
 

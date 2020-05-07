@@ -98,6 +98,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
@@ -115,7 +117,6 @@ dependencies {
 
     // CameraX View class
     implementation 'androidx.camera:camera-view:1.0.0-alpha10'
-    //androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
 }
 
