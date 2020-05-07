@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.SeekBar
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.Metadata
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -48,6 +49,7 @@ class CameraFragment : Fragment() {
     private var preview: Preview? = null
     private var imageCapture: ImageCapture? = null
     private var camera: Camera? = null
+    private var cameraControl: CameraControl? = null
 
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
@@ -75,7 +77,9 @@ class CameraFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        bindCameraUseCases()
+        viewFinder.post {
+            bindCameraUseCases()
+        }
     }
 
 
@@ -121,6 +125,8 @@ class CameraFragment : Fragment() {
 
             // Bind use cases
             bindCameraUseCases()
+
+            setUpZoomSlider()
 
         }
     }
@@ -178,6 +184,7 @@ class CameraFragment : Fragment() {
                 // camera provides access to CameraControl & CameraInfo
                 camera = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture)
+                cameraControl = camera!!.cameraControl
 
                 // Attach the viewfinder's surface provider to preview use case
                 preview?.setSurfaceProvider(viewFinder.createSurfaceProvider(camera?.cameraInfo))
@@ -287,6 +294,19 @@ class CameraFragment : Fragment() {
         }
 
     }
+
+    private fun setUpZoomSlider() {
+    requireView().findViewById<SeekBar>(R.id.seekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            cameraControl!!.setLinearZoom(progress / seekBar!!.max.toFloat())
+            Log.d(TAG,"Linear zoom : " + (progress / seekBar!!.max.toFloat()).toString())
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+    })
+}
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null
