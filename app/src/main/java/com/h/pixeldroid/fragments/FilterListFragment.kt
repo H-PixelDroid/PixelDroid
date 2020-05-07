@@ -15,7 +15,6 @@ import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.interfaces.FilterListFragmentListener
-import com.h.pixeldroid.utils.BitmapUtils
 import com.h.pixeldroid.utils.SpaceItemDecoration
 import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter

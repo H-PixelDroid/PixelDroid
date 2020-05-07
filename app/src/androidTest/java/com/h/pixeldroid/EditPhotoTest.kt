@@ -45,7 +45,6 @@ import java.lang.reflect.Method
 class EditPhotoTest {
 
     private val mockServer = MockServer()
-    private val imageName = "chat.jpg"
     private lateinit var activity: PhotoEditActivity
     private lateinit var activityScenario: ActivityScenario<PhotoEditActivity>
 
@@ -77,7 +76,8 @@ class EditPhotoTest {
         return object : ViewAction {
             override fun getDescription() = "with tab at index $tabIndex"
 
-            override fun getConstraints() = allOf(isDisplayed(), isAssignableFrom(TabLayout::class.java))
+            override fun getConstraints() =
+                allOf(isDisplayed(), isAssignableFrom(TabLayout::class.java))
 
             override fun perform(uiController: UiController, view: View) {
                 val tabLayout = view as TabLayout
@@ -91,22 +91,6 @@ class EditPhotoTest {
         }
     }
 
-    private fun setSeekBarProgress(newProgress: Int, fromUser: Boolean, seekBar: SeekBar) {
-        var privateSetProgressMethod: Method? = null
-        try {
-            privateSetProgressMethod =
-                ProgressBar::class.java.getDeclaredMethod(
-                    "setProgress",
-                    Integer.TYPE,
-                    java.lang.Boolean.TYPE
-                )
-            privateSetProgressMethod.isAccessible = true
-            privateSetProgressMethod.invoke(seekBar, newProgress, fromUser)
-        } catch (e: ReflectiveOperationException) {
-            e.printStackTrace()
-        }
-    }
-
     private fun setProgress(progress: Int): ViewAction? {
         return object : ViewAction {
             override fun getDescription() =  "Set the progress on a SeekBar"
@@ -115,16 +99,9 @@ class EditPhotoTest {
 
             override fun perform(uiController: UiController, view: View) {
                 val seekBar = view as SeekBar
-                setSeekBarProgress(progress, true, seekBar)
+                seekBar.progress = progress
             }
         }
-    }
-
-    private fun swipeSlowLeft(): ViewAction? {
-        return GeneralSwipeAction(
-            Swipe.SLOW, GeneralLocation.CENTER_RIGHT,
-            GeneralLocation.CENTER_LEFT, Press.FINGER
-        )
     }
 
     @Test
@@ -172,16 +149,19 @@ class EditPhotoTest {
     }
 
     @Test
-    fun SaveButtonLaunchNewPostActivity() {
+    fun SaveButton() {
         Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
         Espresso.onView(withId(R.id.action_save)).perform(click())
-        Thread.sleep(1000)
-        Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
+        Espresso.onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText("Image succesfully saved")))
+
     }
 
     @Test
-    fun buttonUpload() {
+    fun buttonUploadLaunchNewPostActivity() {
         Espresso.onView(withId(R.id.action_upload)).perform(click())
+        Thread.sleep(1000)
+        Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
     }
 
 }
