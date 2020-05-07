@@ -79,6 +79,7 @@ class CameraFragment : Fragment() {
         super.onResume()
         viewFinder.post {
             bindCameraUseCases()
+            setUpZoomSlider()
         }
     }
 
