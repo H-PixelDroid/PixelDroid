@@ -45,6 +45,7 @@ class PostFragment : Fragment() {
         status?.setDescription(root, api, "Bearer $accessToken")
 
         //Activate onclickListeners
+        status?.activateBookmarker(holder, api, "Bearer $accessToken", status.bookmarked)
         status?.activateLiker(holder, api, "Bearer $accessToken", status.favourited)
         status?.activateReblogger(holder, api, "Bearer $accessToken", status.reblogged)
         status?.activateCommenter(holder, api, "Bearer $accessToken")

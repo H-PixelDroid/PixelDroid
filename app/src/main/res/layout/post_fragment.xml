@@ -53,6 +53,21 @@
                 app:layout_constraintStart_toEndOf="@+id/username"
                 app:layout_constraintTop_toTopOf="@+id/profilePic"/>
 
+            <at.connyduck.sparkbutton.SparkButton
+                android:id="@+id/bookmarker"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="24dp"
+                android:padding="4dp"
+                sparkbutton:activeImage="@drawable/ic_bookmark_black_24dp"
+                sparkbutton:iconSize="28dp"
+                sparkbutton:inactiveImage="@drawable/ic_bookmark_black_24dp"
+                sparkbutton:primaryColor="@color/share_blue"
+                sparkbutton:secondaryColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/profilePic" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/postConstraint"
                 android:layout_width="match_parent"

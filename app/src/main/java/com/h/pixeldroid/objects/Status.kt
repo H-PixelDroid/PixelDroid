@@ -29,11 +29,13 @@ import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.ImageUtils.Companion.downloadImage
+import com.h.pixeldroid.utils.PostUtils.Companion.bookmarkPostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
 import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
 import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
+import com.h.pixeldroid.utils.PostUtils.Companion.unBookmarkPostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import kotlinx.android.synthetic.main.post_fragment.view.postDate
@@ -300,6 +302,30 @@ data class Status(
                 }
             }
         }
+
+    fun activateBookmarker(
+        holder : PostViewHolder,
+        api: PixelfedAPI,
+        credential: String,
+        isBookmarked: Boolean
+    ) {
+        Log.e("IS BOOKMARKED", isBookmarked.toString())
+        //Set initial state
+        holder.bookmarker.isChecked = isBookmarked
+
+        //Activate the liker
+        holder.bookmarker.setEventListener { _, buttonState ->
+            if (buttonState) {
+                Log.e("BUTTON ACTIVE", buttonState.toString())
+                // Button is active
+                bookmarkPostCall(holder, api, credential, this)
+            } else {
+                Log.e("BUTTON INACTIVE", buttonState.toString())
+                // Button is inactive
+                unBookmarkPostCall(holder, api, credential, this)
+            }
+        }
+    }
 
 
     fun showComments(

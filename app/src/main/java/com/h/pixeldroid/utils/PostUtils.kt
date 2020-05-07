@@ -153,6 +153,63 @@ abstract class PostUtils {
             })
         }
 
+        fun bookmarkPostCall(
+            holder : PostViewHolder,
+            api: PixelfedAPI,
+            credential: String,
+            post : Status
+        ) {
+            // Call api function
+            api.bookmarkStatus(post.id, credential).enqueue(object : Callback<Status> {
+                override fun onFailure(call: Call<Status>, t: Throwable) {
+                    Log.e("BOOKMARK ERROR", t.toString())
+                    holder.bookmarker.isChecked = false
+                }
+
+                override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                    if(response.code() == 200) {
+                        val resp = response.body()!!
+                        Log.e("RESPONSE", " bookmark status")
+
+                        // Update post bookmarked state
+                        holder.bookmarker.isChecked = resp.bookmarked
+                    } else {
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.bookmarker.isChecked = false
+                    }
+                }
+
+            })
+        }
+
+        fun unBookmarkPostCall(
+            holder : PostViewHolder,
+            api: PixelfedAPI,
+            credential: String,
+            post : Status
+        ) {
+            // Call api function
+            api.undoBookmarkStatus(post.id, credential).enqueue(object : Callback<Status> {
+                override fun onFailure(call: Call<Status>, t: Throwable) {
+                    Log.e("UNBOOKMARK ERROR", t.toString())
+                    holder.bookmarker.isChecked = true
+                }
+
+                override fun onResponse(call: Call<Status>, response: Response<Status>) {
+                    if(response.code() == 200) {
+                        val resp = response.body()!!
+
+                        // Update post bookmarked state
+                        holder.bookmarker.isChecked = resp.bookmarked
+                    } else {
+                        Log.e("RESPONSE_CODE", response.code().toString())
+                        holder.bookmarker.isChecked = true
+                    }
+                }
+
+            })
+        }
+
         fun postComment(
             holder : PostViewHolder,
             api: PixelfedAPI,
