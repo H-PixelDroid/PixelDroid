@@ -309,11 +309,10 @@ data class Status(
         credential: String,
         isBookmarked: Boolean
     ) {
-        Log.e("IS BOOKMARKED", isBookmarked.toString())
-        //Set initial state
+        // Set initial state
         holder.bookmarker.isChecked = isBookmarked
 
-        //Activate the liker
+        // Activate bookmarker
         holder.bookmarker.setEventListener { _, buttonState ->
             if (buttonState) {
                 Log.e("BUTTON ACTIVE", buttonState.toString())

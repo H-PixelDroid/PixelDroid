@@ -169,7 +169,6 @@ abstract class PostUtils {
                 override fun onResponse(call: Call<Status>, response: Response<Status>) {
                     if(response.code() == 200) {
                         val resp = response.body()!!
-                        Log.e("RESPONSE", " bookmark status")
 
                         // Update post bookmarked state
                         holder.bookmarker.isChecked = resp.bookmarked
