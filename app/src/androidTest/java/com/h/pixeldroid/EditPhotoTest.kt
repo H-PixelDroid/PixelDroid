@@ -28,6 +28,7 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
+import com.h.pixeldroid.testUtility.CustomMatchers
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.MockServer
 import kotlinx.android.synthetic.main.fragment_edit_image.*
@@ -133,8 +134,14 @@ class EditPhotoTest {
 
     @Test
     fun FiltersIsSwipeableAndClickeable() {
-        Espresso.onView(allOf(first(withId(R.id.thumbnail)), isDisplayed())).perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(1, click()))
-        //Thread.sleep(1000)
+        Espresso.onView(withId(R.id.recycler_view))
+            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(1, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
+        Thread.sleep(1000)
+        Espresso.onView(withId(R.id.recycler_view))
+            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(1, CustomMatchers.slowSwipeLeft(false)))
+        Thread.sleep(1000)
+        Espresso.onView(withId(R.id.recycler_view))
+            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(5, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
     }
 
     @Test
