@@ -1,36 +1,24 @@
 package com.h.pixeldroid
 
-import com.h.pixeldroid.fragments.CameraFragment
 import android.Manifest
-import android.content.Context
 import android.content.Intent
-import androidx.core.app.ActivityManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.swipeLeft
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
-import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.intent.matcher.IntentMatchers.*
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.rule.IntentsTestRule
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import org.junit.Rule
-import org.junit.Test
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_camera.*
 import org.hamcrest.Matcher
 import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.Timeout
 
 class CameraTest {
@@ -57,7 +45,6 @@ class CameraTest {
         activityScenario.onActivity {
                 a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(2)?.select()
         }
-
         Thread.sleep(1000)
     }
 
@@ -65,12 +52,12 @@ class CameraTest {
     fun flipCameraButton() {
         onView(withId(R.id.flip_button)).check(matches(isClickable()))
         onView(withId(R.id.flip_button)).perform(click())
-        onView(withId(R.id.flip_button)).check(matches(isClickable()))
     }
 
     @Test
     fun seekBar() {
         onView(withId(R.id.seekBar)).check(matches(isFocusable()))
+        onView(withId(R.id.seekBar)).perform(swipeRight())
     }
 
   //  @Test
@@ -82,12 +69,12 @@ class CameraTest {
   //      intended(expectedIntent)
   //  }
 
-  //  @Test
-  //  fun uploadButtonLaunchesGalleryIntent() {
-  //      val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
-  //      intending(expectedIntent)
-  //      onView(withId(R.id.upload_button)).perform(click())
-  //      Thread.sleep(1000)
-  //      intended(expectedIntent)
-  //  }
+    @Test
+    fun uploadButtonLaunchesGalleryIntent() {
+        val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
+        intending(expectedIntent)
+        onView(withId(R.id.upload_button)).perform(click())
+        Thread.sleep(1000)
+        intended(expectedIntent)
+    }
 }
