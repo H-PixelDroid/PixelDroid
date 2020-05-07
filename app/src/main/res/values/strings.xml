@@ -40,4 +40,6 @@
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
     <string name="share_picture">Share picture…</string>
+    <string name="NoCommentsToShow">No comments on this post...</string>
+    <string name="CommentDisplay">\" to show...\"</string>
 </resources>
