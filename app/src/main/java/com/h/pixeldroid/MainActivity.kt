@@ -1,16 +1,22 @@
 package com.h.pixeldroid
 
+import android.Manifest
+import com.h.pixeldroid.fragments.CameraFragment
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -20,7 +26,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.NewPostFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
@@ -34,6 +39,13 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    // This is an arbitrary number we are using to keep track of the permission
+    // request. Where an app has multiple context for requesting permission,
+    // this can help differentiate the different contexts.
+    private val REQUEST_CODE_PERMISSIONS = 10
+    // This is an array of all the permission specified in the manifest.
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
@@ -44,6 +56,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Request camera permissions
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(
+                this,
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
+            )
+        }
 
         preferences = getSharedPreferences(
             "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
@@ -58,7 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val tabs = arrayOf(
                 PostsFeedFragment(),
                 searchDiscoverFragment,
-                NewPostFragment(),
+                Fragment(),
                 NotificationsFragment(),
                 PublicTimelineFragment()
             )
@@ -158,6 +179,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
+        }
+    }
+
+    /**
+     * Check if all permission specified in the manifest have been granted
+     */
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            this.applicationContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * Process result from permission request dialog box, has the request
+     * been granted? If yes, start Camera. Otherwise display a toast
+     */
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (!allPermissionsGranted()) {
+                Toast.makeText(this.applicationContext,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
     }
 
