@@ -117,12 +117,12 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         // Unfollow
-        onView(withId(R.id.followButton)).perform((ViewActions.click()))
+        onView(withId(R.id.followButton)).perform((click()))
         Thread.sleep(1000)
         onView(withId(R.id.followButton)).check(matches(withText("Follow")))
 
         // Follow
-        onView(withId(R.id.followButton)).perform((ViewActions.click()))
+        onView(withId(R.id.followButton)).perform((click()))
         Thread.sleep(1000)
         onView(withId(R.id.followButton)).check(matches(withText("Unfollow")))
     }
@@ -140,10 +140,10 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         // Open followers list
-        onView(withId(R.id.nbFollowersTextView)).perform((ViewActions.click()))
+        onView(withId(R.id.nbFollowersTextView)).perform((click()))
         Thread.sleep(1000)
         // Open follower's profile
-        onView(withText("ete2")).perform((ViewActions.click()))
+        onView(withText("ete2")).perform((click()))
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))
@@ -174,7 +174,7 @@ class MockedServerTest {
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
 
         Thread.sleep(1000)
-        onView(withText("Dobios liked your post")).perform(ViewActions.click())
+        onView(withText("Dobios liked your post")).perform(click())
 
         Thread.sleep(1000)
         onView(withText("6 Likes")).check(matches(withId(R.id.nlikes)))
@@ -190,7 +190,7 @@ class MockedServerTest {
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
         Thread.sleep(1000)
 
-        onView(withText("Dobios followed you")).perform(ViewActions.click())
+        onView(withText("Dobios followed you")).perform(click())
         Thread.sleep(1000)
         onView(withText("Andrew Dobis")).check(matches(withId(R.id.accountNameTextView)))
     }
@@ -205,10 +205,10 @@ class MockedServerTest {
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
         Thread.sleep(1000)
 
-        onView(withText("Dobios liked your post")).perform(ViewActions.click())
+        onView(withText("Dobios liked your post")).perform(click())
         Thread.sleep(1000)
 
-        onView(withId(R.id.username)).perform(ViewActions.click())
+        onView(withId(R.id.username)).perform(click())
         Thread.sleep(10000)
         onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
     }
@@ -223,7 +223,7 @@ class MockedServerTest {
         onView(withId(R.id.view_pager)).perform(ViewActions.swipeUp()).perform(ViewActions.swipeDown())
         Thread.sleep(1000)
 
-        onView(withText("Clement shared your post")).perform(ViewActions.click())
+        onView(withText("Clement shared your post")).perform(click())
         Thread.sleep(1000)
 
         onView(first(withText("Clement"))).check(matches(withId(R.id.username)))

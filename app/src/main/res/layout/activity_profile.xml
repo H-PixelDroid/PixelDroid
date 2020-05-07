@@ -31,7 +31,8 @@
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
+                        tools:srcCompat="@tools:sample/avatars"
+                        android:contentDescription="TODO" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -143,7 +144,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/colorPrimaryTab"
-                        android:src="@android:drawable/ic_dialog_dialer" />
+                        android:src="@android:drawable/ic_dialog_dialer"
+                        android:contentDescription="TODO" />
 
                     <ImageButton
                         android:id="@+id/collectionButton"
@@ -151,7 +153,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/colorPrimaryTab"
-                        android:src="@android:drawable/ic_menu_gallery" />
+                        android:src="@android:drawable/ic_menu_gallery"
+                        android:contentDescription="TODO" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

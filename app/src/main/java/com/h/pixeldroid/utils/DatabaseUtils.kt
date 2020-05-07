@@ -10,7 +10,7 @@ class DatabaseUtils {
          * Inserts one post into the specified database,
          * after it has checked the LRU
          */
-        fun insertPost(db: AppDatabase, post: PostEntity) {
+        private fun insertPost(db: AppDatabase, post: PostEntity) {
             if (!IsInsertable(db)) {
                 removeEldestPost(db)
             }

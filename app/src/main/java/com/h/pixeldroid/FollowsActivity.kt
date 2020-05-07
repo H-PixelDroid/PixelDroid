@@ -14,7 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class FollowsActivity : AppCompatActivity() {
-    var followsFragment = AccountListFragment()
+    private var followsFragment = AccountListFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

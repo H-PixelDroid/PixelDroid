@@ -245,7 +245,7 @@ data class Status(
 
 
         //Set comment initial visibility
-        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
+        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = GONE
 
         imagePopUpMenu(rootView, homeFragment.requireActivity())
     }
@@ -313,7 +313,7 @@ data class Status(
         } else {
             holder.viewComment.text =  "View all $replies_count comments..."
             holder.viewComment.setOnClickListener {
-                holder.viewComment.visibility = View.GONE
+                holder.viewComment.visibility = GONE
 
                 //Retrieve the comments
                 retrieveComments(holder, api, credential, this)
@@ -348,7 +348,7 @@ data class Status(
     }
 
 
-    fun imagePopUpMenu(view: View, activity: FragmentActivity) {
+    private fun imagePopUpMenu(view: View, activity: FragmentActivity) {
         val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
         if (!media_attachments.isNullOrEmpty() && media_attachments.size == 1) {
             view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {

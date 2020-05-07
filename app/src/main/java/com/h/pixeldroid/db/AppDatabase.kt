@@ -23,7 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
 
             return INSTANCE ?: synchronized(this) {
                 // To be able to create a temporary database that flushes when tests are over
-                var instance = if (TEST_MODE) {
+                val instance = if (TEST_MODE) {
                     Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).allowMainThreadQueries().build()
                 } else {
                     Room.databaseBuilder(

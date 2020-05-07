@@ -1,8 +1,8 @@
 package com.h.pixeldroid.db
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity(tableName= "posts")

@@ -48,11 +48,11 @@ class PostCreationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_creation)
 
-        val imageUri: Uri = intent.getParcelableExtra<Uri>("picture_uri")!!
+        val imageUri: Uri = intent.getParcelableExtra("picture_uri")!!
 
         saveImage(imageUri)
 
-        pictureFrame = findViewById<ImageView>(R.id.post_creation_picture_frame)
+        pictureFrame = findViewById(R.id.post_creation_picture_frame)
         pictureFrame.setImageURI(image.toUri())
 
         preferences = getSharedPreferences(

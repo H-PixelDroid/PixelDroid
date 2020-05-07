@@ -38,7 +38,8 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/notification_type"
-            tools:src="@drawable/ic_default_user" />
+            tools:src="@drawable/ic_default_user"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/notification_photo_thumbnail"
@@ -50,7 +51,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/notification_type"
             tools:src="@drawable/ic_default_user"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            tools:srcCompat="@tools:sample/backgrounds/scenic"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/notification_post_description"
