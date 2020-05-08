@@ -10,7 +10,10 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.room.Room
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.objects.Application
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Token
@@ -31,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var oauthScheme: String
     private lateinit var appName: String
     private lateinit var preferences: SharedPreferences
+    private var username = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,6 +167,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun authenticationSuccessful(accessToken: String) {
         preferences.edit().putString("accessToken", accessToken).apply()
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).build()
+        val instance: InstanceDatabaseEntity = InstanceDatabaseEntity(
+            username = "",
+            instance = preferences.getString("domain", "") as String
+        )
+        db.instanceDao().insertAll(instance)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
