@@ -2,6 +2,7 @@ package com.h.pixeldroid.utils
 
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.h.pixeldroid.R
@@ -26,7 +27,11 @@ class ThemeUtils {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 }
                 else -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+                    }
                 }
             }
         }
