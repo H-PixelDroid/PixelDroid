@@ -99,7 +99,6 @@ class CameraFragment : Fragment() {
             viewFinder.post {
                 bindCameraUseCases()
                 updateCameraUi()
-                setUpZoomSlider()
             }
         }
     }
@@ -226,7 +225,12 @@ class CameraFragment : Fragment() {
     /** Method used to re-draw the camera UI controls, called every time configuration changes. */
     private fun updateCameraUi() {
 
-        val controls = requireView()
+        // Remove previous UI if any
+        container.findViewById<ConstraintLayout>(R.id.camera_ui_container)?.let {
+            container.removeView(it)
+        }
+
+        val controls = View.inflate(requireContext(), R.layout.camera_ui_container, container)
 
         // Listener for button used to capture photo
         controls.findViewById<ImageButton>(R.id.camera_capture_button).setOnClickListener {
@@ -316,20 +320,18 @@ class CameraFragment : Fragment() {
             }
         }
 
+
+            controls.findViewById<SeekBar>(R.id.seekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    cameraControl!!.setLinearZoom(progress / seekBar!!.max.toFloat())
+                    Log.d(TAG,"Linear zoom : " + (progress / seekBar.max.toFloat()).toString())
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
     }
-
-    private fun setUpZoomSlider() {
-    requireView().findViewById<SeekBar>(R.id.seekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            cameraControl!!.setLinearZoom(progress / seekBar!!.max.toFloat())
-            Log.d(TAG,"Linear zoom : " + (progress / seekBar.max.toFloat()).toString())
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-    })
-}
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null
