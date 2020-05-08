@@ -10,30 +10,30 @@ import androidx.room.TypeConverters
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun postDao(): PostDao
-    val MAX_NUMBER_OF_POSTS = 100
 
     companion object {
+        const val MAX_NUMBER_OF_POSTS = 100
         // Singleton prevents multiple instances of database opening at the
         // same time.
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-        var TEST_MODE = false
-
-        fun getDatabase(context: Context): AppDatabase {
-
-            return INSTANCE ?: synchronized(this) {
-                // To be able to create a temporary database that flushes when tests are over
-                val instance = if (TEST_MODE) {
-                    Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).allowMainThreadQueries().build()
-                } else {
-                    Room.databaseBuilder(
-                        context.applicationContext, AppDatabase::class.java, "posts_database"
-                    ).build()
-                }
-
-                INSTANCE = instance
-                return instance
-            }
-        }
+//        @Volatile
+//        private var INSTANCE: AppDatabase? = null
+//        var TEST_MODE = false
+//
+//        fun getDatabase(context: Context): AppDatabase {
+//
+//            return INSTANCE ?: synchronized(this) {
+//                // To be able to create a temporary database that flushes when tests are over
+//                val instance = if (TEST_MODE) {
+//                    Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).allowMainThreadQueries().build()
+//                } else {
+//                    Room.databaseBuilder(
+//                        context.applicationContext, AppDatabase::class.java, "posts_database"
+//                    ).build()
+//                }
+//
+//                INSTANCE = instance
+//                return instance
+//            }
+//        }
     }
 }
