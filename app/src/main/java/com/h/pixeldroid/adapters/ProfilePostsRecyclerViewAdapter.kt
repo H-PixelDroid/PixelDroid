@@ -1,4 +1,4 @@
-package com.h.pixeldroid.fragments
+package com.h.pixeldroid.adapters
 
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView

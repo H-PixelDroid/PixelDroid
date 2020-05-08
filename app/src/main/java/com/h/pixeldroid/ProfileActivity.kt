@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.ProfilePostsRecyclerViewAdapter
+import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Relationship

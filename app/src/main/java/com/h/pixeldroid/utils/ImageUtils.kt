@@ -18,7 +18,8 @@ import java.io.File
 
 class ImageUtils {
     companion object {
-        fun downloadImage(activity: FragmentActivity, context: Context, url: String, share: Boolean = false) {
+        fun downloadImage(activity: FragmentActivity, url: String, share: Boolean = false) {
+            val context = activity.applicationContext
             var msg = ""
             var lastMsg = ""
             val directory = File(Environment.DIRECTORY_PICTURES)
@@ -88,7 +89,7 @@ class ImageUtils {
                             e.printStackTrace()
                         }
                         intentShare.putExtra(Intent.EXTRA_STREAM, uri)
-                        context.startActivity(Intent.createChooser(intentShare, "Share Image"))
+                        activity.startActivity(Intent.createChooser(intentShare, "Share Image"))
                     }
                     cursor.close()
                 }

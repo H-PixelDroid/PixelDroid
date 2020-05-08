@@ -6,4 +6,7 @@
     <color name="icActive">#FFFFFFFF</color>
     <color name="icFocused">#DDFFFFFF</color>
     <color name="icPressed">#AAFFFFFF</color>
+    <color name="filterLabelNormal">#8A8889</color>
+    <color name="filterLabelSelected">#221F20</color>
+    <color name="colorOptionMenu">#FF3990</color>
 </resources>
