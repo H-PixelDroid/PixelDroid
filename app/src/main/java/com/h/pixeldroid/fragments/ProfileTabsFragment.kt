@@ -3,7 +3,6 @@ package com.h.pixeldroid.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
+import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.objects.Status
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 internal open class ProfileTabsFragment : Fragment() {
