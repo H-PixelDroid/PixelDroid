@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 
 class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var restartActivitiesOnExit = false
@@ -27,12 +28,21 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         super.startActivity(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this)
+    }
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         val themes = resources.getStringArray(R.array.theme_values)
-        Log.e("SETTINGS", key)
         when (key) {
-            "Theme" -> {
-                val theme = sharedPreferences.getString("Theme", "default")
+            "theme" -> {
+                val theme = sharedPreferences.getString("theme", "default")
                 Log.d("activeTheme", theme!!)
                 //Set the theme
                 when(theme) {
