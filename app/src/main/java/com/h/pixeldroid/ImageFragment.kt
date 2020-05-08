@@ -1,5 +1,6 @@
 package com.h.pixeldroid
 
+import android.Manifest
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -11,10 +12,15 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.ImageUtils
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 
@@ -48,11 +54,31 @@ class ImageFragment : Fragment() {
                 setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.image_popup_menu_save_to_gallery -> {
-                            ImageUtils.downloadImage(requireActivity(), view.context, imgUrl)
+                            Dexter.withContext(view.context)
+                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                .withListener(object: BasePermissionListener() {
+                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                        Toast.makeText(view.context, "You need to grant write permission to download pictures!", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                        ImageUtils.downloadImage(requireActivity(), imgUrl)
+                                    }
+                                }).check()
                             true
                         }
                         R.id.image_popup_menu_share_picture ->  {
-                            ImageUtils.downloadImage(requireActivity(), view.context, imgUrl, share = true)
+                            Dexter.withContext(view.context)
+                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                .withListener(object: BasePermissionListener() {
+                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                        Toast.makeText(view.context, "You need to grant write permission to share pictures!", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                        ImageUtils.downloadImage(requireActivity(), imgUrl, share = true)
+                                    }
+                                }).check()
                             true
                         }
                         else -> false

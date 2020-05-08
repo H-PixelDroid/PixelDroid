@@ -1,6 +1,8 @@
 package com.h.pixeldroid.objects
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spanned
@@ -16,6 +18,7 @@ import android.widget.Toast
 import android.widget.PopupMenu
 import android.widget.ImageView
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -36,6 +39,13 @@ import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.BasePermissionListener
+import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.postDate
 import kotlinx.android.synthetic.main.post_fragment.view.postDomain
 import java.io.Serializable
@@ -91,6 +101,7 @@ data class Status(
 {
 
     companion object {
+        const val SAVE_TO_GALLERY_WRITE_PERMISSION = 1
         const val POST_TAG = "postTag"
         const val POST_FRAG_TAG = "postFragTag"
         const val DOMAIN_TAG = "domainTag"
@@ -356,11 +367,31 @@ data class Status(
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
                             R.id.image_popup_menu_save_to_gallery -> {
-                                downloadImage(activity, view.context, getPostUrl()!!)
+                                Dexter.withContext(view.context)
+                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    .withListener(object: BasePermissionListener() {
+                                        override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                            Toast.makeText(view.context, "You need to grant write permission to download pictures!", Toast.LENGTH_SHORT).show()
+                                        }
+
+                                        override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                            downloadImage(activity, getPostUrl()!!)
+                                        }
+                                    }).check()
                                 true
                             }
                             R.id.image_popup_menu_share_picture -> {
-                                downloadImage(activity, view.context, getPostUrl()!!, share = true)
+                                Dexter.withContext(view.context)
+                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    .withListener(object: BasePermissionListener() {
+                                        override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                            Toast.makeText(view.context, "You need to grant write permission to share pictures!", Toast.LENGTH_SHORT).show()
+                                        }
+
+                                        override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                            downloadImage(activity, getPostUrl()!!, share = true)
+                                        }
+                                    }).check()
                                 true
                             }
                             else -> false
