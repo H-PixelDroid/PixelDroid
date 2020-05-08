@@ -229,7 +229,7 @@ class CameraFragment : Fragment() {
         val controls = requireView()
 
         // Listener for button used to capture photo
-        controls.findViewById<ImageButton>(R.id.capture_button).setOnClickListener {
+        controls.findViewById<ImageButton>(R.id.camera_capture_button).setOnClickListener {
 
             Log.e(TAG, "Setting up capture button")
             // Get a stable reference of the modifiable image capture use case
@@ -283,7 +283,7 @@ class CameraFragment : Fragment() {
         }
 
         // Listener for button used to switch cameras
-        controls.findViewById<ImageButton>(R.id.flip_button).setOnClickListener {
+        controls.findViewById<ImageButton>(R.id.camera_switch_button).setOnClickListener {
             lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
                 CameraSelector.LENS_FACING_BACK
             } else {
@@ -304,7 +304,7 @@ class CameraFragment : Fragment() {
 
         }
 
-        controls.findViewById<ImageButton>(R.id.upload_button).setOnClickListener{
+        controls.findViewById<ImageButton>(R.id.photo_view_button).setOnClickListener{
             Intent().apply {
                 type = "image/*"
                 action = Intent.ACTION_GET_CONTENT
