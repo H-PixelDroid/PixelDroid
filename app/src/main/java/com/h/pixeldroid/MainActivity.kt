@@ -27,10 +27,10 @@ import com.h.pixeldroid.fragments.feeds.NotificationsFragment
 import com.h.pixeldroid.fragments.feeds.PublicTimelineFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.ThemeUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

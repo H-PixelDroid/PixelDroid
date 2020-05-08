@@ -5,6 +5,7 @@ import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -52,6 +53,26 @@ class DrawerMenuTest {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
         // Check that settings activity was opened.
         onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testThemeSettings() {
+        // Start the screen of your activity.
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
+        //select theme modes
+        onView(withText(R.string.theme_title)).perform(click())
+        onView(withText("Dark")).perform(click())
+
+        //Select an other theme
+        onView(withText(R.string.theme_title)).perform(click())
+        onView(withText("Default")).perform(click())
+
+        //Select the last theme
+        onView(withText(R.string.theme_title)).perform(click())
+        onView(withText("Light")).perform(click())
+
+        //Check that we are back in the settings page
+        onView(withText(R.string.theme_header)).check(matches(isDisplayed()))
     }
 
     @Test

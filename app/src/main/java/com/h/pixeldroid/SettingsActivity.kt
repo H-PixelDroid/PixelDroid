@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import com.h.pixeldroid.utils.ThemeUtils.Companion.setThemeFromPreferences
 
 class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var restartActivitiesOnExit = false
@@ -39,37 +40,15 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        val themes = resources.getStringArray(R.array.theme_values)
         when (key) {
-            "theme" -> {
-                val theme = sharedPreferences.getString("theme", "default")
-                Log.d("activeTheme", theme!!)
-                //Set the theme
-                when(theme) {
-                    //Default
-                    themes[0] -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    }
-                    //Light
-                    themes[1] -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    }
-                    //Dark
-                    themes[2] -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    }
-                    else -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    }
-
-                }
-
-                restartActivitiesOnExit = true
-                restartCurrentActivity()
-            }
+            "theme" -> setThemeFromPreferences(sharedPreferences, resources)
         }
 
+        restartActivitiesOnExit = true
+        restartCurrentActivity()
     }
+
+
 
     override fun onBackPressed() {
         /* Switching themes won't actually change the theme of activities on the back stack.
