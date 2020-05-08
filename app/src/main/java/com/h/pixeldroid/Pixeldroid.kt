@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.preference.PreferenceManager
 import com.h.pixeldroid.utils.ThemeUtils
 
-class ThemedApplication: Application() {
+class Pixeldroid: Application() {
 
     override fun onCreate() {
         super.onCreate()

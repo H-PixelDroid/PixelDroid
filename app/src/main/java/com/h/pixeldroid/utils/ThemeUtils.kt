@@ -13,14 +13,10 @@ class ThemeUtils {
          */
         fun setThemeFromPreferences(preferences: SharedPreferences, resources : Resources) {
             val themes = resources.getStringArray(R.array.theme_values)
-            val theme = preferences.getString("theme", "default")
-            Log.e("activeTheme", theme!!)
+            val theme = preferences.getString("theme", "")
+            Log.e("themePref", theme!!)
             //Set the theme
             when(theme) {
-                //Default
-                themes[0] -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                }
                 //Light
                 themes[1] -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
