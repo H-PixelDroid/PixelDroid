@@ -38,7 +38,7 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
+// test
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
