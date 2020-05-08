@@ -14,7 +14,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.h.pixeldroid.fragments.ProfilePostsRecyclerViewAdapter
+import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
 import com.h.pixeldroid.testUtility.MockServer
 import org.junit.Before
