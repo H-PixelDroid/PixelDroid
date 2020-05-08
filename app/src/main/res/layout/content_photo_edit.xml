@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PhotoEditActivity"
+    tools:showIn="@layout/activity_photo_edit"
+    >
+
+    <ImageView
+        android:id="@+id/image_preview"
+        android:scaleType="centerInside"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"/>
+
+    <com.h.pixeldroid.utils.NonSwipeableViewPager
+        android:id="@+id/viewPager"
+        android:layout_above="@+id/tabs"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@+id/image_preview"
+        android:layout_width="match_parent"
+        android:layout_height="80dp" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

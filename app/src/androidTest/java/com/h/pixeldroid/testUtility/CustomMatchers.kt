@@ -46,6 +46,21 @@ abstract class CustomMatchers {
             )
         }
 
+        /**
+         * @param percent can be 1 or 0
+         * 1: swipes all the way left
+         * 0: swipes half way left
+         */
+        fun slowSwipeLeft(percent: Boolean) : ViewAction {
+            return ViewActions.actionWithAssertions(
+                GeneralSwipeAction(
+                    Swipe.SLOW,
+                    GeneralLocation.CENTER_RIGHT,
+                    if(percent) GeneralLocation.CENTER_LEFT else GeneralLocation.CENTER,
+                    Press.FINGER)
+            )
+        }
+
         fun getText(matcher: Matcher<View?>?): String? {
             val stringHolder = arrayOf<String?>(null)
             Espresso.onView(matcher).perform(object : ViewAction {
