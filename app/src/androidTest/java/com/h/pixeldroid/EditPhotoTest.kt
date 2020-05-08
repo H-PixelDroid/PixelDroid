@@ -54,7 +54,7 @@ class EditPhotoTest {
 
         // Launch PhotoEditActivity
         val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
-        val intent = Intent(context, PhotoEditActivity::class.java).putExtra("uri", uri)
+        val intent = Intent(context, PhotoEditActivity::class.java).putExtra("picture_uri", uri)
 
         activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}
 
@@ -139,7 +139,7 @@ class EditPhotoTest {
 
     @Test
     fun SaveButton() {
-        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         Espresso.onView(withId(R.id.action_save)).perform(click())
         Espresso.onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText("Image succesfully saved")))
