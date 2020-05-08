@@ -9,10 +9,13 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
 import androidx.test.espresso.contrib.NavigationViewActions
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.h.pixeldroid.fragments.ProfilePostsRecyclerViewAdapter
+import com.h.pixeldroid.testUtility.CustomMatchers
 import com.h.pixeldroid.testUtility.MockServer
 import org.junit.Before
 import org.junit.Rule
@@ -115,5 +118,24 @@ class DrawerMenuTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Andrew Dobis")))
+    }
+
+    @Test
+    fun showBookmarkedPosts() {
+        // Open My Profile from drawer
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
+        Thread.sleep(100)
+        // Open bookmarks tab
+        onView(withId(R.id.profile_view_pager))
+            .perform(ViewActions.swipeLeft()) // collections
+            .perform(ViewActions.swipeLeft())
+        Thread.sleep(100)
+
+        // Open first post
+        onView(withId(R.id.profilePostsRecyclerView))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<ProfilePostsRecyclerViewAdapter.ViewHolder>
+                (0, CustomMatchers.clickChildViewWithId(R.id.postPreview)))
+
+        onView(withId(R.id.nlikes)).check(matches(withText("5 Likes")))
     }
 }

@@ -6,13 +6,17 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import at.connyduck.sparkbutton.SparkButton
 import com.google.android.material.tabs.TabLayout
+import com.h.pixeldroid.fragments.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.testUtility.CustomMatchers
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
@@ -109,7 +113,7 @@ class MockedServerTest {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
 
-        //Get initial like count
+        // Open user profile
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (0, clickChildViewWithId(R.id.username)))
@@ -132,7 +136,7 @@ class MockedServerTest {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
 
-        //Get initial like count
+        // Open user profile
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (0, clickChildViewWithId(R.id.username)))
@@ -335,6 +339,31 @@ class MockedServerTest {
 
         //Profit
         onView((withId(R.id.list))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingBookmarkButtonWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(100)
+
+        // Open user profile
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.profilePic)))
+        Thread.sleep(100)
+
+        // Open first post
+        onView(withId(R.id.profilePostsRecyclerView))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<ProfilePostsRecyclerViewAdapter.ViewHolder>
+                    (0, CustomMatchers.clickChildViewWithId(R.id.postPreview)))
+
+        // Bookmark the post
+        onView(withId(R.id.bookmarker)).perform(click())
+        onView(withId(R.id.bookmarker)).check(matches(isClickable()))
+        // Unbookmark the post
+        onView(withId(R.id.bookmarker)).perform(click())
+        onView(withId(R.id.bookmarker)).check(matches(isClickable()))
     }
 
     @Test
