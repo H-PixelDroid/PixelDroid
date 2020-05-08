@@ -144,10 +144,10 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         // Open followers list
-        onView(withId(R.id.nbFollowersTextView)).perform((ViewActions.click()))
+        onView(withId(R.id.nbFollowersTextView)).perform((click()))
         Thread.sleep(1000)
         // Open follower's profile
-        onView(withText("ete2")).perform((ViewActions.click()))
+        onView(withText("ete2")).perform((click()))
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))

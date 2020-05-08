@@ -129,7 +129,7 @@ class DrawerMenuTest {
         onView(withId(R.id.profile_view_pager))
             .perform(ViewActions.swipeLeft()) // collections
             .perform(ViewActions.swipeLeft())
-        Thread.sleep(100)
+        Thread.sleep(1000)
 
         // Open first post
         onView(withId(R.id.profilePostsRecyclerView))
