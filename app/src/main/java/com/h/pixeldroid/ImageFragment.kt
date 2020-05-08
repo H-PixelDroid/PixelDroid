@@ -70,13 +70,11 @@ class ImageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //Load the image into to view
-        val imageView : ImageView = view.findViewById(R.id.imageImageView)!!
-        val picRequest = Glide.with(this)
+        Glide.with(this)
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
-
-        picRequest.load(imgUrl).into(imageView)
-
+            .load(imgUrl)
+            .into(view.findViewById(R.id.imageImageView)!!)
     }
 
     companion object {

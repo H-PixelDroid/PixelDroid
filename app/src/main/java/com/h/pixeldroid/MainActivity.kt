@@ -30,6 +30,7 @@ import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.IllegalArgumentException
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -74,12 +75,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // Setup views
         val accessToken = preferences.getString("accessToken", "")
-        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
 
         val drawerHeader = navigationView.getHeaderView(0)
         val accountName = drawerHeader.findViewById<TextView>(R.id.drawer_account_name)
         val avatar = drawerHeader.findViewById<ImageView>(R.id.drawer_avatar)
-
+        val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
         pixelfedAPI.verifyCredentials("Bearer $accessToken")
             .enqueue(object : Callback<Account> {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
