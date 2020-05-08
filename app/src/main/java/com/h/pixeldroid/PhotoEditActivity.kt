@@ -70,7 +70,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_edit)
 
-        URI.picture_uri = intent.getParcelableExtra("uri")
+        URI.picture_uri = intent.getParcelableExtra("picture_uri")
 
         resultUri = URI.picture_uri
 

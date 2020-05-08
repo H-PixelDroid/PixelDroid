@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
 import kotlinx.coroutines.Dispatchers
@@ -409,7 +410,7 @@ class CameraFragment : Fragment() {
     }
     private fun startPostCreation(uri: Uri) {
         startActivity(
-            Intent(activity, PostCreationActivity::class.java)
+            Intent(activity, PhotoEditActivity::class.java)
                 .putExtra("picture_uri", uri)
         )
 
@@ -418,15 +419,8 @@ class CameraFragment : Fragment() {
     companion object {
 
         private const val TAG = "CameraFragment"
-        private const val FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private const val PHOTO_EXTENSION = ".jpg"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
-
-        /** Helper function used to create a timestamped file */
-        private fun createFile(baseFolder: File, format: String, extension: String) =
-            File(baseFolder, SimpleDateFormat(format, Locale.US)
-                .format(System.currentTimeMillis()) + extension)
 
         /** Use external media if it is available, our app's file directory otherwise */
         private fun getGalleryDirectory(context: Context): File {
