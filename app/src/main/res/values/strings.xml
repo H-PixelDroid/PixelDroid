@@ -30,6 +30,7 @@
     <string name="mention_notification">%1$s mentioned you</string>
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
+
     <string name="create_a_new_post">Create a new post!</string>
     <string name="take_a_picture">Take a picture</string>
     <string name="upload_a_picture">Upload a picture</string>
@@ -38,11 +39,19 @@
     <string name="send">send</string>
     <string name="whats_an_instance">"What's an instance?"</string>
     <string name="logout">Logout</string>
+
+    <string name="lbl_brightness">BRIGHTNESS</string>
+    <string name="lbl_contrast">CONTRAST</string>
+    <string name="lbl_saturation">SATURATION</string>
+    <string name="tab_filters">FILTERS</string>
+    <string name="tab_edit">EDIT</string>
+
     <string name="save_to_gallery">Save to Gallery…</string>
     <string name="image_download_failed">Download has been failed, please try again</string>
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
     <string name="share_picture">Share picture…</string>
-    <string name="NoCommentsToShow">No comments on this post...</string>
-    <string name="CommentDisplay">\" to show...\"</string>
+    <string name="NoCommentsToShow">No comments on this post…</string>
+    <string name="CommentDisplay"> to show…</string>
+
 </resources>

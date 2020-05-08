@@ -24,14 +24,14 @@ class PostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val status = arguments?.getSerializable(POST_TAG) as Status?
+        val current_status = arguments?.getSerializable(POST_TAG) as Status?
         val domain = arguments?.getString(DOMAIN_TAG)!!
-        val root = inflater.inflate(R.layout.post_fragment, container, false)
+        val root: View = inflater.inflate(R.layout.post_fragment, container, false)
         val picRequest = Glide.with(this)
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        status?.setupPost(root, picRequest, this, domain, true)
+        current_status?.setupPost(root, picRequest, this, domain, true)
 
         //Setup arguments needed for the onclicklisteners
         val holder = PostViewHolder(root, requireContext())
@@ -42,14 +42,15 @@ class PostFragment : Fragment() {
         val accessToken = preferences.getString("accessToken", "")
         val api = PixelfedAPI.create("${preferences.getString("domain", "")}")
 
-        status?.setDescription(root, api, "Bearer $accessToken")
+        current_status?.setDescription(root, api, "Bearer $accessToken")
 
         //Activate onclickListeners
-        status?.activateLiker(holder, api, "Bearer $accessToken", status.favourited)
-        status?.activateReblogger(holder, api, "Bearer $accessToken", status.reblogged)
-        status?.activateCommenter(holder, api, "Bearer $accessToken")
-        status?.showComments(holder, api, "Bearer $accessToken")
+        current_status?.activateLiker(holder, api, "Bearer $accessToken", current_status!!.favourited)
+        current_status?.activateReblogger(holder, api, "Bearer $accessToken", current_status!!.reblogged)
+        current_status?.activateCommenter(holder, api, "Bearer $accessToken")
+        current_status?.showComments(holder, api, "Bearer $accessToken")
 
         return root
     }
+
 }

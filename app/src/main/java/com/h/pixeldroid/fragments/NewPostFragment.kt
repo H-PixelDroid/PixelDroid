@@ -2,13 +2,14 @@ package com.h.pixeldroid.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.h.pixeldroid.PostCreationActivity
+import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.R
 
 /**
@@ -34,14 +35,21 @@ class NewPostFragment : Fragment() {
             uploadPicture()
         }
 
+        val takePictureButton: Button = view.findViewById(R.id.takePictureButton)
+        takePictureButton.setOnClickListener{
+            val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
+            val intent = Intent(context, PhotoEditActivity::class.java).putExtra("uri", uri)
+            startActivity(intent)
+        }
+
         return view
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null
             && requestCode == PICK_IMAGE_REQUEST  && data.data != null)
-            startActivity(Intent(activity, PostCreationActivity::class.java)
-                .putExtra("picture_uri", data.data)
+            startActivity(Intent(activity, PhotoEditActivity::class.java)
+                .putExtra("uri", data.data)
             )
     }
 
