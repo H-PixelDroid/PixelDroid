@@ -1,22 +1,16 @@
 package com.h.pixeldroid
 
-import android.Manifest
-import com.h.pixeldroid.fragments.CameraFragment
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -26,6 +20,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.NewPostFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
@@ -38,7 +33,7 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-// test
+
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
@@ -63,7 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val tabs = arrayOf(
                 PostsFeedFragment(),
                 searchDiscoverFragment,
-                CameraFragment(),
+                NewPostFragment(),
                 NotificationsFragment(),
                 PublicTimelineFragment()
             )
