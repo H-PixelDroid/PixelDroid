@@ -52,7 +52,7 @@ class DrawerMenuTest {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
         // Check that settings activity was opened.
-        onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.theme_title)).check(matches(isDisplayed()))
     }
 
     @Test
