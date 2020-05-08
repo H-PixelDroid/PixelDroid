@@ -25,7 +25,7 @@
 
         <activity
             android:name=".PhotoEditActivity"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".PostCreationActivity"
             android:screenOrientation="sensorPortrait"

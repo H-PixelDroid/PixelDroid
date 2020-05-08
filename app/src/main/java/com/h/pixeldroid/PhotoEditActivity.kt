@@ -1,15 +1,16 @@
 package com.h.pixeldroid
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.EditPhotoViewPagerAdapter
@@ -18,37 +19,44 @@ import com.h.pixeldroid.fragments.FilterListFragment
 import com.h.pixeldroid.interfaces.EditImageFragmentListener
 import com.h.pixeldroid.interfaces.FilterListFragmentListener
 import com.h.pixeldroid.utils.NonSwipeableViewPager
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
-
 import kotlinx.android.synthetic.main.activity_photo_edit.*
 import kotlinx.android.synthetic.main.content_photo_edit.*
 import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+
+// This is an arbitrary number we are using to keep track of the permission
+// request. Where an app has multiple context for requesting permission,
+// this can help differentiate the different contexts.
+private const val REQUEST_CODE_PERMISSIONS_SAVE_PHOTO = 8
+private const val REQUEST_CODE_PERMISSIONS_SEND_PHOTO = 7
+private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditImageFragmentListener {
 
     val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
 
-    internal var originalImage: Bitmap? = null
-    internal lateinit var filteredImage: Bitmap
-    internal lateinit var finalImage: Bitmap
+    private var originalImage: Bitmap? = null
+    private lateinit var filteredImage: Bitmap
+    private lateinit var finalImage: Bitmap
 
-    internal lateinit var filterListFragment: FilterListFragment
-    internal lateinit var editImageFragment: EditImageFragment
+    private lateinit var filterListFragment: FilterListFragment
+    private lateinit var editImageFragment: EditImageFragment
+
+    private lateinit var outputDirectory: File
 
     lateinit var viewPager: NonSwipeableViewPager
     lateinit var tabLayout: TabLayout
 
-    internal var brightnessFinal = 0
-    internal var saturationFinal = 1.0f
-    internal var contrastFinal = 1.0f
+    private var brightnessFinal = 0
+    private var saturationFinal = 1.0f
+    private var contrastFinal = 1.0f
 
     private var resultUri: Uri? = null
 
@@ -77,6 +85,16 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         tabLayout = findViewById(R.id.tabs)
         setupViewPager(viewPager)
         tabLayout.setupWithViewPager(viewPager)
+        outputDirectory = getOutputDirectory()
+    }
+
+    /** Use external media if it is available, our app's file directory otherwise */
+    private fun getOutputDirectory(): File {
+        val appContext = applicationContext
+        val mediaDir = externalMediaDirs.firstOrNull()?.let {
+            File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
+        return if (mediaDir != null && mediaDir.exists())
+            mediaDir else appContext.filesDir
     }
 
     private fun loadImage() {
@@ -107,9 +125,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
 
-        when(id) {
+        when(item.itemId) {
             android.R.id.home -> {
                 super.onBackPressed()
             }
@@ -125,47 +142,79 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         return super.onOptionsItemSelected(item)
     }
 
-    private fun uploadImage(path: String?) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if(grantResults.size > 1
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            // permission was granted
+            when (requestCode) {
+                REQUEST_CODE_PERMISSIONS_SAVE_PHOTO -> permissionsGrantedToSave(true)
+                REQUEST_CODE_PERMISSIONS_SEND_PHOTO -> permissionsGrantedToSave(false)
+            }
+        } else {
+            Snackbar.make(coordinator_edit, "Permission denied", Snackbar.LENGTH_LONG).show()
+        }
+    }
+
+    private fun uploadImage(file: File) {
         val intent = Intent (applicationContext, PostCreationActivity::class.java)
-        intent.putExtra("picture_uri", Uri.parse(path))
-        val fileToDelete = File(File(path!!).absolutePath)
-        fileToDelete.delete()
+        intent.putExtra("picture_uri", Uri.fromFile(file))
+        //file.delete()
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         applicationContext!!.startActivity(intent)
     }
 
     private fun saveImageToGallery(save: Boolean) {
         // runtime permission and process
-        Dexter.withActivity(this)
-            .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .withListener(object:MultiplePermissionsListener{
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    if(report!!.areAllPermissionsGranted()) {
-                        permissionsGrantedToSave(save)
-                    } else {
-                        Toast.makeText(applicationContext, "Permission denied", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?) {
-                    token!!.continuePermissionRequest()
-                }
-
-            }).check()
+        if (!allPermissionsGranted()) {
+            ActivityCompat.requestPermissions(
+                this,
+                REQUIRED_PERMISSIONS,
+                if(save) REQUEST_CODE_PERMISSIONS_SAVE_PHOTO else REQUEST_CODE_PERMISSIONS_SEND_PHOTO
+            )
+        } else {
+            permissionsGrantedToSave(save)
+        }
     }
 
-    private fun permissionsGrantedToSave(save: Boolean){
-        // Save the picture
-        val path = MediaStore.Images.Media.insertImage(contentResolver, finalImage, System.currentTimeMillis().toString() + "_profile.jpg", "")
-        if(!TextUtils.isEmpty(path)) {
-            if(!save) {
-                uploadImage(path)
-            } else {
-                Snackbar.make(coordinator_edit, "Image succesfully saved", Snackbar.LENGTH_LONG).show()
-            }
-        } else {
+    /**
+     * Check if all permission specified in the manifest have been granted
+     */
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            applicationContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun File.writeBitmap(bitmap: Bitmap) {
+        outputStream().use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, out)
+            out.flush()
+        }
+    }
+
+    private fun permissionsGrantedToSave(save: Boolean) {
+        val file = if(!save){
+            //put picture in cache
+            File.createTempFile("temp_img", ".png", cacheDir)
+        } else{
+            // Save the picture (quality is ignored for PNG)
+            File(outputDirectory, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
+                    .format(System.currentTimeMillis()) + ".png")
+        }
+        try {
+            file.writeBitmap(finalImage)
+        } catch (e: IOException) {
             Snackbar.make(coordinator_edit, "Unable to save image", Snackbar.LENGTH_LONG).show()
+        }
+
+        if (!save) {
+            uploadImage(file)
+        } else {
+            Snackbar.make(coordinator_edit, "Image succesfully saved", Snackbar.LENGTH_LONG).show()
         }
     }
 
