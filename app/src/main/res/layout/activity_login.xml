@@ -25,13 +25,21 @@
                 android:layout_marginBottom="20dp"
                 app:srcCompat="@drawable/ic_fred_phone" />
 
+            <Spinner
+                android:id="@+id/login_activity_instance_chooser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:visibility="gone"/>
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/domainTextInputLayout"
+                android:id="@+id/login_activity_instance_input_layout"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:hint="Domain of your instance"
-                app:errorEnabled="true">
+                android:hint="@string/domain_of_your_instance"
+                app:errorEnabled="true"
+                android:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editText"
@@ -45,8 +53,7 @@
                     android:id="@+id/connect_instance_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="36dp"
-                    android:text="Connect to Pixelfed" />
+                    android:text="@string/connect_to_pixelfed" />
 
                 <TextView
                     android:id="@+id/whatsAnInstanceTextView"
@@ -60,6 +67,14 @@
                     android:textAlignment="center" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/login_activity_connection_required_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_connection_required_once"
+                android:textAlignment="center"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/progressLayout"

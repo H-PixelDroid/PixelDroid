@@ -4,20 +4,30 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.room.Room
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Application
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Token
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.connect_instance_button
+import kotlinx.android.synthetic.main.activity_login.editText
+import kotlinx.android.synthetic.main.activity_login.login_activity_connection_required_text
+import kotlinx.android.synthetic.main.activity_login.login_activity_instance_chooser
+import kotlinx.android.synthetic.main.activity_login.login_activity_instance_input_layout
+import kotlinx.android.synthetic.main.activity_login.progressLayout
+import kotlinx.android.synthetic.main.activity_login.whatsAnInstanceTextView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,20 +44,59 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var oauthScheme: String
     private lateinit var appName: String
     private lateinit var preferences: SharedPreferences
-    private var username = ""
+    private lateinit var db: AppDatabase
+    private lateinit var pixelfedAPI: PixelfedAPI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
-        connect_instance_button.setOnClickListener { registerAppToServer() }
-        whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
+        setContentView(R.layout.activity_login)
 
         appName = getString(R.string.app_name)
         oauthScheme = getString(R.string.auth_scheme)
         preferences = getSharedPreferences(
             "$PACKAGE_ID.pref", Context.MODE_PRIVATE
         )
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).allowMainThreadQueries().build()
+
+        val instances: List<String> = accountList()
+        if (instances.isNotEmpty()) {
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, instances).also {
+                adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                login_activity_instance_chooser.adapter = adapter
+            }
+            login_activity_instance_chooser.visibility = View.VISIBLE
+        }
+
+        if (hasInternet()) {
+            login_activity_instance_input_layout.visibility = View.VISIBLE
+            connect_instance_button.setOnClickListener { registerAppToServer() }
+            whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
+        } else {
+            if (!hasSavedInstances()) {
+                login_activity_connection_required_text.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun hasInternet(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetwork
+        return activeNetworkInfo != null
+    }
+
+    private fun hasSavedInstances(): Boolean {
+        return true
+    }
+
+    private fun accountList(): List<String> {
+        val users = db.userDao().getAll()
+        if (users.isEmpty()) return emptyList()
+        return users.map {user -> "${user.username}@${user.instance}"}
     }
 
     override fun onStart(){
@@ -85,7 +134,8 @@ class LoginActivity : AppCompatActivity() {
     private fun registerAppToServer() {
         loadingAnimation(true)
         val normalizedDomain = "https://" + normalizeDomain(editText.text.toString())
-        PixelfedAPI.create(normalizedDomain).registerApplication(
+        pixelfedAPI = PixelfedAPI.create(normalizedDomain)
+        pixelfedAPI.registerApplication(
             appName,"$oauthScheme://$PACKAGE_ID", SCOPE
         ).enqueue(object : Callback<Application> {
             override fun onResponse(call: Call<Application>, response: Response<Application>) {
@@ -102,7 +152,6 @@ class LoginActivity : AppCompatActivity() {
                     .putString("clientSecret", credentials.client_secret)
                     .apply()
                 promptOAuth(normalizedDomain, clientId)
-                getInstanceConfig()
             }
 
             override fun onFailure(call: Call<Application>, t: Throwable) {
@@ -158,24 +207,16 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        PixelfedAPI.create(domain)
-            .obtainToken(
+        pixelfedAPI = PixelfedAPI.create(domain)
+        pixelfedAPI.obtainToken(
             clientId, clientSecret, "$oauthScheme://$PACKAGE_ID", SCOPE, code,
             "authorization_code"
         ).enqueue(callback)
     }
 
     private fun authenticationSuccessful(accessToken: String) {
+        saveUserAndInstance(accessToken)
         preferences.edit().putString("accessToken", accessToken).apply()
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "database-name"
-        ).build()
-        val instance: InstanceDatabaseEntity = InstanceDatabaseEntity(
-            username = "",
-            instance = preferences.getString("domain", "") as String
-        )
-        db.instanceDao().insertAll(instance)
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
@@ -188,39 +229,62 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loadingAnimation(on: Boolean){
         if(on) {
-            domainTextInputLayout.visibility = View.GONE
+            login_activity_instance_input_layout.visibility = View.GONE
             progressLayout.visibility = View.VISIBLE
         }
         else {
-            domainTextInputLayout.visibility = View.VISIBLE
+            login_activity_instance_input_layout.visibility = View.VISIBLE
             progressLayout.visibility = View.GONE
         }
     }
 
-    private fun getInstanceConfig() {
-        // to get max post description length, can be enhanced for other things
-        // see /api/v1/instance
-        PixelfedAPI.create(preferences.getString("domain", "")!!)
-            .instance().enqueue(object : Callback<Instance> {
-
-            override fun onFailure(call: Call<Instance>, t: Throwable) {
-                Log.e(TAG, "Request to fetch instance config failed.")
-                preferences.edit().putInt("max_toot_chars", 500).apply()
-            }
-
-            override fun onResponse(call: Call<Instance>, response: Response<Instance>) {
-                if (response.code() == 200) {
-                    preferences.edit().putInt(
-                        "max_toot_chars",
-                        response.body()!!.max_toot_chars.toInt()
-                    ).apply()
-                } else {
-                    Log.e(TAG, "Server response to fetch instance config failed.")
-                    preferences.edit().putInt("max_toot_chars", 500).apply()
+    private fun saveUserAndInstance(accessToken: String) {
+        preferences.edit().putInt("max_toot_chars", Instance.DEFAULT_MAX_TOOT_CHARS).apply()
+        pixelfedAPI.instance().enqueue(object : Callback<Instance> {
+                override fun onFailure(call: Call<Instance>, t: Throwable) {
+                    Log.e(TAG, "Request to fetch instance config failed.")
                 }
-            }
+                override fun onResponse(call: Call<Instance>, response: Response<Instance>) {
+                    if (response.code() == 200) {
+                        val instance = response.body()!!
+                        storeInstance(instance)
+                        storeUser(accessToken, instance.title)
+                    } else {
+                        Log.e(TAG, "Server response to fetch instance config failed.")
+                    }
+                }
+            })
+    }
 
-        })
+    private fun storeInstance(instance: Instance) {
+        val maxTootChars = instance.max_toot_chars.toInt()
+        preferences.edit().putInt("max_toot_chars", maxTootChars).apply()
+        val dbInstance = InstanceDatabaseEntity(
+            uri = instance.uri,
+            title = instance.title,
+            max_toot_chars = maxTootChars,
+            thumbnail = instance.thumbnail
+        )
+        db.instanceDao().insertInstance(dbInstance)
+    }
+
+    private fun storeUser(accessToken: String, instance: String) {
+        pixelfedAPI.verifyCredentials("Bearer $accessToken")
+            .enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if (response.code() == 200) {
+                        val user = response.body()!!
+                        db.userDao().insertUser(UserDatabaseEntity(
+                            user_id = user.id,
+                            instance = instance,
+                            username = user.username
+                        ))
+                    }
+                }
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e(TAG, t.toString())
+                }
+            })
     }
 
 }

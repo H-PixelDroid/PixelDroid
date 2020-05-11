@@ -9,4 +9,7 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="login_instance_spinner">
+    </string-array>
 </resources>

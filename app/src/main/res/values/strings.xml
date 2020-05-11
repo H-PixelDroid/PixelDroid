@@ -48,5 +48,8 @@
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
     <string name="share_picture">Share picture…</string>
+    <string name="domain_of_your_instance">Domain of your instance</string>
+    <string name="connect_to_pixelfed">Connect to Pixelfed</string>
+    <string name="login_connection_required_once">You need to connect to the internet at least once to use PixelDroid :(</string>
 
 </resources>

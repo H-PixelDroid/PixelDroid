@@ -6,10 +6,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface InstanceDao {
-    @Query("SELECT * FROM instances")
-    fun getAll(): List<InstanceDatabaseEntity>
-
+interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertInstance(instance: InstanceDatabaseEntity)
+    fun insertUser(user: UserDatabaseEntity)
+
+    @Query("SELECT * FROM users")
+    fun getAll(): List<UserDatabaseEntity>
 }

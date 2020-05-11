@@ -2,14 +2,10 @@ package com.h.pixeldroid.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 
-@Database(entities = [InstanceDatabaseEntity::class], version = 1)
-@TypeConverters(Converters::class)
+@Database(entities = [InstanceDatabaseEntity::class, UserDatabaseEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    companion object {
-        const val MAX_NUMBER_OF_POSTS = 100
-    }
-
     abstract fun instanceDao(): InstanceDao
+
+    abstract fun userDao(): UserDao
 }
