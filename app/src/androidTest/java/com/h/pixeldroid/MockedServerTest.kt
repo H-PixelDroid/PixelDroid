@@ -1,6 +1,9 @@
 package com.h.pixeldroid
 
 import android.content.Context
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
@@ -19,6 +22,8 @@ import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import com.h.pixeldroid.testUtility.MockServer
+import kotlinx.android.synthetic.main.post_fragment.*
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -500,6 +505,30 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
+    }
+
+    @Test
+    fun clickOnSensitiveWarningHidesIt() {
+
+        activityScenario.onActivity { it ->
+            assert(it.sensitiveWarning.visibility == VISIBLE)
+            it.sensitiveWarning.performClick()
+            Thread.sleep(5000)
+            assert(it.sensitiveWarning.visibility == VISIBLE)
+
+        }
+    }
+
+    @Test
+    fun clickOnImageViewHidesSensitiveWarning() {
+
+        activityScenario.onActivity { it ->
+            assert(it.sensitiveWarning.visibility == VISIBLE)
+            it.postPicture.performClick()
+            Thread.sleep(1000)
+            assert(it.sensitiveWarning.visibility == GONE)
+
+        }
     }
 }
 
