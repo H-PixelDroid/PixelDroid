@@ -2,7 +2,6 @@ package com.h.pixeldroid.objects
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spanned
@@ -18,13 +17,12 @@ import android.widget.Toast
 import android.widget.PopupMenu
 import android.widget.ImageView
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.ImageFragment
+import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
@@ -40,12 +38,9 @@ import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.BasePermissionListener
-import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.postDate
 import kotlinx.android.synthetic.main.post_fragment.view.postDomain
 import java.io.Serializable
