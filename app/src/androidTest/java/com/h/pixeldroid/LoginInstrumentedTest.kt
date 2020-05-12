@@ -17,7 +17,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasDataString
 import androidx.test.espresso.matcher.ViewMatchers.hasErrorText
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -46,18 +45,6 @@ class LoginInstrumentedTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<LoginActivity>
             = ActivityScenarioRule(LoginActivity::class.java)
-
-    @Test
-    fun clickConnect() {
-        onView(withId(R.id.connect_instance_button)).check(matches(withText("Connect to Pixelfed")))
-    }
-
-    @Test
-    fun invalidURL() {
-        onView(withId(R.id.editText)).perform(ViewActions.replaceText("/jdi"), ViewActions.closeSoftKeyboard())
-        onView(withId(R.id.connect_instance_button)).perform(scrollTo()).perform(click())
-        onView(withId(R.id.editText)).check(matches(hasErrorText("Invalid domain")))
-    }
 
     @Test
     fun notPixelfedInstance() {

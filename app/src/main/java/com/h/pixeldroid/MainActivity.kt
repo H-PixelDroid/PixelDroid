@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //Check if we have logged in and gotten an access token
         if((Utils.hasInternet(applicationContext) && !preferences.contains("accessToken"))
-            || !preferences.contains("user_id")) {
+            || (!Utils.hasInternet(applicationContext) && !preferences.contains("user_id"))) {
             launchActivity(LoginActivity())
         } else {
             setupDrawer()
