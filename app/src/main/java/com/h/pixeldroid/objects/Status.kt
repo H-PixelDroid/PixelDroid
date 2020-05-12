@@ -10,7 +10,8 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.core.text.toSpanned
 import android.widget.TextView
 import android.widget.LinearLayout
@@ -201,6 +202,7 @@ data class Status(
         }
     }
 
+
     private fun setupTabs(tabs: ArrayList<ImageFragment>, rootView: View, homeFragment: Fragment) {
         //Attach the given tabs to the view pager
         rootView.postPager.adapter = object : FragmentStateAdapter(homeFragment) {
@@ -264,7 +266,7 @@ data class Status(
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
 
-        if (sensitive)
+        if(sensitive)
             sensitiveLayout(rootView, homeFragment.requireActivity())
         else
             imagePopUpMenu(rootView, homeFragment.requireActivity())
@@ -368,6 +370,52 @@ data class Status(
     }
 
 
+    fun imagePopUpMenu(view: View, activity: FragmentActivity) {
+        val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
+        if (!media_attachments.isNullOrEmpty() && media_attachments.size == 1) {
+            view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
+                PopupMenu(view.context, anchor).apply {
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.image_popup_menu_save_to_gallery -> {
+                                Dexter.withContext(view.context)
+                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    .withListener(object: BasePermissionListener() {
+                                        override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                            Toast.makeText(view.context, "You need to grant write permission to download pictures!", Toast.LENGTH_SHORT).show()
+                                        }
+
+                                        override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                            downloadImage(activity, getPostUrl()!!)
+                                        }
+                                    }).check()
+                                true
+                            }
+                            R.id.image_popup_menu_share_picture -> {
+                                Dexter.withContext(view.context)
+                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    .withListener(object: BasePermissionListener() {
+                                        override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                            Toast.makeText(view.context, "You need to grant write permission to share pictures!", Toast.LENGTH_SHORT).show()
+                                        }
+
+                                        override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                            downloadImage(activity, getPostUrl()!!, share = true)
+                                        }
+                                    }).check()
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    inflate(R.menu.image_popup_menu)
+                    show()
+                }
+                true
+            }
+        }
+    }
+
     private fun sensitiveLayout(view: View, activity: FragmentActivity) {
 
         fun uncensorPicture(view: View) {
@@ -387,64 +435,6 @@ data class Status(
                 uncensorPicture(view)
                 imagePopUpMenu(view, activity)
             }
-        }
-    }
-
-    private fun imagePopUpMenu(view: View, activity: FragmentActivity) {
-        val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
-
-        view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
-
-            PopupMenu(view.context, anchor).apply {
-                setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.image_popup_menu_save_to_gallery -> {
-                            Dexter.withContext(view.context)
-                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .withListener(object : BasePermissionListener() {
-                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                        Toast.makeText(
-                                            view.context,
-                                            "You need to grant write permission to download pictures!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-
-                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                        downloadImage(activity, getPostUrl()!!)
-                                    }
-                                }).check()
-                            true
-                        }
-                        R.id.image_popup_menu_share_picture -> {
-                            Dexter.withContext(view.context)
-                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .withListener(object : BasePermissionListener() {
-                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                        Toast.makeText(
-                                            view.context,
-                                            "You need to grant write permission to share pictures!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-
-                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                        downloadImage(
-                                            activity,
-                                            getPostUrl()!!,
-                                            share = true
-                                        )
-                                    }
-                                }).check()
-                            true
-                        }
-                        else -> false
-                    }
-                }
-                inflate(R.menu.image_popup_menu)
-                show()
-            }
-            true
         }
     }
 }
