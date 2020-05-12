@@ -1,5 +1,7 @@
 package com.h.pixeldroid
 
+
+import android.graphics.ColorMatrix
 import android.content.Context
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -22,6 +24,8 @@ import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
+import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
 import kotlinx.android.synthetic.main.post_fragment.*
 import org.hamcrest.Matchers.not
 import org.junit.Before
@@ -529,6 +533,18 @@ class MockedServerTest {
             assert(it.sensitiveWarning.visibility == GONE)
 
         }
+    }
+
+    @Test
+    fun censorMatrices() {
+        val array: FloatArray = floatArrayOf(
+            0.1f, 0f, 0f, 0f, 0f,  // red vector
+            0f, 0.1f, 0f, 0f, 0f,  // green vector
+            0f, 0f, 0.1f, 0f, 0f,  // blue vector
+            0f, 0f, 0f, 1f, 0f ) // alpha vector
+       assert(censorColorMatrix().equals(array))
+
+        assert(uncensorColorMatrix().equals(ColorMatrix()))
     }
 }
 
