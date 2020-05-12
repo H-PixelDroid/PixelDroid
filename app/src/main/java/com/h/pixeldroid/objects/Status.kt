@@ -3,14 +3,14 @@ package com.h.pixeldroid.objects
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import androidx.core.text.toSpanned
 import android.widget.TextView
 import android.widget.LinearLayout
@@ -32,12 +32,14 @@ import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.ImageUtils.Companion.downloadImage
+import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
 import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
 import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
+import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -46,17 +48,12 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.BasePermissionListener
 import com.karumi.dexter.listener.single.PermissionListener
-import kotlinx.android.synthetic.main.post_fragment.view.postDate
-import kotlinx.android.synthetic.main.post_fragment.view.postDomain
+import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.collections.ArrayList
-import kotlinx.android.synthetic.main.post_fragment.view.postPager
-import kotlinx.android.synthetic.main.post_fragment.view.postPicture
-import kotlinx.android.synthetic.main.post_fragment.view.postTabs
-import kotlinx.android.synthetic.main.post_fragment.view.profilePic
 
 /*
 Represents a status posted by an account.
@@ -175,10 +172,19 @@ data class Status(
     private fun setupPostPics(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
         //Check whether or not we need to activate the viewPager
         if(media_attachments?.size == 1) {
+
+            if(sensitive) {
+                rootView.sensitiveWarning.visibility = VISIBLE
+                rootView.postPicture.colorFilter = ColorMatrixColorFilter(censorColorMatrix())
+            } else {
+                rootView.sensitiveWarning.visibility = GONE
+            }
+
             rootView.postPicture.visibility = VISIBLE
             rootView.postPager.visibility = GONE
             rootView.postTabs.visibility = GONE
             request.load(this.getPostUrl()).into(rootView.postPicture)
+
         } else if(media_attachments?.size!! > 1) {
             //Only show the viewPager and tabs
             rootView.postPicture.visibility = GONE
@@ -258,7 +264,10 @@ data class Status(
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
 
-        imagePopUpMenu(rootView, homeFragment.requireActivity())
+        if (sensitive)
+            sensitiveLayout(rootView, homeFragment.requireActivity())
+        else
+            imagePopUpMenu(rootView, homeFragment.requireActivity())
     }
 
     fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
@@ -359,49 +368,83 @@ data class Status(
     }
 
 
-    fun imagePopUpMenu(view: View, activity: FragmentActivity) {
-        val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
+    private fun sensitiveLayout(view: View, activity: FragmentActivity) {
+
+        fun uncensorPicture(view: View) {
+            view.sensitiveWarning.visibility = GONE
+            view.postPicture.colorFilter = ColorMatrixColorFilter(uncensorColorMatrix())
+        }
+
+
         if (!media_attachments.isNullOrEmpty() && media_attachments.size == 1) {
-            view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
-                PopupMenu(view.context, anchor).apply {
-                    setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.image_popup_menu_save_to_gallery -> {
-                                Dexter.withContext(view.context)
-                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                    .withListener(object: BasePermissionListener() {
-                                        override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                            Toast.makeText(view.context, "You need to grant write permission to download pictures!", Toast.LENGTH_SHORT).show()
-                                        }
 
-                                        override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                            downloadImage(activity, getPostUrl()!!)
-                                        }
-                                    }).check()
-                                true
-                            }
-                            R.id.image_popup_menu_share_picture -> {
-                                Dexter.withContext(view.context)
-                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                    .withListener(object: BasePermissionListener() {
-                                        override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                            Toast.makeText(view.context, "You need to grant write permission to share pictures!", Toast.LENGTH_SHORT).show()
-                                        }
-
-                                        override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                            downloadImage(activity, getPostUrl()!!, share = true)
-                                        }
-                                    }).check()
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-                    inflate(R.menu.image_popup_menu)
-                    show()
-                }
-                true
+            view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
+                uncensorPicture(view)
+                imagePopUpMenu(view, activity)
             }
+
+            view.findViewById<ImageView>(R.id.postPicture).setOnClickListener {
+                uncensorPicture(view)
+                imagePopUpMenu(view, activity)
+            }
+        }
+    }
+
+    private fun imagePopUpMenu(view: View, activity: FragmentActivity) {
+        val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
+
+        view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
+
+            PopupMenu(view.context, anchor).apply {
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.image_popup_menu_save_to_gallery -> {
+                            Dexter.withContext(view.context)
+                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                .withListener(object : BasePermissionListener() {
+                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                        Toast.makeText(
+                                            view.context,
+                                            "You need to grant write permission to download pictures!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                        downloadImage(activity, getPostUrl()!!)
+                                    }
+                                }).check()
+                            true
+                        }
+                        R.id.image_popup_menu_share_picture -> {
+                            Dexter.withContext(view.context)
+                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                .withListener(object : BasePermissionListener() {
+                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                        Toast.makeText(
+                                            view.context,
+                                            "You need to grant write permission to share pictures!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                        downloadImage(
+                                            activity,
+                                            getPostUrl()!!,
+                                            share = true
+                                        )
+                                    }
+                                }).check()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                inflate(R.menu.image_popup_menu)
+                show()
+            }
+            true
         }
     }
 }
