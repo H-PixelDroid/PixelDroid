@@ -5,8 +5,10 @@ import android.graphics.ColorMatrix
 import android.content.Context
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -26,7 +28,11 @@ import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithI
 import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
+import kotlinx.android.synthetic.main.fragment_feed.*
+import kotlinx.android.synthetic.main.fragment_feed.view.*
 import kotlinx.android.synthetic.main.post_fragment.*
+import kotlinx.android.synthetic.main.post_fragment.view.*
+import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
@@ -517,7 +523,7 @@ class MockedServerTest {
         activityScenario.onActivity { it ->
             assert(it.sensitiveWarning.visibility == VISIBLE)
             it.sensitiveWarning.performClick()
-            Thread.sleep(5000)
+            Thread.sleep(1000)
             assert(it.sensitiveWarning.visibility == VISIBLE)
 
         }
@@ -541,10 +547,40 @@ class MockedServerTest {
             0.1f, 0f, 0f, 0f, 0f,  // red vector
             0f, 0.1f, 0f, 0f, 0f,  // green vector
             0f, 0f, 0.1f, 0f, 0f,  // blue vector
-            0f, 0f, 0f, 1f, 0f ) // alpha vector
-       assert(censorColorMatrix().equals(array))
+            0f, 0f, 0f, 1f, 0f   ) // alpha vector
 
+        assert(censorColorMatrix().equals(array))
         assert(uncensorColorMatrix().equals(ColorMatrix()))
+    }
+
+    @Test
+    fun performClickOnSensitiveWarning() {
+
+        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (1, clickChildViewWithId(R.id.sensitiveWarning)))
+        Thread.sleep(1000)
+
+        assert(true)
+    }
+
+    @Test
+    fun performClickOnPostPicture() {
+
+        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (1, clickChildViewWithId(R.id.postPicture)))
+        Thread.sleep(1000)
+
+        assert(true)
     }
 }
 
