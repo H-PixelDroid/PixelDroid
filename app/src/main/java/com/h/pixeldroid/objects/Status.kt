@@ -187,6 +187,8 @@ data class Status(
             request.load(this.getPostUrl()).into(rootView.postPicture)
 
         } else if(media_attachments?.size!! > 1) {
+            rootView.sensitiveWarning.visibility = GONE
+
             //Only show the viewPager and tabs
             rootView.postPicture.visibility = GONE
             rootView.postPager.visibility = VISIBLE
