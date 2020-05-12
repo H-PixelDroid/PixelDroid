@@ -25,12 +25,38 @@
                 android:layout_marginBottom="20dp"
                 app:srcCompat="@drawable/ic_fred_phone" />
 
-            <Spinner
-                android:id="@+id/login_activity_instance_chooser"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/login_activity_instance_chooser_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="60dp"
                 android:layout_marginBottom="15dp"
-                android:visibility="gone"/>
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/login_activity_instance_chooser_offline_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/you_are_in_offline_mode"
+                    android:textAlignment="center"
+                    android:visibility="gone"/>
+
+                <Spinner
+                    android:id="@+id/login_activity_instance_chooser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"/>
+
+                <Button
+                    android:id="@+id/login_activity_instance_chooser_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enter"/>
+
+            </LinearLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/login_activity_instance_input_layout"
