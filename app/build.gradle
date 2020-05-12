@@ -114,6 +114,9 @@ dependencies {
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
     implementation 'com.karumi:dexter:6.1.0'
+
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+
 }
 
 tasks.withType(Test) {
