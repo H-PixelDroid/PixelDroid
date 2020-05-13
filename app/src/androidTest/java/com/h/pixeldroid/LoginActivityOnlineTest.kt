@@ -92,7 +92,7 @@ class LoginActivityOnlineTest {
     @Test
     fun wrongIntentReturnInfoFailsTest() {
         pref.edit()
-            .putString("domain", "dhbfnhgbdbbet")
+            .putString("domain", "https://dhbfnhgbdbbet")
             .putString("clientID", "iwndoiuqwnd")
             .putString("clientSecret", "wlifowed")
             .apply()
