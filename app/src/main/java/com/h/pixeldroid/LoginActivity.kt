@@ -128,11 +128,6 @@ class LoginActivity : AppCompatActivity() {
         else
             preferences.edit()
                 .putString("user_id", account["id"])
-//                .putString("domain", account["instance_uri"])
-//                .putString("clientID", clientId)
-//                .putString("clientSecret", credentials.client_secret)
-//                .putString("accessToken", accessToken)
-//                .putString("instance_uri", instance.uri)
                 .apply()
     }
 
@@ -232,11 +227,6 @@ class LoginActivity : AppCompatActivity() {
         val callback = object : Callback<Token> {
             override fun onResponse(call: Call<Token>, response: Response<Token>) {
                 if (!response.isSuccessful || response.body() == null) {
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.auth_error_toast_msg),
-                        Toast.LENGTH_LONG
-                    ).show()
                     return failedRegistration(getString(R.string.token_error))
                 }
                 authenticationSuccessful(response.body()!!.access_token)
@@ -283,15 +273,13 @@ class LoginActivity : AppCompatActivity() {
         preferences.edit().putInt("max_toot_chars", Instance.DEFAULT_MAX_TOOT_CHARS).apply()
         pixelfedAPI.instance().enqueue(object : Callback<Instance> {
                 override fun onFailure(call: Call<Instance>, t: Throwable) {
-                    Log.e(TAG, "Request to fetch instance config failed.")
                 }
+
                 override fun onResponse(call: Call<Instance>, response: Response<Instance>) {
                     if (response.isSuccessful && response.body() != null) {
                         val instance = response.body() as Instance
                         storeInstance(instance)
                         storeUser(accessToken)
-                    } else {
-                        Log.e(TAG, "Server response to fetch instance config failed.")
                     }
                 }
             })
@@ -325,7 +313,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
                 override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e(TAG, t.toString())
                 }
             })
     }

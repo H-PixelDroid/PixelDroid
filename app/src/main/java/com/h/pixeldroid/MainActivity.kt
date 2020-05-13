@@ -21,11 +21,12 @@ import com.h.pixeldroid.fragments.NewPostFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
+import com.h.pixeldroid.fragments.feeds.OfflineFeedFragment
 import com.h.pixeldroid.fragments.feeds.PublicTimelineFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.ImageConverter
-import com.h.pixeldroid.utils.Utils
+import com.h.pixeldroid.utils.Utils.Companion.hasInternet
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,13 +52,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         db = DBUtils.initDB(applicationContext)
 
         //Check if we have logged in and gotten an access token
-        if((Utils.hasInternet(applicationContext) && !preferences.contains("accessToken"))
-            || (!Utils.hasInternet(applicationContext) && !preferences.contains("user_id"))) {
+        if((hasInternet(applicationContext) && !preferences.contains("accessToken"))
+            || (!hasInternet(applicationContext) && !preferences.contains("user_id"))) {
             launchActivity(LoginActivity())
         } else {
             setupDrawer()
             val tabs = arrayOf(
-                PostsFeedFragment(),
+                if (hasInternet(applicationContext)) PostsFeedFragment()
+                else OfflineFeedFragment(),
                 searchDiscoverFragment,
                 NewPostFragment(),
                 NotificationsFragment(),
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupDrawer() {
         nav_view.setNavigationItemSelectedListener(this)
-        if (Utils.hasInternet(applicationContext)) {
+        if (hasInternet(applicationContext)) {
             val accessToken = preferences.getString("accessToken", "")
             val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
             pixelfedAPI.verifyCredentials("Bearer $accessToken")

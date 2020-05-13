@@ -55,4 +55,7 @@
     <string name="enter">Enter</string>
     <string name="auth_error_toast_msg">Server has responded with an error, try again!</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

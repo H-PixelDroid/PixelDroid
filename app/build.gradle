@@ -113,7 +113,7 @@ dependencies {
     def fragment_version = '1.2.4'
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
-    implementation 'com.karumi:dexter:6.1.0'
+    implementation 'com.karumi:dexter:6.1.2'
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
