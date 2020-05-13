@@ -165,5 +165,15 @@ class JsonValues {
                 "scope": "read write follow push",
                 "created_at": 12121212
         }"""
+        const val instanceJson = """{
+            "uri": "pixeldroid.epfl",
+            "title": "PixelDroid",
+            "description": "Test server description.",
+            "email": "lejeu@epfl.ch",
+            "max_toot_chars": "666",
+            "thumbnail": "https://files.mastodon.social/site_uploads/files/000/000/001/original/vlcsnap-2018-08-27-16h43m11s127.png",
+            "version": "69.420",
+            "registrations": true
+        }"""
     }
 }
