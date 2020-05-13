@@ -157,14 +157,18 @@ class LoginActivity : AppCompatActivity() {
         startActivity(i)
     }
 
-    private fun normalizeDomain(domain: String): String =
-        "https://" + domain
+    private fun normalizeDomain(domain: String): String {
+        return "https://" + domain
             .replace("http://", "")
             .replace("https://", "")
             .trim(Char::isWhitespace)
+    }
+
 
     private fun registerAppToServer(normalizedDomain: String) {
         loadingAnimation(true)
+        if (normalizedDomain.replace("https://", "").isNullOrBlank())
+            return failedRegistration(getString(R.string.login_empty_string_error))
         PixelfedAPI.create(normalizedDomain).registerApplication(
             appName,"$oauthScheme://$PACKAGE_ID", SCOPE
         ).enqueue(object : Callback<Application> {
@@ -219,7 +223,7 @@ class LoginActivity : AppCompatActivity() {
         val clientId = preferences.getString("clientID", "") as String
         val clientSecret = preferences.getString("clientSecret", "") as String
 
-        if (code.isNullOrEmpty() || domain.isEmpty() || clientId.isEmpty() || clientSecret.isEmpty()) {
+        if (code.isNullOrBlank() || domain.isBlank() || clientId.isBlank() || clientSecret.isBlank()) {
             return failedRegistration(getString(R.string.auth_failed))
         }
 
@@ -251,7 +255,7 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun failedRegistration(message: String = getString(R.string.registration_failed)){
+    private fun failedRegistration(message: String = getString(R.string.registration_failed)) {
         loadingAnimation(false)
         editText.error = message
     }

@@ -97,33 +97,3 @@ class LoginCheckIntent {
         Intents.release()
     }
 }
-
-@RunWith(AndroidJUnit4::class)
-class AfterIntent {
-    @get:Rule
-    var globalTimeout: Timeout = Timeout.seconds(100)
-
-    @get:Rule
-    val rule = ActivityTestRule(LoginActivity::class.java)
-    private var launchedActivity: Activity? = null
-
-    @Before
-    fun setup() {
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("domain", "http://localhost").apply()
-        val intent = Intent(ACTION_VIEW, Uri.parse("oauth2redirect://com.h.pixeldroid?code=sdfdqsf"))
-        launchedActivity = rule.launchActivity(intent)
-    }
-
-    @Test
-    fun usesIntent() {
-
-        Thread.sleep(5000)
-
-        onView(withId(R.id.editText)).check(matches(
-            anyOf(hasErrorText("Error getting token"),
-            hasErrorText("Could not authenticate"))))
-
-    }
-}
