@@ -519,30 +519,6 @@ class MockedServerTest {
     }
 
     @Test
-    fun clickOnSensitiveWarningHidesIt() {
-
-        activityScenario.onActivity { it ->
-            assert(it.sensitiveWarning.visibility == VISIBLE)
-            it.sensitiveWarning.performClick()
-            Thread.sleep(1000)
-            assert(it.sensitiveWarning.visibility == VISIBLE)
-
-        }
-    }
-
-    @Test
-    fun clickOnImageViewHidesSensitiveWarning() {
-
-        activityScenario.onActivity { it ->
-            assert(it.sensitiveWarning.visibility == VISIBLE)
-            it.postPicture.performClick()
-            Thread.sleep(1000)
-            assert(it.sensitiveWarning.visibility == GONE)
-
-        }
-    }
-
-    @Test
     fun censorMatrices() {
         val array: FloatArray = floatArrayOf(
             0.1f, 0f, 0f, 0f, 0f,  // red vector
