@@ -34,8 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:text="Search"
-        android:backgroundTint="@color/colorPrimaryTab"
-        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/colorButtonBg"
+        android:textColor="@color/colorButtonText"
         app:layout_constraintBottom_toBottomOf="@+id/search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/search" />

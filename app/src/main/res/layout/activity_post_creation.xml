@@ -44,8 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/send"
-            android:backgroundTint="@color/colorPrimaryTab"
-            android:textColor="@color/colorPrimary"
+            android:backgroundTint="@color/colorButtonBg"
+            android:textColor="@color/colorButtonText"
             android:layout_margin="15dp"
             android:layout_gravity="center_vertical"
             tools:ignore="PrivateResource"/>

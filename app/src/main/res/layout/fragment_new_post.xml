@@ -22,8 +22,8 @@
         android:gravity="center"
         android:padding="15dp"
         android:text="@string/upload_a_picture"
-        android:backgroundTint="@color/colorPrimaryTab"
-        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/colorButtonBg"
+        android:textColor="@color/colorButtonText"
         tools:ignore="PrivateResource" />
 
     <TextView
@@ -39,8 +39,8 @@
         android:gravity="center"
         android:padding="15dp"
         android:text="@string/take_a_picture"
-        android:backgroundTint="@color/colorPrimaryTab"
-        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/colorButtonBg"
+        android:textColor="@color/colorButtonText"
         tools:ignore="PrivateResource" />
 
 </LinearLayout>
