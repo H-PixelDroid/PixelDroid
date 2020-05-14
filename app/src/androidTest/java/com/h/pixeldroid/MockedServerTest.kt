@@ -14,6 +14,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -556,8 +557,10 @@ class MockedServerTest {
     @Test
     fun performClickOnSensitiveWarning() {
 
-        onView(withId(R.id.list)).perform(slowSwipeUp(false))
-        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
+        Thread.sleep(1000)
+
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(isDisplayed()))
         Thread.sleep(1000)
 
         onView(withId(R.id.list))
@@ -565,14 +568,16 @@ class MockedServerTest {
                 (1, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(1000)
 
-        assert(true)
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(not(isDisplayed())))
     }
 
     @Test
     fun performClickOnPostPicture() {
 
-        onView(withId(R.id.list)).perform(slowSwipeUp(false))
-        onView(withId(R.id.list)).perform(slowSwipeUp(false))
+        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
+        Thread.sleep(1000)
+
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(isDisplayed()))
         Thread.sleep(1000)
 
         onView(withId(R.id.list))
@@ -580,7 +585,7 @@ class MockedServerTest {
                 (1, clickChildViewWithId(R.id.postPicture)))
         Thread.sleep(1000)
 
-        assert(true)
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(not(isDisplayed())))
     }
 }
 
