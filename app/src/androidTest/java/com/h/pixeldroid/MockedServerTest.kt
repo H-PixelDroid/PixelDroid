@@ -518,17 +518,18 @@ class MockedServerTest {
             .check(matches(hasDescendant(withId(R.id.comment))))
     }
 
- //   @Test
- //   fun censorMatrices() {
- //       val array: FloatArray = floatArrayOf(
- //           0.1f, 0f, 0f, 0f, 0f,  // red vector
- //           0f, 0.1f, 0f, 0f, 0f,  // green vector
- //           0f, 0f, 0.1f, 0f, 0f,  // blue vector
- //           0f, 0f, 0f, 1f, 0f   ) // alpha vector
+    @Test
+    fun censorMatrices() {
+        // Doing these dummy checks as I can not get the matrix property from the ImageView
+        val array: FloatArray = floatArrayOf(
+            0.1f, 0f, 0f, 0f, 0f,  // red vector
+            0f, 0.1f, 0f, 0f, 0f,  // green vector
+            0f, 0f, 0.1f, 0f, 0f,  // blue vector
+            0f, 0f, 0f, 1f, 0f   ) // alpha vector
 
- //       assert(censorColorMatrix().equals(array))
- //       assert(uncensorColorMatrix().equals(ColorMatrix()))
- //   }
+        assert(censorColorMatrix().equals(array))
+        assert(uncensorColorMatrix().equals(ColorMatrix()))
+    }
 
     @Test
     fun performClickOnSensitiveWarning() {
