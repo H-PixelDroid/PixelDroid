@@ -2,7 +2,6 @@ package com.h.pixeldroid.objects
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -19,7 +18,6 @@ import android.widget.Toast
 import android.widget.PopupMenu
 import android.widget.ImageView
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -43,12 +41,9 @@ import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.BasePermissionListener
-import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 import java.text.ParseException
@@ -171,37 +166,44 @@ data class Status(
     }
 
     private fun setupPostPics(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
-        //Check whether or not we need to activate the viewPager
-        if(media_attachments?.size == 1) {
 
-            if(sensitive) {
-                rootView.sensitiveWarning.visibility = VISIBLE
-                rootView.postPicture.colorFilter = ColorMatrixColorFilter(censorColorMatrix())
-            } else {
-                rootView.sensitiveWarning.visibility = GONE
-            }
+        // Standard layout
+        rootView.postPicture.visibility = VISIBLE
+        rootView.postPager.visibility = GONE
+        rootView.postTabs.visibility = GONE
 
-            rootView.postPicture.visibility = VISIBLE
-            rootView.postPager.visibility = GONE
-            rootView.postTabs.visibility = GONE
+        if (sensitive) {
+            setupSensitiveLayout(rootView, request, homeFragment)
             request.load(this.getPostUrl()).into(rootView.postPicture)
 
-        } else if(media_attachments?.size!! > 1) {
+        } else {
             rootView.sensitiveWarning.visibility = GONE
 
-            //Only show the viewPager and tabs
-            rootView.postPicture.visibility = GONE
-            rootView.postPager.visibility = VISIBLE
-            rootView.postTabs.visibility = VISIBLE
+            if(media_attachments?.size == 1) {
+                request.load(this.getPostUrl()).into(rootView.postPicture)
 
-            val tabs : ArrayList<ImageFragment> = ArrayList()
-
-            //Fill the tabs with each mediaAttachment
-            for(media in media_attachments) {
-                tabs.add(ImageFragment.newInstance(media.url))
+            } else if(media_attachments?.size!! > 1) {
+                setupTabsLayout(rootView, request, homeFragment)
             }
-            setupTabs(tabs, rootView, homeFragment)
+
+            imagePopUpMenu(rootView, homeFragment.requireActivity())
         }
+    }
+
+    private fun setupTabsLayout(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
+        //Only show the viewPager and tabs
+        rootView.postPicture.visibility = GONE
+        rootView.postPager.visibility = VISIBLE
+        rootView.postTabs.visibility = VISIBLE
+
+        val tabs : ArrayList<ImageFragment> = ArrayList()
+
+        //Fill the tabs with each mediaAttachment
+        for(media in media_attachments!!) {
+            tabs.add(ImageFragment.newInstance(media.url))
+        }
+
+        setupTabs(tabs, rootView, homeFragment)
     }
 
 
@@ -216,6 +218,7 @@ data class Status(
                 return media_attachments?.size ?: 0
             }
         }
+
         TabLayoutMediator(rootView.postTabs, rootView.postPager) { tab, _ ->
             tab.icon = rootView.context.getDrawable(R.drawable.ic_dot_blue_12dp)
         }.attach()
@@ -267,11 +270,6 @@ data class Status(
 
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
-
-        if(sensitive)
-            sensitiveLayout(rootView, homeFragment.requireActivity())
-        else
-            imagePopUpMenu(rootView, homeFragment.requireActivity())
     }
 
     fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
@@ -418,25 +416,30 @@ data class Status(
         }
     }
 
-    private fun sensitiveLayout(view: View, activity: FragmentActivity) {
+    private fun setupSensitiveLayout(view: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
+
+        // Set dark layout and warning message
+        view.sensitiveWarning.visibility = VISIBLE
+        view.postPicture.colorFilter = ColorMatrixColorFilter(censorColorMatrix())
 
         fun uncensorPicture(view: View) {
-            view.sensitiveWarning.visibility = GONE
-            view.postPicture.colorFilter = ColorMatrixColorFilter(uncensorColorMatrix())
+            if (!media_attachments.isNullOrEmpty()) {
+                view.sensitiveWarning.visibility = GONE
+                view.postPicture.colorFilter = ColorMatrixColorFilter(uncensorColorMatrix())
+
+                if (media_attachments.size > 1)
+                    setupTabsLayout(view, request, homeFragment)
+            }
+                imagePopUpMenu(view, homeFragment.requireActivity())
+            }
+
+
+        view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
+            uncensorPicture(view)
         }
 
-
-        if (!media_attachments.isNullOrEmpty() && media_attachments.size == 1) {
-
-            view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
-                uncensorPicture(view)
-                imagePopUpMenu(view, activity)
-            }
-
-            view.findViewById<ImageView>(R.id.postPicture).setOnClickListener {
-                uncensorPicture(view)
-                imagePopUpMenu(view, activity)
-            }
+        view.findViewById<ImageView>(R.id.postPicture).setOnClickListener {
+            uncensorPicture(view)
         }
     }
 }
