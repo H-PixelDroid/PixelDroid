@@ -25,7 +25,7 @@
         android:gravity="center"
         android:padding="15dp"
         android:layout_margin="15dp"
-        android:text="Edit a picture"
+        android:text="@string/edit_a_picture"
         android:background="@color/colorPrimary"
         android:textColor="@color/cardview_light_background"/>
 

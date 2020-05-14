@@ -58,7 +58,9 @@ class ImageFragment : Fragment() {
                                 .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 .withListener(object: BasePermissionListener() {
                                     override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                        Toast.makeText(view.context, "You need to grant write permission to download pictures!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(view.context,
+                                            view.context.getString(R.string.write_permission_download_pic),
+                                            Toast.LENGTH_SHORT).show()
                                     }
 
                                     override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
@@ -72,7 +74,9 @@ class ImageFragment : Fragment() {
                                 .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 .withListener(object: BasePermissionListener() {
                                     override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                        Toast.makeText(view.context, "You need to grant write permission to share pictures!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(view.context,
+                                            view.context.getString(R.string.write_permission_share_pic),
+                                            Toast.LENGTH_SHORT).show()
                                     }
 
                                     override fun onPermissionGranted(p0: PermissionGrantedResponse?) {

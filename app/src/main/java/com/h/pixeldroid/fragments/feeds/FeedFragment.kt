@@ -113,14 +113,14 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
                         callback.onResult(notifications as List<T>)
 
                     } else{
-                        Toast.makeText(context,"Something went wrong while loading", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<List<T>>, t: Throwable) {
-                    Toast.makeText(context,"Could not get feed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
                     Log.e("FeedFragment", t.toString())
                 }
             })

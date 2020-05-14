@@ -2,7 +2,6 @@ package com.h.pixeldroid
 
 import android.app.SearchManager
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +16,6 @@ import com.h.pixeldroid.fragments.feeds.search.SearchPostsFragment
 import com.h.pixeldroid.objects.Results
 
 class SearchActivity : AppCompatActivity() {
-    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,9 +73,9 @@ class SearchActivity : AppCompatActivity() {
         val tabLayout = findViewById<TabLayout>(R.id.search_tabs)
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when(position){
-                0 -> tab.text = "POSTS"
-                1 -> tab.text = "ACCOUNTS"
-                2 -> tab.text = "HASHTAGS"
+                0 -> tab.text = getString(R.string.posts)
+                1 -> tab.text = getString(R.string.accounts)
+                2 -> tab.text = getString(R.string.hashtags)
             }
         }.attach()
         when(searchType){

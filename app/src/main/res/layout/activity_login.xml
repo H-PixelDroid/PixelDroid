@@ -30,7 +30,7 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:hint="Domain of your instance"
+                android:hint="@string/domain_of_your_instance"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="36dp"
-                    android:text="Connect to Pixelfed" />
+                    android:text="@string/connect_to_pixelfed" />
 
                 <TextView
                     android:id="@+id/whatsAnInstanceTextView"

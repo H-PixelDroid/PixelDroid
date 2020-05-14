@@ -1,5 +1,6 @@
 package com.h.pixeldroid
 
+import androidx.test.platform.app.InstrumentationRegistry
 import com.h.pixeldroid.objects.*
 import org.junit.Assert
 import org.junit.Test
@@ -43,12 +44,14 @@ class PostUnitTest {
 
     @Test
     fun getNLikesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.favourites_count} Likes", status.getNLikes())
+        Assert.assertEquals("${status.favourites_count} Likes", status.getNLikes(
+            InstrumentationRegistry.getInstrumentation().targetContext))
     }
 
     @Test
     fun getNSharesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.reblogs_count} Shares", status.getNShares())
+        Assert.assertEquals("${status.reblogs_count} Shares", status.getNShares(
+            InstrumentationRegistry.getInstrumentation().targetContext))
     }
 
 }

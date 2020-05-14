@@ -2,7 +2,6 @@ package com.h.pixeldroid.objects
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spanned
@@ -18,7 +17,6 @@ import android.widget.Toast
 import android.widget.PopupMenu
 import android.widget.ImageView
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -40,12 +38,9 @@ import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.BasePermissionListener
-import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.postDate
 import kotlinx.android.synthetic.main.post_fragment.view.postDomain
 import java.io.Serializable
@@ -118,7 +113,7 @@ data class Status(
     private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned {
         val description = content
         if(description.isEmpty()) {
-            return "No description".toSpanned()
+            return context.getString(R.string.no_description).toSpanned()
         }
         return parseHTMLText(description, mentions, api, context, credential)
 
@@ -132,17 +127,17 @@ data class Status(
         return name
     }
 
-    fun getNLikes() : CharSequence {
+    fun getNLikes(context: Context) : CharSequence {
         val nLikes = favourites_count
-        return "$nLikes Likes"
+        return nLikes.toString() + context.getString(R.string.likes)
     }
 
-    fun getNShares() : CharSequence {
+    fun getNShares(context: Context) : CharSequence {
         val nShares = reblogs_count
-        return "$nShares Shares"
+        return nShares.toString() + context.getString(R.string.shares)
     }
 
-    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean) {
+    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean, context: Context) {
         var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
         if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}Z".toRegex())) {
             format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
@@ -158,7 +153,7 @@ data class Status(
                 .getRelativeTimeSpanString(then, now,
                     android.text.format.DateUtils.SECOND_IN_MILLIS,
                     android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
-            textView.text = if(isActivity) "Posted on $date"
+            textView.text = if(isActivity) context.getString(R.string.posted_on) + date
                             else "$formattedDate"
         } catch (e: ParseException) {
             e.printStackTrace()
@@ -229,15 +224,15 @@ data class Status(
         usernameDesc.setTypeface(null, Typeface.BOLD)
 
         val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
-        nlikes.text = this.getNLikes()
+        nlikes.text = this.getNLikes(rootView.context)
         nlikes.setTypeface(null, Typeface.BOLD)
 
         val nshares = rootView.findViewById<TextView>(R.id.nshares)
-        nshares.text = this.getNShares()
+        nshares.text = this.getNShares(rootView.context)
         nshares.setTypeface(null, Typeface.BOLD)
 
         //Convert the date to a readable string
-        ISO8601toDate(created_at, rootView.postDate, isActivity)
+        ISO8601toDate(created_at, rootView.postDate, isActivity, rootView.context)
 
         rootView.postDomain.text = getStatusDomain(domain)
 
@@ -320,9 +315,11 @@ data class Status(
     ) {
         //Show all comments of a post
         if (replies_count == 0) {
-            holder.viewComment.text =  "No comments on this post..."
+            holder.viewComment.text =  holder.context.getString(R.string.no_comments)
         } else {
-            holder.viewComment.text =  "View all $replies_count comments..."
+            holder.viewComment.text = 
+                holder.context.getString(R.string.view_all) + replies_count +
+                holder.context.getString(R.string.show_comments)
             holder.viewComment.setOnClickListener {
                 holder.viewComment.visibility = View.GONE
 
@@ -345,7 +342,7 @@ data class Status(
             val textIn = holder.comment.text
             //Open text input
             if(textIn.isNullOrEmpty()) {
-                Toast.makeText(holder.context,"Comment must not be empty!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(holder.context, holder.context.getString(R.string.empty_comment), Toast.LENGTH_SHORT).show()
             } else {
 
                 //Post the comment
@@ -371,7 +368,7 @@ data class Status(
                                     .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                     .withListener(object: BasePermissionListener() {
                                         override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                            Toast.makeText(view.context, "You need to grant write permission to download pictures!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(view.context, view.context.getString(R.string.write_permission_download_pic), Toast.LENGTH_SHORT).show()
                                         }
 
                                         override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
@@ -385,7 +382,7 @@ data class Status(
                                     .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                     .withListener(object: BasePermissionListener() {
                                         override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                            Toast.makeText(view.context, "You need to grant write permission to share pictures!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(view.context, view.context.getString(R.string.write_permission_share_pic), Toast.LENGTH_SHORT).show()
                                         }
 
                                         override fun onPermissionGranted(p0: PermissionGrantedResponse?) {

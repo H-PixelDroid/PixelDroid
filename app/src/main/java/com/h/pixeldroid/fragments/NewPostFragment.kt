@@ -60,7 +60,7 @@ class NewPostFragment : Fragment() {
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_LOCAL_ONLY, true)
             startActivityForResult(
-                Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
+                Intent.createChooser(this, getString(R.string.select_picture)), PICK_IMAGE_REQUEST
             )
         }
     }

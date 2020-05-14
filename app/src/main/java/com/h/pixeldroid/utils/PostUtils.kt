@@ -54,7 +54,7 @@ abstract class PostUtils {
                         val resp = response.body()!!
 
                         //Update shown share count
-                        holder.nshares.text = resp.getNShares()
+                        holder.nshares.text = resp.getNShares(holder.context)
                         holder.reblogger.isChecked = resp.reblogged
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
@@ -83,7 +83,7 @@ abstract class PostUtils {
                         val resp = response.body()!!
 
                         //Update shown share count
-                        holder.nshares.text = resp.getNShares()
+                        holder.nshares.text = resp.getNShares(holder.context)
                         holder.reblogger.isChecked = resp.reblogged
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
@@ -112,7 +112,7 @@ abstract class PostUtils {
                         val resp = response.body()!!
 
                         //Update shown like count and internal like toggle
-                        holder.nlikes.text = resp.getNLikes()
+                        holder.nlikes.text = resp.getNLikes(holder.context)
                         holder.liker.isChecked = resp.favourited
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
@@ -141,7 +141,7 @@ abstract class PostUtils {
                         val resp = response.body()!!
 
                         //Update shown like count and internal like toggle
-                        holder.nlikes.text = resp.getNLikes()
+                        holder.nlikes.text = resp.getNLikes(holder.context)
                         holder.liker.isChecked = resp.favourited
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
@@ -165,7 +165,8 @@ abstract class PostUtils {
                 Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("COMMENT ERROR", t.toString())
-                    Toast.makeText(holder.context,"Comment error!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(holder.context, holder.context.getString(R.string.comment_error),
+                        Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onResponse(call: Call<Status>, response: Response<Status>) {
@@ -177,7 +178,10 @@ abstract class PostUtils {
                         //Add the comment to the comment section
                         addComment(holder.context, holder.commentCont, resp.account.username, resp.content)
 
-                        Toast.makeText(holder.context,"Comment: \"$textIn\" posted!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(holder.context,
+                            holder.context.getString(R.string.comment_posted) + textIn +
+                            holder.context.getString(R.string.comment_posted_end),
+                            Toast.LENGTH_SHORT).show()
                         Log.e("COMMENT SUCCESS", "posted: $textIn")
                     } else {
                         Log.e("ERROR_CODE", response.code().toString())
