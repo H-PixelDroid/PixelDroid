@@ -32,10 +32,11 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_post_description_input_field"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:textColor="@color/colorPrimaryTab"/>
+                android:textColor="@color/colorPrimary"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
