@@ -32,16 +32,14 @@ class CameraTest {
     }
     @Test
     fun takePictureButton() {
-        val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
-            IntentMatchers.hasComponent("com.h.pixeldroid.PhotoEditActivity")
-        )
         val scenario = launchFragmentInContainer<CameraFragment>()
         Thread.sleep(2000)
         scenario.onFragment { fragment ->
             fragment.camera_capture_button.performClick()
         }
-        Thread.sleep(2000)
-        Intents.intended(expectedIntent)
+        scenario.onFragment { fragment ->
+            assert(fragment.isHidden)
+        }
 
     }
 
