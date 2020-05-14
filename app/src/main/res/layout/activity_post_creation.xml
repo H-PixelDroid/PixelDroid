@@ -26,8 +26,8 @@
             app:errorEnabled="true"
             android:layout_gravity="fill_horizontal"
             android:paddingStart="15dp"
-            android:textColorHint="@color/cardview_light_background"
-            app:errorTextColor="@color/cardview_light_background">
+            android:textColorHint="@color/colorPrimaryTab"
+            app:errorTextColor="@color/colorPrimaryError">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_post_description_input_field"
@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:textColor="@color/cardview_light_background"/>
+                android:textColor="@color/colorPrimaryTab"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -44,8 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/send"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/cardview_light_background"
+            android:backgroundTint="@color/colorPrimaryTab"
+            android:textColor="@color/colorPrimary"
             android:layout_margin="15dp"
             android:layout_gravity="center_vertical"
             tools:ignore="PrivateResource"/>

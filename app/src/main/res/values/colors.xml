@@ -8,4 +8,5 @@
     <color name="filterLabelNormal">#8A8889</color>
     <color name="filterLabelSelected">#221F20</color>
     <color name="colorOptionMenu">#FF3990</color>
+    <color name="colorPrimaryError">#FF0000</color>
 </resources>

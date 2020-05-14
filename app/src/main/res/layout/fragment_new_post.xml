@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_a_new_post"
-        android:textColor="@color/colorPrimaryTab"
         android:textSize="25sp"
         android:layout_marginBottom="50dp"/>
 
@@ -23,8 +22,8 @@
         android:gravity="center"
         android:padding="15dp"
         android:text="@string/upload_a_picture"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/colorPrimaryTab"
+        android:backgroundTint="@color/colorPrimaryTab"
+        android:textColor="@color/colorPrimary"
         tools:ignore="PrivateResource" />
 
     <TextView
@@ -40,8 +39,8 @@
         android:gravity="center"
         android:padding="15dp"
         android:text="@string/take_a_picture"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/colorPrimaryTab"
+        android:backgroundTint="@color/colorPrimaryTab"
+        android:textColor="@color/colorPrimary"
         tools:ignore="PrivateResource" />
 
 </LinearLayout>

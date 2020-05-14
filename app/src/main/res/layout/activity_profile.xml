@@ -113,6 +113,8 @@
                     android:layout_height="wrap_content"
                     android:text="Follow"
                     android:visibility="invisible"
+                    android:textColor="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimaryTab"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

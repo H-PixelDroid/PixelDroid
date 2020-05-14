@@ -7,6 +7,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="AppTheme.Launcher.Night">
+        <item name="android:windowBackground">@drawable/theme_night</item>
+    </style>
     <style name="AppTheme.Launcher">
         <item name="android:windowBackground">@drawable/theme</item>
     </style>
