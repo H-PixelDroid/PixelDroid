@@ -43,5 +43,12 @@
     <string name="share_picture">Share picture…</string>
     <string name="NoCommentsToShow">No comments on this post…</string>
     <string name="CommentDisplay"> to show…</string>
+    <string name="domain_of_your_instance">Domain of your instance</string>
+    <string name="connect_to_pixelfed">Connect to Pixelfed</string>
+    <string name="login_connection_required_once">You need to connect to the internet at least once to use PixelDroid :(</string>
+    <string name="you_are_in_offline_mode">You are in offline mode, but you can still view some content!</string>
+    <string name="enter">Enter</string>
+    <string name="auth_error_toast_msg">Server has responded with an error, try again!</string>
+    <string name="login_empty_string_error">Instance address cannot be empty!</string>
 
 </resources>
