@@ -1,5 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NoCommentsToShow">No comments on this post...</string>
-    <string name="CommentDisplay">\" to show...\"</string>
 </resources>
