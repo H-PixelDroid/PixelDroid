@@ -227,11 +227,7 @@ abstract class PostUtils {
         }
 
         fun censorColorMatrix(): ColorMatrix {
-            val array: FloatArray = floatArrayOf(
-                0f, 0f, 0f, 0f, 0f,  // red vector
-                0f, 0f, 0f, 0f, 0f,  // green vector
-                0f, 0f, 0f, 0f, 0f,  // blue vector
-                0f, 0f, 0f, 1f, 0f ) // alpha vector
+            val array: FloatArray = floatArrayOf( 0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 1f, 0f )
             return ColorMatrix(array)
         }
 
