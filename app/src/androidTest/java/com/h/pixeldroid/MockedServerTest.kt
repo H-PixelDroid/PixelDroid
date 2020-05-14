@@ -535,13 +535,16 @@ class MockedServerTest {
 
         onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
         Thread.sleep(1000)
+        
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
 
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (1, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(1000)
 
-        onView(first(withId(R.id.sensitiveWarning))).check(matches(not(isDisplayed())))
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 
     @Test
@@ -550,12 +553,15 @@ class MockedServerTest {
         onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
         Thread.sleep(1000)
 
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (1, clickChildViewWithId(R.id.postPicture)))
         Thread.sleep(1000)
 
-        onView(first(withId(R.id.sensitiveWarning))).check(matches(not(isDisplayed())))
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 }
 
