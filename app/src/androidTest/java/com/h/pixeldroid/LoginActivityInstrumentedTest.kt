@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -16,12 +17,19 @@ import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasDataString
 import androidx.test.espresso.matcher.ViewMatchers.hasErrorText
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.ActivityTestRule
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.utils.DBUtils
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.CoreMatchers.containsString
@@ -39,34 +47,6 @@ import org.junit.runner.RunWith
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@RunWith(AndroidJUnit4::class)
-class LoginInstrumentedTest {
-    @get:Rule
-    var globalTimeout: Timeout = Timeout.seconds(100)
-    @get:Rule
-    var activityRule: ActivityScenarioRule<LoginActivity>
-            = ActivityScenarioRule(LoginActivity::class.java)
-
-    @Test
-    fun clickConnect() {
-        onView(withId(R.id.connect_instance_button)).check(matches(withText("Connect to Pixelfed")))
-    }
-
-    @Test
-    fun invalidURL() {
-        onView(withId(R.id.editText)).perform(ViewActions.replaceText("/jdi"), ViewActions.closeSoftKeyboard())
-        onView(withId(R.id.connect_instance_button)).perform(scrollTo()).perform(click())
-        onView(withId(R.id.editText)).check(matches(hasErrorText("Invalid domain")))
-    }
-
-    @Test
-    fun notPixelfedInstance() {
-        onView(withId(R.id.editText)).perform(ViewActions.replaceText("localhost"), ViewActions.closeSoftKeyboard())
-        onView(withId(R.id.connect_instance_button)).perform(scrollTo()).perform(click())
-        onView(withId(R.id.editText)).check(matches(hasErrorText("Could not register the application with this server")))
-    }
-}
-
 @RunWith(AndroidJUnit4::class)
 class LoginCheckIntent {
     @get:Rule
@@ -115,35 +95,5 @@ class LoginCheckIntent {
     @After
     fun after() {
         Intents.release()
-    }
-}
-
-@RunWith(AndroidJUnit4::class)
-class AfterIntent {
-    @get:Rule
-    var globalTimeout: Timeout = Timeout.seconds(100)
-
-    @get:Rule
-    val rule = ActivityTestRule(LoginActivity::class.java)
-    private var launchedActivity: Activity? = null
-
-    @Before
-    fun setup() {
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("domain", "http://localhost").apply()
-        val intent = Intent(ACTION_VIEW, Uri.parse("oauth2redirect://com.h.pixeldroid?code=sdfdqsf"))
-        launchedActivity = rule.launchActivity(intent)
-    }
-
-    @Test
-    fun usesIntent() {
-
-        Thread.sleep(5000)
-
-        onView(withId(R.id.editText)).check(matches(
-            anyOf(hasErrorText("Error getting token"),
-            hasErrorText("Could not authenticate"))))
-
     }
 }

@@ -48,5 +48,15 @@
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
     <string name="share_picture">Share picture…</string>
+    <string name="domain_of_your_instance">Domain of your instance</string>
+    <string name="connect_to_pixelfed">Connect to Pixelfed</string>
+    <string name="login_connection_required_once">You need to connect to the internet at least once to use PixelDroid :(</string>
+    <string name="you_are_in_offline_mode">You are in offline mode, but you can still view some content!</string>
+    <string name="enter">Enter</string>
+    <string name="auth_error_toast_msg">Server has responded with an error, try again!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_empty_string_error">Instance address cannot be empty!</string>
 
 </resources>
