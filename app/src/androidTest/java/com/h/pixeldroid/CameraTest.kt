@@ -33,4 +33,14 @@ class CameraTest {
             assert(fragment.isHidden)
         }
     }
+
+    @Test
+    fun switchButton() {
+        val scenario = launchFragmentInContainer<CameraFragment>()
+        scenario.onFragment { fragment ->
+            fragment.camera_switch_button.performClick()
+            Thread.sleep(300)
+            assert(!fragment.isHidden)
+        }
+    }
 }
