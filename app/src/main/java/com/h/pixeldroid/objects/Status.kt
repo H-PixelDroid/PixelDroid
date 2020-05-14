@@ -119,13 +119,8 @@ data class Status(
 
     }
 
-    fun getUsername() : CharSequence {
-        var name = account.username
-        if (name.isNullOrEmpty()) {
-            name = account.display_name?: "NoName"
-        }
-        return name
-    }
+    fun getUsername() : CharSequence =
+        account.username.ifBlank{account.display_name.ifBlank{"NoName"}}
 
     fun getNLikes() : CharSequence {
         val nLikes = favourites_count
