@@ -88,7 +88,7 @@ dependencies {
         // Excludes the support library because it's already included by Glide.
         transitive = false
     }
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "com.github.tomakehurst:wiremock-jre8:2.26.3"
