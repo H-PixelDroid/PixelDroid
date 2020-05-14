@@ -13,6 +13,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.uiautomator.UiDevice
 import com.h.pixeldroid.testUtility.MockServer
 import org.junit.Before
 import org.junit.Rule
@@ -42,7 +44,7 @@ class DrawerMenuTest {
         // Open Drawer to click on navigation.
         ActivityScenario.launch(MainActivity::class.java)
         onView(withId(R.id.drawer_layout))
-            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+            .check(matches(DrawerMatchers.isClosed())) // Left Drawer should be closed.
             .perform(DrawerActions.open()) // Open Drawer
     }
 
@@ -115,5 +117,12 @@ class DrawerMenuTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Andrew Dobis")))
+    }
+
+    @Test
+    fun onBackPressedClosesDrawer() {
+        UiDevice.getInstance(getInstrumentation()).pressBack()
+        Thread.sleep(1000)
+        onView(withId(R.id.drawer_layout)).check(matches(DrawerMatchers.isClosed()))
     }
 }

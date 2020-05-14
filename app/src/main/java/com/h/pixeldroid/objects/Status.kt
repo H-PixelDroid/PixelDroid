@@ -23,7 +23,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.ImageFragment
+import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
@@ -45,6 +45,8 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.*
+import kotlinx.android.synthetic.main.post_fragment.view.postDate
+import kotlinx.android.synthetic.main.post_fragment.view.postDomain
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -117,13 +119,8 @@ data class Status(
 
     }
 
-    fun getUsername() : CharSequence {
-        var name = account.username
-        if (name.isNullOrEmpty()) {
-            name = account.display_name?: "NoName"
-        }
-        return name
-    }
+    fun getUsername() : CharSequence =
+        account.username.ifBlank{account.display_name.ifBlank{"NoName"}}
 
     fun getNLikes() : CharSequence {
         val nLikes = favourites_count

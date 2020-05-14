@@ -70,12 +70,14 @@ dependencies {
 
     def room_version = "2.2.5"
     implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
+
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
 
     implementation 'info.androidhive:imagefilters:1.0.7'
 
@@ -111,7 +113,10 @@ dependencies {
     def fragment_version = '1.2.4'
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
-    implementation 'com.karumi:dexter:6.1.0'
+    implementation 'com.karumi:dexter:6.1.2'
+
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+
 }
 
 tasks.withType(Test) {

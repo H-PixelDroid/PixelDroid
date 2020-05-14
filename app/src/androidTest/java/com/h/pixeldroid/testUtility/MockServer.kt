@@ -8,9 +8,10 @@ import okhttp3.mockwebserver.RecordedRequest
 
 class MockServer {
 
-
     companion object{
         private val server = MockWebServer()
+        private val headerName = "Content-Type"
+        private val headerValue = "application/json; charset=utf-8"
     }
 
     private val accountJson = "{\n" +
@@ -210,27 +211,39 @@ class MockServer {
             @Throws(InterruptedException::class)
             override fun dispatch(request: RecordedRequest): MockResponse {
                 when (request.path) {
-                    "/api/v1/accounts/verify_credentials" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(accountJson)
-                    "/api/v1/timelines/home" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(feedJson)
-                    "/api/v1/media" -> return MockResponse().addHeader("Content-Type", "application/json; charset=utf-8").setResponseCode(200).setBody(mediaUploadResponseJson)
+                    "/api/v1/accounts/verify_credentials" -> return MockResponse()
+                        .addHeader(headerName, headerValue)
+                        .setResponseCode(200).setBody(JsonValues.accountJson)
+                    "/api/v1/instance" -> return MockResponse()
+                        .addHeader(headerName, headerValue)
+                        .setResponseCode(200).setBody(JsonValues.instanceJson)
+                    "/api/v1/media" -> return MockResponse()
+                        .addHeader(headerName, headerValue)
+                        .setResponseCode(200).setBody(JsonValues.mediaUploadResponseJson)
+                    "/api/v1/timelines/home" -> return MockResponse()
+                        .addHeader(headerName, headerValue)
+                        .setResponseCode(200).setBody(JsonValues.feedJson)
+                    "/oauth/token" -> return MockResponse()
+                        .addHeader(headerName, headerValue)
+                        .setResponseCode(200).setBody(JsonValues.tokenJson)
                 }
                 when {
                     request.path?.startsWith("/api/v1/notifications") == true -> {
                         return MockResponse()
                             .addHeader("Content-Type", "application/json; charset=utf-8")
-                            .setResponseCode(200).setBody(notificationsJson)
+                            .setResponseCode(200).setBody(JsonValues.notificationsJson)
                     }
                     request.path?.startsWith("/api/v1/timelines/home") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(feedJson)
+                        ).setResponseCode(200).setBody(JsonValues.feedJson)
                     }
                     request.path?.startsWith("/api/v1/timelines/public") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(feedJson)
+                        ).setResponseCode(200).setBody(JsonValues.feedJson)
                     }
                     request.path?.startsWith("/api/v1/accounts/0/statuses") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
@@ -239,7 +252,7 @@ class MockServer {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(accountStatusesJson)
+                        ).setResponseCode(200).setBody(JsonValues.accountStatusesJson)
                     }
                     request.path?.startsWith("/api/v1/statuses/0/context") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
@@ -248,7 +261,7 @@ class MockServer {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(commentStatusesJson)
+                        ).setResponseCode(200).setBody(JsonValues.commentStatusesJson)
                     }
                     request.path?.startsWith("/api/v1/statuses/0/favourite") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
@@ -257,7 +270,7 @@ class MockServer {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(likedJson)
+                        ).setResponseCode(200).setBody(JsonValues.likedJson)
                     }
                     request.path?.startsWith("/api/v1/statuses/0/unfavourite") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
@@ -266,13 +279,13 @@ class MockServer {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(unlikeJson)
+                        ).setResponseCode(200).setBody(JsonValues.unlikeJson)
                     }
                     request.path?.startsWith("/api/v1/statuses") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(unlikeJson)
+                        ).setResponseCode(200).setBody(JsonValues.unlikeJson)
                     }
                     request.path?.startsWith("/api/v1/accounts/0") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
@@ -281,7 +294,7 @@ class MockServer {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(accountJson)
+                        ).setResponseCode(200).setBody(JsonValues.accountJson)
                     }
                     request.path?.startsWith("/api/v1/statuses/0/reblog") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
@@ -290,7 +303,7 @@ class MockServer {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(reblogJson)
+                        ).setResponseCode(200).setBody(JsonValues.reblogJson)
                     }
                     request.path?.startsWith("/api/v1/statuses/0/unreblog") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
@@ -299,85 +312,85 @@ class MockServer {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(unlikeJson)
+                        ).setResponseCode(200).setBody(JsonValues.unlikeJson)
                     }
                     request.path?.matches("/api/v1/accounts/[0-9]*/follow".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(followRelationshipJson)
+                        ).setResponseCode(200).setBody(JsonValues.followRelationshipJson)
                     }
                     request.path?.matches("/api/v1/accounts/[0-9]*/unfollow".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(unfollowRelationshipJson)
+                        ).setResponseCode(200).setBody(JsonValues.unfollowRelationshipJson)
                     }
                     request.path?.startsWith("/api/v1/accounts/relationships") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(relationshipJson)
+                        ).setResponseCode(200).setBody(JsonValues.relationshipJson)
                     }
                     request.path?.matches("/api/v1/accounts/[0-9]*/followers\\?limit=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(followersJson)
+                        ).setResponseCode(200).setBody(JsonValues.followersJson)
                     }
                     request.path?.matches("/api/v1/accounts/[0-9]*/followers\\?since_id=[0-9]*&limit=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(followersAfterJson)
+                        ).setResponseCode(200).setBody(JsonValues.followersAfterJson)
                     }
                     request.path?.matches("/api/v1/accounts/[0-9]*/following\\?limit=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(followersJson)
+                        ).setResponseCode(200).setBody(JsonValues.followersJson)
                     }
                     request.path?.matches("/api/v1/accounts/[0-9]*/following\\?since_id=[0-9]*&limit=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(followersAfterJson)
+                        ).setResponseCode(200).setBody(JsonValues.followersAfterJson)
                     }
                     request.path?.matches("/api/v2/search\\?type=hashtags&q=caturday&limit=[0-9]*&offset=[0-9]*".toRegex()) == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(searchEmpty)
+                        ).setResponseCode(200).setBody(JsonValues.searchEmpty)
                     }
                     request.path?.startsWith("/api/v2/search?type=hashtags&q=caturday")!!-> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(searchCaturdayHashtags)
+                        ).setResponseCode(200).setBody(JsonValues.searchCaturdayHashtags)
                     }
                     request.path?.startsWith("/api/v2/search?type=statuses&q=caturday")!! -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(searchCaturday)
+                        ).setResponseCode(200).setBody(JsonValues.searchCaturday)
                     }
                     request.path?.startsWith("/api/v2/search?type=accounts&q=dansup")!! -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(searchDansupAccounts)
+                        ).setResponseCode(200).setBody(JsonValues.searchDansupAccounts)
                     }
                     request.path?.matches("""/api/v2/search\?(max_id=[0-9]*&)?type=(accounts|statuses)&q=dansup(&limit=[0-9]*)?""".toRegex())!! -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(searchEmpty)
+                        ).setResponseCode(200).setBody(JsonValues.searchEmpty)
                     }
                     request.path?.startsWith("/api/v2/discover/posts")!! -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
-                        ).setResponseCode(200).setBody(discover)
+                        ).setResponseCode(200).setBody(JsonValues.discover)
                     }
                     else -> return MockResponse().setResponseCode(404)
                 }
