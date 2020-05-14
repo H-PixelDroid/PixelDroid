@@ -61,17 +61,18 @@ class DrawerMenuTest {
     fun testThemeSettings() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
+        val themes = getInstrumentation().context.resources.getStringArray(R.array.theme_values)
         //select theme modes
         onView(withText(R.string.theme_title)).perform(click())
-        onView(withText("Dark")).perform(click())
+        onView(withText(themes[2])).perform(click())
 
         //Select an other theme
         onView(withText(R.string.theme_title)).perform(click())
-        onView(withText("Default")).perform(click())
+        onView(withText(themes[0])).perform(click())
 
         //Select the last theme
         onView(withText(R.string.theme_title)).perform(click())
-        onView(withText("Light")).perform(click())
+        onView(withText(themes[1])).perform(click())
 
         //Check that we are back in the settings page
         onView(withText(R.string.theme_header)).check(matches(isDisplayed()))
