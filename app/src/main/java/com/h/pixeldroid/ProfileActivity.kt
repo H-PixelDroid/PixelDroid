@@ -130,9 +130,9 @@ class ProfileActivity : AppCompatActivity() {
 
         TabLayoutMediator(findViewById(R.id.profile_tabs), viewPager) { tab, position ->
             when(position){
-                0 -> tab.icon = getDrawable(R.drawable.ic_photo_camera_white_24dp)
-                1 -> tab.icon = getDrawable(R.drawable.ic_heart)
-                2 -> tab.icon = getDrawable(R.drawable.ic_heart)
+                0 -> tab.icon = getDrawable(R.drawable.ic_grid_black_24dp)
+                1 -> tab.icon = getDrawable(R.drawable.ic_collections_black_24dp)
+                2 -> tab.icon = getDrawable(R.drawable.ic_bookmark_black_24dp)
             }
         }.attach()
     }

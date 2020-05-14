@@ -3,6 +3,7 @@ package com.h.pixeldroid.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +14,15 @@ import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.R
 import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.objects.Status
+import retrofit2.Response
 
-
-internal open class ProfileTabsFragment : Fragment() {
+abstract class ProfileTabsFragment : Fragment() {
     private lateinit var preferences: SharedPreferences
-    private lateinit var pixelfedAPI: PixelfedAPI
-    private lateinit var adapter : ProfilePostsRecyclerViewAdapter
+    internal lateinit var pixelfedAPI: PixelfedAPI
+    internal lateinit var adapter : ProfilePostsRecyclerViewAdapter
     private lateinit var recycler : RecyclerView
-    private var accessToken: String? = null
+    internal var accessToken: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +41,25 @@ internal open class ProfileTabsFragment : Fragment() {
         adapter = ProfilePostsRecyclerViewAdapter(requireContext())
         recycler.adapter = adapter
 
+        setPosts(adapter, pixelfedAPI, accessToken)
+
         return view
+    }
+
+    protected abstract fun setPosts(
+        adapter: ProfilePostsRecyclerViewAdapter, pixelfedAPI: PixelfedAPI,
+        accessToken: String?)
+
+    protected fun handleAPIResponse(response: Response<List<Status>>) {
+        if(response.code() == 200) {
+            val posts = ArrayList<Status>()
+            val statuses = response.body()!!
+            for(status in statuses) {
+                posts.add(status)
+            }
+            adapter.addPosts(posts)
+        } else {
+            Log.e("PROFILE POSTS: ", response.code().toString())
+        }
     }
 }
