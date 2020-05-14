@@ -535,9 +535,6 @@ class MockedServerTest {
 
         onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
         Thread.sleep(1000)
-        
-        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        Thread.sleep(1000)
 
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
@@ -551,9 +548,6 @@ class MockedServerTest {
     fun performClickOnPostPicture() {
 
         onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
-        Thread.sleep(1000)
-
-        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         Thread.sleep(1000)
 
         onView(withId(R.id.list))
