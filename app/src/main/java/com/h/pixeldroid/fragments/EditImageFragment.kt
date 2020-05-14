@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.h.pixeldroid.R
 import com.h.pixeldroid.interfaces.EditImageFragmentListener
 
@@ -17,9 +18,12 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
     private lateinit var seekbarSaturation: SeekBar
     private lateinit var seekbarContrast: SeekBar
 
-    private var BRIGHTNESS_START = 100
-    private var SATURATION_START = 0
-    private var CONTRAST_START = 10
+    private var BRIGHTNESS_MAX = 200
+    private var SATURATION_MAX = 20
+    private var CONTRAST_MAX= 30
+    private var BRIGHTNESS_START = BRIGHTNESS_MAX/2
+    private var SATURATION_START = SATURATION_MAX/2
+    private var CONTRAST_START = CONTRAST_MAX/2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,13 +36,13 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
         seekbarSaturation = view.findViewById(R.id.seekbar_saturation)
         seekbarContrast = view.findViewById(R.id.seekbar_contrast)
 
-        seekbarBrightness.max = 200
+        seekbarBrightness.max = BRIGHTNESS_MAX
         seekbarBrightness.progress = BRIGHTNESS_START
 
-        seekbarContrast.max = 20
+        seekbarContrast.max = CONTRAST_MAX
         seekbarContrast.progress = CONTRAST_START
 
-        seekbarSaturation.max = 30
+        seekbarSaturation.max = SATURATION_MAX
         seekbarSaturation.progress = SATURATION_START
 
         seekbarBrightness.setOnSeekBarChangeListener(this)
