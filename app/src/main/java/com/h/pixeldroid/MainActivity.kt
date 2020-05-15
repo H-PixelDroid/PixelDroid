@@ -34,7 +34,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header.view.drawer_account_name
 import kotlinx.android.synthetic.main.nav_header.view.drawer_avatar
 
-
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var preferences: SharedPreferences

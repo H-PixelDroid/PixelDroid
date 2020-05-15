@@ -14,7 +14,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_default_user" />
+        tools:src="@drawable/ic_default_user"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/account_entry_username"
