@@ -44,13 +44,15 @@ class PostUnitTest {
 
     @Test
     fun getNLikesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.favourites_count} Likes", status.getNLikes(
+        Assert.assertEquals("${status.favourites_count}${getInstrumentation()
+            .targetContext.getString(R.string.likes)}", status.getNLikes(
             getInstrumentation().targetContext))
     }
 
     @Test
     fun getNSharesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.reblogs_count} Shares", status.getNShares(
+        Assert.assertEquals("${status.reblogs_count}${getInstrumentation()
+            .targetContext.getString(R.string.shares)}", status.getNShares(
             getInstrumentation().targetContext))
     }
 
