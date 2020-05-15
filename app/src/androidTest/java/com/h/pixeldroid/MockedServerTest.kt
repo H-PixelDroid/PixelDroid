@@ -5,6 +5,7 @@ import android.graphics.ColorMatrix
 import android.content.Context
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.TextView
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
@@ -24,6 +25,7 @@ import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.second
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import com.h.pixeldroid.testUtility.MockServer
@@ -299,7 +301,9 @@ class MockedServerTest {
             a -> run {
                 //Wait for the feed to load
                 Thread.sleep(1000)
-                //Pick the second photo
+             a.findViewById<TextView>(R.id.sensitiveWarning).performClick()
+             Thread.sleep(1000)
+             //Pick the second photo
                 a.findViewById<TabLayout>(R.id.postTabs).getTabAt(1)?.select()
             }
         }
@@ -537,12 +541,15 @@ class MockedServerTest {
         onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
         Thread.sleep(1000)
 
+        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (1, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(1000)
 
-        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 
     @Test
@@ -551,12 +558,15 @@ class MockedServerTest {
         onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
         Thread.sleep(1000)
 
+        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (1, clickChildViewWithId(R.id.postPicture)))
         Thread.sleep(1000)
 
-        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 
     @Test
@@ -565,9 +575,12 @@ class MockedServerTest {
         onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(0))
         Thread.sleep(1000)
 
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
-                (1, clickChildViewWithId(R.id.sensitiveWarning)))
+                (0, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(1000)
 
         onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
@@ -579,9 +592,12 @@ class MockedServerTest {
         onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(0))
         Thread.sleep(1000)
 
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
-                (1, clickChildViewWithId(R.id.postPicture)))
+                (0, clickChildViewWithId(R.id.postPicture)))
         Thread.sleep(1000)
 
         onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
