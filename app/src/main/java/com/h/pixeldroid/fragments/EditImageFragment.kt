@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.h.pixeldroid.R
 import com.h.pixeldroid.interfaces.EditImageFragmentListener
 
