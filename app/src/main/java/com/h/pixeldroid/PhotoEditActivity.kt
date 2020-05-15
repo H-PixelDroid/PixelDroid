@@ -97,7 +97,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
 
-        cropUri = intent.getParcelableExtra("uri")
+        cropUri = intent.getParcelableExtra("picture_uri")
 
         loadImage()
         val file = File.createTempFile("temp_compressed_img", ".png", cacheDir)

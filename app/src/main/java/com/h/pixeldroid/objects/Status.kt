@@ -285,6 +285,8 @@ data class Status(
                     // Button is inactive
                     undoReblogPost(holder, api, credential, this@Status)
                 }
+                //show animation or not?
+                true
             }
         }
     }
@@ -309,7 +311,9 @@ data class Status(
                     // Button is inactive
                     unLikePostCall(holder, api, credential, this@Status)
                 }
-            }
+            //show animation or not?
+            true
+        }
         }
     }
 
