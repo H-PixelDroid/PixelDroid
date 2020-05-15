@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PostCreationActivityTest {
 
-    val mockServer = MockServer()
+    private val mockServer = MockServer()
 
     @get:Rule
     val globalTimeout: Timeout = Timeout.seconds(30)
