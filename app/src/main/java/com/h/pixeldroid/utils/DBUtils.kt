@@ -28,6 +28,5 @@ class DBUtils {
                     )
                 )
         }
-        //TODO fun setActiveUser()
     }
 }

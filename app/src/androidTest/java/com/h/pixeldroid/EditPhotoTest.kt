@@ -33,7 +33,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class EditPhotoTest {
 
-    private val mockServer = MockServer()
     private lateinit var activity: PhotoEditActivity
     private lateinit var activityScenario: ActivityScenario<PhotoEditActivity>
 
@@ -46,11 +45,6 @@ class EditPhotoTest {
     @Before
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        mockServer.start()
-        val baseUrl = mockServer.getUrl()
-        val preferences = context.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
 
         // Launch PhotoEditActivity
         val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")

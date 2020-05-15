@@ -2,6 +2,7 @@ package com.h.pixeldroid
 
 import android.content.Context
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -12,6 +13,9 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
@@ -19,6 +23,7 @@ import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.utils.DBUtils
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,6 +36,8 @@ class MockedServerTest {
 
     private val mockServer = MockServer()
     private lateinit var activityScenario: ActivityScenario<MainActivity>
+    private lateinit var db: AppDatabase
+    private lateinit var context: Context
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -42,10 +49,27 @@ class MockedServerTest {
     fun before(){
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
+        context = ApplicationProvider.getApplicationContext()
+        db = DBUtils.initDB(context)
+        db.clearAllTables()
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = baseUrl.toString(),
+                title = "PixelTest"
+            )
+        )
+
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = baseUrl.toString(),
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
     }
 
