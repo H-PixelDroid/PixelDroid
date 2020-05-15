@@ -23,7 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                app:srcCompat="@drawable/ic_fred_phone" />
+                app:srcCompat="@drawable/ic_fred_phone"
+                android:contentDescription="TODO" />
 
             <LinearLayout
                 android:id="@+id/login_activity_instance_chooser_layout"
@@ -53,6 +54,8 @@
                     android:id="@+id/login_activity_instance_chooser_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorButtonBg"
+                    android:textColor="@color/colorButtonText"
                     android:text="@string/enter"/>
 
             </LinearLayout>
@@ -79,6 +82,8 @@
                     android:id="@+id/connect_instance_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorButtonBg"
+                    android:textColor="@color/colorButtonText"
                     android:text="@string/connect_to_pixelfed" />
 
                 <TextView

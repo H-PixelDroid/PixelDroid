@@ -1,5 +1,3 @@
 package com.h.pixeldroid.objects
 
-class Field {
-
-}
+class Field

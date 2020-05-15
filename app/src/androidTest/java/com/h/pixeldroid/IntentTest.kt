@@ -96,7 +96,7 @@ class IntentTest {
         intended(expectedIntent)
     }
 
-    fun clickClickableSpanInDescription(textToClick: CharSequence): ViewAction {
+    private fun clickClickableSpanInDescription(textToClick: CharSequence): ViewAction {
         return object : ViewAction {
 
             override fun getConstraints(): Matcher<View> {
@@ -104,7 +104,7 @@ class IntentTest {
             }
 
             override fun getDescription(): String {
-                return "clicking on a ClickableSpan";
+                return "clicking on a ClickableSpan"
             }
 
             override fun perform(uiController: UiController, view: View) {
@@ -116,7 +116,7 @@ class IntentTest {
                     throw NoMatchingViewException.Builder()
                         .includeViewHierarchy(true)
                         .withRootView(textView)
-                        .build();
+                        .build()
                 }
 
                 // Get the links inside the TextView and check if we find textToClick
@@ -128,9 +128,9 @@ class IntentTest {
                         val start = spannableString.getSpanStart(spanCandidate)
                         val end = spannableString.getSpanEnd(spanCandidate)
                         val sequence = spannableString.subSequence(start, end)
-                        if (textToClick.toString().equals(sequence.toString())) {
+                        if (textToClick.toString() == sequence.toString()) {
                             span.onClick(textView)
-                            return;
+                            return
                         }
                     }
                 }
