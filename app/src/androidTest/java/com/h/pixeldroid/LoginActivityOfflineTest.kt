@@ -49,32 +49,9 @@ class LoginActivityOfflineTest {
     @Test
     fun emptyDBandOfflineModeDisplayCorrectMessage() {
         ActivityScenario.launch(LoginActivity::class.java)
-        Thread.sleep(10000)
         onView(withId(R.id.login_activity_connection_required_text)).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun offlineModeSelectAvailabeLaunchesMainActivityWithStoredAccountInstance() {
-        db.instanceDao().insertInstance(
-            InstanceDatabaseEntity(
-            uri = "some_uri",
-            title = "PixelTest"
-        ))
-        db.userDao().insertUser(
-            UserDatabaseEntity(
-            user_id = "some_user_id",
-            instance_uri = "some_uri",
-            username = "Testi",
-            display_name = "Testi Testo",
-            avatar_static = "some_avatar_url",
-                isActive = true,
-                accessToken = "token"
-        ))
-        ActivityScenario.launch(LoginActivity::class.java)
-        /*onView(withId(R.id.login_activity_instance_chooser_button)).perform(click())
-        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open())
-        onView(withId(R.id.drawer_account_name)).check(matches(withText("Testi Testo")))*/
-    }
 
     @After
     fun after() {
