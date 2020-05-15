@@ -92,7 +92,7 @@ data class Status(
     val muted: Boolean = false,
     val bookmarked: Boolean = false,
     val pinned: Boolean = false
-    ) : Serializable, FeedContent()
+) : Serializable, FeedContent()
 {
 
     companion object {
@@ -149,7 +149,7 @@ data class Status(
                     android.text.format.DateUtils.SECOND_IN_MILLIS,
                     android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
             textView.text = if(isActivity) "Posted on $date"
-                            else "$formattedDate"
+            else "$formattedDate"
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -440,8 +440,8 @@ data class Status(
                 if (media_attachments.size > 1)
                     setupTabsLayout(view, request, homeFragment)
             }
-                imagePopUpMenu(view, homeFragment.requireActivity())
-            }
+            imagePopUpMenu(view, homeFragment.requireActivity())
+        }
 
 
         view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
