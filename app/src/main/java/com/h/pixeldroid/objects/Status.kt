@@ -96,9 +96,7 @@ data class Status(
 {
 
     companion object {
-        const val SAVE_TO_GALLERY_WRITE_PERMISSION = 1
         const val POST_TAG = "postTag"
-        const val POST_FRAG_TAG = "postFragTag"
         const val DOMAIN_TAG = "domainTag"
         const val DISCOVER_TAG = "discoverTag"
     }

@@ -15,25 +15,19 @@ class DBUtils {
             ).allowMainThreadQueries().build()
         }
 
-        fun addUser(db: AppDatabase, account: Account, instance_uri: String = "") {
-            if (instance_uri.isEmpty()) {
-                db.userDao().updateUser(
-                    user_id = account.id,
-                    username = account.username,
-                    display_name = account.display_name,
-                    avatar_static = account.avatar_static
-                )
-            } else {
+        fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true, accessToken: String) {
                 db.userDao().insertUser(
                     UserDatabaseEntity(
                         user_id = account.id,
                         instance_uri = instance_uri,
                         username = account.username,
                         display_name = account.display_name,
-                        avatar_static = account.avatar_static
+                        avatar_static = account.avatar_static,
+                        isActive = activeUser,
+                        accessToken = accessToken
                     )
                 )
-            }
         }
+        //TODO fun setActiveUser()
     }
 }
