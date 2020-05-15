@@ -1,6 +1,5 @@
 package com.h.pixeldroid
 
-import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.h.pixeldroid.objects.*
 import org.junit.Assert
 import org.junit.Test
@@ -40,20 +39,6 @@ class PostUnitTest {
     fun getUsernameReturnsOtherNameIfUsernameIsNull() {
         val emptyDescStatus = status.copy(account = status.account.copy(username = ""))
         Assert.assertEquals(status.account.display_name, emptyDescStatus.getUsername())
-    }
-
-    @Test
-    fun getNLikesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.favourites_count}${getInstrumentation()
-            .targetContext.getString(R.string.likes)}", status.getNLikes(
-            getInstrumentation().targetContext))
-    }
-
-    @Test
-    fun getNSharesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.reblogs_count}${getInstrumentation()
-            .targetContext.getString(R.string.shares)}", status.getNShares(
-            getInstrumentation().targetContext))
     }
 
 }
