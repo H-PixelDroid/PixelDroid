@@ -23,7 +23,7 @@ data class Account(
     val acct: String = "",
     val url: String = "", //HTTPS URL
     //Display attributes
-    val display_name: String? = null,
+    val display_name: String = "",
     val note: String = "", //HTML
     val avatar: String = "", //URL
     val avatar_static: String = "", //URL
