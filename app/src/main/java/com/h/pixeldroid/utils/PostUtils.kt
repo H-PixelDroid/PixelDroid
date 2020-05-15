@@ -27,7 +27,7 @@ abstract class PostUtils {
                 when(holder.commentIn.visibility) {
                     View.VISIBLE -> {
                         holder.commentIn.visibility = View.GONE
-                        setImageFromDrawable(holder.postView, holder.commenter, R.drawable.ic_comment_empty)
+                        setImageFromDrawable(holder.postView, holder.commenter,  R.drawable.ic_comment_empty)
                     }
                     View.GONE -> {
                         holder.commentIn.visibility = View.VISIBLE

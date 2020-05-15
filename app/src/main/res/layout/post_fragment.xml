@@ -33,7 +33,8 @@
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_default_user"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
 
             <TextView
             android:id="@+id/username"
@@ -83,11 +84,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:longClickable="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@color/browser_actions_bg_grey" />
+                    tools:src="@color/browser_actions_bg_grey"
+                    android:longClickable="true"
+                    android:contentDescription="TODO" />
 
                 <FrameLayout
                     android:id="@+id/post_fragment_image_popup_menu_anchor"

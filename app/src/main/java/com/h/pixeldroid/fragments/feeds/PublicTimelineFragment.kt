@@ -8,8 +8,7 @@ import retrofit2.Call
 
 class PublicTimelineFragment: PostsFeedFragment() {
 
-    inner class SearchFeedDataSource(
-    ) : FeedDataSource(null, null){
+    inner class SearchFeedDataSource : FeedDataSource(null, null){
 
         override fun newSource(): FeedDataSource {
             return SearchFeedDataSource()
