@@ -40,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var db: AppDatabase
     private lateinit var pixelfedAPI: PixelfedAPI
     private var inputVisibility: Int = View.GONE
-    private var chooserVisibility: Int = View.GONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -2,7 +2,6 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -45,7 +44,6 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var preferences: SharedPreferences
     private val searchDiscoverFragment: SearchDiscoverFragment = SearchDiscoverFragment()
     private lateinit var db: AppDatabase
     private lateinit var header: AccountHeaderView
@@ -60,14 +58,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        preferences = getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-        )
         db = DBUtils.initDB(applicationContext)
 
         //get the currently active user
         user = db.userDao().getActiveUser()
-        
+
         //Check if we have logged in and gotten an access token
         if (user == null) {
             launchActivity(LoginActivity(), firstTime = true)
@@ -154,12 +149,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun logOut(){
-        val user = db.userDao().deleteActiveUsers()
+        db.userDao().deleteActiveUsers()
+
         val remainingUsers = db.userDao().getAll()
         if (remainingUsers.isEmpty()){
             //no more users, start first-time login flow
             launchActivity(LoginActivity(), firstTime = true)
-        } else{
+        } else {
             val newActive = remainingUsers.first()
             db.userDao().activateUser(newActive.user_id)
             //relaunch the app
@@ -171,9 +167,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private fun getUpdatedAccount(){
         if (hasInternet(applicationContext)) {
-            val user = db.userDao().getActiveUser()
             val domain = user?.instance_uri.orEmpty()
-            val accessToken = preferences.getString("accessToken", "").orEmpty()
+            val accessToken = user?.accessToken.orEmpty()
             val pixelfedAPI = PixelfedAPI.create(domain)
             pixelfedAPI.verifyCredentials("Bearer $accessToken")
                 .enqueue(object : Callback<Account> {

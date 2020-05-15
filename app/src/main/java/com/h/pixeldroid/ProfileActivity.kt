@@ -1,8 +1,6 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
@@ -16,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
+import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Relationship

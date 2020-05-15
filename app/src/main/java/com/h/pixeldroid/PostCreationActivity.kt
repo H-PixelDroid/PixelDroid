@@ -1,8 +1,6 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -16,8 +14,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.Attachment
+import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.DBUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -38,9 +39,11 @@ class PostCreationActivity : AppCompatActivity() {
 
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
-    private lateinit var preferences: SharedPreferences
     private lateinit var pictureFrame: ImageView
     private lateinit var image: File
+    private var user: UserDatabaseEntity? = null
+
+    private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
 
     private var description: String = ""
 
@@ -55,11 +58,23 @@ class PostCreationActivity : AppCompatActivity() {
         pictureFrame = findViewById(R.id.post_creation_picture_frame)
         pictureFrame.setImageURI(image.toUri())
 
-        preferences = getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-        )
-        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        accessToken = preferences.getString("accessToken", "")!!
+        val db = DBUtils.initDB(applicationContext)
+        user = db.userDao().getActiveUser()
+
+        val instances = db.instanceDao().getAll()
+        maxLength = if (user!=null){
+            val thisInstances =
+                instances.filter { instanceDatabaseEntity ->
+                    instanceDatabaseEntity.uri.contains(user!!.instance_uri)
+                }
+            thisInstances.first().max_toot_chars
+        } else {
+            Instance.DEFAULT_MAX_TOOT_CHARS
+        }
+
+        val domain = user?.instance_uri.orEmpty()
+        accessToken = user?.accessToken.orEmpty()
+        pixelfedAPI = PixelfedAPI.create(domain)
 
         // check if the picture is alright
         // TODO
@@ -99,7 +114,6 @@ class PostCreationActivity : AppCompatActivity() {
     private fun setDescription(): Boolean {
         val textField = findViewById<TextInputEditText>(R.id.new_post_description_input_field)
         val content = textField.text.toString()
-        val maxLength = preferences.getInt("max_toot_chars", 500)
         if (content.length > maxLength) {
             // error, too much characters
             textField.error = "Description must contain $maxLength characters at most."

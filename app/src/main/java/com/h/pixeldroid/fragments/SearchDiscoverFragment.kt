@@ -1,8 +1,6 @@
 package com.h.pixeldroid.fragments
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,12 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.SearchActivity
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.DiscoverPost
 import com.h.pixeldroid.objects.DiscoverPosts
 import com.h.pixeldroid.objects.Status

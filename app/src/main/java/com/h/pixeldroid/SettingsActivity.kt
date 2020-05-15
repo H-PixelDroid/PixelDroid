@@ -3,9 +3,7 @@ package com.h.pixeldroid
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.h.pixeldroid.utils.ThemeUtils.Companion.setThemeFromPreferences
