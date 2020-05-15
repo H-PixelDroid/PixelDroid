@@ -40,6 +40,11 @@
     <string name="image_download_failed">Download has been failed, please try again</string>
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
+    <string name="capture_button_alt">Capture</string>
+    <string name="switch_camera_button_alt">Switch camera</string>
+    <string name="gallery_button_alt">Gallery</string>
+    <string name="capture_mode_camera">Camera</string>
+    <string name="delete_title">Confirm</string>
     <string name="share_picture">Share picture…</string>
 
     <string name="loading_toast">Something went wrong while loading</string>

@@ -14,16 +14,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/camera_container"
-    android:background="@android:color/black"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.camera.view.PreviewView
-        android:id="@+id/view_finder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@drawable/ic_shutter_pressed" />
+    <item android:state_focused="true" android:drawable="@drawable/ic_shutter_focused" />
+    <item android:drawable="@drawable/ic_shutter_normal" />
+</selector>

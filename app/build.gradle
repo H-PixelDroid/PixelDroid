@@ -65,11 +65,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.8.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation "androidx.browser:browser:1.2.0"
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.github.connyduck:sparkbutton:3.0.0'
+    implementation 'com.github.connyduck:sparkbutton:4.0.0'
 
     def room_version = "2.2.5"
     implementation "androidx.room:room-runtime:$room_version"
@@ -94,7 +94,7 @@ dependencies {
         // Excludes the support library because it's already included by Glide.
         transitive = false
     }
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "com.github.tomakehurst:wiremock-jre8:2.26.3"
@@ -110,6 +110,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
@@ -117,7 +119,18 @@ dependencies {
     def fragment_version = '1.2.4'
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
-    implementation 'com.karumi:dexter:6.1.2'
+    // Use the most recent version of CameraX
+    def camerax_version = '1.0.0-beta03'
+    implementation "androidx.camera:camera-core:${camerax_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    // CameraX Lifecycle library
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+
+    // CameraX View class
+    implementation 'androidx.camera:camera-view:1.0.0-alpha10'
+
+    implementation 'com.karumi:dexter:6.1.0'
+
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
