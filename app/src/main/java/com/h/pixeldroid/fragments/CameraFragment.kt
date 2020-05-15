@@ -77,22 +77,6 @@ class CameraFragment : Fragment() {
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
 
-    /**
-     * We need a display listener for orientation changes that do not trigger a configuration
-     * change, for example if we choose to override config change in manifest or for 180-degree
-     * orientation changes.
-     */
-    private val displayListener = object : DisplayManager.DisplayListener {
-        override fun onDisplayAdded(displayId: Int) = Unit
-        override fun onDisplayRemoved(displayId: Int) = Unit
-        override fun onDisplayChanged(displayId: Int) = view?.let { view ->
-            if (displayId == this@CameraFragment.displayId) {
-                Log.d(TAG, "Rotation changed: ${view.display.rotation}")
-                imageCapture?.targetRotation = view.display.rotation
-            }
-        } ?: Unit
-    }
-
     override fun onResume() {
         super.onResume()
         // Make sure that all permissions are still present on resume,
@@ -126,7 +110,6 @@ class CameraFragment : Fragment() {
         cameraExecutor.shutdown()
 
         // Unregister the broadcast receivers and listeners
-        displayManager.unregisterDisplayListener(displayListener)
     }
 
     override fun onCreateView(
@@ -162,7 +145,6 @@ class CameraFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         // Every time the orientation of device changes, update rotation for use cases
-        displayManager.registerDisplayListener(displayListener, null)
 
         // Determine the output directory
         outputDirectory = getGalleryDirectory(requireContext())
