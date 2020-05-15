@@ -34,8 +34,7 @@ class SearchPostsFragment: PostsFeedFragment(){
         return view
     }
 
-    inner class SearchFeedDataSource(
-    ) : FeedDataSource(null, null){
+    inner class SearchFeedDataSource : FeedDataSource(null, null){
 
         override fun newSource(): FeedDataSource {
             return SearchFeedDataSource()

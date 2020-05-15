@@ -15,7 +15,6 @@
             android:id="@+id/search_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabBackground="@color/colorPrimary"
             app:tabMode="fixed"/>
 
         <androidx.viewpager2.widget.ViewPager2
