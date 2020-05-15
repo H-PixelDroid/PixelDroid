@@ -61,7 +61,7 @@ class DrawerMenuTest {
     fun testThemeSettings() {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
-        val themes = getInstrumentation().context.resources.getStringArray(R.array.theme_values)
+        val themes = getInstrumentation().targetContext.resources.getStringArray(R.array.theme_entries)
         //select theme modes
         onView(withText(R.string.theme_title)).perform(click())
         onView(withText(themes[2])).perform(click())
