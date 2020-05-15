@@ -47,10 +47,12 @@ class PostCreationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_creation)
-        val imageUri: Uri = intent.getParcelableExtra<Uri>("picture_uri")!!
+
+        val imageUri: Uri = intent.getParcelableExtra("picture_uri")!!
+
         saveImage(imageUri)
 
-        pictureFrame = findViewById<ImageView>(R.id.post_creation_picture_frame)
+        pictureFrame = findViewById(R.id.post_creation_picture_frame)
         pictureFrame.setImageURI(image.toUri())
 
         preferences = getSharedPreferences(
@@ -100,8 +102,9 @@ class PostCreationActivity : AppCompatActivity() {
         val maxLength = preferences.getInt("max_toot_chars", 500)
         if (content.length > maxLength) {
             // error, too much characters
-            textField.error = getString(R.string.description_max_characters) + maxLength +
-                    getString(R.string.description_max_characters_end)
+            textField.error =
+                getString(R.string.description_max_characters) + maxLength +
+                getString(R.string.description_max_characters_end)
             return false
         }
         // store the description
@@ -129,7 +132,9 @@ class PostCreationActivity : AppCompatActivity() {
                         Toast.makeText(applicationContext, getString(R.string.picture_format_error),
                             Toast.LENGTH_SHORT).show()
                 } else {
-                    Log.e(TAG, "Server responded: $response" + call.request() + call.request().body)
+                    Log.e(TAG,
+                        "Server responded: $response${call.request()}${call.request().body}"
+                    )
                     Toast.makeText(applicationContext,getString(R.string.request_format_error),
                         Toast.LENGTH_SHORT).show()
                 }

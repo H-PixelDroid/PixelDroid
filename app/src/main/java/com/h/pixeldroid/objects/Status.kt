@@ -22,7 +22,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.ImageFragment
+import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
@@ -119,13 +119,8 @@ data class Status(
 
     }
 
-    fun getUsername() : CharSequence {
-        var name = account.username
-        if (name.isNullOrEmpty()) {
-            name = account.display_name?: "NoName"
-        }
-        return name
-    }
+    fun getUsername() : CharSequence =
+        account.username.ifBlank{account.display_name.ifBlank{"NoName"}}
 
     fun getNLikes(context: Context) : CharSequence {
         val nLikes = favourites_count
@@ -214,22 +209,26 @@ data class Status(
         isActivity : Boolean
     ) {
         //Setup username as a button that opens the profile
-        val username = rootView.findViewById<TextView>(R.id.username)
-        username.text = this.getUsername()
-        username.setTypeface(null, Typeface.BOLD)
-        username.setOnClickListener { account.openProfile(rootView.context) }
+        rootView.findViewById<TextView>(R.id.username).apply {
+            text = this@Status.getUsername()
+            setTypeface(null, Typeface.BOLD)
+            setOnClickListener { account.openProfile(rootView.context) }
+        }
 
-        val usernameDesc = rootView.findViewById<TextView>(R.id.usernameDesc)
-        usernameDesc.text = this.getUsername()
-        usernameDesc.setTypeface(null, Typeface.BOLD)
+        rootView.findViewById<TextView>(R.id.usernameDesc).apply {
+            text = this@Status.getUsername()
+            setTypeface(null, Typeface.BOLD)
+        }
 
-        val nlikes = rootView.findViewById<TextView>(R.id.nlikes)
-        nlikes.text = this.getNLikes(rootView.context)
-        nlikes.setTypeface(null, Typeface.BOLD)
+        rootView.findViewById<TextView>(R.id.nlikes).apply {
+            text = this@Status.getNLikes(rootView.context)
+            setTypeface(null, Typeface.BOLD)
+        }
 
-        val nshares = rootView.findViewById<TextView>(R.id.nshares)
-        nshares.text = this.getNShares(rootView.context)
-        nshares.setTypeface(null, Typeface.BOLD)
+        rootView.findViewById<TextView>(R.id.nshares).apply {
+            text = this@Status.getNShares(rootView.context)
+            setTypeface(null, Typeface.BOLD)
+        }
 
         //Convert the date to a readable string
         ISO8601toDate(created_at, rootView.postDate, isActivity, rootView.context)
@@ -251,7 +250,7 @@ data class Status(
 
 
         //Set comment initial visibility
-        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
+        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = GONE
 
         imagePopUpMenu(rootView, homeFragment.requireActivity())
     }
@@ -259,8 +258,10 @@ data class Status(
     fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
         val desc = rootView.findViewById<TextView>(R.id.description)
 
-        desc.text = this.getDescription(api, rootView.context, credential)
-        desc.movementMethod = LinkMovementMethod.getInstance()
+        desc.apply {
+            text = this@Status.getDescription(api, rootView.context, credential)
+            movementMethod = LinkMovementMethod.getInstance()
+        }
     }
 
     fun activateReblogger(
@@ -269,19 +270,21 @@ data class Status(
         credential: String,
         isReblogged : Boolean
     ) {
-        //Set initial button state
-        holder.reblogger.isChecked = isReblogged
+        holder.reblogger.apply {
+            //Set initial button state
+            isChecked = isReblogged
 
-        //Activate the button
-        holder.reblogger.setEventListener { _, buttonState ->
-            if (buttonState) {
-                Log.e("REBLOG", "Reblogged post")
-                // Button is active
-                reblogPost(holder, api, credential, this)
-            } else {
-                Log.e("REBLOG", "Undo Reblogged post")
-                // Button is inactive
-                undoReblogPost(holder, api, credential, this)
+            //Activate the button
+            setEventListener { _, buttonState ->
+                if (buttonState) {
+                    Log.e("REBLOG", "Reblogged post")
+                    // Button is active
+                    reblogPost(holder, api, credential, this@Status)
+                } else {
+                    Log.e("REBLOG", "Undo Reblogged post")
+                    // Button is inactive
+                    undoReblogPost(holder, api, credential, this@Status)
+                }
             }
         }
     }
@@ -292,20 +295,23 @@ data class Status(
         credential: String,
         isLiked: Boolean
     ) {
-        //Set initial state
-        holder.liker.isChecked = isLiked
 
-        //Activate the liker
-        holder.liker.setEventListener { _, buttonState ->
+        holder.liker.apply {
+            //Set initial state
+            isChecked = isLiked
+
+            //Activate the liker
+            setEventListener { _, buttonState ->
                 if (buttonState) {
                     // Button is active
-                    likePostCall(holder, api, credential, this)
+                    likePostCall(holder, api, credential, this@Status)
                 } else {
                     // Button is inactive
-                    unLikePostCall(holder, api, credential, this)
+                    unLikePostCall(holder, api, credential, this@Status)
                 }
             }
         }
+    }
 
 
     fun showComments(
@@ -317,14 +323,14 @@ data class Status(
         if (replies_count == 0) {
             holder.viewComment.text =  holder.context.getString(R.string.no_comments)
         } else {
-            holder.viewComment.text = 
-                holder.context.getString(R.string.view_all) + replies_count +
-                holder.context.getString(R.string.show_comments)
-            holder.viewComment.setOnClickListener {
-                holder.viewComment.visibility = View.GONE
+            holder.viewComment.apply {
+                text = "$replies_count ${holder.context.getString(R.string.CommentDisplay)}"
+                setOnClickListener {
+                    visibility = GONE
 
-                //Retrieve the comments
-                retrieveComments(holder, api, credential, this)
+                    //Retrieve the comments
+                    retrieveComments(holder, api, credential, this@Status)
+                }
             }
         }
     }
@@ -356,7 +362,7 @@ data class Status(
     }
 
 
-    fun imagePopUpMenu(view: View, activity: FragmentActivity) {
+    private fun imagePopUpMenu(view: View, activity: FragmentActivity) {
         val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
         if (!media_attachments.isNullOrEmpty() && media_attachments.size == 1) {
             view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {

@@ -149,7 +149,7 @@ abstract class FeedsRecyclerViewAdapter<T: FeedContent, VH : RecyclerView.ViewHo
         }
 
         override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
-            return oldItem == newItem
+            return oldItem.equals(newItem)
         }
     }
 ){

@@ -20,7 +20,7 @@ import retrofit2.Response
 
 class PostActivity : AppCompatActivity() {
     private lateinit var preferences: SharedPreferences
-    lateinit var postFragment : PostFragment
+    private lateinit var postFragment : PostFragment
     lateinit var domain : String
 
     override fun onCreate(savedInstanceState: Bundle?) {

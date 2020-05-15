@@ -5,6 +5,7 @@ import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -13,6 +14,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.uiautomator.UiDevice
 import com.h.pixeldroid.testUtility.MockServer
 import org.junit.Before
 import org.junit.Rule
@@ -42,7 +45,7 @@ class DrawerMenuTest {
         // Open Drawer to click on navigation.
         ActivityScenario.launch(MainActivity::class.java)
         onView(withId(R.id.drawer_layout))
-            .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+            .check(matches(DrawerMatchers.isClosed())) // Left Drawer should be closed.
             .perform(DrawerActions.open()) // Open Drawer
     }
 
@@ -51,7 +54,28 @@ class DrawerMenuTest {
         // Start the screen of your activity.
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
         // Check that settings activity was opened.
-        onView(withText(R.string.signature_title)).check(matches(isDisplayed()))
+        onView(withText(R.string.theme_title)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testThemeSettings() {
+        // Start the screen of your activity.
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
+        val themes = getInstrumentation().targetContext.resources.getStringArray(R.array.theme_entries)
+        //select theme modes
+        onView(withText(R.string.theme_title)).perform(click())
+        onView(withText(themes[2])).perform(click())
+
+        //Select an other theme
+        onView(withText(R.string.theme_title)).perform(click())
+        onView(withText(themes[0])).perform(click())
+
+        //Select the last theme
+        onView(withText(R.string.theme_title)).perform(click())
+        onView(withText(themes[1])).perform(click())
+
+        //Check that we are back in the settings page
+        onView(withText(R.string.theme_header)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -115,5 +139,12 @@ class DrawerMenuTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Andrew Dobis")))
+    }
+
+    @Test
+    fun onBackPressedClosesDrawer() {
+        UiDevice.getInstance(getInstrumentation()).pressBack()
+        Thread.sleep(1000)
+        onView(withId(R.id.drawer_layout)).check(matches(DrawerMatchers.isClosed()))
     }
 }

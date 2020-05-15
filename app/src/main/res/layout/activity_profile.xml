@@ -111,19 +111,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/follow"
-                    android:textColor="@color/colorPrimary"
                     android:visibility="invisible"
+                    android:textColor="@color/colorButtonText"
+                    android:backgroundTint="@color/colorButtonBg"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/editButton"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/edit_profile"
-                    android:textColor="@color/cardview_light_background"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorButtonText"
+                    android:backgroundTint="@color/colorButtonBg"
                     android:visibility="gone"
+                    android:text="@string/edit_profile"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -143,16 +144,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/colorPrimary"
-                        android:src="@android:drawable/ic_dialog_dialer" />
+                        android:background="@color/colorPrimaryTab"
+                        android:src="@android:drawable/ic_dialog_dialer"
+                        android:contentDescription="TODO" />
 
                     <ImageButton
                         android:id="@+id/collectionButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/colorPrimary"
-                        android:src="@android:drawable/ic_menu_gallery" />
+                        android:background="@color/colorPrimaryTab"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        android:contentDescription="TODO" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

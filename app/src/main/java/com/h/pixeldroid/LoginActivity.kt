@@ -8,15 +8,30 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Application
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Token
-import kotlinx.android.synthetic.main.activity_login.*
-import okhttp3.HttpUrl
+import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.Utils
+import kotlinx.android.synthetic.main.activity_login.connect_instance_button
+import kotlinx.android.synthetic.main.activity_login.editText
+import kotlinx.android.synthetic.main.activity_login.login_activity_connection_required_text
+import kotlinx.android.synthetic.main.activity_login.login_activity_instance_chooser
+import kotlinx.android.synthetic.main.activity_login.login_activity_instance_chooser_button
+import kotlinx.android.synthetic.main.activity_login.login_activity_instance_chooser_layout
+import kotlinx.android.synthetic.main.activity_login.login_activity_instance_chooser_offline_text
+import kotlinx.android.synthetic.main.activity_login.login_activity_instance_input_layout
+import kotlinx.android.synthetic.main.activity_login.progressLayout
+import kotlinx.android.synthetic.main.activity_login.whatsAnInstanceTextView
+import okhttp3.internal.toImmutableList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,41 +39,108 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
-    private val TAG = "Login Activity"
+    companion object {
+        private const val TAG = "Login Activity"
+        private const val PACKAGE_ID = BuildConfig.APPLICATION_ID
+        private const val SCOPE = "read write follow"
+    }
 
-    private lateinit var OAUTH_SCHEME: String
-    private val PACKAGE_ID = BuildConfig.APPLICATION_ID
-    private val SCOPE = "read write follow"
-    private lateinit var APP_NAME: String
+    private lateinit var oauthScheme: String
+    private lateinit var appName: String
     private lateinit var preferences: SharedPreferences
+    private lateinit var db: AppDatabase
+    private lateinit var pixelfedAPI: PixelfedAPI
+    private var inputVisibility: Int = View.GONE
+    private var chooserVisibility: Int = View.GONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        connect_instance_button.setOnClickListener { onClickConnect() }
-        whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
+        loadingAnimation(true)
+        appName = getString(R.string.app_name)
+        oauthScheme = getString(R.string.auth_scheme)
+        preferences = getSharedPreferences("$PACKAGE_ID.pref", Context.MODE_PRIVATE)
+        db = DBUtils.initDB(applicationContext)
 
-        APP_NAME = getString(R.string.app_name)
-        OAUTH_SCHEME = getString(R.string.auth_scheme)
-        preferences = getSharedPreferences(
-            "$PACKAGE_ID.pref", Context.MODE_PRIVATE
-        )
+        // check for stored accounts/instances
+        val accounts: List<Map<String, String>> = getSavedAccounts()
+        if (accounts.isNotEmpty()) {
+            displayChooser(accounts)
+            login_activity_instance_chooser_button.setOnClickListener {
+                val choice: Int = login_activity_instance_chooser.selectedItemId.toInt()
+                setPreferences(accounts[choice])
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        if (Utils.hasInternet(applicationContext)) {
+            connect_instance_button.setOnClickListener {
+                registerAppToServer(normalizeDomain(editText.text.toString()))
+            }
+            whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
+            inputVisibility = View.VISIBLE
+        } else {
+            if (accounts.isEmpty()) {
+                login_activity_connection_required_text.visibility = View.VISIBLE
+            } else {
+                login_activity_instance_chooser_offline_text.visibility = View.VISIBLE
+            }
+        }
+        loadingAnimation(false)
+    }
+
+    private fun getSavedAccounts(): List<Map<String, String>> {
+        val result = mutableListOf<Map<String, String>>()
+        val instances = db.instanceDao().getAll()
+        for (user in db.userDao().getAll()) {
+            val instance = instances.first {instance ->
+                instance.uri == user.instance_uri
+            }
+            result.add(mapOf(
+                Pair("username", user.username),
+                Pair("instance_title", instance.title),
+                Pair("instance_uri", instance.uri),
+                Pair("id", user.user_id)
+            ))
+        }
+        return result.toImmutableList()
+    }
+
+    private fun displayChooser(accounts: List<Map<String, String>>) {
+        ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            accounts.map { account ->
+                "${account["username"]}@${account["instance_title"]}"
+            }).also {
+                adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            login_activity_instance_chooser.adapter = adapter
+        }
+        chooserVisibility = View.VISIBLE
+    }
+
+    private fun setPreferences(account: Map<String, String>) {
+        if (Utils.hasInternet(applicationContext))
+            registerAppToServer(normalizeDomain(account["instance_uri"].orEmpty()))
+        else
+            preferences.edit()
+                .putString("user_id", account["id"])
+                .apply()
     }
 
     override fun onStart(){
         super.onStart()
-
-        val url = intent.data
+        val url: Uri? = intent.data
 
         //Check if the activity was started after the authentication
-        if (url == null || !url.toString().startsWith("$OAUTH_SCHEME://$PACKAGE_ID")) return
-
+        if (url == null || !url.toString().startsWith("$oauthScheme://$PACKAGE_ID")) return
         loadingAnimation(true)
 
         val code = url.getQueryParameter("code")
         authenticate(code)
-
     }
 
     override fun onStop() {
@@ -69,82 +151,54 @@ class LoginActivity : AppCompatActivity() {
     override fun onBackPressed() {
     }
 
-    private fun onClickConnect() {
-
-        val normalizedDomain = normalizeDomain(editText.text.toString())
-
-        try{
-            HttpUrl.Builder().host(normalizedDomain).scheme("https").build()
-        } catch (e: IllegalArgumentException) {
-            return failedRegistration(getString(R.string.invalid_domain))
-        }
-        
-        hideKeyboard()
-        loadingAnimation(true)
-
-        preferences.edit()
-            .putString("domain", "https://$normalizedDomain")
-            .apply()
-        getInstanceConfig()
-        registerAppToServer("https://$normalizedDomain")
-
-    }
-
     private fun whatsAnInstance() {
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse("https://pixelfed.org/join")
         startActivity(i)
     }
 
-    private fun hideKeyboard() {
-        val view = currentFocus
-        if (view != null) {
-            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                view.windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
-            )
-        }
+    private fun normalizeDomain(domain: String): String {
+        return "https://" + domain
+            .replace("http://", "")
+            .replace("https://", "")
+            .trim(Char::isWhitespace)
     }
 
-    private fun normalizeDomain(domain: String): String {
-        var d = domain.replace("http://", "")
-        d = d.replace("https://", "")
-        return d.trim(Char::isWhitespace)
-    }
 
     private fun registerAppToServer(normalizedDomain: String) {
-        val callback = object : Callback<Application> {
+        loadingAnimation(true)
+        if (normalizedDomain.replace("https://", "").isNullOrBlank())
+            return failedRegistration(getString(R.string.login_empty_string_error))
+        PixelfedAPI.create(normalizedDomain).registerApplication(
+            appName,"$oauthScheme://$PACKAGE_ID", SCOPE
+        ).enqueue(object : Callback<Application> {
             override fun onResponse(call: Call<Application>, response: Response<Application>) {
                 if (!response.isSuccessful) {
                     return failedRegistration()
                 }
-
-                val credentials = response.body()
-                val clientId = credentials?.client_id ?: return failedRegistration()
-                val clientSecret = credentials.client_secret
-
+                preferences.edit()
+                    .putString("domain", normalizedDomain)
+                    .apply()
+                val credentials = response.body() as Application
+                val clientId = credentials.client_id ?: return failedRegistration()
                 preferences.edit()
                     .putString("clientID", clientId)
-                    .putString("clientSecret", clientSecret)
+                    .putString("clientSecret", credentials.client_secret)
                     .apply()
-
                 promptOAuth(normalizedDomain, clientId)
             }
 
             override fun onFailure(call: Call<Application>, t: Throwable) {
                 return failedRegistration()
             }
-        }
-        PixelfedAPI.create(normalizedDomain).registerApplication(
-            APP_NAME,"$OAUTH_SCHEME://$PACKAGE_ID", SCOPE
-        ).enqueue(callback)
+        })
     }
 
     private fun promptOAuth(normalizedDomain: String, client_id: String) {
 
         val url = "$normalizedDomain/oauth/authorize?" +
                 "client_id" + "=" + client_id + "&" +
-                "redirect_uri" + "=" + "$OAUTH_SCHEME://$PACKAGE_ID" + "&" +
+                "redirect_uri" + "=" + "$oauthScheme://$PACKAGE_ID" + "&" +
                 "response_type=code" + "&" +
                 "scope=$SCOPE"
 
@@ -165,11 +219,11 @@ class LoginActivity : AppCompatActivity() {
     private fun authenticate(code: String?) {
 
         // Get previous values from preferences
-        val domain = preferences.getString("domain", "")
-        val clientId = preferences.getString("clientID", "")
-        val clientSecret = preferences.getString("clientSecret", "")
+        val domain = preferences.getString("domain", "") as String
+        val clientId = preferences.getString("clientID", "") as String
+        val clientSecret = preferences.getString("clientSecret", "") as String
 
-        if (code == null || domain.isNullOrEmpty() || clientId.isNullOrEmpty() || clientSecret.isNullOrEmpty()) {
+        if (code.isNullOrBlank() || domain.isBlank() || clientId.isBlank() || clientSecret.isBlank()) {
             return failedRegistration(getString(R.string.auth_failed))
         }
 
@@ -187,61 +241,84 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        PixelfedAPI.create("$domain")
-            .obtainToken(
-            clientId, clientSecret, "$OAUTH_SCHEME://$PACKAGE_ID", SCOPE, code,
+        pixelfedAPI = PixelfedAPI.create(domain)
+        pixelfedAPI.obtainToken(
+            clientId, clientSecret, "$oauthScheme://$PACKAGE_ID", SCOPE, code,
             "authorization_code"
         ).enqueue(callback)
     }
 
     private fun authenticationSuccessful(accessToken: String) {
+        saveUserAndInstance(accessToken)
         preferences.edit().putString("accessToken", accessToken).apply()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        finish()
     }
 
-    private fun failedRegistration(message: String =
-                                       getString(R.string.registration_failed)){
+    private fun failedRegistration(message: String = getString(R.string.registration_failed)) {
         loadingAnimation(false)
         editText.error = message
     }
 
     private fun loadingAnimation(on: Boolean){
         if(on) {
-            domainTextInputLayout.visibility = View.GONE
+            login_activity_instance_input_layout.visibility = View.GONE
+            login_activity_instance_chooser_layout.visibility = View.GONE
             progressLayout.visibility = View.VISIBLE
         }
         else {
-            domainTextInputLayout.visibility = View.VISIBLE
+            login_activity_instance_input_layout.visibility = inputVisibility
+            login_activity_instance_chooser_layout.visibility = chooserVisibility
             progressLayout.visibility = View.GONE
         }
     }
 
-    private fun getInstanceConfig() {
-        // to get max post description length, can be enhanced for other things
-        // see /api/v1/instance
-        PixelfedAPI.create(preferences.getString("domain", "")!!)
-            .instance().enqueue(object : Callback<Instance> {
-
-            override fun onFailure(call: Call<Instance>, t: Throwable) {
-                Log.e(TAG, "Request to fetch instance config failed.")
-                preferences.edit().putInt("max_toot_chars", 500).apply()
-            }
-
-            override fun onResponse(call: Call<Instance>, response: Response<Instance>) {
-                if (response.code() == 200) {
-                    preferences.edit().putInt(
-                        "max_toot_chars",
-                        response.body()!!.max_toot_chars.toInt()
-                    ).apply()
-                } else {
-                    Log.e(TAG, "Server response to fetch instance config failed.")
-                    preferences.edit().putInt("max_toot_chars", 500).apply()
+    private fun saveUserAndInstance(accessToken: String) {
+        preferences.edit().putInt("max_toot_chars", Instance.DEFAULT_MAX_TOOT_CHARS).apply()
+        pixelfedAPI.instance().enqueue(object : Callback<Instance> {
+                override fun onFailure(call: Call<Instance>, t: Throwable) {
                 }
-            }
 
-        })
+                override fun onResponse(call: Call<Instance>, response: Response<Instance>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val instance = response.body() as Instance
+                        storeInstance(instance)
+                        storeUser(accessToken)
+                    }
+                }
+            })
+    }
+
+    private fun storeInstance(instance: Instance) {
+        val maxTootChars = instance.max_toot_chars.toInt()
+        preferences.edit().putInt("max_toot_chars", maxTootChars).apply()
+        preferences.edit().putString("instance_uri", instance.uri).apply()
+        val dbInstance = InstanceDatabaseEntity(
+            uri = instance.uri,
+            title = instance.title,
+            max_toot_chars = maxTootChars,
+            thumbnail = instance.thumbnail
+        )
+        db.instanceDao().insertInstance(dbInstance)
+    }
+
+    private fun storeUser(accessToken: String) {
+        pixelfedAPI.verifyCredentials("Bearer $accessToken")
+            .enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if (response.body() != null && response.isSuccessful) {
+                        val user = response.body() as Account
+                        preferences.edit().putString("user_id", user.id).apply()
+                        DBUtils.addUser(
+                            db,
+                            user,
+                            preferences.getString("instance_uri", null).orEmpty()
+                        )
+                    }
+                }
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                }
+            })
     }
 
 }
