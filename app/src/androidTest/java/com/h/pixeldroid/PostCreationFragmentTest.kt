@@ -18,6 +18,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.h.pixeldroid.testUtility.MockServer
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.camera_ui_container.*
 import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
@@ -50,7 +51,7 @@ class PostCreationFragmentTest {
     fun uploadButtonLaunchesGalleryIntent() {
         val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
         intending(expectedIntent)
-        onView(withId(R.id.uploadPictureButton)).perform(click())
+        onView(withId(R.id.photo_view_button)).perform(click())
         Thread.sleep(1000)
         intended(expectedIntent)
     }
@@ -73,16 +74,16 @@ class PostFragmentUITests {
             .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         preferences.edit().putString("accessToken", "azerty").apply()
         preferences.edit().putString("domain", baseUrl.toString()).apply()
-
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
-                a -> a.tabs.getTabAt(2)!!.select()
-        }
         Thread.sleep(300)
     }
 
     @Test
     fun newPostUiTest() {
-        onView(withId(R.id.uploadPictureButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.takePictureButton)).check(matches(isDisplayed()))
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+                a -> a.tabs.getTabAt(2)!!.select()
+        }
+        Thread.sleep(1500)
+        onView(withId(R.id.photo_view_button)).check(matches(isDisplayed()))
+        onView(withId(R.id.camera_capture_button)).check(matches(isDisplayed()))
     }
 }

@@ -54,7 +54,7 @@ class EditPhotoTest {
 
         // Launch PhotoEditActivity
         val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
-        val intent = Intent(context, PhotoEditActivity::class.java).putExtra("uri", uri)
+        val intent = Intent(context, PhotoEditActivity::class.java).putExtra("picture_uri", uri)
 
         activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}
 
@@ -108,10 +108,11 @@ class EditPhotoTest {
         Thread.sleep(1000)
         Espresso.onView(withId(R.id.recycler_view))
             .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(5, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
+        Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun BirghtnessSaturationContrastTest() {
+    fun BrightnessSaturationContrastTest() {
         Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
 
         Thread.sleep(1000)
@@ -139,11 +140,10 @@ class EditPhotoTest {
 
     @Test
     fun SaveButton() {
-        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         Espresso.onView(withId(R.id.action_save)).perform(click())
         Espresso.onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText("Image succesfully saved")))
-
     }
 
     @Test
@@ -153,4 +153,11 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
     }
 
+    @Test
+    fun croppingIsPossible() {
+        Espresso.onView(withId(R.id.cropImageButton)).perform(click())
+        Thread.sleep(1000)
+        Espresso.onView(withId(R.id.menu_crop)).perform(click())
+        Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
+    }
 }

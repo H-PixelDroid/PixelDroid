@@ -4,9 +4,11 @@
     <color name="colorPrimaryTab">#FFFFFF</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="icActive">#FFFFFFFF</color>
+    <color name="icFocused">#DDFFFFFF</color>
+    <color name="icPressed">#AAFFFFFF</color>
     <color name="colorButtonBg">#6200EE</color>
     <color name="colorButtonText">#FFFFFF</color>
-
     <color name="filterLabelNormal">#8A8889</color>
     <color name="filterLabelSelected">#221F20</color>
     <color name="colorOptionMenu">#FF3990</color>

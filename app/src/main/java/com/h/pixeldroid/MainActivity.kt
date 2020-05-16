@@ -15,9 +15,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.fragments.NewPostFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (hasInternet(applicationContext)) PostsFeedFragment()
                 else OfflineFeedFragment(),
                 searchDiscoverFragment,
-                NewPostFragment(),
+                CameraFragment(),
                 NotificationsFragment(),
                 PublicTimelineFragment()
             )
