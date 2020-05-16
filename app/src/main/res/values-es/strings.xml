@@ -11,11 +11,6 @@
     <string name="app_name">PixelDroid</string>
     <string name="token_error">Error al obtener el token</string>
     <string name="title_activity_settings2">Ajustes</string>
-    <string name="messages_header">Mensajes</string>
-    <string name="sync_header">Sincronización</string>
-    <string name="signature_title">Tu firma</string>
-    <string name="reply_title">Acción de respuesta predeterminada</string>
-    <string name="sync_title">Sincronizar correo electrónico periódicamente</string>
     <string name="shared_notification">%1$s compartió tu publicación</string>
     <string name="liked_notification">%1$s le gustó tu publicación</string>
     <string name="create_a_new_post">¡Crear una nueva publicación!</string>
@@ -30,8 +25,6 @@
     <string name="image_download_downloading">Descargando…</string>
     <string name="image_download_success">La imagen se descargó con éxito</string>
     <string name="share_picture">Compartir foto…</string>
-    <string name="attachment_title">Descargar archivos adjuntos entrantes</string>
-    <string name="attachment_summary_on">Descargar automáticamente los archivos adjuntos para correos electrónicos entrantes</string>
     <string name="attachment_summary_off">Descargar únicamente los archivos adjuntos cuando se solicite manualmente</string>
     <string name="followed_notification">%1$s te siguió</string>
     <string name="mention_notification">%1$s te mencionó</string>

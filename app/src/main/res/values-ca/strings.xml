@@ -4,13 +4,6 @@
     <string name="mention_notification">%1$s t\'ha esmentat</string>
     <string name="followed_notification">%1$s et segueix</string>
     <string name="attachment_summary_off">Baixar fitxers adjunts només quan es sol·liciti manualment</string>
-    <string name="attachment_summary_on">Baixar automàticament els fitxers adjunts per als correus electrònics entrants</string>
-    <string name="attachment_title">Baixar fitxers adjunts entrants</string>
-    <string name="sync_title">Syncronitzar correu periòdicament</string>
-    <string name="reply_title">Acció de resposta predeterminada</string>
-    <string name="signature_title">La vostra signatura</string>
-    <string name="sync_header">Syncronitzar</string>
-    <string name="messages_header">Missatges</string>
     <string name="title_activity_settings2">Configuració</string>
     <string name="token_error">S\'ha produït un error en obtenir el token</string>
     <string name="auth_failed">No s\'ha pogut autenticar</string>

@@ -18,13 +18,6 @@
     <string name="mention_notification">%1$s erabiltzaileak aipatu zaitu</string>
     <string name="followed_notification">%1$s jarraitzen hasi zaizu</string>
     <string name="attachment_summary_off">Eskuz eskatzean bakarrik deskargatu eranskinak</string>
-    <string name="attachment_summary_on">Deskargatu sarrerako posta elektronikoen eranskinak automatikoki</string>
-    <string name="attachment_title">Deskargatu sarrerako eranskinak</string>
-    <string name="sync_title">Sinkronizatu posta elektronikoa aldizka</string>
-    <string name="reply_title">Erantzuteko ekintza lehenetsia</string>
-    <string name="signature_title">Zure sinadura</string>
-    <string name="sync_header">Sinkronizatu</string>
-    <string name="messages_header">Hobespenen izenburuak</string>
     <string name="title_activity_settings2">Ezarpenak</string>
     <string name="token_error">Errorea tokena eskuratzean</string>
     <string name="auth_failed">Ezin izan da autentifikatu</string>
