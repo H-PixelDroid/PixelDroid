@@ -71,6 +71,7 @@ class PostTest {
                 accessToken = "token"
             )
         )
+        db.close()
         Intents.init()
     }
 

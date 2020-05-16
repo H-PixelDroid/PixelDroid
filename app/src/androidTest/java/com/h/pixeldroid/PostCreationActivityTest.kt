@@ -58,6 +58,7 @@ class PostCreationActivityTest {
                 accessToken = "token"
             )
         )
+        db.close()
         val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
         val intent = Intent(context, PostCreationActivity::class.java)
             .putExtra("picture_uri", uri)

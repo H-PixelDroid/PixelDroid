@@ -32,6 +32,7 @@ class FollowsActivity : AppCompatActivity() {
 
             val domain = user?.instance_uri.orEmpty()
             val accessToken = user?.accessToken.orEmpty()
+            db.close()
 
             val pixelfedAPI = PixelfedAPI.create(domain)
 

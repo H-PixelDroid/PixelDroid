@@ -47,6 +47,7 @@ class LoginActivityOnlineTest {
         pref.edit().clear().apply()
         db = DBUtils.initDB(context)
         db.clearAllTables()
+        db.close()
     }
 
     @Test
@@ -117,6 +118,7 @@ class LoginActivityOnlineTest {
                 accessToken = "token"
             )
         )
+        db.close()
         pref.edit()
             .putString("domain", server.getUrl().toString())
             .putString("clientID", "test_id")
@@ -125,7 +127,7 @@ class LoginActivityOnlineTest {
         val uri = Uri.parse("oauth2redirect://com.h.pixeldroid?code=test_code")
         val intent = Intent(ACTION_VIEW, uri, context, LoginActivity::class.java)
         ActivityScenario.launch<LoginActivity>(intent)
-        Thread.sleep(10000)
+        Thread.sleep(1000)
         onView(withId(R.id.main_activity_main_linear_layout)).check(matches(isDisplayed()))
     }
 }

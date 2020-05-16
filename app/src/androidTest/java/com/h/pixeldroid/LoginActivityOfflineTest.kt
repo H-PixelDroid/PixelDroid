@@ -44,6 +44,7 @@ class LoginActivityOfflineTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = DBUtils.initDB(context)
         db.clearAllTables()
+        db.close()
     }
 
     @Test

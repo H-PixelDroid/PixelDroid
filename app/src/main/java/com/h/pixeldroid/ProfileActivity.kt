@@ -45,6 +45,7 @@ class ProfileActivity : AppCompatActivity() {
         domain = user?.instance_uri.orEmpty()
         pixelfedAPI = PixelfedAPI.create(domain)
         accessToken = user?.accessToken.orEmpty()
+        db.close()
 
         // Set posts RecyclerView as a grid with 3 columns
         recycler = findViewById(R.id.profilePostsRecyclerView)

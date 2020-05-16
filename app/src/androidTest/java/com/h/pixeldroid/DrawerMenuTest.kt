@@ -66,6 +66,7 @@ class DrawerMenuTest {
                 accessToken = "token"
             )
         )
+        db.close()
 
         // Open Drawer to click on navigation.
         ActivityScenario.launch(MainActivity::class.java)

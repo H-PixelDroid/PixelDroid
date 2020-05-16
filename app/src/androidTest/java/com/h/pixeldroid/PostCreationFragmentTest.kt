@@ -98,6 +98,7 @@ class PostFragmentUITests {
                 accessToken = "token"
             )
         )
+        db.close()
         Thread.sleep(300)
     }
 

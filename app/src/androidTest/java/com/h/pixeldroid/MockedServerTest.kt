@@ -70,6 +70,7 @@ class MockedServerTest {
                 accessToken = "token"
             )
         )
+        db.close()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
     }
 

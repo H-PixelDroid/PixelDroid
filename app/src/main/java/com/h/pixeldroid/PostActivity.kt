@@ -34,6 +34,7 @@ class PostActivity : AppCompatActivity() {
 
         domain = user?.instance_uri.orEmpty()
         accessToken = user?.accessToken.orEmpty()
+        db.close()
 
         postFragment = PostFragment()
         val arguments = Bundle()

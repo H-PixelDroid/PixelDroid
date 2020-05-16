@@ -62,6 +62,7 @@ class PostCreationActivity : AppCompatActivity() {
         user = db.userDao().getActiveUser()
 
         val instances = db.instanceDao().getAll()
+        db.close()
         maxLength = if (user!=null){
             val thisInstances =
                 instances.filter { instanceDatabaseEntity ->

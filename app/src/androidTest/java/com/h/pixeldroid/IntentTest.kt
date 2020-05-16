@@ -2,10 +2,8 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.text.SpannableString
 import android.text.style.ClickableSpan
-import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
@@ -14,20 +12,13 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.contrib.DrawerActions
-import androidx.test.espresso.contrib.DrawerMatchers
-import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
@@ -89,6 +80,7 @@ class IntentTest {
                 accessToken = "token"
             )
         )
+        db.close()
 
         Intents.init()
     }
