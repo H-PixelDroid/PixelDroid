@@ -35,4 +35,5 @@
     <string name="app_name">PixelDroid</string>
     <string name="reply_title">Action de réponse par défaut</string>
     <string name="create_a_new_post">Créez une nouvelle publication !</string>
+    <string name="token_error">Erreur lors de l\'obtention du jeton</string>
 </resources>
