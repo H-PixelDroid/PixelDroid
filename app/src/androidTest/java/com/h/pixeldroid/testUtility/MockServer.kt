@@ -34,7 +34,7 @@ class MockServer {
                         .setResponseCode(200).setBody(JsonValues.accountJson)
                     "/api/v1/instance" -> return MockResponse()
                         .addHeader(headerName, headerValue)
-                        .setResponseCode(200).setBody(JsonValues.instanceJson)
+                        .setResponseCode(200).setBody(JsonValues.instanceJson.replace("REPLACEWITHDOMAIN", getUrl().toString()))
                     "/api/v1/media" -> return MockResponse()
                         .addHeader(headerName, headerValue)
                         .setResponseCode(200).setBody(JsonValues.mediaUploadResponseJson)
