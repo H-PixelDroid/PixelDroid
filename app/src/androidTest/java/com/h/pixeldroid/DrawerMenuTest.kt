@@ -1,10 +1,9 @@
 package com.h.pixeldroid
 
 import android.content.Context
-import android.view.Gravity
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
@@ -13,10 +12,14 @@ import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.utils.DBUtils
+import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,6 +30,9 @@ import org.junit.runner.RunWith
 class DrawerMenuTest {
 
     private val mockServer = MockServer()
+    private lateinit var db: AppDatabase
+    private lateinit var context: Context
+
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(30)
@@ -38,10 +44,29 @@ class DrawerMenuTest {
     fun before(){
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
+
+        context = ApplicationProvider.getApplicationContext()
+        db = DBUtils.initDB(context)
+        db.clearAllTables()
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = baseUrl.toString(),
+                title = "PixelTest"
+            )
+        )
+
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = baseUrl.toString(),
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
+
         // Open Drawer to click on navigation.
         ActivityScenario.launch(MainActivity::class.java)
         onView(withId(R.id.drawer_layout))
@@ -49,7 +74,7 @@ class DrawerMenuTest {
             .perform(DrawerActions.open()) // Open Drawer
     }
 
-   /* @Test
+   @Test
     fun testDrawerSettingsButton() {
         // Start the screen of your activity.
         onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
@@ -60,7 +85,8 @@ class DrawerMenuTest {
     @Test
     fun testThemeSettings() {
         // Start the screen of your activity.
-        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
+        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_settings)
+        )
         val themes = getInstrumentation().targetContext.resources.getStringArray(R.array.theme_entries)
         //select theme modes
         onView(withText(R.string.theme_title)).perform(click())
@@ -89,12 +115,16 @@ class DrawerMenuTest {
     @Test
     fun testDrawerProfileButton() {
         // Start the screen of your activity.
-        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
+        onView(
+            Matchers.allOf(
+                withChild()
+            )
+        ).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
 
-    @Test
+    /*@Test
     fun testDrawerAvatarClick() {
         // Start the screen of your activity.
         onView(withId(R.id.drawer_avatar)).perform(click())
@@ -108,7 +138,7 @@ class DrawerMenuTest {
         onView(withId(R.id.drawer_account_name)).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
-    }
+    }*/
 
     @Test
     fun clickFollowers() {
@@ -146,5 +176,5 @@ class DrawerMenuTest {
         UiDevice.getInstance(getInstrumentation()).pressBack()
         Thread.sleep(1000)
         onView(withId(R.id.drawer_layout)).check(matches(DrawerMatchers.isClosed()))
-    }*/
+    }
 }
