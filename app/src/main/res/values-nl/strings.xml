@@ -11,4 +11,19 @@
     <string name="menu_account">Mijn profiel</string>
     <string name="menu_subtitle">Account informatie</string>
     <string name="menu_slideshow">Account naam</string>
+    <string name="logout">Log uit</string>
+    <string name="whats_an_instance">Wat is een instance\?</string>
+    <string name="send">stuur</string>
+    <string name="description">Beschrijving…</string>
+    <string name="or">of</string>
+    <string name="upload_a_picture">Upload een foto</string>
+    <string name="take_a_picture">Maak een foto</string>
+    <string name="create_a_new_post">Schrijf een nieuw bericht!</string>
+    <string name="liked_notification">%1$s vond je bericht leuk</string>
+    <string name="shared_notification">%1$s heeft je bericht gedeeld</string>
+    <string name="mention_notification">%1$s heeft je genoemd</string>
+    <string name="followed_notification">%1$s volgt je</string>
+    <string name="attachment_summary_off">Bijlagen alleen downloaden bij handmatige toestemming</string>
+    <string name="auth_failed">Kon niet authenticeren</string>
+    <string name="app_name">PixelDroid</string>
 </resources>
