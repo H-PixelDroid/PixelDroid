@@ -22,4 +22,18 @@
     <string name="menu_subtitle">Informació del compte</string>
     <string name="menu_slideshow">Nom del compte</string>
     <string name="app_name">PixelDroid</string>
+    <string name="share_picture">Compartir imatge…</string>
+    <string name="image_download_success">La imatge s\'ha descarrega\'t correctament</string>
+    <string name="image_download_downloading">Descarregant…</string>
+    <string name="image_download_failed">La descàrrega no ha estat possible, si us plau torna a provar-ho</string>
+    <string name="save_to_gallery">Desar a la Galeria…</string>
+    <string name="logout">Tancar sessió</string>
+    <string name="whats_an_instance">Què és una instancia\?</string>
+    <string name="send">enviar</string>
+    <string name="description">Descripció…</string>
+    <string name="or">o</string>
+    <string name="upload_a_picture">Puja una imatge</string>
+    <string name="take_a_picture">Fes una foto</string>
+    <string name="create_a_new_post">Crea una nova publicació!</string>
+    <string name="liked_notification">%1$s ha dona\'t m\'agrada a la teva publicació</string>
 </resources>
