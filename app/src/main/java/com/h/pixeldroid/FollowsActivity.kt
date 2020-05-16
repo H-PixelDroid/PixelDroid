@@ -9,6 +9,7 @@ import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
+import com.h.pixeldroid.utils.DBUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,11 +26,14 @@ class FollowsActivity : AppCompatActivity() {
         val following = intent.getSerializableExtra(FOLLOWING_TAG) as Boolean
 
         if(id == null) {
-            val preferences = this.getSharedPreferences(
-                "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-            )
-            val pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-            val accessToken = preferences.getString("accessToken", "")
+            val db = DBUtils.initDB(applicationContext)
+
+            val user = db.userDao().getActiveUser()
+
+            val domain = user?.instance_uri.orEmpty()
+            val accessToken = user?.accessToken.orEmpty()
+
+            val pixelfedAPI = PixelfedAPI.create(domain)
 
             pixelfedAPI.verifyCredentials("Bearer $accessToken").enqueue(object :
                 Callback<Account> {
