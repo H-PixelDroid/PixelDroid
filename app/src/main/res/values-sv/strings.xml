@@ -8,4 +8,6 @@
     <string name="menu_slideshow">Kontonamn</string>
     <string name="app_name">PixelDroid</string>
     <string name="browser_launch_failed">Kunde inte starta en webbläsare, har du en\?</string>
+    <string name="token_error">Fel vid hämtning av token</string>
+    <string name="auth_failed">Kunde inte autentisera</string>
 </resources>
