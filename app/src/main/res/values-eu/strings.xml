@@ -29,4 +29,6 @@
     <string name="menu_subtitle">Kontuaren informazioa</string>
     <string name="menu_slideshow">Kontuaren izena</string>
     <string name="app_name">PixelDroid</string>
+    <string name="capture_mode_camera">Kamera</string>
+    <string name="gallery_button_alt">Galeria</string>
 </resources>
