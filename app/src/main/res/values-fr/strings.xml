@@ -1,3 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="registration_failed">Impossible d\'enregistrer l\'application sur ce serveur</string>
+    <string name="auth_failed">Impossible d\'authentifier</string>
+    <string name="title_activity_settings2">Réglages</string>
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Synchroniser</string>
+    <string name="signature_title">Votre signature</string>
+    <string name="menu_slideshow">Nom du compte</string>
+    <string name="menu_subtitle">Informations du compte</string>
+    <string name="menu_account">Mon profil</string>
+    <string name="menu_settings">Réglages</string>
+    <string name="sync_title">Synchroniser régulièrement les e-mails</string>
+    <string name="attachment_summary_on">Télécharger automatiquement les pièces jointes pour les e-mails entrants</string>
+    <string name="attachment_summary_off">Télécharger uniquement les pièces jointes lorsque demandé manuellement</string>
+    <string name="followed_notification">%1$s vous a suivi</string>
+    <string name="shared_notification">%1$s a partagé votre publication</string>
+    <string name="liked_notification">%1$s a aimé(e) votre publication</string>
+    <string name="take_a_picture">Prendre une photo</string>
+    <string name="upload_a_picture">Mettre en ligne une photo</string>
+    <string name="or">ou</string>
+    <string name="description">Description…</string>
+    <string name="send">envoyer</string>
+    <string name="whats_an_instance">Qu\'est-ce qu\'une instance \?</string>
+    <string name="logout">Se déconnecter</string>
+    <string name="save_to_gallery">Sauvegarder dans la gallerie…</string>
+    <string name="image_download_downloading">En cours de téléchargement…</string>
+    <string name="image_download_success">Image téléchargée avec succès</string>
+    <string name="share_picture">Partager l\'image…</string>
+    <string name="invalid_domain">Domaine invalide</string>
+    <string name="attachment_title">Télécharger les pièces jointes entrantes</string>
+    <string name="image_download_failed">Le téléchargement a échoué, veuillez réessayer</string>
+    <string name="browser_launch_failed">Impossible de lancer un navigateur, en avez-vous un \?</string>
+    <string name="mention_notification">%1$s vous a mentionné</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="reply_title">Action de réponse par défaut</string>
+    <string name="create_a_new_post">Créez une nouvelle publication !</string>
+    <string name="token_error">Erreur lors de l\'obtention du jeton</string>
 </resources>
