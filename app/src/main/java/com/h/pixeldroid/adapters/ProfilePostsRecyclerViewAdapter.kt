@@ -32,7 +32,12 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecycler
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
-        setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)
+
+        if (post.sensitive)
+            setSquareImageFromURL(holder.postView, null, holder.postPreview)
+        else
+            setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)
+
         holder.postPreview.setOnClickListener {
             val intent = Intent(holder.postPreview.context, PostActivity::class.java)
             intent.putExtra(Status.POST_TAG, post)

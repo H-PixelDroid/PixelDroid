@@ -55,5 +55,6 @@
     <string name="enter">Enter</string>
     <string name="auth_error_toast_msg">Server has responded with an error, try again!</string>
     <string name="login_empty_string_error">Instance address cannot be empty!</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media \n (click to show)</string>
 
 </resources>
