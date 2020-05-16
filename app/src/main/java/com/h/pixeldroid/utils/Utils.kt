@@ -12,6 +12,13 @@ class Utils {
             return cm.activeNetwork != null
         }
 
+        fun normalizeDomain(domain: String): String {
+            return "https://" + domain
+                .replace("http://", "")
+                .replace("https://", "")
+                .trim(Char::isWhitespace)
+        }
+
 
     }
 }

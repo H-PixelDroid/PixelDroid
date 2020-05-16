@@ -18,7 +18,9 @@ import com.h.pixeldroid.objects.Application
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Token
 import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.DBUtils.Companion.storeInstance
 import com.h.pixeldroid.utils.Utils
+import com.h.pixeldroid.utils.Utils.Companion.normalizeDomain
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.internal.toImmutableList
 import retrofit2.Call
@@ -85,13 +87,6 @@ class LoginActivity : AppCompatActivity() {
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse("https://pixelfed.org/join")
         startActivity(i)
-    }
-
-    private fun normalizeDomain(domain: String): String {
-        return "https://" + domain
-            .replace("http://", "")
-            .replace("https://", "")
-            .trim(Char::isWhitespace)
     }
 
 
@@ -214,29 +209,13 @@ class LoginActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<Instance>, response: Response<Instance>) {
                     if (response.isSuccessful && response.body() != null) {
                         val instance = response.body() as Instance
-                        storeInstance(instance)
-                        storeUser(accessToken, normalizeDomain(instance.uri))
-
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                        db.close()
+                        storeInstance(db, instance)
+                        storeUser(accessToken, instance.uri)
                     } else {
                         return failedRegistration(getString(R.string.instance_error))
                     }
                 }
             })
-    }
-
-    private fun storeInstance(instance: Instance) {
-        val maxTootChars = instance.max_toot_chars.toInt()
-        val dbInstance = InstanceDatabaseEntity(
-            uri = normalizeDomain(instance.uri),
-            title = instance.title,
-            max_toot_chars = maxTootChars,
-            thumbnail = instance.thumbnail
-        )
-        db.instanceDao().insertInstance(dbInstance)
     }
 
     private fun storeUser(accessToken: String, instance: String) {
@@ -253,6 +232,10 @@ class LoginActivity : AppCompatActivity() {
                             activeUser = true,
                             accessToken = accessToken
                         )
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        db.close()
                     }
                 }
                 override fun onFailure(call: Call<Account>, t: Throwable) {
