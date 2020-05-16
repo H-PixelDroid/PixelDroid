@@ -230,11 +230,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val profiles: MutableList<IProfile> = users.map { user ->
             ProfileDrawerItem().apply {
                 isSelected = user.isActive
-                nameText = user.username
+                nameText = user.display_name
                 iconUrl = user.avatar_static
                 isNameShown = true
                 identifier = user.user_id.toLong()
-                descriptionText = user.display_name
+                descriptionText = "${user.username}@${user.instance_uri.removePrefix("https://")}"
             }
         }.toMutableList()
 
