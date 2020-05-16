@@ -1,2 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="theme_header">Thema</string>
+    <string name="theme_title">Applicatie thema</string>
+    <string name="title_activity_settings2">Instellingen</string>
+    <string name="token_error">Fout bij ophalen van token</string>
+    <string name="browser_launch_failed">Kon de browser niet starten, heb je er wel één\?</string>
+    <string name="registration_failed">Kon de applicatie niet bij deze server registreren</string>
+    <string name="invalid_domain">Ongeldig domein</string>
+    <string name="menu_settings">Instellingen</string>
+    <string name="menu_account">Mijn profiel</string>
+    <string name="menu_subtitle">Account informatie</string>
+    <string name="menu_slideshow">Account naam</string>
+</resources>
