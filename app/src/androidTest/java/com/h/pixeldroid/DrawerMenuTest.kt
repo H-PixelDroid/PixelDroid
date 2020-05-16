@@ -74,7 +74,7 @@ class DrawerMenuTest {
             .perform(DrawerActions.open()) // Open Drawer
     }
 
-   @Test
+   /*@Test
     fun testDrawerSettingsButton() {
         // Start the screen of your activity.
         onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
@@ -124,7 +124,7 @@ class DrawerMenuTest {
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
 
-    /*@Test
+    @Test
     fun testDrawerAvatarClick() {
         // Start the screen of your activity.
         onView(withId(R.id.drawer_avatar)).perform(click())
@@ -138,7 +138,7 @@ class DrawerMenuTest {
         onView(withId(R.id.drawer_account_name)).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
-    }*/
+    }
 
     @Test
     fun clickFollowers() {
@@ -169,7 +169,7 @@ class DrawerMenuTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Andrew Dobis")))
-    }
+    }*/
 
     @Test
     fun onBackPressedClosesDrawer() {

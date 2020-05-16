@@ -98,7 +98,6 @@ class LoginActivityOnlineTest {
         context = ApplicationProvider.getApplicationContext()
         db = DBUtils.initDB(context)
         db.clearAllTables()
-        Thread.sleep(1000)
 
         db.instanceDao().insertInstance(
             InstanceDatabaseEntity(

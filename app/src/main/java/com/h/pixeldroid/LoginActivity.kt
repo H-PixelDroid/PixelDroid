@@ -230,7 +230,7 @@ class LoginActivity : AppCompatActivity() {
     private fun storeInstance(instance: Instance) {
         val maxTootChars = instance.max_toot_chars.toInt()
         val dbInstance = InstanceDatabaseEntity(
-            uri = instance.uri,
+            uri = normalizeDomain(instance.uri),
             title = instance.title,
             max_toot_chars = maxTootChars,
             thumbnail = instance.thumbnail
