@@ -109,7 +109,7 @@
                     android:adjustViewBounds="true"
                     android:gravity="center|center_horizontal|center_vertical"
                     android:longClickable="true"
-                    android:text="CW / NSFW / Hidden Media \n (click to show)"
+                    android:text="@string/cw_nsfw_hidden_media_n_click_to_show"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/ic_launcher_background"
                     app:layout_constraintBottom_toBottomOf="@+id/postPicture"
