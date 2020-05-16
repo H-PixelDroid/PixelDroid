@@ -232,10 +232,10 @@ class LoginActivity : AppCompatActivity() {
                             activeUser = true,
                             accessToken = accessToken
                         )
+                        db.close()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
-                        db.close()
                     }
                 }
                 override fun onFailure(call: Call<Account>, t: Throwable) {
