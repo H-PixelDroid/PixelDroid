@@ -41,9 +41,6 @@ class MockedServerTest {
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
-    @get:Rule
-    var activityRule: ActivityScenarioRule<MainActivity>
-            = ActivityScenarioRule(MainActivity::class.java)
 
     @Before
     fun before(){
