@@ -35,4 +35,5 @@
     <string name="attachment_summary_off">Descargar únicamente los archivos adjuntos cuando se solicite manualmente</string>
     <string name="followed_notification">%1$s te siguió</string>
     <string name="mention_notification">%1$s te mencionó</string>
+    <string name="or">o</string>
 </resources>
