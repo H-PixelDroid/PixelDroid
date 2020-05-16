@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="auth_failed">no puede autenticarse</string>
+    <string name="browser_launch_failed">No se pudo iniciar un navegador, ¿tienes uno\?</string>
+    <string name="registration_failed">No se pudo registrar la aplicación con este servidor</string>
+    <string name="invalid_domain">Dominio no válido</string>
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_account">Mi perfil</string>
+    <string name="menu_subtitle">Informaciones de la cuenta</string>
+    <string name="menu_slideshow">Nombre de la cuenta</string>
+    <string name="app_name">PixelDroid</string>
+</resources>
