@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="auth_failed">no puede autenticarse</string>
+    <string name="auth_failed">No puede autenticarse</string>
     <string name="browser_launch_failed">No se pudo iniciar un navegador, ¿tienes uno\?</string>
     <string name="registration_failed">No se pudo registrar la aplicación con este servidor</string>
     <string name="invalid_domain">Dominio no válido</string>
