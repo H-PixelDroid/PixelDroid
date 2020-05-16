@@ -25,11 +25,11 @@
     <string name="send">enviar</string>
     <string name="whats_an_instance">¿Qué es una instancia\?</string>
     <string name="logout">Cerrar sesión</string>
-    <string name="save_to_gallery">Guardar en la Galería...</string>
+    <string name="save_to_gallery">Guardar en la galería…</string>
     <string name="image_download_failed">La descarga ha fallado, por favor inténtalo de nuevo</string>
-    <string name="image_download_downloading">Descargando...</string>
+    <string name="image_download_downloading">Descargando…</string>
     <string name="image_download_success">La imagen se descargó con éxito</string>
-    <string name="share_picture">Compartir foto...</string>
+    <string name="share_picture">Compartir foto…</string>
     <string name="attachment_title">Descargar archivos adjuntos entrantes</string>
     <string name="attachment_summary_on">Descargar automáticamente los archivos adjuntos para correos electrónicos entrantes</string>
     <string name="attachment_summary_off">Descargar únicamente los archivos adjuntos cuando se solicite manualmente</string>
