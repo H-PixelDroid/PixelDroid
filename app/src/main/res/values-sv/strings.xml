@@ -7,4 +7,5 @@
     <string name="menu_subtitle">Kontoinformation</string>
     <string name="menu_slideshow">Kontonamn</string>
     <string name="app_name">PixelDroid</string>
+    <string name="browser_launch_failed">Kunde inte starta en webbläsare, har du en\?</string>
 </resources>
