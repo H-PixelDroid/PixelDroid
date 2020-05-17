@@ -42,7 +42,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private val searchDiscoverFragment: SearchDiscoverFragment = SearchDiscoverFragment()
     private lateinit var db: AppDatabase
@@ -127,15 +127,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer.itemAdapter.add(
             primaryDrawerItem {
-                name = StringHolder("My Profile")
+                nameRes = R.string.menu_account
                 iconicsIcon = GoogleMaterial.Icon.gmd_person
             },
             primaryDrawerItem {
-                name = StringHolder("Settings")
+                nameRes = R.string.menu_settings
                 iconicsIcon = GoogleMaterial.Icon.gmd_settings
             },
             primaryDrawerItem {
-                name = StringHolder("Log out")
+                nameRes = R.string.logout
                 iconicsIcon = GoogleMaterial.Icon.gmd_close
             })
         drawer.onDrawerItemClickListener = { v, drawerItem, position ->
@@ -270,21 +270,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 4 -> tab.icon = getDrawable(R.drawable.ic_filter_black_24dp)
             }
         }.attach()
-    }
-
-    /**
-    When clicking in the drawer menu, go to the corresponding activity
-     */
-    override fun onNavigationItemSelected(@NonNull item: MenuItem): Boolean {
-        when (item.itemId){
-            R.id.nav_account -> launchActivity(ProfileActivity())
-            R.id.nav_settings -> launchActivity(SettingsActivity())
-            R.id.nav_logout -> launchActivity(LoginActivity())
-        }
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-
-        return true
     }
 
     /**

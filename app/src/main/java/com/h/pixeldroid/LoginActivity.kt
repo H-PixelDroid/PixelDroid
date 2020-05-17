@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
@@ -22,6 +23,7 @@ import com.h.pixeldroid.utils.DBUtils.Companion.storeInstance
 import com.h.pixeldroid.utils.Utils
 import com.h.pixeldroid.utils.Utils.Companion.normalizeDomain
 import kotlinx.android.synthetic.main.activity_login.*
+import okhttp3.HttpUrl
 import okhttp3.internal.toImmutableList
 import retrofit2.Call
 import retrofit2.Callback
@@ -89,9 +91,27 @@ class LoginActivity : AppCompatActivity() {
         startActivity(i)
     }
 
+    private fun hideKeyboard() {
+        val view = currentFocus
+        if (view != null) {
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                view.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+    }
 
     private fun registerAppToServer(normalizedDomain: String) {
+
+        try{
+            HttpUrl.Builder().host(normalizedDomain).scheme("https").build()
+        } catch (e: IllegalArgumentException) {
+            return failedRegistration(getString(R.string.invalid_domain))
+        }
+
+        hideKeyboard()
         loadingAnimation(true)
+
         if (normalizedDomain.replace("https://", "").isNullOrBlank())
             return failedRegistration(getString(R.string.login_empty_string_error))
         PixelfedAPI.create(normalizedDomain).registerApplication(
