@@ -14,7 +14,6 @@ class MockServer {
         private val headerValue = "application/json; charset=utf-8"
     }
 
-
     fun start() {
         try {
             server.dispatcher = getDispatcher()

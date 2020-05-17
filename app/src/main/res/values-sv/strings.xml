@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="registration_failed">Kunde inte registrera applikationen med denna server</string>
+    <string name="invalid_domain">Ogiltig domän</string>
+    <string name="menu_settings">Inställningar</string>
+    <string name="menu_account">Min profil</string>
+    <string name="menu_subtitle">Kontoinformation</string>
+    <string name="menu_slideshow">Kontonamn</string>
+    <string name="app_name">PixelDroid</string>
+</resources>

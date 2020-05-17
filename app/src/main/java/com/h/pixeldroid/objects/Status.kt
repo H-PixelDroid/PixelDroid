@@ -2,6 +2,7 @@ package com.h.pixeldroid.objects
 
 import android.Manifest
 import android.content.Context
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spanned
@@ -30,17 +31,20 @@ import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.ImageUtils.Companion.downloadImage
+import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
 import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
 import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
+import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
+import kotlinx.android.synthetic.main.post_fragment.view.*
 import kotlinx.android.synthetic.main.post_fragment.view.postDate
 import kotlinx.android.synthetic.main.post_fragment.view.postDomain
 import java.io.Serializable
@@ -48,10 +52,6 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.collections.ArrayList
-import kotlinx.android.synthetic.main.post_fragment.view.postPager
-import kotlinx.android.synthetic.main.post_fragment.view.postPicture
-import kotlinx.android.synthetic.main.post_fragment.view.postTabs
-import kotlinx.android.synthetic.main.post_fragment.view.profilePic
 
 /*
 Represents a status posted by an account.
@@ -92,7 +92,7 @@ data class Status(
     val muted: Boolean = false,
     val bookmarked: Boolean = false,
     val pinned: Boolean = false
-    ) : Serializable, FeedContent()
+) : Serializable, FeedContent()
 {
 
     companion object {
@@ -147,7 +147,7 @@ data class Status(
                     android.text.format.DateUtils.SECOND_IN_MILLIS,
                     android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
             textView.text = if(isActivity) "Posted on $date"
-                            else "$formattedDate"
+            else "$formattedDate"
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -161,27 +161,46 @@ data class Status(
     }
 
     private fun setupPostPics(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
-        //Check whether or not we need to activate the viewPager
-        if(media_attachments?.size == 1) {
-            rootView.postPicture.visibility = VISIBLE
-            rootView.postPager.visibility = GONE
-            rootView.postTabs.visibility = GONE
+
+        // Standard layout
+        rootView.postPicture.visibility = VISIBLE
+        rootView.postPager.visibility = GONE
+        rootView.postTabs.visibility = GONE
+
+        if (sensitive) {
+            setupSensitiveLayout(rootView, request, homeFragment)
             request.load(this.getPostUrl()).into(rootView.postPicture)
-        } else if(media_attachments?.size!! > 1) {
-            //Only show the viewPager and tabs
-            rootView.postPicture.visibility = GONE
-            rootView.postPager.visibility = VISIBLE
-            rootView.postTabs.visibility = VISIBLE
 
-            val tabs : ArrayList<ImageFragment> = ArrayList()
+        } else {
+            rootView.sensitiveWarning.visibility = GONE
 
-            //Fill the tabs with each mediaAttachment
-            for(media in media_attachments) {
-                tabs.add(ImageFragment.newInstance(media.url))
+            if(media_attachments?.size == 1) {
+                request.load(this.getPostUrl()).into(rootView.postPicture)
+
+            } else if(media_attachments?.size!! > 1) {
+                setupTabsLayout(rootView, request, homeFragment)
             }
-            setupTabs(tabs, rootView, homeFragment)
+
+            imagePopUpMenu(rootView, homeFragment.requireActivity())
         }
     }
+
+    private fun setupTabsLayout(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
+        //Only show the viewPager and tabs
+        rootView.postPicture.visibility = GONE
+        rootView.postPager.visibility = VISIBLE
+        rootView.postTabs.visibility = VISIBLE
+
+        val tabs : ArrayList<ImageFragment> = ArrayList()
+
+        //Fill the tabs with each mediaAttachment
+        for(media in media_attachments!!) {
+            tabs.add(ImageFragment.newInstance(media.url))
+        }
+
+        setupTabs(tabs, rootView, homeFragment)
+    }
+
 
     private fun setupTabs(tabs: ArrayList<ImageFragment>, rootView: View, homeFragment: Fragment) {
         //Attach the given tabs to the view pager
@@ -194,6 +213,7 @@ data class Status(
                 return media_attachments?.size ?: 0
             }
         }
+
         TabLayoutMediator(rootView.postTabs, rootView.postPager) { tab, _ ->
             tab.icon = rootView.context.getDrawable(R.drawable.ic_dot_blue_12dp)
         }.attach()
@@ -248,9 +268,7 @@ data class Status(
 
 
         //Set comment initial visibility
-        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = GONE
-
-        imagePopUpMenu(rootView, homeFragment.requireActivity())
+        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
     }
 
     fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
@@ -407,6 +425,33 @@ data class Status(
                 }
                 true
             }
+        }
+    }
+
+    private fun setupSensitiveLayout(view: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
+
+        // Set dark layout and warning message
+        view.sensitiveWarning.visibility = VISIBLE
+        view.postPicture.colorFilter = ColorMatrixColorFilter(censorColorMatrix())
+
+        fun uncensorPicture(view: View) {
+            if (!media_attachments.isNullOrEmpty()) {
+                view.sensitiveWarning.visibility = GONE
+                view.postPicture.colorFilter = ColorMatrixColorFilter(uncensorColorMatrix())
+
+                if (media_attachments.size > 1)
+                    setupTabsLayout(view, request, homeFragment)
+            }
+            imagePopUpMenu(view, homeFragment.requireActivity())
+        }
+
+
+        view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
+            uncensorPicture(view)
+        }
+
+        view.findViewById<ImageView>(R.id.postPicture).setOnClickListener {
+            uncensorPicture(view)
         }
     }
 }

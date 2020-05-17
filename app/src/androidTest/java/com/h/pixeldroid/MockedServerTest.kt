@@ -1,13 +1,22 @@
 package com.h.pixeldroid
 
+
+import android.graphics.ColorMatrix
 import android.content.Context
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.TextView
+import androidx.core.view.get
+import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -20,10 +29,19 @@ import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.second
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
+import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
+import kotlinx.android.synthetic.main.fragment_feed.*
+import kotlinx.android.synthetic.main.fragment_feed.view.*
+import kotlinx.android.synthetic.main.post_fragment.*
+import kotlinx.android.synthetic.main.post_fragment.view.*
+import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -305,7 +323,9 @@ class MockedServerTest {
             a -> run {
                 //Wait for the feed to load
                 Thread.sleep(1000)
-                //Pick the second photo
+             a.findViewById<TextView>(R.id.sensitiveWarning).performClick()
+             Thread.sleep(1000)
+             //Pick the second photo
                 a.findViewById<TabLayout>(R.id.postTabs).getTabAt(1)?.select()
             }
         }
@@ -522,6 +542,87 @@ class MockedServerTest {
         Thread.sleep(1000)
         onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
+    }
+
+    @Test
+    fun censorMatrices() {
+        // Doing these dummy checks as I can not get the matrix property from the ImageView
+        val array: FloatArray = floatArrayOf(
+            0.1f, 0f, 0f, 0f, 0f,  // red vector
+            0f, 0.1f, 0f, 0f, 0f,  // green vector
+            0f, 0f, 0.1f, 0f, 0f,  // blue vector
+            0f, 0f, 0f, 1f, 0f   ) // alpha vector
+
+        assert(censorColorMatrix().equals(array))
+        assert(uncensorColorMatrix().equals(ColorMatrix()))
+    }
+
+    @Test
+    fun performClickOnSensitiveWarning() {
+
+        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
+        Thread.sleep(1000)
+
+        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (1, clickChildViewWithId(R.id.sensitiveWarning)))
+        Thread.sleep(1000)
+
+        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
+    }
+
+    @Test
+    fun performClickOnPostPicture() {
+
+        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
+        Thread.sleep(1000)
+
+        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (1, clickChildViewWithId(R.id.postPicture)))
+        Thread.sleep(1000)
+
+        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
+    }
+
+    @Test
+    fun performClickOnSensitiveWarningTabs() {
+
+        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(0))
+        Thread.sleep(1000)
+
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.sensitiveWarning)))
+        Thread.sleep(1000)
+
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
+    }
+
+    @Test
+    fun performClickOnPostPictureTabs() {
+
+        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(0))
+        Thread.sleep(1000)
+
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        Thread.sleep(1000)
+
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.postPicture)))
+        Thread.sleep(1000)
+
+        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
     }
 }
 

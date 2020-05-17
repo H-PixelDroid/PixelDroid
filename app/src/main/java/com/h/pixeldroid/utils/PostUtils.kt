@@ -1,5 +1,6 @@
 package com.h.pixeldroid.utils
 
+import android.graphics.ColorMatrix
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -223,6 +224,15 @@ abstract class PostUtils {
                     }
                 }
             })
+        }
+
+        fun censorColorMatrix(): ColorMatrix {
+            val array: FloatArray = floatArrayOf( 0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 1f, 0f )
+            return ColorMatrix(array)
+        }
+
+        fun uncensorColorMatrix(): ColorMatrix {
+            return ColorMatrix()
         }
     }
 }

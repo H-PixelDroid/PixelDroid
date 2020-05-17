@@ -31,6 +31,25 @@ abstract class CustomMatchers {
             }
         }
 
+        fun <T> second(matcher: Matcher<T>): Matcher<T>? {
+            return object : BaseMatcher<T>() {
+                var isFirst = true
+                override fun describeTo(description: org.hamcrest.Description?) {
+                    description?.appendText("second matching item")
+                }
+
+                override fun matches(item: Any?): Boolean {
+                    if (isFirst && matcher.matches(item)) {
+                        isFirst = false
+                        return false
+                    } else if (!isFirst && matcher.matches(item))
+                        return true
+                    return false
+                }
+
+            }
+        }
+
         /**
          * @param percent can be 1 or 0
          * 1: swipes all the way up
