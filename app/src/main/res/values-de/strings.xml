@@ -6,4 +6,22 @@
     <string name="menu_account">Mein Profil</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="invalid_domain">Ungültige Domäne</string>
+    <string name="browser_launch_failed">Der Browser konnte nicht gestartet werden, haben Sie einen\?</string>
+    <string name="auth_failed">Authentifizierung fehlgeschlagen</string>
+    <string name="token_error">Fehler beim Erhalten des Token</string>
+    <string name="title_activity_settings2">Einstellungen</string>
+    <string name="or">oder</string>
+    <string name="theme_header">Erscheinungsbild</string>
+    <string name="followed_notification">%1$s folgt dir</string>
+    <string name="mention_notification">%1$s hat dich erwähnt</string>
+    <string name="shared_notification">%1$s hat deinen Beitrag geteilt</string>
+    <string name="liked_notification">%1$s hat deinen Beitrag favorisiert</string>
+    <string name="take_a_picture">Ein Foto aufnehmen</string>
+    <string name="upload_a_picture">Ein Foto hochladen</string>
+    <string name="send">senden</string>
+    <string name="whats_an_instance">" Was ist eine Instanz\?"</string>
+    <string name="theme_title">Anwendungs Erscheinungsbild</string>
+    <string name="attachment_summary_off">" Anhänge nur herunterladen, wenn sie manuell angefordert werden"</string>
+    <string name="create_a_new_post">Neuen Beitrag erstellen!</string>
+    <string name="description">Beschreibung...</string>
 </resources>
