@@ -44,4 +44,12 @@
     <string name="domain_of_your_instance">اسم نطاق مثيل خادمك</string>
     <string name="login_connection_required_once">يجب عليك الاتصال بالأنترنت ولو لمرة واحدة قصد استخدام PixelDroid :(</string>
     <string name="enter">أدخل</string>
+    <string name="attachment_summary_off">تنزيل المرفقات فقط عندما يُطلَب ذلك يدويًا</string>
+    <string name="capture_button_alt">لقطة شاشة</string>
+    <string name="you_are_in_offline_mode">إنك غير متصل الآن ولكنه لا يزال بإمكانك عرض بعض المحتوى!</string>
+    <string name="auth_error_toast_msg">لقد أجاب الخادم بخطأ ، حاول مجددًا!</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / وسائط مخفية 
+\n (اضعط للعرض)</string>
+    <string name="lbl_contrast">تباين عالٍ</string>
+    <string name="lbl_saturation">التشبّع اللوني</string>
 </resources>
