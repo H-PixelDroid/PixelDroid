@@ -24,4 +24,12 @@
     <string name="attachment_summary_off">" Anhänge nur herunterladen, wenn sie manuell angefordert werden"</string>
     <string name="create_a_new_post">Neuen Beitrag erstellen!</string>
     <string name="description">Beschreibung...</string>
+    <string name="save_to_gallery">In Galerie speichern...</string>
+    <string name="image_download_failed">"Der  Download ist fehlgeschlagen, bitte versuchen Sie es erneut"</string>
+    <string name="logout">Abmelden</string>
+    <string name="lbl_brightness">Helligkeit</string>
+    <string name="tab_filters">Filter</string>
+    <string name="tab_edit">bearbeiten</string>
+    <string name="lbl_contrast">Kontrast</string>
+    <string name="lbl_saturation">Sättigung</string>
 </resources>
