@@ -5,5 +5,5 @@
     <string name="menu_subtitle">Kontoinformationen</string>
     <string name="menu_account">Mein Profil</string>
     <string name="menu_settings">Einstellungen</string>
-    <string name="invalid_domain">" Ungültige Domäne"</string>
+    <string name="invalid_domain">Ungültige Domäne</string>
 </resources>
