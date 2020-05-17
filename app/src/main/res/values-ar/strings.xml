@@ -43,4 +43,5 @@
     <string name="capture_mode_camera">الكاميرا</string>
     <string name="domain_of_your_instance">اسم نطاق مثيل خادمك</string>
     <string name="login_connection_required_once">يجب عليك الاتصال بالأنترنت ولو لمرة واحدة قصد استخدام PixelDroid :(</string>
+    <string name="enter">أدخل</string>
 </resources>
