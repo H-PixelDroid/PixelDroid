@@ -48,4 +48,8 @@
     <string name="auth_error_toast_msg">Zerbitzariak errore batekin erantzun du, saiatu berriro!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">Eduki-abisua / Multimedia ezkutatuta
 \n (egin klik erakusteko)</string>
+    <string name="lbl_brightness">DISTIRA</string>
+    <string name="CommentDisplay">erakutsi ...</string>
+    <string name="login_empty_string_error">Instantziaren helbidea hutsik dago!</string>
+    <string name="domain_of_your_instance">Zure instantziaren domeinua</string>
 </resources>
