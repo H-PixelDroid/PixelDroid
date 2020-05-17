@@ -65,7 +65,7 @@ class LoginActivityOnlineTest {
         ActivityScenario.launch(LoginActivity::class.java)
         onView(withId(R.id.connect_instance_button)).perform(click())
         onView(withId(R.id.editText)).check(matches(
-            hasErrorText(context.getString(R.string.login_empty_string_error))
+            hasErrorText(context.getString(R.string.invalid_domain))
         ))
     }
 
