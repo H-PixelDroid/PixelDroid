@@ -104,7 +104,7 @@ class LoginActivity : AppCompatActivity() {
     private fun registerAppToServer(normalizedDomain: String) {
 
         try{
-            HttpUrl.Builder().host(normalizedDomain).scheme("https").build()
+            HttpUrl.Builder().host(normalizedDomain.replace("https://", "")).scheme("https").build()
         } catch (e: IllegalArgumentException) {
             return failedRegistration(getString(R.string.invalid_domain))
         }
@@ -112,8 +112,6 @@ class LoginActivity : AppCompatActivity() {
         hideKeyboard()
         loadingAnimation(true)
 
-        if (normalizedDomain.replace("https://", "").isNullOrBlank())
-            return failedRegistration(getString(R.string.login_empty_string_error))
         PixelfedAPI.create(normalizedDomain).registerApplication(
             appName,"$oauthScheme://$PACKAGE_ID", SCOPE
         ).enqueue(object : Callback<Application> {
