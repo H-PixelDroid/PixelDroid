@@ -19,7 +19,7 @@
     <string name="take_a_picture">Ein Foto aufnehmen</string>
     <string name="upload_a_picture">Ein Foto hochladen</string>
     <string name="send">senden</string>
-    <string name="whats_an_instance">" Was ist eine Instanz\?"</string>
+    <string name="whats_an_instance">Was ist eine Instanz\?</string>
     <string name="theme_title">Anwendungs Erscheinungsbild</string>
     <string name="attachment_summary_off">" Anhänge nur herunterladen, wenn sie manuell angefordert werden"</string>
     <string name="create_a_new_post">Neuen Beitrag erstellen!</string>
