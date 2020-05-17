@@ -293,13 +293,11 @@ data class Status(
             //Activate the button
             setEventListener { _, buttonState ->
                 if (buttonState) {
-                    Log.e("REBLOG", "Reblogged post")
                     // Button is active
-                    reblogPost(holder, api, credential, this@Status)
-                } else {
-                    Log.e("REBLOG", "Undo Reblogged post")
-                    // Button is inactive
                     undoReblogPost(holder, api, credential, this@Status)
+                } else {
+                    // Button is inactive
+                    reblogPost(holder, api, credential, this@Status)
                 }
                 //show animation or not?
                 true
@@ -321,11 +319,11 @@ data class Status(
             //Activate the liker
             setEventListener { _, buttonState ->
                 if (buttonState) {
-                    // Button is active
-                    likePostCall(holder, api, credential, this@Status)
-                } else {
-                    // Button is inactive
+                    // Button is active, unlike
                     unLikePostCall(holder, api, credential, this@Status)
+                } else {
+                    // Button is inactive, like
+                    likePostCall(holder, api, credential, this@Status)
                 }
             //show animation or not?
             true
