@@ -40,7 +40,7 @@
     <string name="capture_button_alt">Atera</string>
     <string name="theme_header">Gaia</string>
     <string name="lbl_contrast">KONTRASTEA</string>
-    <string name="lbl_saturation">ASETASUNA</string>
+    <string name="lbl_saturation">SATURAZIOA</string>
     <string name="tab_filters">IRAGAZKIAK</string>
     <string name="connect_to_pixelfed">Konektatu Pixelfedera</string>
     <string name="login_connection_required_once">PixelDroid erabili ahal izateko Internetera gutxienez behin konektatu behar duzu :(</string>
