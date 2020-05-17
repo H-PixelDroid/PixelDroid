@@ -50,4 +50,5 @@
     <string name="auth_error_toast_msg">Server hat mit einem Fehler geantwortet, versuchen Sie es erneut!</string>
     <string name="login_empty_string_error">Instanz-Adresse kann nicht leer sein!</string>
     <string name="switch_camera_button_alt">" Kamera wechseln"</string>
+    <string name="registration_failed">Konnte die App nicht mit diesem Server verbinden</string>
 </resources>
