@@ -1,2 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_slideshow">Nome account</string>
+    <string name="title_activity_settings2">Impostazioni</string>
+    <string name="attachment_summary_off">Scarica gli allegati solo quando richiesto manualmente</string>
+    <string name="menu_account">Profilo personale</string>
+    <string name="menu_settings">Impostazioni</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="browser_launch_failed">Impossibile avviare un browser, ne hai uno\?</string>
+    <string name="theme_title">Tema applicazione</string>
+    <string name="auth_failed">Impossibile eseguire l\'autenticazione</string>
+    <string name="theme_header">Tema</string>
+    <string name="token_error">Errore durante il recupero del token</string>
+    <string name="shared_notification">%1$s ha condiviso il tuo post</string>
+    <string name="followed_notification">%1$s ti ha seguito</string>
+    <string name="mention_notification">%1$s ti ha menzionato</string>
+    <string name="take_a_picture">Fai una foto</string>
+    <string name="upload_a_picture">Carica una foto</string>
+    <string name="liked_notification">%1$s è piaciuto il tuo post</string>
+    <string name="create_a_new_post">Crea un nuovo post!</string>
+    <string name="or">o</string>
+    <string name="tab_filters">FILTRI</string>
+    <string name="send">invia</string>
+    <string name="lbl_brightness">LUMINOSITÀ</string>
+    <string name="description">Descrizione…</string>
+    <string name="whats_an_instance">Cos\'è un\'istanza\?</string>
+    <string name="logout">Disconnettersi</string>
+    <string name="lbl_saturation">SATURAZIONE</string>
+    <string name="enter">Entrare</string>
+    <string name="menu_subtitle">Informazioni account</string>
+    <string name="delete_title">Conferma</string>
+    <string name="connect_to_pixelfed">Connetti a Pixelfed</string>
+    <string name="lbl_contrast">CONTRASTO</string>
+    <string name="save_to_gallery">Salva nella galleria…</string>
+    <string name="image_download_failed">Il download non è riuscito, per favore riprova</string>
+    <string name="share_picture">Condividi immagine…</string>
+    <string name="auth_error_toast_msg">Il server ha risposto con un errore, riprovare!</string>
+    <string name="image_download_downloading">Download in corso…</string>
+    <string name="image_download_success">Immagine scaricata con successo</string>
+    <string name="NoCommentsToShow">Nessun commento in questo post…</string>
+    <string name="registration_failed">Impossibile registrare l\'applicazione con questo server</string>
+    <string name="CommentDisplay">mostrare…</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Media nascosti
+\n (cliccaper visualizzare)</string>
+    <string name="capture_button_alt">Acquisizione</string>
+    <string name="switch_camera_button_alt">Cambia fotocamera</string>
+    <string name="gallery_button_alt">Galleria</string>
+    <string name="capture_mode_camera">Fotocamera</string>
+    <string name="domain_of_your_instance">Dominio della tua istanza</string>
+    <string name="login_connection_required_once">È necessario connettersi a Internet almeno una volta per utilizzare PixelDroid :(</string>
+    <string name="you_are_in_offline_mode">Sei in modalità offline, ma puoi comunque visualizzare alcuni contenuti!</string>
+    <string name="login_empty_string_error">L\'indirizzo dell\'istanza non può essere vuoto!</string>
+    <string name="invalid_domain">Dominio non valido</string>
+    <string name="tab_edit">MODIFICA</string>
+</resources>
