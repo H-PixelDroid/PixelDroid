@@ -1,2 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_slideshow">اسم الحساب</string>
+    <string name="token_error">خطأ في الحصول على الرمز المميز</string>
+    <string name="title_activity_settings2">الإعدادات</string>
+    <string name="theme_title">حلة التطبيق</string>
+    <string name="theme_header">المظهر</string>
+    <string name="mention_notification">أشار إليك %1$s</string>
+    <string name="shared_notification">شارَك %1$s منشورك</string>
+    <string name="registration_failed">لا يمكن تسجيل التطبيق على هذا الخادم</string>
+    <string name="browser_launch_failed">تعذر إطلاق متصفح الويب. هل لديك واحد؟</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="menu_subtitle">معلومات عن الحساب</string>
+    <string name="menu_account">ملفي التعريفي</string>
+    <string name="menu_settings">الإعدادات</string>
+    <string name="invalid_domain">اسم النطاق غير صالح</string>
+    <string name="auth_failed">فشلت المصادقة</string>
+    <string name="followed_notification">يتابعك %1$s</string>
+    <string name="take_a_picture">التقط صورة</string>
+    <string name="upload_a_picture">حمّل صورة</string>
+    <string name="or">أو</string>
+    <string name="description">الوصف…</string>
+    <string name="send">ارسل</string>
+    <string name="whats_an_instance">ماذا نعني بمثيل الخادم؟</string>
+    <string name="logout">الخروج</string>
+    <string name="tab_filters">الفلاتر</string>
+    <string name="tab_edit">تعديل</string>
+    <string name="save_to_gallery">احتفظ بها في المعرض…</string>
+    <string name="image_download_downloading">التنزيل جارٍ…</string>
+    <string name="image_download_success">تم التنزيل بنجاح</string>
+    <string name="switch_camera_button_alt">تبديل الكاميرا</string>
+    <string name="gallery_button_alt">المعرض</string>
+    <string name="delete_title">تأكيد</string>
+    <string name="share_picture">شارِك الصورة…</string>
+    <string name="NoCommentsToShow">لا توجد تعليقات في هذا المنشور…</string>
+    <string name="CommentDisplay">لإظهاره…</string>
+    <string name="connect_to_pixelfed">لِج إلى PixelFed</string>
+    <string name="login_empty_string_error">لا يجب ترك العنوان فارغًا!</string>
+    <string name="lbl_brightness">السطوع</string>
+    <string name="image_download_failed">فشل التنزيل ، حاول مجددًا مِن فضلك</string>
+    <string name="liked_notification">أعجِب %1$s بمنشورك</string>
+    <string name="create_a_new_post">انشئ منشورًا جديدًا!</string>
+    <string name="capture_mode_camera">الكاميرا</string>
+    <string name="domain_of_your_instance">اسم نطاق مثيل خادمك</string>
+    <string name="login_connection_required_once">يجب عليك الاتصال بالأنترنت ولو لمرة واحدة قصد استخدام PixelDroid :(</string>
+</resources>
