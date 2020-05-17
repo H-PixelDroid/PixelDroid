@@ -5,23 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat
-import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.work.*
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -36,13 +34,18 @@ import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
+import io.reactivex.Scheduler
 import kotlinx.android.synthetic.main.activity_photo_edit.*
 import kotlinx.android.synthetic.main.content_photo_edit.*
-import java.io.ByteArrayOutputStream
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.Executors.newSingleThreadExecutor
+import java.util.concurrent.Future
 
 // This is an arbitrary number we are using to keep track of the permission
 // request. Where an app has multiple context for requesting permission,
@@ -88,16 +91,30 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         System.loadLibrary("NativeImageProcessor")
     }
 
+
+    companion object{
+        private var executor: ExecutorService = newSingleThreadExecutor()
+        private var future: Future<*>? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_edit)
 
+        //TODO move to xml:
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Edit"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
 
+        val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
+
         cropUri = intent.getParcelableExtra("picture_uri")
+
+        // set on-click listener
+        cropButton.setOnClickListener {
+            startCrop()
+        }
 
         loadImage()
         val file = File.createTempFile("temp_compressed_img", ".png", cacheDir)
@@ -109,13 +126,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         setupViewPager(viewPager)
         tabLayout.setupWithViewPager(viewPager)
         outputDirectory = getOutputDirectory()
-
-        val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
-        // set on-click listener
-        cropButton.setOnClickListener {
-            startCrop()
-        }
     }
+
 
     //<editor-fold desc="ON LAUNCH">
     private fun loadImage() {
@@ -192,11 +204,18 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         contrastFinal = CONTRAST_START
     }
 
+
     //</editor-fold>
     //<editor-fold desc="EDITS">
 
     private fun applyFilterAndShowImage(filter: Filter, image: Bitmap?) {
-        image_preview.setImageBitmap(filter.processFilter(image!!.copy(BITMAP_CONFIG, true)))
+        future?.cancel(true)
+        future = executor.submit {
+            val bitmap = filter.processFilter(image!!.copy(BITMAP_CONFIG, true))
+            image_preview.post {
+                image_preview.setImageBitmap(bitmap)
+            }
+        }
     }
 
     override fun onBrightnessChange(brightness: Int) {
