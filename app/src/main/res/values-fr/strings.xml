@@ -3,17 +3,11 @@
     <string name="registration_failed">Impossible d\'enregistrer l\'application sur ce serveur</string>
     <string name="auth_failed">Impossible d\'authentifier</string>
     <string name="title_activity_settings2">Réglages</string>
-    <string name="menu_slideshow">Nom du compte</string>
-    <string name="menu_subtitle">Informations du compte</string>
     <string name="menu_account">Mon profil</string>
     <string name="menu_settings">Réglages</string>
-    <string name="attachment_summary_off">Télécharger uniquement les pièces jointes lorsque demandé manuellement</string>
     <string name="followed_notification">%1$s vous a suivi</string>
     <string name="shared_notification">%1$s a partagé votre publication</string>
     <string name="liked_notification">%1$s a aimé(e) votre publication</string>
-    <string name="take_a_picture">Prendre une photo</string>
-    <string name="upload_a_picture">Mettre en ligne une photo</string>
-    <string name="or">ou</string>
     <string name="description">Description…</string>
     <string name="send">envoyer</string>
     <string name="whats_an_instance">Qu\'est-ce qu\'une instance \?</string>

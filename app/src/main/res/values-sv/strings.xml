@@ -4,7 +4,5 @@
     <string name="invalid_domain">Ogiltig domän</string>
     <string name="menu_settings">Inställningar</string>
     <string name="menu_account">Min profil</string>
-    <string name="menu_subtitle">Kontoinformation</string>
-    <string name="menu_slideshow">Kontonamn</string>
     <string name="app_name">PixelDroid</string>
 </resources>
