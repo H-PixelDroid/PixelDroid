@@ -13,9 +13,7 @@ import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 
 
 /**
- * A fragment representing a list of Items.
- * Activities containing this fragment MUST implement the
- * [ProfilePostsFragment.OnListFragmentInteractionListener] interface.
+ * A fragment representing a list of statuses of a profile.
  */
 class ProfilePostsFragment : Fragment() {
 

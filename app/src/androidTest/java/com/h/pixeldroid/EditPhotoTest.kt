@@ -1,6 +1,5 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -20,7 +19,6 @@ import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
-import com.h.pixeldroid.testUtility.MockServer
 import kotlinx.android.synthetic.main.fragment_edit_image.*
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert

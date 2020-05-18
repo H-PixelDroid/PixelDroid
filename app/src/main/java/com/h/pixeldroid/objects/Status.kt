@@ -268,7 +268,7 @@ data class Status(
 
 
         //Set comment initial visibility
-        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = View.GONE
+        rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = GONE
     }
 
     fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {

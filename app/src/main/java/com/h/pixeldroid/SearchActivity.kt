@@ -24,11 +24,15 @@ class SearchActivity : AppCompatActivity() {
         var query = intent.getSerializableExtra("searchFeed") as String
         query = query.trim()
 
-        val searchType = if (query.startsWith("#")){
-            Results.SearchType.hashtags
-        } else if(query.startsWith("@")){
-            Results.SearchType.accounts
-        } else Results.SearchType.statuses
+        val searchType = when {
+            query.startsWith("#") -> {
+                Results.SearchType.hashtags
+            }
+            query.startsWith("@") -> {
+                Results.SearchType.accounts
+            }
+            else -> Results.SearchType.statuses
+        }
 
         if(searchType != Results.SearchType.statuses) query = query.drop(1)
 

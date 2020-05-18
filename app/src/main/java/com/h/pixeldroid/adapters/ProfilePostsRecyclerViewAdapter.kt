@@ -12,8 +12,7 @@ import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setSquareImageFromURL
 
 /**
- * [RecyclerView.Adapter] that can display a list of [PostMiniature]s and makes a call to the
- * specified [OnListFragmentInteractionListener].
+ * [RecyclerView.Adapter] that can display a list of [Status]s
  */
 class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecyclerViewAdapter.ViewHolder>() {
     private val posts: ArrayList<Status> = ArrayList()

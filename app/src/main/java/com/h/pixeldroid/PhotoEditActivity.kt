@@ -31,6 +31,7 @@ import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
 import kotlinx.android.synthetic.main.activity_photo_edit.*
 import kotlinx.android.synthetic.main.content_photo_edit.*
+import okhttp3.internal.wait
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -213,39 +214,38 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     override fun onBrightnessChange(brightness: Int) {
         brightnessFinal = brightness
         val myFilter = Filter()
-        myFilter.addSubFilter(BrightnessSubFilter(brightness))
+        myFilter.addEditFilters(brightness, saturationFinal, contrastFinal)
         applyFilterAndShowImage(myFilter, filteredImage)
     }
 
     override fun onSaturationChange(saturation: Float) {
         saturationFinal = saturation
         val myFilter = Filter()
-        myFilter.addSubFilter(SaturationSubfilter(saturation))
+        myFilter.addEditFilters(brightnessFinal, saturation, contrastFinal)
         applyFilterAndShowImage(myFilter, filteredImage)
     }
 
     override fun onContrastChange(contrast: Float) {
         contrastFinal = contrast
         val myFilter = Filter()
-        myFilter.addSubFilter(ContrastSubFilter(contrast))
+        myFilter.addEditFilters(brightnessFinal, saturationFinal, contrast)
         applyFilterAndShowImage(myFilter, filteredImage)
     }
 
-    private fun addEditFilters(filter: Filter, br: Int, sa: Float, co: Float): Filter {
-        filter.addSubFilter(BrightnessSubFilter(br))
-        filter.addSubFilter(ContrastSubFilter(co))
-        filter.addSubFilter(SaturationSubfilter(sa))
-
-        return filter
+    private fun Filter.addEditFilters(br: Int, sa: Float, co: Float): Filter {
+        addSubFilter(BrightnessSubFilter(br))
+        addSubFilter(ContrastSubFilter(co))
+        addSubFilter(SaturationSubfilter(sa))
+        return this
     }
 
     override fun onEditStarted() {
     }
 
     override fun onEditCompleted() {
-        val bitmap = filteredImage.copy(BITMAP_CONFIG, true)
         val myFilter = Filter()
-        addEditFilters(myFilter, brightnessFinal, saturationFinal, contrastFinal)
+        myFilter.addEditFilters(brightnessFinal, saturationFinal, contrastFinal)
+        val bitmap = filteredImage.copy(BITMAP_CONFIG, true)
 
         compressedImage = myFilter.processFilter(bitmap)
     }
@@ -279,7 +279,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         val newBr = if(brightnessFinal != 0) BRIGHTNESS_START/brightnessFinal else 0
         val newSa = if(saturationFinal != 0.0f) SATURATION_START/saturationFinal else 0.0f
         val newCo = if(contrastFinal != 0.0f) CONTRAST_START/contrastFinal else 0.0f
-        val myFilter = addEditFilters(Filter(), newBr, newSa, newCo)
+        val myFilter = Filter().addEditFilters(newBr, newSa, newCo)
 
         filteredImage = myFilter.processFilter(filteredImage)
     }
@@ -330,8 +330,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     }
 
     private fun applyFinalFilters(image: Bitmap?) {
-        var editFilter = Filter()
-        editFilter = addEditFilters(editFilter, brightnessFinal, saturationFinal, contrastFinal)
+        val editFilter = Filter().addEditFilters(brightnessFinal, saturationFinal, contrastFinal)
 
         finalImage = editFilter.processFilter(image!!.copy(BITMAP_CONFIG, true))
         if (actualFilter!=null) finalImage = actualFilter!!.processFilter(finalImage)

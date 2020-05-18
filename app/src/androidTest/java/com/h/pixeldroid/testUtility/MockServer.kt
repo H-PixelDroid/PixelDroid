@@ -10,8 +10,8 @@ class MockServer {
 
     companion object{
         private val server = MockWebServer()
-        private val headerName = "Content-Type"
-        private val headerValue = "application/json; charset=utf-8"
+        private const val headerName = "Content-Type"
+        private const val headerValue = "application/json; charset=utf-8"
     }
 
     fun start() {

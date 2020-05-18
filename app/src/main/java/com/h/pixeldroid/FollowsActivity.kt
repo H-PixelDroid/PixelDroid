@@ -1,9 +1,8 @@
 package com.h.pixeldroid
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.objects.Account
