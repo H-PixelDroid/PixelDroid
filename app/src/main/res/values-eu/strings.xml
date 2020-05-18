@@ -29,4 +29,27 @@
     <string name="menu_subtitle">Kontuaren informazioa</string>
     <string name="menu_slideshow">Kontuaren izena</string>
     <string name="app_name">PixelDroid</string>
+    <string name="capture_mode_camera">Kamera</string>
+    <string name="gallery_button_alt">Galeria</string>
+    <string name="delete_title">Berretsi</string>
+    <string name="NoCommentsToShow">Iruzkinik gabeko argitalpena…</string>
+    <string name="you_are_in_offline_mode">Lineaz kanpo editatzeko moduan zaude, baina hala ere eduki batzuk ikus ditzakezu!</string>
+    <string name="theme_title">Aplikazioaren gaia</string>
+    <string name="tab_edit">EDITATU</string>
+    <string name="switch_camera_button_alt">Aldatu kamera</string>
+    <string name="capture_button_alt">Atera</string>
+    <string name="theme_header">Gaia</string>
+    <string name="lbl_contrast">KONTRASTEA</string>
+    <string name="lbl_saturation">SATURAZIOA</string>
+    <string name="tab_filters">IRAGAZKIAK</string>
+    <string name="connect_to_pixelfed">Konektatu Pixelfedera</string>
+    <string name="login_connection_required_once">PixelDroid erabili ahal izateko Internetera gutxienez behin konektatu behar duzu :(</string>
+    <string name="enter">Sartu</string>
+    <string name="auth_error_toast_msg">Zerbitzariak errore batekin erantzun du, saiatu berriro!</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">Eduki-abisua / Multimedia ezkutatuta
+\n (egin klik erakusteko)</string>
+    <string name="lbl_brightness">DISTIRA</string>
+    <string name="CommentDisplay">erakutsi…</string>
+    <string name="login_empty_string_error">Instantziaren helbidea hutsik dago!</string>
+    <string name="domain_of_your_instance">Zure instantziaren domeinua</string>
 </resources>

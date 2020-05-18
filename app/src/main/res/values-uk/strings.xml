@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="browser_launch_failed">Не вдалося відкрити браузер, він у вас є\?</string>
+    <string name="image_download_failed">Не вдалося завантажити, спробуйте знову</string>
+    <string name="menu_subtitle">Інформація про акаунт</string>
+    <string name="menu_account">Мій профіль</string>
+    <string name="invalid_domain">Недоступний домен</string>
+    <string name="title_activity_settings2">Налаштування</string>
+    <string name="theme_title">Тема застосунку</string>
+    <string name="theme_header">Тема</string>
+    <string name="mention_notification">%1$s згадав(-ла) вас</string>
+    <string name="create_a_new_post">Створити новий пост!</string>
+    <string name="take_a_picture">Сфотографувати</string>
+    <string name="upload_a_picture">Завантажити фото</string>
+    <string name="or">або</string>
+    <string name="description">Опис…</string>
+    <string name="send">відправити</string>
+    <string name="lbl_brightness">Яскравість</string>
+    <string name="lbl_contrast">Контраст</string>
+    <string name="lbl_saturation">Насичення</string>
+    <string name="tab_filters">Фільтри</string>
+    <string name="save_to_gallery">Зберегти до галереї…</string>
+    <string name="image_download_downloading">Завантаження…</string>
+    <string name="image_download_success">Зображення успішно завантажено</string>
+    <string name="switch_camera_button_alt">Перемкнути камеру</string>
+    <string name="gallery_button_alt">Галерея</string>
+    <string name="capture_mode_camera">Камера</string>
+    <string name="delete_title">Підтвердити</string>
+    <string name="share_picture">Поділитися фотографією…</string>
+    <string name="logout">Вийти</string>
+    <string name="NoCommentsToShow">Немає коментарів до цієї публікації…</string>
+    <string name="tab_edit">Редагувати</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="menu_settings">Налаштування</string>
+</resources>

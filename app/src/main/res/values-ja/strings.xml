@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_slideshow">アカウント名</string>
+    <string name="menu_subtitle">アカウント情報</string>
+    <string name="menu_account">プロフィール</string>
+    <string name="menu_settings">設定</string>
+    <string name="invalid_domain">無効なドメイン</string>
+    <string name="auth_failed">認証できませんでした</string>
+    <string name="token_error">トークンの取得中にエラーが発生しました</string>
+    <string name="title_activity_settings2">設定</string>
+    <string name="theme_title">テーマ設定</string>
+    <string name="theme_header">テーマ</string>
+    <string name="attachment_summary_off">要求された場合にのみ添付ファイルをダウンロードする</string>
+    <string name="followed_notification">%1$s さんにフォローされました</string>
+    <string name="liked_notification">%1$s さんがあなたの投稿をお気に入りに登録しました</string>
+    <string name="take_a_picture">写真を撮影</string>
+    <string name="upload_a_picture">画像をアップロード</string>
+    <string name="or">または</string>
+    <string name="description">説明…</string>
+    <string name="send">送信</string>
+    <string name="whats_an_instance">インスタンスとは？</string>
+    <string name="logout">ログアウト</string>
+    <string name="lbl_brightness">輝度</string>
+    <string name="lbl_contrast">コントラスト</string>
+    <string name="lbl_saturation">サチュレーション</string>
+    <string name="tab_filters">フィルター</string>
+    <string name="save_to_gallery">ギャラリーに保存…</string>
+    <string name="image_download_downloading">ダウンロード中…</string>
+    <string name="image_download_success">画像のダウンロードに成功しました</string>
+    <string name="capture_button_alt">キャプチャー</string>
+    <string name="switch_camera_button_alt">カメラを切り替え</string>
+    <string name="gallery_button_alt">ギャラリー</string>
+    <string name="capture_mode_camera">カメラ</string>
+    <string name="delete_title">確認</string>
+    <string name="share_picture">画像を共有…</string>
+    <string name="CommentDisplay">表示する…</string>
+    <string name="domain_of_your_instance">あなたの参加しているインスタンスのドメイン</string>
+    <string name="connect_to_pixelfed">Pixelfedに接続</string>
+    <string name="login_connection_required_once">PixelDroidを利用するにははじめにインターネットにアクセスする必要があります</string>
+    <string name="auth_error_toast_msg">サーバーでエラーが発生しました。もう一度お試しください。</string>
+    <string name="login_empty_string_error">インスタンスアドレスを空欄にすることはできません</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media 
+\n (クリックで表示)</string>
+    <string name="enter">入る</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="registration_failed">このサーバーにアプリケーションを登録することができませんでした</string>
+    <string name="browser_launch_failed">ブラウザが起動できませんでした。インストールされているか確認してください。</string>
+    <string name="mention_notification">%1$s さんがあなたにメンションしました</string>
+    <string name="shared_notification">%1$s さんがあなたの投稿を再共有しました</string>
+    <string name="create_a_new_post">新しい投稿を作成</string>
+    <string name="tab_edit">編集</string>
+    <string name="image_download_failed">ダウンロードに失敗しました、もう一度実行してください</string>
+    <string name="NoCommentsToShow">この投稿にはコメントがありません…</string>
+    <string name="you_are_in_offline_mode">オフラインモードです、一部のコンテンツは引き続き表示できます</string>
+</resources>
