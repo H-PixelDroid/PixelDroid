@@ -22,4 +22,22 @@
     <string name="send">enviar</string>
     <string name="description">Descripció…</string>
     <string name="liked_notification">%1$s ha dona\'t m\'agrada a la teva publicació</string>
+    <string name="theme_title">Tema de l\'applicació</string>
+    <string name="switch_camera_button_alt">Canviar la càmera</string>
+    <string name="login_connection_required_once">Per utilitzar PixelDroid, has de connectar-te a Internet almenys una vegada :(</string>
+    <string name="theme_header">Tema</string>
+    <string name="lbl_brightness">BRILLANTOR</string>
+    <string name="lbl_contrast">CONTRAST</string>
+    <string name="lbl_saturation">SATURACIÓ</string>
+    <string name="tab_filters">FILTRES</string>
+    <string name="tab_edit">EDICIÓ</string>
+    <string name="capture_button_alt">Captura</string>
+    <string name="gallery_button_alt">Galeria</string>
+    <string name="NoCommentsToShow">No hi ha comentaris en aquesta publicació …</string>
+    <string name="CommentDisplay">mostrar…</string>
+    <string name="domain_of_your_instance">Domini de la teva instancia</string>
+    <string name="connect_to_pixelfed">Connecta’t a Pixelfed</string>
+    <string name="you_are_in_offline_mode">Estàs en mode fora de línia, però encara pots veure algun contingut!</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Imatges ocultes
+\n(fes clic per mostrar)</string>
 </resources>

@@ -1,2 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">PixelDroid</string>
+    <string name="menu_account">Mein Profil</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="invalid_domain">Ungültige Domäne</string>
+    <string name="browser_launch_failed">Der Browser konnte nicht gestartet werden, haben Sie einen\?</string>
+    <string name="auth_failed">Authentifizierung fehlgeschlagen</string>
+    <string name="token_error">Fehler beim Erhalten des Token</string>
+    <string name="title_activity_settings2">Einstellungen</string>
+    <string name="theme_header">Erscheinungsbild</string>
+    <string name="followed_notification">%1$s folgt dir</string>
+    <string name="mention_notification">%1$s hat dich erwähnt</string>
+    <string name="shared_notification">%1$s hat deinen Beitrag geteilt</string>
+    <string name="liked_notification">%1$s hat deinen Beitrag favorisiert</string>
+    <string name="send">senden</string>
+    <string name="whats_an_instance">Was ist eine Instanz\?</string>
+    <string name="theme_title">Erscheinungsbild</string>
+    <string name="description">Beschreibung…</string>
+    <string name="save_to_gallery">In Galerie speichern…</string>
+    <string name="image_download_failed">Der Download ist fehlgeschlagen, bitte versuchen Sie es erneut</string>
+    <string name="logout">Abmelden</string>
+    <string name="lbl_brightness">Helligkeit</string>
+    <string name="tab_filters">Filter</string>
+    <string name="tab_edit">bearbeiten</string>
+    <string name="lbl_contrast">Kontrast</string>
+    <string name="lbl_saturation">Sättigung</string>
+    <string name="NoCommentsToShow">Keine Kommentare zu diesem Beitrag…</string>
+    <string name="image_download_downloading">Herunterladen…</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW/NSFW/Versteckte Medien
+\n(klicken zum Anzeigen)</string>
+    <string name="image_download_success">Bild erfolgreich heruntergeladen</string>
+    <string name="capture_button_alt">Erfassen</string>
+    <string name="gallery_button_alt">Galerie</string>
+    <string name="share_picture">Foto teilen…</string>
+    <string name="CommentDisplay">zeigen…</string>
+    <string name="domain_of_your_instance">Domain Ihrer Instanz</string>
+    <string name="connect_to_pixelfed">Mit Pixelfed verbinden</string>
+    <string name="login_connection_required_once">Sie müssen mindestens einmal mit dem Internet verbunden sein, um PixelDroid verwenden zu können :(</string>
+    <string name="you_are_in_offline_mode">Sie befinden sich im Offline-Modus, aber Sie können immer noch einige Inhalte ansehen!</string>
+    <string name="switch_camera_button_alt">Kamera wechseln</string>
+    <string name="registration_failed">Konnte die App nicht mit diesem Server verbinden</string>
+</resources>
