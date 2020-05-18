@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
@@ -33,9 +33,6 @@ class DrawerMenuTest {
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(30)
-    @get:Rule
-    var activityRule: ActivityScenarioRule<MainActivity>
-            = ActivityScenarioRule(MainActivity::class.java)
 
     @Before
     fun before(){
@@ -72,10 +69,10 @@ class DrawerMenuTest {
             .perform(DrawerActions.open()) // Open Drawer
     }
 
-   /*@Test
+   @Test
     fun testDrawerSettingsButton() {
         // Start the screen of your activity.
-        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_settings))
+        onView(withText(R.string.menu_settings)).perform(click())
         // Check that settings activity was opened.
         onView(withText(R.string.theme_title)).check(matches(isDisplayed()))
     }
@@ -83,8 +80,7 @@ class DrawerMenuTest {
     @Test
     fun testThemeSettings() {
         // Start the screen of your activity.
-        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_settings)
-        )
+        onView(withText(R.string.menu_settings)).perform(click())
         val themes = getInstrumentation().targetContext.resources.getStringArray(R.array.theme_entries)
         //select theme modes
         onView(withText(R.string.theme_title)).perform(click())
@@ -105,7 +101,7 @@ class DrawerMenuTest {
     @Test
     fun testDrawerLogoutButton() {
         // Start the screen of your activity.
-        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_logout))
+        onView(withText(R.string.logout)).perform(click())
         // Check that settings activity was opened.
         onView(withId(R.id.connect_instance_button)).check(matches(isDisplayed()))
     }
@@ -113,35 +109,31 @@ class DrawerMenuTest {
     @Test
     fun testDrawerProfileButton() {
         // Start the screen of your activity.
-        onView(
-            Matchers.allOf(
-                withChild()
-            )
-        ).perform(click())
+        onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
 
-    @Test
+    /*@Test
     fun testDrawerAvatarClick() {
         // Start the screen of your activity.
-        onView(withId(R.id.drawer_avatar)).perform(click())
+        onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
-    }
+    }*/
 
-    @Test
+    /*@Test
     fun testDrawerAccountNameClick() {
         // Start the screen of your activity.
-        onView(withId(R.id.drawer_account_name)).perform(click())
+        onView(withText("Testi")).perform(click())
         // Check that profile activity was opened.
-        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
-    }
+        onView(withText("Add Account")).check(matches(isDisplayed()))
+    }*/
 
     @Test
     fun clickFollowers() {
         // Open My Profile from drawer
-        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
+        onView(withText(R.string.menu_account)).perform(click())
         Thread.sleep(1000)
 
         // Open followers list
@@ -157,7 +149,7 @@ class DrawerMenuTest {
     @Test
     fun clickFollowing() {
         // Open My Profile from drawer
-        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(R.id.nav_account))
+        onView(withText(R.string.menu_account)).perform(click())
         Thread.sleep(1000)
         // Open followers list
         onView(withId(R.id.nbFollowingTextView)).perform(click())
@@ -167,7 +159,7 @@ class DrawerMenuTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Andrew Dobis")))
-    }*/
+    }
 
     @Test
     fun onBackPressedClosesDrawer() {
