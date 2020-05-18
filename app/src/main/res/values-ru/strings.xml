@@ -28,7 +28,7 @@
     <string name="delete_title">Подтвердить</string>
     <string name="NoCommentsToShow">Нет комментариев под этим постом…</string>
     <string name="CommentDisplay">показать…</string>
-    <string name="domain_of_your_instance">Доменное имя вашего инстанса</string>
+    <string name="domain_of_your_instance">Домен вашего инстанса</string>
     <string name="connect_to_pixelfed">Подключение к Pixelfed</string>
     <string name="menu_slideshow">Имя аккаунта</string>
     <string name="app_name">PixelDroid</string>
@@ -51,4 +51,5 @@
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Скрытое медиа 
 \n (кликните что бы показать)</string>
     <string name="registration_failed">Не удалось зарегистрировать приложение на этом инстансе</string>
+    <string name="capture_button_alt">Захватить</string>
 </resources>
