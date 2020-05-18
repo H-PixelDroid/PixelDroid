@@ -1,2 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="create_a_new_post">مطلب جدیدی بگذارید!</string>
+    <string name="login_connection_required_once">برای استفاده از پیکسل‌دروید باید لااقل یک مرتبه به اینترنت وصل شوید :(</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">رسانهٔ پنهان / نامناسب برای محیط کار / دارای هشدار
+\n(برای نمایش، کلیک کنید)</string>
+    <string name="menu_slideshow">نام حساب</string>
+    <string name="menu_subtitle">اطلاعات حساب</string>
+    <string name="menu_settings">تنظیمات</string>
+    <string name="invalid_domain">دامنه نامعتبر</string>
+    <string name="browser_launch_failed">نتوانستیم مرورگر را باز کنیم. آیا اصلا مرورگری دارید؟</string>
+    <string name="auth_failed">ناتوانی در احراز هویت</string>
+    <string name="token_error">ناتوانی در دریافت توکن</string>
+    <string name="title_activity_settings2">تنظیمات</string>
+    <string name="theme_title">پوستهٔ برنامه</string>
+    <string name="theme_header">پوسته</string>
+    <string name="followed_notification">‏%1$s شما را دنبال کرد</string>
+    <string name="mention_notification">‏%1$s به شما اشاره کرد</string>
+    <string name="shared_notification">‏%1$s مطلب شما را هم‌رسانی کرد</string>
+    <string name="liked_notification">‏%1$s مطلب شما را پسندید</string>
+    <string name="take_a_picture">عکسی بگیرید</string>
+    <string name="upload_a_picture">تصویری بارگذاری کنید</string>
+    <string name="or">یا</string>
+    <string name="description">توضیحات…</string>
+    <string name="send">بفرست</string>
+    <string name="whats_an_instance">یک نمونه چیست؟</string>
+    <string name="logout">خروج</string>
+    <string name="lbl_brightness">روشنایی</string>
+    <string name="lbl_contrast">تضاد</string>
+    <string name="lbl_saturation">اشباع</string>
+    <string name="tab_filters">پالایه‌ها</string>
+    <string name="tab_edit">ویرایش</string>
+    <string name="save_to_gallery">ذخیره در نگارخانه…</string>
+    <string name="image_download_failed">بارگیری شکست خورد، دوباره تلاش کنید</string>
+    <string name="image_download_downloading">در حال بارگیری…</string>
+    <string name="image_download_success">تصویر با موفقیت بارگیری شد</string>
+    <string name="capture_button_alt">دریافت</string>
+    <string name="switch_camera_button_alt">تغییر دوربین</string>
+    <string name="gallery_button_alt">نگارخانه</string>
+    <string name="capture_mode_camera">دوربین</string>
+    <string name="delete_title">تایید</string>
+    <string name="share_picture">هم‌رسانی تصویر…</string>
+    <string name="NoCommentsToShow">نظری روی این مطلب نیست…</string>
+    <string name="CommentDisplay">برای نمایش…</string>
+    <string name="domain_of_your_instance">دامنهٔ نمونهٔ شما</string>
+    <string name="connect_to_pixelfed">اتصال به پیکسل‌فد</string>
+    <string name="you_are_in_offline_mode">شما در حالت برخط نیستید، اما همچنان می‌توانید برخی محتواها را ببینید!</string>
+    <string name="enter">ورود</string>
+    <string name="auth_error_toast_msg">کارساز، پاسخی حاوی خطا فرستاد، دوباره تلاش کنید!</string>
+    <string name="login_empty_string_error">نشانی نمونه نمی‌تواند خالی باشد!</string>
+    <string name="app_name">پیکسل‌دروید</string>
+    <string name="menu_account">نمایهٔ من</string>
+    <string name="registration_failed">نتوانستیم برنامه را روی این کارساز ثبت کنیم</string>
+    <string name="attachment_summary_off">پیوست‌ها تنها در صورت درخواستی دستی بارگیری شوند</string>
+</resources>
