@@ -1,2 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_slideshow">用户名</string>
+    <string name="registration_failed">无法在此服务器上注册应用程序</string>
+    <string name="browser_launch_failed">无法跳转至浏览器，请确认是否安装</string>
+    <string name="image_download_success">成功下载图像</string>
+    <string name="menu_account">个人资料</string>
+    <string name="menu_settings">设置</string>
+    <string name="invalid_domain">无效域名</string>
+    <string name="auth_failed">无法验证</string>
+    <string name="token_error">获取验证令牌时出错</string>
+    <string name="theme_header">主题</string>
+    <string name="send">发送</string>
+    <string name="logout">注销</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="menu_subtitle">用户信息</string>
+    <string name="title_activity_settings2">配置</string>
+    <string name="theme_title">应用主题</string>
+    <string name="attachment_summary_off">仅在手动请求时下载附件</string>
+    <string name="followed_notification">关注了你</string>
+    <string name="mention_notification">提到了你</string>
+    <string name="shared_notification">分享了你的帖文</string>
+    <string name="liked_notification">给你的帖文点赞</string>
+    <string name="create_a_new_post">创建一条新帖文！</string>
+    <string name="take_a_picture">拍照</string>
+    <string name="upload_a_picture">上传图片</string>
+    <string name="or">或</string>
+    <string name="description">描述……</string>
+    <string name="whats_an_instance">什么是实例？</string>
+    <string name="lbl_brightness">亮度</string>
+    <string name="lbl_contrast">对比度</string>
+    <string name="lbl_saturation">饱和度</string>
+    <string name="tab_filters">滤镜</string>
+    <string name="tab_edit">编辑</string>
+    <string name="save_to_gallery">保存到相册……</string>
+    <string name="image_download_failed">下载失败，请重试</string>
+    <string name="image_download_downloading">下载中……</string>
+    <string name="capture_button_alt">拍摄</string>
+    <string name="switch_camera_button_alt">切换摄像头</string>
+    <string name="gallery_button_alt">相册</string>
+    <string name="capture_mode_camera">相机</string>
+    <string name="delete_title">确认</string>
+    <string name="NoCommentsToShow">这条帖文下没有评论……</string>
+    <string name="CommentDisplay">显示……</string>
+    <string name="domain_of_your_instance">实例的域名</string>
+    <string name="you_are_in_offline_mode">您处于离线模式，但仍可以查看已缓存内容！</string>
+    <string name="login_empty_string_error">请输入实例地址！</string>
+    <string name="auth_error_toast_msg">服务器报错误，请重试！</string>
+    <string name="enter">输入</string>
+    <string name="connect_to_pixelfed">连接至 Pixelfed</string>
+    <string name="share_picture">分享图片……</string>
+    <string name="login_connection_required_once">您至少需要连接到互联网一次才能使用 PixelDroid :(</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">内容警告 / 工作场所不宜 / 隐藏媒体 
+\n （单击以显示）</string>
+</resources>
