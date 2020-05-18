@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_slideshow">Nome da conta</string>
-    <string name="menu_subtitle">Información da conta</string>
     <string name="menu_account">Perfil</string>
     <string name="menu_settings">Axustes</string>
     <string name="invalid_domain">Dominio non válido</string>
