@@ -7,25 +7,19 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.*
 import androidx.core.text.toSpanned
-import android.widget.TextView
-import android.widget.LinearLayout
-import android.widget.Toast
-import android.widget.PopupMenu
-import android.widget.ImageView
-import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
@@ -45,12 +39,10 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.*
-import kotlinx.android.synthetic.main.post_fragment.view.postDate
-import kotlinx.android.synthetic.main.post_fragment.view.postDomain
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 import kotlin.collections.ArrayList
 
 /*

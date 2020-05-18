@@ -31,7 +31,6 @@ import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
 import kotlinx.android.synthetic.main.activity_photo_edit.*
 import kotlinx.android.synthetic.main.content_photo_edit.*
-import okhttp3.internal.wait
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

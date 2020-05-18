@@ -8,12 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Application
 import com.h.pixeldroid.objects.Instance
@@ -24,7 +22,6 @@ import com.h.pixeldroid.utils.Utils
 import com.h.pixeldroid.utils.Utils.Companion.normalizeDomain
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.HttpUrl
-import okhttp3.internal.toImmutableList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,7 +30,6 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG = "Login Activity"
         private const val PACKAGE_ID = BuildConfig.APPLICATION_ID
         private const val SCOPE = "read write follow"
     }
