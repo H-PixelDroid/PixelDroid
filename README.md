@@ -9,6 +9,6 @@ If you want to try out PixelDroid on your own device, you can try to compile the
   
 - Open the ___gradle___ project inside of Android Studio. Then you should plug your Android device into your computer (make sure that your device is in [developer mode](https://developer.android.com/studio/debug/dev-options)) and select ___share files___ on it. 
 
-- You should see that Android studio has detected your device and it's name should appear next to a small play button on the top right corner of Android Studio. If that is the case, then you can click said play button and, after Android studio will have built the project, you'll be able to use PixelDroid on your device!  
+- You should see that Android studio has detected your device and its name should appear next to a small play button on the top right corner of Android Studio. If that is the case, then you can click said play button and, after Android studio will have built the project, you'll be able to use PixelDroid on your device!  
   
 At this point PixelDroid will be installed on your phone, so it won't have to be plugged in anymore!
