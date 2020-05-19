@@ -39,5 +39,8 @@
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Média caché
 \n (appuyez pour afficher)</string>
     <string name="CommentDisplay">pour afficher…</string>
-    <string name="login_connection_required_once">Vous devez vous connecter à Internet au moins une fois afin de pouvoir utiliser PixelDroid :(</string>
+    <string name="login_connection_required_once">Vous devez être connecté à Internet afin de pouvoir ajouter un premier compte et utiliser PixelDroid :(</string>
+    <string name="add_account_description">Ajouter un autre compte PixelFed</string>
+    <string name="add_account_name">Ajouter un compte</string>
+    <string name="instance_error">Impossible d’obtenir des informations sur l’instance</string>
 </resources>
