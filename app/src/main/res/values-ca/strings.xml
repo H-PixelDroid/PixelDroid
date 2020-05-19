@@ -3,7 +3,6 @@
     <string name="shared_notification">%1$s ha compartit la teva publicació</string>
     <string name="mention_notification">%1$s t\'ha esmentat</string>
     <string name="followed_notification">%1$s et segueix</string>
-    <string name="attachment_summary_off">Baixar fitxers adjunts només quan es sol·liciti manualment</string>
     <string name="title_activity_settings2">Configuració</string>
     <string name="token_error">S\'ha produït un error en obtenir el token</string>
     <string name="auth_failed">No s\'ha pogut autenticar</string>
@@ -12,8 +11,6 @@
     <string name="invalid_domain">Domini no vàlid</string>
     <string name="menu_settings">Configuració</string>
     <string name="menu_account">El meu perfil</string>
-    <string name="menu_subtitle">Informació del compte</string>
-    <string name="menu_slideshow">Nom del compte</string>
     <string name="app_name">PixelDroid</string>
     <string name="share_picture">Compartir imatge…</string>
     <string name="image_download_success">La imatge s\'ha descarrega\'t correctament</string>
@@ -24,10 +21,6 @@
     <string name="whats_an_instance">Què és una instancia\?</string>
     <string name="send">enviar</string>
     <string name="description">Descripció…</string>
-    <string name="or">o</string>
-    <string name="upload_a_picture">Puja una imatge</string>
-    <string name="take_a_picture">Fes una foto</string>
-    <string name="create_a_new_post">Crea una nova publicació!</string>
     <string name="liked_notification">%1$s ha dona\'t m\'agrada a la teva publicació</string>
     <string name="theme_title">Tema de l\'applicació</string>
     <string name="switch_camera_button_alt">Canviar la càmera</string>
@@ -40,16 +33,11 @@
     <string name="tab_edit">EDICIÓ</string>
     <string name="capture_button_alt">Captura</string>
     <string name="gallery_button_alt">Galeria</string>
-    <string name="capture_mode_camera">Càmera</string>
-    <string name="delete_title">Confirmar</string>
     <string name="NoCommentsToShow">No hi ha comentaris en aquesta publicació …</string>
     <string name="CommentDisplay">mostrar…</string>
     <string name="domain_of_your_instance">Domini de la teva instancia</string>
     <string name="connect_to_pixelfed">Connecta’t a Pixelfed</string>
     <string name="you_are_in_offline_mode">Estàs en mode fora de línia, però encara pots veure algun contingut!</string>
-    <string name="enter">Entrar</string>
-    <string name="login_empty_string_error">L\'adreça de la instància no pot estar buida!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Imatges ocultes
 \n(fes clic per mostrar)</string>
-    <string name="auth_error_toast_msg">El servidor ha respost amb un error, torna-ho a provar!</string>
 </resources>

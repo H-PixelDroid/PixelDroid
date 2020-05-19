@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="create_a_new_post">Sortu argitalpen berri bat!</string>
     <string name="liked_notification">%1$s erabiltzaileak zure argitalpena gogoko du</string>
     <string name="shared_notification">%1$s erabiltzaileak zure argitalpena partekatu du</string>
     <string name="share_picture">Partekatu irudia…</string>
@@ -12,12 +11,8 @@
     <string name="whats_an_instance">Zer da instantzia bat\?</string>
     <string name="send">bidali</string>
     <string name="description">Deskribapena…</string>
-    <string name="or">edo</string>
-    <string name="upload_a_picture">Kargatu argazki bat</string>
-    <string name="take_a_picture">Atera argazki bat</string>
     <string name="mention_notification">%1$s erabiltzaileak aipatu zaitu</string>
     <string name="followed_notification">%1$s jarraitzen hasi zaizu</string>
-    <string name="attachment_summary_off">Eskuz eskatzean bakarrik deskargatu eranskinak</string>
     <string name="title_activity_settings2">Ezarpenak</string>
     <string name="token_error">Errorea tokena eskuratzean</string>
     <string name="auth_failed">Ezin izan da autentifikatu</string>
@@ -26,12 +21,8 @@
     <string name="invalid_domain">Domeinu baliogabea</string>
     <string name="menu_settings">Ezarpenak</string>
     <string name="menu_account">Nire profila</string>
-    <string name="menu_subtitle">Kontuaren informazioa</string>
-    <string name="menu_slideshow">Kontuaren izena</string>
     <string name="app_name">PixelDroid</string>
-    <string name="capture_mode_camera">Kamera</string>
     <string name="gallery_button_alt">Galeria</string>
-    <string name="delete_title">Berretsi</string>
     <string name="NoCommentsToShow">Iruzkinik gabeko argitalpena…</string>
     <string name="you_are_in_offline_mode">Lineaz kanpo editatzeko moduan zaude, baina hala ere eduki batzuk ikus ditzakezu!</string>
     <string name="theme_title">Aplikazioaren gaia</string>
@@ -44,12 +35,9 @@
     <string name="tab_filters">IRAGAZKIAK</string>
     <string name="connect_to_pixelfed">Konektatu Pixelfedera</string>
     <string name="login_connection_required_once">PixelDroid erabili ahal izateko Internetera gutxienez behin konektatu behar duzu :(</string>
-    <string name="enter">Sartu</string>
-    <string name="auth_error_toast_msg">Zerbitzariak errore batekin erantzun du, saiatu berriro!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">Eduki-abisua / Multimedia ezkutatuta
 \n (egin klik erakusteko)</string>
     <string name="lbl_brightness">DISTIRA</string>
     <string name="CommentDisplay">erakutsi…</string>
-    <string name="login_empty_string_error">Instantziaren helbidea hutsik dago!</string>
     <string name="domain_of_your_instance">Zure instantziaren domeinua</string>
 </resources>

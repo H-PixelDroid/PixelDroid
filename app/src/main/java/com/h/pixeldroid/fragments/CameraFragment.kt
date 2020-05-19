@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.hardware.display.DisplayManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -31,13 +30,10 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.h.pixeldroid.PhotoEditActivity
-import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.abs
@@ -69,10 +65,6 @@ class CameraFragment : Fragment() {
     private var preview: Preview? = null
     private var imageCapture: ImageCapture? = null
     private var camera: Camera? = null
-
-    private val displayManager by lazy {
-        requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
-    }
 
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
@@ -276,7 +268,7 @@ class CameraFragment : Fragment() {
             if (cursor != null && cursor.moveToFirst()) {
                 val uri = Uri.parse(cursor.getString(1)).path ?: ""
                 setGalleryThumbnail(uri)
-                cursor.close();
+                cursor.close()
             }
         }
 

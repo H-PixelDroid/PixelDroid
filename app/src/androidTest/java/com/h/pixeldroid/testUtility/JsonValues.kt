@@ -166,7 +166,7 @@ class JsonValues {
                 "created_at": 12121212
         }"""
         const val instanceJson = """{
-            "uri": "pixeldroid.epfl",
+            "uri": "REPLACEWITHDOMAIN",
             "title": "PixelDroid",
             "description": "Test server description.",
             "email": "lejeu@epfl.ch",

@@ -2,7 +2,6 @@ package com.h.pixeldroid
 
 import android.app.SearchManager
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +16,6 @@ import com.h.pixeldroid.fragments.feeds.search.SearchPostsFragment
 import com.h.pixeldroid.objects.Results
 
 class SearchActivity : AppCompatActivity() {
-    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +24,15 @@ class SearchActivity : AppCompatActivity() {
         var query = intent.getSerializableExtra("searchFeed") as String
         query = query.trim()
 
-        val searchType = if (query.startsWith("#")){
-            Results.SearchType.hashtags
-        } else if(query.startsWith("@")){
-            Results.SearchType.accounts
-        } else Results.SearchType.statuses
+        val searchType = when {
+            query.startsWith("#") -> {
+                Results.SearchType.hashtags
+            }
+            query.startsWith("@") -> {
+                Results.SearchType.accounts
+            }
+            else -> Results.SearchType.statuses
+        }
 
         if(searchType != Results.SearchType.statuses) query = query.drop(1)
 

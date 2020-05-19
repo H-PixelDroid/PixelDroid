@@ -16,7 +16,11 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.utils.DBUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.camera_ui_container.*
 import org.hamcrest.Matcher
@@ -66,14 +70,35 @@ class PostFragmentUITests {
     @get:Rule
     var rule = ActivityScenarioRule(MainActivity::class.java)
 
+    private lateinit var db: AppDatabase
+
+
     @Before
     fun setup() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
+        db = DBUtils.initDB(context)
+        db.clearAllTables()
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = baseUrl.toString(),
+                title = "PixelTest"
+            )
+        )
+
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = baseUrl.toString(),
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
+        db.close()
         Thread.sleep(300)
     }
 

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_slideshow">Nome da conta</string>
-    <string name="menu_subtitle">Información da conta</string>
     <string name="menu_account">Perfil</string>
     <string name="menu_settings">Axustes</string>
     <string name="invalid_domain">Dominio non válido</string>
@@ -15,10 +13,6 @@
     <string name="mention_notification">%1$s mencionoute</string>
     <string name="liked_notification">a %1$s gustoulle a publicación</string>
     <string name="shared_notification">%1$s comparteu a publicación</string>
-    <string name="create_a_new_post">Crea una publicación!</string>
-    <string name="take_a_picture">Fai unha foto</string>
-    <string name="upload_a_picture">Sube unha imaxe</string>
-    <string name="or">ou</string>
     <string name="description">Descrición…</string>
     <string name="send">enviar</string>
     <string name="whats_an_instance">Que é unha instancia\?</string>
@@ -34,8 +28,6 @@
     <string name="capture_button_alt">Facer foto</string>
     <string name="switch_camera_button_alt">Cambiar de cámara</string>
     <string name="gallery_button_alt">Galería</string>
-    <string name="capture_mode_camera">Cámara</string>
-    <string name="delete_title">Confirmar</string>
     <string name="share_picture">Compartir foto…</string>
     <string name="NoCommentsToShow">Sen comentarios na publicación…</string>
     <string name="image_download_failed">Fallou a descarga, inténtao outra vez</string>
@@ -44,12 +36,8 @@
     <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
     <string name="login_connection_required_once">Tes que conectarte cando menos unha vez a internet para usar PixelDroid :(</string>
     <string name="you_are_in_offline_mode">Non tes conexión, pero aínda así podes ver algún contido!</string>
-    <string name="enter">Entrar</string>
-    <string name="auth_error_toast_msg">O servidor respondeu cun erro, inténtao outra vez!</string>
-    <string name="login_empty_string_error">O enderezo da instancia non pode estar baleiro!</string>
-    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Agochado 
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Agochado
 \n(preme para amosar)</string>
     <string name="app_name">PixelDroid</string>
     <string name="registration_failed">Non puidemos rexistrar a aplicación neste servidor</string>
-    <string name="attachment_summary_off">Descargar anexos só cando se solicite manualmente</string>
 </resources>

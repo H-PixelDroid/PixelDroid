@@ -20,20 +20,26 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.R
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.DBUtils
 import retrofit2.Call
 
 open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
     lateinit var domain : String
+    private var user: UserDatabaseEntity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        domain = preferences.getString("domain", "")!!
+        val db = DBUtils.initDB(requireContext())
+        user = db.userDao().getActiveUser()
+
+        domain = user?.instance_uri.orEmpty()
         //RequestBuilder that is re-used for every image
         picRequest = Glide.with(this)
             .asDrawable().fitCenter()

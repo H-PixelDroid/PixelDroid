@@ -1,8 +1,6 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
@@ -16,33 +14,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
+import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Relationship
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ProfileActivity : AppCompatActivity() {
-    private lateinit var preferences : SharedPreferences
     private lateinit var pixelfedAPI : PixelfedAPI
     private lateinit var adapter : ProfilePostsRecyclerViewAdapter
     private lateinit var recycler : RecyclerView
-    private var accessToken : String? = null
+    private lateinit var accessToken : String
+    private lateinit var domain : String
     private var account: Account? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        preferences = this.getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE)
-        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        accessToken = preferences.getString("accessToken", "")
+        val db = DBUtils.initDB(applicationContext)
+
+        val user = db.userDao().getActiveUser()
+
+        domain = user?.instance_uri.orEmpty()
+        pixelfedAPI = PixelfedAPI.create(domain)
+        accessToken = user?.accessToken.orEmpty()
+        db.close()
 
         // Set posts RecyclerView as a grid with 3 columns
         recycler = findViewById(R.id.profilePostsRecyclerView)
@@ -139,7 +142,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun onClickEditButton() {
-        val url = "${preferences.getString("domain", "")}/settings/home"
+        val url = "$domain/settings/home"
 
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         if(browserIntent.resolveActivity(packageManager) != null) {

@@ -1,15 +1,11 @@
 package com.h.pixeldroid
 
 
-import android.graphics.ColorMatrix
 import android.content.Context
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.graphics.ColorMatrix
 import android.widget.TextView
-import androidx.core.view.get
-import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.onData
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -17,10 +13,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.tabs.TabLayout
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
@@ -29,14 +26,9 @@ import com.h.pixeldroid.testUtility.CustomMatchers.Companion.second
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
-import kotlinx.android.synthetic.main.fragment_feed.*
-import kotlinx.android.synthetic.main.fragment_feed.view.*
-import kotlinx.android.synthetic.main.post_fragment.*
-import kotlinx.android.synthetic.main.post_fragment.view.*
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,21 +41,38 @@ class MockedServerTest {
 
     private val mockServer = MockServer()
     private lateinit var activityScenario: ActivityScenario<MainActivity>
+    private lateinit var db: AppDatabase
+    private lateinit var context: Context
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
-    @get:Rule
-    var activityRule: ActivityScenarioRule<MainActivity>
-            = ActivityScenarioRule(MainActivity::class.java)
 
     @Before
     fun before(){
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
+        context = ApplicationProvider.getApplicationContext()
+        db = DBUtils.initDB(context)
+        db.clearAllTables()
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = baseUrl.toString(),
+                title = "PixelTest"
+            )
+        )
+
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = baseUrl.toString(),
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
+        db.close()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
     }
 

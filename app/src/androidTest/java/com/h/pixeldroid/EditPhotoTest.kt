@@ -1,6 +1,5 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -20,7 +19,6 @@ import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
-import com.h.pixeldroid.testUtility.MockServer
 import kotlinx.android.synthetic.main.fragment_edit_image.*
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert
@@ -33,7 +31,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class EditPhotoTest {
 
-    private val mockServer = MockServer()
     private lateinit var activity: PhotoEditActivity
     private lateinit var activityScenario: ActivityScenario<PhotoEditActivity>
 
@@ -46,11 +43,6 @@ class EditPhotoTest {
     @Before
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        mockServer.start()
-        val baseUrl = mockServer.getUrl()
-        val preferences = context.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
 
         // Launch PhotoEditActivity
         val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")

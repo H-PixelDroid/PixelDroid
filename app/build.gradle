@@ -113,6 +113,19 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
 
+    implementation "com.mikepenz:materialdrawer:8.0.3"
+
+    //required support lib modules
+    implementation "androidx.annotation:annotation:1.1.0"
+
+    // Add for NavController support
+    implementation "com.mikepenz:materialdrawer-nav:8.0.3"
+
+    //iconics
+    implementation "com.mikepenz:materialdrawer-iconics:8.0.3"
+    implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
+
+
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
 
@@ -129,7 +142,7 @@ dependencies {
     // CameraX View class
     implementation 'androidx.camera:camera-view:1.0.0-alpha10'
 
-    implementation 'com.karumi:dexter:6.1.0'
+    implementation 'com.karumi:dexter:6.1.2'
 
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'

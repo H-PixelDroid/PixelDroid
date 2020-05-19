@@ -4,13 +4,10 @@
     <string name="invalid_domain">Ogiltig domän</string>
     <string name="menu_settings">Inställningar</string>
     <string name="menu_account">Min profil</string>
-    <string name="menu_subtitle">Kontoinformation</string>
-    <string name="menu_slideshow">Kontonamn</string>
     <string name="app_name">PixelDroid</string>
     <string name="browser_launch_failed">Kunde inte starta en webbläsare, har du en\?</string>
     <string name="token_error">Fel vid hämtning av token</string>
     <string name="auth_failed">Kunde inte autentisera</string>
-    <string name="attachment_summary_off">Enbart nedladdade bilagor när manuellt efterfrågade</string>
     <string name="title_activity_settings2">Inställningar</string>
     <string name="domain_of_your_instance">Instansens domän</string>
     <string name="save_to_gallery">Spara till galleri…</string>
@@ -24,12 +21,7 @@
     <string name="mention_notification">%1$s nämnde dig</string>
     <string name="shared_notification">%1$s delande ditt inlägg</string>
     <string name="liked_notification">%1$s gillar ditt inlägg</string>
-    <string name="create_a_new_post">Skapa ett nytt inlägg!</string>
-    <string name="take_a_picture">Ta en bild</string>
-    <string name="upload_a_picture">Ladda upp en bild</string>
-    <string name="or">eller</string>
     <string name="description">Beskrivning…</string>
-    <string name="enter">Enter</string>
     <string name="send">skicka</string>
     <string name="whats_an_instance">Vad är en instans\?</string>
     <string name="logout">Logga av</string>
@@ -41,15 +33,11 @@
     <string name="capture_button_alt">Lagra</string>
     <string name="switch_camera_button_alt">Byt kamera</string>
     <string name="gallery_button_alt">Galleri</string>
-    <string name="capture_mode_camera">Kamera</string>
-    <string name="delete_title">Bekräfta</string>
     <string name="share_picture">Dela bild…</string>
     <string name="NoCommentsToShow">Inga kommentarer på detta inlägg…</string>
     <string name="CommentDisplay">att visa…</string>
     <string name="connect_to_pixelfed">Anslut till Pixelfed</string>
     <string name="you_are_in_offline_mode">Du är i nedkopplad läge, men du kan ändå se lite innehåll!</string>
-    <string name="auth_error_toast_msg">Servern svarade med ett fel, försök igen!</string>
-    <string name="login_empty_string_error">Instansadressen får inte vara tom!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Dold media
 \n(Tryck för att visa)</string>
 </resources>

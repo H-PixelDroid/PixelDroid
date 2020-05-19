@@ -3,17 +3,11 @@
     <string name="registration_failed">Impossible d\'enregistrer l\'application sur ce serveur</string>
     <string name="auth_failed">Impossible d\'authentifier</string>
     <string name="title_activity_settings2">Réglages</string>
-    <string name="menu_slideshow">Nom du compte</string>
-    <string name="menu_subtitle">Informations du compte</string>
     <string name="menu_account">Mon profil</string>
     <string name="menu_settings">Réglages</string>
-    <string name="attachment_summary_off">Télécharger uniquement les pièces jointes lorsque demandé manuellement</string>
     <string name="followed_notification">%1$s vous a suivi</string>
     <string name="shared_notification">%1$s a partagé votre publication</string>
     <string name="liked_notification">%1$s a aimé(e) votre publication</string>
-    <string name="take_a_picture">Prendre une photo</string>
-    <string name="upload_a_picture">Mettre en ligne une photo</string>
-    <string name="or">ou</string>
     <string name="description">Description…</string>
     <string name="send">envoyer</string>
     <string name="whats_an_instance">Qu\'est-ce qu\'une instance \?</string>
@@ -27,7 +21,6 @@
     <string name="browser_launch_failed">Impossible de lancer un navigateur, en avez-vous un \?</string>
     <string name="mention_notification">%1$s vous a mentionné</string>
     <string name="app_name">PixelDroid</string>
-    <string name="create_a_new_post">Créez une nouvelle publication !</string>
     <string name="token_error">Erreur lors de l\'obtention du jeton</string>
     <string name="connect_to_pixelfed">Se connecter à PixelFed</string>
     <string name="theme_title">Thème de l’application</string>
@@ -40,16 +33,11 @@
     <string name="capture_button_alt">Capturer</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
     <string name="gallery_button_alt">Gallerie</string>
-    <string name="capture_mode_camera">Appareil photo</string>
-    <string name="delete_title">Confirmer</string>
     <string name="NoCommentsToShow">Aucun commentaire dans cette publication…</string>
     <string name="domain_of_your_instance">Domaine de votre instance</string>
     <string name="you_are_in_offline_mode">Vous êtes en mode hors ligne mais vous pouvez continuer accéder à un certain contenu !</string>
-    <string name="enter">Entrez</string>
-    <string name="login_empty_string_error">L’adresse de l’instance ne peut être laissée vide !</string>
-    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Média caché 
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Média caché
 \n (appuyez pour afficher)</string>
     <string name="CommentDisplay">pour afficher…</string>
     <string name="login_connection_required_once">Vous devez vous connecter à Internet au moins une fois afin de pouvoir utiliser PixelDroid :(</string>
-    <string name="auth_error_toast_msg">Le serveur a répondu avec une erreur, veuillez réessayer !</string>
 </resources>

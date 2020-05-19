@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PixelDroid</string>
-    <string name="menu_slideshow">Account name</string>
-    <string name="menu_subtitle">Account information</string>
     <string name="menu_account">My Profile</string>
     <string name="menu_settings">Settings</string>
     <string name="invalid_domain">"Invalid domain"</string>
@@ -10,25 +8,21 @@
     <string name="browser_launch_failed">"Could not launch a browser, do you have one?"</string>
     <string name="auth_failed">"Could not authenticate"</string>
     <string name="token_error">"Error getting token"</string>
+    <string name="instance_error">"Could not get instance information"</string>
     <string name="title_activity_settings2">Settings</string>
     <!-- Theme Preferences -->
     <string name="theme_title">Application Theme</string>
     <string name="theme_header">Theme</string>
 
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="followed_notification">%1$s followed you</string>
     <string name="mention_notification">%1$s mentioned you</string>
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
 
-    <string name="create_a_new_post">Create a new post!</string>
-    <string name="take_a_picture">Take a picture</string>
-    <string name="upload_a_picture">Upload a picture</string>
-    <string name="or">or</string>
     <string name="description">Description…</string>
     <string name="send">send</string>
     <string name="whats_an_instance">"What's an instance?"</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Log out</string>
 
     <string name="lbl_brightness">BRIGHTNESS</string>
     <string name="lbl_contrast">CONTRAST</string>
@@ -43,18 +37,15 @@
     <string name="capture_button_alt">Capture</string>
     <string name="switch_camera_button_alt">Switch camera</string>
     <string name="gallery_button_alt">Gallery</string>
-    <string name="capture_mode_camera">Camera</string>
-    <string name="delete_title">Confirm</string>
     <string name="share_picture">Share picture…</string>
     <string name="NoCommentsToShow">No comments on this post…</string>
     <string name="CommentDisplay"> to show…</string>
     <string name="domain_of_your_instance">Domain of your instance</string>
     <string name="connect_to_pixelfed">Connect to Pixelfed</string>
-    <string name="login_connection_required_once">You need to connect to the internet at least once to use PixelDroid :(</string>
+    <string name="login_connection_required_once">You need to be online to be able to add the first account and use PixelDroid :(</string>
     <string name="you_are_in_offline_mode">You are in offline mode, but you can still view some content!</string>
-    <string name="enter">Enter</string>
-    <string name="auth_error_toast_msg">Server has responded with an error, try again!</string>
-    <string name="login_empty_string_error">Instance address cannot be empty!</string>
+    <string name="add_account_name">Add Account</string>
+    <string name="add_account_description">Add another Pixelfed Account</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media \n (click to show)</string>
 
 </resources>
