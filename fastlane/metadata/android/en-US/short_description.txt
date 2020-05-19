@@ -1,0 +1,2 @@
+Free (as in freedom) Android client for Pixelfed, the federated image sharing platform.
+
