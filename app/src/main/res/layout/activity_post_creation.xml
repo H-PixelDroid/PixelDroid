@@ -19,37 +19,51 @@
         android:background="#88000000">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:hint="@string/description"
-            app:errorEnabled="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="fill_horizontal"
-            android:paddingStart="15dp"
+            android:layout_weight="1"
+            android:hint="@string/description"
+            android:padding="5dp"
             android:textColorHint="@color/colorPrimaryTab"
+            app:errorEnabled="true"
             app:errorTextColor="@color/colorPrimaryError">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_post_description_input_field"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/post_creation_send_button"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/send"
-            android:backgroundTint="@color/colorButtonBg"
-            android:textColor="@color/colorButtonText"
-            android:layout_margin="15dp"
-            android:layout_gravity="center_vertical"
-            tools:ignore="PrivateResource"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkSensitive"
+                android:layout_width="match_parent"
+                android:layout_height="31dp"
+                android:layout_marginTop="5dp"
+                android:buttonTint="#000000"
+                android:text="Sensitive" />
+
+            <Button
+                android:id="@+id/post_creation_send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="58dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/colorButtonBg"
+                android:text="@string/send"
+                android:textColor="@color/colorButtonText"
+                tools:ignore="PrivateResource" />
+        </LinearLayout>
 
     </LinearLayout>
 

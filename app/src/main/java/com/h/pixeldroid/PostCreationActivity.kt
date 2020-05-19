@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -41,9 +42,13 @@ class PostCreationActivity : AppCompatActivity() {
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var pictureFrame: ImageView
     private lateinit var image: File
+<<<<<<< Updated upstream
     private var user: UserDatabaseEntity? = null
 
     private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
+=======
+    private var isSensitive = false
+>>>>>>> Stashed changes
 
     private var description: String = ""
 
@@ -82,6 +87,11 @@ class PostCreationActivity : AppCompatActivity() {
 
         // edit the picture
         // TODO
+
+        // Listen to sensitive checkBox
+        findViewById<CheckBox>(R.id.checkSensitive).setOnClickListener {
+            isSensitive = !isSensitive
+        }
 
         // get the description and send the post to PixelFed
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
@@ -155,7 +165,8 @@ class PostCreationActivity : AppCompatActivity() {
         pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
             statusText = description,
-            media_ids = listOf(id)
+            media_ids = listOf(id),
+            sensitive = isSensitive
         ).enqueue(object: Callback<Status> {
             override fun onFailure(call: Call<Status>, t: Throwable) {
                 Toast.makeText(applicationContext,"Post upload failed",Toast.LENGTH_SHORT).show()
