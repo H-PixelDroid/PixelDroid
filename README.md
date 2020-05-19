@@ -4,6 +4,8 @@ Free (as in freedom) Android client for Pixelfed, the federated image sharing pl
 
 [![Build Status](https://gitlab.com/Matttter/PixelDroid/badges/master/pipeline.svg)](https://gitlab.com/Matttter/PixelDroid/pipelines) [![Maintainability](https://api.codeclimate.com/v1/badges/a4f1747dc60b96eb74df/maintainability)](https://codeclimate.com/github/H-PixelDroid/PixelDroid/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a4f1747dc60b96eb74df/test_coverage)](https://codeclimate.com/github/H-PixelDroid/PixelDroid/test_coverage) [![Translation status](https://weblate.pixeldroid.org/widgets/pixeldroid/-/pixeldroid/svg-badge.svg)](https://weblate.pixeldroid.org/engage/pixeldroid/?utm_source=widget)  
 
+<a href=https://apt.izzysoft.de/fdroid/index/apk/com.h.pixeldroid><img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" width="170"></a>
+
 ## Compiling the code yourself  
 If you want to try out PixelDroid on your own device, you can try to compile the source code yourself. To do that you will need to install [Android Studio](https://developer.android.com/studio/).  
   
