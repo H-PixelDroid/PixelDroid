@@ -37,7 +37,10 @@
     <string name="you_are_in_offline_mode">您处于离线模式，但仍可以查看已缓存内容！</string>
     <string name="connect_to_pixelfed">连接至 Pixelfed</string>
     <string name="share_picture">分享图片……</string>
-    <string name="login_connection_required_once">您至少需要连接到互联网一次才能使用 PixelDroid :(</string>
+    <string name="login_connection_required_once">您需要联网才能添加第一个帐户并使用 PixelDroid :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">内容警告 / 工作场所不宜 / 隐藏媒体 
 \n （单击以显示）</string>
+    <string name="add_account_description">添加另一个 Pixelfed 用户</string>
+    <string name="add_account_name">添加用户</string>
+    <string name="instance_error">无法获取实例信息</string>
 </resources>
