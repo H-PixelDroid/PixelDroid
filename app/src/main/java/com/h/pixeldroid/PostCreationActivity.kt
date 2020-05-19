@@ -42,13 +42,10 @@ class PostCreationActivity : AppCompatActivity() {
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var pictureFrame: ImageView
     private lateinit var image: File
-<<<<<<< Updated upstream
     private var user: UserDatabaseEntity? = null
 
     private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
-=======
     private var isSensitive = false
->>>>>>> Stashed changes
 
     private var description: String = ""
 
