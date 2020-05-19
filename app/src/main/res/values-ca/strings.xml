@@ -24,7 +24,7 @@
     <string name="liked_notification">%1$s ha dona\'t m\'agrada a la teva publicació</string>
     <string name="theme_title">Tema de l\'applicació</string>
     <string name="switch_camera_button_alt">Canviar la càmera</string>
-    <string name="login_connection_required_once">Per utilitzar PixelDroid, has de connectar-te a Internet almenys una vegada :(</string>
+    <string name="login_connection_required_once">Per poder afegir el primer compte i utilitzar PixelDroid, heu d’estar en línia :(</string>
     <string name="theme_header">Tema</string>
     <string name="lbl_brightness">BRILLANTOR</string>
     <string name="lbl_contrast">CONTRAST</string>
@@ -40,4 +40,7 @@
     <string name="you_are_in_offline_mode">Estàs en mode fora de línia, però encara pots veure algun contingut!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Imatges ocultes
 \n(fes clic per mostrar)</string>
+    <string name="add_account_description">Afegeix un altre compte</string>
+    <string name="add_account_name">Afegeix un compte</string>
+    <string name="instance_error">No s\'ha pogut obtenir informació sobre la instància</string>
 </resources>
