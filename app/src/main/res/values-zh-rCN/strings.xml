@@ -14,10 +14,10 @@
     <string name="app_name">PixelDroid</string>
     <string name="title_activity_settings2">配置</string>
     <string name="theme_title">应用主题</string>
-    <string name="followed_notification">关注了你</string>
-    <string name="mention_notification">提到了你</string>
-    <string name="shared_notification">分享了你的帖文</string>
-    <string name="liked_notification">给你的帖文点赞</string>
+    <string name="followed_notification">%1$s 关注了你</string>
+    <string name="mention_notification">%1$s 提到了你</string>
+    <string name="shared_notification">%1$s 分享了你的帖文</string>
+    <string name="liked_notification">%1$s 给你的帖文点赞</string>
     <string name="description">描述……</string>
     <string name="whats_an_instance">什么是实例？</string>
     <string name="lbl_brightness">亮度</string>
