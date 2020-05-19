@@ -32,7 +32,7 @@
     <string name="tab_edit">ÉDITER</string>
     <string name="capture_button_alt">Capturer</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
-    <string name="gallery_button_alt">Gallerie</string>
+    <string name="gallery_button_alt">Galerie</string>
     <string name="NoCommentsToShow">Aucun commentaire dans cette publication…</string>
     <string name="domain_of_your_instance">Domaine de votre instance</string>
     <string name="you_are_in_offline_mode">Vous êtes en mode hors ligne mais vous pouvez continuer accéder à un certain contenu !</string>
