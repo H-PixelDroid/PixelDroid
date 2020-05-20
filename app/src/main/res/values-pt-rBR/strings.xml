@@ -1,2 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="capture_button_alt">Capturar</string>
+    <string name="switch_camera_button_alt">Mudar câmera</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Mídia oculta
+\n (clicar para visualizar)</string>
+    <string name="theme_title">Tema da Aplicação</string>
+    <string name="instance_error">Não foi possível obter informações sobre a instância</string>
+    <string name="token_error">Erro na obtenção do token</string>
+    <string name="browser_launch_failed">Não foi possível abrir um navegador, você tem algum\?</string>
+    <string name="registration_failed">Não foi possível registrar a aplicação com este servidor</string>
+    <string name="invalid_domain">Domínio inválido</string>
+    <string name="add_account_description">Adicionar outra conta Pixelfed</string>
+    <string name="add_account_name">Adicionar Conta</string>
+    <string name="you_are_in_offline_mode">Você está em modo offline, mas ainda pode ver alguns conteúdos!</string>
+    <string name="login_connection_required_once">Você precisa estar conectado para poder adicionar a primeira conta e usar o PixelDroid :(</string>
+    <string name="connect_to_pixelfed">Conectar-se à Pixelfed</string>
+    <string name="domain_of_your_instance">Domínio da sua instância</string>
+    <string name="CommentDisplay">mostrar…</string>
+    <string name="NoCommentsToShow">Nenhum comentário…</string>
+    <string name="share_picture">Compartilhar imagem…</string>
+    <string name="gallery_button_alt">Galeria</string>
+    <string name="image_download_success">A imagem foi transferida com sucesso</string>
+    <string name="image_download_downloading">Baixando o arquivo…</string>
+    <string name="image_download_failed">O download não deu certo, por favor, tente novamente</string>
+    <string name="save_to_gallery">Salvar na Galeria…</string>
+    <string name="tab_edit">EDITAR</string>
+    <string name="tab_filters">FILTROS</string>
+    <string name="lbl_saturation">SATURAÇÃO</string>
+    <string name="lbl_contrast">CONTRASTE</string>
+    <string name="lbl_brightness">BRILHO</string>
+    <string name="logout">Sair</string>
+    <string name="whats_an_instance">O que é uma instância\?</string>
+    <string name="send">enviar</string>
+    <string name="description">Descrição…</string>
+    <string name="liked_notification">%1$s curtiu o seu post</string>
+    <string name="shared_notification">%1$s compartilhou o seu post</string>
+    <string name="mention_notification">%1$s mencionou você</string>
+    <string name="followed_notification">%1$s começou a te seguir</string>
+    <string name="theme_header">Tema</string>
+    <string name="title_activity_settings2">Configurações</string>
+    <string name="auth_failed">Falha na autenticação</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="menu_account">Meu Perfil</string>
+    <string name="app_name">PixelDroid</string>
+</resources>
