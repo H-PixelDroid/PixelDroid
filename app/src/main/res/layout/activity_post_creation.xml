@@ -14,42 +14,56 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:background="#88000000">
+        android:background="#88000000"
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
+        <ProgressBar
+            android:id="@+id/uploadProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:hint="@string/description"
-            app:errorEnabled="true"
-            android:layout_gravity="fill_horizontal"
-            android:paddingStart="15dp"
-            android:textColorHint="@color/colorPrimaryTab"
-            app:errorTextColor="@color/colorPrimaryError">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/new_post_description_input_field"
-                android:layout_width="match_parent"
+            android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                android:textColor="@color/colorPrimary"/>
+                android:layout_gravity="fill_horizontal"
+                android:layout_weight="1"
+                android:hint="@string/description"
+                android:paddingStart="15dp"
+                android:textColorHint="@color/colorPrimaryTab"
+                app:errorEnabled="true"
+                app:errorTextColor="@color/colorPrimaryError">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_post_description_input_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/colorPrimary" />
 
-        <Button
-            android:id="@+id/post_creation_send_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/send"
-            android:backgroundTint="@color/colorButtonBg"
-            android:textColor="@color/colorButtonText"
-            android:layout_margin="15dp"
-            android:layout_gravity="center_vertical"
-            tools:ignore="PrivateResource"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/post_creation_send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="15dp"
+                android:backgroundTint="@color/colorButtonBg"
+                android:enabled="false"
+                android:text="@string/send"
+                android:textColor="@color/colorButtonText"
+                tools:ignore="PrivateResource" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

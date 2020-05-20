@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
+import android.view.View.GONE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -15,25 +15,27 @@ import androidx.core.net.toUri
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_post_creation.*
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
+import okio.BufferedSink
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.io.*
 
-class PostCreationActivity : AppCompatActivity() {
+
+class PostCreationActivity : AppCompatActivity(){
 
     private val TAG = "Post Creation Activity"
 
@@ -42,6 +44,8 @@ class PostCreationActivity : AppCompatActivity() {
     private lateinit var pictureFrame: ImageView
     private lateinit var image: File
     private var user: UserDatabaseEntity? = null
+
+    private var listOfIds: List<String> = emptyList()
 
     private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
 
@@ -77,21 +81,21 @@ class PostCreationActivity : AppCompatActivity() {
         accessToken = user?.accessToken.orEmpty()
         pixelfedAPI = PixelfedAPI.create(domain)
 
-        // check if the picture is alright
-        // TODO
-
-        // edit the picture
-        // TODO
+        //upload the picture and display progress while doing so
+        upload()
 
         // get the description and send the post to PixelFed
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
-            if (setDescription()) upload()
+            if (setDescription() && listOfIds.isNotEmpty()) post()
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        image.delete()
+    }
+
     private fun saveImage(imageUri: Uri) {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val fileName = "PixelDroid_$timeStamp.png"
         try {
             val stream = applicationContext.contentResolver
                 .openAssetFileDescriptor(imageUri, "r")!!
@@ -99,9 +103,8 @@ class PostCreationActivity : AppCompatActivity() {
             val bm = BitmapFactory.decodeStream(stream)
             val bos = ByteArrayOutputStream()
             bm.compress(Bitmap.CompressFormat.PNG, 0, bos)
-            image = File(
-                applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                fileName)
+            image = File.createTempFile("temp_compressed_img", ".png", cacheDir)
+
             val fos = FileOutputStream(image)
             fos.write(bos.toByteArray())
             fos.flush()
@@ -117,7 +120,7 @@ class PostCreationActivity : AppCompatActivity() {
         val content = textField.text.toString()
         if (content.length > maxLength) {
             // error, too much characters
-            textField.error = "Description must contain $maxLength characters at most."
+            textField.error = "Description can contain at most $maxLength characters."
             return false
         }
         // store the description
@@ -125,37 +128,45 @@ class PostCreationActivity : AppCompatActivity() {
         return true
     }
 
-    private fun upload() {
-        val rBody: RequestBody = image.asRequestBody("image/*".toMediaTypeOrNull())
-        val part = MultipartBody.Part.createFormData("file", image.name, rBody)
-        pixelfedAPI.mediaUpload("Bearer $accessToken", part).enqueue(object:
-            Callback<Attachment> {
-            override fun onFailure(call: Call<Attachment>, t: Throwable) {
-                Log.e(TAG, t.toString() + call.request())
-                Toast.makeText(applicationContext,"Picture upload error!",Toast.LENGTH_SHORT).show()
+    private fun upload(){
+        val imagePart = ProgressRequestBody(image)
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("file", image.name, imagePart)
+            .build()
+
+        val sub = imagePart.progressSubject
+            .subscribeOn(Schedulers.io())
+            .subscribe { percentage ->
+                uploadProgressBar.progress = percentage.toInt()
             }
 
-            override fun onResponse(call: Call<Attachment>, response: Response<Attachment>) {
-                if (response.code() == 200) {
-                    val body = response.body()!!
-                    if (body.type.name == "image") {
-                        post(body.id)
-                    } else
-                        Toast.makeText(applicationContext, "Upload error: wrong picture format.", Toast.LENGTH_SHORT).show()
-                } else {
-                    Log.e(TAG, "Server responded: $response" + call.request() + call.request().body)
-                    Toast.makeText(applicationContext,"Upload error: bad request format",Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
+        var postSub : Disposable?= null
+        val inter = pixelfedAPI.uploadImage("Bearer $accessToken", requestBody.parts[0])
+
+        postSub = inter
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ attachment ->
+                listOfIds = listOf(attachment.id)
+            },{e->
+                 //TODO add proper error handling here ("retry uploading" button for example)
+                e.printStackTrace()
+                postSub?.dispose()
+                sub.dispose()
+            }, {
+                uploadProgressBar.visibility = GONE
+                post_creation_send_button.isEnabled = true
+                postSub?.dispose()
+                sub.dispose()
+            })
     }
 
-    private fun post(id: String) {
-        if (id.isEmpty()) return
+    private fun post() {
         pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
             statusText = description,
-            media_ids = listOf(id)
+            media_ids = listOfIds
         ).enqueue(object: Callback<Status> {
             override fun onFailure(call: Call<Status>, t: Throwable) {
                 Toast.makeText(applicationContext,"Post upload failed",Toast.LENGTH_SHORT).show()
@@ -165,7 +176,9 @@ class PostCreationActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Status>, response: Response<Status>) {
                 if (response.code() == 200) {
                     Toast.makeText(applicationContext,"Post upload success",Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    val intent = Intent(this@PostCreationActivity, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
                 } else {
                     Toast.makeText(applicationContext,"Post upload failed : not 200",Toast.LENGTH_SHORT).show()
                     Log.e(TAG, call.request().toString() + response.raw().toString())
@@ -174,4 +187,57 @@ class PostCreationActivity : AppCompatActivity() {
         })
     }
 
+}
+
+class ProgressRequestBody(private val mFile: File) : RequestBody() {
+
+    private val getProgressSubject: PublishSubject<Float> = PublishSubject.create()
+
+    val progressSubject: Observable<Float>
+        get() {
+            return getProgressSubject
+        }
+
+
+    override fun contentType(): MediaType? {
+        return "image/png".toMediaTypeOrNull()
+    }
+
+    @Throws(IOException::class)
+    override fun contentLength(): Long {
+        return mFile.length()
+    }
+
+    @Throws(IOException::class)
+    override fun writeTo(sink: BufferedSink) {
+        val fileLength = contentLength()
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        val `in` = FileInputStream(mFile)
+        var uploaded: Long = 0
+
+        `in`.use {
+            var read: Int
+            var lastProgressPercentUpdate = 0.0f
+            read = it.read(buffer)
+            while (read != -1) {
+
+                uploaded += read.toLong()
+                sink.write(buffer, 0, read)
+                read = it.read(buffer)
+
+                val progress = (uploaded.toFloat() / fileLength.toFloat()) * 100f
+                //prevent publishing too many updates, which slows upload, by checking if the upload has progressed by at least 1 percent
+                if (progress - lastProgressPercentUpdate > 1 || progress == 100f) {
+                    // publish progress
+                    getProgressSubject.onNext(progress)
+                    lastProgressPercentUpdate = progress
+                }
+            }
+        }
+    }
+
+
+    companion object {
+        private const val DEFAULT_BUFFER_SIZE = 2048
+    }
 }
