@@ -89,7 +89,7 @@
     <string name="follow">اتبع</string>
     <string name="edit_profile">تعديل الملف الشخصي</string>
     <string name="search">البحث</string>
-    <string name="posts">المنشورات</string>
+    <string name="posts">المشاركات</string>
     <string name="accounts">الحسابات</string>
     <string name="hashtags">الوسوم</string>
     <string name="media_upload_completed">{gmd_cloud_done} تم تحميل الوسائط</string>
