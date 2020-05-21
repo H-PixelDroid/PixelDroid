@@ -64,4 +64,5 @@
     <string name="normal_filter">Normaal</string>
     <string name="picture_format_error">Uploadfout: verkeerd beeldformaat.</string>
     <string name="save_image_success">Beeld succesvol opgeslagen</string>
+    <string name="upload_post_success">Post met succes geüpload</string>
 </resources>
