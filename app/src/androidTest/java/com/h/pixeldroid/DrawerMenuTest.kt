@@ -172,8 +172,7 @@ class DrawerMenuTest {
         Thread.sleep(100)
         // Open bookmarks tab
         onView(withId(R.id.profile_view_pager))
-            .perform(ViewActions.swipeLeft()) // collections
-            .perform(ViewActions.swipeLeft())
+            .perform(CustomMatchers.slowSwipeLeft(true))
         Thread.sleep(1000)
 
         // Open first post
