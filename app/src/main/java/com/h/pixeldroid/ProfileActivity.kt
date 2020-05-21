@@ -21,6 +21,7 @@ import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Relationship
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
 import retrofit2.Callback
@@ -102,7 +103,8 @@ class ProfileActivity : AppCompatActivity() {
         ImageConverter.setRoundImageFromURL(View(applicationContext), account!!.avatar, profilePicture)
 
         val description = findViewById<TextView>(R.id.descriptionTextView)
-        description.text = account!!.note
+        description.text = parseHTMLText(account!!.note, emptyList(), pixelfedAPI,
+            applicationContext, "Bearer $accessToken")
 
         val accountName = findViewById<TextView>(R.id.accountNameTextView)
         accountName.text = account!!.display_name
