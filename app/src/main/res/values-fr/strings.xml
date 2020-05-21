@@ -6,7 +6,7 @@
     <string name="menu_account">Mon profil</string>
     <string name="menu_settings">Réglages</string>
     <string name="followed_notification">%1$s vous a suivi</string>
-    <string name="shared_notification">%1$s a partagé votre publication</string>
+    <string name="shared_notification">%1$s a partagé(e) votre publication</string>
     <string name="liked_notification">%1$s a aimé(e) votre publication</string>
     <string name="description">Description…</string>
     <string name="send">envoyer</string>
@@ -39,12 +39,12 @@
 \n(Cliquer pour le montrer)</string>
     <string name="CommentDisplay">Montrer…</string>
     <string name="login_connection_required_once">Pour utiliser PixelDroid, vous devez vous connecter au moins une fois à internet :(</string>
-    <string name="add_account_description">Ajouter un autre compte PixelFed</string>
+    <string name="add_account_description">Ajouter un autre compte Pixelfed</string>
     <string name="add_account_name">Ajouter un compte</string>
     <string name="instance_error">Impossible d’obtenir des informations sur l’instance</string>
     <string name="request_format_error">Erreur de téléchargement : format de requête incorrect</string>
     <string name="picture_format_error">Erreur de téléversement : format d\'image incorrect.</string>
-    <string name="upload_picture_failed">Erreur de téléchargement d\'image !</string>
+    <string name="upload_picture_failed">Erreur de téléversement d\'image !</string>
     <string name="description_max_characters">La description doit contenir au plus %1$s caractères.</string>
     <string name="save_image_success">Image enregistrée avec succès</string>
     <string name="save_image_failed">Impossible de sauvegarder l\'image</string>
@@ -52,8 +52,8 @@
     <string name="dark_theme">Sombre</string>
     <string name="light_theme">Clair</string>
     <string name="default_theme">Par défaut (Suivant votre système)</string>
-    <string name="upload_post_failed">Échec du post-téléversement</string>
-    <string name="upload_post_success">Téléversement de la publication réussi</string>
+    <string name="upload_post_failed">Échec lors du téléversement de la publication</string>
+    <string name="upload_post_success">Téléversement de la publication avec succès</string>
     <string name="posted_on">Publié le %1$s</string>
     <string name="empty_comment">Le commentaire ne doit pas être vide !</string>
     <string name="write_permission_share_pic">Vous devez accorder une autorisation d\'écriture pour partager des photos !</string>
