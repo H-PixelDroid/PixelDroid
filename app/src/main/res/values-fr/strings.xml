@@ -22,7 +22,7 @@
     <string name="mention_notification">%1$s vous a mentionné</string>
     <string name="app_name">PixelDroid</string>
     <string name="token_error">Erreur lors de l\'obtention du jeton</string>
-    <string name="connect_to_pixelfed">Se connecter à PixelFed</string>
+    <string name="connect_to_pixelfed">Se connecter à Pixelfed</string>
     <string name="theme_title">Thème de l’application</string>
     <string name="theme_header">Thème</string>
     <string name="lbl_brightness">LUMINOSITÉ</string>
