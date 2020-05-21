@@ -26,7 +26,7 @@
     <string name="theme_title">Thème de l’application</string>
     <string name="theme_header">Thème</string>
     <string name="lbl_brightness">LUMINOSITÉ</string>
-    <string name="lbl_contrast">CONTRASTE</string>
+    <string name="lbl_contrast">Contraste</string>
     <string name="lbl_saturation">SATURATION</string>
     <string name="tab_filters">FILTRES</string>
     <string name="tab_edit">ÉDITER</string>
