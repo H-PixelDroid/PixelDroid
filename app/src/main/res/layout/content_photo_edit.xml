@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+<merge xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhotoEditActivity"
-    tools:showIn="@layout/activity_photo_edit"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:id="@+id/image_preview"
+    <LinearLayout
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".70"
-        android:scaleType="centerInside" />
+        android:layout_height="match_parent"
+        tools:context=".PhotoEditActivity"
+        tools:showIn="@layout/activity_photo_edit"
+        >
+
+        <ImageView
+            android:id="@+id/image_preview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".70"
+            android:scaleType="centerInside" />
+
+        <com.h.pixeldroid.utils.NonSwipeableViewPager
+            android:id="@+id/viewPager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".22" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".08"/>
+
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/cropImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="end|center"
+        android:backgroundTint="#FFFFFFFF"
+        android:backgroundTintMode="screen"
         android:src="@drawable/ic_crop_black_24dp" />
-
-    <com.h.pixeldroid.utils.NonSwipeableViewPager
-        android:id="@+id/viewPager"
-        android:layout_above="@+id/tabs"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_below="@+id/image_preview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".22" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        app:tabGravity="fill"
-        app:tabMode="fixed"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".08"/>
-
-</LinearLayout>
+</merge>
