@@ -42,15 +42,9 @@
     <string name="add_account_description">Ajouter un autre compte PixelFed</string>
     <string name="add_account_name">Ajouter un compte</string>
     <string name="instance_error">Impossible d’obtenir des informations sur l’instance</string>
-<<<<<<< HEAD
-    <string name="request_format_error">"Erreur de téléchargement: format de requête  incorrect"</string>
-    <string name="picture_format_error">Erreur de téléchargement: format d\'image incorrect.</string>
-    <string name="upload_picture_failed">Erreur de téléchargement d\'image!</string>
-=======
     <string name="request_format_error">Erreur de téléversement: format de requête incorrect</string>
     <string name="picture_format_error">Erreur de téléversement: format d\'image incorrect.</string>
     <string name="upload_picture_failed">Erreur de téléversement d\'image!</string>
->>>>>>> weblate/master
     <string name="description_max_characters">La description doit contenir au plus %1$s caractères.</string>
     <string name="save_image_success">Image enregistrée avec succès</string>
     <string name="save_image_failed">Impossible de sauvegarder l\'image</string>
@@ -58,8 +52,6 @@
     <string name="dark_theme">Sombre</string>
     <string name="light_theme">Clair</string>
     <string name="default_theme">Par défaut (en suivant le système)</string>
-<<<<<<< HEAD
-=======
     <string name="upload_post_failed">Échec du téléversement de la publication</string>
     <string name="upload_post_success">Réussite du téléversement de la publication</string>
     <string name="posted_on">Piublié le %1$s</string>
@@ -102,5 +94,4 @@
     <string name="posts">PUBLICATIONS</string>
     <string name="accounts">COMPTES</string>
     <string name="hashtags">HASHTAGS</string>
->>>>>>> weblate/master
 </resources>

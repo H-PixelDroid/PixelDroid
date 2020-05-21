@@ -99,7 +99,6 @@
     <string name="hashtags">HASHTAGS</string>
     <!-- Sensitive media -->
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media \n (click to show)</string>
-<<<<<<< HEAD
 
     <!-- Shown when image has finished uploading. {gmd_cloud_done} is an icon, position it as is appropriate in target language -->
     <string name="media_upload_completed">{gmd_cloud_done} Media upload completed</string>
@@ -110,6 +109,3 @@
     <string name="retry">Retry</string>
 
 </resources>
-=======
-</resources>
->>>>>>> weblate/master

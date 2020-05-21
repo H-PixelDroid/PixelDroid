@@ -75,8 +75,6 @@
     <string name="dark_theme">Тёмный</string>
     <string name="light_theme">Светлый</string>
     <string name="default_theme">По умолчанию (как в системе)</string>
-<<<<<<< HEAD
-=======
     <string name="follow_status_failed">Не удалось получить статус подписки</string>
     <string name="follow_error">Не удалось подписаться</string>
     <string name="action_not_allowed">Это действие не разрешено</string>
@@ -96,5 +94,4 @@
     <string name="accounts">АККАУНТЫ</string>
     <string name="hashtags">ХЭШТЕГИ</string>
     <string name="follow_button_failed">Не удалось отобразить кнопку подписки</string>
->>>>>>> weblate/master
 </resources>
