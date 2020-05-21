@@ -75,4 +75,23 @@
     <string name="dark_theme">Тёмный</string>
     <string name="light_theme">Светлый</string>
     <string name="default_theme">По умолчанию (как в системе)</string>
+    <string name="follow_status_failed">Не удалось получить статус подписки</string>
+    <string name="follow_error">Не удалось подписаться</string>
+    <string name="action_not_allowed">Это действие не разрешено</string>
+    <string name="unfollow_error">Не удалось отписаться</string>
+    <string name="access_token_invalid">Этот токен доступа недействительный</string>
+    <string name="default_nposts">-
+\nПостов</string>
+    <string name="default_nfollowers">-
+\nПодписчиков</string>
+    <string name="default_nfollowing">-
+\nПодписок</string>
+    <string name="no_username">Нет имени пользователя</string>
+    <string name="follow">Подписаться</string>
+    <string name="edit_profile">Редактировать профиль</string>
+    <string name="search">Поиск</string>
+    <string name="posts">ПОСТЫ</string>
+    <string name="accounts">АККАУНТЫ</string>
+    <string name="hashtags">ХЭШТЕГИ</string>
+    <string name="follow_button_failed">Не удалось отобразить кнопку подписки</string>
 </resources>

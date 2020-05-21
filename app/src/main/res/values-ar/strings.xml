@@ -42,4 +42,8 @@
     <string name="add_account_description">إضافة حساب PixelFed آخر</string>
     <string name="add_account_name">إضافة حساب</string>
     <string name="instance_error">تعذّر الحصول على معلومات مثيل الخادم</string>
+    <string name="save_image_failed">تعذر حفظ الصورة</string>
+    <string name="permission_denied">رُفض التصريح</string>
+    <string name="dark_theme">داكن</string>
+    <string name="light_theme">فاتح</string>
 </resources>
