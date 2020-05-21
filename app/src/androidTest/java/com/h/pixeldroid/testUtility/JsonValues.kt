@@ -1,5 +1,8 @@
 package com.h.pixeldroid.testUtility
 
+import com.google.gson.Gson
+import com.h.pixeldroid.objects.Application
+
 class JsonValues {
     companion object {
         const val likedJson = """{"id":"156491373246287872","created_at":"2020-04-16T20:00:50.000000Z","in_reply_to_id":null,"in_reply_to_account_id":null,"sensitive":false,"spoiler_text":"","visibility":"public","language":"en","uri":"https:\/\/pixelfed.de\/p\/machintuck\/156491373246287872","url":"https:\/\/pixelfed.de\/p\/machintuck\/156491373246287872","replies_count":1,"reblogs_count":13,"favourites_count":3,"reblogged":false,"favourited":true,"muted":false,"bookmarked":false,"pinned":false,"content":"<a class=\"u-url mention\" href=\"https:\/\/pixelfed.de\/Dobios\" rel=\"external nofollow noopener\">@Dobios<\/a> <a class=\"u-url mention\" href=\"https:\/\/pixelfed.de\/Dante\" rel=\"external nofollow noopener\">@Dante<\/a>","reblog":null,"application":{"name":"web","website":null},"mentions":[{"id":"136800034732773376","url":"https:\/\/pixelfed.de\/Dobios","username":"Dobios","acct":"Dobios"},{"id":"136453537340198912","url":"https:\/\/pixelfed.de\/dante","username":"dante","acct":"dante"}],"tags":[{"name":"mushroom","url":"https:\/\/pixelfed.de\/discover\/tags\/mushroom"},{"name":"commentsstillbroken","url":"https:\/\/pixelfed.de\/discover\/tags\/commentsstillbroken"},{"name":"fixyourapi","url":"https:\/\/pixelfed.de\/discover\/tags\/fixyourapi"},{"name":"pls","url":"https:\/\/pixelfed.de\/discover\/tags\/pls"}],"emojis":[],"card":null,"poll":null,"account":{"id":"145183325781364736","username":"machintuck","acct":"machintuck","display_name":"Arthur","locked":false,"created_at":"2020-03-16T15:06:42.000000Z","followers_count":4,"following_count":4,"statuses_count":5,"note":"","url":"https:\/\/pixelfed.de\/machintuck","avatar":"https:\/\/pixelfed.de\/storage\/avatars\/014\/518\/332\/578\/136\/473\/6\/gbdKtKOhTkNA5UxCzeAQ_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35","avatar_static":"https:\/\/pixelfed.de\/storage\/avatars\/014\/518\/332\/578\/136\/473\/6\/gbdKtKOhTkNA5UxCzeAQ_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35","header":"","header_static":"","emojis":[],"moved":null,"fields":null,"bot":false,"software":"pixelfed","is_admin":false},"media_attachments":[{"id":"19228","type":"image","url":"https:\/\/pixelfed.de\/storage\/m\/d0931bf747b992a1c83e055753526516f2706111\/9b4393bfd32c643a265bd1c557b981f167d60969\/lbOqQOMeHLGmhYgehhZUBJ4JvjtKulh83BA97LoP.jpeg","remote_url":null,"preview_url":"https:\/\/pixelfed.de\/storage\/m\/d0931bf747b992a1c83e055753526516f2706111\/9b4393bfd32c643a265bd1c557b981f167d60969\/lbOqQOMeHLGmhYgehhZUBJ4JvjtKulh83BA97LoP_thumb.jpeg","text_url":null,"meta":null,"description":null}]}"""
@@ -175,5 +178,8 @@ class JsonValues {
             "version": "69.420",
             "registrations": true
         }"""
+        var applicationJson = Gson().toJson(Application(name="PixelDroid",
+            website=null, vapid_key=null, client_id="286",
+            client_secret="2q3dHY29U8GNZ2eY6cbcw010cWk3qVGmWXxAJzn7"))
     }
 }
