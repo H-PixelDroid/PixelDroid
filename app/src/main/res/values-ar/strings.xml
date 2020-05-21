@@ -86,7 +86,7 @@
     <string name="unfollow_error">تعذر الغاء المتابعة</string>
     <string name="default_nfollowing">-
 \nالمتابَعون</string>
-    <string name="no_username">ليس هناك اسم مستخدم</string>
+    <string name="no_username">"لا يوجد اسم المستخدم "</string>
     <string name="follow">تابِع</string>
     <string name="edit_profile">تعديل الملف التعريفي</string>
     <string name="search">البحث</string>
