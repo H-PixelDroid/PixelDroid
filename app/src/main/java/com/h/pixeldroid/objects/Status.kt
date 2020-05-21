@@ -333,7 +333,7 @@ data class Status(
     ) {
         //Show all comments of a post
         if (replies_count == 0) {
-            holder.viewComment.text =  holder.context.getString(R.string.no_comments)
+            holder.viewComment.text =  holder.context.getString(R.string.NoCommentsToShow)
         } else {
             holder.viewComment.apply {
                 text = "$replies_count ${holder.context.getString(R.string.CommentDisplay)}"
