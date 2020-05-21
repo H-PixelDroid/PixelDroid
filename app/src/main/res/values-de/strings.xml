@@ -66,7 +66,7 @@
     <string name="upload_post_success">Erfolgreich hochgeladen</string>
     <string name="upload_post_error">Hochladen des Beitrags fehlgeschlagen</string>
     <string name="comment_error">Kommentarfehler!</string>
-    <string name="comment_posted">Kommentar platziert: %1$s</string>
+    <string name="comment_posted">Kommentar: %1$s geschrieben!</string>
     <string name="nb_posts">%1$s
 \nBeiträge</string>
     <string name="nb_followers">%1$s
@@ -90,11 +90,12 @@
     <string name="posts">BEITRÄGE</string>
     <string name="posting_image_accessibility_hint">Bild wird gepostet</string>
     <string name="media_upload_failed">{gmd_cloud_off} Hochladen der Medien fehlgeschlagen, versuche es nochmal oder überprüfe deine Netzwerkverbindung</string>
-    <string name="media_upload_completed">" {gmd_cloud_done} Hochladen der Medien abgeschlossen"</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Hochladen der Medien abgeschlossen</string>
     <string name="request_format_error">Fehler beim Hochladen: Falsches Request Format</string>
     <string name="feed_failed">Konnte den Feed nicht laden</string>
     <string name="posted_on">Erstellt am %1$s</string>
     <string name="write_permission_download_pic">Für das Herunterladen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
     <string name="write_permission_share_pic">Für die Teilen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
-    <string name="follow_status_failed">Konnte Followzustand nicht erhalten.</string>
+    <string name="follow_status_failed">Konnte den Folgestatus nicht erhalten</string>
+    <string name="retry">Wiederholen</string>
 </resources>
