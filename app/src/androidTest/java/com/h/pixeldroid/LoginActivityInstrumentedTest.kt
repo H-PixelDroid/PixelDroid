@@ -47,11 +47,11 @@ class LoginCheckIntent {
         ActivityScenario.launch(LoginActivity::class.java)
         val expectedIntent: Matcher<Intent> = allOf(
             hasAction(ACTION_VIEW),
-            hasDataString(containsString("pixelfed.social"))
+            hasDataString(containsString("pixelfed.de"))
         )
         Thread.sleep(1000)
 
-        onView(withId(R.id.editText)).perform(scrollTo()).perform(ViewActions.replaceText("pixelfed.social"), ViewActions.closeSoftKeyboard())
+        onView(withId(R.id.editText)).perform(scrollTo()).perform(ViewActions.replaceText("pixelfed.de"), ViewActions.closeSoftKeyboard())
         onView(withId(R.id.connect_instance_button)).perform(scrollTo()).perform(click())
 
         Thread.sleep(3000)

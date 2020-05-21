@@ -16,7 +16,7 @@
     <string name="liked_notification">%1$s vond je bericht leuk</string>
     <string name="shared_notification">%1$s heeft je bericht gedeeld</string>
     <string name="mention_notification">%1$s heeft je genoemd</string>
-    <string name="followed_notification">%1$s volgt je</string>
+    <string name="followed_notification">%1$s volgt jou</string>
     <string name="auth_failed">Kon niet authenticeren</string>
     <string name="app_name">PixelDroid</string>
     <string name="save_to_gallery">Opslaan in gallerij…</string>
@@ -41,4 +41,27 @@
     <string name="login_connection_required_once">Je moet met het internet verbonden zijn om je eerste account toe te voegen en PixelDroid te kunnen gebruiken :(</string>
     <string name="add_account_description">Andere Pixelfed account toevoegen</string>
     <string name="add_account_name">Account toevoegen</string>
+    <string name="upload_picture_failed">Fout bij het uploaden!</string>
+    <string name="description_max_characters">De beschrijving mag maximaal %1$s karakters bevatten.</string>
+    <string name="dark_theme">Donker</string>
+    <string name="light_theme">Licht</string>
+    <string name="search">Zoeken</string>
+    <string name="edit_profile">Profiel bewerken</string>
+    <string name="follow">Volgen</string>
+    <string name="no_username">Geen gebruikersnaam</string>
+    <string name="default_nfollowing">-
+\nVolgend</string>
+    <string name="default_nfollowers">-
+\nVolgers</string>
+    <string name="action_not_allowed">Deze actie is niet toegestaan</string>
+    <string name="nb_following">%1$s
+\nVolgend</string>
+    <string name="nb_followers">%1$s
+\nVolgers</string>
+    <string name="empty_comment">Commentaar mag niet leeg zijn!</string>
+    <string name="no_description">Geen beschrijving</string>
+    <string name="loading_toast">Er ging iets mis tijdens het laden</string>
+    <string name="normal_filter">Normaal</string>
+    <string name="picture_format_error">Uploadfout: verkeerd beeldformaat.</string>
+    <string name="save_image_success">Beeld succesvol opgeslagen</string>
 </resources>
