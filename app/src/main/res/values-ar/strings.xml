@@ -74,4 +74,8 @@
     <string name="no_description">مِن دون وصف</string>
     <string name="feed_failed">تعذّر جلب التدفق</string>
     <string name="retry">اعد المحاولة</string>
+    <string name="action_not_allowed">هذا الإجراء غير مسموح</string>
+    <string name="follow_error">تعذّرت المتابَعة</string>
+    <string name="follow_button_failed">تعذّر إظهار زر الإشتراك</string>
+    <string name="follow_status_failed">تعذّر جلب حالة الإشتراك</string>
 </resources>
