@@ -91,4 +91,7 @@
     <string name="posting_image_accessibility_hint">Bild wird gepostet</string>
     <string name="media_upload_failed">{gmd_cloud_off} Hochladen der Medien fehlgeschlagen, versuche es nochmal oder überprüfe deine Netzwerkverbindung</string>
     <string name="media_upload_completed">" {gmd_cloud_done} Hochladen der Medien abgeschlossen"</string>
+    <string name="request_format_error">Fehler beim Hochladen: Falsches Request Format</string>
+    <string name="feed_failed">Konnte den Feed nicht laden</string>
+    <string name="posted_on">Erstellt am %1$s</string>
 </resources>
