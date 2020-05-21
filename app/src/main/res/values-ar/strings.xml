@@ -42,7 +42,7 @@
     <string name="add_account_description">إضافة حساب PixelFed آخر</string>
     <string name="add_account_name">إضافة حساب</string>
     <string name="instance_error">تعذّر الحصول على معلومات مثيل الخادم</string>
-    <string name="save_image_failed">تعذر حفظ الصورة</string>
+    <string name="save_image_failed">لا يمكن حفظ الصورة</string>
     <string name="permission_denied">رُفض التصريح</string>
     <string name="dark_theme">داكن</string>
     <string name="light_theme">فاتح</string>
@@ -52,7 +52,7 @@
     <string name="upload_post_success">تم تحميل المنشور بنجاح</string>
     <string name="upload_post_failed">فشل في تحميل المنشور</string>
     <string name="upload_picture_failed">خطأ في تحميل الصورة!</string>
-    <string name="loading_toast">طرأ خطأ أنثاء التحميل</string>
+    <string name="loading_toast">حدث خلل اثناء التحميل</string>
     <string name="normal_filter">عادي</string>
     <string name="upload_post_error">فشل في تحميل المشاركة: ليس 200</string>
     <string name="nb_following">%1$s
@@ -73,4 +73,5 @@
     <string name="likes">%1$s إعجاب(إعجابات)</string>
     <string name="no_description">مِن دون وصف</string>
     <string name="feed_failed">تعذّر جلب التدفق</string>
+    <string name="retry">اعد المحاولة</string>
 </resources>
