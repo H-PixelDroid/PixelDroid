@@ -15,10 +15,10 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.DBUtils
 import retrofit2.Response
 
 abstract class ProfileTabsFragment : Fragment() {
-    private lateinit var preferences: SharedPreferences
     internal lateinit var pixelfedAPI: PixelfedAPI
     internal lateinit var adapter : ProfilePostsRecyclerViewAdapter
     private lateinit var recycler : RecyclerView
@@ -29,11 +29,14 @@ abstract class ProfileTabsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile_post, container, false)
-        preferences = requireActivity().getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-        )
-        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        accessToken = preferences.getString("accessToken", "")
+
+        val db = DBUtils.initDB(requireContext())
+
+        val user = db.userDao().getActiveUser()
+
+        val domain = user?.instance_uri.orEmpty()
+        pixelfedAPI = PixelfedAPI.create(domain)
+        accessToken = user?.accessToken.orEmpty()
 
         // Set posts RecyclerView as a grid with 3 columns
         recycler = view.findViewById(R.id.profilePostsRecyclerView)

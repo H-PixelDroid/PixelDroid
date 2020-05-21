@@ -338,11 +338,11 @@ data class Status(
             // Activate bookmarker
             setEventListener { _, buttonState ->
                 if (buttonState) {
-                    // Button is active
-                    bookmarkPostCall(holder, api, credential, this@Status)
-                } else {
-                    // Button is inactive
+                    // Button is active, unbookmark
                     unBookmarkPostCall(holder, api, credential, this@Status)
+                } else {
+                    // Button is inactive, bookmark
+                    bookmarkPostCall(holder, api, credential, this@Status)
                 }
                 //show animation or not?
                 true

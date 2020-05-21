@@ -19,6 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.ProfileBookmarkFragment
 import com.h.pixeldroid.fragments.ProfilePostFragment
+import com.h.pixeldroid.fragments.ProfileTabsFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Relationship
@@ -59,7 +60,7 @@ class ProfileActivity : AppCompatActivity() {
             setViews()
             activateFollow()
 
-            val tabs = arrayOf(ProfilePostFragment(), Fragment())
+            val tabs : Array<ProfileTabsFragment> = arrayOf(ProfilePostFragment())
             setTabs(tabs)
         } ?: run {
             pixelfedAPI.verifyCredentials("Bearer $accessToken")
@@ -69,7 +70,7 @@ class ProfileActivity : AppCompatActivity() {
                             account = response.body()!!
                             setViews()
 
-                            val tabs = arrayOf(ProfilePostFragment(), Fragment(), ProfileBookmarkFragment())
+                            val tabs = arrayOf(ProfilePostFragment(), ProfileBookmarkFragment())
                             setTabs(tabs)
                         }
                     }
@@ -120,7 +121,7 @@ class ProfileActivity : AppCompatActivity() {
         nbFollowing.setOnClickListener{ onClickFollowing() }
     }
 
-    private fun setTabs(tabs: Array<Fragment>) {
+    private fun setTabs(tabs: Array<ProfileTabsFragment>) {
         val viewPager = findViewById<ViewPager2>(R.id.profile_view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
