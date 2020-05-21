@@ -66,7 +66,7 @@
     <string name="comment_error">خطأ في التعليق!</string>
     <string name="share_image">مشاركة الصورة</string>
     <string name="write_permission_share_pic">يجب عليك منح تصريح للكتابة قصد مشاركة الصور!</string>
-    <string name="write_permission_download_pic">يجب عليك منح تصريح للكتابة قصد تنزيل الصور!</string>
+    <string name="write_permission_download_pic">تحتاج إلى منح إذن الكتابة لتنزيل الصور!</string>
     <string name="empty_comment">لا يجب ان يكون التعليق فارغًا!</string>
     <string name="posted_on">نُشِر في %1$s</string>
     <string name="shares">%1$s مشاركات</string>
