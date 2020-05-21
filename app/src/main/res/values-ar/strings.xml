@@ -83,7 +83,7 @@
     <string name="default_nposts">-
 \nمنشورات</string>
     <string name="access_token_invalid">الرمز المميز غير صالح</string>
-    <string name="unfollow_error">تعذّر إلغاء المتابعة</string>
+    <string name="unfollow_error">تعذر الغاء المتابعة</string>
     <string name="default_nfollowing">-
 \nالمتابَعين</string>
     <string name="no_username">ليس هناك اسم مستخدم</string>
