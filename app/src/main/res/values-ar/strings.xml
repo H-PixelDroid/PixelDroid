@@ -78,4 +78,10 @@
     <string name="follow_error">تعذّرت المتابَعة</string>
     <string name="follow_button_failed">تعذّر إظهار زر الإشتراك</string>
     <string name="follow_status_failed">تعذر الحصول على حالة المتابعة</string>
+    <string name="default_nfollowers">-
+\nالمتابِعين</string>
+    <string name="default_nposts">-
+\nمنشورات</string>
+    <string name="access_token_invalid">الرمز المميز غير صالح</string>
+    <string name="unfollow_error">تعذّرت عملية إلغاء المتابعة</string>
 </resources>
