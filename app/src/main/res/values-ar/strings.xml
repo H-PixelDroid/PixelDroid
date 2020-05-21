@@ -85,7 +85,7 @@
     <string name="access_token_invalid">الرمز المميز غير صالح</string>
     <string name="unfollow_error">تعذر الغاء المتابعة</string>
     <string name="default_nfollowing">-
-\nالمتابَعين</string>
+\nالمتابَعون</string>
     <string name="no_username">ليس هناك اسم مستخدم</string>
     <string name="follow">تابِع</string>
     <string name="edit_profile">تعديل الملف التعريفي</string>
