@@ -31,8 +31,7 @@
     <string name="permission_denied">Permission denied</string>
     <string name="save_image_failed">Unable to save image</string>
     <string name="save_image_success">Image succesfully saved</string>
-    <string name="description_max_characters">\"Description must contain \"</string>
-    <string name="description_max_characters_end">\" characters at most.\"</string>
+    <string name="description_max_characters">"Description must contain %1$s characters at most."</string>
     <string name="upload_picture_failed">Picture upload error!</string>
     <string name="picture_format_error">Upload error: wrong picture format.</string>
     <string name="request_format_error">Upload error: bad request format</string>
@@ -63,23 +62,22 @@
     <string name="image_download_success">Image downloaded successfully</string>
     <!-- Post attributes -->
     <string name="no_description">No description</string>
-    <string name="likes">" Likes"</string>
-    <string name="shares">" Shares"</string>
-    <string name="posted_on">\"Posted on \"</string>
+    <string name="likes">"%1$s Likes"</string>
+    <string name="shares">"%1$s Shares"</string>
+    <string name="posted_on">"Posted on %1$s"</string>
     <string name="NoCommentsToShow">No comments on this post…</string>
     <string name="empty_comment">Comment must not be empty!</string>
     <string name="write_permission_download_pic">You need to grant write permission to download pictures!</string>
     <string name="write_permission_share_pic">You need to grant write permission to share pictures!</string>
     <string name="share_image">Share Image</string>
     <string name="comment_error">Comment error!</string>
-    <string name="comment_posted">\"Comment: \"</string>
-    <string name="comment_posted_end">\" posted!\"</string>
+    <string name="comment_posted">"Comment: %1$s posted!"</string>
     <string name="comment">Comment</string>
     <string name="CommentDisplay"> to show…</string>
     <!-- Profile page -->
-    <string name="nb_posts">"\nPosts"</string>
-    <string name="nb_followers">"\nFollowers"</string>
-    <string name="nb_following">"\nFollowing"</string>
+    <string name="nb_posts">"%1$s\nPosts"</string>
+    <string name="nb_followers">"%1$s\nFollowers"</string>
+    <string name="nb_following">"%1$s\nFollowing"</string>
     <string name="follow_status_failed">Could not get follow status</string>
     <string name="follow_button_failed">Could not display follow button</string>
     <string name="follow_error">Could not follow</string>

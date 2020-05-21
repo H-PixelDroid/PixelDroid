@@ -113,13 +113,11 @@ data class Status(
         account.username.ifBlank{account.display_name.ifBlank{"NoName"}}
 
     fun getNLikes(context: Context) : CharSequence {
-        val nLikes = favourites_count
-        return nLikes.toString() + context.getString(R.string.likes)
+        return context.getString(R.string.likes).format(favourites_count.toString())
     }
 
     fun getNShares(context: Context) : CharSequence {
-        val nShares = reblogs_count
-        return nShares.toString() + context.getString(R.string.shares)
+        return context.getString(R.string.shares).format(reblogs_count.toString())
     }
 
     private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean, context: Context) {
@@ -139,7 +137,7 @@ data class Status(
                     android.text.format.DateUtils.SECOND_IN_MILLIS,
                     android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
 
-            textView.text = if(isActivity) context.getString(R.string.posted_on) + date
+            textView.text = if(isActivity) context.getString(R.string.posted_on).format(date)
                             else "$formattedDate"
 
         } catch (e: ParseException) {

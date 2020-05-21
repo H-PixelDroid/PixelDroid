@@ -117,9 +117,8 @@ class PostCreationActivity : AppCompatActivity() {
         val content = textField.text.toString()
         if (content.length > maxLength) {
             // error, too much characters
-            textField.error =
-                getString(R.string.description_max_characters) + maxLength +
-                getString(R.string.description_max_characters_end)
+            textField.error = getString(R.string.description_max_characters).format(maxLength)
+
             return false
         }
         // store the description

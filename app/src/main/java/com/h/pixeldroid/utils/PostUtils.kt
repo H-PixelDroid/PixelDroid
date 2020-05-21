@@ -180,8 +180,7 @@ abstract class PostUtils {
                         addComment(holder.context, holder.commentCont, resp.account.username, resp.content)
 
                         Toast.makeText(holder.context,
-                            holder.context.getString(R.string.comment_posted) + textIn +
-                            holder.context.getString(R.string.comment_posted_end),
+                            holder.context.getString(R.string.comment_posted).format(textIn),
                             Toast.LENGTH_SHORT).show()
                         Log.e("COMMENT SUCCESS", "posted: $textIn")
                     } else {

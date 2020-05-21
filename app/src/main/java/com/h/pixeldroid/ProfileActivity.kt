@@ -109,18 +109,18 @@ class ProfileActivity : AppCompatActivity() {
         accountName.setTypeface(null, Typeface.BOLD)
 
         val nbPosts = findViewById<TextView>(R.id.nbPostsTextView)
-        nbPosts.text =
-            account!!.statuses_count.toString() + applicationContext.getString(R.string.nb_posts)
+        nbPosts.text = applicationContext.getString(R.string.nb_posts)
+            .format(account!!.statuses_count.toString())
         nbPosts.setTypeface(null, Typeface.BOLD)
 
         val nbFollowers = findViewById<TextView>(R.id.nbFollowersTextView)
-        nbFollowers.text =
-            account!!.followers_count.toString() + applicationContext.getString(R.string.nb_followers)
+        nbFollowers.text = applicationContext.getString(R.string.nb_followers)
+            .format(account!!.followers_count.toString())
         nbFollowers.setTypeface(null, Typeface.BOLD)
 
         val nbFollowing = findViewById<TextView>(R.id.nbFollowingTextView)
-        nbFollowing.text =
-            account!!.following_count.toString() + applicationContext.getString(R.string.nb_following)
+        nbFollowing.text = applicationContext.getString(R.string.nb_following)
+            .format(account!!.following_count.toString())
         nbFollowing.setTypeface(null, Typeface.BOLD)
     }
 
