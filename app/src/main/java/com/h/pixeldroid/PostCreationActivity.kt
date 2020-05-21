@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -84,14 +85,20 @@ class PostCreationActivity : AppCompatActivity(){
         //upload the picture and display progress while doing so
         upload()
 
-        // get the description and send the post to PixelFed
+        // get the description and send the post
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
             if (setDescription() && listOfIds.isNotEmpty()) post()
+        }
+        // Button to retry image upload when it fails
+        findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
+            upload_error.visibility = GONE
+            upload()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        //delete the temporary image
         image.delete()
     }
 
@@ -119,7 +126,7 @@ class PostCreationActivity : AppCompatActivity(){
         val textField = findViewById<TextInputEditText>(R.id.new_post_description_input_field)
         val content = textField.text.toString()
         if (content.length > maxLength) {
-            // error, too much characters
+            // error, too many characters
             textField.error = "Description can contain at most $maxLength characters."
             return false
         }
@@ -150,25 +157,28 @@ class PostCreationActivity : AppCompatActivity(){
             .subscribe({ attachment ->
                 listOfIds = listOf(attachment.id)
             },{e->
-                 //TODO add proper error handling here ("retry uploading" button for example)
+                upload_error.visibility = VISIBLE
                 e.printStackTrace()
                 postSub?.dispose()
                 sub.dispose()
             }, {
                 uploadProgressBar.visibility = GONE
-                post_creation_send_button.isEnabled = true
+                upload_completed_textview.visibility = VISIBLE
+                enableButton(true)
                 postSub?.dispose()
                 sub.dispose()
             })
     }
 
     private fun post() {
+        enableButton(false)
         pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
             statusText = description,
             media_ids = listOfIds
         ).enqueue(object: Callback<Status> {
             override fun onFailure(call: Call<Status>, t: Throwable) {
+                enableButton(true)
                 Toast.makeText(applicationContext,"Post upload failed",Toast.LENGTH_SHORT).show()
                 Log.e(TAG, t.message + call.request())
             }
@@ -182,9 +192,21 @@ class PostCreationActivity : AppCompatActivity(){
                 } else {
                     Toast.makeText(applicationContext,"Post upload failed : not 200",Toast.LENGTH_SHORT).show()
                     Log.e(TAG, call.request().toString() + response.raw().toString())
+                    enableButton(true)
                 }
             }
         })
+    }
+    private fun enableButton(enable: Boolean = true){
+        post_creation_send_button.isEnabled = enable
+        if(enable){
+            posting_progress_bar.visibility = GONE
+            post_creation_send_button.visibility = VISIBLE
+        } else{
+            posting_progress_bar.visibility = VISIBLE
+            post_creation_send_button.visibility = GONE
+        }
+
     }
 
 }
@@ -235,7 +257,6 @@ class ProgressRequestBody(private val mFile: File) : RequestBody() {
             }
         }
     }
-
 
     companion object {
         private const val DEFAULT_BUFFER_SIZE = 2048

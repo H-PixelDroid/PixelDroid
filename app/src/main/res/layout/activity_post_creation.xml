@@ -1,70 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/upload_error"
+        android:layout_width="match_parent"
+        android:elevation="2dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.mikepenz.iconics.view.IconicsTextView
+            android:id="@+id/upload_error_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#90000000"
+            android:text="@string/media_upload_failed"
+            android:textColor="@color/colorPrimaryError"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/retry_upload_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/retry"
+            app:layout_constraintEnd_toEndOf="@id/upload_error_text_view"
+            app:layout_constraintStart_toStartOf="@id/upload_error_text_view"
+            app:layout_constraintTop_toBottomOf="@id/upload_error_text_view" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/post_creation_picture_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="TODO" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/posting_image_accessibility_hint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonConstraints"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#88000000"
-        android:orientation="vertical">
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textInputLayout2">
 
-        <ProgressBar
-            android:id="@+id/uploadProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
+        <Button
+            android:id="@+id/post_creation_send_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="fill_horizontal"
-                android:layout_weight="1"
-                android:hint="@string/description"
-                android:paddingStart="15dp"
-                android:textColorHint="@color/colorPrimaryTab"
-                app:errorEnabled="true"
-                app:errorTextColor="@color/colorPrimaryError">
+            android:backgroundTint="@color/colorButtonBg"
+            android:enabled="false"
+            android:visibility="gone"
+            android:text="@string/send"
+            android:textColor="@color/colorButtonText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/new_post_description_input_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:ems="10"
-                    android:inputType="textMultiLine"
-                    android:textColor="@color/colorPrimary" />
+        <ProgressBar
+            android:id="@+id/posting_progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/post_creation_send_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="15dp"
-                android:backgroundTint="@color/colorButtonBg"
-                android:enabled="false"
-                android:text="@string/send"
-                android:textColor="@color/colorButtonText"
-                tools:ignore="PrivateResource" />
 
-        </LinearLayout>
 
-    </LinearLayout>
 
-</merge>
+    <ProgressBar
+        android:id="@+id/uploadProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/description"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:textColorHint="@color/colorPrimaryTab"
+        app:errorEnabled="true"
+        app:errorTextColor="@color/colorPrimaryError"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonConstraints"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/new_post_description_input_field"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:textColor="@color/colorPrimary" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.mikepenz.iconics.view.IconicsTextView
+        android:id="@+id/upload_completed_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/media_upload_completed"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
