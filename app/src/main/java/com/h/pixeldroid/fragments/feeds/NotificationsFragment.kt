@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.get
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
@@ -20,13 +21,20 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.util.ViewPreloadSizeProvider
+import com.google.android.material.badge.BadgeDrawable
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.ProfileActivity
 import com.h.pixeldroid.R
+import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
+import com.h.pixeldroid.utils.NotificationUtils
+import com.h.pixeldroid.utils.Utils
+import com.h.pixeldroid.utils.Utils.Companion.hasInternet
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 import retrofit2.Call
 
@@ -37,6 +45,7 @@ import retrofit2.Call
 class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.NotificationsRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var profilePicRequest: RequestBuilder<Drawable>
+    lateinit var badge : BadgeDrawable
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

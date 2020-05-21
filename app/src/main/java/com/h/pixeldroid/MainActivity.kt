@@ -13,6 +13,8 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
@@ -25,6 +27,7 @@ import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.PublicTimelineFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.NotificationUtils
 import com.h.pixeldroid.utils.Utils.Companion.hasInternet
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.materialdrawer.iconics.iconicsIcon
@@ -39,6 +42,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -160,8 +164,6 @@ class MainActivity : AppCompatActivity() {
             launchActivity(MainActivity(), firstTime = true)
         }
 
-
-
     }
     private fun getUpdatedAccount(){
         if (hasInternet(applicationContext)) {
@@ -248,7 +250,6 @@ class MainActivity : AppCompatActivity() {
         header.setActiveProfile(account.toLong())
     }
 
-
     private fun setupTabs(tab_array: Array<Fragment>){
         view_pager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
@@ -268,6 +269,71 @@ class MainActivity : AppCompatActivity() {
                 4 -> tab.icon = getDrawable(R.drawable.ic_filter_black_24dp)
             }
         }.attach()
+
+        //Initialize notifications badge
+        setupNotificationBadge()
+    }
+
+    private fun setupNotificationBadge() {
+        //Setup initial notification badge
+        val badge = tabs.getTabAt(3)?.orCreateBadge!!
+
+        //Only show the badge if the user has internet
+        if(hasInternet(applicationContext)) {
+            val domain = user?.instance_uri.orEmpty()
+            val accessToken = user?.accessToken.orEmpty()
+            val pixelfedAPI = PixelfedAPI.create(domain)
+
+            //Set on tabChanged listeners
+            tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
+
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    //Check if the notifications tab was selected
+                    if(tab.position == 3) {
+                        //Only update the badge if the user has internet
+                        if(hasInternet(applicationContext)) {
+                            //Update DB entry
+                            NotificationUtils.updateLatestIdDBEntry(
+                                pixelfedAPI,
+                                "Bearer $accessToken",
+                                applicationContext,
+                                resources,
+                                badge
+                            )
+                        } else {
+                            badge.isVisible = false
+                        }
+                    } else {
+                        if(hasInternet(applicationContext)) {
+                            //Update DB entry
+                            NotificationUtils.updateNotificationsBadge(
+                                pixelfedAPI,
+                                "Bearer $accessToken",
+                                applicationContext,
+                                resources,
+                                badge
+                            )
+                        } else {
+                            badge.isVisible = false
+                        }
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {}
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                    onTabSelected(tab)
+                }
+            })
+
+            //Make initial call
+            NotificationUtils.updateNotificationsBadge(
+                pixelfedAPI,
+                "Bearer $accessToken",
+                applicationContext,
+                resources,
+                badge
+            )
+        }
     }
 
     /**

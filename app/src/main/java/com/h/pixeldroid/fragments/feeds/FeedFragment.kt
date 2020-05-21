@@ -25,6 +25,9 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.FeedContent
 import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.NotificationUtils
+import com.h.pixeldroid.utils.Utils
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -43,7 +46,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
     protected lateinit var swipeRefreshLayout: SwipeRefreshLayout
     internal lateinit var loadingIndicator: ProgressBar
     private var user: UserDatabaseEntity? = null
-    private lateinit var db: AppDatabase
+    protected lateinit var db: AppDatabase
 
 
 
