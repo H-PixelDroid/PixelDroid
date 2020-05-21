@@ -103,6 +103,6 @@
     <string name="media_upload_completed">{gmd_cloud_done} Media upload completed</string>
     <!-- Shown when image uploading has failed. {gmd_cloud_off} is an icon, position it as is appropriate in target language -->
     <string name="media_upload_failed">{gmd_cloud_off} Media upload failed, try again or check network conditions</string>
-    <string name="posting_image_accessibility_hint">Image being posted</string>
+    <string name="posting_image_accessibility_hint">Image that is being posted</string>
     <string name="retry">Retry</string>
 </resources>
