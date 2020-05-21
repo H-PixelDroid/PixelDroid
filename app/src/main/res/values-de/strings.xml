@@ -36,8 +36,9 @@
     <string name="CommentDisplay">zeigen…</string>
     <string name="domain_of_your_instance">Domain Ihrer Instanz</string>
     <string name="connect_to_pixelfed">Mit Pixelfed verbinden</string>
-    <string name="login_connection_required_once">Sie müssen mindestens einmal mit dem Internet verbunden sein, um PixelDroid verwenden zu können :(</string>
+    <string name="login_connection_required_once">Sie müssen online sein, um das erste Konto hinzuzufügen und um PixelDroid verwenden zu können :(</string>
     <string name="you_are_in_offline_mode">Sie befinden sich im Offline-Modus, aber Sie können immer noch einige Inhalte ansehen!</string>
     <string name="switch_camera_button_alt">Kamera wechseln</string>
     <string name="registration_failed">Konnte die App nicht mit diesem Server verbinden</string>
+    <string name="instance_error">Konnte die Informationen der Instanz nicht abrufen</string>
 </resources>

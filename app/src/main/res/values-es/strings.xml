@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="auth_failed">No puede autenticarse</string>
+    <string name="auth_failed">No puede autentificarse</string>
     <string name="browser_launch_failed">No se pudo iniciar un navegador, ¿tienes uno\?</string>
     <string name="registration_failed">No se pudo registrar la aplicación con este servidor</string>
     <string name="invalid_domain">Dominio no válido</string>
@@ -37,7 +37,10 @@
     <string name="domain_of_your_instance">Dominio de tu nodo</string>
     <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
     <string name="you_are_in_offline_mode">Estás en modo sin conexión, ¡pero todavía puedes ver algo de contenido!</string>
-    <string name="login_connection_required_once">Necesitar conectarte a Internet al menos una vez para utilizar PixelDroid :(</string>
+    <string name="login_connection_required_once">Necesitas estar conectado para poder añadir la primera cuenta y utilizar PixelDroid :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Contenido Oculto 
 \n (haz clic para mostrar)</string>
+    <string name="add_account_description">Añadir otra Cuenta de Pixelfed</string>
+    <string name="add_account_name">Añadir Cuenta</string>
+    <string name="instance_error">No se pudo obtener información del nodo</string>
 </resources>
