@@ -44,7 +44,7 @@
     <string name="instance_error">Impossible d’obtenir des informations sur l’instance</string>
     <string name="request_format_error">Erreur de téléversement: format de requête incorrect</string>
     <string name="picture_format_error">Erreur de téléversement: format d\'image incorrect.</string>
-    <string name="upload_picture_failed">Erreur de téléversement d\'image!</string>
+    <string name="upload_picture_failed">Erreur de téléchargement d\'image!</string>
     <string name="description_max_characters">La description doit contenir au plus %1$s caractères.</string>
     <string name="save_image_success">Image enregistrée avec succès</string>
     <string name="save_image_failed">Impossible de sauvegarder l\'image</string>
