@@ -33,8 +33,7 @@
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_default_user"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="TODO" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
             android:id="@+id/username"
@@ -88,8 +87,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@color/browser_actions_bg_grey"
-                    android:longClickable="true"
-                    android:contentDescription="TODO" />
+                    android:longClickable="true" />
 
                 <FrameLayout
                     android:id="@+id/post_fragment_image_popup_menu_anchor"
@@ -235,7 +233,7 @@
                         android:id="@+id/editComment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="Comment"
+                        android:hint="@string/comment"
                         android:importantForAutofill="no"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>

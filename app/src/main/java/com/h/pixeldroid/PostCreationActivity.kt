@@ -117,7 +117,8 @@ class PostCreationActivity : AppCompatActivity() {
         val content = textField.text.toString()
         if (content.length > maxLength) {
             // error, too much characters
-            textField.error = "Description must contain $maxLength characters at most."
+            textField.error = getString(R.string.description_max_characters).format(maxLength)
+
             return false
         }
         // store the description
@@ -132,7 +133,8 @@ class PostCreationActivity : AppCompatActivity() {
             Callback<Attachment> {
             override fun onFailure(call: Call<Attachment>, t: Throwable) {
                 Log.e(TAG, t.toString() + call.request())
-                Toast.makeText(applicationContext,"Picture upload error!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,getString(R.string.upload_picture_failed),
+                    Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<Attachment>, response: Response<Attachment>) {
@@ -141,10 +143,14 @@ class PostCreationActivity : AppCompatActivity() {
                     if (body.type.name == "image") {
                         post(body.id)
                     } else
-                        Toast.makeText(applicationContext, "Upload error: wrong picture format.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, getString(R.string.picture_format_error),
+                            Toast.LENGTH_SHORT).show()
                 } else {
-                    Log.e(TAG, "Server responded: $response" + call.request() + call.request().body)
-                    Toast.makeText(applicationContext,"Upload error: bad request format",Toast.LENGTH_SHORT).show()
+                    Log.e(TAG,
+                        "Server responded: $response${call.request()}${call.request().body}"
+                    )
+                    Toast.makeText(applicationContext,getString(R.string.request_format_error),
+                        Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -158,16 +164,19 @@ class PostCreationActivity : AppCompatActivity() {
             media_ids = listOf(id)
         ).enqueue(object: Callback<Status> {
             override fun onFailure(call: Call<Status>, t: Throwable) {
-                Toast.makeText(applicationContext,"Post upload failed",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,getString(R.string.upload_post_failed),
+                    Toast.LENGTH_SHORT).show()
                 Log.e(TAG, t.message + call.request())
             }
 
             override fun onResponse(call: Call<Status>, response: Response<Status>) {
                 if (response.code() == 200) {
-                    Toast.makeText(applicationContext,"Post upload success",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,getString(R.string.upload_post_success),
+                        Toast.LENGTH_SHORT).show()
                     startActivity(Intent(applicationContext, MainActivity::class.java))
                 } else {
-                    Toast.makeText(applicationContext,"Post upload failed : not 200",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,getString(R.string.upload_post_error),
+                        Toast.LENGTH_SHORT).show()
                     Log.e(TAG, call.request().toString() + response.raw().toString())
                 }
             }

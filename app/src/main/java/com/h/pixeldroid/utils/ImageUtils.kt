@@ -89,7 +89,7 @@ class ImageUtils {
                             e.printStackTrace()
                         }
                         intentShare.putExtra(Intent.EXTRA_STREAM, uri)
-                        activity.startActivity(Intent.createChooser(intentShare, "Share Image"))
+                        activity.startActivity(Intent.createChooser(intentShare, context.getString(R.string.share_image)))
                     }
                     cursor.close()
                 }
