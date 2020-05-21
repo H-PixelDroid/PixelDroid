@@ -96,4 +96,6 @@
     <string name="media_upload_completed">{gmd_cloud_done} تم تحميل الوسائط</string>
     <string name="posting_image_accessibility_hint">جارٍ نشر الصورة</string>
     <string name="picture_format_error">خطأ في التحميل: نسق الصورة غير صالح.</string>
+    <string name="request_format_error">خطأ في التحميل: نسق الطلب غير صالح</string>
+    <string name="media_upload_failed">{gmd_cloud_off} فشل في تحميل الوسائط ، يرجى إعادة المحاولة أو تحقق مِن حالة الشبكة</string>
 </resources>
