@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_failed">Не удалось авторизоваться</string>
+    <string name="token_error">Ошибка получения токена</string>
+    <string name="title_activity_settings2">Настройки</string>
+    <string name="theme_title">Тема приложения</string>
+    <string name="theme_header">Тема</string>
+    <string name="followed_notification">%1$s подписался на вас</string>
+    <string name="mention_notification">%1$s упомянул вас</string>
+    <string name="shared_notification">%1$s поделился вашим пост</string>
+    <string name="send">отправить</string>
+    <string name="logout">Выйти</string>
+    <string name="lbl_brightness">ЯРКОСТЬ</string>
+    <string name="whats_an_instance">Что такое инстанс\?</string>
+    <string name="lbl_contrast">КОНТРАСТ</string>
+    <string name="lbl_saturation">НАСЫЩЕННОСТЬ</string>
+    <string name="tab_filters">ФИЛЬТРЫ</string>
+    <string name="tab_edit">РЕДАКТИРОВАТЬ</string>
+    <string name="save_to_gallery">Сохранить в Галерею…</string>
+    <string name="image_download_downloading">Скачивание…</string>
+    <string name="image_download_success">Изображение успешно загружено</string>
+    <string name="switch_camera_button_alt">Переключить камеру</string>
+    <string name="gallery_button_alt">Галерея</string>
+    <string name="NoCommentsToShow">Нет комментариев под этим постом…</string>
+    <string name="CommentDisplay">показать…</string>
+    <string name="domain_of_your_instance">Домен вашего инстанса</string>
+    <string name="connect_to_pixelfed">Подключение к Pixelfed</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="menu_account">Мой профиль</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="invalid_domain">Неправильное доменное имя</string>
+    <string name="browser_launch_failed">Не удалось запустить браузер, есть ли он у вас\?</string>
+    <string name="liked_notification">%1$s понравился ваш пост</string>
+    <string name="description">Описание…</string>
+    <string name="image_download_failed">Скачивание не удалось, попробуйте ещё раз</string>
+    <string name="share_picture">Поделиться изображение…</string>
+    <string name="login_connection_required_once">Вам необходимо подключение к интернету что бы использовать PixelDroid :(</string>
+    <string name="you_are_in_offline_mode">Вы в оффлайн режиме, но вы можете видеть некоторый контент!</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Скрытое медиа
+\n (кликните что бы показать)</string>
+    <string name="registration_failed">Не удалось зарегистрировать приложение на этом инстансе</string>
+    <string name="capture_button_alt">Захватить</string>
+</resources>

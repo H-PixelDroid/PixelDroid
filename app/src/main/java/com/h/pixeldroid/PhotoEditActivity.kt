@@ -1,27 +1,20 @@
 package com.h.pixeldroid
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat
-import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -38,11 +31,13 @@ import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
 import kotlinx.android.synthetic.main.activity_photo_edit.*
 import kotlinx.android.synthetic.main.content_photo_edit.*
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors.newSingleThreadExecutor
+import java.util.concurrent.Future
 
 // This is an arbitrary number we are using to keep track of the permission
 // request. Where an app has multiple context for requesting permission,
@@ -88,16 +83,30 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         System.loadLibrary("NativeImageProcessor")
     }
 
+
+    companion object{
+        private var executor: ExecutorService = newSingleThreadExecutor()
+        private var future: Future<*>? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_edit)
 
+        //TODO move to xml:
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Edit"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
 
+        val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
+
         cropUri = intent.getParcelableExtra("picture_uri")
+
+        // set on-click listener
+        cropButton.setOnClickListener {
+            startCrop()
+        }
 
         loadImage()
         val file = File.createTempFile("temp_compressed_img", ".png", cacheDir)
@@ -109,13 +118,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         setupViewPager(viewPager)
         tabLayout.setupWithViewPager(viewPager)
         outputDirectory = getOutputDirectory()
-
-        val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
-        // set on-click listener
-        cropButton.setOnClickListener {
-            startCrop()
-        }
     }
+
 
     //<editor-fold desc="ON LAUNCH">
     private fun loadImage() {
@@ -192,49 +196,55 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         contrastFinal = CONTRAST_START
     }
 
+
     //</editor-fold>
     //<editor-fold desc="EDITS">
 
     private fun applyFilterAndShowImage(filter: Filter, image: Bitmap?) {
-        image_preview.setImageBitmap(filter.processFilter(image!!.copy(BITMAP_CONFIG, true)))
+        future?.cancel(true)
+        future = executor.submit {
+            val bitmap = filter.processFilter(image!!.copy(BITMAP_CONFIG, true))
+            image_preview.post {
+                image_preview.setImageBitmap(bitmap)
+            }
+        }
     }
 
     override fun onBrightnessChange(brightness: Int) {
         brightnessFinal = brightness
         val myFilter = Filter()
-        myFilter.addSubFilter(BrightnessSubFilter(brightness))
+        myFilter.addEditFilters(brightness, saturationFinal, contrastFinal)
         applyFilterAndShowImage(myFilter, filteredImage)
     }
 
     override fun onSaturationChange(saturation: Float) {
         saturationFinal = saturation
         val myFilter = Filter()
-        myFilter.addSubFilter(SaturationSubfilter(saturation))
+        myFilter.addEditFilters(brightnessFinal, saturation, contrastFinal)
         applyFilterAndShowImage(myFilter, filteredImage)
     }
 
     override fun onContrastChange(contrast: Float) {
         contrastFinal = contrast
         val myFilter = Filter()
-        myFilter.addSubFilter(ContrastSubFilter(contrast))
+        myFilter.addEditFilters(brightnessFinal, saturationFinal, contrast)
         applyFilterAndShowImage(myFilter, filteredImage)
     }
 
-    private fun addEditFilters(filter: Filter, br: Int, sa: Float, co: Float): Filter {
-        filter.addSubFilter(BrightnessSubFilter(br))
-        filter.addSubFilter(ContrastSubFilter(co))
-        filter.addSubFilter(SaturationSubfilter(sa))
-
-        return filter
+    private fun Filter.addEditFilters(br: Int, sa: Float, co: Float): Filter {
+        addSubFilter(BrightnessSubFilter(br))
+        addSubFilter(ContrastSubFilter(co))
+        addSubFilter(SaturationSubfilter(sa))
+        return this
     }
 
     override fun onEditStarted() {
     }
 
     override fun onEditCompleted() {
-        val bitmap = filteredImage.copy(BITMAP_CONFIG, true)
         val myFilter = Filter()
-        addEditFilters(myFilter, brightnessFinal, saturationFinal, contrastFinal)
+        myFilter.addEditFilters(brightnessFinal, saturationFinal, contrastFinal)
+        val bitmap = filteredImage.copy(BITMAP_CONFIG, true)
 
         compressedImage = myFilter.processFilter(bitmap)
     }
@@ -268,7 +278,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         val newBr = if(brightnessFinal != 0) BRIGHTNESS_START/brightnessFinal else 0
         val newSa = if(saturationFinal != 0.0f) SATURATION_START/saturationFinal else 0.0f
         val newCo = if(contrastFinal != 0.0f) CONTRAST_START/contrastFinal else 0.0f
-        val myFilter = addEditFilters(Filter(), newBr, newSa, newCo)
+        val myFilter = Filter().addEditFilters(newBr, newSa, newCo)
 
         filteredImage = myFilter.processFilter(filteredImage)
     }
@@ -320,8 +330,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     }
 
     private fun applyFinalFilters(image: Bitmap?) {
-        var editFilter = Filter()
-        editFilter = addEditFilters(editFilter, brightnessFinal, saturationFinal, contrastFinal)
+        val editFilter = Filter().addEditFilters(brightnessFinal, saturationFinal, contrastFinal)
 
         finalImage = editFilter.processFilter(image!!.copy(BITMAP_CONFIG, true))
         if (actualFilter!=null) finalImage = actualFilter!!.processFilter(finalImage)

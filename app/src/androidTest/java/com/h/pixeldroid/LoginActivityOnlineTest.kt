@@ -47,27 +47,7 @@ class LoginActivityOnlineTest {
         pref.edit().clear().apply()
         db = DBUtils.initDB(context)
         db.clearAllTables()
-    }
-
-    @Test
-    fun connectToSavedAccount() {
-        db.instanceDao().insertInstance(
-            InstanceDatabaseEntity(
-                uri = "some_uri",
-                title = "PixelTest"
-            )
-        )
-        db.userDao().insertUser(
-            UserDatabaseEntity(
-                user_id = "some_user_id",
-                instance_uri = "some_uri",
-                username = "Testi",
-                display_name = "Testi Testo",
-                avatar_static = "some_avatar_url"
-            )
-        )
-        ActivityScenario.launch(LoginActivity::class.java)
-        onView(withId(R.id.login_activity_instance_chooser_button)).perform(click())
+        db.close()
     }
 
     @Test
@@ -85,7 +65,7 @@ class LoginActivityOnlineTest {
         ActivityScenario.launch(LoginActivity::class.java)
         onView(withId(R.id.connect_instance_button)).perform(click())
         onView(withId(R.id.editText)).check(matches(
-            hasErrorText(context.getString(R.string.login_empty_string_error))
+            hasErrorText(context.getString(R.string.invalid_domain))
         ))
     }
 
@@ -116,8 +96,30 @@ class LoginActivityOnlineTest {
 
     @Test
     fun correctIntentReturnLoadsMainActivity() {
+        context = ApplicationProvider.getApplicationContext()
+        db = DBUtils.initDB(context)
+        db.clearAllTables()
+
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = server.getUrl().toString(),
+                title = "PixelTest"
+            )
+        )
+
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = server.getUrl().toString(),
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
+        db.close()
         pref.edit()
-            .putString("accessToken", "azerty")
             .putString("domain", server.getUrl().toString())
             .putString("clientID", "test_id")
             .putString("clientSecret", "test_secret")
@@ -125,6 +127,7 @@ class LoginActivityOnlineTest {
         val uri = Uri.parse("oauth2redirect://com.h.pixeldroid?code=test_code")
         val intent = Intent(ACTION_VIEW, uri, context, LoginActivity::class.java)
         ActivityScenario.launch<LoginActivity>(intent)
+        Thread.sleep(1000)
         onView(withId(R.id.main_activity_main_linear_layout)).check(matches(isDisplayed()))
     }
 }

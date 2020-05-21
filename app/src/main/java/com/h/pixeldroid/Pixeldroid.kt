@@ -1,8 +1,6 @@
 package com.h.pixeldroid
 
-import android.Manifest
 import android.app.Application
-import android.view.WindowManager
 import androidx.preference.PreferenceManager
 import com.h.pixeldroid.utils.ThemeUtils
 

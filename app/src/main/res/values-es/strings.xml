@@ -1,3 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="auth_failed">No puede autenticarse</string>
+    <string name="browser_launch_failed">No se pudo iniciar un navegador, ¿tienes uno\?</string>
+    <string name="registration_failed">No se pudo registrar la aplicación con este servidor</string>
+    <string name="invalid_domain">Dominio no válido</string>
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_account">Mi perfil</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="token_error">Error al obtener el token</string>
+    <string name="title_activity_settings2">Ajustes</string>
+    <string name="shared_notification">%1$s compartió tu publicación</string>
+    <string name="liked_notification">%1$s le gustó tu publicación</string>
+    <string name="description">Descripción…</string>
+    <string name="send">enviar</string>
+    <string name="whats_an_instance">¿Qué es una instancia\?</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="save_to_gallery">Guardar en la galería…</string>
+    <string name="image_download_failed">La descarga ha fallado, por favor inténtalo de nuevo</string>
+    <string name="image_download_downloading">Descargando…</string>
+    <string name="image_download_success">La imagen se descargó con éxito</string>
+    <string name="share_picture">Compartir foto…</string>
+    <string name="followed_notification">%1$s te siguió</string>
+    <string name="mention_notification">%1$s te mencionó</string>
+    <string name="switch_camera_button_alt">Cambiar cámara</string>
+    <string name="theme_title">Tema de la Aplicación</string>
+    <string name="theme_header">Tema</string>
+    <string name="lbl_brightness">BRILLO</string>
+    <string name="lbl_contrast">CONTRASTE</string>
+    <string name="lbl_saturation">SATURACIÓN</string>
+    <string name="tab_filters">FILTROS</string>
+    <string name="tab_edit">EDITAR</string>
+    <string name="capture_button_alt">Capturar</string>
+    <string name="gallery_button_alt">Galería</string>
+    <string name="NoCommentsToShow">No hay comentarios en esta publicación…</string>
+    <string name="CommentDisplay">para mostrar…</string>
+    <string name="domain_of_your_instance">Dominio de tu nodo</string>
+    <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
+    <string name="you_are_in_offline_mode">Estás en modo sin conexión, ¡pero todavía puedes ver algo de contenido!</string>
+    <string name="login_connection_required_once">Necesitar conectarte a Internet al menos una vez para utilizar PixelDroid :(</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Contenido Oculto 
+\n (haz clic para mostrar)</string>
 </resources>

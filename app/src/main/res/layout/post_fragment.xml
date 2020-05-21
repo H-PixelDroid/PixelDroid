@@ -67,8 +67,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-                </androidx.viewpager2.widget.ViewPager2>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/postTabs"
@@ -77,8 +76,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/postPager"
-                    app:tabMode="auto">
-                </com.google.android.material.tabs.TabLayout>
+                    app:tabMode="auto" />
 
                 <ImageView
                     android:id="@+id/postPicture"
@@ -102,7 +100,22 @@
                     app:layout_constraintTop_toTopOf="@+id/postPicture"
                     app:layout_constraintVertical_bias="0.1" />
 
+                <TextView
+                    android:id="@+id/sensitiveWarning"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:gravity="center|center_horizontal|center_vertical"
+                    android:longClickable="true"
+                    android:text="@string/cw_nsfw_hidden_media_n_click_to_show"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/ic_launcher_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/postPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/postTabs"
+                    tools:src="@color/browser_actions_bg_grey" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <ImageView
                 android:id="@+id/commenter"

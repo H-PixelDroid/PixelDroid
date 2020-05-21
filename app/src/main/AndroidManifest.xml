@@ -77,7 +77,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity

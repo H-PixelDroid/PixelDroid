@@ -4,13 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -18,10 +16,18 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.rule.GrantPermissionRule
-import com.h.pixeldroid.objects.*
+
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.objects.Application
+import com.h.pixeldroid.objects.Attachment
+import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.objects.Tag
+
 import com.h.pixeldroid.testUtility.MockServer
-import org.hamcrest.CoreMatchers
+import com.h.pixeldroid.utils.DBUtils
 import org.hamcrest.Matcher
 import org.junit.*
 import org.junit.rules.Timeout
@@ -32,6 +38,7 @@ import org.junit.runner.RunWith
 class PostTest {
 
     private lateinit var context: Context
+    private lateinit var db: AppDatabase
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -42,11 +49,27 @@ class PostTest {
         val mockServer = MockServer()
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        val preferences = context.getSharedPreferences(
-            "com.h.pixeldroid.pref",
-            Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
+        db = DBUtils.initDB(context)
+        db.clearAllTables()
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = baseUrl.toString(),
+                title = "PixelTest"
+            )
+        )
+
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = baseUrl.toString(),
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
+        db.close()
         Intents.init()
     }
 

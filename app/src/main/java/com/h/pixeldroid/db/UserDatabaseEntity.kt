@@ -19,5 +19,7 @@ data class UserDatabaseEntity (
     var instance_uri: String,
     var username: String,
     var display_name: String,
-    var avatar_static: String
+    var avatar_static: String,
+    var isActive: Boolean,
+    var accessToken: String
 )

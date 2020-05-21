@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
@@ -81,7 +80,7 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
     private fun makeContent(): LiveData<PagedList<Notification>> {
         fun makeInitialCall(requestedLoadSize: Int): Call<List<Notification>> {
             return pixelfedAPI
-                .notifications("Bearer $accessToken", min_id="1", limit="$requestedLoadSize")
+                .notifications("Bearer $accessToken", limit="$requestedLoadSize")
         }
         fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Notification>> {
             return pixelfedAPI

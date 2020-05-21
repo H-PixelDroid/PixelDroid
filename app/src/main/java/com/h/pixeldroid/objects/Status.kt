@@ -2,56 +2,48 @@ package com.h.pixeldroid.objects
 
 import android.Manifest
 import android.content.Context
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.*
 import androidx.core.text.toSpanned
-import android.widget.TextView
-import android.widget.LinearLayout
-import android.widget.Toast
-import android.widget.PopupMenu
-import android.widget.ImageView
-import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
 import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.ImageUtils.Companion.downloadImage
+import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
 import com.h.pixeldroid.utils.PostUtils.Companion.reblogPost
 import com.h.pixeldroid.utils.PostUtils.Companion.retrieveComments
 import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
+import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
-import kotlinx.android.synthetic.main.post_fragment.view.postDate
-import kotlinx.android.synthetic.main.post_fragment.view.postDomain
+import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 import kotlin.collections.ArrayList
-import kotlinx.android.synthetic.main.post_fragment.view.postPager
-import kotlinx.android.synthetic.main.post_fragment.view.postPicture
-import kotlinx.android.synthetic.main.post_fragment.view.postTabs
-import kotlinx.android.synthetic.main.post_fragment.view.profilePic
 
 /*
 Represents a status posted by an account.
@@ -92,13 +84,11 @@ data class Status(
     val muted: Boolean = false,
     val bookmarked: Boolean = false,
     val pinned: Boolean = false
-    ) : Serializable, FeedContent()
+) : Serializable, FeedContent()
 {
 
     companion object {
-        const val SAVE_TO_GALLERY_WRITE_PERMISSION = 1
         const val POST_TAG = "postTag"
-        const val POST_FRAG_TAG = "postFragTag"
         const val DOMAIN_TAG = "domainTag"
         const val DISCOVER_TAG = "discoverTag"
     }
@@ -148,8 +138,10 @@ data class Status(
                 .getRelativeTimeSpanString(then, now,
                     android.text.format.DateUtils.SECOND_IN_MILLIS,
                     android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
+
             textView.text = if(isActivity) context.getString(R.string.posted_on) + date
                             else "$formattedDate"
+
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -163,27 +155,46 @@ data class Status(
     }
 
     private fun setupPostPics(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
-        //Check whether or not we need to activate the viewPager
-        if(media_attachments?.size == 1) {
-            rootView.postPicture.visibility = VISIBLE
-            rootView.postPager.visibility = GONE
-            rootView.postTabs.visibility = GONE
+
+        // Standard layout
+        rootView.postPicture.visibility = VISIBLE
+        rootView.postPager.visibility = GONE
+        rootView.postTabs.visibility = GONE
+
+        if (sensitive) {
+            setupSensitiveLayout(rootView, request, homeFragment)
             request.load(this.getPostUrl()).into(rootView.postPicture)
-        } else if(media_attachments?.size!! > 1) {
-            //Only show the viewPager and tabs
-            rootView.postPicture.visibility = GONE
-            rootView.postPager.visibility = VISIBLE
-            rootView.postTabs.visibility = VISIBLE
 
-            val tabs : ArrayList<ImageFragment> = ArrayList()
+        } else {
+            rootView.sensitiveWarning.visibility = GONE
 
-            //Fill the tabs with each mediaAttachment
-            for(media in media_attachments) {
-                tabs.add(ImageFragment.newInstance(media.url))
+            if(media_attachments?.size == 1) {
+                request.load(this.getPostUrl()).into(rootView.postPicture)
+
+            } else if(media_attachments?.size!! > 1) {
+                setupTabsLayout(rootView, request, homeFragment)
             }
-            setupTabs(tabs, rootView, homeFragment)
+
+            imagePopUpMenu(rootView, homeFragment.requireActivity())
         }
     }
+
+    private fun setupTabsLayout(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
+        //Only show the viewPager and tabs
+        rootView.postPicture.visibility = GONE
+        rootView.postPager.visibility = VISIBLE
+        rootView.postTabs.visibility = VISIBLE
+
+        val tabs : ArrayList<ImageFragment> = ArrayList()
+
+        //Fill the tabs with each mediaAttachment
+        for(media in media_attachments!!) {
+            tabs.add(ImageFragment.newInstance(media.url))
+        }
+
+        setupTabs(tabs, rootView, homeFragment)
+    }
+
 
     private fun setupTabs(tabs: ArrayList<ImageFragment>, rootView: View, homeFragment: Fragment) {
         //Attach the given tabs to the view pager
@@ -196,6 +207,7 @@ data class Status(
                 return media_attachments?.size ?: 0
             }
         }
+
         TabLayoutMediator(rootView.postTabs, rootView.postPager) { tab, _ ->
             tab.icon = rootView.context.getDrawable(R.drawable.ic_dot_blue_12dp)
         }.attach()
@@ -251,8 +263,6 @@ data class Status(
 
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = GONE
-
-        imagePopUpMenu(rootView, homeFragment.requireActivity())
     }
 
     fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
@@ -277,13 +287,11 @@ data class Status(
             //Activate the button
             setEventListener { _, buttonState ->
                 if (buttonState) {
-                    Log.e("REBLOG", "Reblogged post")
                     // Button is active
-                    reblogPost(holder, api, credential, this@Status)
-                } else {
-                    Log.e("REBLOG", "Undo Reblogged post")
-                    // Button is inactive
                     undoReblogPost(holder, api, credential, this@Status)
+                } else {
+                    // Button is inactive
+                    reblogPost(holder, api, credential, this@Status)
                 }
                 //show animation or not?
                 true
@@ -305,11 +313,11 @@ data class Status(
             //Activate the liker
             setEventListener { _, buttonState ->
                 if (buttonState) {
-                    // Button is active
-                    likePostCall(holder, api, credential, this@Status)
-                } else {
-                    // Button is inactive
+                    // Button is active, unlike
                     unLikePostCall(holder, api, credential, this@Status)
+                } else {
+                    // Button is inactive, like
+                    likePostCall(holder, api, credential, this@Status)
                 }
             //show animation or not?
             true
@@ -409,6 +417,33 @@ data class Status(
                 }
                 true
             }
+        }
+    }
+
+    private fun setupSensitiveLayout(view: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
+
+        // Set dark layout and warning message
+        view.sensitiveWarning.visibility = VISIBLE
+        view.postPicture.colorFilter = ColorMatrixColorFilter(censorColorMatrix())
+
+        fun uncensorPicture(view: View) {
+            if (!media_attachments.isNullOrEmpty()) {
+                view.sensitiveWarning.visibility = GONE
+                view.postPicture.colorFilter = ColorMatrixColorFilter(uncensorColorMatrix())
+
+                if (media_attachments.size > 1)
+                    setupTabsLayout(view, request, homeFragment)
+            }
+            imagePopUpMenu(view, homeFragment.requireActivity())
+        }
+
+
+        view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
+            uncensorPicture(view)
+        }
+
+        view.findViewById<ImageView>(R.id.postPicture).setOnClickListener {
+            uncensorPicture(view)
         }
     }
 }

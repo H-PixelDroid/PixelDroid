@@ -1,7 +1,5 @@
 package com.h.pixeldroid
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,15 +11,16 @@ import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.objects.Status.Companion.DISCOVER_TAG
 import com.h.pixeldroid.objects.Status.Companion.DOMAIN_TAG
 import com.h.pixeldroid.objects.Status.Companion.POST_TAG
+import com.h.pixeldroid.utils.DBUtils
 import kotlinx.android.synthetic.main.activity_post.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PostActivity : AppCompatActivity() {
-    private lateinit var preferences: SharedPreferences
     private lateinit var postFragment : PostFragment
     lateinit var domain : String
+    private lateinit var accessToken : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +28,13 @@ class PostActivity : AppCompatActivity() {
 
         val status = intent.getSerializableExtra(POST_TAG) as Status?
         val discoverPost: DiscoverPost? = intent.getSerializableExtra(DISCOVER_TAG) as DiscoverPost?
+        val db = DBUtils.initDB(applicationContext)
 
-        preferences = getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-        )
-        domain = preferences.getString("domain", "")!!
+        val user = db.userDao().getActiveUser()
+
+        domain = user?.instance_uri.orEmpty()
+        accessToken = user?.accessToken.orEmpty()
+        db.close()
 
         postFragment = PostFragment()
         val arguments = Bundle()
@@ -52,7 +53,6 @@ class PostActivity : AppCompatActivity() {
         discoverPost: DiscoverPost
     ) {
         val api = PixelfedAPI.create(domain)
-        val accessToken = preferences.getString("accessToken", "") ?: ""
         val id = discoverPost.url?.substringAfterLast('/') ?: ""
         api.getStatus("Bearer $accessToken", id).enqueue(object : Callback<Status> {
 

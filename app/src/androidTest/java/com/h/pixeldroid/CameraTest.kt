@@ -1,14 +1,12 @@
 package com.h.pixeldroid
 
 import android.Manifest
-import android.content.ContentValues
 import android.content.Intent
 import android.content.Intent.ACTION_CHOOSER
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaScannerConnection
 import android.os.Environment
-import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.intent.Intents
@@ -24,7 +22,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
-import java.io.OutputStream
 
 
 class CameraTest {
@@ -51,7 +48,7 @@ class CameraTest {
     fun takePictureButton() {
         var scenario = launchFragmentInContainer<CameraFragment>()
 
-        scenario.onFragment { _ ->
+        scenario.onFragment {
             val image = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
             image.eraseColor(Color.GREEN)
             val folder =

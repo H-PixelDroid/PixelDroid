@@ -1,12 +1,11 @@
 package com.h.pixeldroid.utils
 
-import android.content.SharedPreferences
+import android.graphics.ColorMatrix
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.feeds.PostViewHolder
@@ -229,6 +228,15 @@ abstract class PostUtils {
                     }
                 }
             })
+        }
+
+        fun censorColorMatrix(): ColorMatrix {
+            val array: FloatArray = floatArrayOf( 0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 0f, 0f,  0f, 0f, 0f, 1f, 0f )
+            return ColorMatrix(array)
+        }
+
+        fun uncensorColorMatrix(): ColorMatrix {
+            return ColorMatrix()
         }
     }
 }

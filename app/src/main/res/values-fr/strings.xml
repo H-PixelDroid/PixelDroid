@@ -1,3 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="registration_failed">Impossible d\'enregistrer l\'application sur ce serveur</string>
+    <string name="auth_failed">Impossible d\'authentifier</string>
+    <string name="title_activity_settings2">Réglages</string>
+    <string name="menu_account">Mon profil</string>
+    <string name="menu_settings">Réglages</string>
+    <string name="followed_notification">%1$s vous a suivi</string>
+    <string name="shared_notification">%1$s a partagé votre publication</string>
+    <string name="liked_notification">%1$s a aimé(e) votre publication</string>
+    <string name="description">Description…</string>
+    <string name="send">envoyer</string>
+    <string name="whats_an_instance">Qu\'est-ce qu\'une instance \?</string>
+    <string name="logout">Se déconnecter</string>
+    <string name="save_to_gallery">Sauvegarder dans la gallerie…</string>
+    <string name="image_download_downloading">En cours de téléchargement…</string>
+    <string name="image_download_success">Image téléchargée avec succès</string>
+    <string name="share_picture">Partager l\'image…</string>
+    <string name="invalid_domain">Domaine invalide</string>
+    <string name="image_download_failed">Le téléchargement a échoué, veuillez réessayer</string>
+    <string name="browser_launch_failed">Impossible de lancer un navigateur, en avez-vous un \?</string>
+    <string name="mention_notification">%1$s vous a mentionné</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="token_error">Erreur lors de l\'obtention du jeton</string>
+    <string name="connect_to_pixelfed">Se connecter à PixelFed</string>
+    <string name="theme_title">Thème de l’application</string>
+    <string name="theme_header">Thème</string>
+    <string name="lbl_brightness">LUMINOSITÉ</string>
+    <string name="lbl_contrast">CONTRASTE</string>
+    <string name="lbl_saturation">SATURATION</string>
+    <string name="tab_filters">FILTRES</string>
+    <string name="tab_edit">ÉDITER</string>
+    <string name="capture_button_alt">Capturer</string>
+    <string name="switch_camera_button_alt">Changer de caméra</string>
+    <string name="gallery_button_alt">Gallerie</string>
+    <string name="NoCommentsToShow">Aucun commentaire dans cette publication…</string>
+    <string name="domain_of_your_instance">Domaine de votre instance</string>
+    <string name="you_are_in_offline_mode">Vous êtes en mode hors ligne mais vous pouvez continuer accéder à un certain contenu !</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Média caché
+\n (appuyez pour afficher)</string>
+    <string name="CommentDisplay">pour afficher…</string>
+    <string name="login_connection_required_once">Vous devez vous connecter à Internet au moins une fois afin de pouvoir utiliser PixelDroid :(</string>
 </resources>

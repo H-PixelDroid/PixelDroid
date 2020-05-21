@@ -46,12 +46,7 @@ class ThumbnailAdapter (private val context: Context,
     }
 
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var thumbnail: ImageView
-        var filterName: TextView
-
-        init {
-            thumbnail = itemView.thumbnail
-            filterName = itemView.filter_name
-        }
+        var thumbnail: ImageView = itemView.thumbnail
+        var filterName: TextView = itemView.filter_name
     }
 }
