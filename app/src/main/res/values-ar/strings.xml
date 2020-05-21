@@ -55,4 +55,22 @@
     <string name="loading_toast">طرأ خطأ أنثاء التحميل</string>
     <string name="normal_filter">عادي</string>
     <string name="upload_post_error">فشل في تحميل المشاركة: ليس 200</string>
+    <string name="nb_following">%1$s
+\nالمتابَعين</string>
+    <string name="nb_followers">%1$s
+\nمتابِعين</string>
+    <string name="nb_posts">%1$s
+\nمنشورات</string>
+    <string name="comment">علّق</string>
+    <string name="comment_posted">التعليق: نُشِر %1$s!</string>
+    <string name="comment_error">خطأ في التعليق!</string>
+    <string name="share_image">مشاركة الصورة</string>
+    <string name="write_permission_share_pic">يجب عليك منح تصريح للكتابة قصد مشاركة الصور!</string>
+    <string name="write_permission_download_pic">يجب عليك منح تصريح للكتابة قصد تنزيل الصور!</string>
+    <string name="empty_comment">لا يجب ترك التعليق فارغًا!</string>
+    <string name="posted_on">نُشِر في %1$s</string>
+    <string name="shares">%1$s مشاركات</string>
+    <string name="likes">%1$s إعجاب(إعجابات)</string>
+    <string name="no_description">مِن دون وصف</string>
+    <string name="feed_failed">تعذّر جلب التدفق</string>
 </resources>
