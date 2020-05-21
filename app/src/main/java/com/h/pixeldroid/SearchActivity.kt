@@ -77,9 +77,9 @@ class SearchActivity : AppCompatActivity() {
         val tabLayout = findViewById<TabLayout>(R.id.search_tabs)
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when(position){
-                0 -> tab.text = "POSTS"
-                1 -> tab.text = "ACCOUNTS"
-                2 -> tab.text = "HASHTAGS"
+                0 -> tab.text = getString(R.string.posts)
+                1 -> tab.text = getString(R.string.accounts)
+                2 -> tab.text = getString(R.string.hashtags)
             }
         }.attach()
         when(searchType){

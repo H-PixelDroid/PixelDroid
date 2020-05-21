@@ -128,7 +128,8 @@ class PostCreationActivity : AppCompatActivity(){
         val content = textField.text.toString()
         if (content.length > maxLength) {
             // error, too many characters
-            textField.error = "Description can contain at most $maxLength characters."
+            textField.error = getString(R.string.description_max_characters).format(maxLength)
+
             return false
         }
         // store the description
@@ -180,18 +181,21 @@ class PostCreationActivity : AppCompatActivity(){
         ).enqueue(object: Callback<Status> {
             override fun onFailure(call: Call<Status>, t: Throwable) {
                 enableButton(true)
-                Toast.makeText(applicationContext,"Post upload failed",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,getString(R.string.upload_post_failed),
+                    Toast.LENGTH_SHORT).show()
                 Log.e(TAG, t.message + call.request())
             }
 
             override fun onResponse(call: Call<Status>, response: Response<Status>) {
                 if (response.code() == 200) {
-                    Toast.makeText(applicationContext,"Post upload success",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,getString(R.string.upload_post_success),
+                        Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@PostCreationActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 } else {
-                    Toast.makeText(applicationContext,"Post upload failed : not 200",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,getString(R.string.upload_post_error),
+                        Toast.LENGTH_SHORT).show()
                     Log.e(TAG, call.request().toString() + response.raw().toString())
                     enableButton(true)
                 }
