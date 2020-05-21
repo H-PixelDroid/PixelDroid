@@ -42,4 +42,37 @@
     <string name="add_account_description">Добавить другой аккаунт PixelFed</string>
     <string name="add_account_name">Добавить аккаунт</string>
     <string name="instance_error">Не удалось получить информацию о инстансе</string>
+    <string name="nb_following">%1$s
+\nПодписок</string>
+    <string name="nb_followers">%1$s
+\nПодписчиков</string>
+    <string name="nb_posts">%1$s
+\nПостов</string>
+    <string name="comment">Комментарий</string>
+    <string name="comment_posted">Комментарий: %1$s опубликовано!</string>
+    <string name="comment_error">Ошибка комментария!</string>
+    <string name="share_image">Поделиться изображением</string>
+    <string name="write_permission_download_pic">Вы должны дать разрешение что бы загрузить изображения!</string>
+    <string name="write_permission_share_pic">Вы должны дать разрешение что бы поделиться изображениями!</string>
+    <string name="empty_comment">Комментарий не должен быть пустым!</string>
+    <string name="posted_on">Опубликовано в %1$s</string>
+    <string name="shares">%1$s репостов</string>
+    <string name="likes">%1$s лайков</string>
+    <string name="no_description">Нет описания</string>
+    <string name="feed_failed">Не удалось получить ленту</string>
+    <string name="loading_toast">Что-то пошло не так при загрузке (да и в моей жизни что-то пошло не так((()</string>
+    <string name="normal_filter">Обычный</string>
+    <string name="upload_post_error">Не удалось загрузить пост: не 200</string>
+    <string name="upload_post_success">Пост удачно загружен</string>
+    <string name="upload_post_failed">Не удалось загрузить пост</string>
+    <string name="request_format_error">Ошибка загрузки: плохой формат запроса</string>
+    <string name="picture_format_error">Ошибка загрузки: неправильный формат изображения.</string>
+    <string name="upload_picture_failed">Ошибка загрузки изображения!</string>
+    <string name="description_max_characters">Описание должно содержать максимум %1$s символов.</string>
+    <string name="save_image_success">Изображение удачно сохранено</string>
+    <string name="save_image_failed">Невозможно сохранить изображение</string>
+    <string name="permission_denied">Нет прав</string>
+    <string name="dark_theme">Тёмный</string>
+    <string name="light_theme">Светлый</string>
+    <string name="default_theme">По умолчанию (как в системе)</string>
 </resources>
