@@ -48,4 +48,5 @@
     <string name="light_theme">فاتح</string>
     <string name="save_image_success">تم حفظ الصورة بنجاح</string>
     <string name="default_theme">افتراضي (حسب النظام)</string>
+    <string name="description_max_characters">يجب أن يحتوي الوصف على٪ 1 $ s حرفًا على الأكثر.</string>
 </resources>
