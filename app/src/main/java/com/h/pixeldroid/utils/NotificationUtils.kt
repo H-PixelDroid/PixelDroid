@@ -23,17 +23,19 @@ abstract class NotificationUtils {
             credential : String,
             context: Context,
             resources: Resources,
+            db : AppDatabase,
             badge : BadgeDrawable
         ) {
-            val db = DBUtils.initDB(context)
             //Check for the latest notification id
             api.notifications(credential, limit="1").enqueue(object : Callback<List<Notification>> {
                 override fun onResponse(call: Call<List<Notification>>, response: Response<List<Notification>>) {
                     if (response.code() == 200) {
                         val resultingId = (response.body() as List<Notification>)[0].id.toInt()
-
+                        Log.e("NOTIFICATIONS_ID", "$resultingId")
                         //Check the resulting ID against the db id
                         val oldId = db.notificationIdDao().get()?.notificationId ?: resultingId
+
+                        Log.e("DB_NOTIF_ID", "$oldId")
                         if(resultingId != oldId) {
                             badge.isVisible = true
                             val difference = resultingId - oldId
@@ -58,9 +60,9 @@ abstract class NotificationUtils {
             credential : String,
             context: Context,
             resources: Resources,
+            db : AppDatabase,
             badge : BadgeDrawable
         ) {
-            val db = DBUtils.initDB(context)
             //Check for the latest notification id
             api.notifications(credential, limit="1").enqueue(object : Callback<List<Notification>> {
                 override fun onResponse(call: Call<List<Notification>>, response: Response<List<Notification>>) {
@@ -72,6 +74,8 @@ abstract class NotificationUtils {
 
                         //Update the database entry
                         db.notificationIdDao().updateLatestId(resultingId)
+
+                        Log.e("NOTIFICATIONS_LATEST_ID", "$resultingId")
                     } else{
                         Log.e("NOTIFICATIONS_REQUEST", "${response.code()}")
                     }

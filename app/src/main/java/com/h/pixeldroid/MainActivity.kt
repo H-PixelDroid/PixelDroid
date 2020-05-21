@@ -288,6 +288,7 @@ class MainActivity : AppCompatActivity() {
             tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
 
                 override fun onTabSelected(tab: TabLayout.Tab) {
+                    Log.e("TAB", "Selected Tab number ${tab.position}")
                     //Check if the notifications tab was selected
                     if(tab.position == 3) {
                         //Only update the badge if the user has internet
@@ -298,6 +299,7 @@ class MainActivity : AppCompatActivity() {
                                 "Bearer $accessToken",
                                 applicationContext,
                                 resources,
+                                db,
                                 badge
                             )
                         } else {
@@ -311,6 +313,7 @@ class MainActivity : AppCompatActivity() {
                                 "Bearer $accessToken",
                                 applicationContext,
                                 resources,
+                                db,
                                 badge
                             )
                         } else {
@@ -319,8 +322,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onTabUnselected(tab: TabLayout.Tab) {}
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                    Log.e("TAB", "Unselected Tab number ${tab.position}")
+                }
                 override fun onTabReselected(tab: TabLayout.Tab) {
+                    Log.e("TAB", "Reselected Tab number ${tab.position}")
                     onTabSelected(tab)
                 }
             })
@@ -331,6 +337,7 @@ class MainActivity : AppCompatActivity() {
                 "Bearer $accessToken",
                 applicationContext,
                 resources,
+                db,
                 badge
             )
         }
