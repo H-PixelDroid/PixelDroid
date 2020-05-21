@@ -237,14 +237,6 @@ interface PixelfedAPI {
         @Part file: MultipartBody.Part
     ): Observable<Attachment>
 
-    @Multipart
-    @POST("/api/v1/media")
-    fun uploadImage(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
-        @Part file: MultipartBody.Part
-    ): Observable<Attachment>
-
     // get instance configuration
     @GET("/api/v1/instance")
     fun instance() : Call<Instance>

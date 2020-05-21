@@ -149,7 +149,7 @@ class PostCreationActivity : AppCompatActivity(){
             }
 
         var postSub : Disposable?= null
-        val inter = pixelfedAPI.uploadImage("Bearer $accessToken", requestBody.parts[0])
+        val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", requestBody.parts[0])
 
         postSub = inter
             .subscribeOn(Schedulers.io())
