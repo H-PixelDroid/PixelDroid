@@ -60,7 +60,7 @@
     <string name="nb_followers">%1$s
 \nمتابع</string>
     <string name="nb_posts">%1$s
-\nمنشورات</string>
+\nمشاركة</string>
     <string name="comment">تعليق</string>
     <string name="comment_posted">التعليق: تم نشر٪ 1 $ s!</string>
     <string name="comment_error">خطأ في التعليق!</string>
