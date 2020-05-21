@@ -54,4 +54,5 @@
     <string name="upload_picture_failed">خطأ في تحميل الصورة!</string>
     <string name="loading_toast">طرأ خطأ أنثاء التحميل</string>
     <string name="normal_filter">عادي</string>
+    <string name="upload_post_error">فشل في تحميل المشاركة: ليس 200</string>
 </resources>
