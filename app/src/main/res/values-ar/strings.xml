@@ -95,4 +95,5 @@
     <string name="hashtags">الوسوم</string>
     <string name="media_upload_completed">{gmd_cloud_done} تم تحميل الوسائط</string>
     <string name="posting_image_accessibility_hint">جارٍ نشر الصورة</string>
+    <string name="picture_format_error">خطأ في التحميل: نسق الصورة غير صالح.</string>
 </resources>
