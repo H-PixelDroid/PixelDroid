@@ -46,4 +46,6 @@
     <string name="permission_denied">رُفض التصريح</string>
     <string name="dark_theme">داكن</string>
     <string name="light_theme">فاتح</string>
+    <string name="save_image_success">تم حفظ الصورة بنجاح</string>
+    <string name="default_theme">افتراضي (حسب النظام)</string>
 </resources>
