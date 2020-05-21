@@ -88,7 +88,7 @@
     <string name="hashtags">HASHTAGS</string>
     <string name="accounts">KONTEN</string>
     <string name="posts">BEITRÄGE</string>
-    <string name="posting_image_accessibility_hint">Bild wird gepostet</string>
+    <string name="posting_image_accessibility_hint">Hochzuladendes Bild</string>
     <string name="media_upload_failed">{gmd_cloud_off} Hochladen der Medien fehlgeschlagen, versuche es nochmal oder überprüfe deine Netzwerkverbindung</string>
     <string name="media_upload_completed">{gmd_cloud_done} Hochladen der Medien abgeschlossen</string>
     <string name="request_format_error">Fehler beim Hochladen: Falsches Request Format</string>
