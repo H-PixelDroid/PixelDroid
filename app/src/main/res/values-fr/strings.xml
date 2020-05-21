@@ -51,7 +51,7 @@
     <string name="permission_denied">Permission refusée</string>
     <string name="dark_theme">Sombre</string>
     <string name="light_theme">Clair</string>
-    <string name="default_theme">Par défaut (en suivant le système)</string>
+    <string name="default_theme">Par défaut (Suivant votre systeme)</string>
     <string name="upload_post_failed">Échec du post-téléversement</string>
     <string name="upload_post_success">Téléversement de la publication réussi</string>
     <string name="posted_on">Publié le %1$s</string>
