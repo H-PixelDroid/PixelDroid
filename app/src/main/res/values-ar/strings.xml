@@ -62,7 +62,7 @@
     <string name="nb_posts">%1$s
 \nمنشورات</string>
     <string name="comment">علّق</string>
-    <string name="comment_posted">التعليق: نُشِر %1$s!</string>
+    <string name="comment_posted">التعليق: تم نشر٪ 1 $ s!</string>
     <string name="comment_error">خطأ في التعليق!</string>
     <string name="share_image">مشاركة الصورة</string>
     <string name="write_permission_share_pic">يجب عليك منح تصريح للكتابة قصد مشاركة الصور!</string>
