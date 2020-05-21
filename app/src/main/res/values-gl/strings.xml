@@ -34,10 +34,12 @@
     <string name="CommentDisplay">amostrar…</string>
     <string name="domain_of_your_instance">Dominio da túa instancia</string>
     <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
-    <string name="login_connection_required_once">Tes que conectarte cando menos unha vez a internet para usar PixelDroid :(</string>
-    <string name="you_are_in_offline_mode">Non tes conexión, pero aínda así podes ver algún contido!</string>
+    <string name="login_connection_required_once">Debes ter conexión a internet para poder engadir a conta e usar PixelDroid :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Agochado
 \n(preme para amosar)</string>
     <string name="app_name">PixelDroid</string>
     <string name="registration_failed">Non puidemos rexistrar a aplicación neste servidor</string>
+    <string name="add_account_description">Engadir outra conta Pixelfed</string>
+    <string name="add_account_name">Engadir Conta</string>
+    <string name="instance_error">Non se obtivo a información da instancia</string>
 </resources>

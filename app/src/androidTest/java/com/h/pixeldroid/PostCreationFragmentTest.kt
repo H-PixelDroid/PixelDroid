@@ -1,10 +1,10 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
@@ -12,7 +12,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
@@ -22,7 +21,6 @@ import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.utils.DBUtils
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.camera_ui_container.*
 import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
@@ -67,9 +65,6 @@ class PostFragmentUITests {
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(30)
-    @get:Rule
-    var rule = ActivityScenarioRule(MainActivity::class.java)
-
     private lateinit var db: AppDatabase
 
 

@@ -123,6 +123,7 @@ dependencies {
 
     //iconics
     implementation "com.mikepenz:materialdrawer-iconics:8.0.3"
+    implementation "com.mikepenz:iconics-views:5.0.2"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
 
 

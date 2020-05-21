@@ -10,42 +10,104 @@
     <string name="token_error">"Error getting token"</string>
     <string name="instance_error">"Could not get instance information"</string>
     <string name="title_activity_settings2">Settings</string>
+
     <!-- Theme Preferences -->
     <string name="theme_title">Application Theme</string>
     <string name="theme_header">Theme</string>
+    <string name="default_theme">Default (Follows system)</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
 
     <string name="followed_notification">%1$s followed you</string>
     <string name="mention_notification">%1$s mentioned you</string>
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
-
+    <!-- Login page -->
+    <string name="whats_an_instance">"What's an instance?"</string>
+    <string name="domain_of_your_instance">Domain of your instance</string>
+    <string name="connect_to_pixelfed">Connect to Pixelfed</string>
+    <string name="login_connection_required_once">You need to be online to be able to add the first account and use PixelDroid :(</string>
+    <string name="add_account_name">Add Account</string>
+    <string name="add_account_description">Add another Pixelfed Account</string>
+    <!-- Drawer -->
+    <string name="logout">Log out</string>
+    <!-- Post creation -->
+    <string name="permission_denied">Permission denied</string>
+    <string name="save_image_failed">Unable to save image</string>
+    <string name="save_image_success">Image succesfully saved</string>
+    <string name="description_max_characters">"Description must contain %1$s characters at most."</string>
+    <string name="upload_picture_failed">Picture upload error!</string>
+    <string name="picture_format_error">Upload error: wrong picture format.</string>
+    <string name="request_format_error">Upload error: bad request format</string>
+    <string name="upload_post_failed">Post upload failed</string>
+    <string name="upload_post_success">Post upload success</string>
+    <string name="upload_post_error">Post upload failed : not 200</string>
     <string name="description">Description…</string>
     <string name="send">send</string>
-    <string name="whats_an_instance">"What's an instance?"</string>
-    <string name="logout">Log out</string>
-
+    <!-- Post edition -->
     <string name="lbl_brightness">BRIGHTNESS</string>
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">SATURATION</string>
     <string name="tab_filters">FILTERS</string>
     <string name="tab_edit">EDIT</string>
-
-    <string name="save_to_gallery">Save to Gallery…</string>
-    <string name="image_download_failed">Download has been failed, please try again</string>
-    <string name="image_download_downloading">Downloading…</string>
-    <string name="image_download_success">Image downloaded successfully</string>
+    <string name="normal_filter">Normal</string>
+    <!-- Camera -->
     <string name="capture_button_alt">Capture</string>
     <string name="switch_camera_button_alt">Switch camera</string>
     <string name="gallery_button_alt">Gallery</string>
+    <!-- Loading error messages -->
+    <string name="loading_toast">Something went wrong while loading</string>
+    <string name="feed_failed">Could not get feed</string>
+    <!-- Post pop-up options -->
     <string name="share_picture">Share picture…</string>
+    <string name="save_to_gallery">Save to Gallery…</string>
+    <string name="image_download_failed">Download has failed, please try again</string>
+    <string name="image_download_downloading">Downloading…</string>
+    <string name="image_download_success">Image downloaded successfully</string>
+    <!-- Post attributes -->
+    <string name="no_description">No description</string>
+    <string name="likes">"%1$s Likes"</string>
+    <string name="shares">"%1$s Shares"</string>
+    <string name="posted_on">"Posted on %1$s"</string>
     <string name="NoCommentsToShow">No comments on this post…</string>
+    <string name="empty_comment">Comment must not be empty!</string>
+    <string name="write_permission_download_pic">You need to grant write permission to download pictures!</string>
+    <string name="write_permission_share_pic">You need to grant write permission to share pictures!</string>
+    <string name="share_image">Share Image</string>
+    <string name="comment_error">Comment error!</string>
+    <string name="comment_posted">"Comment: %1$s posted!"</string>
+    <string name="comment">Comment</string>
     <string name="CommentDisplay"> to show…</string>
-    <string name="domain_of_your_instance">Domain of your instance</string>
-    <string name="connect_to_pixelfed">Connect to Pixelfed</string>
-    <string name="login_connection_required_once">You need to be online to be able to add the first account and use PixelDroid :(</string>
-    <string name="you_are_in_offline_mode">You are in offline mode, but you can still view some content!</string>
-    <string name="add_account_name">Add Account</string>
-    <string name="add_account_description">Add another Pixelfed Account</string>
+    <!-- Profile page -->
+    <string name="nb_posts">"%1$s\nPosts"</string>
+    <string name="nb_followers">"%1$s\nFollowers"</string>
+    <string name="nb_following">"%1$s\nFollowing"</string>
+    <string name="follow_status_failed">Could not get follow status</string>
+    <string name="follow_button_failed">Could not display follow button</string>
+    <string name="follow_error">Could not follow</string>
+    <string name="action_not_allowed">This action is not allowed</string>
+    <string name="unfollow_error">Could not unfollow</string>
+    <string name="access_token_invalid">The access token is invalid</string>
+    <string name="default_nposts">-\nPosts</string>
+    <string name="default_nfollowers">-\nFollowers</string>
+    <string name="default_nfollowing">-\nFollowing</string>
+    <string name="no_username">No Username</string>
+    <string name="follow">Follow</string>
+    <string name="edit_profile">Edit profile</string>
+    <!-- Search page -->
+    <string name="search">Search</string>
+    <string name="posts">POSTS</string>
+    <string name="accounts">ACCOUNTS</string>
+    <string name="hashtags">HASHTAGS</string>
+    <!-- Sensitive media -->
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media \n (click to show)</string>
+
+    <!-- Shown when image has finished uploading. {gmd_cloud_done} is an icon, position it as is appropriate in target language -->
+    <string name="media_upload_completed">{gmd_cloud_done} Media upload completed</string>
+    <!-- Shown when image uploading has failed. {gmd_cloud_off} is an icon, position it as is appropriate in target language -->
+    <string name="media_upload_failed">{gmd_cloud_off} Media upload failed, try again or check network conditions</string>
+
+    <string name="posting_image_accessibility_hint">Image being posted</string>
+    <string name="retry">Retry</string>
 
 </resources>

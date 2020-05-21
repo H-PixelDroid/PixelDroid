@@ -75,7 +75,7 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
 
         val tbItem = ThumbnailItem()
         tbItem.image = tbImage
-        tbItem.filterName = "Normal"
+        tbItem.filterName = getString(R.string.normal_filter)
         ThumbnailsManager.addThumb(tbItem)
 
         val filters = FilterPack.getFilterPack(requireActivity())

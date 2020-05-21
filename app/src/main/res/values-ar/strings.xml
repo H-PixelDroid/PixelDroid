@@ -33,11 +33,13 @@
     <string name="image_download_failed">فشل التنزيل ، حاول مجددًا مِن فضلك</string>
     <string name="liked_notification">أعجِب %1$s بمنشورك</string>
     <string name="domain_of_your_instance">اسم نطاق مثيل خادمك</string>
-    <string name="login_connection_required_once">يجب عليك الاتصال بالأنترنت ولو لمرة واحدة قصد استخدام PixelDroid :(</string>
+    <string name="login_connection_required_once">يجب أن تكون متصلا بالأنترنت لتتمكن مِن إضافة أول حساب واستخدام PixelDroid :(</string>
     <string name="capture_button_alt">لقطة شاشة</string>
-    <string name="you_are_in_offline_mode">إنك غير متصل الآن ولكنه لا يزال بإمكانك عرض بعض المحتوى!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / وسائط مخفية
 \n (اضعط للعرض)</string>
     <string name="lbl_contrast">تباين عالٍ</string>
     <string name="lbl_saturation">التشبّع اللوني</string>
+    <string name="add_account_description">إضافة حساب PixelFed آخر</string>
+    <string name="add_account_name">إضافة حساب</string>
+    <string name="instance_error">تعذّر الحصول على معلومات مثيل الخادم</string>
 </resources>

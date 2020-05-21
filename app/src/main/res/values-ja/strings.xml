@@ -39,5 +39,7 @@
     <string name="tab_edit">編集</string>
     <string name="image_download_failed">ダウンロードに失敗しました、もう一度実行してください</string>
     <string name="NoCommentsToShow">この投稿にはコメントがありません…</string>
-    <string name="you_are_in_offline_mode">オフラインモードです、一部のコンテンツは引き続き表示できます</string>
+    <string name="add_account_description">他のPixelfedアカウントを追加</string>
+    <string name="add_account_name">アカウントを追加</string>
+    <string name="instance_error">インスタンス情報が取得できませんでした</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login_connection_required_once">برای استفاده از پیکسل‌دروید باید لااقل یک مرتبه به اینترنت وصل شوید :(</string>
+    <string name="login_connection_required_once">برای افزود نخستین حساب و استفاده از پیکسل‌دروید لازم است برخط باشید :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">رسانهٔ پنهان / نامناسب برای محیط کار / دارای هشدار
 \n(برای نمایش، کلیک کنید)</string>
     <string name="menu_settings">تنظیمات</string>
@@ -36,8 +36,10 @@
     <string name="CommentDisplay">برای نمایش…</string>
     <string name="domain_of_your_instance">دامنهٔ نمونهٔ شما</string>
     <string name="connect_to_pixelfed">اتصال به پیکسل‌فد</string>
-    <string name="you_are_in_offline_mode">شما در حالت برخط نیستید، اما همچنان می‌توانید برخی محتواها را ببینید!</string>
     <string name="app_name">پیکسل‌دروید</string>
     <string name="menu_account">نمایهٔ من</string>
     <string name="registration_failed">نتوانستیم برنامه را روی این کارساز ثبت کنیم</string>
+    <string name="add_account_description">افزودن یک حساب دیگر پیکسل‌فد</string>
+    <string name="add_account_name">افزودن حساب</string>
+    <string name="instance_error">نتوانستیم اطلاعات نمونه را دریافت کنیم</string>
 </resources>

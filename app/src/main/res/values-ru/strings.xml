@@ -34,10 +34,12 @@
     <string name="description">Описание…</string>
     <string name="image_download_failed">Скачивание не удалось, попробуйте ещё раз</string>
     <string name="share_picture">Поделиться изображение…</string>
-    <string name="login_connection_required_once">Вам необходимо подключение к интернету что бы использовать PixelDroid :(</string>
-    <string name="you_are_in_offline_mode">Вы в оффлайн режиме, но вы можете видеть некоторый контент!</string>
+    <string name="login_connection_required_once">Вам необходимо быть в сети что бы добавить аккаунт и использовать PixelDroid :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Скрытое медиа
 \n (кликните что бы показать)</string>
     <string name="registration_failed">Не удалось зарегистрировать приложение на этом инстансе</string>
     <string name="capture_button_alt">Захватить</string>
+    <string name="add_account_description">Добавить другой аккаунт PixelFed</string>
+    <string name="add_account_name">Добавить аккаунт</string>
+    <string name="instance_error">Не удалось получить информацию о инстансе</string>
 </resources>

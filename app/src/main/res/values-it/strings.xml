@@ -37,7 +37,6 @@
     <string name="gallery_button_alt">Galleria</string>
     <string name="domain_of_your_instance">Dominio della tua istanza</string>
     <string name="login_connection_required_once">È necessario connettersi a Internet almeno una volta per utilizzare PixelDroid :(</string>
-    <string name="you_are_in_offline_mode">Sei in modalità offline, ma puoi comunque visualizzare alcuni contenuti!</string>
     <string name="invalid_domain">Dominio non valido</string>
     <string name="tab_edit">MODIFICA</string>
 </resources>

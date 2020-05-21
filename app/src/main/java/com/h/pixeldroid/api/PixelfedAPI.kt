@@ -1,6 +1,7 @@
 package com.h.pixeldroid.api
 
 import com.h.pixeldroid.objects.*
+import io.reactivex.Observable
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -8,6 +9,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
+
 
 /*
     Implements the Pixelfed API
@@ -233,7 +235,7 @@ interface PixelfedAPI {
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Part file: MultipartBody.Part
-    ): Call<Attachment>
+    ): Observable<Attachment>
 
     // get instance configuration
     @GET("/api/v1/instance")
@@ -245,4 +247,3 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String
     ) : Call<DiscoverPosts>
 }
-
