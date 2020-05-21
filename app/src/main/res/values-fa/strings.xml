@@ -42,4 +42,22 @@
     <string name="add_account_description">افزودن یک حساب دیگر پیکسل‌فد</string>
     <string name="add_account_name">افزودن حساب</string>
     <string name="instance_error">نتوانستیم اطلاعات نمونه را دریافت کنیم</string>
+    <string name="permission_denied">ممنوعیت دسترسی</string>
+    <string name="save_image_failed">نتوانستیم تصویر را ذخیره کنیم</string>
+    <string name="description_max_characters">"توضیحات حداکثر می‌توانند تا  %1$s حرف داشته باشند."</string>
+    <string name="default_theme">پیش‌فرض (پیروی از سیستم‌عامل)</string>
+    <string name="light_theme">روشن</string>
+    <string name="dark_theme">تاریک</string>
+    <string name="upload_post_error">بارگذاری مطلب ناموفق بود: غیر از ۲۰۰</string>
+    <string name="save_image_success">تصویر با موفقیت ذخیره شد</string>
+    <string name="upload_picture_failed">خطا در بارگذاری تصویر!</string>
+    <string name="picture_format_error">خطای بارگذاری: تصویر با قالب نادرست</string>
+    <string name="request_format_error">خطای بارگذاری: درخواست با قالب نادرست</string>
+    <string name="upload_post_failed">بارگذاری مطلب ناموفق بود</string>
+    <string name="upload_post_success">مطلب با موفقیت بارگذاری شد</string>
+    <string name="normal_filter">عادی</string>
+    <string name="loading_toast">مشکلی حین بارکردن رخ داد</string>
+    <string name="feed_failed">نتوانستیم خوراک را دریافت کنیم</string>
+    <string name="no_description">بدون توضیحات</string>
+    <string name="likes">%1$s پسند</string>
 </resources>
