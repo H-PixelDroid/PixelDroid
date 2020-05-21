@@ -36,7 +36,6 @@
     <string name="CommentDisplay">برای نمایش…</string>
     <string name="domain_of_your_instance">دامنهٔ نمونهٔ شما</string>
     <string name="connect_to_pixelfed">اتصال به پیکسل‌فد</string>
-    <string name="you_are_in_offline_mode">شما در حالت برخط نیستید، اما همچنان می‌توانید برخی محتواها را ببینید!</string>
     <string name="app_name">پیکسل‌دروید</string>
     <string name="menu_account">نمایهٔ من</string>
     <string name="registration_failed">نتوانستیم برنامه را روی این کارساز ثبت کنیم</string>

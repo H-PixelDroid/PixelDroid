@@ -39,7 +39,6 @@
     <string name="domain_of_your_instance">Domein van je instance</string>
     <string name="connect_to_pixelfed">Met Pixelfed verbinden</string>
     <string name="login_connection_required_once">Je moet met het internet verbonden zijn om je eerste account toe te voegen en PixelDroid te kunnen gebruiken :(</string>
-    <string name="you_are_in_offline_mode">Je bent in de offline modus, maar je kan nog steeds bepaalde inhoud zien!</string>
     <string name="add_account_description">Andere Pixelfed account toevoegen</string>
     <string name="add_account_name">Account toevoegen</string>
 </resources>
