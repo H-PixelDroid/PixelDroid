@@ -73,7 +73,7 @@
     <string name="likes">%1$s إعجاب(إعجابات)</string>
     <string name="no_description">مِن دون وصف</string>
     <string name="feed_failed">تعذّر جلب التدفق</string>
-    <string name="retry">اعد المحاولة</string>
+    <string name="retry">حاول مجدّدًا</string>
     <string name="action_not_allowed">هذا الإجراء غير مسموح به</string>
     <string name="follow_error">تعذّرت المتابَعة</string>
     <string name="follow_button_failed">"تعذر عرض  زر المتابعة"</string>
@@ -84,4 +84,15 @@
 \nمنشورات</string>
     <string name="access_token_invalid">الرمز المميز غير صالح</string>
     <string name="unfollow_error">تعذّر إلغاء المتابعة</string>
+    <string name="default_nfollowing">-
+\nالمتابَعين</string>
+    <string name="no_username">ليس هناك اسم مستخدم</string>
+    <string name="follow">تابِع</string>
+    <string name="edit_profile">تعديل الملف التعريفي</string>
+    <string name="search">البحث</string>
+    <string name="posts">المنشورات</string>
+    <string name="accounts">الحسابات</string>
+    <string name="hashtags">الوسوم</string>
+    <string name="media_upload_completed">{gmd_cloud_done} تم تحميل الوسائط</string>
+    <string name="posting_image_accessibility_hint">جارٍ نشر الصورة</string>
 </resources>
