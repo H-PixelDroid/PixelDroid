@@ -2,7 +2,7 @@
 
     <PreferenceCategory app:title="@string/theme_header">
         <ListPreference
-            app:defaultValue="Default"
+            app:defaultValue="@string/default_theme"
             app:entries="@array/theme_entries"
             app:entryValues="@array/theme_values"
             app:key="theme"
