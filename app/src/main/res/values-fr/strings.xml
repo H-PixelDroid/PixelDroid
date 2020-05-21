@@ -33,7 +33,7 @@
     <string name="capture_button_alt">Capturer</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
     <string name="gallery_button_alt">Galerie</string>
-    <string name="NoCommentsToShow">Aucun commentaire dans cette publication…</string>
+    <string name="NoCommentsToShow">"Pas de commentaire pour cette publication. "</string>
     <string name="domain_of_your_instance">Domaine de votre instance</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Média caché
 \n (appuyez pour afficher)</string>
