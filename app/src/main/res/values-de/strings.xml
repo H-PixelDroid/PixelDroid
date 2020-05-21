@@ -63,6 +63,32 @@
     <string name="search">Suchen</string>
     <string name="follow">Folgen</string>
     <string name="edit_profile">Profil bearbeiten</string>
-    <string name="upload_post_success">"Erfolgreich hochgeladen "</string>
+    <string name="upload_post_success">Erfolgreich hochgeladen</string>
     <string name="upload_post_error">Hochladen des Beitrags fehlgeschlagen</string>
+    <string name="comment_error">Kommentarfehler!</string>
+    <string name="comment_posted">Kommentar platziert: %1$s</string>
+    <string name="nb_posts">%1$s
+\nBeiträge</string>
+    <string name="nb_followers">%1$s
+\nFollower</string>
+    <string name="nb_following">%1$s
+\nFolgt</string>
+    <string name="follow_button_failed">Konnte Knopf zum Folgen nicht anzeigen</string>
+    <string name="follow_error">Konnte nicht folgen</string>
+    <string name="no_username">Kein Benutzername</string>
+    <string name="default_nfollowing">-
+\nFolgend</string>
+    <string name="action_not_allowed">Diese Handlung ist nicht erlaubt</string>
+    <string name="unfollow_error">Konnte nicht entfolgen</string>
+    <string name="access_token_invalid">Dieser Zugangstoken ist ungültig</string>
+    <string name="default_nposts">-
+\nBeiträge</string>
+    <string name="default_nfollowers">-
+\nFollower</string>
+    <string name="hashtags">HASHTAGS</string>
+    <string name="accounts">KONTEN</string>
+    <string name="posts">BEITRÄGE</string>
+    <string name="posting_image_accessibility_hint">Bild wird gepostet</string>
+    <string name="media_upload_failed">{gmd_cloud_off} Hochladen der Medien fehlgeschlagen, versuche es nochmal oder überprüfe deine Netzwerkverbindung</string>
+    <string name="media_upload_completed">" {gmd_cloud_done} Hochladen der Medien abgeschlossen"</string>
 </resources>
