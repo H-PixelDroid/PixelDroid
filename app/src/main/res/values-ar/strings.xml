@@ -79,8 +79,9 @@
     <string name="follow_button_failed">تعذر عرض زر المتابعة</string>
     <string name="follow_status_failed">تعذر جلب الاشتراك</string>
     <string name="default_nfollowers">-
-\nالمتابِعين</string>
-    <string name="default_nposts">المشاركات</string>
+\nالمتابِعون</string>
+    <string name="default_nposts">-
+\nالمشاركات</string>
     <string name="access_token_invalid">الرمز المميز غير صالح</string>
     <string name="unfollow_error">تعذر الغاء المتابعة</string>
     <string name="default_nfollowing">-
