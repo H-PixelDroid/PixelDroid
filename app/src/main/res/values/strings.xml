@@ -39,7 +39,7 @@
     <string name="request_format_error">Upload error: bad request format</string>
     <string name="upload_post_failed">Post upload failed</string>
     <string name="upload_post_success">Post uploaded successfully</string>
-    <string name="upload_post_error">Post upload failed: server responded with error</string>
+    <string name="upload_post_error">Post upload failed</string>
     <string name="description">Description…</string>
     <string name="send">send</string>
     <!-- Post edition -->
