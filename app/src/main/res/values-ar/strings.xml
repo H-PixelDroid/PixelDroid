@@ -76,7 +76,7 @@
     <string name="retry">حاول مجدّدًا</string>
     <string name="action_not_allowed">هذا الإجراء غير مسموح به</string>
     <string name="follow_error">تعذّرت المتابَعة</string>
-    <string name="follow_button_failed">"تعذر عرض  زر المتابعة"</string>
+    <string name="follow_button_failed">تعذر عرض زر المتابعة</string>
     <string name="follow_status_failed">تعذر جلب الاشتراك</string>
     <string name="default_nfollowers">-
 \nالمتابِعين</string>
