@@ -19,7 +19,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryTab"
+        android:background="@color/colorPrimaryActionBar"
         app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
