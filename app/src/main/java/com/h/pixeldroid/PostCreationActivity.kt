@@ -89,6 +89,7 @@ class PostCreationActivity : AppCompatActivity(){
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
             if (setDescription() && listOfIds.isNotEmpty()) post()
         }
+        
         // Button to retry image upload when it fails
         findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
             upload_error.visibility = GONE
