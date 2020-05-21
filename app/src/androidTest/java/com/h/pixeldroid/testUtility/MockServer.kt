@@ -45,6 +45,11 @@ class MockServer {
                         .setResponseCode(200).setBody(JsonValues.tokenJson)
                 }
                 when {
+                    request.path?.startsWith("/api/v1/apps") == true -> {
+                        return MockResponse()
+                            .addHeader("Content-Type", "application/json; charset=utf-8")
+                            .setResponseCode(200).setBody(JsonValues.applicationJson)
+                    }
                     request.path?.startsWith("/api/v1/notifications") == true -> {
                         return MockResponse()
                             .addHeader("Content-Type", "application/json; charset=utf-8")

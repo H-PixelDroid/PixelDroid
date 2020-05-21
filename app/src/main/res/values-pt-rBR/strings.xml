@@ -12,7 +12,6 @@
     <string name="invalid_domain">Domínio inválido</string>
     <string name="add_account_description">Adicionar outra conta Pixelfed</string>
     <string name="add_account_name">Adicionar Conta</string>
-    <string name="you_are_in_offline_mode">Você está em modo offline, mas ainda pode ver alguns conteúdos!</string>
     <string name="login_connection_required_once">Você precisa estar conectado para poder adicionar a primeira conta e usar o PixelDroid :(</string>
     <string name="connect_to_pixelfed">Conectar-se à Pixelfed</string>
     <string name="domain_of_your_instance">Domínio da sua instância</string>

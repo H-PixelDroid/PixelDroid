@@ -37,7 +37,6 @@
     <string name="CommentDisplay">mostrar…</string>
     <string name="domain_of_your_instance">Domini de la teva instància</string>
     <string name="connect_to_pixelfed">Connecta’t a Pixelfed</string>
-    <string name="you_are_in_offline_mode">Estàs en mode fora de línia, però encara pots veure algun contingut!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Imatges ocultes
 \n(fes clic per mostrar)</string>
     <string name="add_account_description">Afegeix un altre compte</string>

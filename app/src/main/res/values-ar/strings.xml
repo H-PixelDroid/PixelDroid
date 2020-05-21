@@ -35,7 +35,6 @@
     <string name="domain_of_your_instance">اسم نطاق مثيل خادمك</string>
     <string name="login_connection_required_once">يجب أن تكون متصلا بالأنترنت لتتمكن مِن إضافة أول حساب واستخدام PixelDroid :(</string>
     <string name="capture_button_alt">لقطة شاشة</string>
-    <string name="you_are_in_offline_mode">إنك غير متصل الآن ولكنه لا يزال بإمكانك عرض بعض المحتوى!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / وسائط مخفية
 \n (اضعط للعرض)</string>
     <string name="lbl_contrast">تباين عالٍ</string>
