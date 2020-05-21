@@ -43,8 +43,8 @@
     <string name="add_account_name">Ajouter un compte</string>
     <string name="instance_error">Impossible d’obtenir des informations sur l’instance</string>
     <string name="request_format_error">Erreur de téléchargement : format de requête incorrect</string>
-    <string name="picture_format_error">Erreur de téléversement: format d\'image incorrect.</string>
-    <string name="upload_picture_failed">Erreur de téléchargement d\'image!</string>
+    <string name="picture_format_error">Erreur de téléversement : format d\'image incorrect.</string>
+    <string name="upload_picture_failed">Erreur de téléchargement d\'image !</string>
     <string name="description_max_characters">La description doit contenir au plus %1$s caractères.</string>
     <string name="save_image_success">Image enregistrée avec succès</string>
     <string name="save_image_failed">Impossible de sauvegarder l\'image</string>
@@ -53,7 +53,7 @@
     <string name="light_theme">Clair</string>
     <string name="default_theme">Par défaut (en suivant le système)</string>
     <string name="upload_post_failed">Échec du post-téléversement</string>
-    <string name="upload_post_success">Réussite du téléversement de la publication</string>
+    <string name="upload_post_success">Téléversement de la publication réussi</string>
     <string name="posted_on">Publié le %1$s</string>
     <string name="empty_comment">Le commentaire ne doit pas être vide !</string>
     <string name="write_permission_share_pic">Vous devez accorder une autorisation d\'écriture pour partager des photos !</string>
@@ -94,4 +94,8 @@
     <string name="posts">PUBLICATIONS</string>
     <string name="accounts">COMPTES</string>
     <string name="hashtags">HASHTAGS</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Média téléversé avec succès</string>
+    <string name="retry">Réessayez</string>
+    <string name="posting_image_accessibility_hint">Publication en cours de l\'image</string>
+    <string name="media_upload_failed">{gmd_cloud_off} Échec du téléversement du média, réessayez ou vérifiez les conditions du réseau</string>
 </resources>
