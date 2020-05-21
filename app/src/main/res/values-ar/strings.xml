@@ -56,7 +56,7 @@
     <string name="normal_filter">عادي</string>
     <string name="upload_post_error">فشل في تحميل المشاركة: ليس 200</string>
     <string name="nb_following">%1$s
-\nالمتابَعين</string>
+\nالمتابَعون</string>
     <string name="nb_followers">%1$s
 \nمتابع</string>
     <string name="nb_posts">%1$s
