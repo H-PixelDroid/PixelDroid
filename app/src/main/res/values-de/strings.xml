@@ -94,4 +94,6 @@
     <string name="request_format_error">Fehler beim Hochladen: Falsches Request Format</string>
     <string name="feed_failed">Konnte den Feed nicht laden</string>
     <string name="posted_on">Erstellt am %1$s</string>
+    <string name="write_permission_download_pic">Für das Herunterladen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
+    <string name="write_permission_share_pic">Für die Teilen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
 </resources>
