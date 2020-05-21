@@ -78,8 +78,7 @@
     <string name="follow_error">لا يمكن المتابعة</string>
     <string name="follow_button_failed">تعذر عرض زرالمتابعة</string>
     <string name="follow_status_failed">تعذر جلب الاشتراك</string>
-    <string name="default_nfollowers">-
-\nالمتابِعون</string>
+    <string name="default_nfollowers">المتابعون</string>
     <string name="default_nposts">-
 \nالمشاركات</string>
     <string name="access_token_invalid">الرمز المميز غير صالح</string>
