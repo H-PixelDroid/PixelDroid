@@ -34,7 +34,6 @@
     <string name="NoCommentsToShow">这条帖文下没有评论……</string>
     <string name="CommentDisplay">显示……</string>
     <string name="domain_of_your_instance">实例的域名</string>
-    <string name="you_are_in_offline_mode">您处于离线模式，但仍可以查看已缓存内容！</string>
     <string name="connect_to_pixelfed">连接至 Pixelfed</string>
     <string name="share_picture">分享图片……</string>
     <string name="login_connection_required_once">您需要联网才能添加第一个帐户并使用 PixelDroid :(</string>

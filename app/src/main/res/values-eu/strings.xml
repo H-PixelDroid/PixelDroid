@@ -24,7 +24,6 @@
     <string name="app_name">PixelDroid</string>
     <string name="gallery_button_alt">Galeria</string>
     <string name="NoCommentsToShow">Iruzkinik gabeko argitalpena…</string>
-    <string name="you_are_in_offline_mode">Lineaz kanpo editatzeko moduan zaude, baina hala ere eduki batzuk ikus ditzakezu!</string>
     <string name="theme_title">Aplikazioaren gaia</string>
     <string name="tab_edit">EDITATU</string>
     <string name="switch_camera_button_alt">Aldatu kamera</string>

@@ -37,7 +37,6 @@
     <string name="NoCommentsToShow">Inga kommentarer på detta inlägg…</string>
     <string name="CommentDisplay">att visa…</string>
     <string name="connect_to_pixelfed">Anslut till Pixelfed</string>
-    <string name="you_are_in_offline_mode">Du är i nedkopplad läge, men du kan ändå se lite innehåll!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Dold media
 \n(Tryck för att visa)</string>
     <string name="add_account_description">Lägg till ett annat Pixelfed-konto</string>

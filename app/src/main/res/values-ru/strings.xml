@@ -35,7 +35,6 @@
     <string name="image_download_failed">Скачивание не удалось, попробуйте ещё раз</string>
     <string name="share_picture">Поделиться изображение…</string>
     <string name="login_connection_required_once">Вам необходимо быть в сети что бы добавить аккаунт и использовать PixelDroid :(</string>
-    <string name="you_are_in_offline_mode">Вы в оффлайн режиме, но вы можете видеть некоторый контент!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Скрытое медиа
 \n (кликните что бы показать)</string>
     <string name="registration_failed">Не удалось зарегистрировать приложение на этом инстансе</string>

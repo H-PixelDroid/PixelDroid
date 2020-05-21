@@ -35,7 +35,6 @@
     <string name="gallery_button_alt">Galerie</string>
     <string name="NoCommentsToShow">Aucun commentaire dans cette publication…</string>
     <string name="domain_of_your_instance">Domaine de votre instance</string>
-    <string name="you_are_in_offline_mode">Vous êtes en mode hors ligne mais vous pouvez continuer accéder à un certain contenu !</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Média caché
 \n (appuyez pour afficher)</string>
     <string name="CommentDisplay">pour afficher…</string>
