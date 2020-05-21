@@ -49,7 +49,9 @@
     <string name="save_image_success">تم حفظ الصورة بنجاح</string>
     <string name="default_theme">افتراضي (حسب النظام)</string>
     <string name="description_max_characters">يجب أن يحتوي الوصف على %1$s حرفًا على الأكثر.</string>
-    <string name="upload_post_success">تم تحميل المشاركة بنجاح</string>
-    <string name="upload_post_failed">فشل تحميل المشاركة</string>
+    <string name="upload_post_success">تم تحميل المنشور بنجاح</string>
+    <string name="upload_post_failed">فشل في تحميل المنشور</string>
     <string name="upload_picture_failed">خطأ في تحميل الصورة!</string>
+    <string name="loading_toast">طرأ خطأ أنثاء التحميل</string>
+    <string name="normal_filter">عادي</string>
 </resources>
