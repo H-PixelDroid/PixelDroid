@@ -47,7 +47,7 @@
     <string name="likes">" Likes"</string>
     <string name="shares">" Shares"</string>
     <string name="posted_on">\"Posted on \"</string>
-    <string name="no_comments">No comments on this post…</string>
+    <string name="NoCommentsToShow">No comments on this post…</string>
     <string name="view_all">\"View all \"</string>
     <string name="show_comments">\" comments…\"</string>
     <string name="empty_comment">Comment must not be empty!</string>
