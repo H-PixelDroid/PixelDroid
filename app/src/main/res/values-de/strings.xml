@@ -64,4 +64,5 @@
     <string name="follow">Folgen</string>
     <string name="edit_profile">Profil bearbeiten</string>
     <string name="upload_post_success">"Erfolgreich hochgeladen "</string>
+    <string name="upload_post_error">Hochladen des Beitrags fehlgeschlagen</string>
 </resources>
