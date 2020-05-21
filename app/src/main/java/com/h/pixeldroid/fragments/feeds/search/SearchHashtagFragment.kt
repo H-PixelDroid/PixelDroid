@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -14,21 +13,11 @@ import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.ListPreloader
-import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
-import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.R
-import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.fragments.feeds.FeedFragment
 import com.h.pixeldroid.fragments.feeds.FeedsRecyclerViewAdapter
-import com.h.pixeldroid.fragments.feeds.NotificationsFragment
-import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Results
 import com.h.pixeldroid.objects.Tag
-import kotlinx.android.synthetic.main.account_list_entry.view.*
 import kotlinx.android.synthetic.main.fragment_tags.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -110,14 +99,14 @@ class SearchHashtagFragment: FeedFragment<Tag, SearchHashtagFragment.TagsRecycle
                         callback.onResult(notifications as List<Tag>)
 
                     } else{
-                        Toast.makeText(context,"Something went wrong while loading", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<Results>, t: Throwable) {
-                    Toast.makeText(context,"Could not get feed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
                     Log.e("FeedFragment", t.toString())
                 }
             })

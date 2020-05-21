@@ -32,7 +32,7 @@ class HtmlUtils {
             return result.trim().toSpanned()
         }
 
-        public fun getDomain(urlString: String?): String {
+        fun getDomain(urlString: String?): String {
             val uri: URI
             try {
                 uri = URI(urlString!!)
@@ -111,8 +111,8 @@ class HtmlUtils {
                     }
                 }
 
-                builder.removeSpan(span);
-                builder.setSpan(customSpan, start, end, flags);
+                builder.removeSpan(span)
+                builder.setSpan(customSpan, start, end, flags)
 
                 // Add zero-width space after links in end of line to fix its too large hitbox.
                 if (end >= builder.length || builder.subSequence(end, end + 1).toString() == "\n") {

@@ -13,11 +13,13 @@ import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 
 
 /**
+<<<<<<< HEAD:app/src/main/java/com/h/pixeldroid/fragments/ProfilePostGridFragment.kt
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
  * [ProfilePostGridFragment.OnListFragmentInteractionListener] interface.
  */
 class ProfilePostGridFragment : Fragment() {
+
     private var columnCount = 3
 
     override fun onCreateView(

@@ -45,7 +45,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="-\nPosts" />
+                            android:text="@string/default_nposts" />
 
                         <TextView
                             android:id="@+id/nbFollowersTextView"
@@ -53,7 +53,7 @@
                             android:layout_height="120dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="-\nFollowers" />
+                            android:text="@string/default_nfollowers" />
 
                         <TextView
                             android:id="@+id/nbFollowingTextView"
@@ -61,7 +61,7 @@
                             android:layout_height="120dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="-\nFollowing" />
+                            android:text="@string/default_nfollowing" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -78,7 +78,7 @@
                     android:id="@+id/accountNameTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No Username"
+                    android:text="@string/no_username"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -110,20 +110,21 @@
                     android:id="@+id/followButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Follow"
-                    android:textColor="@color/colorPrimary"
+                    android:text="@string/follow"
                     android:visibility="invisible"
+                    android:textColor="@color/colorButtonText"
+                    android:backgroundTint="@color/colorButtonBg"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/editButton"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="@color/colorPrimary"
-                    android:text="Edit profile"
-                    android:textColor="@color/cardview_light_background"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorButtonText"
+                    android:backgroundTint="@color/colorButtonBg"
                     android:visibility="gone"
+                    android:text="@string/edit_profile"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

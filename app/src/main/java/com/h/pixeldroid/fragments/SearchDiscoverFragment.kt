@@ -1,8 +1,6 @@
 package com.h.pixeldroid.fragments
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.h.pixeldroid.BuildConfig
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.SearchActivity
@@ -24,6 +21,7 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.DiscoverPost
 import com.h.pixeldroid.objects.DiscoverPosts
 import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,13 +33,11 @@ import retrofit2.Response
 
 class SearchDiscoverFragment : Fragment() {
     private lateinit var api: PixelfedAPI
-    private lateinit var preferences: SharedPreferences
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : DiscoverRecyclerViewAdapter
     private lateinit var accessToken: String
     private lateinit var discoverProgressBar: ProgressBar
     private lateinit var discoverRefreshLayout: SwipeRefreshLayout
-
 
 
     override fun onCreateView(
@@ -67,11 +63,14 @@ class SearchDiscoverFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        preferences = requireActivity().getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE
-        )
-        api = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        accessToken = preferences.getString("accessToken", "") ?: ""
+
+        val db = DBUtils.initDB(requireContext())
+
+        val user = db.userDao().getActiveUser()
+
+        val domain = user?.instance_uri.orEmpty()
+        api = PixelfedAPI.create(domain)
+        accessToken = user?.accessToken.orEmpty()
 
         discoverProgressBar = view.findViewById(R.id.discoverProgressBar)
         discoverRefreshLayout = view.findViewById(R.id.discoverRefreshLayout)

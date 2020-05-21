@@ -1,8 +1,6 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
@@ -24,25 +22,31 @@ import com.h.pixeldroid.fragments.ProfilePostFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Relationship
+import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ProfileActivity : AppCompatActivity() {
-    private lateinit var preferences : SharedPreferences
     private lateinit var pixelfedAPI : PixelfedAPI
     private var accessToken : String? = null
+
     private var account: Account? = null
+    private lateinit var domain : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        preferences = this.getSharedPreferences(
-            "${BuildConfig.APPLICATION_ID}.pref", Context.MODE_PRIVATE)
-        pixelfedAPI = PixelfedAPI.create("${preferences.getString("domain", "")}")
-        accessToken = preferences.getString("accessToken", "")
+        val db = DBUtils.initDB(applicationContext)
+
+        val user = db.userDao().getActiveUser()
+
+        domain = user?.instance_uri.orEmpty()
+        pixelfedAPI = PixelfedAPI.create(domain)
+        accessToken = user?.accessToken.orEmpty()
+        db.close()
 
         setContent()
     }
@@ -97,17 +101,20 @@ class ProfileActivity : AppCompatActivity() {
         accountName.setTypeface(null, Typeface.BOLD)
 
         val nbPosts = findViewById<TextView>(R.id.nbPostsTextView)
-        nbPosts.text = "${account!!.statuses_count}\nPosts"
+        nbPosts.text = applicationContext.getString(R.string.nb_posts)
+            .format(account!!.statuses_count.toString())
         nbPosts.setTypeface(null, Typeface.BOLD)
 
         val nbFollowers = findViewById<TextView>(R.id.nbFollowersTextView)
-        nbFollowers.text = "${account!!.followers_count}\nFollowers"
+        nbFollowers.text = applicationContext.getString(R.string.nb_followers)
+            .format(account!!.followers_count.toString())
         nbFollowers.setTypeface(null, Typeface.BOLD)
         // On click open followers list
         nbFollowers.setOnClickListener{ onClickFollowers() }
 
         val nbFollowing = findViewById<TextView>(R.id.nbFollowingTextView)
-        nbFollowing.text = "${account!!.following_count}\nFollowing"
+        nbFollowing.text = applicationContext.getString(R.string.nb_following)
+            .format(account!!.following_count.toString())
         nbFollowing.setTypeface(null, Typeface.BOLD)
         // On click open followers list
         nbFollowing.setOnClickListener{ onClickFollowing() }
@@ -138,14 +145,13 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun onClickEditButton() {
-        val url = "${preferences.getString("domain", "")}/settings/home"
+        val url = "$domain/settings/home"
 
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         if(browserIntent.resolveActivity(packageManager) != null) {
             startActivity(browserIntent)
         } else {
-            val text = "Cannot open this link"
-            Log.e("ProfileActivity", text)
+            Log.e("ProfileActivity", "Cannot open this link")
         }
     }
 
@@ -175,7 +181,8 @@ class ProfileActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<List<Relationship>>, t: Throwable) {
                 Log.e("FOLLOW ERROR", t.toString())
-                Toast.makeText(applicationContext,"Could not get follow status", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,getString(R.string.follow_status_failed),
+                    Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(call: Call<List<Relationship>>, response: Response<List<Relationship>>) {
@@ -193,8 +200,8 @@ class ProfileActivity : AppCompatActivity() {
                         followButton.visibility = View.VISIBLE
                     }
                 } else {
-                    Toast.makeText(applicationContext, "Could not display follow button", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(applicationContext, getString(R.string.follow_button_failed),
+                        Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -209,8 +216,8 @@ class ProfileActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<Relationship>, t: Throwable) {
                     Log.e("FOLLOW ERROR", t.toString())
-                    Toast.makeText(applicationContext, "Could not follow", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(applicationContext, getString(R.string.follow_error),
+                        Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onResponse(
@@ -221,8 +228,8 @@ class ProfileActivity : AppCompatActivity() {
                         followButton.text = "Unfollow"
                         setOnClickUnfollow()
                     } else if (response.code() == 403) {
-                        Toast.makeText(applicationContext, "This action is not allowed", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(applicationContext, getString(R.string.action_not_allowed),
+                            Toast.LENGTH_SHORT).show()
                     }
                 }
             })
@@ -238,8 +245,8 @@ class ProfileActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<Relationship>, t: Throwable) {
                     Log.e("UNFOLLOW ERROR", t.toString())
-                    Toast.makeText(applicationContext, "Could not unfollow", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(applicationContext, getString(R.string.unfollow_error),
+                        Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
@@ -247,8 +254,8 @@ class ProfileActivity : AppCompatActivity() {
                         followButton.text = "Follow"
                         setOnClickFollow()
                     } else if (response.code() == 401) {
-                        Toast.makeText(applicationContext, "The access token is invalid", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(applicationContext, getString(R.string.access_token_invalid),
+                            Toast.LENGTH_SHORT).show()
                     }
                 }
             })

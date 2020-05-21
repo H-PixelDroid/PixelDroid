@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/white"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_width="match_parent"
@@ -14,9 +13,17 @@
 
     <ImageView
         android:id="@+id/image_preview"
-        android:scaleType="centerInside"
         android:layout_width="match_parent"
-        android:layout_height="400dp"/>
+        android:layout_height="0dp"
+        android:layout_weight=".70"
+        android:scaleType="centerInside" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/cropImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_crop_black_24dp" />
 
     <com.h.pixeldroid.utils.NonSwipeableViewPager
         android:id="@+id/viewPager"
@@ -24,7 +31,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_below="@+id/image_preview"
         android:layout_width="match_parent"
-        android:layout_height="80dp" />
+        android:layout_height="0dp"
+        android:layout_weight=".22" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
@@ -32,6 +40,7 @@
         app:tabMode="fixed"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight=".08"/>
 
-</RelativeLayout>
+</LinearLayout>

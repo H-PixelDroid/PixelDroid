@@ -1,6 +1,5 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -20,7 +19,6 @@ import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
-import com.h.pixeldroid.testUtility.MockServer
 import kotlinx.android.synthetic.main.fragment_edit_image.*
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert
@@ -33,7 +31,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class EditPhotoTest {
 
-    private val mockServer = MockServer()
     private lateinit var activity: PhotoEditActivity
     private lateinit var activityScenario: ActivityScenario<PhotoEditActivity>
 
@@ -46,15 +43,10 @@ class EditPhotoTest {
     @Before
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        mockServer.start()
-        val baseUrl = mockServer.getUrl()
-        val preferences = context.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
 
         // Launch PhotoEditActivity
         val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
-        val intent = Intent(context, PhotoEditActivity::class.java).putExtra("uri", uri)
+        val intent = Intent(context, PhotoEditActivity::class.java).putExtra("picture_uri", uri)
 
         activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}
 
@@ -108,10 +100,11 @@ class EditPhotoTest {
         Thread.sleep(1000)
         Espresso.onView(withId(R.id.recycler_view))
             .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(5, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
+        Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun BirghtnessSaturationContrastTest() {
+    fun BrightnessSaturationContrastTest() {
         Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
 
         Thread.sleep(1000)
@@ -139,11 +132,10 @@ class EditPhotoTest {
 
     @Test
     fun SaveButton() {
-        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         Espresso.onView(withId(R.id.action_save)).perform(click())
         Espresso.onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText("Image succesfully saved")))
-
     }
 
     @Test
@@ -153,4 +145,11 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
     }
 
+    @Test
+    fun croppingIsPossible() {
+        Espresso.onView(withId(R.id.cropImageButton)).perform(click())
+        Thread.sleep(1000)
+        Espresso.onView(withId(R.id.menu_crop)).perform(click())
+        Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
+    }
 }

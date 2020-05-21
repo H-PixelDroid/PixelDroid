@@ -1,2 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="theme_header">Thema</string>
+    <string name="theme_title">Applicatie thema</string>
+    <string name="title_activity_settings2">Instellingen</string>
+    <string name="token_error">Fout bij ophalen van token</string>
+    <string name="browser_launch_failed">Kon de browser niet starten, heb je er wel één\?</string>
+    <string name="registration_failed">Kon de applicatie niet bij deze server registreren</string>
+    <string name="invalid_domain">Ongeldig domein</string>
+    <string name="menu_settings">Instellingen</string>
+    <string name="menu_account">Mijn profiel</string>
+    <string name="logout">Log uit</string>
+    <string name="whats_an_instance">Wat is een instance\?</string>
+    <string name="send">stuur</string>
+    <string name="description">Beschrijving…</string>
+    <string name="liked_notification">%1$s vond je bericht leuk</string>
+    <string name="shared_notification">%1$s heeft je bericht gedeeld</string>
+    <string name="mention_notification">%1$s heeft je genoemd</string>
+    <string name="followed_notification">%1$s volgt je</string>
+    <string name="auth_failed">Kon niet authenticeren</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="save_to_gallery">Opslaan in gallerij…</string>
+    <string name="image_download_failed">Download is mislukt, probeer het alstublieft opnieuw</string>
+    <string name="image_download_downloading">Word gedownload…</string>
+    <string name="image_download_success">Afbeelding met succes gedownload</string>
+    <string name="share_picture">Afbeelding delen…</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Verborgen Media
+\n (Klik om weer te geven)</string>
+    <string name="lbl_brightness">Helderheid</string>
+    <string name="lbl_contrast">CONTRAST</string>
+    <string name="lbl_saturation">VERZADIGING</string>
+    <string name="tab_filters">FILTERS</string>
+    <string name="tab_edit">BEWERKEN</string>
+    <string name="capture_button_alt">Vastleggen</string>
+    <string name="switch_camera_button_alt">Van camera wisselen</string>
+    <string name="gallery_button_alt">Gallerij</string>
+    <string name="NoCommentsToShow">Geen reacties op dit bericht…</string>
+    <string name="CommentDisplay">weer te geven…</string>
+    <string name="domain_of_your_instance">Domein van je instance</string>
+    <string name="connect_to_pixelfed">Met Pixelfed verbinden</string>
+    <string name="login_connection_required_once">Je moet met het internet verbonden zijn om je eerste account toe te voegen en PixelDroid te kunnen gebruiken :(</string>
+    <string name="you_are_in_offline_mode">Je bent in de offline modus, maar je kan nog steeds bepaalde inhoud zien!</string>
+    <string name="add_account_description">Andere Pixelfed account toevoegen</string>
+    <string name="add_account_name">Account toevoegen</string>
+</resources>

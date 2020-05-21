@@ -41,14 +41,4 @@ class PostUnitTest {
         Assert.assertEquals(status.account.display_name, emptyDescStatus.getUsername())
     }
 
-    @Test
-    fun getNLikesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.favourites_count} Likes", status.getNLikes())
-    }
-
-    @Test
-    fun getNSharesReturnsCorrectFormat() {
-        Assert.assertEquals("${status.reblogs_count} Shares", status.getNShares())
-    }
-
 }

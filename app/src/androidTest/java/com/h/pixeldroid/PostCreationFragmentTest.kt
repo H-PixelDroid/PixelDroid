@@ -16,8 +16,13 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.utils.DBUtils
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.camera_ui_container.*
 import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
@@ -50,7 +55,7 @@ class PostCreationFragmentTest {
     fun uploadButtonLaunchesGalleryIntent() {
         val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
         intending(expectedIntent)
-        onView(withId(R.id.uploadPictureButton)).perform(click())
+        onView(withId(R.id.photo_view_button)).perform(click())
         Thread.sleep(1000)
         intended(expectedIntent)
     }
@@ -65,24 +70,45 @@ class PostFragmentUITests {
     @get:Rule
     var rule = ActivityScenarioRule(MainActivity::class.java)
 
+    private lateinit var db: AppDatabase
+
+
     @Before
     fun setup() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        val preferences = InstrumentationRegistry.getInstrumentation()
-            .targetContext.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
-        preferences.edit().putString("accessToken", "azerty").apply()
-        preferences.edit().putString("domain", baseUrl.toString()).apply()
+        db = DBUtils.initDB(context)
+        db.clearAllTables()
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = baseUrl.toString(),
+                title = "PixelTest"
+            )
+        )
 
-        ActivityScenario.launch(MainActivity::class.java).onActivity {
-                a -> a.tabs.getTabAt(2)!!.select()
-        }
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = baseUrl.toString(),
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
+        db.close()
         Thread.sleep(300)
     }
 
     @Test
     fun newPostUiTest() {
-        onView(withId(R.id.uploadPictureButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.takePictureButton)).check(matches(isDisplayed()))
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+                a -> a.tabs.getTabAt(2)!!.select()
+        }
+        Thread.sleep(1500)
+        onView(withId(R.id.photo_view_button)).check(matches(isDisplayed()))
+        onView(withId(R.id.camera_capture_button)).check(matches(isDisplayed()))
     }
 }

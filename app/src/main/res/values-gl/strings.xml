@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_account">Perfil</string>
+    <string name="menu_settings">Axustes</string>
+    <string name="invalid_domain">Dominio non válido</string>
+    <string name="browser_launch_failed">Non se puido iniciar o navegador, tes algún\?</string>
+    <string name="auth_failed">Non se autenticou a conta</string>
+    <string name="token_error">Erro ao obter o token</string>
+    <string name="title_activity_settings2">Axustes</string>
+    <string name="theme_title">Preferencias do decorado</string>
+    <string name="theme_header">Decorado</string>
+    <string name="followed_notification">%1$s séguete</string>
+    <string name="mention_notification">%1$s mencionoute</string>
+    <string name="liked_notification">a %1$s gustoulle a publicación</string>
+    <string name="shared_notification">%1$s comparteu a publicación</string>
+    <string name="description">Descrición…</string>
+    <string name="send">enviar</string>
+    <string name="whats_an_instance">Que é unha instancia\?</string>
+    <string name="logout">Saír</string>
+    <string name="lbl_brightness">BRILLO</string>
+    <string name="lbl_contrast">CONTRASTE</string>
+    <string name="lbl_saturation">SATURACIÓN</string>
+    <string name="tab_filters">FILTROS</string>
+    <string name="tab_edit">EDITAR</string>
+    <string name="save_to_gallery">Gardar na Galería…</string>
+    <string name="image_download_downloading">Descargando…</string>
+    <string name="image_download_success">Imaxe descargada correctamente</string>
+    <string name="capture_button_alt">Facer foto</string>
+    <string name="switch_camera_button_alt">Cambiar de cámara</string>
+    <string name="gallery_button_alt">Galería</string>
+    <string name="share_picture">Compartir foto…</string>
+    <string name="NoCommentsToShow">Sen comentarios na publicación…</string>
+    <string name="image_download_failed">Fallou a descarga, inténtao outra vez</string>
+    <string name="CommentDisplay">amostrar…</string>
+    <string name="domain_of_your_instance">Dominio da túa instancia</string>
+    <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
+    <string name="login_connection_required_once">Debes ter conexión a internet para poder engadir a conta e usar PixelDroid :(</string>
+    <string name="you_are_in_offline_mode">Non tes conexión, pero aínda así podes ver algún contido!</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Agochado
+\n(preme para amosar)</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="registration_failed">Non puidemos rexistrar a aplicación neste servidor</string>
+    <string name="add_account_description">Engadir outra conta Pixelfed</string>
+    <string name="add_account_name">Engadir Conta</string>
+    <string name="instance_error">Non se obtivo a información da instancia</string>
+</resources>

@@ -16,7 +16,7 @@ import retrofit2.Call
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class APIUnitTest {
-    val referenceFirstStatus = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
+    private val referenceFirstStatus = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
         created_at="2020-03-03T08:00:16.000000Z",
         account=Account(id="115114166443970560", username="Miike", acct="Miike",
             url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
@@ -59,7 +59,7 @@ class APIUnitTest {
             , bookmarked = false, card = null, poll = null, text= null,url= "https://pixelfed.de/p/dante/144456497894658048")
     )
     @get:Rule
-    public var wireMockRule = WireMockRule(8089)
+    var wireMockRule = WireMockRule(8089)
     /*@Test
     fun mocked_api_publicTimeline_test(){
         /* Given */
@@ -141,7 +141,7 @@ class APIUnitTest {
             .timelineHome("abc", null, null, null,null, null)
         val statusesHome = callHome.execute().body()
         val f = statuses!![0]
-        val g = statuses!![0]
+        val g = statuses[0]
         assertEquals(referenceFirstStatus, f)
         assertEquals(referenceFirstStatus, g)
             //same as before, but otherwise coverage is not detected for the data classes
