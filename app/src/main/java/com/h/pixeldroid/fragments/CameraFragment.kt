@@ -366,16 +366,20 @@ class CameraFragment : Fragment() {
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("album", "$requestCode $resultCode $data")
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && data != null
-            && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)
-            && data.data != null) {
+            && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)) {
             Log.d("album", data.data.toString())
 
             if (data.clipData != null) {
                 val count = data.clipData!!.itemCount
+                val images: ArrayList<String> = ArrayList()
                 for (i in 0 until count) {
-                    val imageUri: Uri = data.clipData!!.getItemAt(i).uri
+                    val imageUri: String = data.clipData!!.getItemAt(i).uri.toString()
+                    images.add(imageUri)
                 }
+                startAlbumCreation(images)
             } else if (data.data != null) {
                 startPostCreation(data.data!!)
             }
@@ -392,7 +396,7 @@ class CameraFragment : Fragment() {
     private fun startAlbumCreation(uris: ArrayList<String>) {
         startActivity(
             Intent(activity, AlbumCreationActivity::class.java)
-                .putExtra("picture_uri", uris)
+                .putExtra("pictures_uri", uris)
         )
     }
 

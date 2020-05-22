@@ -22,10 +22,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.interfaces.AlbumCreationListener
 import com.h.pixeldroid.objects.Attachment
-import com.h.pixeldroid.objects.DiscoverPost
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
@@ -66,22 +64,18 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post_creation)
-
-        pictureFrame = findViewById(R.id.post_creation_picture_frame)
-        pictureFrame.setImageURI(image.toUri())
+        setContentView(R.layout.activity_album_creation)
 
         // load images
-        posts = intent.getStringArrayListExtra("picture_uri")!!
+        posts = intent.getStringArrayListExtra("pictures_uri")!!
 
         // Set posts RecyclerView as a grid with 3 columns
-        recycler = findViewById(R.id.discoverList)
-        recycler.layoutManager = GridLayoutManager(this, 3)
         adapter = AlbumCreationAdapter(posts)
         adapter.listener = this
+        recycler.layoutManager = GridLayoutManager(this, 3)
         recycler.adapter = adapter
 
-        val db = DBUtils.initDB(applicationContext)
+        /*val db = DBUtils.initDB(applicationContext)
         user = db.userDao().getActiveUser()
 
         val instances = db.instanceDao().getAll()
@@ -106,7 +100,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         // get the description and send the post to PixelFed
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
             if (setDescription()) upload()
-        }
+        }*/
     }
 
     private fun setDescription(): Boolean {
@@ -180,13 +174,14 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         var listener: AlbumCreationListener? = null
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            context = parent.context
+            Log.d("album", context.toString())
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_profile_posts, parent, false)
+                .inflate(R.layout.activity_album_creation, parent, true)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
             holder.bind()
         }
 
@@ -195,11 +190,12 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             fun bind() {
                 val image = Uri.parse(posts[adapterPosition])
+                Log.d("album", image.toString())
                 // load image
-                Glide.with(context!!)
+                /*Glide.with(context!!)
                     .load(image)
                     .centerCrop()
-                    .into(itemView.galleryImage)
+                    .into(itemView.galleryImage)*/
                 // adding click or tap handler for our image layout
                 itemView.container.setOnClickListener {
                     listener?.onClick(adapterPosition)
