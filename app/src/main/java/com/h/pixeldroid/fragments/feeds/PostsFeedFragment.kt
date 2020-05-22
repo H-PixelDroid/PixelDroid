@@ -45,7 +45,7 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        adapter = PostsFeedRecyclerViewAdapter(this)
+        adapter = PostsFeedRecyclerViewAdapter()
         list.adapter = adapter
 
 
@@ -89,7 +89,7 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
-    inner class PostsFeedRecyclerViewAdapter(private val postsFeedFragment: PostsFeedFragment)
+    inner class PostsFeedRecyclerViewAdapter()
         : FeedsRecyclerViewAdapter<Status, PostViewHolder>(),
         ListPreloader.PreloadModelProvider<Status> {
         private val api = pixelfedAPI

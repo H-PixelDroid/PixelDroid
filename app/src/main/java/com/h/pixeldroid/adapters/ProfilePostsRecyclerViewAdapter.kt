@@ -15,7 +15,7 @@ import com.h.pixeldroid.utils.ImageConverter.Companion.setSquareImageFromURL
 /**
  * [RecyclerView.Adapter] that can display a list of [Status]s
  */
-class ProfilePostsRecyclerViewAdapter(
+/*class ProfilePostsRecyclerViewAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<ProfilePostsRecyclerViewAdapter.ViewHolder>() {
     private val posts: ArrayList<Status> = ArrayList()
@@ -53,4 +53,4 @@ class ProfilePostsRecyclerViewAdapter(
         posts.addAll(newPosts)
         notifyItemRangeInserted(size, newPosts.size)
     }
-}
+}*/
