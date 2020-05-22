@@ -55,18 +55,19 @@ class DBUtils {
         }
 
         fun storePosts(db: AppDatabase, data: List<*>) {
-            if (data.firstOrNull() is Status) {
-                for (post in data) {
-                    val post = post as Status
-                    if (true) {
-                        val postDBEntity = PostDatabaseEntity(
-                            account_profile_picture = "",
-                            account_name = "",
-                            picture = "",
-                            favourite_count = 0,
-                            reply_count = 0
-                        )
-                    }
+            data.forEach { post ->
+                if (post is Status && !post.media_attachments.isNullOrEmpty()) {
+                    db.postDao().insertPost(PostDatabaseEntity(
+                        account_profile_picture = post.getProfilePicUrl() ?: "",
+                        account_name = post.getUsername().toString(),
+                        media_urls = post.media_attachments.map {
+                                attachment -> attachment.url ?: ""
+                        },
+                        favourite_count = post.favourites_count ?: 0,
+                        reply_count = post.replies_count ?: 0,
+                        share_count = post.reblogs_count ?: 0,
+                        description = post.content ?: ""
+                    ))
                 }
             }
         }

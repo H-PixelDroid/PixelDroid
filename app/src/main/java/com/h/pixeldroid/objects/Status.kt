@@ -190,7 +190,7 @@ data class Status(
 
         //Fill the tabs with each mediaAttachment
         for(media in media_attachments!!) {
-            tabs.add(ImageFragment.newInstance(media.url))
+            tabs.add(ImageFragment.newInstance(media.url!!))
         }
 
         setupTabs(tabs, rootView, homeFragment)

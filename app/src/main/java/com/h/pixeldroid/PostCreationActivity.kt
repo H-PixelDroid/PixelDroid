@@ -157,7 +157,7 @@ class PostCreationActivity : AppCompatActivity(){
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ attachment ->
-                listOfIds = listOf(attachment.id)
+                listOfIds = listOf(attachment.id!!)
             },{e->
                 upload_error.visibility = VISIBLE
                 e.printStackTrace()
