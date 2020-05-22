@@ -171,6 +171,8 @@ class DrawerMenuTest {
         onView(withText(R.string.menu_account)).perform(click())
         Thread.sleep(100)
         // Open bookmarks tab
+        onView(withId(R.id.profilePage)).perform(CustomMatchers.slowSwipeUp(true))
+        Thread.sleep(1000)
         onView(withId(R.id.profile_view_pager))
             .perform(CustomMatchers.slowSwipeLeft(true))
         Thread.sleep(1000)
@@ -181,7 +183,7 @@ class DrawerMenuTest {
                 RecyclerViewActions.actionOnItemAtPosition<ProfilePostsRecyclerViewAdapter.ViewHolder>
                     (0, CustomMatchers.clickChildViewWithId(R.id.postPreview))
             )
-
+        Thread.sleep(1000)
         onView(withId(R.id.nlikes)).check(matches(withText("5 Likes")))
     }
 
