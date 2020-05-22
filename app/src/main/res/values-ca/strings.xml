@@ -4,7 +4,7 @@
     <string name="mention_notification">%1$s t\'ha esmentat</string>
     <string name="followed_notification">%1$s et segueix</string>
     <string name="title_activity_settings2">Configuració</string>
-    <string name="token_error">S\'ha produït un error en obtenir el testimoni</string>
+    <string name="token_error">S\'ha produït un error en obtenir el token</string>
     <string name="auth_failed">No s\'ha pogut autenticar</string>
     <string name="browser_launch_failed">No s\'ha pogut llançar un navegador, en tens un\?</string>
     <string name="registration_failed">No s\'ha pogut registrar l\'aplicació amb aquest servidor</string>
@@ -24,7 +24,7 @@
     <string name="liked_notification">%1$s ha dona\'t m\'agrada a la teva publicació</string>
     <string name="theme_title">Tema de l\'aplicació</string>
     <string name="switch_camera_button_alt">Canviar la càmera</string>
-    <string name="login_connection_required_once">Per poder afegir el primer compte i utilitzar PixelDroid, heu d’estar en línia :(</string>
+    <string name="login_connection_required_once">Per poder afegir el primer compte i utilitzar PixelDroid, has d’estar en línia :(</string>
     <string name="theme_header">Tema</string>
     <string name="lbl_brightness">BRILLANTOR</string>
     <string name="lbl_contrast">CONTRAST</string>
@@ -49,11 +49,11 @@
     <string name="search">Buscar</string>
     <string name="edit_profile">Editar perfil</string>
     <string name="follow">Seguir</string>
-    <string name="no_username">Sense nom d’usuari</string>
+    <string name="no_username">Sense nom d’usuari(a)</string>
     <string name="default_nfollowing">-
 \nSeguint</string>
-    <string name="default_nfollowers">-
-\nSeguidors</string>
+    <string name="default_nfollowers">- 
+\nSeguidors/es</string>
     <string name="default_nposts">-
 \nPublicacions</string>
     <string name="access_token_invalid">El token d\'accés és invalid</string>
@@ -62,10 +62,10 @@
     <string name="follow_error">No s\'ha pogut seguir</string>
     <string name="follow_button_failed">No s\'ha pogut mostrar el botó de seguir</string>
     <string name="follow_status_failed">No s\'ha pogut obtenir l\'estat de seguiment</string>
-    <string name="nb_following">%1$s
-\nSeguits</string>
-    <string name="nb_followers">%1$s
-\nSeguidors</string>
+    <string name="nb_following">%1$s 
+\nSeguits/des</string>
+    <string name="nb_followers">%1$s 
+\nSeguidors/es</string>
     <string name="nb_posts">%1$s
 \nPublicacions</string>
     <string name="comment">Comentari</string>
@@ -74,14 +74,14 @@
     <string name="share_image">Compartir imatge</string>
     <string name="write_permission_share_pic">Necessites concedir permís d’escriptura per compartir imatges!</string>
     <string name="write_permission_download_pic">Has de concedir permís d’escriptura per baixar imatges!</string>
-    <string name="empty_comment">El comentari no ha de ser buit!</string>
+    <string name="empty_comment">El comentari no ha de estar buit!</string>
     <string name="posted_on">Publica\'t el %1$s</string>
     <string name="likes">%1$s M\'agrades</string>
     <string name="no_description">Sense descripció</string>
     <string name="feed_failed">No s\'ha pogut obtenir el fil</string>
     <string name="loading_toast">Alguna cosa no ha funcionat correctament mentre es carregava</string>
     <string name="normal_filter">Normal</string>
-    <string name="upload_post_error">Ha fallat l\'enviament de la publicació: no 200</string>
+    <string name="upload_post_error">Ha fallat l\'enviament de la publicació</string>
     <string name="upload_post_success">S\'ha publicat amb èxit la publicació</string>
     <string name="upload_post_failed">Ha fallat l\'enviament de la publicació</string>
     <string name="request_format_error">Error d\'enviament: format de sol·licitud dolent</string>
@@ -94,4 +94,8 @@
     <string name="dark_theme">Fosc</string>
     <string name="light_theme">Clar</string>
     <string name="default_theme">Per defecte (seguint el sistema)</string>
+    <string name="media_upload_completed">{gmd_cloud_done} S\'ha completat l\'enviament multimèdia</string>
+    <string name="media_upload_failed">{gmd_cloud_off} L\'enviament multimèdia ha fallat, torna-ho a provar o comprova les condicions de la xarxa</string>
+    <string name="posting_image_accessibility_hint">Imatge que s\'està publicant</string>
+    <string name="retry">Tornar a provar</string>
 </resources>

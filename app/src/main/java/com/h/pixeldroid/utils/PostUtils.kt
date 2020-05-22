@@ -115,6 +115,9 @@ abstract class PostUtils {
                         //Update shown like count and internal like toggle
                         holder.nlikes.text = resp.getNLikes(holder.context)
                         holder.liker.isChecked = resp.favourited
+
+                        //Notify the user, that the action was successful
+                        Toast.makeText(holder.context, holder.context.getString(R.string.liked_post), Toast.LENGTH_SHORT).show()
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
                         holder.liker.isChecked = false
@@ -144,6 +147,9 @@ abstract class PostUtils {
                         //Update shown like count and internal like toggle
                         holder.nlikes.text = resp.getNLikes(holder.context)
                         holder.liker.isChecked = resp.favourited
+
+                        //Notify the user, that the action was successful
+                        Toast.makeText(holder.context, holder.context.getString(R.string.unliked_post), Toast.LENGTH_SHORT).show()
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
                         holder.liker.isChecked = true
