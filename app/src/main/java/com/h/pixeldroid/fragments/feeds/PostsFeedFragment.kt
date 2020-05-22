@@ -118,7 +118,7 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             post.setDescription(holder.postView, api, credential)
 
             //Activate liker
-            post.activateLiker(holder, api, credential, post.favourited!!)
+            post.activateLiker(holder, api, credential, post.favourited ?: false)
 
             //Show comments
             post.showComments(holder, api, credential)
@@ -127,7 +127,7 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             post.activateCommenter(holder, api, credential)
 
             //Activate Reblogger
-            post.activateReblogger(holder, api ,credential, post.reblogged!!)
+            post.activateReblogger(holder, api ,credential, post.reblogged ?: false)
         }
 
         override fun getPreloadItems(position: Int): MutableList<Status> {

@@ -46,10 +46,10 @@ class PostFragment : Fragment() {
 
         //Activate onclickListeners
         current_status?.activateLiker(holder, api, "Bearer $accessToken",
-            current_status.favourited!!
+            current_status.favourited ?: false
         )
         current_status?.activateReblogger(holder, api, "Bearer $accessToken",
-            current_status.reblogged!!
+            current_status.reblogged ?: false
         )
         current_status?.activateCommenter(holder, api, "Bearer $accessToken")
         current_status?.showComments(holder, api, "Bearer $accessToken")
