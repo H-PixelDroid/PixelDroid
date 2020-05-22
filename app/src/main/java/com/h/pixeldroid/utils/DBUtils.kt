@@ -7,6 +7,7 @@ import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Instance
+import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.Utils.Companion.normalizeDomain
 
 class DBUtils {
@@ -50,6 +51,12 @@ class DBUtils {
                 thumbnail = instance.thumbnail
             )
             db.instanceDao().insertInstance(dbInstance)
+        }
+
+        fun storePosts(db: AppDatabase, data: List<*>) {
+            if (data.firstOrNull() is Status) {
+
+            }
         }
     }
 }

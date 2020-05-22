@@ -24,6 +24,7 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.FeedContent
+import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import retrofit2.Call
@@ -111,10 +112,10 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
 
             call.enqueue(object : Callback<List<T>> {
                 override fun onResponse(call: Call<List<T>>, response: Response<List<T>>) {
-                    if (response.code() == 200) {
-                        val notifications = response.body()!! as ArrayList<T>
-                        callback.onResult(notifications as List<T>)
-
+                    if (response.isSuccessful && response.body() != null) {
+                        val notifications = response.body()!!
+                        callback.onResult(notifications)
+                        DBUtils.storePosts(db, notifications)
                     } else{
                         Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
                     }
