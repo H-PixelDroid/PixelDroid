@@ -69,4 +69,5 @@
     <string name="write_permission_download_pic">Idazteko baimena eman behar duzu irudiak deskargatzeko!</string>
     <string name="empty_comment">Iruzkina ez da hutsik egon behar!</string>
     <string name="likes">%1$s Atsegite</string>
+    <string name="normal_filter">Normala</string>
 </resources>
