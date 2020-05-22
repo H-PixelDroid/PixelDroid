@@ -51,7 +51,7 @@ class PostFragment : Fragment() {
         current_status?.showComments(holder, api, "Bearer $accessToken")
 
         //Activate double tap liking
-        current_status?.activateDoubleTapLiker(holder, api, "Bearer $accessToken", current_status.favourited)
+        current_status?.activateDoubleTapLiker(holder, api, "Bearer $accessToken")
 
         return root
     }
