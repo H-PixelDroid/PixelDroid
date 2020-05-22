@@ -42,4 +42,56 @@
     <string name="add_account_description">Afegeix un altre compte</string>
     <string name="add_account_name">Afegeix un compte</string>
     <string name="instance_error">No s\'ha pogut obtenir informació sobre la instància</string>
+    <string name="shares">%1$s Accions</string>
+    <string name="hashtags">HASHTAGS</string>
+    <string name="accounts">COMPTES</string>
+    <string name="posts">PUBLICACIONS</string>
+    <string name="search">Buscar</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="follow">Seguir</string>
+    <string name="no_username">Sense nom d’usuari</string>
+    <string name="default_nfollowing">-
+\nSeguint</string>
+    <string name="default_nfollowers">-
+\nSeguidors</string>
+    <string name="default_nposts">-
+\nPublicacions</string>
+    <string name="access_token_invalid">El token d\'accés és invalid</string>
+    <string name="unfollow_error">No s\'ha pogut parar de seguir</string>
+    <string name="action_not_allowed">Aquesta acció no està permesa</string>
+    <string name="follow_error">No s\'ha pogut seguir</string>
+    <string name="follow_button_failed">No s\'ha pogut mostrar el botó de seguir</string>
+    <string name="follow_status_failed">No s\'ha pogut obtenir l\'estat de seguiment</string>
+    <string name="nb_following">%1$s
+\nSeguits</string>
+    <string name="nb_followers">%1$s
+\nSeguidors</string>
+    <string name="nb_posts">%1$s
+\nPublicacions</string>
+    <string name="comment">Comentari</string>
+    <string name="comment_posted">Comentari: %1$s publicat!</string>
+    <string name="comment_error">Error de comentari!</string>
+    <string name="share_image">Compartir imatge</string>
+    <string name="write_permission_share_pic">Necessites concedir permís d’escriptura per compartir imatges!</string>
+    <string name="write_permission_download_pic">Has de concedir permís d’escriptura per baixar imatges!</string>
+    <string name="empty_comment">El comentari no ha de ser buit!</string>
+    <string name="posted_on">Publica\'t el %1$s</string>
+    <string name="likes">%1$s M\'agrades</string>
+    <string name="no_description">Sense descripció</string>
+    <string name="feed_failed">No s\'ha pogut obtenir el fil</string>
+    <string name="loading_toast">Alguna cosa no ha funcionat correctament mentre es carregava</string>
+    <string name="normal_filter">Normal</string>
+    <string name="upload_post_error">Ha fallat l\'enviament de la publicació: no 200</string>
+    <string name="upload_post_success">S\'ha publicat amb èxit la publicació</string>
+    <string name="upload_post_failed">Ha fallat l\'enviament de la publicació</string>
+    <string name="request_format_error">Error d\'enviament: format de sol·licitud dolent</string>
+    <string name="picture_format_error">Error d\'enviament: format d\'imatge erroni.</string>
+    <string name="upload_picture_failed">Error d\'enviament d\'imatges!</string>
+    <string name="description_max_characters">La descripció ha de contenir %1$s caràcters com a mínim.</string>
+    <string name="save_image_success">La imatge s\'ha desat correctament</string>
+    <string name="save_image_failed">No es pot desar la imatge</string>
+    <string name="permission_denied">Permís denegat</string>
+    <string name="dark_theme">Fosc</string>
+    <string name="light_theme">Clar</string>
+    <string name="default_theme">Per defecte (seguint el sistema)</string>
 </resources>

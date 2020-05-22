@@ -42,4 +42,25 @@
     <string name="add_account_description">Beste Pixelfed kontu bat gehitu</string>
     <string name="add_account_name">Kontua gehitu</string>
     <string name="instance_error">Ezinezkoa nodoaren informazioa lortzea</string>
+    <string name="search">Bilatu</string>
+    <string name="follow">Jarraitu</string>
+    <string name="default_nfollowing">-
+\nJarraitzen</string>
+    <string name="default_nfollowers">-
+\nJarraitzaile</string>
+    <string name="default_nposts">-
+\nArgitalpen</string>
+    <string name="nb_following">%1$s
+\nJarraitzen</string>
+    <string name="nb_followers">%1$s
+\nJarraitzaile</string>
+    <string name="share_image">Irudia partekatu</string>
+    <string name="upload_picture_failed">Ezin izan da irudia igo!</string>
+    <string name="save_image_failed">Ezinezkoa irudia gordetzea</string>
+    <string name="dark_theme">Iluna</string>
+    <string name="light_theme">Argia</string>
+    <string name="default_theme">Lehenetsia (Sistemaren lehentsia)</string>
+    <string name="no_description">Deskribapenik ez</string>
+    <string name="description_max_characters">Deskribapenak %1$s karaktere izan behar ditu gehienez.</string>
+    <string name="save_image_success">Irudia behar bezala gorde da</string>
 </resources>
