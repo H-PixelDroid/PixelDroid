@@ -63,4 +63,10 @@
     <string name="no_description">Deskribapenik ez</string>
     <string name="description_max_characters">Deskribapenak %1$s karaktere izan behar ditu gehienez.</string>
     <string name="save_image_success">Irudia behar bezala gorde da</string>
+    <string name="feed_failed">Ezin izan da jarioa lortu</string>
+    <string name="loading_toast">Zerbait gaizki atera zen kargatzen ari zela</string>
+    <string name="shares">%1$s Partekatze</string>
+    <string name="write_permission_download_pic">Idazteko baimena eman behar duzu irudiak deskargatzeko!</string>
+    <string name="empty_comment">Iruzkina ez da hutsik egon behar!</string>
+    <string name="likes">%1$s Atsegite</string>
 </resources>
