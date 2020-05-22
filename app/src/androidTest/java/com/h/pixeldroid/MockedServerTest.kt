@@ -580,23 +580,6 @@ class MockedServerTest {
     }
 
     @Test
-    fun performClickOnPostPictureTabs() {
-
-        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(0))
-        Thread.sleep(1000)
-
-        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        Thread.sleep(1000)
-
-        onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
-                (0, clickChildViewWithId(R.id.postPicture)))
-        Thread.sleep(1000)
-
-        onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
-    }
-
-    @Test
     fun doubleTapLikerWorks() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
