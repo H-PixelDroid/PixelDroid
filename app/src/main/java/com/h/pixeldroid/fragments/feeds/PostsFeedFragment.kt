@@ -120,6 +120,9 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             //Activate liker
             post.activateLiker(holder, api, credential, post.favourited)
 
+            //Activate double tap liking
+            post.activateDoubleTapLiker(holder, api, credential, post.favourited)
+
             //Show comments
             post.showComments(holder, api, credential)
 

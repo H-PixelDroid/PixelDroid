@@ -346,6 +346,29 @@ class MockedServerTest {
     }
 
     @Test
+    fun doubleTapLikerWorks() {
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(1000)
+
+        //Get initial like count
+        val likes = getText(first(withId(R.id.nlikes)))
+        val nlikes = likes!!.split(" ")[0].toInt()
+
+        //Like the post
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.postPicture)))
+        onView(withId(R.id.list))
+            .perform(actionOnItemAtPosition<PostViewHolder>
+                (0, clickChildViewWithId(R.id.postPicture)))
+        //...
+        Thread.sleep(100)
+
+        //Profit
+        onView(first(withId(R.id.nlikes))).check(matches((withText("${nlikes + 1} Likes"))))
+    }
+
+    @Test
     fun clickingLikeButtonFails() {
         ActivityScenario.launch(MainActivity::class.java)
         Thread.sleep(1000)
