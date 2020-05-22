@@ -38,8 +38,64 @@
     <string name="shared_notification">%1$s さんがあなたの投稿を再共有しました</string>
     <string name="tab_edit">編集</string>
     <string name="image_download_failed">ダウンロードに失敗しました、もう一度実行してください</string>
-    <string name="NoCommentsToShow">この投稿にはコメントがありません…</string>
+    <string name="NoCommentsToShow">この投稿にはコメントがありません</string>
     <string name="add_account_description">他のPixelfedアカウントを追加</string>
     <string name="add_account_name">アカウントを追加</string>
     <string name="instance_error">インスタンス情報が取得できませんでした</string>
+    <string name="posted_on">%1$s の投稿</string>
+    <string name="accounts">アカウント</string>
+    <string name="write_permission_share_pic">画像を共有するためには書き込みの権限を更新する必要があります</string>
+    <string name="write_permission_download_pic">画像をダウンロードするには書き込みの権限を更新する必要があります</string>
+    <string name="empty_comment">コメントは空欄にできません</string>
+    <string name="shares">%1$s再共有</string>
+    <string name="likes">%1$sお気に入り</string>
+    <string name="description_max_characters">説明には最低 %1$s文字以上含める必要があります。</string>
+    <string name="comment_posted">コメント: %1$s が投稿されました</string>
+    <string name="retry">再試行</string>
+    <string name="posting_image_accessibility_hint">投稿された画像</string>
+    <string name="media_upload_failed">{gmd_cloud_off}メディアアップロードに失敗しました。ネットワーク環境を確認のうえ、再度実行してください</string>
+    <string name="media_upload_completed">{gmd_cloud_done}メディアのアップロードが完了しました</string>
+    <string name="hashtags">ハッシュタグ</string>
+    <string name="posts">投稿</string>
+    <string name="search">検索</string>
+    <string name="edit_profile">プロフィールを編集</string>
+    <string name="follow">フォロー</string>
+    <string name="no_username">ユーザー名が設定されていません</string>
+    <string name="default_nfollowing">-
+\nフォロー</string>
+    <string name="default_nfollowers">-
+\nフォロワー</string>
+    <string name="default_nposts">-
+\n投稿</string>
+    <string name="access_token_invalid">アクセストークンが無効です</string>
+    <string name="unfollow_error">フォロー解除できませんでした</string>
+    <string name="action_not_allowed">このアクションは許可されていません</string>
+    <string name="follow_error">フォローできませんでした</string>
+    <string name="follow_button_failed">フォローボタンを表示できませんでした</string>
+    <string name="follow_status_failed">フォローステータスを取得できませんでした</string>
+    <string name="nb_following">%1$s
+\nフォロー</string>
+    <string name="nb_followers">%1$s
+\nフォロワー</string>
+    <string name="nb_posts">%1$s
+\n投稿</string>
+    <string name="comment">コメント</string>
+    <string name="comment_error">コメントエラー</string>
+    <string name="share_image">画像を共有</string>
+    <string name="no_description">説明はありません</string>
+    <string name="feed_failed">フィードを取得できませんでした</string>
+    <string name="loading_toast">読み込み中に問題が発生しました</string>
+    <string name="normal_filter">ノーマル</string>
+    <string name="upload_post_error">投稿のアップロードに失敗しました</string>
+    <string name="upload_post_success">投稿のアップロードに成功しました</string>
+    <string name="upload_post_failed">投稿のアップロードに失敗しました</string>
+    <string name="request_format_error">アップロードエラー:不正なリクエスト形式</string>
+    <string name="picture_format_error">アップロードエラー:形式が間違っています。</string>
+    <string name="upload_picture_failed">画像アップロードエラー</string>
+    <string name="save_image_success">画像が保存されました</string>
+    <string name="save_image_failed">画像を保存できません</string>
+    <string name="permission_denied">権限がありません</string>
+    <string name="dark_theme">ダーク</string>
+    <string name="light_theme">ライト</string>
+    <string name="default_theme">デフォルト(システム設定)</string>
 </resources>
