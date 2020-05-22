@@ -10,14 +10,12 @@
     <string name="token_error">"Error getting token"</string>
     <string name="instance_error">"Could not get instance information"</string>
     <string name="title_activity_settings2">Settings</string>
-
     <!-- Theme Preferences -->
     <string name="theme_title">Application Theme</string>
     <string name="theme_header">Theme</string>
     <string name="default_theme">Default (Follows system)</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
-
     <string name="followed_notification">%1$s followed you</string>
     <string name="mention_notification">%1$s mentioned you</string>
     <string name="shared_notification">%1$s shared your post</string>
@@ -34,7 +32,7 @@
     <!-- Post creation -->
     <string name="permission_denied">Permission denied</string>
     <string name="save_image_failed">Unable to save image</string>
-    <string name="save_image_success">Image succesfully saved</string>
+    <string name="save_image_success">Image successfully saved</string>
     <string name="description_max_characters">"Description must contain %1$s characters at most."</string>
     <string name="upload_picture_failed">Picture upload error!</string>
     <string name="picture_format_error">Upload error: wrong picture format.</string>

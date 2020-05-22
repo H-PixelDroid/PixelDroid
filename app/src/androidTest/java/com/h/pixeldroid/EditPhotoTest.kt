@@ -135,7 +135,7 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         Espresso.onView(withId(R.id.action_save)).perform(click())
         Espresso.onView(withId(com.google.android.material.R.id.snackbar_text))
-            .check(matches(withText("Image succesfully saved")))
+            .check(matches(withText(R.string.save_image_success)))
     }
 
     @Test
