@@ -94,4 +94,8 @@
     <string name="dark_theme">Escuro</string>
     <string name="light_theme">Claro</string>
     <string name="default_theme">Por omisión (do sistema)</string>
+    <string name="media_upload_failed"></string>
+    <string name="posting_image_accessibility_hint"></string>
+    <string name="media_upload_completed"></string>
+    <string name="retry"></string>
 </resources>

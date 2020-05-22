@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.os.Handler
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.view.View
@@ -42,7 +43,7 @@ import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import kotlin.collections.ArrayList
 
 /*
@@ -296,6 +297,37 @@ data class Status(
                 }
                 //show animation or not?
                 true
+            }
+        }
+    }
+
+    fun activateDoubleTapLiker(
+        holder : PostViewHolder,
+        api: PixelfedAPI,
+        credential: String,
+        isLiked: Boolean
+    ) {
+        holder.apply {
+            var clicked = false
+            postPic.setOnClickListener {
+                //Check that the post isn't hidden
+                if(sensitiveW.visibility == GONE) {
+                    //Check for double click
+                    if(clicked) {
+                        if (isLiked) {
+                            // Button is active, unlike
+                            unLikePostCall(holder, api, credential, this@Status)
+                        } else {
+                            // Button is inactive, like
+                            likePostCall(holder, api, credential, this@Status)
+                        }
+                    } else {
+                        clicked = true
+
+                        //Reset clicked to false after 500ms
+                        postPic.handler.postDelayed(fun() { clicked = false }, 500)
+                    }
+                }
             }
         }
     }

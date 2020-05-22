@@ -44,14 +44,14 @@
     <string name="instance_error">نتوانستیم اطلاعات نمونه را دریافت کنیم</string>
     <string name="permission_denied">ممنوعیت دسترسی</string>
     <string name="save_image_failed">نتوانستیم تصویر را ذخیره کنیم</string>
-    <string name="description_max_characters">"توضیحات حداکثر می‌توانند تا  %1$s حرف داشته باشند."</string>
+    <string name="description_max_characters">توضیحات حداکثر می‌توانند تا %1$s حرف داشته باشند.</string>
     <string name="default_theme">پیش‌فرض (پیروی از سیستم‌عامل)</string>
     <string name="light_theme">روشن</string>
     <string name="dark_theme">تاریک</string>
     <string name="upload_post_error">بارگذاری مطلب ناموفق بود: غیر از ۲۰۰</string>
     <string name="save_image_success">تصویر با موفقیت ذخیره شد</string>
     <string name="upload_picture_failed">خطا در بارگذاری تصویر!</string>
-    <string name="picture_format_error">خطای بارگذاری: تصویر با قالب نادرست</string>
+    <string name="picture_format_error">خطای بارگذاری: تصویر با قالب نادرست.</string>
     <string name="request_format_error">خطای بارگذاری: درخواست با قالب نادرست</string>
     <string name="upload_post_failed">بارگذاری مطلب ناموفق بود</string>
     <string name="upload_post_success">مطلب با موفقیت بارگذاری شد</string>
@@ -60,4 +60,42 @@
     <string name="feed_failed">نتوانستیم خوراک را دریافت کنیم</string>
     <string name="no_description">بدون توضیحات</string>
     <string name="likes">%1$s پسند</string>
+    <string name="accounts">حساب‌ها</string>
+    <string name="hashtags">هشتگ‌ها</string>
+    <string name="shares">%1$s هم‌رسانی</string>
+    <string name="posted_on">منتشر شده در %1$s</string>
+    <string name="empty_comment">نظر نمی‌تواند خالی باشد!</string>
+    <string name="write_permission_download_pic">برای بارگیری تصاویر بایستی مجوز نوشتن را بدهید!</string>
+    <string name="write_permission_share_pic">برای هم‌رسانی تصاویر باید مجوز نوشتن را بدهید!</string>
+    <string name="share_image">هم‌رسانی تصویر</string>
+    <string name="comment_error">خطا در درج نظر!</string>
+    <string name="comment_posted">نظر: %1$s منتشر کرد!</string>
+    <string name="comment">نظر</string>
+    <string name="nb_posts">%1$s
+\nمطلب</string>
+    <string name="nb_followers">%1$s
+\nپی‌گیرنده</string>
+    <string name="nb_following">%1$s
+\nپی‌گیری</string>
+    <string name="follow_status_failed">نتوانستیم وضعیت پی‌گیری را دریافت کنیم</string>
+    <string name="follow_button_failed">نتوانستیم دکمه پی‌گیری را نمایش دهیم</string>
+    <string name="follow_error">نتوانستیم پی‌گیری کنیم</string>
+    <string name="action_not_allowed">این کنش مجاز نیست</string>
+    <string name="unfollow_error">نتوانستیم پی‌گیری را لغو کنیم</string>
+    <string name="access_token_invalid">توکن دسترسی نامعتبر است</string>
+    <string name="default_nposts">-
+\nمطلب</string>
+    <string name="default_nfollowers">-
+\nپی‌گیرنده</string>
+    <string name="no_username">فاقد نام کاربری</string>
+    <string name="follow">پی‌گیری</string>
+    <string name="edit_profile">ویرایش نمایه</string>
+    <string name="search">جستجو</string>
+    <string name="posts">مطالب</string>
+    <string name="media_upload_completed">‏{gmd_cloud_done} بارگذاری رسانه کامل شد</string>
+    <string name="posting_image_accessibility_hint">تصویر در حال فرستاده شدن است</string>
+    <string name="retry">تلاش دوباره</string>
+    <string name="default_nfollowing">-
+\nپی‌گیری</string>
+    <string name="media_upload_failed">‏{gmd_cloud_off} بارگذاری رسانه شکست خورد، وضعیت شبکه را بررسی کرده و دوباره تلاش کنید</string>
 </resources>

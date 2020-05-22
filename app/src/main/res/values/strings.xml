@@ -38,8 +38,8 @@
     <string name="picture_format_error">Upload error: wrong picture format.</string>
     <string name="request_format_error">Upload error: bad request format</string>
     <string name="upload_post_failed">Post upload failed</string>
-    <string name="upload_post_success">Post upload success</string>
-    <string name="upload_post_error">Post upload failed : not 200</string>
+    <string name="upload_post_success">Post uploaded successfully</string>
+    <string name="upload_post_error">Post upload failed</string>
     <string name="description">Description…</string>
     <string name="send">send</string>
     <!-- Post edition -->
@@ -62,6 +62,9 @@
     <string name="image_download_failed">Download has failed, please try again</string>
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
+    <!-- Post action feedback -->
+    <string name="liked_post">Post successfully liked!</string>
+    <string name="unliked_post">Post successfully unliked</string>
     <!-- Post attributes -->
     <string name="no_description">No description</string>
     <string name="likes">"%1$s Likes"</string>
@@ -99,13 +102,10 @@
     <string name="hashtags">HASHTAGS</string>
     <!-- Sensitive media -->
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media \n (click to show)</string>
-
     <!-- Shown when image has finished uploading. {gmd_cloud_done} is an icon, position it as is appropriate in target language -->
     <string name="media_upload_completed">{gmd_cloud_done} Media upload completed</string>
     <!-- Shown when image uploading has failed. {gmd_cloud_off} is an icon, position it as is appropriate in target language -->
     <string name="media_upload_failed">{gmd_cloud_off} Media upload failed, try again or check network conditions</string>
-
-    <string name="posting_image_accessibility_hint">Image being posted</string>
+    <string name="posting_image_accessibility_hint">Image that is being posted</string>
     <string name="retry">Retry</string>
-
 </resources>
