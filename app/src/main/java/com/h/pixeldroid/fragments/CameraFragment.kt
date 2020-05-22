@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.h.pixeldroid.AlbumCreationActivity
 import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.R
 import kotlinx.coroutines.Dispatchers
@@ -287,6 +288,7 @@ class CameraFragment : Fragment() {
                 action = Intent.ACTION_GET_CONTENT
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 startActivityForResult(
                     Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
                 )
@@ -367,16 +369,31 @@ class CameraFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && data != null
             && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)
             && data.data != null) {
+            Log.d("album", data.data.toString())
 
-            startPostCreation(data.data!!)
+            if (data.clipData != null) {
+                val count = data.clipData!!.itemCount
+                for (i in 0 until count) {
+                    val imageUri: Uri = data.clipData!!.getItemAt(i).uri
+                }
+            } else if (data.data != null) {
+                startPostCreation(data.data!!)
+            }
         }
     }
+
     private fun startPostCreation(uri: Uri) {
         startActivity(
             Intent(activity, PhotoEditActivity::class.java)
                 .putExtra("picture_uri", uri)
         )
+    }
 
+    private fun startAlbumCreation(uris: ArrayList<String>) {
+        startActivity(
+            Intent(activity, AlbumCreationActivity::class.java)
+                .putExtra("picture_uri", uris)
+        )
     }
 
     companion object {

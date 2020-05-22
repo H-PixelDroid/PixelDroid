@@ -98,11 +98,10 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         supportActionBar!!.title = "Edit"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
-
-        val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
-
         cropUri = intent.getParcelableExtra("picture_uri")
 
+        val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
+        cropButton.alpha = 0.5f
         // set on-click listener
         cropButton.setOnClickListener {
             startCrop()
