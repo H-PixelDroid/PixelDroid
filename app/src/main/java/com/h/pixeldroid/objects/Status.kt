@@ -304,23 +304,26 @@ data class Status(
         credential: String,
         isLiked: Boolean
     ) {
-        holder.postPic.apply {
+        holder.apply {
             var clicked = false
-            setOnClickListener {
-                //Check for double click
-                if(clicked) {
-                    if (isLiked) {
-                        // Button is active, unlike
-                        unLikePostCall(holder, api, credential, this@Status)
+            postPic.setOnClickListener {
+                //Check that the post isn't hidden
+                if(sensitiveW.visibility == GONE) {
+                    //Check for double click
+                    if(clicked) {
+                        if (isLiked) {
+                            // Button is active, unlike
+                            unLikePostCall(holder, api, credential, this@Status)
+                        } else {
+                            // Button is inactive, like
+                            likePostCall(holder, api, credential, this@Status)
+                        }
                     } else {
-                        // Button is inactive, like
-                        likePostCall(holder, api, credential, this@Status)
-                    }
-                } else {
-                    clicked = true
+                        clicked = true
 
-                    //Reset clicked to false after 500ms
-                    handler.postDelayed(fun() { clicked = false }, 500)
+                        //Reset clicked to false after 500ms
+                        postPic.handler.postDelayed(fun() { clicked = false }, 500)
+                    }
                 }
             }
         }

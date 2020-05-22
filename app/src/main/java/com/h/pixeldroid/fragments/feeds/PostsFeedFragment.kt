@@ -168,4 +168,5 @@ class PostViewHolder(val postView: View, val context: android.content.Context) :
     val viewComment : TextView = postView.findViewById(R.id.ViewComments)
     val postDate    : TextView = postView.findViewById(R.id.postDate)
     val postDomain  : TextView = postView.findViewById(R.id.postDomain)
+    val sensitiveW  : TextView = postView.findViewById(R.id.sensitiveWarning)
 }
