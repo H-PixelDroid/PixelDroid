@@ -301,6 +301,15 @@ class MainActivity : AppCompatActivity() {
             val accessToken = user?.accessToken.orEmpty()
             val pixelfedAPI = PixelfedAPI.create(domain)
 
+            NotificationUtils.updateLatestIdDBEntry(
+                pixelfedAPI,
+                "Bearer $accessToken",
+                applicationContext,
+                resources,
+                db,
+                badge
+            )
+
             //Set on tabChanged listeners
             tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
 

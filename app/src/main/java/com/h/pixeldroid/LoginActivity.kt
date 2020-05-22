@@ -237,36 +237,19 @@ class LoginActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
                     if (response.body() != null && response.isSuccessful) {
                         val user = response.body() as Account
-
-                        //Check for the latest notification id
-                        pixelfedAPI.notifications("Bearer $accessToken", limit="1").enqueue(object : Callback<List<Notification>> {
-                            override fun onResponse(call: Call<List<Notification>>, response: Response<List<Notification>>) {
-                                if (response.code() == 200) {
-                                    val resultingId = (response.body() as List<Notification>)[0].id.toInt()
-
-                                    db.userDao().deActivateActiveUser()
-                                    DBUtils.addUser(
-                                        db,
-                                        user,
-                                        instance,
-                                        activeUser = true,
-                                        accessToken = accessToken,
-                                        latestNotificationId = resultingId
-                                    )
-                                    db.close()
-                                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    startActivity(intent)
-                                } else{
-                                    Log.e("NOTIFICATIONS_REQUEST", "${response.code()}")
-                                }
-                            }
-
-                            override fun onFailure(call: Call<List<Notification>>, t: Throwable) {
-                                Toast.makeText(applicationContext, resources.getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
-                                Log.e("FeedFragment", t.toString())
-                            }
-                        })
+                        db.userDao().deActivateActiveUser()
+                        DBUtils.addUser(
+                            db,
+                            user,
+                            instance,
+                            activeUser = true,
+                            accessToken = accessToken,
+                            latestNotificationId = -1
+                        )
+                        db.close()
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
                     }
                 }
                 override fun onFailure(call: Call<Account>, t: Throwable) {
