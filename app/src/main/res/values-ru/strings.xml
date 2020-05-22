@@ -94,8 +94,8 @@
     <string name="accounts">АККАУНТЫ</string>
     <string name="hashtags">ХЭШТЕГИ</string>
     <string name="follow_button_failed">Не удалось отобразить кнопку подписки</string>
-    <string name="posting_image_accessibility_hint"></string>
-    <string name="media_upload_completed"></string>
-    <string name="retry"></string>
-    <string name="media_upload_failed"></string>
+    <string name="posting_image_accessibility_hint">Изображение, которое будет опубликовано</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Загрузка медиа завершена</string>
+    <string name="retry">Попробовать снова</string>
+    <string name="media_upload_failed">{gmd_cloud_off} Загрузка медиа не удалась, попробуйте снова или проверте состояние сети</string>
 </resources>
