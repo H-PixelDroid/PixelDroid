@@ -167,15 +167,16 @@ class MockedServerTest {
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<PostViewHolder>
                 (0, clickChildViewWithId(R.id.username)))
+        Thread.sleep(100)
 
-        Thread.sleep(1000)
+        onView(withId(R.id.followButton)).perform(ViewActions.swipeUp())
 
         // Open followers list
         onView(withId(R.id.nbFollowersTextView)).perform((click()))
-        Thread.sleep(1000)
+        Thread.sleep(100)
         // Open follower's profile
         onView(withText("ete2")).perform((click()))
-        Thread.sleep(1000)
+        Thread.sleep(100)
 
         onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))
     }

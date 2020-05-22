@@ -5,7 +5,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers
@@ -171,11 +171,11 @@ class DrawerMenuTest {
         onView(withText(R.string.menu_account)).perform(click())
         Thread.sleep(100)
         // Open bookmarks tab
-        onView(withId(R.id.profilePage)).perform(CustomMatchers.slowSwipeUp(true))
-        Thread.sleep(1000)
+        onView(withId(R.id.editButton)).perform(swipeUp())
+        Thread.sleep(100)
         onView(withId(R.id.profile_view_pager))
-            .perform(CustomMatchers.slowSwipeLeft(true))
-        Thread.sleep(1000)
+            .perform(swipeLeft())
+        Thread.sleep(100)
 
         // Open first post
         onView(withId(R.id.profilePostsRecyclerView))
@@ -183,7 +183,7 @@ class DrawerMenuTest {
                 RecyclerViewActions.actionOnItemAtPosition<ProfilePostsRecyclerViewAdapter.ViewHolder>
                     (0, CustomMatchers.clickChildViewWithId(R.id.postPreview))
             )
-        Thread.sleep(1000)
+        Thread.sleep(100)
         onView(withId(R.id.nlikes)).check(matches(withText("5 Likes")))
     }
 
