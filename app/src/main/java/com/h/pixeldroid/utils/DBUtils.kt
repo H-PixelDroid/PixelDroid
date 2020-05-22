@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.PostDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Instance
@@ -55,7 +56,18 @@ class DBUtils {
 
         fun storePosts(db: AppDatabase, data: List<*>) {
             if (data.firstOrNull() is Status) {
-
+                for (post in data) {
+                    val post = post as Status
+                    if (true) {
+                        val postDBEntity = PostDatabaseEntity(
+                            account_profile_picture = "",
+                            account_name = "",
+                            picture = "",
+                            favourite_count = 0,
+                            reply_count = 0
+                        )
+                    }
+                }
             }
         }
     }

@@ -88,7 +88,7 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
 
         //We use the id as the key
         override fun getKey(item: T): String {
-            return item.id
+            return item.id!!
         }
         //This is called to initialize the list, so we want some of the latest statuses
         override fun loadInitial(
