@@ -94,4 +94,8 @@
     <string name="accounts">АККАУНТЫ</string>
     <string name="hashtags">ХЭШТЕГИ</string>
     <string name="follow_button_failed">Не удалось отобразить кнопку подписки</string>
+    <string name="posting_image_accessibility_hint"></string>
+    <string name="media_upload_completed"></string>
+    <string name="retry"></string>
+    <string name="media_upload_failed"></string>
 </resources>
