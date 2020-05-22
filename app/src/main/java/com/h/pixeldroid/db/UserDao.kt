@@ -13,6 +13,12 @@ interface UserDao {
     @Query("SELECT * FROM users")
     fun getAll(): List<UserDatabaseEntity>
 
+    @Query("SELECT latestNotificationId FROM users WHERE isActive = 1")
+    fun getLatestNotificationId() : Int?
+
+    @Query("UPDATE users SET latestNotificationId = :notificationId WHERE isActive = 1")
+    fun setLatestNotificationId(notificationId : Int)
+
     @Query("SELECT * FROM users WHERE isActive=1 LIMIT 1")
     fun getActiveUser(): UserDatabaseEntity?
 

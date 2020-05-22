@@ -6,16 +6,15 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.objects.Application
-import com.h.pixeldroid.objects.Instance
-import com.h.pixeldroid.objects.Token
+import com.h.pixeldroid.objects.*
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.DBUtils.Companion.storeInstance
 import com.h.pixeldroid.utils.Utils
@@ -237,19 +236,37 @@ class LoginActivity : AppCompatActivity() {
             .enqueue(object : Callback<Account> {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
                     if (response.body() != null && response.isSuccessful) {
-                        db.userDao().deActivateActiveUser()
                         val user = response.body() as Account
-                        DBUtils.addUser(
-                            db,
-                            user,
-                            instance,
-                            activeUser = true,
-                            accessToken = accessToken
-                        )
-                        db.close()
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
+
+                        //Check for the latest notification id
+                        pixelfedAPI.notifications("Bearer $accessToken", limit="1").enqueue(object : Callback<List<Notification>> {
+                            override fun onResponse(call: Call<List<Notification>>, response: Response<List<Notification>>) {
+                                if (response.code() == 200) {
+                                    val resultingId = (response.body() as List<Notification>)[0].id.toInt()
+
+                                    db.userDao().deActivateActiveUser()
+                                    DBUtils.addUser(
+                                        db,
+                                        user,
+                                        instance,
+                                        activeUser = true,
+                                        accessToken = accessToken,
+                                        latestNotificationId = resultingId
+                                    )
+                                    db.close()
+                                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(intent)
+                                } else{
+                                    Log.e("NOTIFICATIONS_REQUEST", "${response.code()}")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<List<Notification>>, t: Throwable) {
+                                Toast.makeText(applicationContext, resources.getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                                Log.e("FeedFragment", t.toString())
+                            }
+                        })
                     }
                 }
                 override fun onFailure(call: Call<Account>, t: Throwable) {

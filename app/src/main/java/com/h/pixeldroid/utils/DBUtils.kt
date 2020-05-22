@@ -25,7 +25,7 @@ class DBUtils {
             }
         }
 
-        fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true, accessToken: String) {
+        fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true, accessToken: String, latestNotificationId : Int) {
             db.userDao().insertUser(
                     UserDatabaseEntity(
                         user_id = account.id,
@@ -35,7 +35,8 @@ class DBUtils {
                         display_name = account.display_name,
                         avatar_static = account.avatar_static,
                         isActive = activeUser,
-                        accessToken = accessToken
+                        accessToken = accessToken,
+                        latestNotificationId = latestNotificationId
                     )
                 )
         }

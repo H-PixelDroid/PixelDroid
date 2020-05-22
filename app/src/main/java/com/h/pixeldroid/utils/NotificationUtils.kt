@@ -33,7 +33,7 @@ abstract class NotificationUtils {
                         val resultingId = (response.body() as List<Notification>)[0].id.toInt()
                         Log.e("NOTIFICATIONS_ID", "$resultingId")
                         //Check the resulting ID against the db id
-                        val oldId = db.notificationIdDao().get()?.notificationId ?: resultingId
+                        val oldId = db.userDao().getLatestNotificationId() ?: resultingId
 
                         Log.e("DB_NOTIF_ID", "$oldId")
                         if(resultingId != oldId) {
@@ -73,7 +73,7 @@ abstract class NotificationUtils {
                         badge.isVisible = false
 
                         //Update the database entry
-                        db.notificationIdDao().updateLatestId(resultingId)
+                        db.userDao().setLatestNotificationId(resultingId)
 
                         Log.e("NOTIFICATIONS_LATEST_ID", "$resultingId")
                     } else{

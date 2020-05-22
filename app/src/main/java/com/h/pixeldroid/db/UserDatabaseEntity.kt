@@ -21,5 +21,6 @@ data class UserDatabaseEntity (
     var display_name: String,
     var avatar_static: String,
     var isActive: Boolean,
-    var accessToken: String
+    var accessToken: String,
+    var latestNotificationId : Int
 )

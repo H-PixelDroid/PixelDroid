@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ import com.h.pixeldroid.fragments.feeds.OfflineFeedFragment
 import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
 import com.h.pixeldroid.fragments.feeds.PublicTimelineFragment
 import com.h.pixeldroid.objects.Account
+import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.NotificationUtils
 import com.h.pixeldroid.utils.Utils.Companion.hasInternet
@@ -175,8 +177,23 @@ class MainActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<Account>, response: Response<Account>) {
                         if (response.body() != null && response.isSuccessful) {
                             val account = response.body() as Account
-                            DBUtils.addUser(db, account, domain, accessToken = accessToken)
-                            fillDrawerAccountInfo(account.id)
+
+                            //Check for the latest notification id
+                            pixelfedAPI.notifications("Bearer $accessToken", limit="1").enqueue(object : Callback<List<Notification>> {
+                                override fun onResponse(call: Call<List<Notification>>, response: Response<List<Notification>>) {
+                                    if (response.code() == 200) {
+                                        val resultingId = (response.body() as List<Notification>)[0].id.toInt()
+                                        DBUtils.addUser(db, account, domain, accessToken = accessToken, latestNotificationId = resultingId)
+                                        fillDrawerAccountInfo(account.id)
+                                    } else{
+                                        Log.e("NOTIFICATIONS_REQUEST", "${response.code()}")
+                                    }
+                                }
+                                override fun onFailure(call: Call<List<Notification>>, t: Throwable) {
+                                    Toast.makeText(applicationContext, resources.getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                                    Log.e("FeedFragment", t.toString())
+                                }
+                            })
                         }
                     }
 
