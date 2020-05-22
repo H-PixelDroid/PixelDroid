@@ -63,4 +63,6 @@
     <string name="no_description">Deskribapenik ez</string>
     <string name="description_max_characters">Deskribapenak %1$s karaktere izan behar ditu gehienez.</string>
     <string name="save_image_success">Irudia behar bezala gorde da</string>
+    <string name="feed_failed">Ezin izan da jarioa lortu</string>
+    <string name="loading_toast">Zerbait gaizki atera zen kargatzen ari zela</string>
 </resources>
