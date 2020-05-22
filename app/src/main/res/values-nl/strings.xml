@@ -65,7 +65,7 @@
     <string name="picture_format_error">Uploadfout: verkeerd beeldformaat.</string>
     <string name="save_image_success">Beeld succesvol opgeslagen</string>
     <string name="upload_post_success">Post met succes geüpload</string>
-    <string name="retry">Probeer opnieuw</string>
+    <string name="retry">Opnieuw proberen</string>
     <string name="media_upload_failed">{gmd_cloud_off} Het uploaden van de mediabestanden is mislukt, probeer het opnieuw of controleer de netwerkverbinding</string>
     <string name="media_upload_completed">{gmd_cloud_done} Media-upload voltooid</string>
     <string name="default_nposts">-
