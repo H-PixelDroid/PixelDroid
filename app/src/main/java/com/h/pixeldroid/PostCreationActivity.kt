@@ -45,7 +45,7 @@ class PostCreationActivity : AppCompatActivity() {
     private var user: UserDatabaseEntity? = null
 
     private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
-    private var isSensitive = false
+    private var isSensitive = 0
 
     private var description: String = ""
 
@@ -87,7 +87,7 @@ class PostCreationActivity : AppCompatActivity() {
 
         // Listen to sensitive checkBox
         findViewById<CheckBox>(R.id.checkSensitive).setOnClickListener {
-            isSensitive = !isSensitive
+            isSensitive = (isSensitive + 1) % 2
         }
 
         // get the description and send the post to PixelFed
@@ -159,12 +159,15 @@ class PostCreationActivity : AppCompatActivity() {
 
     private fun post(id: String) {
         if (id.isEmpty()) return
-        pixelfedAPI.postStatus(
+        val post = pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
             statusText = description,
             media_ids = listOf(id),
             sensitive = isSensitive
-        ).enqueue(object: Callback<Status> {
+        )
+        Log.e(TAG, post.request().toString())
+
+            post.enqueue(object: Callback<Status> {
             override fun onFailure(call: Call<Status>, t: Throwable) {
                 Toast.makeText(applicationContext,"Post upload failed",Toast.LENGTH_SHORT).show()
                 Log.e(TAG, t.message + call.request())

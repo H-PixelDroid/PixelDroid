@@ -98,7 +98,7 @@ interface PixelfedAPI {
         @Field("poll[expires_in]") poll_expires : List<String>? = null,
         @Field("poll[multiple]") poll_multiple : List<String>? = null,
         @Field("poll[hide_totals]") poll_hideTotals : List<String>? = null,
-        @Field("sensitive") sensitive : Boolean? = null,
+        @Field("sensitive") sensitive : Int? = null,
         @Field("spoiler_text") spoiler_text : String? = null,
         @Field("visibility") visibility : String = "public",
         @Field("scheduled_at") scheduled_at : String? = null,
