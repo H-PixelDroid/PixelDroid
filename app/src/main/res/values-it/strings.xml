@@ -88,9 +88,14 @@
     <string name="posts">POSTS</string>
     <string name="accounts">ACCOUNTS</string>
     <string name="hashtags">HASHTAGS</string>
-    <string name="posting_image_accessibility_hint">Immagine in fase di pubblicazione</string>
+    <string name="posting_image_accessibility_hint">Immagine che viene pubblicata</string>
     <string name="nb_posts">%1$s
 \nPosts</string>
     <string name="action_not_allowed">Questa azione non è consentita</string>
-    <string name="upload_post_error">Caricamento post non riuscito: non 200</string>
+    <string name="upload_post_error">Caricamento post non riuscito</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Caricamento contenuti completato</string>
+    <string name="media_upload_failed">{gmd_cloud_off} Caricamento dei contenuti non riuscito, riprovare o verificare le condizioni della rete</string>
+    <string name="follow_button_failed">Impossibile visualizzare il tasto segui</string>
+    <string name="follow_status_failed">Impossibile ottenere lo stato segui</string>
+    <string name="default_theme">Predefinito (Segue il sistema)</string>
 </resources>
