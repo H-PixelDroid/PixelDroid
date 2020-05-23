@@ -72,8 +72,8 @@
     <string name="save_image_success">Изображение удачно сохранено</string>
     <string name="save_image_failed">Невозможно сохранить изображение</string>
     <string name="permission_denied">Нет прав</string>
-    <string name="dark_theme">Тёмный</string>
-    <string name="light_theme">Светлый</string>
+    <string name="dark_theme">Тёмная</string>
+    <string name="light_theme">Светлая</string>
     <string name="default_theme">По умолчанию (как в системе)</string>
     <string name="follow_status_failed">Не удалось получить статус подписки</string>
     <string name="follow_error">Не удалось подписаться</string>
