@@ -94,4 +94,6 @@
     <string name="comment">Iruzkin</string>
     <string name="write_permission_share_pic">Idazteko baimena eman behar duzu argazkiak partekatzeko!</string>
     <string name="posted_on">%1$s(e)n argitaratua</string>
+    <string name="hashtags">TRAOLAK</string>
+    <string name="accounts">KONTUAK</string>
 </resources>
