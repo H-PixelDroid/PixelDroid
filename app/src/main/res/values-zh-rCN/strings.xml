@@ -43,7 +43,7 @@
     <string name="add_account_name">添加用户</string>
     <string name="instance_error">无法获取实例信息</string>
     <string name="retry">重试</string>
-    <string name="posting_image_accessibility_hint">正在发布的图像</string>
+    <string name="posting_image_accessibility_hint">待发布的图像</string>
     <string name="media_upload_failed">{gmd_cloud_off} 媒体上传失败，请重试或检查网络状况</string>
     <string name="media_upload_completed">{gmd_cloud_done} 媒体已上传</string>
     <string name="hashtags">标签</string>
