@@ -79,5 +79,11 @@
     <string name="likes">%1$s Vind-ik-leuks</string>
     <string name="request_format_error">Fout bij het uploaden: slecht verzoekformaat</string>
     <string name="shares">%1$s keer gedeeld</string>
-    <string name="posted_on">" Geplaatst op %1$s"</string>
+    <string name="posted_on">Gepost op %1$s</string>
+    <string name="comment">Commentaar maken</string>
+    <string name="comment_posted">Commentaar: %1$s gepost!</string>
+    <string name="comment_error">Fout met commentaar!</string>
+    <string name="share_image">Afbeelding delen</string>
+    <string name="write_permission_share_pic">Je moet schrijven toestaan om afbeeldingen te delen!</string>
+    <string name="write_permission_download_pic">Je moet schrijven toestaan om afbeeldingen te downloaden!</string>
 </resources>
