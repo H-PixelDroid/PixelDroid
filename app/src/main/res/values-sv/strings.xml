@@ -42,4 +42,60 @@
     <string name="add_account_description">Lägg till ett annat Pixelfed-konto</string>
     <string name="add_account_name">Lägg till konto</string>
     <string name="instance_error">Lyckades inte hämta information från instans</string>
+    <string name="posting_image_accessibility_hint">Bild som publiceras</string>
+    <string name="retry">Försök igen</string>
+    <string name="media_upload_failed">{gmd_cloud_off} Uppladdning av media misslyckades, försök igen eller kontrollera uppkopplingen</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Uppladdning av media avklarad</string>
+    <string name="hashtags">HASHTAGGAR</string>
+    <string name="accounts">KONTON</string>
+    <string name="posts">INLÄGG</string>
+    <string name="search">Sök</string>
+    <string name="edit_profile">Redigera profil</string>
+    <string name="follow">Följ</string>
+    <string name="no_username">Inget användarnamn</string>
+    <string name="default_nfollowing">-
+\nFöljer</string>
+    <string name="default_nfollowers">-
+\nFöljare</string>
+    <string name="default_nposts">-
+\nInlägg</string>
+    <string name="access_token_invalid">Åtkomst token är ogiltig</string>
+    <string name="unfollow_error">Kunde inte avfölja</string>
+    <string name="action_not_allowed">Denna åtgärd är inte tillåten</string>
+    <string name="follow_error">Kunde inte följa</string>
+    <string name="follow_button_failed">Kunde inte visa följarknapp</string>
+    <string name="follow_status_failed">Kunde inte hämta status för följare</string>
+    <string name="nb_following">%1$s
+\nFöljer</string>
+    <string name="nb_followers">%1$s
+\nFöljare</string>
+    <string name="nb_posts">%1$s
+\nInlägg</string>
+    <string name="comment">Kommentera</string>
+    <string name="comment_posted">Kommentar: %$s inlagd!</string>
+    <string name="comment_error">Kommentarsfel!</string>
+    <string name="share_image">Dela bild</string>
+    <string name="write_permission_share_pic">Du måste tillåta skrivrättigheter för att dela bilder!</string>
+    <string name="write_permission_download_pic">Du måste tillåta skrivrättigheter för att ladda ned bilder!</string>
+    <string name="empty_comment">Kommentaren får inte vara tom!</string>
+    <string name="posted_on">Inlagt på %1$s</string>
+    <string name="shares">%1$s delningar</string>
+    <string name="likes">%1$s gillningar</string>
+    <string name="no_description">Ingen beskrivning</string>
+    <string name="feed_failed">Kunde inte hämta flöde</string>
+    <string name="loading_toast">Något gick fel vid laddningen</string>
+    <string name="normal_filter">Normal</string>
+    <string name="upload_post_error">Uppladdningen misslyckades</string>
+    <string name="upload_post_success">Uppladdningen lyckades</string>
+    <string name="upload_post_failed">Uppladdningen misslyckades</string>
+    <string name="request_format_error">Uppladdningsfel: felaktig begäran</string>
+    <string name="picture_format_error">Uppladdningsfel: fel bildformat.</string>
+    <string name="upload_picture_failed">Fel vid uppladdning av bild!</string>
+    <string name="description_max_characters">Beskrivningen måste minst innehålla %1$s tecken.</string>
+    <string name="save_image_success">Bild sparades</string>
+    <string name="save_image_failed">Kunde inte spara bild</string>
+    <string name="permission_denied">Åtkomst nekas</string>
+    <string name="dark_theme">Mörkt</string>
+    <string name="light_theme">Ljust</string>
+    <string name="default_theme">Standard (Följer systemet)</string>
 </resources>
