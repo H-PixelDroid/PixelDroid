@@ -86,4 +86,7 @@
     <string name="share_image">Afbeelding delen</string>
     <string name="write_permission_share_pic">Je moet schrijven toestaan om afbeeldingen te delen!</string>
     <string name="write_permission_download_pic">Je moet schrijven toestaan om afbeeldingen te downloaden!</string>
+    <string name="follow_status_failed">Kon volgstatus niet ophalen</string>
+    <string name="nb_posts">%1$s
+\nPosts</string>
 </resources>
