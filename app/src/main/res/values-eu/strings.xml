@@ -96,4 +96,6 @@
     <string name="posted_on">%1$s(e)n argitaratua</string>
     <string name="hashtags">TRAOLAK</string>
     <string name="accounts">KONTUAK</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Multimedia karga burutu da</string>
+    <string name="upload_post_failed">Argitalpenak huts egin du</string>
 </resources>
