@@ -14,6 +14,7 @@ import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.fragments.feeds.FeedFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Results
+import com.h.pixeldroid.objects.Tag
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,9 +49,14 @@ class SearchAccountFragment: AccountListFragment(){
         }
         private fun makeAfterCall(requestedLoadSize: Int, key: String): Call<Results> {
             return pixelfedAPI
-                .search("Bearer $accessToken", max_id=key,
+                .search("Bearer $accessToken", offset=key.toInt(),
                     limit="$requestedLoadSize", q = query,
                     type = Results.SearchType.accounts)
+        }
+        override fun getKey(item: Account): String {
+            val value = content.value
+            val count = value?.loadedCount ?: 0
+            return count.toString()
         }
         override fun loadInitial(
             params: LoadInitialParams<String>,
