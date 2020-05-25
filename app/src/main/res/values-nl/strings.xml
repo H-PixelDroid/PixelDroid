@@ -71,4 +71,9 @@
     <string name="default_nposts">-
 \nBerichten</string>
     <string name="upload_post_error">Post-upload mislukt</string>
+    <string name="upload_post_failed">Kon post niet uploaden</string>
+    <string name="save_image_failed">Kon afbeelding niet opslaan</string>
+    <string name="permission_denied">Toestemming geweigerd</string>
+    <string name="default_theme">Standaard (volg systeem instelling)</string>
+    <string name="instance_error">Kon informatie niet ophalen van deze server</string>
 </resources>
