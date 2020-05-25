@@ -76,4 +76,6 @@
     <string name="permission_denied">Toestemming geweigerd</string>
     <string name="default_theme">Standaard (volg systeem instelling)</string>
     <string name="instance_error">Kon informatie niet ophalen van deze server</string>
+    <string name="likes">" %1$s Vind-ik-leuks"</string>
+    <string name="request_format_error">Fout bij het uploaden: slecht verzoekformaat</string>
 </resources>
