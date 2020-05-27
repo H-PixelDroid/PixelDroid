@@ -5,14 +5,14 @@
     <string name="title_activity_settings2">Réglages</string>
     <string name="menu_account">Mon profil</string>
     <string name="menu_settings">Réglages</string>
-    <string name="followed_notification">%1$s vous a suivi</string>
-    <string name="shared_notification">%1$s a partagé(e) votre publication</string>
-    <string name="liked_notification">%1$s a aimé(e) votre publication</string>
+    <string name="followed_notification">%1$s vous suit</string>
+    <string name="shared_notification">%1$s a partagé votre publication</string>
+    <string name="liked_notification">%1$s a aimé votre publication</string>
     <string name="description">Description…</string>
     <string name="send">envoyer</string>
     <string name="whats_an_instance">Qu\'est-ce qu\'une instance \?</string>
     <string name="logout">Se déconnecter</string>
-    <string name="save_to_gallery">Sauvegarder dans la gallerie…</string>
+    <string name="save_to_gallery">Sauvegarder dans la galerie…</string>
     <string name="image_download_downloading">En cours de téléchargement…</string>
     <string name="image_download_success">Image téléchargée avec succès</string>
     <string name="share_picture">Partager l\'image…</string>
@@ -38,9 +38,9 @@
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Media caché
 \n(Cliquer pour le montrer)</string>
     <string name="CommentDisplay">Montrer…</string>
-    <string name="login_connection_required_once">Pour utiliser PixelDroid, vous devez vous connecter au moins une fois à internet :(</string>
+    <string name="login_connection_required_once">Vous devez être connecté à internet pour pouvoir ajouter un compte et utiliser PixelDroid :(</string>
     <string name="add_account_description">Ajouter un autre compte Pixelfed</string>
-    <string name="add_account_name">Ajouter un compte</string>
+    <string name="add_account_name">Ajouter un compte Pixelfed</string>
     <string name="instance_error">Impossible d’obtenir des informations sur l’instance</string>
     <string name="request_format_error">Erreur de téléchargement : format de requête incorrect</string>
     <string name="picture_format_error">Erreur de téléversement : format d\'image incorrect.</string>
@@ -52,13 +52,13 @@
     <string name="dark_theme">Sombre</string>
     <string name="light_theme">Clair</string>
     <string name="default_theme">Par défaut (Suivant votre système)</string>
-    <string name="upload_post_failed">Échec lors du téléversement de la publication</string>
+    <string name="upload_post_failed">Échec du téléversement de la publication</string>
     <string name="upload_post_success">Téléversement de la publication avec succès</string>
     <string name="posted_on">Publié le %1$s</string>
     <string name="empty_comment">Le commentaire ne doit pas être vide !</string>
     <string name="write_permission_share_pic">Vous devez accorder une autorisation d\'écriture pour partager des photos !</string>
     <string name="default_nfollowers">- 
-\nAbonné(e)s</string>
+\nAbonné·e·s</string>
     <string name="upload_post_error">Le téléversement de la publication a échoué</string>
     <string name="normal_filter">Normal</string>
     <string name="loading_toast">Une erreur s\'est produite lors du chargement</string>
