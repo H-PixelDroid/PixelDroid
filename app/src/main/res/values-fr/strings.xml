@@ -30,7 +30,7 @@
     <string name="lbl_saturation">SATURATION</string>
     <string name="tab_filters">FILTRES</string>
     <string name="tab_edit">MODIFIER</string>
-    <string name="capture_button_alt">Capturer</string>
+    <string name="capture_button_alt">Prendre une photo</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
     <string name="gallery_button_alt">Galerie</string>
     <string name="NoCommentsToShow">Pas de commentaire pour cette publication…</string>
