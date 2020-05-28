@@ -323,7 +323,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                 REQUEST_CODE_PERMISSIONS_SEND_PHOTO -> permissionsGrantedToSave(false)
             }
         } else {
-            Snackbar.make(coordinator_edit, "Permission denied", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(coordinator_edit, getString(R.string.permission_denied),
+                Snackbar.LENGTH_LONG).show()
         }
     }
 
@@ -392,13 +393,15 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             applyFinalFilters(originalImage)
             file.writeBitmap(finalImage)
         } catch (e: IOException) {
-            Snackbar.make(coordinator_edit, "Unable to save image", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(coordinator_edit, getString(R.string.save_image_failed),
+                Snackbar.LENGTH_LONG).show()
         }
 
         if (!save) {
             uploadImage(file)
         } else {
-            Snackbar.make(coordinator_edit, "Image succesfully saved", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(coordinator_edit, getString(R.string.save_image_success),
+                Snackbar.LENGTH_LONG).show()
         }
     }
     //</editor-fold>

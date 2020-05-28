@@ -31,7 +31,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".PostCreationActivity"
             android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".FollowsActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity"/>

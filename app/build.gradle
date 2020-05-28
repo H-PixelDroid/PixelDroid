@@ -18,8 +18,8 @@ android {
         applicationId "com.h.pixeldroid"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0.alpha1"
+        versionCode 2
+        versionName "1.0.alpha2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -123,6 +123,7 @@ dependencies {
 
     //iconics
     implementation "com.mikepenz:materialdrawer-iconics:8.0.3"
+    implementation "com.mikepenz:iconics-views:5.0.2"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
 
 

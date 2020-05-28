@@ -7,7 +7,7 @@
     <string name="image_download_downloading">Deskargatzen…</string>
     <string name="image_download_failed">Deskargak huts egin du, mesedez saiatu berriro</string>
     <string name="save_to_gallery">Gorde galerian…</string>
-    <string name="logout">Itxi saioa</string>
+    <string name="logout">Saioa Itxi</string>
     <string name="whats_an_instance">Zer da instantzia bat\?</string>
     <string name="send">bidali</string>
     <string name="description">Deskribapena…</string>
@@ -24,7 +24,6 @@
     <string name="app_name">PixelDroid</string>
     <string name="gallery_button_alt">Galeria</string>
     <string name="NoCommentsToShow">Iruzkinik gabeko argitalpena…</string>
-    <string name="you_are_in_offline_mode">Lineaz kanpo editatzeko moduan zaude, baina hala ere eduki batzuk ikus ditzakezu!</string>
     <string name="theme_title">Aplikazioaren gaia</string>
     <string name="tab_edit">EDITATU</string>
     <string name="switch_camera_button_alt">Aldatu kamera</string>
@@ -34,10 +33,40 @@
     <string name="lbl_saturation">SATURAZIOA</string>
     <string name="tab_filters">IRAGAZKIAK</string>
     <string name="connect_to_pixelfed">Konektatu Pixelfedera</string>
-    <string name="login_connection_required_once">PixelDroid erabili ahal izateko Internetera gutxienez behin konektatu behar duzu :(</string>
+    <string name="login_connection_required_once">PixelDroid erabili ahal izateko Internet konexioa behar duzu :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">Eduki-abisua / Multimedia ezkutatuta
 \n (egin klik erakusteko)</string>
     <string name="lbl_brightness">DISTIRA</string>
     <string name="CommentDisplay">erakutsi…</string>
     <string name="domain_of_your_instance">Zure instantziaren domeinua</string>
+    <string name="add_account_description">Beste Pixelfed kontu bat gehitu</string>
+    <string name="add_account_name">Kontua gehitu</string>
+    <string name="instance_error">Ezinezkoa nodoaren informazioa lortzea</string>
+    <string name="search">Bilatu</string>
+    <string name="follow">Jarraitu</string>
+    <string name="default_nfollowing">-
+\nJarraitzen</string>
+    <string name="default_nfollowers">-
+\nJarraitzaile</string>
+    <string name="default_nposts">-
+\nArgitalpen</string>
+    <string name="nb_following">%1$s
+\nJarraitzen</string>
+    <string name="nb_followers">%1$s
+\nJarraitzaile</string>
+    <string name="share_image">Irudia partekatu</string>
+    <string name="upload_picture_failed">Ezin izan da irudia igo!</string>
+    <string name="save_image_failed">Ezinezkoa irudia gordetzea</string>
+    <string name="dark_theme">Iluna</string>
+    <string name="light_theme">Argia</string>
+    <string name="default_theme">Lehenetsia (Sistemaren lehentsia)</string>
+    <string name="no_description">Deskribapenik ez</string>
+    <string name="description_max_characters">Deskribapenak %1$s karaktere izan behar ditu gehienez.</string>
+    <string name="save_image_success">Irudia behar bezala gorde da</string>
+    <string name="feed_failed">Ezin izan da jarioa lortu</string>
+    <string name="loading_toast">Zerbait gaizki atera zen kargatzen ari zela</string>
+    <string name="shares">%1$s Partekatze</string>
+    <string name="write_permission_download_pic">Idazteko baimena eman behar duzu irudiak deskargatzeko!</string>
+    <string name="empty_comment">Iruzkina ez da hutsik egon behar!</string>
+    <string name="likes">%1$s Atsegite</string>
 </resources>

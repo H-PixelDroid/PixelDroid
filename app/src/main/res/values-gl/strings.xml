@@ -34,10 +34,68 @@
     <string name="CommentDisplay">amostrar…</string>
     <string name="domain_of_your_instance">Dominio da túa instancia</string>
     <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
-    <string name="login_connection_required_once">Tes que conectarte cando menos unha vez a internet para usar PixelDroid :(</string>
-    <string name="you_are_in_offline_mode">Non tes conexión, pero aínda así podes ver algún contido!</string>
+    <string name="login_connection_required_once">Debes ter conexión a internet para poder engadir a conta e usar PixelDroid :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Agochado
 \n(preme para amosar)</string>
     <string name="app_name">PixelDroid</string>
     <string name="registration_failed">Non puidemos rexistrar a aplicación neste servidor</string>
+    <string name="add_account_description">Engadir outra conta Pixelfed</string>
+    <string name="add_account_name">Engadir Conta</string>
+    <string name="instance_error">Non se obtivo a información da instancia</string>
+    <string name="save_image_success">Imaxe gardada</string>
+    <string name="hashtags">CANCELOS</string>
+    <string name="accounts">CONTAS</string>
+    <string name="posts">POSTS</string>
+    <string name="search">Buscar</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="follow">Seguir</string>
+    <string name="no_username">Sen nome de usuaria</string>
+    <string name="default_nfollowing">-
+\nSeguindo</string>
+    <string name="default_nfollowers">-
+\nSeguidoras</string>
+    <string name="default_nposts">-
+\nPublicacións</string>
+    <string name="access_token_invalid">O token de acceso non é válido</string>
+    <string name="unfollow_error">Non se puido deixar de seguir</string>
+    <string name="action_not_allowed">Non está permitida a acción</string>
+    <string name="follow_error">Non se puido seguir</string>
+    <string name="follow_button_failed">Non se pode mostrar o botón para seguir</string>
+    <string name="follow_status_failed">Non se obtivo o estado de relacións</string>
+    <string name="nb_following">%1$s
+\nSeguindo</string>
+    <string name="nb_followers">%1$s
+\nSeguidoras</string>
+    <string name="nb_posts">%1$s
+\nPublicacións</string>
+    <string name="comment">Comentar</string>
+    <string name="comment_posted">Comentario: %1$s publicado!</string>
+    <string name="comment_error">Fallo ao comentar!</string>
+    <string name="share_image">Compartir Imaxe</string>
+    <string name="write_permission_share_pic">Tes que dar permiso de escritura para compartir fotos!</string>
+    <string name="write_permission_download_pic">Tes que conceder permiso de escritura para descargar fotos!</string>
+    <string name="empty_comment">O comentario non debe quedar baleiro!</string>
+    <string name="posted_on">Publicado o %1$s</string>
+    <string name="shares">Compartido %1$s</string>
+    <string name="likes">%1$s Gústame</string>
+    <string name="no_description">Sen descrición</string>
+    <string name="feed_failed">Non se obtivo a fonte</string>
+    <string name="loading_toast">Algo fallou ao realizar a subida</string>
+    <string name="normal_filter">Normal</string>
+    <string name="upload_post_error">Fallou a publicación: not 200</string>
+    <string name="upload_post_success">Publicación correcta</string>
+    <string name="upload_post_failed">Fallou a subida da publicación</string>
+    <string name="request_format_error">Erro na subida: formato da solicitude non válido</string>
+    <string name="picture_format_error">Erro na subida: formato de imaxe non válido.</string>
+    <string name="upload_picture_failed">Erro ao subir a foto!</string>
+    <string name="description_max_characters">A descrición non pode superar os %1$s caracteres.</string>
+    <string name="save_image_failed">Non se gardou a imaxe</string>
+    <string name="permission_denied">Permiso denegado</string>
+    <string name="dark_theme">Escuro</string>
+    <string name="light_theme">Claro</string>
+    <string name="default_theme">Por omisión (do sistema)</string>
+    <string name="media_upload_failed"></string>
+    <string name="posting_image_accessibility_hint"></string>
+    <string name="media_upload_completed"></string>
+    <string name="retry"></string>
 </resources>

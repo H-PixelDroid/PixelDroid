@@ -42,7 +42,7 @@ import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import kotlin.collections.ArrayList
 
 /*
@@ -103,7 +103,7 @@ data class Status(
     private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned {
         val description = content
         if(description.isEmpty()) {
-            return "No description".toSpanned()
+            return context.getString(R.string.no_description).toSpanned()
         }
         return parseHTMLText(description, mentions, api, context, credential)
 
@@ -112,17 +112,15 @@ data class Status(
     fun getUsername() : CharSequence =
         account.username.ifBlank{account.display_name.ifBlank{"NoName"}}
 
-    fun getNLikes() : CharSequence {
-        val nLikes = favourites_count
-        return "$nLikes Likes"
+    fun getNLikes(context: Context) : CharSequence {
+        return context.getString(R.string.likes).format(favourites_count.toString())
     }
 
-    fun getNShares() : CharSequence {
-        val nShares = reblogs_count
-        return "$nShares Shares"
+    fun getNShares(context: Context) : CharSequence {
+        return context.getString(R.string.shares).format(reblogs_count.toString())
     }
 
-    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean) {
+    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean, context: Context) {
         var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
         if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}Z".toRegex())) {
             format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
@@ -138,8 +136,10 @@ data class Status(
                 .getRelativeTimeSpanString(then, now,
                     android.text.format.DateUtils.SECOND_IN_MILLIS,
                     android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
-            textView.text = if(isActivity) "Posted on $date"
-            else "$formattedDate"
+
+            textView.text = if(isActivity) context.getString(R.string.posted_on).format(date)
+                            else "$formattedDate"
+
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -231,17 +231,17 @@ data class Status(
         }
 
         rootView.findViewById<TextView>(R.id.nlikes).apply {
-            text = this@Status.getNLikes()
+            text = this@Status.getNLikes(rootView.context)
             setTypeface(null, Typeface.BOLD)
         }
 
         rootView.findViewById<TextView>(R.id.nshares).apply {
-            text = this@Status.getNShares()
+            text = this@Status.getNShares(rootView.context)
             setTypeface(null, Typeface.BOLD)
         }
 
         //Convert the date to a readable string
-        ISO8601toDate(created_at, rootView.postDate, isActivity)
+        ISO8601toDate(created_at, rootView.postDate, isActivity, rootView.context)
 
         rootView.postDomain.text = getStatusDomain(domain)
 
@@ -293,6 +293,39 @@ data class Status(
                 }
                 //show animation or not?
                 true
+            }
+        }
+    }
+
+    fun activateDoubleTapLiker(
+        holder : PostViewHolder,
+        api: PixelfedAPI,
+        credential: String
+    ) {
+        holder.apply {
+            var clicked = false
+            postPic.setOnClickListener {
+                //Check that the post isn't hidden
+                if(sensitiveW.visibility == GONE) {
+                    //Check for double click
+                    if(clicked) {
+                        if (holder.liker.isChecked) {
+                            // Button is active, unlike
+                            holder.liker.isChecked = false
+                            unLikePostCall(holder, api, credential, this@Status)
+                        } else {
+                            // Button is inactive, like
+                            holder.liker.playAnimation()
+                            holder.liker.isChecked = true
+                            likePostCall(holder, api, credential, this@Status)
+                        }
+                    } else {
+                        clicked = true
+
+                        //Reset clicked to false after 500ms
+                        postPic.handler.postDelayed(fun() { clicked = false }, 500)
+                    }
+                }
             }
         }
     }
@@ -358,7 +391,7 @@ data class Status(
             val textIn = holder.comment.text
             //Open text input
             if(textIn.isNullOrEmpty()) {
-                Toast.makeText(holder.context,"Comment must not be empty!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(holder.context, holder.context.getString(R.string.empty_comment), Toast.LENGTH_SHORT).show()
             } else {
 
                 //Post the comment
@@ -384,7 +417,7 @@ data class Status(
                                     .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                     .withListener(object: BasePermissionListener() {
                                         override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                            Toast.makeText(view.context, "You need to grant write permission to download pictures!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(view.context, view.context.getString(R.string.write_permission_download_pic), Toast.LENGTH_SHORT).show()
                                         }
 
                                         override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
@@ -398,7 +431,7 @@ data class Status(
                                     .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                     .withListener(object: BasePermissionListener() {
                                         override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                            Toast.makeText(view.context, "You need to grant write permission to share pictures!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(view.context, view.context.getString(R.string.write_permission_share_pic), Toast.LENGTH_SHORT).show()
                                         }
 
                                         override fun onPermissionGranted(p0: PermissionGrantedResponse?) {

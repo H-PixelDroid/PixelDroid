@@ -28,16 +28,74 @@
     <string name="share_picture">شارِك الصورة…</string>
     <string name="NoCommentsToShow">لا توجد تعليقات في هذا المنشور…</string>
     <string name="CommentDisplay">لإظهاره…</string>
-    <string name="connect_to_pixelfed">لِج إلى PixelFed</string>
+    <string name="connect_to_pixelfed">لِج إلى Pixelfed</string>
     <string name="lbl_brightness">السطوع</string>
     <string name="image_download_failed">فشل التنزيل ، حاول مجددًا مِن فضلك</string>
     <string name="liked_notification">أعجِب %1$s بمنشورك</string>
     <string name="domain_of_your_instance">اسم نطاق مثيل خادمك</string>
-    <string name="login_connection_required_once">يجب عليك الاتصال بالأنترنت ولو لمرة واحدة قصد استخدام PixelDroid :(</string>
+    <string name="login_connection_required_once">يجب أن تكون متصلا بالأنترنت لتتمكن مِن إضافة أول حساب واستخدام PixelDroid :(</string>
     <string name="capture_button_alt">لقطة شاشة</string>
-    <string name="you_are_in_offline_mode">إنك غير متصل الآن ولكنه لا يزال بإمكانك عرض بعض المحتوى!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / وسائط مخفية
 \n (اضعط للعرض)</string>
     <string name="lbl_contrast">تباين عالٍ</string>
     <string name="lbl_saturation">التشبّع اللوني</string>
+    <string name="add_account_description">إضافة حساب Pixelfed آخر</string>
+    <string name="add_account_name">إضافة حساب</string>
+    <string name="instance_error">تعذّر الحصول على معلومات مثيل الخادم</string>
+    <string name="save_image_failed">لا يمكن حفظ الصورة</string>
+    <string name="permission_denied">رُفض التصريح</string>
+    <string name="dark_theme">داكن</string>
+    <string name="light_theme">فاتح</string>
+    <string name="save_image_success">تم حفظ الصورة بنجاح</string>
+    <string name="default_theme">افتراضي (يتبع النظام)</string>
+    <string name="description_max_characters">يجب أن يحتوي الوصف على %1$s حرفًا على الأكثر.</string>
+    <string name="upload_post_success">تم تحميل المنشور بنجاح</string>
+    <string name="upload_post_failed">فشل في تحميل المنشور</string>
+    <string name="upload_picture_failed">خطأ في تحميل الصورة!</string>
+    <string name="loading_toast">حدث خلل اثناء التحميل</string>
+    <string name="normal_filter">عادي</string>
+    <string name="upload_post_error">فشل في تحميل المنشور</string>
+    <string name="nb_following">%1$s
+\nيتابعون</string>
+    <string name="nb_followers">%1$s
+\nمتابع</string>
+    <string name="nb_posts">%1$s
+\nمشاركة</string>
+    <string name="comment">تعليق</string>
+    <string name="comment_posted">التعليق: تم نشر٪ 1 $ s!</string>
+    <string name="comment_error">خطأ في التعليق!</string>
+    <string name="share_image">مشاركة الصورة</string>
+    <string name="write_permission_share_pic">يجب عليك منح تصريح للكتابة قصد مشاركة الصور!</string>
+    <string name="write_permission_download_pic">تحتاج إلى منح إذن الكتابة لتنزيل الصور!</string>
+    <string name="empty_comment">لا يجب ان يكون التعليق فارغًا!</string>
+    <string name="posted_on">نُشِر في %1$s</string>
+    <string name="shares">%1$s مشاركات</string>
+    <string name="likes">٪ 1 $ s إعجاب</string>
+    <string name="no_description">مِن دون وصف</string>
+    <string name="feed_failed">تعذّر جلب التدفق</string>
+    <string name="retry">حاول مجدّدًا</string>
+    <string name="action_not_allowed">هذا الإجراء غير مسموح به</string>
+    <string name="follow_error">لا يمكن المتابعة</string>
+    <string name="follow_button_failed">تعذر عرض زر المتابعة</string>
+    <string name="follow_status_failed">تعذر جلب الاشتراك</string>
+    <string name="default_nfollowers">-
+\nالمتابعون</string>
+    <string name="default_nposts">-
+\nالمشاركات</string>
+    <string name="access_token_invalid">الرمز المميز غير صالح</string>
+    <string name="unfollow_error">تعذر الغاء المتابعة</string>
+    <string name="default_nfollowing">-
+\nالمتابَعون</string>
+    <string name="no_username">لا يوجد اسم المستخدم</string>
+    <string name="follow">اتبع</string>
+    <string name="edit_profile">تعديل الملف الشخصي</string>
+    <string name="search">البحث</string>
+    <string name="posts">المشاركات</string>
+    <string name="accounts">الحسابات</string>
+    <string name="hashtags">الوسوم</string>
+    <string name="media_upload_completed">{gmd_cloud_done} تم تحميل الوسائط</string>
+    <string name="posting_image_accessibility_hint">جارٍ نشر الصورة</string>
+    <string name="picture_format_error">خطأ في التحميل: نسق الصورة غير صالح.</string>
+    <string name="request_format_error">خطأ في التحميل: نسق الطلب غير صالح</string>
+    <string name="media_upload_failed">{gmd_cloud_off} فشل في تحميل الوسائط ، يرجى إعادة المحاولة أو تحقق مِن حالة الشبكة</string>
 </resources>

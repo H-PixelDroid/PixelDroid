@@ -120,6 +120,9 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             //Activate liker
             post.activateLiker(holder, api, credential, post.favourited)
 
+            //Activate double tap liking
+            post.activateDoubleTapLiker(holder, api, credential)
+
             //Show comments
             post.showComments(holder, api, credential)
 
@@ -165,4 +168,5 @@ class PostViewHolder(val postView: View, val context: android.content.Context) :
     val viewComment : TextView = postView.findViewById(R.id.ViewComments)
     val postDate    : TextView = postView.findViewById(R.id.postDate)
     val postDomain  : TextView = postView.findViewById(R.id.postDomain)
+    val sensitiveW  : TextView = postView.findViewById(R.id.sensitiveWarning)
 }

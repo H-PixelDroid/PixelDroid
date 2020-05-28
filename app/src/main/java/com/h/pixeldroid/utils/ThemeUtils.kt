@@ -15,7 +15,6 @@ class ThemeUtils {
         fun setThemeFromPreferences(preferences: SharedPreferences, resources : Resources) {
             val themes = resources.getStringArray(R.array.theme_values)
             val theme = preferences.getString("theme", "")
-            Log.e("themePref", theme!!)
             //Set the theme
             when(theme) {
                 //Light

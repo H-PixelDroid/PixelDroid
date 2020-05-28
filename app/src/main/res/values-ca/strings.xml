@@ -6,7 +6,7 @@
     <string name="title_activity_settings2">Configuració</string>
     <string name="token_error">S\'ha produït un error en obtenir el token</string>
     <string name="auth_failed">No s\'ha pogut autenticar</string>
-    <string name="browser_launch_failed">No s\'ha pogut llançar un navegador, en té un\?</string>
+    <string name="browser_launch_failed">No s\'ha pogut llançar un navegador, en tens un\?</string>
     <string name="registration_failed">No s\'ha pogut registrar l\'aplicació amb aquest servidor</string>
     <string name="invalid_domain">Domini no vàlid</string>
     <string name="menu_settings">Configuració</string>
@@ -16,28 +16,86 @@
     <string name="image_download_success">La imatge s\'ha descarrega\'t correctament</string>
     <string name="image_download_downloading">Descarregant…</string>
     <string name="image_download_failed">La descàrrega no ha estat possible, si us plau torna a provar-ho</string>
-    <string name="save_to_gallery">Desar a la Galeria…</string>
+    <string name="save_to_gallery">Desar a la galeria…</string>
     <string name="logout">Tancar sessió</string>
-    <string name="whats_an_instance">Què és una instancia\?</string>
+    <string name="whats_an_instance">Què és una instància\?</string>
     <string name="send">enviar</string>
     <string name="description">Descripció…</string>
     <string name="liked_notification">%1$s ha dona\'t m\'agrada a la teva publicació</string>
-    <string name="theme_title">Tema de l\'applicació</string>
+    <string name="theme_title">Tema de l\'aplicació</string>
     <string name="switch_camera_button_alt">Canviar la càmera</string>
-    <string name="login_connection_required_once">Per utilitzar PixelDroid, has de connectar-te a Internet almenys una vegada :(</string>
+    <string name="login_connection_required_once">Per poder afegir el primer compte i utilitzar PixelDroid, has d’estar en línia :(</string>
     <string name="theme_header">Tema</string>
     <string name="lbl_brightness">BRILLANTOR</string>
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">SATURACIÓ</string>
     <string name="tab_filters">FILTRES</string>
-    <string name="tab_edit">EDICIÓ</string>
+    <string name="tab_edit">EDITAR</string>
     <string name="capture_button_alt">Captura</string>
     <string name="gallery_button_alt">Galeria</string>
     <string name="NoCommentsToShow">No hi ha comentaris en aquesta publicació …</string>
     <string name="CommentDisplay">mostrar…</string>
-    <string name="domain_of_your_instance">Domini de la teva instancia</string>
+    <string name="domain_of_your_instance">Domini de la teva instància</string>
     <string name="connect_to_pixelfed">Connecta’t a Pixelfed</string>
-    <string name="you_are_in_offline_mode">Estàs en mode fora de línia, però encara pots veure algun contingut!</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Imatges ocultes
 \n(fes clic per mostrar)</string>
+    <string name="add_account_description">Afegeix un altre compte</string>
+    <string name="add_account_name">Afegeix un compte</string>
+    <string name="instance_error">No s\'ha pogut obtenir informació sobre la instància</string>
+    <string name="shares">%1$s Accions</string>
+    <string name="hashtags">HASHTAGS</string>
+    <string name="accounts">COMPTES</string>
+    <string name="posts">PUBLICACIONS</string>
+    <string name="search">Buscar</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="follow">Seguir</string>
+    <string name="no_username">Sense nom d’usuari(a)</string>
+    <string name="default_nfollowing">-
+\nSeguint</string>
+    <string name="default_nfollowers">- 
+\nSeguidors/es</string>
+    <string name="default_nposts">-
+\nPublicacions</string>
+    <string name="access_token_invalid">El token d\'accés és invalid</string>
+    <string name="unfollow_error">No s\'ha pogut parar de seguir</string>
+    <string name="action_not_allowed">Aquesta acció no està permesa</string>
+    <string name="follow_error">No s\'ha pogut seguir</string>
+    <string name="follow_button_failed">No s\'ha pogut mostrar el botó de seguir</string>
+    <string name="follow_status_failed">No s\'ha pogut obtenir l\'estat de seguiment</string>
+    <string name="nb_following">%1$s 
+\nSeguits/des</string>
+    <string name="nb_followers">%1$s 
+\nSeguidors/es</string>
+    <string name="nb_posts">%1$s
+\nPublicacions</string>
+    <string name="comment">Comentari</string>
+    <string name="comment_posted">Comentari: %1$s publicat!</string>
+    <string name="comment_error">Error de comentari!</string>
+    <string name="share_image">Compartir imatge</string>
+    <string name="write_permission_share_pic">Necessites concedir permís d’escriptura per compartir imatges!</string>
+    <string name="write_permission_download_pic">Has de concedir permís d’escriptura per baixar imatges!</string>
+    <string name="empty_comment">El comentari no ha de estar buit!</string>
+    <string name="posted_on">Publica\'t el %1$s</string>
+    <string name="likes">%1$s M\'agrades</string>
+    <string name="no_description">Sense descripció</string>
+    <string name="feed_failed">No s\'ha pogut obtenir el fil</string>
+    <string name="loading_toast">Alguna cosa no ha funcionat correctament mentre es carregava</string>
+    <string name="normal_filter">Normal</string>
+    <string name="upload_post_error">Ha fallat l\'enviament de la publicació</string>
+    <string name="upload_post_success">S\'ha publicat amb èxit la publicació</string>
+    <string name="upload_post_failed">Ha fallat l\'enviament de la publicació</string>
+    <string name="request_format_error">Error d\'enviament: format de sol·licitud dolent</string>
+    <string name="picture_format_error">Error d\'enviament: format d\'imatge erroni.</string>
+    <string name="upload_picture_failed">Error d\'enviament d\'imatges!</string>
+    <string name="description_max_characters">La descripció ha de contenir %1$s caràcters com a mínim.</string>
+    <string name="save_image_success">La imatge s\'ha desat correctament</string>
+    <string name="save_image_failed">No es pot desar la imatge</string>
+    <string name="permission_denied">Permís denegat</string>
+    <string name="dark_theme">Fosc</string>
+    <string name="light_theme">Clar</string>
+    <string name="default_theme">Per defecte (seguint el sistema)</string>
+    <string name="media_upload_completed">{gmd_cloud_done} S\'ha completat l\'enviament multimèdia</string>
+    <string name="media_upload_failed">{gmd_cloud_off} L\'enviament multimèdia ha fallat, torna-ho a provar o comprova les condicions de la xarxa</string>
+    <string name="posting_image_accessibility_hint">Imatge que s\'està publicant</string>
+    <string name="retry">Tornar a provar</string>
 </resources>
