@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="registration_failed">Impossible d\'enregistrer l\'application sur ce serveur</string>
-    <string name="auth_failed">Authentification impossible</string>
+    <string name="auth_failed">Échec de l\'autentification</string>
     <string name="title_activity_settings2">Réglages</string>
     <string name="menu_account">Mon profil</string>
     <string name="menu_settings">Réglages</string>
@@ -51,7 +51,7 @@
     <string name="permission_denied">Permission refusée</string>
     <string name="dark_theme">Sombre</string>
     <string name="light_theme">Clair</string>
-    <string name="default_theme">Par défaut (Suivant votre système)</string>
+    <string name="default_theme">Par défaut (selon votre système)</string>
     <string name="upload_post_failed">Échec du téléversement de la publication</string>
     <string name="upload_post_success">Téléversement de la publication avec succès</string>
     <string name="posted_on">Publié le %1$s</string>
@@ -97,5 +97,5 @@
     <string name="media_upload_completed">{gmd_cloud_done} Média téléversé avec succès</string>
     <string name="retry">Réessayez</string>
     <string name="posting_image_accessibility_hint">Image en cours de publication</string>
-    <string name="media_upload_failed">{gmd_cloud_off} Échec du téléversement du média, réessayez ou vérifiez les conditions du réseau</string>
+    <string name="media_upload_failed">{gmd_cloud_off} Échec du téléversement du média, réessayez ou vérifiez l\'état du réseau</string>
 </resources>
