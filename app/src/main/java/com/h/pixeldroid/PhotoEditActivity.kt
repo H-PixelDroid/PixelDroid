@@ -445,7 +445,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                     outputStream.writeBitmap(applyFinalFilters(originalImage))
                 }
                 else {
-                    val cropFile = cropUri!!.toFile().inputStream()
+                    val cropFile = contentResolver.openInputStream(cropUri!!)!!
 
                     if(save)
                         cropFile.use { input ->

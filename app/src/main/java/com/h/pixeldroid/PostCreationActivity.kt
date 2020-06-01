@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -118,11 +119,30 @@ class PostCreationActivity : AppCompatActivity(){
         return true
     }
 
-    private fun upload(){
-        val imagePart = ProgressRequestBody(imageUri.toFile())
+    private fun upload() {
+        val imageInputStream = contentResolver.openInputStream(imageUri)!!
+
+        val size =
+            if(imageUri.toString().startsWith("content")) {
+                contentResolver.query(imageUri, null, null, null, null)
+                    ?.use { cursor ->
+                        /*
+                     * Get the column indexes of the data in the Cursor,
+                     * move to the first row in the Cursor, get the data,
+                     * and display it.
+                     */
+                        val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                        cursor.moveToFirst()
+                        cursor.getLong(sizeIndex)
+                    } ?: 0
+            } else {
+                imageUri.toFile().length()
+            }
+
+        val imagePart = ProgressRequestBody(imageInputStream, size)
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("file", imageUri.toFile().name, imagePart)
+            .addFormDataPart("file", System.currentTimeMillis().toString(), imagePart)
             .build()
 
         val sub = imagePart.progressSubject
@@ -197,7 +217,7 @@ class PostCreationActivity : AppCompatActivity(){
 
 }
 
-class ProgressRequestBody(private val mFile: File) : RequestBody() {
+class ProgressRequestBody(private val mFile: InputStream, private val length: Long) : RequestBody() {
 
     private val getProgressSubject: PublishSubject<Float> = PublishSubject.create()
 
@@ -213,17 +233,16 @@ class ProgressRequestBody(private val mFile: File) : RequestBody() {
 
     @Throws(IOException::class)
     override fun contentLength(): Long {
-        return mFile.length()
+        return length
     }
 
     @Throws(IOException::class)
     override fun writeTo(sink: BufferedSink) {
         val fileLength = contentLength()
         val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-        val `in` = FileInputStream(mFile)
         var uploaded: Long = 0
 
-        `in`.use {
+        mFile.use {
             var read: Int
             var lastProgressPercentUpdate = 0.0f
             read = it.read(buffer)
