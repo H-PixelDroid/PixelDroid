@@ -49,6 +49,11 @@
     <string name="tab_filters">FILTERS</string>
     <string name="tab_edit">EDIT</string>
     <string name="normal_filter">Normal</string>
+    <string name="busy_dialog_text">Still processing image, wait for that to finish first!</string>
+    <string name="busy_dialog_ok_button">OK, wait for that.</string>
+    <string name="crop_result_error">"Couldn't retrieve image after crop"</string>
+
+
     <!-- Camera -->
     <string name="capture_button_alt">Capture</string>
     <string name="switch_camera_button_alt">Switch camera</string>
