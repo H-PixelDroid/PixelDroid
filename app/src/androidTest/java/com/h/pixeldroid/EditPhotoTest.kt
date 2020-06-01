@@ -10,6 +10,7 @@ import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.SeekBar
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.PerformException
@@ -25,7 +26,9 @@ import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
+import junit.framework.Assert.assertTrue
 import kotlinx.android.synthetic.main.fragment_edit_image.*
+import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert
 import org.junit.Before
@@ -163,6 +166,12 @@ class EditPhotoTest {
         Espresso.onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText(R.string.save_image_success)))
     }
+
+    @Test
+    fun backButton() {
+        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
+        Espresso.onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)    }
 
     @Test
     fun buttonUploadLaunchNewPostActivity() {
