@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.os.Handler
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.view.View
@@ -304,8 +303,7 @@ data class Status(
     fun activateDoubleTapLiker(
         holder : PostViewHolder,
         api: PixelfedAPI,
-        credential: String,
-        isLiked: Boolean
+        credential: String
     ) {
         holder.apply {
             var clicked = false
@@ -314,11 +312,14 @@ data class Status(
                 if(sensitiveW.visibility == GONE) {
                     //Check for double click
                     if(clicked) {
-                        if (isLiked) {
+                        if (holder.liker.isChecked) {
                             // Button is active, unlike
+                            holder.liker.isChecked = false
                             unLikePostCall(holder, api, credential, this@Status)
                         } else {
                             // Button is inactive, like
+                            holder.liker.playAnimation()
+                            holder.liker.isChecked = true
                             likePostCall(holder, api, credential, this@Status)
                         }
                     } else {

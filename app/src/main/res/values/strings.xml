@@ -62,9 +62,6 @@
     <string name="image_download_failed">Download has failed, please try again</string>
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
-    <!-- Post action feedback -->
-    <string name="liked_post">Post successfully liked!</string>
-    <string name="unliked_post">Post successfully unliked</string>
     <!-- Post attributes -->
     <string name="no_description">No description</string>
     <string name="likes">"%1$s Likes"</string>

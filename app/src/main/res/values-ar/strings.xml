@@ -28,7 +28,7 @@
     <string name="share_picture">شارِك الصورة…</string>
     <string name="NoCommentsToShow">لا توجد تعليقات في هذا المنشور…</string>
     <string name="CommentDisplay">لإظهاره…</string>
-    <string name="connect_to_pixelfed">لِج إلى PixelFed</string>
+    <string name="connect_to_pixelfed">لِج إلى Pixelfed</string>
     <string name="lbl_brightness">السطوع</string>
     <string name="image_download_failed">فشل التنزيل ، حاول مجددًا مِن فضلك</string>
     <string name="liked_notification">أعجِب %1$s بمنشورك</string>
@@ -39,7 +39,7 @@
 \n (اضعط للعرض)</string>
     <string name="lbl_contrast">تباين عالٍ</string>
     <string name="lbl_saturation">التشبّع اللوني</string>
-    <string name="add_account_description">إضافة حساب PixelFed آخر</string>
+    <string name="add_account_description">إضافة حساب Pixelfed آخر</string>
     <string name="add_account_name">إضافة حساب</string>
     <string name="instance_error">تعذّر الحصول على معلومات مثيل الخادم</string>
     <string name="save_image_failed">لا يمكن حفظ الصورة</string>
