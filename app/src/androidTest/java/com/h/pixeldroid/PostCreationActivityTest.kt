@@ -2,7 +2,11 @@ package com.h.pixeldroid
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
+import android.os.Environment
+import androidx.core.net.toUri
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -22,6 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class PostCreationActivityTest {
@@ -32,6 +37,13 @@ class PostCreationActivityTest {
 
     @get:Rule
     val globalTimeout: Timeout = Timeout.seconds(30)
+
+    private fun File.writeBitmap(bitmap: Bitmap) {
+        outputStream().use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, out)
+            out.flush()
+        }
+    }
 
     @Before
     fun setup() {
@@ -59,10 +71,22 @@ class PostCreationActivityTest {
             )
         )
         db.close()
-        val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
-        val intent = Intent(context, PostCreationActivity::class.java)
-            .putExtra("picture_uri", uri)
 
+        var uri: Uri = "".toUri()
+        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
+        scenario.onActivity {
+            val image = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+            image.eraseColor(Color.GREEN)
+            val folder =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            if (!folder.exists()) {
+                folder.mkdir()
+            }
+            val file = File.createTempFile("temp_img", ".png", folder)
+            file.writeBitmap(image)
+            uri = file.toUri()
+        }
+        val intent = Intent(context, PostCreationActivity::class.java).putExtra("picture_uri", uri)
         ActivityScenario.launch<PostCreationActivity>(intent)
     }
 

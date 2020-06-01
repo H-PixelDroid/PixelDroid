@@ -55,7 +55,7 @@ class PostCreationActivity : AppCompatActivity(){
     private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
 
     private var description: String = ""
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Iconics.init(this)
