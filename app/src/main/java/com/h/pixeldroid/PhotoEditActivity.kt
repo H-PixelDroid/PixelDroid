@@ -394,6 +394,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         } else {
             val imagesDir =
                 Environment.getExternalStoragePublicDirectory(getString(R.string.app_name))
+            imagesDir.mkdir()
             val file = File(imagesDir, name)
             path = file.path
             outputStream = file.outputStream()

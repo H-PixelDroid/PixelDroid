@@ -1,9 +1,15 @@
 package com.h.pixeldroid
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Environment
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.SeekBar
+import androidx.core.net.toUri
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.PerformException
@@ -27,6 +33,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import java.io.File
+import java.net.URI
 
 @RunWith(AndroidJUnit4::class)
 class EditPhotoTest {
@@ -40,12 +48,30 @@ class EditPhotoTest {
     @get:Rule
     var mRuntimePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
+    private fun File.writeBitmap(bitmap: Bitmap) {
+        outputStream().use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, out)
+            out.flush()
+        }
+    }
+
     @Before
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        // Launch PhotoEditActivity
-        val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
+        var uri: Uri = "".toUri()
+        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
+        scenario.onActivity {
+            val image = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+            image.eraseColor(Color.GREEN)
+            val folder =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            if (!folder.exists()) {
+                folder.mkdir()
+            }
+            val file = File.createTempFile("temp_img", ".png", folder)
+            file.writeBitmap(image)
+            uri = file.toUri()
+        }
         val intent = Intent(context, PhotoEditActivity::class.java).putExtra("picture_uri", uri)
 
         activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}

@@ -22,6 +22,7 @@ import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
+import com.mikepenz.iconics.Iconics
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -54,9 +55,10 @@ class PostCreationActivity : AppCompatActivity(){
     private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
 
     private var description: String = ""
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Iconics.init(this)
         setContentView(R.layout.activity_post_creation)
 
         imageUri = intent.getParcelableExtra("picture_uri")!!
