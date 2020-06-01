@@ -169,6 +169,7 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.action_upload)).perform(click())
         Thread.sleep(1000)
         Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.retry_upload_button)).perform(click())
     }
 
     @Test
