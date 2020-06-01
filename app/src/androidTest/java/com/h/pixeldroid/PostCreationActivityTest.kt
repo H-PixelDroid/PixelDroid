@@ -97,3 +97,71 @@ class PostCreationActivityTest {
         onView(withId(R.id.main_activity_main_linear_layout)).check(matches(isDisplayed()))
     }
 }
+
+@RunWith(AndroidJUnit4::class)
+class PostCreationActivityErrorTest {
+
+    private lateinit var db: AppDatabase
+
+
+    @get:Rule
+    val globalTimeout: Timeout = Timeout.seconds(30)
+
+    private fun File.writeBitmap(bitmap: Bitmap) {
+        outputStream().use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, out)
+            out.flush()
+        }
+    }
+
+    @Before
+    fun setup() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val baseUrl = "http://a"
+        db = DBUtils.initDB(context)
+        db.clearAllTables()
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = baseUrl,
+                title = "PixelTest"
+            )
+        )
+
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = baseUrl,
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
+        db.close()
+
+        var uri: Uri = "".toUri()
+        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
+        scenario.onActivity {
+            val image = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+            image.eraseColor(Color.GREEN)
+            val folder =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            if (!folder.exists()) {
+                folder.mkdir()
+            }
+            val file = File.createTempFile("temp_img", ".png", folder)
+            file.writeBitmap(image)
+            uri = file.toUri()
+        }
+        val intent = Intent(context, PostCreationActivity::class.java).putExtra("picture_uri", uri)
+        ActivityScenario.launch<PostCreationActivity>(intent)
+    }
+
+    @Test
+    fun errorShown() {
+        onView(withId(R.id.retry_upload_button)).perform(click())
+        // should send on main activity
+        onView(withId(R.id.retry_upload_button)).check(matches(isDisplayed()))
+    }
+}
