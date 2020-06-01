@@ -140,7 +140,9 @@ class EditPhotoTest {
 
         var change = 5
         Espresso.onView(withId(R.id.seekbar_brightness)).perform(setProgress(change))
+        Thread.sleep(1000)
         Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
+        Thread.sleep(1000)
         Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
 
         Assert.assertEquals(change, activity.seekbar_brightness.progress)
