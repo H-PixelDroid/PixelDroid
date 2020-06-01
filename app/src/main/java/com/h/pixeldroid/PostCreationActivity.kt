@@ -12,7 +12,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toFile
 import androidx.core.net.toUri
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.UserDatabaseEntity
@@ -43,7 +45,7 @@ class PostCreationActivity : AppCompatActivity(){
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var pictureFrame: ImageView
-    private lateinit var image: File
+    private lateinit var imageUri: Uri
     private var user: UserDatabaseEntity? = null
 
     private var listOfIds: List<String> = emptyList()
@@ -56,12 +58,11 @@ class PostCreationActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_creation)
 
-        val imageUri: Uri = intent.getParcelableExtra("picture_uri")!!
-
-        saveImage(imageUri)
+        imageUri = intent.getParcelableExtra("picture_uri")!!
 
         pictureFrame = findViewById(R.id.post_creation_picture_frame)
-        pictureFrame.setImageURI(image.toUri())
+        Glide.with(this).load(imageUri).into(pictureFrame)
+
 
         val db = DBUtils.initDB(applicationContext)
         user = db.userDao().getActiveUser()
@@ -100,27 +101,7 @@ class PostCreationActivity : AppCompatActivity(){
     override fun onDestroy() {
         super.onDestroy()
         //delete the temporary image
-        image.delete()
-    }
-
-    private fun saveImage(imageUri: Uri) {
-        try {
-            val stream = applicationContext.contentResolver
-                .openAssetFileDescriptor(imageUri, "r")!!
-                .createInputStream()
-            val bm = BitmapFactory.decodeStream(stream)
-            val bos = ByteArrayOutputStream()
-            bm.compress(Bitmap.CompressFormat.PNG, 0, bos)
-            image = File.createTempFile("temp_compressed_img", ".png", cacheDir)
-
-            val fos = FileOutputStream(image)
-            fos.write(bos.toByteArray())
-            fos.flush()
-            fos.close()
-        } catch (error: IOException) {
-            error.printStackTrace()
-            throw error
-        }
+        //image.delete()
     }
 
     private fun setDescription(): Boolean {
@@ -138,10 +119,10 @@ class PostCreationActivity : AppCompatActivity(){
     }
 
     private fun upload(){
-        val imagePart = ProgressRequestBody(image)
+        val imagePart = ProgressRequestBody(imageUri.toFile())
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("file", image.name, imagePart)
+            .addFormDataPart("file", imageUri.toFile().name, imagePart)
             .build()
 
         val sub = imagePart.progressSubject

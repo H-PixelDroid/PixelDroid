@@ -1,20 +1,31 @@
 package com.h.pixeldroid
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
+import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -30,9 +41,10 @@ import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
 import kotlinx.android.synthetic.main.activity_photo_edit.*
-import kotlinx.android.synthetic.main.content_photo_edit.*
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -49,6 +61,7 @@ private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.READ_EXTE
 
 class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditImageFragmentListener {
 
+    private var saving: Boolean = false
     private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
     private val BRIGHTNESS_START = 0
     private val SATURATION_START = 1.0f
@@ -58,14 +71,11 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private var compressedImage: Bitmap? = null
     private var compressedOriginalImage: Bitmap? = null
     private lateinit var filteredImage: Bitmap
-    private lateinit var finalImage: Bitmap
 
     private var actualFilter: Filter? = null
 
     private lateinit var filterListFragment: FilterListFragment
     private lateinit var editImageFragment: EditImageFragment
-
-    private lateinit var outputDirectory: File
 
     lateinit var viewPager: NonSwipeableViewPager
     lateinit var tabLayout: TabLayout
@@ -75,9 +85,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private var contrastFinal = CONTRAST_START
 
     private var imageUri: Uri? = null
-    private var cropUri: Uri? = null
-
-    object URI {var picture_uri: Uri? = null}
 
     init {
         System.loadLibrary("NativeImageProcessor")
@@ -87,6 +94,11 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     companion object{
         private var executor: ExecutorService = newSingleThreadExecutor()
         private var future: Future<*>? = null
+
+        private var saveExecutor: ExecutorService = newSingleThreadExecutor()
+        private var saveFuture: Future<*>? = null
+
+        internal var cropUri: Uri? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,15 +121,11 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         }
 
         loadImage()
-        val file = File.createTempFile("temp_compressed_img", ".png", cacheDir)
-        file.writeBitmap(compressedImage!!)
-        URI.picture_uri = Uri.fromFile(file)
 
         viewPager = findViewById(R.id.viewPager)
         tabLayout = findViewById(R.id.tabs)
         setupViewPager(viewPager)
         tabLayout.setupWithViewPager(viewPager)
-        outputDirectory = getOutputDirectory()
     }
 
 
@@ -127,7 +135,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         compressedImage = resizeImage(originalImage!!.copy(BITMAP_CONFIG, true))
         compressedOriginalImage = compressedImage!!.copy(BITMAP_CONFIG, true)
         filteredImage = compressedImage!!.copy(BITMAP_CONFIG, true)
-        image_preview.setImageBitmap(compressedImage)
+        Glide.with(this).load(compressedImage).into(image_preview)
     }
 
     private fun resizeImage(image: Bitmap): Bitmap {
@@ -159,11 +167,16 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         return true
     }
 
+    override fun onStop() {
+        super.onStop()
+        saving = false
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId) {
             android.R.id.home -> {
-                super.onBackPressed()
+                onBackPressed()
             }
             R.id.action_upload -> {
                 saveImageToGallery(false)
@@ -253,11 +266,9 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     //<editor-fold desc="CROPPING">
 
     private fun startCrop() {
-        applyFinalFilters(MediaStore.Images.Media.getBitmap(contentResolver, cropUri))
         val file = File.createTempFile("temp_crop_img", ".png", cacheDir)
-        file.writeBitmap(finalImage)
 
-        val uCrop: UCrop = UCrop.of(Uri.fromFile(file), URI.picture_uri!!)
+        val uCrop: UCrop = UCrop.of(cropUri!!, Uri.fromFile(file))
         uCrop.start(this)
     }
 
@@ -287,7 +298,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         val resultCrop: Uri? = UCrop.getOutput(data!!)
         if(resultCrop != null) {
             image_preview.setImageURI(resultCrop)
-
             val bitmap = (image_preview.drawable as BitmapDrawable).bitmap
             originalImage = bitmap.copy(Bitmap.Config.ARGB_8888, true)
             compressedImage = resizeImage(originalImage!!.copy(BITMAP_CONFIG, true))
@@ -329,16 +339,17 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         }
     }
 
-    private fun applyFinalFilters(image: Bitmap?) {
+    private fun applyFinalFilters(image: Bitmap?): Bitmap {
         val editFilter = Filter().addEditFilters(brightnessFinal, saturationFinal, contrastFinal)
 
-        finalImage = editFilter.processFilter(image!!.copy(BITMAP_CONFIG, true))
+        var finalImage = editFilter.processFilter(image!!.copy(BITMAP_CONFIG, true))
         if (actualFilter!=null) finalImage = actualFilter!!.processFilter(finalImage)
+        return finalImage
     }
 
-    private fun uploadImage(file: File) {
+    private fun uploadImage(file: String) {
         val intent = Intent (applicationContext, PostCreationActivity::class.java)
-        intent.putExtra("picture_uri", Uri.fromFile(file))
+        intent.putExtra("picture_uri", Uri.parse(file))
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         applicationContext!!.startActivity(intent)
     }
@@ -364,45 +375,115 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             applicationContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
-    /** Use external media if it is available, our app's file directory otherwise */
-    private fun getOutputDirectory(): File {
-        val appContext = applicationContext
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else appContext.filesDir
+    private fun getOutputFile(name: String): Pair<OutputStream, String> {
+        val outputStream: OutputStream
+        val path: String
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val resolver: ContentResolver = contentResolver
+            val contentValues = ContentValues()
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+            contentValues.put(
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                Environment.DIRECTORY_PICTURES
+            )
+            val imageUri: Uri =
+                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
+            path = imageUri.toString()
+            outputStream = resolver.openOutputStream(Objects.requireNonNull(imageUri))!!
+        } else {
+            val imagesDir =
+                Environment.getExternalStoragePublicDirectory(getString(R.string.app_name))
+            val file = File(imagesDir, name)
+            path = file.path
+            outputStream = file.outputStream()
+        }
+        return Pair(outputStream, path)
     }
 
-    private fun File.writeBitmap(bitmap: Bitmap) {
-        outputStream().use { out ->
+    private fun OutputStream.writeBitmap(bitmap: Bitmap) {
+        use { out ->
+            //(quality is ignored for PNG)
             bitmap.compress(Bitmap.CompressFormat.PNG, 85, out)
             out.flush()
         }
     }
 
     private fun permissionsGrantedToSave(save: Boolean) {
-        val file =
-            if(!save){
-                //put picture in cache
-                File.createTempFile("temp_edit_img", ".png", cacheDir)
-            } else{
-                // Save the picture (quality is ignored for PNG)
-                File(outputDirectory, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
-                    .format(System.currentTimeMillis()) + ".png")
+        if (saving) {
+            val builder = AlertDialog.Builder(this)
+            builder.apply {
+                setMessage("Still processing image, wait for that to finish first!")
+                setNegativeButton("OK, wait for that.") { _, _ -> }
             }
-        try {
-            applyFinalFilters(originalImage)
-            file.writeBitmap(finalImage)
-        } catch (e: IOException) {
-            Snackbar.make(coordinator_edit, getString(R.string.save_image_failed),
-                Snackbar.LENGTH_LONG).show()
+            // Create the AlertDialog
+            builder.show()
+            return
         }
+        saving = true
+        progressBarSaveFile.visibility = VISIBLE
+        saveFuture = saveExecutor.submit {
+            val outputStream: OutputStream
+            var path: String
+                if (!save) {
+                    //put picture in cache
+                    val tempFile = File.createTempFile("temp_edit_img", ".png", cacheDir)
+                    path = tempFile.path
+                    outputStream = tempFile.outputStream()
+                } else {
+                    // Save the picture to gallery
+                    val name = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
+                        .format(System.currentTimeMillis()) + ".png"
+                    val pair = getOutputFile(name)
+                    outputStream = pair.first
+                    path = pair.second
+                }
+            try {
+                if(brightnessFinal != BRIGHTNESS_START || contrastFinal != CONTRAST_START
+                    || saturationFinal != SATURATION_START
+                    || (actualFilter != null && actualFilter!!.name != getString(R.string.normal_filter))) {
+                    outputStream.writeBitmap(applyFinalFilters(originalImage))
+                }
+                else {
+                    val cropFile = cropUri!!.toFile().inputStream()
 
-        if (!save) {
-            uploadImage(file)
-        } else {
-            Snackbar.make(coordinator_edit, getString(R.string.save_image_success),
-                Snackbar.LENGTH_LONG).show()
+                    if(save)
+                        cropFile.use { input ->
+                        outputStream.use { output ->
+                            input.copyTo(output)
+                        }
+                    }
+                    else path = cropUri.toString()
+                }
+            } catch (e: IOException) {
+                this.runOnUiThread {
+                    Snackbar.make(
+                        coordinator_edit, getString(R.string.save_image_failed),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
+            if(saving) {
+                this.runOnUiThread {
+                    if (!save) {
+                        uploadImage(path)
+                    } else {
+                        val mimeType = MimeTypeMap.getSingleton()
+                            .getMimeTypeFromExtension("png")
+                        MediaScannerConnection.scanFile(
+                            this,
+                            arrayOf(path),
+                            arrayOf(mimeType), null)
+
+                        Snackbar.make(
+                            coordinator_edit, getString(R.string.save_image_success),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    progressBarSaveFile.visibility = GONE
+                    saving = false
+                }
+            }
         }
     }
     //</editor-fold>

@@ -54,7 +54,7 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
     fun displayImage(bitmap: Bitmap?) {
         val r = Runnable {
             val tbImage: Bitmap = (if (bitmap == null) {
-                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, PhotoEditActivity.URI.picture_uri)
+                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, PhotoEditActivity.cropUri)
             } else {
                 Bitmap.createScaledBitmap(bitmap, 100, 100, false)
             })
@@ -75,7 +75,8 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
 
         val tbItem = ThumbnailItem()
         tbItem.image = tbImage
-        tbItem.filterName = getString(R.string.normal_filter)
+        tbItem.filter.name = getString(R.string.normal_filter)
+        tbItem.filterName = tbItem.filter.name
         ThumbnailsManager.addThumb(tbItem)
 
         val filters = FilterPack.getFilterPack(requireActivity())
