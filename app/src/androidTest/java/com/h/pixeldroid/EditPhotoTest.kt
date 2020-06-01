@@ -172,6 +172,23 @@ class EditPhotoTest {
     }
 
     @Test
+    fun modifiedUploadLaunchesNewPostActivity() {
+        Espresso.onView(withId(R.id.recycler_view))
+            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(2, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
+        Thread.sleep(1000)
+
+        Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
+        Espresso.onView(withId(R.id.seekbar_brightness)).perform(setProgress(5))
+        Thread.sleep(1000)
+
+        Espresso.onView(withId(R.id.action_upload)).perform(click())
+        Thread.sleep(1000)
+
+
+        Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun croppingIsPossible() {
         Espresso.onView(withId(R.id.cropImageButton)).perform(click())
         Thread.sleep(1000)

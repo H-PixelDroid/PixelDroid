@@ -396,7 +396,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                 Environment.getExternalStoragePublicDirectory(getString(R.string.app_name))
             imagesDir.mkdir()
             val file = File(imagesDir, name)
-            path = file.path
+            path = Uri.fromFile(file).toString()
             outputStream = file.outputStream()
         }
         return Pair(outputStream, path)
@@ -429,7 +429,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                 if (!save) {
                     //put picture in cache
                     val tempFile = File.createTempFile("temp_edit_img", ".png", cacheDir)
-                    path = tempFile.path
+                    path = Uri.fromFile(tempFile).toString()
                     outputStream = tempFile.outputStream()
                 } else {
                     // Save the picture to gallery
