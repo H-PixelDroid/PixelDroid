@@ -61,7 +61,7 @@ private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.READ_EXTE
 
 class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditImageFragmentListener {
 
-    private var saving: Boolean = false
+    internal var saving: Boolean = false
     private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
     private val BRIGHTNESS_START = 0
     private val SATURATION_START = 1.0f
@@ -305,7 +305,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             filteredImage = compressedImage!!.copy(BITMAP_CONFIG, true)
             resetFilteredImage()
         } else {
-            Toast.makeText(this, "Cannot retrieve image", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.crop_result_error, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -314,7 +314,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         if(resultError != null) {
             Toast.makeText(this, "" + resultError, Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "Unexpected Error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.crop_result_error, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -414,8 +414,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         if (saving) {
             val builder = AlertDialog.Builder(this)
             builder.apply {
-                setMessage("Still processing image, wait for that to finish first!")
-                setNegativeButton("OK, wait for that.") { _, _ -> }
+                setMessage(R.string.crop_result_error)
+                setNegativeButton(R.string.busy_dialog_ok_button) { _, _ -> }
             }
             // Create the AlertDialog
             builder.show()

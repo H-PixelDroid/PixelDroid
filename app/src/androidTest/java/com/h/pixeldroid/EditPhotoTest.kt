@@ -195,4 +195,12 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.menu_crop)).perform(click())
         Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
     }
+
+    @Test
+    fun alreadyUploadingDialog() {
+        activityScenario.onActivity { a -> a.saving = true }
+        Espresso.onView(withId(R.id.action_upload)).perform(click())
+        Thread.sleep(1000)
+        Espresso.onView(withText(R.string.busy_dialog_text)).check(matches(isDisplayed()))
+    }
 }
