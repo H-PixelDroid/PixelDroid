@@ -414,7 +414,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         if (saving) {
             val builder = AlertDialog.Builder(this)
             builder.apply {
-                setMessage(R.string.crop_result_error)
+                setMessage(R.string.busy_dialog_text)
                 setNegativeButton(R.string.busy_dialog_ok_button) { _, _ -> }
             }
             // Create the AlertDialog
