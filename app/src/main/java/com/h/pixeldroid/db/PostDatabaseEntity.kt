@@ -14,5 +14,6 @@ data class PostDatabaseEntity (
     val favourite_count: Int,
     val reply_count: Int,
     val share_count: Int,
-    val description: String
+    val description: String,
+    val date: String
 )

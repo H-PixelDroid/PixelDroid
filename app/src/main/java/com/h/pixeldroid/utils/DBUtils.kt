@@ -10,6 +10,7 @@ import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.Utils.Companion.normalizeDomain
+import java.util.*
 
 class DBUtils {
     companion object {
@@ -66,7 +67,8 @@ class DBUtils {
                         favourite_count = post.favourites_count ?: 0,
                         reply_count = post.replies_count ?: 0,
                         share_count = post.reblogs_count ?: 0,
-                        description = post.content ?: ""
+                        description = post.content ?: "",
+                        date = post.created_at ?: ""
                     ))
                 }
             }

@@ -91,6 +91,31 @@ data class Status(
         const val POST_TAG = "postTag"
         const val DOMAIN_TAG = "domainTag"
         const val DISCOVER_TAG = "discoverTag"
+
+        fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean, context: Context) {
+            var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
+            if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}Z".toRegex())) {
+                format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
+            } else if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}+[0-9]{2}:[0-9]{2}".toRegex())) {
+                format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+hh:mm")
+            }
+            val now = Date().time
+
+            try {
+                val date: Date = format.parse(dateString)!!
+                val then = date.time
+                val formattedDate = android.text.format.DateUtils
+                    .getRelativeTimeSpanString(then, now,
+                        android.text.format.DateUtils.SECOND_IN_MILLIS,
+                        android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
+
+                textView.text = if(isActivity) context.getString(R.string.posted_on).format(date)
+                else "$formattedDate"
+
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getPostUrl() : String? = media_attachments?.firstOrNull()?.url
@@ -121,31 +146,6 @@ data class Status(
 
     fun getNShares(context: Context) : CharSequence {
         return context.getString(R.string.shares).format(reblogs_count.toString())
-    }
-
-    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean, context: Context) {
-        var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
-        if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}Z".toRegex())) {
-            format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
-        } else if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}+[0-9]{2}:[0-9]{2}".toRegex())) {
-            format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+hh:mm")
-        }
-        val now = Date().time
-
-        try {
-            val date: Date = format.parse(dateString)!!
-            val then = date.time
-            val formattedDate = android.text.format.DateUtils
-                .getRelativeTimeSpanString(then, now,
-                    android.text.format.DateUtils.SECOND_IN_MILLIS,
-                    android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
-
-            textView.text = if(isActivity) context.getString(R.string.posted_on).format(date)
-                            else "$formattedDate"
-
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
     }
 
     private fun getStatusDomain(domain : String) : String {

@@ -4,12 +4,26 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/feed_fragment_placeholder_text"
+        android:id="@+id/offline_feed_placeholder_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="25sp"
-        android:text="Nothing to see here!"
+        android:text="@string/nothing_to_see_here"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/offline_feed_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="16dp"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/offline_feed_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:visibility="gone"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
