@@ -101,10 +101,6 @@ class OfflineFeedFragment: Fragment() {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.post_fragment, parent, false)
                 .apply {
-                    liker.visibility = View.GONE
-                    nlikes.visibility = View.GONE
-                    reblogger.visibility = View.GONE
-                    nshares.visibility = View.GONE
                     commenter.visibility = View.GONE
                     postDomain.visibility = View.GONE
                     commentIn.visibility = View.GONE
@@ -175,6 +171,9 @@ class OfflineFeedFragment: Fragment() {
                     text = HtmlUtils.fromHtml(post.description)
                 }
             }
+
+            holder.itemView.nlikes.text = post.likes.toString()
+            holder.itemView.nshares.text = post.shares.toString()
         }
 
         override fun getItemCount(): Int {

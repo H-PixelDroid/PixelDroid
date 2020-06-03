@@ -8,13 +8,15 @@ import androidx.room.PrimaryKey
 )
 data class PostDatabaseEntity (
     @PrimaryKey var uri: String,
-    val account_profile_picture: String,
-    val account_name: String,
-    val media_urls: List<String>,
-    val favourite_count: Int,
-    val reply_count: Int,
-    val share_count: Int,
-    val description: String,
-    val date: String,
-    val store_time: String
+    var account_profile_picture: String,
+    var account_name: String,
+    var media_urls: List<String>,
+    var favourite_count: Int,
+    var reply_count: Int,
+    var share_count: Int,
+    var description: String,
+    var date: String,
+    var store_time: String,
+    var likes: Int,
+    var shares: Int
 )

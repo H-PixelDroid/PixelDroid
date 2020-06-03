@@ -78,7 +78,9 @@ class DBUtils {
                         share_count = post.reblogs_count ?: 0,
                         description = post.content ?: "",
                         date = post.created_at ?: "",
-                        store_time = Date().time.toString()
+                        store_time = Date().time.toString(),
+                        likes = post.favourites_count ?: 0,
+                        shares = post.reblogs_count ?: 0
                     ))
                 }
             }
