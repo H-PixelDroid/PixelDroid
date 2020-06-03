@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +13,20 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.text.toSpanned
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.google.android.material.tabs.TabLayoutMediator
 
 import com.h.pixeldroid.R
 import com.h.pixeldroid.db.PostDatabaseEntity
+import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.HtmlUtils
 import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.fragment_offline_feed.view.*
 import kotlinx.android.synthetic.main.post_fragment.view.*
@@ -101,6 +107,7 @@ class OfflineFeedFragment: Fragment() {
                     nshares.visibility = View.GONE
                     commenter.visibility = View.GONE
                     postDomain.visibility = View.GONE
+                    commentIn.visibility = View.GONE
                 }
             return OfflinePostViewHolder(view)
         }
@@ -137,14 +144,37 @@ class OfflineFeedFragment: Fragment() {
                 if(post.media_urls.size == 1) {
                     picRequest.load(post.media_urls[0]).into(holder.postPic)
                 } else {
-                    setupTabsLayout(rootView, request, homeFragment)
+                    //Only show the viewPager and tabs
+                    holder.postPic.visibility = View.GONE
+                    holder.itemView.postPager.visibility = View.VISIBLE
+                    holder.itemView.postTabs.visibility = View.VISIBLE
+                    val tabs : ArrayList<ImageFragment> = ArrayList()
+                    //Fill the tabs with each mediaAttachment
+                    for(media in post.media_urls) {
+                        tabs.add(ImageFragment.newInstance(media))
+                    }
+                    holder.itemView.postPager.adapter = object : FragmentStateAdapter(this@OfflineFeedFragment) {
+                        override fun createFragment(position: Int): Fragment {
+                            return tabs[position]
+                        }
+
+                        override fun getItemCount(): Int {
+                            return post.media_urls.size
+                        }
+                    }
+                    TabLayoutMediator(holder.itemView.postTabs, holder.itemView.postPager) { tab, _ ->
+                        tab.icon = holder.itemView.context.getDrawable(R.drawable.ic_dot_blue_12dp)
+                    }.attach()
                 }
-                imagePopUpMenu(rootView, homeFragment.requireActivity())
             }
 
-            //Set the special HTML text
-            post.setDescription(holder.postView, api, credential)
-
+            holder.description.apply {
+                if(post.description.isBlank()) {
+                    visibility = View.GONE
+                } else {
+                    text = HtmlUtils.fromHtml(post.description)
+                }
+            }
         }
 
         override fun getItemCount(): Int {

@@ -45,7 +45,7 @@ class LoginActivityOfflineTest {
     @Test
     fun emptyDBandOfflineModeDisplayCorrectMessage() {
         ActivityScenario.launch(LoginActivity::class.java)
-        onView(withId(R.id.login_activity_connection_required_text)).check(matches(isDisplayed()))
+        onView(withId(R.id.login_activity_connection_required)).check(matches(isDisplayed()))
     }
 
 

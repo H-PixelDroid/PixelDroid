@@ -14,6 +14,8 @@ import java.util.*
 
 class DBUtils {
     companion object {
+        private const val MAX_NUMBER_OF_STORED_POSTS = 20
+
         fun initDB(context: Context): AppDatabase {
             return Room.databaseBuilder(
                 context,
@@ -56,9 +58,16 @@ class DBUtils {
         }
 
         fun storePosts(db: AppDatabase, data: List<*>) {
+            val dao = db.postDao()
             data.forEach { post ->
-                if (post is Status && !post.media_attachments.isNullOrEmpty()) {
-                    db.postDao().insertPost(PostDatabaseEntity(
+                if (post is Status
+                    && !post.media_attachments.isNullOrEmpty()
+                    && dao.count(post.uri ?: "") == 0) {
+                    if (dao.numberOfPosts() >= MAX_NUMBER_OF_STORED_POSTS) {
+                        dao.removeOlderPost()
+                    }
+                    dao.insertPost(PostDatabaseEntity(
+                        uri = post.uri ?: "",
                         account_profile_picture = post.getProfilePicUrl() ?: "",
                         account_name = post.getUsername().toString(),
                         media_urls = post.media_attachments.map {
@@ -68,7 +77,8 @@ class DBUtils {
                         reply_count = post.replies_count ?: 0,
                         share_count = post.reblogs_count ?: 0,
                         description = post.content ?: "",
-                        date = post.created_at ?: ""
+                        date = post.created_at ?: "",
+                        store_time = Date().time.toString()
                     ))
                 }
             }

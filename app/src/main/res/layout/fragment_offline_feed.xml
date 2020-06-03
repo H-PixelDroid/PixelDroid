@@ -16,7 +16,6 @@
         android:id="@+id/offline_feed_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="16dp"
         android:visibility="gone"/>
 
     <ProgressBar

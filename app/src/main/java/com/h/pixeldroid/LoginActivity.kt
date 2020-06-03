@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -58,12 +59,16 @@ class LoginActivity : AppCompatActivity() {
             whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
             inputVisibility = View.VISIBLE
         } else {
-            login_activity_connection_required_text.visibility = View.VISIBLE
+            login_activity_connection_required.visibility = View.VISIBLE
+            login_activity_connection_required_button.setOnClickListener {
+                finish();
+                startActivity(intent);
+            }
         }
         loadingAnimation(false)
     }
 
-    override fun onStart(){
+    override fun onStart() {
         super.onStart()
         val url: Uri? = intent.data
 

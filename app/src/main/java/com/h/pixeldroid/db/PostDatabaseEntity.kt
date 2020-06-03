@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
     tableName = "posts"
 )
 data class PostDatabaseEntity (
-    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @PrimaryKey var uri: String,
     val account_profile_picture: String,
     val account_name: String,
     val media_urls: List<String>,
@@ -15,5 +15,6 @@ data class PostDatabaseEntity (
     val reply_count: Int,
     val share_count: Int,
     val description: String,
-    val date: String
+    val date: String,
+    val store_time: String
 )

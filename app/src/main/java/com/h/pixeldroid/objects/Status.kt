@@ -125,14 +125,8 @@ data class Status(
     /**
      * @brief returns the parsed version of the HTML description
      */
-    private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned {
-        val description = content
-        if(description.isNullOrBlank()) {
-            return context.getString(R.string.no_description).toSpanned()
-        }
-        return parseHTMLText(description, mentions, api, context, credential)
-
-    }
+    private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned =
+        parseHTMLText(content ?: "", mentions, api, context, credential)
 
     fun getUsername() : CharSequence = when {
         account?.username.isNullOrBlank() && account?.display_name.isNullOrBlank() -> "No Name"
@@ -270,8 +264,12 @@ data class Status(
         val desc = rootView.findViewById<TextView>(R.id.description)
 
         desc.apply {
-            text = this@Status.getDescription(api, rootView.context, credential)
-            movementMethod = LinkMovementMethod.getInstance()
+            if (content.isNullOrBlank()) {
+                visibility = GONE
+            } else {
+                text = parseHTMLText(content, mentions, api, rootView.context, credential)
+                movementMethod = LinkMovementMethod.getInstance()
+            }
         }
     }
 
