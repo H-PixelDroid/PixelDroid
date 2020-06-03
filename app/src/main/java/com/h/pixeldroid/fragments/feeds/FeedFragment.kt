@@ -1,6 +1,7 @@
 package com.h.pixeldroid.fragments.feeds
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.h.pixeldroid.MainActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
@@ -26,6 +28,7 @@ import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.FeedContent
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.Utils
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,7 +76,11 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
 
         swipeRefreshLayout.setOnRefreshListener {
             //by invalidating data, loadInitial will be called again
-            factory.liveData.value!!.invalidate()
+            if (Utils.hasInternet(requireContext())) {
+                factory.liveData.value!!.invalidate()
+            } else {
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+            }
         }
 
     }

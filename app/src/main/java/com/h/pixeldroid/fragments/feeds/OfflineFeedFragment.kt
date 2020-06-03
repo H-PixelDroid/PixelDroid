@@ -1,11 +1,11 @@
 package com.h.pixeldroid.fragments.feeds
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,14 +13,13 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.text.toSpanned
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-
+import com.h.pixeldroid.MainActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.db.PostDatabaseEntity
 import com.h.pixeldroid.fragments.ImageFragment
@@ -28,15 +27,11 @@ import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.HtmlUtils
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.Utils
 import kotlinx.android.synthetic.main.fragment_offline_feed.view.*
 import kotlinx.android.synthetic.main.post_fragment.view.*
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [OfflineFeedFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class OfflineFeedFragment: Fragment() {
 
     private lateinit var recyclerView: RecyclerView
@@ -83,6 +78,17 @@ class OfflineFeedFragment: Fragment() {
         }
         view.offline_feed_progress_bar.visibility = View.GONE
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.swipeRefreshLayout.setOnRefreshListener {
+            if (Utils.hasInternet(requireContext())) {
+                onStop()
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+            }
+            view.swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     inner class OfflinePostFeedAdapter(private val posts: List<PostDatabaseEntity>)
