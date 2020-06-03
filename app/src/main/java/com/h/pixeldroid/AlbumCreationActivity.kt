@@ -72,6 +72,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         // Set posts RecyclerView as a grid with 3 columns
         adapter = AlbumCreationAdapter(posts)
         adapter.listener = this
+        recycler = findViewById(R.id.discoverList)
         recycler.layoutManager = GridLayoutManager(this, 3)
         recycler.adapter = adapter
 
@@ -116,8 +117,9 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         return true
     }
 
+    /*
     private fun upload() {
-        val rBody: RequestBody = image.asRequestBody("image/*".toMediaTypeOrNull())
+        val rBody: RequestBody = image.asRequestBody("image/".toMediaTypeOrNull())
         val part = MultipartBody.Part.createFormData("file", image.name, rBody)
         pixelfedAPI.mediaUpload("Bearer $accessToken", part).enqueue(object:
             Callback<Attachment> {
@@ -140,6 +142,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
             }
         })
     }
+    */
 
     private fun post(id: String) {
         if (id.isEmpty()) return
