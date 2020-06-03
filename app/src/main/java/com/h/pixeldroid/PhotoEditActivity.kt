@@ -15,15 +15,17 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -465,12 +467,16 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                     if (!save) {
                         uploadImage(path)
                     } else {
-                        val mimeType = MimeTypeMap.getSingleton()
-                            .getMimeTypeFromExtension("png")
                         MediaScannerConnection.scanFile(
                             this,
-                            arrayOf(path),
-                            arrayOf(mimeType), null)
+                            arrayOf(path.toUri().toFile().absolutePath),
+                            null
+
+                        ) { path, uri ->
+                            if(uri == null) {
+                                Log.e("NEW IMAGE SCAN FAILED", "Tried to scan $path, but it failed")
+                            }
+                        }
 
                         Snackbar.make(
                             coordinator_edit, getString(R.string.save_image_success),
