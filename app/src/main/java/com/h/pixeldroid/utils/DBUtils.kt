@@ -63,7 +63,7 @@ class DBUtils {
                 if (post is Status
                     && !post.media_attachments.isNullOrEmpty()
                     && dao.count(post.uri ?: "") == 0) {
-                    if (dao.numberOfPosts() >= MAX_NUMBER_OF_STORED_POSTS) {
+                    while (dao.numberOfPosts() >= MAX_NUMBER_OF_STORED_POSTS) {
                         dao.removeOlderPost()
                     }
                     dao.insertPost(PostDatabaseEntity(

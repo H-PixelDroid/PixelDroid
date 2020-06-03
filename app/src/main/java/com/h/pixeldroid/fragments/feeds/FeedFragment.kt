@@ -79,7 +79,9 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
             if (Utils.hasInternet(requireContext())) {
                 factory.liveData.value!!.invalidate()
             } else {
-                startActivity(Intent(requireContext(), MainActivity::class.java))
+                startActivity(Intent(requireContext(), MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                })
             }
         }
 
