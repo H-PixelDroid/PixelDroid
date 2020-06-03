@@ -24,7 +24,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -43,7 +42,6 @@ import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
 import kotlinx.android.synthetic.main.activity_photo_edit.*
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
@@ -84,8 +82,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private var saturationFinal = SATURATION_START
     private var contrastFinal = CONTRAST_START
 
-    private var imageUri: Uri? = null
-
     init {
         System.loadLibrary("NativeImageProcessor")
     }
@@ -98,7 +94,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         private var saveExecutor: ExecutorService = newSingleThreadExecutor()
         private var saveFuture: Future<*>? = null
 
-        internal var cropUri: Uri? = null
+        private var initialUri: Uri? = null
+        internal var imageUri: Uri? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,7 +110,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
 
         val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
 
-        cropUri = intent.getParcelableExtra("picture_uri")
+        initialUri = intent.getParcelableExtra("picture_uri")
+        imageUri = initialUri
 
         // set on-click listener
         cropButton.setOnClickListener {
@@ -131,7 +129,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
 
     //<editor-fold desc="ON LAUNCH">
     private fun loadImage() {
-        originalImage = MediaStore.Images.Media.getBitmap(contentResolver, cropUri)
+        originalImage = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
         compressedImage = resizeImage(originalImage!!.copy(BITMAP_CONFIG, true))
         compressedOriginalImage = compressedImage!!.copy(BITMAP_CONFIG, true)
         filteredImage = compressedImage!!.copy(BITMAP_CONFIG, true)
@@ -268,15 +266,13 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private fun startCrop() {
         val file = File.createTempFile("temp_crop_img", ".png", cacheDir)
 
-        val uCrop: UCrop = UCrop.of(cropUri!!, Uri.fromFile(file))
+        val uCrop: UCrop = UCrop.of(initialUri!!, Uri.fromFile(file))
         uCrop.start(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK) {
-            imageUri = data!!.data
-
              if (requestCode == UCrop.RESULT_ERROR) {
                 handleCropError(data)
             } else {
@@ -297,6 +293,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private fun handleCropResult(data: Intent?) {
         val resultCrop: Uri? = UCrop.getOutput(data!!)
         if(resultCrop != null) {
+            imageUri = resultCrop
             image_preview.setImageURI(resultCrop)
             val bitmap = (image_preview.drawable as BitmapDrawable).bitmap
             originalImage = bitmap.copy(Bitmap.Config.ARGB_8888, true)
@@ -446,15 +443,14 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                     outputStream.writeBitmap(applyFinalFilters(originalImage))
                 }
                 else {
-                    val cropFile = contentResolver.openInputStream(cropUri!!)!!
-
-                    if(save)
-                        cropFile.use { input ->
-                        outputStream.use { output ->
-                            input.copyTo(output)
+                    if(save) {
+                        contentResolver.openInputStream(imageUri!!)!!.use { input ->
+                            outputStream.use { output ->
+                                input.copyTo(output)
+                            }
                         }
                     }
-                    else path = cropUri.toString()
+                    else path = imageUri.toString()
                 }
             } catch (e: IOException) {
                 this.runOnUiThread {
