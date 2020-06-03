@@ -54,8 +54,6 @@ class CameraFragment : Fragment() {
 
     private lateinit var container: ConstraintLayout
     private lateinit var viewFinder: PreviewView
-    private lateinit var outputDirectory: File
-
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
     private val PICK_IMAGE_REQUEST = 1
     private val CAPTURE_IMAGE_REQUEST = 2
@@ -138,9 +136,6 @@ class CameraFragment : Fragment() {
 
         // Every time the orientation of device changes, update rotation for use cases
 
-        // Determine the output directory
-        outputDirectory = getGalleryDirectory(requireContext())
-
         // Wait for the views to be properly laid out
         viewFinder.post {
 
@@ -166,13 +161,13 @@ class CameraFragment : Fragment() {
     private fun bindCameraUseCases() {
 
         // Get screen metrics used to setup camera for full screen resolution
-        val metrics = DisplayMetrics().also { viewFinder.display.getRealMetrics(it) }
+        val metrics = DisplayMetrics().also { viewFinder.display?.getRealMetrics(it) }
         Log.d(TAG, "Screen metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
 
         val screenAspectRatio = aspectRatio(metrics.widthPixels, metrics.heightPixels)
         Log.d(TAG, "Preview aspect ratio: $screenAspectRatio")
 
-        val rotation = viewFinder.display.rotation
+        val rotation = viewFinder.display?.rotation ?: 0
 
         // Bind the CameraProvider to the LifeCycleOwner
         val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
@@ -324,7 +319,7 @@ class CameraFragment : Fragment() {
 
                 // Create output file to hold the image
                 val photoFile = File.createTempFile(
-                    "${System.currentTimeMillis()}.jpg", null, context?.cacheDir
+                    "cachedPhoto", ".png", context?.cacheDir
                 )
 
                 // Setup image capture metadata
@@ -384,16 +379,6 @@ class CameraFragment : Fragment() {
         private const val TAG = "CameraFragment"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
-
-        /** Use external media if it is available, our app's file directory otherwise */
-        private fun getGalleryDirectory(context: Context): File {
-            val appContext = context.applicationContext
-            val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
-                File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
-            return if (mediaDir != null && mediaDir.exists())
-                mediaDir else appContext.filesDir
-        }
-
 
     }
 }

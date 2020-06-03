@@ -64,7 +64,7 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
                 }
                 R.id.seekbar_contrast -> {
                     val tempProgress = .10f * prog
-                    listener!!.onSaturationChange(tempProgress)
+                    listener!!.onContrastChange(tempProgress)
                 }
             }
         }

@@ -114,13 +114,29 @@ class DrawerMenuTest {
         onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
 
-    /*@Test
-    fun testDrawerAvatarClick() {
+    @Test
+    fun testDrawerOwnProfileFollowers() {
         // Start the screen of your activity.
         onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
-        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
-    }*/
+        onView(withId(R.id.editButton)).check(matches(isDisplayed()))
+        val followersText = context.getString(R.string.nb_followers)
+            .format(68)
+        onView(withText(followersText)).perform(click())
+        onView(withText("Dobios")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testDrawerOwnProfileFollowing() {
+        // Start the screen of your activity.
+        onView(withText(R.string.menu_account)).perform(click())
+        // Check that profile activity was opened.
+        onView(withId(R.id.editButton)).check(matches(isDisplayed()))
+        val followingText = context.getString(R.string.nb_following)
+            .format(27)
+        onView(withText(followingText)).perform(click())
+        onView(withText("Dobios")).check(matches(isDisplayed()))
+    }
 
     /*@Test
     fun testDrawerAccountNameClick() {

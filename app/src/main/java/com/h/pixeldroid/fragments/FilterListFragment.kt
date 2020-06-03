@@ -1,13 +1,17 @@
 package com.h.pixeldroid.fragments
 
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.decodeBitmap
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,10 +55,20 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
         return view
     }
 
-    fun displayImage(bitmap: Bitmap?) {
+    private fun displayImage(bitmap: Bitmap?) {
         val r = Runnable {
             val tbImage: Bitmap = (if (bitmap == null) {
-                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, PhotoEditActivity.URI.picture_uri)
+                // TODO: Shouldn't use deprecated API on newer versions of Android,
+                // but the proper way to do it seems to crash for OpenGL reasons
+                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                //        ImageDecoder.decodeBitmap(
+                //            ImageDecoder.createSource(requireActivity().contentResolver, PhotoEditActivity.imageUri!!))
+                //} else {
+                    MediaStore.Images.Media.getBitmap(
+                        requireActivity().contentResolver,
+                        PhotoEditActivity.imageUri
+                    )
+               //}
             } else {
                 Bitmap.createScaledBitmap(bitmap, 100, 100, false)
             })
@@ -75,7 +89,8 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
 
         val tbItem = ThumbnailItem()
         tbItem.image = tbImage
-        tbItem.filterName = getString(R.string.normal_filter)
+        tbItem.filter.name = getString(R.string.normal_filter)
+        tbItem.filterName = tbItem.filter.name
         ThumbnailsManager.addThumb(tbItem)
 
         val filters = FilterPack.getFilterPack(requireActivity())
