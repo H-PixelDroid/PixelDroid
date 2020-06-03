@@ -85,7 +85,9 @@ class OfflineFeedFragment: Fragment() {
         view.swipeRefreshLayout.setOnRefreshListener {
             if (Utils.hasInternet(requireContext())) {
                 onStop()
-                startActivity(Intent(requireContext(), MainActivity::class.java))
+                startActivity(Intent(requireContext(), MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
             }
             view.swipeRefreshLayout.isRefreshing = false
         }
