@@ -48,7 +48,7 @@
     <string name="default_theme">پیش‌فرض (پیروی از سیستم‌عامل)</string>
     <string name="light_theme">روشن</string>
     <string name="dark_theme">تاریک</string>
-    <string name="upload_post_error">بارگذاری مطلب ناموفق بود: غیر از ۲۰۰</string>
+    <string name="upload_post_error">بارگذاری مطلب ناموفق بود</string>
     <string name="save_image_success">تصویر با موفقیت ذخیره شد</string>
     <string name="upload_picture_failed">خطا در بارگذاری تصویر!</string>
     <string name="picture_format_error">خطای بارگذاری: تصویر با قالب نادرست.</string>
@@ -93,7 +93,7 @@
     <string name="search">جستجو</string>
     <string name="posts">مطالب</string>
     <string name="media_upload_completed">‏{gmd_cloud_done} بارگذاری رسانه کامل شد</string>
-    <string name="posting_image_accessibility_hint">تصویر در حال فرستاده شدن است</string>
+    <string name="posting_image_accessibility_hint">تصویری که در حال فرستاده شدن است</string>
     <string name="retry">تلاش دوباره</string>
     <string name="default_nfollowing">-
 \nپی‌گیری</string>

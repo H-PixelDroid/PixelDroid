@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="registration_failed">Impossible d\'enregistrer l\'application sur ce serveur</string>
-    <string name="auth_failed">Authentification impossible</string>
+    <string name="auth_failed">Échec de l\'autentification</string>
     <string name="title_activity_settings2">Réglages</string>
     <string name="menu_account">Mon profil</string>
     <string name="menu_settings">Réglages</string>
-    <string name="followed_notification">%1$s vous a suivi</string>
-    <string name="shared_notification">%1$s a partagé(e) votre publication</string>
-    <string name="liked_notification">%1$s a aimé(e) votre publication</string>
+    <string name="followed_notification">%1$s vous suit</string>
+    <string name="shared_notification">%1$s a partagé votre publication</string>
+    <string name="liked_notification">%1$s a aimé votre publication</string>
     <string name="description">Description…</string>
     <string name="send">envoyer</string>
     <string name="whats_an_instance">Qu\'est-ce qu\'une instance \?</string>
     <string name="logout">Se déconnecter</string>
-    <string name="save_to_gallery">Sauvegarder dans la gallerie…</string>
+    <string name="save_to_gallery">Sauvegarder dans la galerie…</string>
     <string name="image_download_downloading">En cours de téléchargement…</string>
     <string name="image_download_success">Image téléchargée avec succès</string>
     <string name="share_picture">Partager l\'image…</string>
@@ -29,8 +29,8 @@
     <string name="lbl_contrast">CONTRASTE</string>
     <string name="lbl_saturation">SATURATION</string>
     <string name="tab_filters">FILTRES</string>
-    <string name="tab_edit">ÉDITER</string>
-    <string name="capture_button_alt">Capturer</string>
+    <string name="tab_edit">MODIFIER</string>
+    <string name="capture_button_alt">Prendre une photo</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
     <string name="gallery_button_alt">Galerie</string>
     <string name="NoCommentsToShow">Pas de commentaire pour cette publication…</string>
@@ -38,9 +38,9 @@
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Media caché
 \n(Cliquer pour le montrer)</string>
     <string name="CommentDisplay">Montrer…</string>
-    <string name="login_connection_required_once">Pour utiliser PixelDroid, vous devez vous connecter au moins une fois à internet :(</string>
+    <string name="login_connection_required_once">Vous devez être connecté à internet pour pouvoir ajouter un compte et utiliser PixelDroid :(</string>
     <string name="add_account_description">Ajouter un autre compte Pixelfed</string>
-    <string name="add_account_name">Ajouter un compte</string>
+    <string name="add_account_name">Ajouter un compte Pixelfed</string>
     <string name="instance_error">Impossible d’obtenir des informations sur l’instance</string>
     <string name="request_format_error">Erreur de téléchargement : format de requête incorrect</string>
     <string name="picture_format_error">Erreur de téléversement : format d\'image incorrect.</string>
@@ -51,14 +51,14 @@
     <string name="permission_denied">Permission refusée</string>
     <string name="dark_theme">Sombre</string>
     <string name="light_theme">Clair</string>
-    <string name="default_theme">Par défaut (Suivant votre système)</string>
-    <string name="upload_post_failed">Échec lors du téléversement de la publication</string>
+    <string name="default_theme">Par défaut (selon votre système)</string>
+    <string name="upload_post_failed">Échec du téléversement de la publication</string>
     <string name="upload_post_success">Téléversement de la publication avec succès</string>
     <string name="posted_on">Publié le %1$s</string>
     <string name="empty_comment">Le commentaire ne doit pas être vide !</string>
     <string name="write_permission_share_pic">Vous devez accorder une autorisation d\'écriture pour partager des photos !</string>
     <string name="default_nfollowers">- 
-\nAbonné(e)s</string>
+\nAbonné·e·s</string>
     <string name="upload_post_error">Le téléversement de la publication a échoué</string>
     <string name="normal_filter">Normal</string>
     <string name="loading_toast">Une erreur s\'est produite lors du chargement</string>
@@ -97,5 +97,5 @@
     <string name="media_upload_completed">{gmd_cloud_done} Média téléversé avec succès</string>
     <string name="retry">Réessayez</string>
     <string name="posting_image_accessibility_hint">Image en cours de publication</string>
-    <string name="media_upload_failed">{gmd_cloud_off} Échec du téléversement du média, réessayez ou vérifiez les conditions du réseau</string>
+    <string name="media_upload_failed">{gmd_cloud_off} Échec du téléversement du média, réessayez ou vérifiez l\'état du réseau</string>
 </resources>

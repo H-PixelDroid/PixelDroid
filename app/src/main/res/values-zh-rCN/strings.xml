@@ -42,4 +42,60 @@
     <string name="add_account_description">添加另一个 Pixelfed 用户</string>
     <string name="add_account_name">添加用户</string>
     <string name="instance_error">无法获取实例信息</string>
+    <string name="retry">重试</string>
+    <string name="posting_image_accessibility_hint">待发布的图像</string>
+    <string name="media_upload_failed">{gmd_cloud_off} 媒体上传失败，请重试或检查网络状况</string>
+    <string name="media_upload_completed">{gmd_cloud_done} 媒体已上传</string>
+    <string name="hashtags">标签</string>
+    <string name="accounts">帐户</string>
+    <string name="posts">帖文</string>
+    <string name="search">搜索</string>
+    <string name="edit_profile">编辑个人资料</string>
+    <string name="follow">关注</string>
+    <string name="no_username">没有用户名</string>
+    <string name="default_nfollowing">-
+\n正在关注</string>
+    <string name="default_nfollowers">-
+\n关注者</string>
+    <string name="default_nposts">-
+\n帖文</string>
+    <string name="access_token_invalid">访问令牌无效</string>
+    <string name="unfollow_error">无法取消关注</string>
+    <string name="action_not_allowed">不允许执行此操作</string>
+    <string name="follow_error">无法关注</string>
+    <string name="follow_button_failed">无法显示关注按钮</string>
+    <string name="follow_status_failed">无法获得关注状态</string>
+    <string name="nb_following">%1$s
+\n正在关注</string>
+    <string name="nb_followers">%1$s
+\n关注者</string>
+    <string name="nb_posts">%1$s
+\n帖文</string>
+    <string name="comment">评论</string>
+    <string name="comment_posted">评论： %1$s 已发布！</string>
+    <string name="comment_error">评论错误！</string>
+    <string name="share_image">分享图像</string>
+    <string name="write_permission_share_pic">您需要允许读写权限才能共享图片！</string>
+    <string name="write_permission_download_pic">您需要允许读写权限才能下载图片！</string>
+    <string name="empty_comment">评论不能为空！</string>
+    <string name="posted_on">发表于 %1$s</string>
+    <string name="shares">%1$s 次分享</string>
+    <string name="likes">%1$s 个赞</string>
+    <string name="no_description">没有描述</string>
+    <string name="feed_failed">无法获取订阅</string>
+    <string name="loading_toast">加载时出了一些问题</string>
+    <string name="normal_filter">正常</string>
+    <string name="upload_post_error">帖文上传失败</string>
+    <string name="upload_post_failed">帖文上传失败</string>
+    <string name="upload_post_success">帖文成功上传</string>
+    <string name="request_format_error">上传错误：错误的请求格式</string>
+    <string name="picture_format_error">上传错误：图片格式错误。</string>
+    <string name="upload_picture_failed">图片上传错误！</string>
+    <string name="description_max_characters">描述最多只能包含 %1$s 个字符。</string>
+    <string name="save_image_success">图片成功保存</string>
+    <string name="save_image_failed">无法保存图像</string>
+    <string name="permission_denied">没有权限</string>
+    <string name="default_theme">默认（跟随系统设置）</string>
+    <string name="light_theme">浅色</string>
+    <string name="dark_theme">深色</string>
 </resources>
