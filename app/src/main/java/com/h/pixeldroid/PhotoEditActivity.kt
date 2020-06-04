@@ -173,12 +173,12 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             }
         }
 
-        return super.onOptionsItemSelected(item)
-    }
-
-    //</editor-fold>
     //<editor-fold desc="FILTERS">
 
+    return super.onOptionsItemSelected(item)
+}
+
+//</editor-fold>
     override fun onFilterSelected(filter: Filter) {
         resetControls()
         filteredImage = compressedOriginalImage!!.copy(BITMAP_CONFIG, true)

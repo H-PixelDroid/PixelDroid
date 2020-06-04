@@ -366,11 +366,9 @@ class CameraFragment : Fragment() {
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d("album", "$requestCode $resultCode $data")
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && data != null
             && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)) {
-            Log.d("album", data.data.toString())
 
             if (data.clipData != null) {
                 val count = data.clipData!!.itemCount
