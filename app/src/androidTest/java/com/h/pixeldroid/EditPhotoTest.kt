@@ -1,9 +1,16 @@
 package com.h.pixeldroid
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Environment
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.SeekBar
+import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.PerformException
@@ -19,7 +26,9 @@ import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
+import junit.framework.Assert.assertTrue
 import kotlinx.android.synthetic.main.fragment_edit_image.*
+import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert
 import org.junit.Before
@@ -27,6 +36,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import java.io.File
+import java.net.URI
 
 @RunWith(AndroidJUnit4::class)
 class EditPhotoTest {
@@ -40,12 +51,30 @@ class EditPhotoTest {
     @get:Rule
     var mRuntimePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
+    private fun File.writeBitmap(bitmap: Bitmap) {
+        outputStream().use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, out)
+            out.flush()
+        }
+    }
+
     @Before
     fun before() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        // Launch PhotoEditActivity
-        val uri: Uri = Uri.parse("android.resource://com.h.pixeldroid/drawable/index")
+        var uri: Uri = "".toUri()
+        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
+        scenario.onActivity {
+            val image = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+            image.eraseColor(Color.GREEN)
+            val folder =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            if (!folder.exists()) {
+                folder.mkdir()
+            }
+            val file = File.createTempFile("temp_img", ".png", folder)
+            file.writeBitmap(image)
+            uri = file.toUri()
+        }
         val intent = Intent(context, PhotoEditActivity::class.java).putExtra("picture_uri", uri)
 
         activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}
@@ -139,9 +168,32 @@ class EditPhotoTest {
     }
 
     @Test
+    fun backButton() {
+        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
+        Espresso.onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)    }
+
+    @Test
     fun buttonUploadLaunchNewPostActivity() {
         Espresso.onView(withId(R.id.action_upload)).perform(click())
         Thread.sleep(1000)
+        Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun modifiedUploadLaunchesNewPostActivity() {
+        Espresso.onView(withId(R.id.recycler_view))
+            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(2, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
+        Thread.sleep(1000)
+
+        Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
+        Espresso.onView(withId(R.id.seekbar_brightness)).perform(setProgress(5))
+        Thread.sleep(1000)
+
+        Espresso.onView(withId(R.id.action_upload)).perform(click())
+        Thread.sleep(1000)
+
+
         Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
     }
 
@@ -151,5 +203,13 @@ class EditPhotoTest {
         Thread.sleep(1000)
         Espresso.onView(withId(R.id.menu_crop)).perform(click())
         Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun alreadyUploadingDialog() {
+        activityScenario.onActivity { a -> a.saving = true }
+        Espresso.onView(withId(R.id.action_upload)).perform(click())
+        Thread.sleep(1000)
+        Espresso.onView(withText(R.string.busy_dialog_text)).check(matches(isDisplayed()))
     }
 }

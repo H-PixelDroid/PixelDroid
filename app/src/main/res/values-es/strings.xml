@@ -42,4 +42,60 @@
     <string name="add_account_description">Añadir otra Cuenta de Pixelfed</string>
     <string name="add_account_name">Añadir Cuenta</string>
     <string name="instance_error">No se pudo obtener información del nodo</string>
+    <string name="hashtags">HASHTAGS</string>
+    <string name="retry">Reintentar</string>
+    <string name="posting_image_accessibility_hint">Imagen que se está publicando</string>
+    <string name="media_upload_failed">{gmd_cloud_off} La carga de los medios falló, inténtalo de nuevo o comprueba las condiciones de la red</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Carga de medios completada</string>
+    <string name="accounts">CUENTAS</string>
+    <string name="posts">PUBLICACIONES</string>
+    <string name="search">Buscar</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="follow">Seguir</string>
+    <string name="no_username">Sin nombre de usuario</string>
+    <string name="default_nfollowing">-
+\nSeguidos</string>
+    <string name="default_nfollowers">-
+\nSeguidores</string>
+    <string name="default_nposts">-
+\nPublicaciones</string>
+    <string name="access_token_invalid">El token de acceso es inválido</string>
+    <string name="unfollow_error">No se pudo dejar de seguir</string>
+    <string name="action_not_allowed">Acción no permitida</string>
+    <string name="follow_error">No pudo seguir</string>
+    <string name="follow_button_failed">No se pudo mostrar el botón de seguimiento</string>
+    <string name="follow_status_failed">No se pudo obtener el estado de seguidores</string>
+    <string name="nb_following">%1$s
+\nSeguidos</string>
+    <string name="nb_followers">%1$s
+\nSeguidores</string>
+    <string name="nb_posts">%1$s
+\nPublicaciones</string>
+    <string name="comment">Comentar</string>
+    <string name="comment_posted">¡Comentario: %1$s publicado!</string>
+    <string name="comment_error">¡Error al comentar!</string>
+    <string name="share_image">Compartir imagen</string>
+    <string name="write_permission_share_pic">¡Tienes que dar permiso de escritura para compartir fotos!</string>
+    <string name="write_permission_download_pic">¡Tienes que dar permiso de escritura para descargar fotos!</string>
+    <string name="empty_comment">¡Los comentarios no deben estar vacíos!</string>
+    <string name="posted_on">Publicado en %1$s</string>
+    <string name="shares">%1$s Comparticiones</string>
+    <string name="likes">%1$s Me gustas</string>
+    <string name="no_description">Sin descripción</string>
+    <string name="feed_failed">No se pudieron obtener publicaciones</string>
+    <string name="loading_toast">Algo salió mal al cargar</string>
+    <string name="normal_filter">Normal</string>
+    <string name="upload_post_error">Falló la subida de la publicación</string>
+    <string name="upload_post_success">Publicación subida correctamente</string>
+    <string name="upload_post_failed">Falló la subida de la publicación</string>
+    <string name="request_format_error">Error de carga: formato de petición erróneo</string>
+    <string name="picture_format_error">Error de carga: formato de imagen incorrecto.</string>
+    <string name="upload_picture_failed">¡Error al subir la foto!</string>
+    <string name="description_max_characters">La descripción debe contener %1$s caracteres como máximo.</string>
+    <string name="save_image_success">Imagen guardada correctamente</string>
+    <string name="save_image_failed">No se puede guardar la imagen</string>
+    <string name="permission_denied">Permiso denegado</string>
+    <string name="dark_theme">Oscuro</string>
+    <string name="light_theme">Claro</string>
+    <string name="default_theme">Por defecto (Sistema)</string>
 </resources>

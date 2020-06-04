@@ -9,12 +9,12 @@
         android:orderInCategory="100"
         android:title="CREATE POST"
         android:icon="@drawable/ic_file_upload_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_save"
         android:orderInCategory="101"
         android:title="SAVE"
         android:icon="@drawable/ic_save_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 </menu>
