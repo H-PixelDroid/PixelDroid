@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -12,13 +13,16 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toFile
 import androidx.core.net.toUri
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
+import com.mikepenz.iconics.Iconics
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -43,7 +47,7 @@ class PostCreationActivity : AppCompatActivity(){
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var pictureFrame: ImageView
-    private lateinit var image: File
+    private lateinit var imageUri: Uri
     private var user: UserDatabaseEntity? = null
 
     private var listOfIds: List<String> = emptyList()
@@ -54,14 +58,14 @@ class PostCreationActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Iconics.init(this)
         setContentView(R.layout.activity_post_creation)
 
-        val imageUri: Uri = intent.getParcelableExtra("picture_uri")!!
-
-        saveImage(imageUri)
+        imageUri = intent.getParcelableExtra("picture_uri")!!
 
         pictureFrame = findViewById(R.id.post_creation_picture_frame)
-        pictureFrame.setImageURI(image.toUri())
+        Glide.with(this).load(imageUri).into(pictureFrame)
+
 
         val db = DBUtils.initDB(applicationContext)
         user = db.userDao().getActiveUser()
@@ -100,27 +104,7 @@ class PostCreationActivity : AppCompatActivity(){
     override fun onDestroy() {
         super.onDestroy()
         //delete the temporary image
-        image.delete()
-    }
-
-    private fun saveImage(imageUri: Uri) {
-        try {
-            val stream = applicationContext.contentResolver
-                .openAssetFileDescriptor(imageUri, "r")!!
-                .createInputStream()
-            val bm = BitmapFactory.decodeStream(stream)
-            val bos = ByteArrayOutputStream()
-            bm.compress(Bitmap.CompressFormat.PNG, 0, bos)
-            image = File.createTempFile("temp_compressed_img", ".png", cacheDir)
-
-            val fos = FileOutputStream(image)
-            fos.write(bos.toByteArray())
-            fos.flush()
-            fos.close()
-        } catch (error: IOException) {
-            error.printStackTrace()
-            throw error
-        }
+        //image.delete()
     }
 
     private fun setDescription(): Boolean {
@@ -137,11 +121,30 @@ class PostCreationActivity : AppCompatActivity(){
         return true
     }
 
-    private fun upload(){
-        val imagePart = ProgressRequestBody(image)
+    private fun upload() {
+        val imageInputStream = contentResolver.openInputStream(imageUri)!!
+
+        val size =
+            if(imageUri.toString().startsWith("content")) {
+                contentResolver.query(imageUri, null, null, null, null)
+                    ?.use { cursor ->
+                        /*
+                     * Get the column indexes of the data in the Cursor,
+                     * move to the first row in the Cursor, get the data,
+                     * and display it.
+                     */
+                        val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                        cursor.moveToFirst()
+                        cursor.getLong(sizeIndex)
+                    } ?: 0
+            } else {
+                imageUri.toFile().length()
+            }
+
+        val imagePart = ProgressRequestBody(imageInputStream, size)
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("file", image.name, imagePart)
+            .addFormDataPart("file", System.currentTimeMillis().toString(), imagePart)
             .build()
 
         val sub = imagePart.progressSubject
@@ -216,7 +219,7 @@ class PostCreationActivity : AppCompatActivity(){
 
 }
 
-class ProgressRequestBody(private val mFile: File) : RequestBody() {
+class ProgressRequestBody(private val mFile: InputStream, private val length: Long) : RequestBody() {
 
     private val getProgressSubject: PublishSubject<Float> = PublishSubject.create()
 
@@ -232,17 +235,16 @@ class ProgressRequestBody(private val mFile: File) : RequestBody() {
 
     @Throws(IOException::class)
     override fun contentLength(): Long {
-        return mFile.length()
+        return length
     }
 
     @Throws(IOException::class)
     override fun writeTo(sink: BufferedSink) {
         val fileLength = contentLength()
         val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-        val `in` = FileInputStream(mFile)
         var uploaded: Long = 0
 
-        `in`.use {
+        mFile.use {
             var read: Int
             var lastProgressPercentUpdate = 0.0f
             read = it.read(buffer)

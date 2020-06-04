@@ -12,6 +12,10 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.contrib.DrawerActions
+import androidx.test.espresso.contrib.DrawerMatchers
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
@@ -164,29 +168,28 @@ class IntentTest {
         }
     }
 
-    /*@Test
-    fun launchesIntent() {
-        // Open Drawer to click on navigation.
-        ActivityScenario.launch(MainActivity::class.java)
-        Espresso.onView(ViewMatchers.withId(R.id.drawer_layout))
-            .check(ViewAssertions.matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()) // Open Drawer
 
-        Espresso.onView(ViewMatchers.withId(R.id.drawer))
-            .perform(NavigationViewActions.navigateTo(R.id.nav_account))
+    @Test
+    fun clickEditProfileMakesIntent() {
+        ActivityScenario.launch(MainActivity::class.java)
+
+        Espresso.onView(ViewMatchers.withId(R.id.drawer_layout))
+            .check(ViewAssertions.matches(DrawerMatchers.isClosed())) // Left Drawer should be closed.
+            .perform(DrawerActions.open()) // Open Drawer
 
         val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
             IntentMatchers.hasAction(Intent.ACTION_VIEW),
             IntentMatchers.hasDataString(CoreMatchers.containsString("settings/home"))
         )
 
-        Thread.sleep(1000)
-
-        Espresso.onView(ViewMatchers.withId(R.id.editButton)).perform(ViewActions.click())
-        Thread.sleep(1000)
-
+        // Start the screen of your activity.
+        Espresso.onView(ViewMatchers.withText(R.string.menu_account)).perform(ViewActions.click())
+        // Check that profile activity was opened.
+        Espresso.onView(ViewMatchers.withId(R.id.editButton))
+            .perform(ViewActions.click())
         intended(expectedIntent)
-    } */
+
+    }
 
     @After
     fun after() {
