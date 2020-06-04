@@ -77,6 +77,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private var imageUri: Uri? = null
     private var cropUri: Uri? = null
 
+    private var toUpload:Boolean = true
+
     object URI {var picture_uri: Uri? = null}
 
     init {
@@ -99,6 +101,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
         cropUri = intent.getParcelableExtra("picture_uri")
+        toUpload = intent.getBooleanExtra("no upload", true)
 
         val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
         cropButton.alpha = 0.5f
@@ -342,6 +345,10 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         applicationContext!!.startActivity(intent)
     }
 
+    private fun sendBackImage(file: File) {
+        
+    }
+
     private fun saveImageToGallery(save: Boolean) {
         // runtime permission and process
         if (!allPermissionsGranted()) {
@@ -397,8 +404,10 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                 Snackbar.LENGTH_LONG).show()
         }
 
-        if (!save) {
+        if (!save && toUpload) {
             uploadImage(file)
+        } else if(!save) {
+            sendBackImage(file)
         } else {
             Snackbar.make(coordinator_edit, getString(R.string.save_image_success),
                 Snackbar.LENGTH_LONG).show()

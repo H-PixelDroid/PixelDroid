@@ -53,7 +53,6 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var pictureFrame: ImageView
-    private lateinit var image: File
     private var user: UserDatabaseEntity? = null
 
     private var posts: ArrayList<String> = ArrayList()
@@ -68,7 +67,6 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
 
         // load images
         posts = intent.getStringArrayListExtra("pictures_uri")!!
-        Log.d("album", "data = $posts")
 
         adapter = AlbumCreationAdapter(posts)
         adapter.listener = this
@@ -100,7 +98,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
 
         // get the description and send the post to PixelFed
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
-            if (setDescription()) upload()
+            //if (setDescription()) upload()
         }
     }
 
@@ -117,6 +115,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         return true
     }
 
+    /*
     private fun upload() {
         val rBody: RequestBody = image.asRequestBody("image/".toMediaTypeOrNull())
         val part = MultipartBody.Part.createFormData("file", image.name, rBody)
@@ -140,7 +139,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
                 }
             }
         })
-    }
+    }*/
 
     private fun post(id: String) {
         if (id.isEmpty()) return
