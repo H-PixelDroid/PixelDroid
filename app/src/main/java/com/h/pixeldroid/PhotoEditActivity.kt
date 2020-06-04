@@ -113,11 +113,11 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         supportActionBar!!.setHomeButtonEnabled(true)
 
         toUpload = intent.getBooleanExtra("no upload", true)
-
         val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
 
         initialUri = intent.getParcelableExtra("picture_uri")
         imageUri = initialUri
+        
         // set on-click listener
         cropButton.setOnClickListener {
             startCrop()
