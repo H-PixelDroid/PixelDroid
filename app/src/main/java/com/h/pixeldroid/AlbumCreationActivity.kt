@@ -1,12 +1,10 @@
 package com.h.pixeldroid
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +13,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,25 +20,13 @@ import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.interfaces.AlbumCreationListener
-import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
-import com.h.pixeldroid.utils.ImageConverter
 import kotlinx.android.synthetic.main.image_album_creation.view.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
 
@@ -53,6 +38,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var pictureFrame: ImageView
+    private var positionResult = 0
     private var user: UserDatabaseEntity? = null
 
     private var posts: ArrayList<String> = ArrayList()
@@ -166,7 +152,27 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
     }
 
     override fun onClick(position: Int) {
-        // handle click of image
+        positionResult = position
+
+        val intent = Intent(this, PhotoEditActivity::class.java)
+            .putExtra("picture_uri", Uri.parse(posts[position]))
+            .putExtra("no upload", false)
+        startActivityForResult(intent, positionResult)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("album", resultCode.toString())
+        if (requestCode == positionResult) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Log.d("album", data.getStringExtra("result")!!)
+                posts[positionResult] = data.getStringExtra("result")!!
+                adapter.notifyItemChanged(positionResult)
+            }
+            else {
+                Toast.makeText(applicationContext, "Error while editing picture", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     class AlbumCreationAdapter(private val posts: ArrayList<String>): RecyclerView.Adapter<AlbumCreationAdapter.ViewHolder>() {

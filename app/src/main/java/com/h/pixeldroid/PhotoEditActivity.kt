@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -83,12 +84,10 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private var brightnessFinal = BRIGHTNESS_START
     private var saturationFinal = SATURATION_START
     private var contrastFinal = CONTRAST_START
-    private var toUpload:Boolean = true
 
     init {
         System.loadLibrary("NativeImageProcessor")
     }
-
 
     companion object{
         private var executor: ExecutorService = newSingleThreadExecutor()
@@ -99,6 +98,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
 
         private var initialUri: Uri? = null
         internal var imageUri: Uri? = null
+
+        private var toUpload:Boolean = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -355,8 +356,14 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         applicationContext!!.startActivity(intent)
     }
 
-    private fun sendBackImage(file: File) {
-        
+    private fun sendBackImage(file: String) {
+        val intent = Intent(this, AlbumCreationActivity::class.java)
+        .apply {
+            putExtra("result", file)
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     private fun saveImageToGallery(save: Boolean) {
@@ -470,8 +477,10 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             }
             if(saving) {
                 this.runOnUiThread {
-                    if (!save) {
+                    if (!save && toUpload) {
                         uploadImage(path)
+                    } else if(!save) {
+                        sendBackImage(path)
                     } else {
                         MediaScannerConnection.scanFile(
                             this,
