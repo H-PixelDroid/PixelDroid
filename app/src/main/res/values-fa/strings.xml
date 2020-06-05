@@ -98,4 +98,7 @@
     <string name="default_nfollowing">-
 \nپی‌گیری</string>
     <string name="media_upload_failed">‏{gmd_cloud_off} بارگذاری رسانه شکست خورد، وضعیت شبکه را بررسی کرده و دوباره تلاش کنید</string>
+    <string name="crop_result_error">تصویر برش یافته از دسترس خارج شده است</string>
+    <string name="busy_dialog_ok_button">خوب، منتظر می‌مانم.</string>
+    <string name="busy_dialog_text">منتظر بمانید تا پردازش تصویر پایان یابد!</string>
 </resources>

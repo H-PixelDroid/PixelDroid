@@ -44,7 +44,7 @@
     <string name="instance_error">No se pudo obtener información del nodo</string>
     <string name="hashtags">HASHTAGS</string>
     <string name="retry">Reintentar</string>
-    <string name="posting_image_accessibility_hint">Imagen que se está publicando</string>
+    <string name="posting_image_accessibility_hint">Imagen que se va a publicar</string>
     <string name="media_upload_failed">{gmd_cloud_off} La carga de los medios falló, inténtalo de nuevo o comprueba las condiciones de la red</string>
     <string name="media_upload_completed">{gmd_cloud_done} Carga de medios completada</string>
     <string name="accounts">CUENTAS</string>
@@ -98,4 +98,7 @@
     <string name="dark_theme">Oscuro</string>
     <string name="light_theme">Claro</string>
     <string name="default_theme">Por defecto (Sistema)</string>
+    <string name="crop_result_error">No se pudo recuperar la imagen después del recorte</string>
+    <string name="busy_dialog_ok_button">Bien, espera.</string>
+    <string name="busy_dialog_text">Procesando imagen, ¡Espera a que termine!</string>
 </resources>
