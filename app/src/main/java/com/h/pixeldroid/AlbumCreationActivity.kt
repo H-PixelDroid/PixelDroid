@@ -265,6 +265,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            Log.d("test", "binded")
             holder.bind()
         }
 
@@ -278,8 +279,10 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
                     .load(image)
                     .centerCrop()
                     .into(itemView.galleryImage)
-                // adding click or tap handler for our image layout
+
+                // adding click or tap handler for the image layout
                 itemView.container.setOnClickListener {
+                    Log.d("test", "clicked")
                     listener?.onClick(adapterPosition)
                 }
             }
