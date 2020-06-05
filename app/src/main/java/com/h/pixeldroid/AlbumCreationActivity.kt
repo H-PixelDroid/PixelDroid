@@ -179,10 +179,6 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         }
     }
 
-    private fun mutableToList() {
-
-    }
-
     private fun post() {
         enableButton(false)
         listOfIds = List(muListOfIds.size) { i -> muListOfIds[i] }
@@ -272,6 +268,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         override fun getItemCount(): Int = posts.size
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
             fun bind() {
                 val image = Uri.parse(posts[adapterPosition])
                 // load image
@@ -281,7 +278,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
                     .into(itemView.galleryImage)
 
                 // adding click or tap handler for the image layout
-                itemView.container.setOnClickListener {
+                itemView.galleryImage.setOnClickListener {
                     Log.d("test", "clicked")
                     listener?.onClick(adapterPosition)
                 }

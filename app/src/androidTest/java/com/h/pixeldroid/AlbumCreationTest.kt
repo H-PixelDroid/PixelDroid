@@ -135,8 +135,8 @@ class AlbumCreationTest {
                 )
             )
         Thread.sleep(1000)
-        //onView(withId(R.id.action_upload)).perform(click())
+        onView(withId(R.id.action_upload)).perform(click())
         Thread.sleep(1000)
-        //onView(withId(R.id.galleryImage)).check(matches(isDisplayed()))
+        onView(withId(R.id.image_grid)).check(matches(isDisplayed()))
     }
 }
