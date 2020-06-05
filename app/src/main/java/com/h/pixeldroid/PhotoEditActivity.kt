@@ -88,7 +88,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         System.loadLibrary("NativeImageProcessor")
     }
 
-
     companion object{
         private var executor: ExecutorService = newSingleThreadExecutor()
         private var future: Future<*>? = null
@@ -114,7 +113,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
 
         initialUri = intent.getParcelableExtra("picture_uri")
         imageUri = initialUri
-
+        
         // set on-click listener
         cropButton.setOnClickListener {
             startCrop()
@@ -187,12 +186,12 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             }
         }
 
-        return super.onOptionsItemSelected(item)
-    }
-
-    //</editor-fold>
     //<editor-fold desc="FILTERS">
 
+    return super.onOptionsItemSelected(item)
+}
+
+//</editor-fold>
     override fun onFilterSelected(filter: Filter) {
         resetControls()
         filteredImage = compressedOriginalImage!!.copy(BITMAP_CONFIG, true)
@@ -346,11 +345,15 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         return finalImage
     }
 
-    private fun uploadImage(file: String) {
-        val intent = Intent (applicationContext, PostCreationActivity::class.java)
-        intent.putExtra("picture_uri", Uri.parse(file))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        applicationContext!!.startActivity(intent)
+    private fun sendBackImage(file: String) {
+        val intent = Intent(this, PostCreationActivity::class.java)
+        .apply {
+            putExtra("result", file)
+            addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        }
+
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     private fun saveImageToGallery(save: Boolean) {
@@ -464,8 +467,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             }
             if(saving) {
                 this.runOnUiThread {
-                    if (!save) {
-                        uploadImage(path)
+                    if(!save) {
+                        sendBackImage(path)
                     } else {
                         MediaScannerConnection.scanFile(
                             this,

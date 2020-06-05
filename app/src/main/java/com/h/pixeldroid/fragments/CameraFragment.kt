@@ -2,7 +2,6 @@ package com.h.pixeldroid.fragments
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -30,6 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.h.pixeldroid.PhotoEditActivity
+import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -282,6 +282,7 @@ class CameraFragment : Fragment() {
                 action = Intent.ACTION_GET_CONTENT
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 startActivityForResult(
                     Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
                 )
@@ -343,7 +344,9 @@ class CameraFragment : Fragment() {
 
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                             val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
-                            startPostCreation(savedUri)
+                            val uri: ArrayList<String> = ArrayList()
+                            uri.add(savedUri.toString())
+                            startAlbumCreation(uri)
                         }
                     })
 
@@ -359,19 +362,30 @@ class CameraFragment : Fragment() {
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && data != null
-            && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)
-            && data.data != null) {
+            && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)) {
 
-            startPostCreation(data.data!!)
+            val images: ArrayList<String> = ArrayList()
+            if (data.clipData != null) {
+                val count = data.clipData!!.itemCount
+                for (i in 0 until count) {
+                    val imageUri: String = data.clipData!!.getItemAt(i).uri.toString()
+                    images.add(imageUri)
+                }
+                startAlbumCreation(images)
+            } else if (data.data != null) {
+                images.add(data.data!!.toString())
+                startAlbumCreation(images)
+            }
         }
     }
-    private fun startPostCreation(uri: Uri) {
-        startActivity(
-            Intent(activity, PhotoEditActivity::class.java)
-                .putExtra("picture_uri", uri)
-        )
 
+    private fun startAlbumCreation(uris: ArrayList<String>) {
+        startActivity(
+            Intent(activity, PostCreationActivity::class.java)
+                .putExtra("pictures_uri", uris)
+        )
     }
 
     companion object {
