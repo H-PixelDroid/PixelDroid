@@ -7,9 +7,17 @@
     android:foreground="?selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
-    <ImageView
-        android:id="@+id/galleryImage"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/galleryImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_edit_24"/>
+    </RelativeLayout>
 </com.h.pixeldroid.utils.SquareLayout>

@@ -88,10 +88,6 @@
             app:layout_constraintTop_toTopOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
-
     <ProgressBar
         android:id="@+id/uploadProgressBar"
         style="?android:attr/progressBarStyleHorizontal"

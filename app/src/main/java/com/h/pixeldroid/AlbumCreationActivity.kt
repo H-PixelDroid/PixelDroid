@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toFile
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,7 +25,12 @@ import com.h.pixeldroid.interfaces.AlbumCreationListener
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_post_creation.*
 import kotlinx.android.synthetic.main.image_album_creation.view.*
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,6 +45,10 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var pictureFrame: ImageView
+
+    private var muListOfIds: MutableList<String> = mutableListOf()
+    private var listOfIds: List<String> = emptyList()
+
     private var positionResult = 0
     private var user: UserDatabaseEntity? = null
 
@@ -57,7 +68,7 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         adapter = AlbumCreationAdapter(posts)
         adapter.listener = this
         recycler = findViewById(R.id.image_grid)
-        recycler.layoutManager = GridLayoutManager(this, 2)
+        recycler.layoutManager = GridLayoutManager(this, if (posts.size > 2) 2 else 1)
         recycler.adapter = adapter
 
         val db = DBUtils.initDB(applicationContext)
@@ -82,9 +93,19 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         // check if the pictures are alright
         // TODO
 
-        // get the description and send the post to PixelFed
+        //upload the picture and display progress while doing so
+        upload()
+
+        // get the description and send the post
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
-            //if (setDescription()) upload()
+            if (setDescription() && muListOfIds.isNotEmpty()) post()
+        }
+
+        // Button to retry image upload when it fails
+        findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
+            upload_error.visibility = View.GONE
+            muListOfIds.clear()
+            upload()
         }
     }
 
@@ -101,54 +122,109 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
         return true
     }
 
-    /*
     private fun upload() {
-        val rBody: RequestBody = image.asRequestBody("image/".toMediaTypeOrNull())
-        val part = MultipartBody.Part.createFormData("file", image.name, rBody)
-        pixelfedAPI.mediaUpload("Bearer $accessToken", part).enqueue(object:
-            Callback<Attachment> {
-            override fun onFailure(call: Call<Attachment>, t: Throwable) {
-                Log.e(TAG, t.toString() + call.request())
-                Toast.makeText(applicationContext,"Picture upload error!",Toast.LENGTH_SHORT).show()
-            }
+        for (post in posts) {
+            val imageUri = Uri.parse(post)
+            val imageInputStream = contentResolver.openInputStream(imageUri)!!
 
-            override fun onResponse(call: Call<Attachment>, response: Response<Attachment>) {
-                if (response.code() == 200) {
-                    val body = response.body()!!
-                    if (body.type.name == "image") {
-                        post(body.id)
-                    } else
-                        Toast.makeText(applicationContext, "Upload error: wrong picture format.", Toast.LENGTH_SHORT).show()
+            val size =
+                if (imageUri.toString().startsWith("content")) {
+                    contentResolver.query(imageUri, null, null, null, null)
+                        ?.use { cursor ->
+                            /*
+                         * Get the column indexes of the data in the Cursor,
+                         * move to the first row in the Cursor, get the data,
+                         * and display it.
+                         */
+                            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                            cursor.moveToFirst()
+                            cursor.getLong(sizeIndex)
+                        } ?: 0
                 } else {
-                    Log.e(TAG, "Server responded: $response" + call.request() + call.request().body)
-                    Toast.makeText(applicationContext,"Upload error: bad request format",Toast.LENGTH_SHORT).show()
+                    imageUri.toFile().length()
                 }
-            }
-        })
-    }*/
 
-    private fun post(id: String) {
-        if (id.isEmpty()) return
+            val imagePart = ProgressRequestBody(imageInputStream, size)
+            val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", System.currentTimeMillis().toString(), imagePart)
+                .build()
+
+            val sub = imagePart.progressSubject
+                .subscribeOn(Schedulers.io())
+                .subscribe { percentage ->
+                    uploadProgressBar.progress = percentage.toInt()
+                }
+
+            var postSub: Disposable? = null
+            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", requestBody.parts[0])
+
+            postSub = inter
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ attachment ->
+                    muListOfIds.add(attachment.id)
+                }, { e ->
+                    upload_error.visibility = View.VISIBLE
+                    e.printStackTrace()
+                    postSub?.dispose()
+                    sub.dispose()
+                }, {
+                    uploadProgressBar.visibility = View.GONE
+                    upload_completed_textview.visibility = View.VISIBLE
+                    enableButton(true)
+                    postSub?.dispose()
+                    sub.dispose()
+                })
+        }
+    }
+
+    private fun mutableToList() {
+
+    }
+
+    private fun post() {
+        enableButton(false)
+        listOfIds = List(muListOfIds.size) { i -> muListOfIds[i] }
         pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
             statusText = description,
-            media_ids = listOf(id)
+            media_ids = listOfIds
         ).enqueue(object: Callback<Status> {
             override fun onFailure(call: Call<Status>, t: Throwable) {
-                Toast.makeText(applicationContext,"Post upload failed",Toast.LENGTH_SHORT).show()
+                enableButton(true)
+                Toast.makeText(applicationContext,getString(R.string.upload_post_failed),
+                    Toast.LENGTH_SHORT).show()
                 Log.e(TAG, t.message + call.request())
             }
 
             override fun onResponse(call: Call<Status>, response: Response<Status>) {
                 if (response.code() == 200) {
-                    Toast.makeText(applicationContext,"Post upload success",Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    Toast.makeText(applicationContext,getString(R.string.upload_post_success),
+                        Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@AlbumCreationActivity, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
                 } else {
-                    Toast.makeText(applicationContext,"Post upload failed : not 200",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,getString(R.string.upload_post_error),
+                        Toast.LENGTH_SHORT).show()
                     Log.e(TAG, call.request().toString() + response.raw().toString())
+                    enableButton(true)
                 }
             }
         })
+    }
+
+    private fun enableButton(enable: Boolean = true){
+        post_creation_send_button.isEnabled = enable
+        if(enable){
+            posting_progress_bar.visibility = View.GONE
+            post_creation_send_button.visibility = View.VISIBLE
+        } else{
+            posting_progress_bar.visibility = View.VISIBLE
+            post_creation_send_button.visibility = View.GONE
+        }
+
     }
 
     override fun onClick(position: Int) {
@@ -162,15 +238,17 @@ class AlbumCreationActivity : AppCompatActivity(), AlbumCreationListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("album", resultCode.toString())
         if (requestCode == positionResult) {
             if (resultCode == Activity.RESULT_OK && data != null) {
-                Log.d("album", data.getStringExtra("result")!!)
                 posts[positionResult] = data.getStringExtra("result")!!
                 adapter.notifyItemChanged(positionResult)
+                muListOfIds.clear()
+                upload()
             }
-            else {
-                Toast.makeText(applicationContext, "Error while editing picture", Toast.LENGTH_SHORT).show()
+            else if(resultCode == Activity.RESULT_CANCELED){
+                Toast.makeText(applicationContext, "Edition cancelled", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
             }
         }
     }

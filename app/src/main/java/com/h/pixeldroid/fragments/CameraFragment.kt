@@ -345,7 +345,9 @@ class CameraFragment : Fragment() {
 
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                             val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
-                            startPostCreation(savedUri)
+                            val uri: ArrayList<String> = ArrayList()
+                            uri.add(savedUri.toString())
+                            startAlbumCreation(uri)
                         }
                     })
 
@@ -365,16 +367,17 @@ class CameraFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && data != null
             && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)) {
 
+            val images: ArrayList<String> = ArrayList()
             if (data.clipData != null) {
                 val count = data.clipData!!.itemCount
-                val images: ArrayList<String> = ArrayList()
                 for (i in 0 until count) {
                     val imageUri: String = data.clipData!!.getItemAt(i).uri.toString()
                     images.add(imageUri)
                 }
                 startAlbumCreation(images)
             } else if (data.data != null) {
-                startPostCreation(data.data!!)
+                images.add(data.data!!.toString())
+                startAlbumCreation(images)
             }
         }
     }
