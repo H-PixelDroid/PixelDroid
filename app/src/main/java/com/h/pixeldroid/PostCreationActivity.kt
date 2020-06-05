@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
@@ -22,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.interfaces.PostCreationListener
+import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
@@ -45,10 +45,10 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
-    private lateinit var pictureFrame: ImageView
 
     private var muListOfIds: MutableList<String> = mutableListOf()
-    private var listOfIds: List<String> = emptyList()
+    private var progressList: ArrayList<Int> = arrayListOf()
+
 
     private var positionResult = 0
     private var user: UserDatabaseEntity? = null
@@ -65,6 +65,9 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
         // load images
         posts = intent.getStringArrayListExtra("pictures_uri")!!
+
+        progressList = posts.map { 0 } as ArrayList<Int>
+        muListOfIds = posts.map { "" }.toMutableList()
 
         val db = DBUtils.initDB(applicationContext)
         user = db.userDao().getActiveUser()
@@ -89,7 +92,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         // TODO
 
         //upload the picture and display progress while doing so
-        upload(posts)
+        upload()
 
         adapter = PostCreationAdapter(posts)
         adapter.listener = this
@@ -106,7 +109,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
             upload_error.visibility = View.GONE
             muListOfIds.clear()
-            upload(posts)
+            upload()
         }
     }
 
@@ -123,8 +126,8 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         return true
     }
 
-    private fun upload(arrayLinks: ArrayList<String>) {
-        for (post in arrayLinks) {
+    private fun upload() {
+        for ((index, post) in posts.withIndex()) {
             val imageUri = Uri.parse(post)
             val imageInputStream = contentResolver.openInputStream(imageUri)!!
 
@@ -132,8 +135,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
                 if (imageUri.toString().startsWith("content")) {
                     contentResolver.query(imageUri, null, null, null, null)
                         ?.use { cursor ->
-                            /*
-                         * Get the column indexes of the data in the Cursor,
+                        /* Get the column indexes of the data in the Cursor,
                          * move to the first row in the Cursor, get the data,
                          * and display it.
                          */
@@ -154,7 +156,9 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
             val sub = imagePart.progressSubject
                 .subscribeOn(Schedulers.io())
                 .subscribe { percentage ->
-                    uploadProgressBar.progress = percentage.toInt()
+                    progressList[index] = percentage.toInt()
+                    uploadProgressBar.progress =
+                        progressList.sum() / progressList.size
                 }
 
             var postSub: Disposable? = null
@@ -163,30 +167,37 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
             postSub = inter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ attachment ->
-                    muListOfIds.add(attachment.id)
-                }, { e ->
-                    upload_error.visibility = View.VISIBLE
-                    e.printStackTrace()
-                    postSub?.dispose()
-                    sub.dispose()
-                }, {
-                    uploadProgressBar.visibility = View.GONE
-                    upload_completed_textview.visibility = View.VISIBLE
-                    enableButton(true)
-                    postSub?.dispose()
-                    sub.dispose()
-                })
+                .subscribe(
+                    { attachment: Attachment ->
+                        progressList[index] = 0
+                        muListOfIds[index] = attachment.id
+                    },
+                    { e ->
+                        upload_error.visibility = View.VISIBLE
+                        e.printStackTrace()
+                        postSub?.dispose()
+                        sub.dispose()
+                    },
+                    {
+                        progressList[index] = 100
+                        if(progressList.all{it == 100}){
+                            enableButton(true)
+                            uploadProgressBar.visibility = View.GONE
+                            upload_completed_textview.visibility = View.VISIBLE
+                        }
+                        postSub?.dispose()
+                        sub.dispose()
+                    }
+                )
         }
     }
 
     private fun post() {
         enableButton(false)
-        listOfIds = List(muListOfIds.size) { i -> muListOfIds[i] }
         pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
             statusText = description,
-            media_ids = listOfIds
+            media_ids = muListOfIds.toList()
         ).enqueue(object: Callback<Status> {
             override fun onFailure(call: Call<Status>, t: Throwable) {
                 enableButton(true)
@@ -240,7 +251,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
                 posts[positionResult] = data.getStringExtra("result")!!
                 adapter.notifyItemChanged(positionResult)
                 muListOfIds.clear()
-                upload(arrayListOf(posts[positionResult]))
+                upload()
             }
             else if(resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(applicationContext, "Edition cancelled", Toast.LENGTH_SHORT).show()
