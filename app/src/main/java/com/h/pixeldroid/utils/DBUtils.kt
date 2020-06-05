@@ -10,11 +10,10 @@ import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.Utils.Companion.normalizeDomain
-import java.util.*
 
 class DBUtils {
     companion object {
-        private const val MAX_NUMBER_OF_STORED_POSTS = 20
+        private const val MAX_NUMBER_OF_STORED_POSTS = 200
 
         fun initDB(context: Context): AppDatabase {
             return Room.databaseBuilder(
@@ -57,16 +56,23 @@ class DBUtils {
             db.instanceDao().insertInstance(dbInstance)
         }
 
-        fun storePosts(db: AppDatabase, data: List<*>) {
+        fun storePosts(
+            db: AppDatabase,
+            data: List<*>,
+            user: UserDatabaseEntity
+        ) {
             val dao = db.postDao()
             data.forEach { post ->
                 if (post is Status
                     && !post.media_attachments.isNullOrEmpty()
                     && dao.count(post.uri ?: "") == 0) {
-                    while (dao.numberOfPosts() >= MAX_NUMBER_OF_STORED_POSTS) {
-                        dao.removeOlderPost()
+                    val nPosts = dao.numberOfPosts() - MAX_NUMBER_OF_STORED_POSTS
+                    if (nPosts > 0) {
+                        dao.removeOlderPosts(nPosts)
                     }
                     dao.insertPost(PostDatabaseEntity(
+                        user_id = user.user_id,
+                        instance_uri = user.instance_uri,
                         uri = post.uri ?: "",
                         account_profile_picture = post.getProfilePicUrl() ?: "",
                         account_name = post.getUsername().toString(),
@@ -78,7 +84,6 @@ class DBUtils {
                         share_count = post.reblogs_count ?: 0,
                         description = post.content ?: "",
                         date = post.created_at ?: "",
-                        store_time = Date().time.toString(),
                         likes = post.favourites_count ?: 0,
                         shares = post.reblogs_count ?: 0
                     ))

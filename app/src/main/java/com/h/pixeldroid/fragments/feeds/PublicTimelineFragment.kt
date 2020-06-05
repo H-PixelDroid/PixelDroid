@@ -10,7 +10,7 @@ class PublicTimelineFragment: PostsFeedFragment() {
 
     inner class SearchFeedDataSource : FeedDataSource(null, null){
 
-        override fun newSource(): FeedDataSource {
+        override fun newSource(): SearchFeedDataSource {
             return SearchFeedDataSource()
         }
 

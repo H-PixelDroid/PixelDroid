@@ -57,8 +57,9 @@ class OfflineFeedFragment: Fragment() {
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
         val db = DBUtils.initDB(requireContext())
+        val user = db.userDao().getActiveUser()!!
         if (db.postDao().numberOfPosts() > 0) {
-            val posts = db.postDao().getAll()
+            val posts = db.postDao().getAll(user.user_id, user.instance_uri)
             viewManager = LinearLayoutManager(requireContext())
             viewAdapter = OfflinePostFeedAdapter(posts)
             loadingAnimation.visibility = View.GONE

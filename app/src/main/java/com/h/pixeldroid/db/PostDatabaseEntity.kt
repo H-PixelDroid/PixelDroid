@@ -1,13 +1,25 @@
 package com.h.pixeldroid.db
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.ForeignKey
+import androidx.room.Index
 
 @Entity(
-    tableName = "posts"
+    tableName = "posts",
+    primaryKeys = ["uri", "user_id", "instance_uri"],
+    foreignKeys = [ForeignKey(
+        entity = UserDatabaseEntity::class,
+        parentColumns = arrayOf("user_id", "instance_uri"),
+        childColumns = arrayOf("user_id", "instance_uri"),
+        onUpdate = ForeignKey.CASCADE,
+        onDelete = ForeignKey.CASCADE
+    )],
+    indices = [Index(value = ["user_id"])]
 )
 data class PostDatabaseEntity (
-    @PrimaryKey var uri: String,
+    var uri: String,
+    var user_id: String,
+    var instance_uri: String,
     var account_profile_picture: String,
     var account_name: String,
     var media_urls: List<String>,
@@ -16,7 +28,6 @@ data class PostDatabaseEntity (
     var share_count: Int,
     var description: String,
     var date: String,
-    var store_time: String,
     var likes: Int,
     var shares: Int
 )

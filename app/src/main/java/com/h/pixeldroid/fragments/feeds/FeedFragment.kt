@@ -26,7 +26,6 @@ import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.FeedContent
-import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.Utils
 import kotlinx.android.synthetic.main.fragment_feed.view.*
@@ -124,7 +123,9 @@ open class FeedFragment<T: FeedContent, VH: RecyclerView.ViewHolder?>: Fragment(
                     if (response.isSuccessful && response.body() != null) {
                         val notifications = response.body()!!
                         callback.onResult(notifications)
-                        DBUtils.storePosts(db, notifications)
+                        if(this@FeedDataSource.newSource() !is PublicTimelineFragment.SearchFeedDataSource) {
+                            DBUtils.storePosts(db, notifications, user!!)
+                        }
                     } else{
                         Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
                     }

@@ -13,14 +13,16 @@ interface PostDao {
     @Query("SELECT COUNT(*) FROM posts")
     fun numberOfPosts(): Int
 
-    @Query("SELECT * FROM posts")
-    fun getAll(): List<PostDatabaseEntity>
+    @Query("SELECT * FROM posts WHERE user_id=:user AND instance_uri=:instanceUri")
+    fun getAll(user: String, instanceUri: String): List<PostDatabaseEntity>
 
     @Query("SELECT COUNT(*) FROM posts WHERE uri=:uri")
     fun count(uri: String): Int
 
-    @Query("""DELETE FROM posts WHERE uri IN (
-                        SELECT uri FROM posts ORDER BY store_time ASC LIMIT 1
-                    )""")
-    fun removeOlderPost()
+    @Query(
+        """DELETE FROM posts WHERE uri IN (
+                        SELECT uri FROM posts ORDER BY date ASC LIMIT :nPosts
+                    )"""
+    )
+    fun removeOlderPosts(nPosts: Int)
 }
