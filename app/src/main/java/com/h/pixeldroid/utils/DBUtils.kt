@@ -65,8 +65,8 @@ class DBUtils {
             data.forEach { post ->
                 if (post is Status
                     && !post.media_attachments.isNullOrEmpty()
-                    && dao.count(post.uri ?: "") == 0) {
-                    val nPosts = dao.numberOfPosts() - MAX_NUMBER_OF_STORED_POSTS
+                    && dao.count(post.uri ?: "", user.user_id, user.instance_uri) == 0) {
+                    val nPosts = dao.numberOfPosts(user.user_id, user.instance_uri) - MAX_NUMBER_OF_STORED_POSTS
                     if (nPosts > 0) {
                         dao.removeOlderPosts(nPosts)
                     }
