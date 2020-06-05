@@ -98,8 +98,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
 
         private var initialUri: Uri? = null
         internal var imageUri: Uri? = null
-
-        private var toUpload:Boolean = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,7 +110,6 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
 
-        toUpload = intent.getBooleanExtra("no upload", true)
         val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
 
         initialUri = intent.getParcelableExtra("picture_uri")
@@ -349,15 +346,8 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         return finalImage
     }
 
-    private fun uploadImage(file: String) {
-        val intent = Intent (applicationContext, PostCreationActivity::class.java)
-        intent.putExtra("picture_uri", Uri.parse(file))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        applicationContext!!.startActivity(intent)
-    }
-
     private fun sendBackImage(file: String) {
-        val intent = Intent(this, AlbumCreationActivity::class.java)
+        val intent = Intent(this, PostCreationActivity::class.java)
         .apply {
             putExtra("result", file)
         }
@@ -477,9 +467,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
             }
             if(saving) {
                 this.runOnUiThread {
-                    if (!save && toUpload) {
-                        uploadImage(path)
-                    } else if(!save) {
+                    if(!save) {
                         sendBackImage(path)
                     } else {
                         MediaScannerConnection.scanFile(

@@ -1,56 +1,58 @@
 package com.h.pixeldroid
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.util.Log
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
-import androidx.core.net.toUri
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.interfaces.PostCreationListener
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
-import com.mikepenz.iconics.Iconics
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_post_creation.*
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import kotlinx.android.synthetic.main.image_album_creation.view.*
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okio.BufferedSink
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.*
 
-
-class PostCreationActivity : AppCompatActivity(){
+class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
     private val TAG = "Post Creation Activity"
+
+    private lateinit var recycler : RecyclerView
+    private lateinit var adapter : PostCreationAdapter
 
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
     private lateinit var pictureFrame: ImageView
-    private lateinit var imageUri: Uri
+
+    private var muListOfIds: MutableList<String> = mutableListOf()
+    private var listOfIds: List<String> = emptyList()
+
+    private var positionResult = 0
     private var user: UserDatabaseEntity? = null
 
-    private var listOfIds: List<String> = emptyList()
+    private var posts: ArrayList<String> = ArrayList()
 
     private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
 
@@ -58,14 +60,16 @@ class PostCreationActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Iconics.init(this)
         setContentView(R.layout.activity_post_creation)
 
-        imageUri = intent.getParcelableExtra("picture_uri")!!
+        // load images
+        posts = intent.getStringArrayListExtra("pictures_uri")!!
 
-        pictureFrame = findViewById(R.id.post_creation_picture_frame)
-        Glide.with(this).load(imageUri).into(pictureFrame)
-
+        adapter = PostCreationAdapter(posts)
+        adapter.listener = this
+        recycler = findViewById(R.id.image_grid)
+        recycler.layoutManager = GridLayoutManager(this, if (posts.size > 2) 2 else 1)
+        recycler.adapter = adapter
 
         val db = DBUtils.initDB(applicationContext)
         user = db.userDao().getActiveUser()
@@ -86,34 +90,31 @@ class PostCreationActivity : AppCompatActivity(){
         accessToken = user?.accessToken.orEmpty()
         pixelfedAPI = PixelfedAPI.create(domain)
 
+        // check if the pictures are alright
+        // TODO
+
         //upload the picture and display progress while doing so
         upload()
 
         // get the description and send the post
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
-            if (setDescription() && listOfIds.isNotEmpty()) post()
+            if (setDescription() && muListOfIds.isNotEmpty()) post()
         }
-        
+
         // Button to retry image upload when it fails
         findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
-            upload_error.visibility = GONE
+            upload_error.visibility = View.GONE
+            muListOfIds.clear()
             upload()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        //delete the temporary image
-        //image.delete()
     }
 
     private fun setDescription(): Boolean {
         val textField = findViewById<TextInputEditText>(R.id.new_post_description_input_field)
         val content = textField.text.toString()
         if (content.length > maxLength) {
-            // error, too many characters
-            textField.error = getString(R.string.description_max_characters).format(maxLength)
-
+            // error, too much characters
+            textField.error = "Description must contain $maxLength characters at most."
             return false
         }
         // store the description
@@ -122,61 +123,65 @@ class PostCreationActivity : AppCompatActivity(){
     }
 
     private fun upload() {
-        val imageInputStream = contentResolver.openInputStream(imageUri)!!
+        for (post in posts) {
+            val imageUri = Uri.parse(post)
+            val imageInputStream = contentResolver.openInputStream(imageUri)!!
 
-        val size =
-            if(imageUri.toString().startsWith("content")) {
-                contentResolver.query(imageUri, null, null, null, null)
-                    ?.use { cursor ->
-                        /*
-                     * Get the column indexes of the data in the Cursor,
-                     * move to the first row in the Cursor, get the data,
-                     * and display it.
-                     */
-                        val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-                        cursor.moveToFirst()
-                        cursor.getLong(sizeIndex)
-                    } ?: 0
-            } else {
-                imageUri.toFile().length()
-            }
+            val size =
+                if (imageUri.toString().startsWith("content")) {
+                    contentResolver.query(imageUri, null, null, null, null)
+                        ?.use { cursor ->
+                            /*
+                         * Get the column indexes of the data in the Cursor,
+                         * move to the first row in the Cursor, get the data,
+                         * and display it.
+                         */
+                            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                            cursor.moveToFirst()
+                            cursor.getLong(sizeIndex)
+                        } ?: 0
+                } else {
+                    imageUri.toFile().length()
+                }
 
-        val imagePart = ProgressRequestBody(imageInputStream, size)
-        val requestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("file", System.currentTimeMillis().toString(), imagePart)
-            .build()
+            val imagePart = ProgressRequestBody(imageInputStream, size)
+            val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", System.currentTimeMillis().toString(), imagePart)
+                .build()
 
-        val sub = imagePart.progressSubject
-            .subscribeOn(Schedulers.io())
-            .subscribe { percentage ->
-                uploadProgressBar.progress = percentage.toInt()
-            }
+            val sub = imagePart.progressSubject
+                .subscribeOn(Schedulers.io())
+                .subscribe { percentage ->
+                    uploadProgressBar.progress = percentage.toInt()
+                }
 
-        var postSub : Disposable?= null
-        val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", requestBody.parts[0])
+            var postSub: Disposable? = null
+            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", requestBody.parts[0])
 
-        postSub = inter
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ attachment ->
-                listOfIds = listOf(attachment.id)
-            },{e->
-                upload_error.visibility = VISIBLE
-                e.printStackTrace()
-                postSub?.dispose()
-                sub.dispose()
-            }, {
-                uploadProgressBar.visibility = GONE
-                upload_completed_textview.visibility = VISIBLE
-                enableButton(true)
-                postSub?.dispose()
-                sub.dispose()
-            })
+            postSub = inter
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ attachment ->
+                    muListOfIds.add(attachment.id)
+                }, { e ->
+                    upload_error.visibility = View.VISIBLE
+                    e.printStackTrace()
+                    postSub?.dispose()
+                    sub.dispose()
+                }, {
+                    uploadProgressBar.visibility = View.GONE
+                    upload_completed_textview.visibility = View.VISIBLE
+                    enableButton(true)
+                    postSub?.dispose()
+                    sub.dispose()
+                })
+        }
     }
 
     private fun post() {
         enableButton(false)
+        listOfIds = List(muListOfIds.size) { i -> muListOfIds[i] }
         pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
             statusText = description,
@@ -205,67 +210,79 @@ class PostCreationActivity : AppCompatActivity(){
             }
         })
     }
+
     private fun enableButton(enable: Boolean = true){
         post_creation_send_button.isEnabled = enable
         if(enable){
-            posting_progress_bar.visibility = GONE
-            post_creation_send_button.visibility = VISIBLE
+            posting_progress_bar.visibility = View.GONE
+            post_creation_send_button.visibility = View.VISIBLE
         } else{
-            posting_progress_bar.visibility = VISIBLE
-            post_creation_send_button.visibility = GONE
+            posting_progress_bar.visibility = View.VISIBLE
+            post_creation_send_button.visibility = View.GONE
         }
 
     }
 
-}
+    override fun onClick(position: Int) {
+        positionResult = position
 
-class ProgressRequestBody(private val mFile: InputStream, private val length: Long) : RequestBody() {
-
-    private val getProgressSubject: PublishSubject<Float> = PublishSubject.create()
-
-    val progressSubject: Observable<Float>
-        get() {
-            return getProgressSubject
-        }
-
-
-    override fun contentType(): MediaType? {
-        return "image/png".toMediaTypeOrNull()
+        val intent = Intent(this, PhotoEditActivity::class.java)
+            .putExtra("picture_uri", Uri.parse(posts[position]))
+            .putExtra("no upload", false)
+        startActivityForResult(intent, positionResult)
     }
 
-    @Throws(IOException::class)
-    override fun contentLength(): Long {
-        return length
-    }
-
-    @Throws(IOException::class)
-    override fun writeTo(sink: BufferedSink) {
-        val fileLength = contentLength()
-        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-        var uploaded: Long = 0
-
-        mFile.use {
-            var read: Int
-            var lastProgressPercentUpdate = 0.0f
-            read = it.read(buffer)
-            while (read != -1) {
-
-                uploaded += read.toLong()
-                sink.write(buffer, 0, read)
-                read = it.read(buffer)
-
-                val progress = (uploaded.toFloat() / fileLength.toFloat()) * 100f
-                //prevent publishing too many updates, which slows upload, by checking if the upload has progressed by at least 1 percent
-                if (progress - lastProgressPercentUpdate > 1 || progress == 100f) {
-                    // publish progress
-                    getProgressSubject.onNext(progress)
-                    lastProgressPercentUpdate = progress
-                }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == positionResult) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                posts[positionResult] = data.getStringExtra("result")!!
+                adapter.notifyItemChanged(positionResult)
+                muListOfIds.clear()
+                upload()
+            }
+            else if(resultCode == Activity.RESULT_CANCELED){
+                Toast.makeText(applicationContext, "Edition cancelled", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    companion object {
-        private const val DEFAULT_BUFFER_SIZE = 2048
+    class PostCreationAdapter(private val posts: ArrayList<String>): RecyclerView.Adapter<PostCreationAdapter.ViewHolder>() {
+        private var context: Context? = null
+        var listener: PostCreationListener? = null
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            context = parent.context
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.image_album_creation, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            Log.d("test", "binded")
+            holder.bind()
+        }
+
+        override fun getItemCount(): Int = posts.size
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+            fun bind() {
+                val image = Uri.parse(posts[adapterPosition])
+                // load image
+                Glide.with(context!!)
+                    .load(image)
+                    .centerCrop()
+                    .into(itemView.galleryImage)
+
+                // adding click or tap handler for the image layout
+                itemView.galleryImage.setOnClickListener {
+                    Log.d("test", "clicked")
+                    listener?.onClick(adapterPosition)
+                }
+            }
+        }
     }
 }

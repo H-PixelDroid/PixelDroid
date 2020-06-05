@@ -170,18 +170,30 @@ class EditPhotoTest {
     @Test
     fun backButton() {
         Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
-        Espresso.onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        Espresso.onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
         assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)    }
 
     @Test
-    fun buttonUploadLaunchNewPostActivity() {
-        Espresso.onView(withId(R.id.action_upload)).perform(click())
-        Thread.sleep(1000)
-        Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
-    }
-
-    @Test
     fun modifiedUploadLaunchesNewPostActivity() {
+        var uri1: String = ""
+        val scenario = ActivityScenario.launch(MainActivity::class.java)
+        scenario.onActivity {
+            val image1 = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+            image1.eraseColor(Color.GREEN)
+            val folder =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            if (!folder.exists()) {
+                folder.mkdir()
+            }
+            val file1 = File.createTempFile("temp_img1", ".png", folder)
+            file1.writeBitmap(image1)
+            uri1 = file1.toUri().toString()
+        }
+
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val intent = Intent(context, PostCreationActivity::class.java).putExtra("pictures_uri", arrayListOf(uri1))
+        activityScenario = ActivityScenario.launch(intent)
+
         Espresso.onView(withId(R.id.recycler_view))
             .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(2, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
         Thread.sleep(1000)
@@ -194,7 +206,7 @@ class EditPhotoTest {
         Thread.sleep(1000)
 
 
-        Espresso.onView(withId(R.id.post_creation_picture_frame)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.image_grid)).check(matches(isDisplayed()))
     }
 
     @Test

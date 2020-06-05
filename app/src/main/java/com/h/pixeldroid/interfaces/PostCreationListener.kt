@@ -1,5 +1,5 @@
 package com.h.pixeldroid.interfaces
 
-interface AlbumCreationListener {
+interface PostCreationListener {
     fun onClick(position: Int)
 }

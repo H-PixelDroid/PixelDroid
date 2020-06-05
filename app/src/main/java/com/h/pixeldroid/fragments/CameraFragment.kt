@@ -2,7 +2,6 @@ package com.h.pixeldroid.fragments
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -29,8 +28,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.h.pixeldroid.AlbumCreationActivity
 import com.h.pixeldroid.PhotoEditActivity
+import com.h.pixeldroid.PostCreationActivity
 import com.h.pixeldroid.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -391,7 +390,7 @@ class CameraFragment : Fragment() {
 
     private fun startAlbumCreation(uris: ArrayList<String>) {
         startActivity(
-            Intent(activity, AlbumCreationActivity::class.java)
+            Intent(activity, PostCreationActivity::class.java)
                 .putExtra("pictures_uri", uris)
         )
     }
