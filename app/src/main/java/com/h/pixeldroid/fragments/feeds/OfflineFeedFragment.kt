@@ -24,10 +24,7 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.db.PostDatabaseEntity
 import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.DBUtils
-import com.h.pixeldroid.utils.HtmlUtils
-import com.h.pixeldroid.utils.ImageConverter
-import com.h.pixeldroid.utils.Utils
+import com.h.pixeldroid.utils.*
 import kotlinx.android.synthetic.main.fragment_offline_feed.view.*
 import kotlinx.android.synthetic.main.post_fragment.view.*
 
@@ -113,6 +110,18 @@ class OfflineFeedFragment: Fragment() {
                     commenter.visibility = View.GONE
                     postDomain.visibility = View.GONE
                     commentIn.visibility = View.GONE
+                    liker.apply {
+                        //de-activate the liker
+                        setEventListener { _, _ ->
+                            false
+                        }
+                    }
+                    reblogger.apply {
+                        //de-activate the reblogger
+                        setEventListener { _, _ ->
+                            false
+                        }
+                    }
                 }
             return OfflinePostViewHolder(view)
         }
