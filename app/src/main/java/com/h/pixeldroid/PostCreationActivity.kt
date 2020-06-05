@@ -171,7 +171,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
                 .subscribe(
                     { attachment: Attachment ->
                         progressList[index] = 0
-                        muListOfIds[index] = attachment.id
+                        muListOfIds[index] = attachment.id!!
                     },
                     { e ->
                         upload_error.visibility = View.VISIBLE
