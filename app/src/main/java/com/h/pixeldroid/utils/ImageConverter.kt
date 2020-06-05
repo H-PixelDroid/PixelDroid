@@ -1,5 +1,6 @@
 package com.h.pixeldroid.utils
 
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.h.pixeldroid.R
+import java.io.File
 
 class ImageConverter {
     companion object {
@@ -70,6 +72,18 @@ class ImageConverter {
          */
         fun setSquareImageFromURL(view : View, url : String?, image : ImageView) {
             Glide.with(view).load(url).apply(RequestOptions().centerCrop()).into(image)
+
+        }
+
+        /**
+         * @brief Loads a given image (via url) as a square image into a given image view
+         * @param view, the view in which this is happening
+         * @param drawable, the drawable of the image
+         * @param image, the imageView into which we will load the image
+         */
+        fun setSquareImageFromDrawable(view : View, drawable : Drawable?, image : ImageView) {
+            Glide.with(view).load(drawable).apply(RequestOptions().centerCrop()).into(image)
+
         }
 
         /**
