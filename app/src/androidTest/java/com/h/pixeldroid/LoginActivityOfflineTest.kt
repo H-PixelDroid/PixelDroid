@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -24,35 +25,43 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class LoginActivityOfflineTest {
 
+    companion object {
+        fun switchAirplaneMode() {
+            val device = UiDevice.getInstance(getInstrumentation())
+            device.openQuickSettings()
+            device.findObject(UiSelector().textContains("airplane")).click()
+            device.pressHome()
+        }
+    }
+
     private lateinit var db: AppDatabase
-    private lateinit var device: UiDevice
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
 
     @Before
     fun before() {
-        device = UiDevice.getInstance(getInstrumentation())
-        device.openQuickSettings()
-        device.findObject(UiSelector().textContains("airplane")).click()
-        device.pressHome()
+        switchAirplaneMode()
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = DBUtils.initDB(context)
         db.clearAllTables()
-        db.close()
+        ActivityScenario.launch(LoginActivity::class.java)
     }
 
     @Test
     fun emptyDBandOfflineModeDisplayCorrectMessage() {
-        ActivityScenario.launch(LoginActivity::class.java)
-        onView(withId(R.id.login_activity_connection_required_text)).check(matches(isDisplayed()))
+        onView(withId(R.id.login_activity_connection_required)).check(matches(isDisplayed()))
     }
 
+    @Test
+    fun retryButtonReloadsLoginActivity() {
+        onView(withId(R.id.login_activity_connection_required_button)).perform(click())
+        onView(withId(R.id.login_activity_connection_required)).check(matches(isDisplayed()))
+    }
 
     @After
     fun after() {
-        device.openQuickSettings()
-        device.findObject(UiSelector().textContains("airplane")).click()
-        device.pressHome()
+        switchAirplaneMode()
+        db.close()
     }
 }
