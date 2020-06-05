@@ -349,8 +349,9 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         val intent = Intent(this, PostCreationActivity::class.java)
         .apply {
             putExtra("result", file)
+            addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         }
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

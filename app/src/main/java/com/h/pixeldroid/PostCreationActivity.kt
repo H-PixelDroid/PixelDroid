@@ -66,12 +66,6 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         // load images
         posts = intent.getStringArrayListExtra("pictures_uri")!!
 
-        adapter = PostCreationAdapter(posts)
-        adapter.listener = this
-        recycler = findViewById(R.id.image_grid)
-        recycler.layoutManager = GridLayoutManager(this, if (posts.size > 2) 2 else 1)
-        recycler.adapter = adapter
-
         val db = DBUtils.initDB(applicationContext)
         user = db.userDao().getActiveUser()
 
@@ -96,6 +90,12 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
         //upload the picture and display progress while doing so
         upload()
+
+        adapter = PostCreationAdapter(posts)
+        adapter.listener = this
+        recycler = findViewById(R.id.image_grid)
+        recycler.layoutManager = GridLayoutManager(this, if (posts.size > 2) 2 else 1)
+        recycler.adapter = adapter
 
         // get the description and send the post
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {

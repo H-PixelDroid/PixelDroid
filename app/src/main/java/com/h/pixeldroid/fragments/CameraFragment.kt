@@ -381,13 +381,6 @@ class CameraFragment : Fragment() {
         }
     }
 
-    private fun startPostCreation(uri: Uri) {
-        startActivity(
-            Intent(activity, PhotoEditActivity::class.java)
-                .putExtra("picture_uri", uri)
-        )
-    }
-
     private fun startAlbumCreation(uris: ArrayList<String>) {
         startActivity(
             Intent(activity, PostCreationActivity::class.java)
