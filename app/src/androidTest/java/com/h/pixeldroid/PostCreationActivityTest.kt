@@ -18,6 +18,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
@@ -129,6 +130,15 @@ class PostCreationActivityTest {
                 CustomMatchers.clickChildViewWithId(R.id.galleryImage)
             )
         )
+        Thread.sleep(1000)
+
+        onView(withId(R.id.recycler_view))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(
+                    2,
+                    CustomMatchers.clickChildViewWithId(R.id.thumbnail)
+                )
+            )
         Thread.sleep(1000)
         onView(withId(R.id.action_upload)).perform(click())
         Thread.sleep(1000)

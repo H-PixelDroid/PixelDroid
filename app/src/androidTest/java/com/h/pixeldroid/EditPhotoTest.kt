@@ -3,11 +3,9 @@ package com.h.pixeldroid
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.widget.SeekBar
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -28,7 +26,6 @@ import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
 import junit.framework.Assert.assertTrue
 import kotlinx.android.synthetic.main.fragment_edit_image.*
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert
 import org.junit.Before
@@ -37,7 +34,6 @@ import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import java.io.File
-import java.net.URI
 
 @RunWith(AndroidJUnit4::class)
 class EditPhotoTest {
@@ -172,42 +168,6 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         Espresso.onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
         assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)    }
-
-    @Test
-    fun modifiedUploadLaunchesNewPostActivity() {
-        var uri1: String = ""
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
-        scenario.onActivity {
-            val image1 = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
-            image1.eraseColor(Color.GREEN)
-            val folder =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            if (!folder.exists()) {
-                folder.mkdir()
-            }
-            val file1 = File.createTempFile("temp_img1", ".png", folder)
-            file1.writeBitmap(image1)
-            uri1 = file1.toUri().toString()
-        }
-
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val intent = Intent(context, PostCreationActivity::class.java).putExtra("pictures_uri", arrayListOf(uri1))
-        activityScenario = ActivityScenario.launch(intent)
-
-        Espresso.onView(withId(R.id.recycler_view))
-            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(2, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
-        Thread.sleep(1000)
-
-        Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
-        Espresso.onView(withId(R.id.seekbar_brightness)).perform(setProgress(5))
-        Thread.sleep(1000)
-
-        Espresso.onView(withId(R.id.action_upload)).perform(click())
-        Thread.sleep(1000)
-
-
-        Espresso.onView(withId(R.id.image_grid)).check(matches(isDisplayed()))
-    }
 
     @Test
     fun croppingIsPossible() {

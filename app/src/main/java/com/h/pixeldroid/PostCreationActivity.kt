@@ -25,6 +25,7 @@ import com.h.pixeldroid.interfaces.PostCreationListener
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.utils.ProgressRequestBody
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
