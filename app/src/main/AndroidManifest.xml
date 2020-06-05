@@ -27,8 +27,6 @@
         <activity
             android:name=".PhotoEditActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".AlbumCreationActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".PostCreationActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity"
