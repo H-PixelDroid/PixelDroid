@@ -98,4 +98,7 @@
     <string name="write_permission_share_pic">Für die Teilen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
     <string name="follow_status_failed">Konnte den Folgestatus nicht erhalten</string>
     <string name="retry">Wiederholen</string>
+    <string name="crop_result_error">Konnte das Bild nach dem Zuschneiden nicht verarbeiten</string>
+    <string name="busy_dialog_ok_button">Ok, warten.</string>
+    <string name="busy_dialog_text">Das Bild wird noch verarbeitet, warte bis es fertig ist!</string>
 </resources>

@@ -23,7 +23,7 @@ import java.util.Locale
 class HtmlUtils {
     companion object {
 
-        private fun fromHtml(html: String): Spanned {
+        fun fromHtml(html: String): Spanned {
             val result: Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
             } else {

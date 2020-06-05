@@ -44,7 +44,7 @@ abstract class PostUtils {
             post : Status
         ) {
             //Call the api function
-            api.reblogStatus(credential, post.id).enqueue(object : Callback<Status> {
+            api.reblogStatus(credential, post.id!!).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("REBLOG ERROR", t.toString())
                     holder.reblogger.isChecked = false
@@ -56,7 +56,7 @@ abstract class PostUtils {
 
                         //Update shown share count
                         holder.nshares.text = resp.getNShares(holder.context)
-                        holder.reblogger.isChecked = resp.reblogged
+                        holder.reblogger.isChecked = resp.reblogged!!
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
                         holder.reblogger.isChecked = false
@@ -73,7 +73,7 @@ abstract class PostUtils {
             post : Status
         ) {
             //Call the api function
-            api.undoReblogStatus(credential, post.id).enqueue(object : Callback<Status> {
+            api.undoReblogStatus(credential, post.id!!).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("REBLOG ERROR", t.toString())
                     holder.reblogger.isChecked = true
@@ -85,7 +85,7 @@ abstract class PostUtils {
 
                         //Update shown share count
                         holder.nshares.text = resp.getNShares(holder.context)
-                        holder.reblogger.isChecked = resp.reblogged
+                        holder.reblogger.isChecked = resp.reblogged!!
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
                         holder.reblogger.isChecked = true
@@ -102,7 +102,7 @@ abstract class PostUtils {
             post : Status
         ) {
             //Call the api function
-            api.likePost(credential, post.id).enqueue(object : Callback<Status> {
+            api.likePost(credential, post.id!!).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("LIKE ERROR", t.toString())
                     holder.liker.isChecked = false
@@ -114,7 +114,7 @@ abstract class PostUtils {
 
                         //Update shown like count and internal like toggle
                         holder.nlikes.text = resp.getNLikes(holder.context)
-                        holder.liker.isChecked = resp.favourited
+                        holder.liker.isChecked = resp.favourited ?: false
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
                         holder.liker.isChecked = false
@@ -131,7 +131,7 @@ abstract class PostUtils {
             post : Status
         ) {
             //Call the api function
-            api.unlikePost(credential, post.id).enqueue(object : Callback<Status> {
+            api.unlikePost(credential, post.id!!).enqueue(object : Callback<Status> {
                 override fun onFailure(call: Call<Status>, t: Throwable) {
                     Log.e("UNLIKE ERROR", t.toString())
                     holder.liker.isChecked = true
@@ -143,7 +143,7 @@ abstract class PostUtils {
 
                         //Update shown like count and internal like toggle
                         holder.nlikes.text = resp.getNLikes(holder.context)
-                        holder.liker.isChecked = resp.favourited
+                        holder.liker.isChecked = resp.favourited ?: false
                     } else {
                         Log.e("RESPONSE_CODE", response.code().toString())
                         holder.liker.isChecked = true
@@ -177,7 +177,9 @@ abstract class PostUtils {
                         holder.commentIn.visibility = View.GONE
 
                         //Add the comment to the comment section
-                        addComment(holder.context, holder.commentCont, resp.account.username, resp.content)
+                        addComment(holder.context, holder.commentCont, resp.account!!.username,
+                            resp.content!!
+                        )
 
                         Toast.makeText(holder.context,
                             holder.context.getString(R.string.comment_posted).format(textIn),
@@ -205,7 +207,7 @@ abstract class PostUtils {
             credential: String,
             post : Status
         ) {
-            api.statusComments(post.id, credential).enqueue(object :
+            api.statusComments(post.id!!, credential).enqueue(object :
                 Callback<Context> {
                 override fun onFailure(call: Call<Context>, t: Throwable) {
                     Log.e("COMMENT FETCH ERROR", t.toString())
@@ -220,7 +222,9 @@ abstract class PostUtils {
 
                         //Create the new views for each comment
                         for (status in statuses) {
-                            addComment(holder.context, holder.commentCont, status.account.username, status.content)
+                            addComment(holder.context, holder.commentCont, status.account!!.username,
+                                status.content!!
+                            )
                         }
                     } else {
                         Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")

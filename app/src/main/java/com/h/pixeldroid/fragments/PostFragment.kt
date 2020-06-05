@@ -45,14 +45,17 @@ class PostFragment : Fragment() {
         current_status?.setDescription(root, api, "Bearer $accessToken")
 
         //Activate onclickListeners
-        current_status?.activateLiker(holder, api, "Bearer $accessToken", current_status.favourited)
-        current_status?.activateReblogger(holder, api, "Bearer $accessToken", current_status.reblogged)
+        current_status?.activateLiker(holder, api, "Bearer $accessToken",
+            current_status.favourited ?: false
+        )
+        current_status?.activateReblogger(holder, api, "Bearer $accessToken",
+            current_status.reblogged ?: false
+        )
         current_status?.activateCommenter(holder, api, "Bearer $accessToken")
         current_status?.showComments(holder, api, "Bearer $accessToken")
 
         //Activate double tap liking
         current_status?.activateDoubleTapLiker(holder, api, "Bearer $accessToken")
-
         return root
     }
 
