@@ -44,7 +44,7 @@
     <string name="instance_error">No se pudo obtener información del nodo</string>
     <string name="hashtags">HASHTAGS</string>
     <string name="retry">Reintentar</string>
-    <string name="posting_image_accessibility_hint">Imagen que se está publicando</string>
+    <string name="posting_image_accessibility_hint">Imagen que se va a publicar</string>
     <string name="media_upload_failed">{gmd_cloud_off} La carga de los medios falló, inténtalo de nuevo o comprueba las condiciones de la red</string>
     <string name="media_upload_completed">{gmd_cloud_done} Carga de medios completada</string>
     <string name="accounts">CUENTAS</string>
