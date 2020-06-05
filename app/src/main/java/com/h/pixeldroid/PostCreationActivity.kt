@@ -108,7 +108,8 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         // Button to retry image upload when it fails
         findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
             upload_error.visibility = View.GONE
-            muListOfIds.clear()
+            muListOfIds = posts.map { "" }.toMutableList()
+            progressList = posts.map { 0 } as ArrayList<Int>
             upload()
         }
     }
