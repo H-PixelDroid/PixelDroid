@@ -51,14 +51,14 @@ https://docs.joinmastodon.org/entities/status/
  */
 data class Status(
     //Base attributes
-    override val id: String,
-    val uri: String = "",
-    val created_at: String = "", //ISO 8601 Datetime (maybe can use a date type)
-    val account: Account,
-    val content: String = "", //HTML
-    val visibility: Visibility = Visibility.public,
-    val sensitive: Boolean = false,
-    val spoiler_text: String = "",
+    override val id: String?,
+    val uri: String? = "",
+    val created_at: String? = "", //ISO 8601 Datetime (maybe can use a date type)
+    val account: Account?,
+    val content: String? = "", //HTML
+    val visibility: Visibility? = Visibility.public,
+    val sensitive: Boolean? = false,
+    val spoiler_text: String? = "",
     val media_attachments: List<Attachment>? = null,
     val application: Application? = null,
     //Rendering attributes
@@ -66,9 +66,9 @@ data class Status(
     val tags: List<Tag>? = null,
     val emojis: List<Emoji>? = null,
     //Informational attributes
-    val reblogs_count: Int = 0,
-    val favourites_count: Int = 0,
-    val replies_count: Int = 0,
+    val reblogs_count: Int? = 0,
+    val favourites_count: Int? = 0,
+    val replies_count: Int? = 0,
     //Nullable attributes
     val url: String? = null, //URL
     val in_reply_to_id: String? = null,
@@ -79,11 +79,11 @@ data class Status(
     val language: String? = null, //ISO 639 Part 1 two-letter language code
     val text: String? = null,
     //Authorized user attributes
-    val favourited: Boolean = false,
-    val reblogged: Boolean = false,
-    val muted: Boolean = false,
-    val bookmarked: Boolean = false,
-    val pinned: Boolean = false
+    val favourited: Boolean? = false,
+    val reblogged: Boolean? = false,
+    val muted: Boolean? = false,
+    val bookmarked: Boolean? = false,
+    val pinned: Boolean? = false
 ) : Serializable, FeedContent()
 {
 
@@ -91,26 +91,48 @@ data class Status(
         const val POST_TAG = "postTag"
         const val DOMAIN_TAG = "domainTag"
         const val DISCOVER_TAG = "discoverTag"
+
+        fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean, context: Context) {
+            var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
+            if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}Z".toRegex())) {
+                format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
+            } else if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}+[0-9]{2}:[0-9]{2}".toRegex())) {
+                format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+hh:mm")
+            }
+            val now = Date().time
+
+            try {
+                val date: Date = format.parse(dateString)!!
+                val then = date.time
+                val formattedDate = android.text.format.DateUtils
+                    .getRelativeTimeSpanString(then, now,
+                        android.text.format.DateUtils.SECOND_IN_MILLIS,
+                        android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
+
+                textView.text = if(isActivity) context.getString(R.string.posted_on).format(date)
+                else "$formattedDate"
+
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    fun getPostUrl() : String? = media_attachments?.getOrNull(0)?.url
-    fun getProfilePicUrl() : String? = account.avatar
-    fun getPostPreviewURL() : String? = media_attachments?.getOrNull(0)?.preview_url
+    fun getPostUrl() : String? = media_attachments?.firstOrNull()?.url
+    fun getProfilePicUrl() : String? = account?.avatar
+    fun getPostPreviewURL() : String? = media_attachments?.firstOrNull()?.preview_url
 
     /**
      * @brief returns the parsed version of the HTML description
      */
-    private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned {
-        val description = content
-        if(description.isEmpty()) {
-            return context.getString(R.string.no_description).toSpanned()
-        }
-        return parseHTMLText(description, mentions, api, context, credential)
+    private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned =
+        parseHTMLText(content ?: "", mentions, api, context, credential)
 
+    fun getUsername() : CharSequence = when {
+        account?.username.isNullOrBlank() && account?.display_name.isNullOrBlank() -> "No Name"
+        account!!.username.isNullOrBlank() -> account.display_name as CharSequence
+        else -> account.username as CharSequence
     }
-
-    fun getUsername() : CharSequence =
-        account.username.ifBlank{account.display_name.ifBlank{"NoName"}}
 
     fun getNLikes(context: Context) : CharSequence {
         return context.getString(R.string.likes).format(favourites_count.toString())
@@ -120,33 +142,8 @@ data class Status(
         return context.getString(R.string.shares).format(reblogs_count.toString())
     }
 
-    private fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean, context: Context) {
-        var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
-        if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}Z".toRegex())) {
-            format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
-        } else if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}+[0-9]{2}:[0-9]{2}".toRegex())) {
-            format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+hh:mm")
-        }
-        val now = Date().time
-
-        try {
-            val date: Date = format.parse(dateString)!!
-            val then = date.time
-            val formattedDate = android.text.format.DateUtils
-                .getRelativeTimeSpanString(then, now,
-                    android.text.format.DateUtils.SECOND_IN_MILLIS,
-                    android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
-
-            textView.text = if(isActivity) context.getString(R.string.posted_on).format(date)
-                            else "$formattedDate"
-
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-    }
-
     private fun getStatusDomain(domain : String) : String {
-        val accountDomain = getDomain(account.url)
+        val accountDomain = getDomain(account!!.url)
         return if(getDomain(domain) == accountDomain) ""
         else " from $accountDomain"
 
@@ -159,7 +156,7 @@ data class Status(
         rootView.postPager.visibility = GONE
         rootView.postTabs.visibility = GONE
 
-        if (sensitive) {
+        if (sensitive!!) {
             setupSensitiveLayout(rootView, request, homeFragment)
             request.load(this.getPostUrl()).into(rootView.postPicture)
 
@@ -187,7 +184,7 @@ data class Status(
 
         //Fill the tabs with each mediaAttachment
         for(media in media_attachments!!) {
-            tabs.add(ImageFragment.newInstance(media.url))
+            tabs.add(ImageFragment.newInstance(media.url!!))
         }
 
         setupTabs(tabs, rootView, homeFragment)
@@ -222,7 +219,7 @@ data class Status(
         rootView.findViewById<TextView>(R.id.username).apply {
             text = this@Status.getUsername()
             setTypeface(null, Typeface.BOLD)
-            setOnClickListener { account.openProfile(rootView.context) }
+            setOnClickListener { account?.openProfile(rootView.context) }
         }
 
         rootView.findViewById<TextView>(R.id.usernameDesc).apply {
@@ -241,7 +238,7 @@ data class Status(
         }
 
         //Convert the date to a readable string
-        ISO8601toDate(created_at, rootView.postDate, isActivity, rootView.context)
+        ISO8601toDate(created_at!!, rootView.postDate, isActivity, rootView.context)
 
         rootView.postDomain.text = getStatusDomain(domain)
 
@@ -251,7 +248,7 @@ data class Status(
             this.getProfilePicUrl(),
             rootView.profilePic
         )
-        rootView.profilePic.setOnClickListener { account.openProfile(rootView.context) }
+        rootView.profilePic.setOnClickListener { account?.openProfile(rootView.context) }
 
         //Setup post pic only if there are media attachments
         if(!media_attachments.isNullOrEmpty()) {
@@ -267,8 +264,12 @@ data class Status(
         val desc = rootView.findViewById<TextView>(R.id.description)
 
         desc.apply {
-            text = this@Status.getDescription(api, rootView.context, credential)
-            movementMethod = LinkMovementMethod.getInstance()
+            if (content.isNullOrBlank()) {
+                visibility = GONE
+            } else {
+                text = parseHTMLText(content, mentions, api, rootView.context, credential)
+                movementMethod = LinkMovementMethod.getInstance()
+            }
         }
     }
 

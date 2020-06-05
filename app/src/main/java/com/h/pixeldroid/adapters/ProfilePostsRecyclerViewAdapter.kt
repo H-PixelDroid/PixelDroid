@@ -34,7 +34,7 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecycler
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
 
-        if (post.sensitive)
+        if (post.sensitive!!)
             setSquareImageFromDrawable(holder.postView, getDrawable(holder.postView.context, R.drawable.ic_sensitive), holder.postPreview)
         else
             setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)

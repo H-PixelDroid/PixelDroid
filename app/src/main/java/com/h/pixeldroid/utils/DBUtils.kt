@@ -4,13 +4,17 @@ import android.content.Context
 import androidx.room.Room
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.PostDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Instance
+import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.Utils.Companion.normalizeDomain
 
 class DBUtils {
     companion object {
+        private const val MAX_NUMBER_OF_STORED_POSTS = 200
+
         fun initDB(context: Context): AppDatabase {
             return Room.databaseBuilder(
                 context,
@@ -50,6 +54,41 @@ class DBUtils {
                 thumbnail = instance.thumbnail
             )
             db.instanceDao().insertInstance(dbInstance)
+        }
+
+        fun storePosts(
+            db: AppDatabase,
+            data: List<*>,
+            user: UserDatabaseEntity
+        ) {
+            val dao = db.postDao()
+            data.forEach { post ->
+                if (post is Status
+                    && !post.media_attachments.isNullOrEmpty()
+                    && dao.count(post.uri ?: "", user.user_id, user.instance_uri) == 0) {
+                    val nPosts = dao.numberOfPosts(user.user_id, user.instance_uri) - MAX_NUMBER_OF_STORED_POSTS
+                    if (nPosts > 0) {
+                        dao.removeOlderPosts(nPosts)
+                    }
+                    dao.insertPost(PostDatabaseEntity(
+                        user_id = user.user_id,
+                        instance_uri = user.instance_uri,
+                        uri = post.uri ?: "",
+                        account_profile_picture = post.getProfilePicUrl() ?: "",
+                        account_name = post.getUsername().toString(),
+                        media_urls = post.media_attachments.map {
+                                attachment -> attachment.url ?: ""
+                        },
+                        favourite_count = post.favourites_count ?: 0,
+                        reply_count = post.replies_count ?: 0,
+                        share_count = post.reblogs_count ?: 0,
+                        description = post.content ?: "",
+                        date = post.created_at ?: "",
+                        likes = post.favourites_count ?: 0,
+                        shares = post.reblogs_count ?: 0
+                    ))
+                }
+            }
         }
     }
 }

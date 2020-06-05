@@ -89,4 +89,5 @@
     <string name="follow_status_failed">Kon volgstatus niet ophalen</string>
     <string name="nb_posts">%1$s
 \nPosts</string>
+    <string name="busy_dialog_ok_button">Ok, wacht.</string>
 </resources>

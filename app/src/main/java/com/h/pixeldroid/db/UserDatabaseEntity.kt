@@ -2,6 +2,7 @@ package com.h.pixeldroid.db
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 
 @Entity(
     tableName = "users",
@@ -12,7 +13,8 @@ import androidx.room.ForeignKey
         childColumns = arrayOf("instance_uri"),
         onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["instance_uri"])]
 )
 data class UserDatabaseEntity (
     var user_id: String,
