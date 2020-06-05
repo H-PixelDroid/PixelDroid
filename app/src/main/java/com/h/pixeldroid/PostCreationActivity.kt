@@ -89,7 +89,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         // TODO
 
         //upload the picture and display progress while doing so
-        upload()
+        upload(posts)
 
         adapter = PostCreationAdapter(posts)
         adapter.listener = this
@@ -106,7 +106,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
             upload_error.visibility = View.GONE
             muListOfIds.clear()
-            upload()
+            upload(posts)
         }
     }
 
@@ -123,8 +123,8 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         return true
     }
 
-    private fun upload() {
-        for (post in posts) {
+    private fun upload(arrayLinks: ArrayList<String>) {
+        for (post in arrayLinks) {
             val imageUri = Uri.parse(post)
             val imageInputStream = contentResolver.openInputStream(imageUri)!!
 
@@ -240,7 +240,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
                 posts[positionResult] = data.getStringExtra("result")!!
                 adapter.notifyItemChanged(positionResult)
                 muListOfIds.clear()
-                upload()
+                upload(arrayListOf(posts[positionResult]))
             }
             else if(resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(applicationContext, "Edition cancelled", Toast.LENGTH_SHORT).show()
