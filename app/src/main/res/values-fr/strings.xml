@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="registration_failed">Impossible d\'enregistrer l\'application sur ce serveur</string>
-    <string name="auth_failed">Échec de l\'autentification</string>
+    <string name="auth_failed">Échec de l’authentification</string>
     <string name="title_activity_settings2">Réglages</string>
     <string name="menu_account">Mon profil</string>
     <string name="menu_settings">Réglages</string>
