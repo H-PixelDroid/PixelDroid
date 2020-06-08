@@ -5,9 +5,9 @@
     <string name="title_activity_settings2">Настройки</string>
     <string name="theme_title">Тема приложения</string>
     <string name="theme_header">Тема</string>
-    <string name="followed_notification">%1$s подписался на вас</string>
-    <string name="mention_notification">%1$s упомянул вас</string>
-    <string name="shared_notification">%1$s поделился вашим постом</string>
+    <string name="followed_notification">%1$s подписался(-лась) на вас</string>
+    <string name="mention_notification">%1$s упомянул(а) вас</string>
+    <string name="shared_notification">%1$s поделился(-лась) вашим постом</string>
     <string name="send">отправить</string>
     <string name="logout">Выйти</string>
     <string name="lbl_brightness">ЯРКОСТЬ</string>
@@ -21,7 +21,7 @@
     <string name="image_download_success">Изображение успешно загружено</string>
     <string name="switch_camera_button_alt">Переключить камеру</string>
     <string name="gallery_button_alt">Галерея</string>
-    <string name="NoCommentsToShow">Под этим постом нет комментариев…</string>
+    <string name="NoCommentsToShow">Нет комментариев…</string>
     <string name="CommentDisplay">показать…</string>
     <string name="domain_of_your_instance">Домен вашего инстанса</string>
     <string name="connect_to_pixelfed">Подключение к Pixelfed</string>
@@ -30,7 +30,7 @@
     <string name="menu_settings">Настройки</string>
     <string name="invalid_domain">Неправильное доменное имя</string>
     <string name="browser_launch_failed">Не удалось запустить браузер, есть ли он у вас\?</string>
-    <string name="liked_notification">%1$s понравился ваш пост</string>
+    <string name="liked_notification">%1$s оценил(а) ваш пост</string>
     <string name="description">Описание…</string>
     <string name="image_download_failed">Скачивание не удалось, попробуйте ещё раз</string>
     <string name="share_picture">Поделиться изображением…</string>
@@ -79,7 +79,7 @@
     <string name="follow_error">Не удалось подписаться</string>
     <string name="action_not_allowed">Это действие запрещено</string>
     <string name="unfollow_error">Не удалось отписаться</string>
-    <string name="access_token_invalid">Этот токен доступа недействительный</string>
+    <string name="access_token_invalid">Недействительный токен доступа</string>
     <string name="default_nposts">-
 \nПостов</string>
     <string name="default_nfollowers">-
@@ -99,7 +99,7 @@
     <string name="retry">Попробовать снова</string>
     <string name="media_upload_failed">{gmd_cloud_off} Загрузка медиа не удалась, попробуйте снова или проверте состояние сети</string>
     <string name="nothing_to_see_here">Здесь ничего нет!</string>
-    <string name="crop_result_error">Не удалось получить изображение после кропа</string>
+    <string name="crop_result_error">Не удалось получить изображение после обрезки</string>
     <string name="busy_dialog_ok_button">Хорошо, подожду.</string>
     <string name="busy_dialog_text">Изображение обрабатывается, дождитесь окончания процесса!</string>
 </resources>
