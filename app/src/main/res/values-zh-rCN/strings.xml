@@ -98,4 +98,8 @@
     <string name="default_theme">默认（跟随系统设置）</string>
     <string name="light_theme">浅色</string>
     <string name="dark_theme">深色</string>
+    <string name="nothing_to_see_here">这里什么也没有！</string>
+    <string name="crop_result_error">图像裁剪后无法恢复</string>
+    <string name="busy_dialog_ok_button">好的</string>
+    <string name="busy_dialog_text">图像仍在处理中，请先等待完成！</string>
 </resources>
