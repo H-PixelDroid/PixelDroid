@@ -94,8 +94,12 @@
     <string name="dark_theme">Escuro</string>
     <string name="light_theme">Claro</string>
     <string name="default_theme">Por omisión (do sistema)</string>
-    <string name="media_upload_failed"></string>
-    <string name="posting_image_accessibility_hint"></string>
-    <string name="media_upload_completed"></string>
-    <string name="retry"></string>
+    <string name="media_upload_failed">{gmd_cloud_off} Fallou a subida do ficheiro, inténtao outra vez e comproba a conexión</string>
+    <string name="posting_image_accessibility_hint">Imaxe que se publicou</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Subida do ficheiro completada</string>
+    <string name="retry">Reintentar</string>
+    <string name="nothing_to_see_here">Nada por aquí!</string>
+    <string name="crop_result_error">Tras o recorte non se puido obter a imaxe</string>
+    <string name="busy_dialog_ok_button">OK, agardo.</string>
+    <string name="busy_dialog_text">Estase procesando a imaxe, agarda a que remate!</string>
 </resources>
