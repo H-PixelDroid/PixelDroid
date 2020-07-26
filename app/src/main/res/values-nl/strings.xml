@@ -74,8 +74,8 @@
     <string name="upload_post_failed">Kon post niet uploaden</string>
     <string name="save_image_failed">Kon afbeelding niet opslaan</string>
     <string name="permission_denied">Toestemming geweigerd</string>
-    <string name="default_theme">Standaard (volg systeem instelling)</string>
-    <string name="instance_error">Kon informatie niet ophalen van deze server</string>
+    <string name="default_theme">Standaard (systeem instelling)</string>
+    <string name="instance_error">Kon instance-informatie niet ophalen</string>
     <string name="likes">%1$s Vind-ik-leuks</string>
     <string name="request_format_error">Fout bij het uploaden: slecht verzoekformaat</string>
     <string name="shares">%1$s keer gedeeld</string>
@@ -90,4 +90,16 @@
     <string name="nb_posts">%1$s
 \nPosts</string>
     <string name="busy_dialog_ok_button">Ok, wacht.</string>
+    <string name="crop_result_error">Kon de afbeelding niet ophalen na bijsnijden</string>
+    <string name="busy_dialog_text">Bezig met het verwerken van de afbeelding, wacht even tot dat het klaar is!</string>
+    <string name="follow_error">Kon niet volgen</string>
+    <string name="feed_failed">Kon de feed niet halen</string>
+    <string name="nothing_to_see_here">Niets te zien hier!</string>
+    <string name="access_token_invalid">De toegangscode is ongeldig</string>
+    <string name="posting_image_accessibility_hint">Afbeelding die geplaatst wordt</string>
+    <string name="hashtags">HASHTAGS</string>
+    <string name="accounts">PROFIELEN</string>
+    <string name="posts">BERICHTEN</string>
+    <string name="unfollow_error">Kon niet ontvolgen</string>
+    <string name="follow_button_failed">Kan volg knop niet weergeven</string>
 </resources>
