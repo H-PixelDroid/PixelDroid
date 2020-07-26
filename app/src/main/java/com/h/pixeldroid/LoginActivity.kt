@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Application
 import com.h.pixeldroid.objects.Instance
@@ -26,6 +26,7 @@ import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 
 class LoginActivity : AppCompatActivity() {
@@ -38,7 +39,12 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var oauthScheme: String
     private lateinit var appName: String
     private lateinit var preferences: SharedPreferences
-    private lateinit var db: AppDatabase
+    @Inject
+    lateinit var db: AppDatabase
+
+    @Inject
+    lateinit var apiHolder: PixelfedAPIHolder
+
     private lateinit var pixelfedAPI: PixelfedAPI
     private var inputVisibility: Int = View.GONE
 
@@ -46,11 +52,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        (application as Pixeldroid).getAppComponent().inject(this)
         loadingAnimation(true)
         appName = getString(R.string.app_name)
         oauthScheme = getString(R.string.auth_scheme)
         preferences = getSharedPreferences("$PACKAGE_ID.pref", Context.MODE_PRIVATE)
-        db = DBUtils.initDB(applicationContext)
 
         if (Utils.hasInternet(applicationContext)) {
             connect_instance_button.setOnClickListener {
@@ -61,8 +67,8 @@ class LoginActivity : AppCompatActivity() {
         } else {
             login_activity_connection_required.visibility = View.VISIBLE
             login_activity_connection_required_button.setOnClickListener {
-                finish();
-                startActivity(intent);
+                finish()
+                startActivity(intent)
             }
         }
         loadingAnimation(false)
@@ -113,7 +119,7 @@ class LoginActivity : AppCompatActivity() {
         hideKeyboard()
         loadingAnimation(true)
 
-        PixelfedAPI.create(normalizedDomain).registerApplication(
+        apiHolder.setDomain(normalizedDomain).registerApplication(
             appName,"$oauthScheme://$PACKAGE_ID", SCOPE
         ).enqueue(object : Callback<Application> {
             override fun onResponse(call: Call<Application>, response: Response<Application>) {
@@ -185,7 +191,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        pixelfedAPI = PixelfedAPI.create(domain)
+        pixelfedAPI = apiHolder.setDomain(domain)
         pixelfedAPI.obtainToken(
             clientId, clientSecret, "$oauthScheme://$PACKAGE_ID", SCOPE, code,
             "authorization_code"
@@ -242,7 +248,7 @@ class LoginActivity : AppCompatActivity() {
             .enqueue(object : Callback<Account> {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
                     if (response.body() != null && response.isSuccessful) {
-                        db.userDao().deActivateActiveUser()
+                        db.userDao().deActivateActiveUsers()
                         val user = response.body() as Account
                         DBUtils.addUser(
                             db,
@@ -251,7 +257,7 @@ class LoginActivity : AppCompatActivity() {
                             activeUser = true,
                             accessToken = accessToken
                         )
-                        db.close()
+                        apiHolder.setDomainToCurrentUser(db)
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)

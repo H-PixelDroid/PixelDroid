@@ -20,13 +20,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.MainActivity
+import com.h.pixeldroid.Pixeldroid
 import com.h.pixeldroid.R
+import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.PostDatabaseEntity
 import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.*
 import kotlinx.android.synthetic.main.fragment_offline_feed.view.*
 import kotlinx.android.synthetic.main.post_fragment.view.*
+import javax.inject.Inject
 
 
 class OfflineFeedFragment: Fragment() {
@@ -35,6 +38,9 @@ class OfflineFeedFragment: Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     lateinit var picRequest: RequestBuilder<Drawable>
+    @Inject
+    lateinit var db: AppDatabase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +59,9 @@ class OfflineFeedFragment: Fragment() {
         picRequest = Glide.with(this)
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
-        val db = DBUtils.initDB(requireContext())
+
+        (requireActivity().application as Pixeldroid).getAppComponent().inject(this)
+
         val user = db.userDao().getActiveUser()!!
         if (db.postDao().numberOfPosts(user.user_id, user.instance_uri) > 0) {
             val posts = db.postDao().getAll(user.user_id, user.instance_uri)

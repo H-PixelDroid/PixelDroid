@@ -13,7 +13,7 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.testUtility.initDB
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -43,7 +43,7 @@ class LoginActivityOfflineTest {
     fun before() {
         switchAirplaneMode()
         val context = ApplicationProvider.getApplicationContext<Context>()
-        db = DBUtils.initDB(context)
+        db = initDB(context)
         db.clearAllTables()
         ActivityScenario.launch(LoginActivity::class.java)
     }

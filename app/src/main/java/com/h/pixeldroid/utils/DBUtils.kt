@@ -1,7 +1,5 @@
 package com.h.pixeldroid.utils
 
-import android.content.Context
-import androidx.room.Room
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.PostDatabaseEntity
@@ -15,12 +13,6 @@ class DBUtils {
     companion object {
         private const val MAX_NUMBER_OF_STORED_POSTS = 200
 
-        fun initDB(context: Context): AppDatabase {
-            return Room.databaseBuilder(
-                context,
-                AppDatabase::class.java, "pixeldroid"
-            ).allowMainThreadQueries().build()
-        }
         private fun normalizeOrNot(uri: String): String{
             return if(uri.startsWith("http://localhost")){
                 uri

@@ -1,4 +1,4 @@
-package com.h.pixeldroid.fragments.feeds
+package com.h.pixeldroid.fragments.feeds.postFeeds
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import at.connyduck.sparkbutton.SparkButton
@@ -20,24 +19,23 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
 import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.R
-import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.fragments.feeds.FeedFragment
+import com.h.pixeldroid.fragments.feeds.FeedsRecyclerViewAdapter
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.DBUtils
-import retrofit2.Call
 
-open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
+abstract class PostsFeedFragment : FeedFragment() {
 
     lateinit var picRequest: RequestBuilder<Drawable>
     lateinit var domain : String
-    private var user: UserDatabaseEntity? = null
+    protected lateinit var adapter : FeedsRecyclerViewAdapter<Status, PostViewHolder>
+    lateinit var factory: FeedDataSourceFactory<String, Status>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        val db = DBUtils.initDB(requireContext())
-        user = db.userDao().getActiveUser()
 
         domain = user?.instance_uri.orEmpty()
         //RequestBuilder that is re-used for every image
@@ -45,14 +43,13 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        adapter = PostsFeedRecyclerViewAdapter(this)
+        adapter = PostsFeedRecyclerViewAdapter()
         list.adapter = adapter
-
 
         //Make Glide be aware of the recyclerview and pre-load images
         val sizeProvider: ListPreloader.PreloadSizeProvider<Status> = ViewPreloadSizeProvider()
         val preloader: RecyclerViewPreloader<Status> = RecyclerViewPreloader(
-            Glide.with(this), adapter as PostsFeedFragment.PostsFeedRecyclerViewAdapter, sizeProvider, 4
+            Glide.with(this), adapter as PostsFeedRecyclerViewAdapter, sizeProvider, 4
         )
         list.addOnScrollListener(preloader)
 
@@ -61,35 +58,26 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        content = makeContent()
+        val content = makeContent()
         content.observe(viewLifecycleOwner,
             Observer { c ->
                 adapter.submitList(c)
                 //after a refresh is done we need to stop the pull to refresh spinner
                 swipeRefreshLayout.isRefreshing = false
             })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            //by invalidating data, loadInitial will be called again
+            factory.liveData.value!!.invalidate()
+        }
     }
 
-    internal open fun makeContent(): LiveData<PagedList<Status>> {
-        fun makeInitialCall(requestedLoadSize: Int): Call<List<Status>> {
-            return pixelfedAPI
-                .timelineHome("Bearer $accessToken", limit="$requestedLoadSize")
-        }
-        fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Status>> {
-            return pixelfedAPI
-                .timelineHome("Bearer $accessToken", max_id=key,
-                    limit="$requestedLoadSize")
-        }
-        val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        val dataSource = FeedDataSource(::makeInitialCall, ::makeAfterCall)
-        factory = FeedDataSourceFactory(dataSource)
-        return LivePagedListBuilder(factory, config).build()
-    }
+    internal abstract fun makeContent(): LiveData<PagedList<Status>>
 
     /**
      * [RecyclerView.Adapter] that can display a list of Statuses
      */
-    inner class PostsFeedRecyclerViewAdapter(private val postsFeedFragment: PostsFeedFragment)
+    inner class PostsFeedRecyclerViewAdapter
         : FeedsRecyclerViewAdapter<Status, PostViewHolder>(),
         ListPreloader.PreloadModelProvider<Status> {
         private val api = pixelfedAPI
@@ -98,7 +86,10 @@ open class PostsFeedFragment : FeedFragment<Status, PostViewHolder>() {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.post_fragment, parent, false)
             context = view.context
-            return PostViewHolder(view, context)
+            return PostViewHolder(
+                view,
+                context
+            )
         }
 
         /**

@@ -27,6 +27,7 @@ import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.objects.Tag
 
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.initDB
 import com.h.pixeldroid.utils.DBUtils
 import org.hamcrest.Matcher
 import org.junit.*
@@ -49,7 +50,7 @@ class PostTest {
         val mockServer = MockServer()
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        db = DBUtils.initDB(context)
+        db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
             InstanceDatabaseEntity(

@@ -14,8 +14,10 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.R
+import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.fragments.feeds.FeedFragment
 import com.h.pixeldroid.fragments.feeds.FeedsRecyclerViewAdapter
+import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Results
 import com.h.pixeldroid.objects.Tag
 import kotlinx.android.synthetic.main.fragment_tags.view.*
@@ -23,9 +25,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchHashtagFragment: FeedFragment<Tag, SearchHashtagFragment.TagsRecyclerViewAdapter.ViewHolder>(){
+class SearchHashtagFragment: FeedFragment(){
 
     private lateinit var query: String
+    private lateinit var content: LiveData<PagedList<Tag>>
+    protected lateinit var adapter : TagsRecyclerViewAdapter
+    lateinit var factory: FeedDataSourceFactory<Int, Tag>
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,43 +57,45 @@ class SearchHashtagFragment: FeedFragment<Tag, SearchHashtagFragment.TagsRecycle
                 //after a refresh is done we need to stop the pull to refresh spinner
                 swipeRefreshLayout.isRefreshing = false
             })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            //by invalidating data, loadInitial will be called again
+            factory.liveData.value!!.invalidate()
+        }
     }
 
-    inner class SearchTagsListDataSource: FeedDataSource(null, null){
+    inner class SearchTagsListDataSource: FeedDataSource<Int, Tag>(){
 
-        override fun newSource(): FeedDataSource {
+        override fun newSource(): SearchTagsListDataSource {
             return SearchTagsListDataSource()
         }
 
-        private fun makeInitialCall(requestedLoadSize: Int): Call<Results> {
+        private fun searchMakeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken",
                     limit="$requestedLoadSize", q=query,
                     type = Results.SearchType.hashtags)
         }
-        private fun makeAfterCall(requestedLoadSize: Int, key: String): Call<Results> {
+        private fun searchMakeAfterCall(requestedLoadSize: Int, key: Int): Call<Results> {
             return pixelfedAPI
-                .search("Bearer $accessToken", offset=key.toInt(),
+                .search("Bearer $accessToken", offset=key,
                     limit="$requestedLoadSize", q = query,
                     type = Results.SearchType.hashtags)
         }
 
-        override fun getKey(item: Tag): String {
+        override fun getKey(item: Tag): Int {
             val value = content.value
-            val count = value?.loadedCount ?: 0
-            return count.toString()
+            return value?.loadedCount ?: 0
         }
         override fun loadInitial(
-            params: LoadInitialParams<String>,
+            params: LoadInitialParams<Int>,
             callback: LoadInitialCallback<Tag>
         ) {
-            searchEnqueueCall(makeInitialCall(params.requestedLoadSize), callback)
+            searchEnqueueCall(searchMakeInitialCall(params.requestedLoadSize), callback)
         }
 
-        //This is called to when we get to the bottom of the loaded content, so we want statuses
-        //older than the given key (params.key)
-        override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Tag>) {
-            searchEnqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
+        override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Tag>) {
+            searchEnqueueCall(searchMakeAfterCall(params.requestedLoadSize, params.key), callback)
         }
 
         private fun searchEnqueueCall(call: Call<Results>, callback: LoadCallback<Tag>){
@@ -111,12 +119,24 @@ class SearchHashtagFragment: FeedFragment<Tag, SearchHashtagFragment.TagsRecycle
                 }
             })
         }
+
+        override fun makeInitialCall(requestedLoadSize: Int): Call<List<Tag>> {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
+
+        override fun makeAfterCall(requestedLoadSize: Int, key: Int): Call<List<Tag>> {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
+
+        override fun enqueueCall(call: Call<List<Tag>>, callback: LoadCallback<Tag>) {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
     }
 
     private fun makeContent(): LiveData<PagedList<Tag>> {
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
         factory =
-            FeedFragment<Tag, TagsRecyclerViewAdapter.ViewHolder>()
+            FeedFragment()
                 .FeedDataSourceFactory(
                 SearchTagsListDataSource()
             )

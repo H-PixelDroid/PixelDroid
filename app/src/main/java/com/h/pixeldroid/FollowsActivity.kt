@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
@@ -12,28 +14,32 @@ import com.h.pixeldroid.utils.DBUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class FollowsActivity : AppCompatActivity() {
     private var followsFragment = AccountListFragment()
+    @Inject
+    lateinit var db: AppDatabase
+    @Inject
+    lateinit var apiHolder: PixelfedAPIHolder
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_followers)
+        (this.application as Pixeldroid).getAppComponent().inject(this)
+
 
         // Get account id
         val id = intent.getSerializableExtra(ACCOUNT_ID_TAG) as String?
         val following = intent.getSerializableExtra(FOLLOWING_TAG) as Boolean
 
         if(id == null) {
-            val db = DBUtils.initDB(applicationContext)
-
             val user = db.userDao().getActiveUser()
 
-            val domain = user?.instance_uri.orEmpty()
             val accessToken = user?.accessToken.orEmpty()
-            db.close()
 
-            val pixelfedAPI = PixelfedAPI.create(domain)
+            val pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
             pixelfedAPI.verifyCredentials("Bearer $accessToken").enqueue(object :
                 Callback<Account> {

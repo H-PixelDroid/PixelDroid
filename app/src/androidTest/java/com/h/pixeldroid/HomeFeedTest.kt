@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
@@ -17,7 +16,7 @@ import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
@@ -25,6 +24,7 @@ import com.h.pixeldroid.testUtility.CustomMatchers.Companion.second
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.slowSwipeUp
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithId
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.initDB
 import com.h.pixeldroid.utils.DBUtils
 import org.junit.Before
 import org.junit.Rule
@@ -49,7 +49,7 @@ class HomeFeedTest {
         mockServer.start()
         val baseUrl = mockServer.getUrl()
         context = ApplicationProvider.getApplicationContext()
-        db = DBUtils.initDB(context)
+        db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
             InstanceDatabaseEntity(

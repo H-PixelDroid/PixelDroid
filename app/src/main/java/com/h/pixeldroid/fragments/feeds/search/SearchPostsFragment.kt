@@ -9,8 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.h.pixeldroid.fragments.feeds.FeedFragment
-import com.h.pixeldroid.fragments.feeds.PostViewHolder
-import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
+import com.h.pixeldroid.fragments.feeds.postFeeds.PostsFeedFragment
 import com.h.pixeldroid.objects.Results
 import com.h.pixeldroid.objects.Status
 import retrofit2.Call
@@ -33,19 +32,19 @@ class SearchPostsFragment: PostsFeedFragment(){
         return view
     }
 
-    inner class SearchFeedDataSource : FeedDataSource(null, null){
+    inner class SearchFeedDataSource : FeedDataSource<String, Status>(){
 
-        override fun newSource(): FeedDataSource {
+        override fun newSource(): SearchFeedDataSource {
             return SearchFeedDataSource()
         }
 
-        private fun makeInitialCall(requestedLoadSize: Int): Call<Results> {
+        private fun searchMakeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken",
                     limit="$requestedLoadSize", q=query,
                     type = Results.SearchType.statuses)
         }
-        private fun makeAfterCall(requestedLoadSize: Int, key: String): Call<Results> {
+        private fun searchMakeAfterCall(requestedLoadSize: Int, key: String): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken", max_id=key,
                     limit="$requestedLoadSize", q = query,
@@ -55,13 +54,11 @@ class SearchPostsFragment: PostsFeedFragment(){
             params: LoadInitialParams<String>,
             callback: LoadInitialCallback<Status>
         ) {
-            searchEnqueueCall(makeInitialCall(params.requestedLoadSize), callback)
+            searchEnqueueCall(searchMakeInitialCall(params.requestedLoadSize), callback)
         }
 
-        //This is called to when we get to the bottom of the loaded content, so we want statuses
-        //older than the given key (params.key)
         override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Status>) {
-            searchEnqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
+            searchEnqueueCall(searchMakeAfterCall(params.requestedLoadSize, params.key), callback)
         }
 
         private fun searchEnqueueCall(call: Call<Results>, callback: LoadCallback<Status>){
@@ -84,13 +81,28 @@ class SearchPostsFragment: PostsFeedFragment(){
                 }
             })
         }
+        override fun makeInitialCall(requestedLoadSize: Int): Call<List<Status>> {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
+
+        override fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Status>> {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
+
+        override fun enqueueCall(call: Call<List<Status>>, callback: LoadCallback<Status>) {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
+
+        override fun getKey(item: Status): String {
+            return item.id!!
+        }
 
 
     }
 
     override fun makeContent(): LiveData<PagedList<Status>> {
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory = FeedFragment<Status, PostViewHolder>()
+        factory = FeedFragment()
             .FeedDataSourceFactory(SearchFeedDataSource())
         return LivePagedListBuilder(factory, config).build()
     }
