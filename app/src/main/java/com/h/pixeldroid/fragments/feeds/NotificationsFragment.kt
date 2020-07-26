@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
@@ -29,14 +31,20 @@ import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 /**
  * A fragment representing a list of Items.
  */
-class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.NotificationsRecyclerViewAdapter.ViewHolder>() {
+class NotificationsFragment : FeedFragment() {
 
     lateinit var profilePicRequest: RequestBuilder<Drawable>
+    protected lateinit var adapter : FeedsRecyclerViewAdapter<Notification, NotificationsRecyclerViewAdapter.ViewHolder>
+    lateinit var factory: FeedDataSourceFactory<String, Notification>
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +75,7 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        content = makeContent()
+        val content = makeContent()
 
         content.observe(viewLifecycleOwner,
             Observer { c ->
@@ -75,22 +83,60 @@ class NotificationsFragment : FeedFragment<Notification, NotificationsFragment.N
                 //after a refresh is done we need to stop the pull to refresh spinner
                 swipeRefreshLayout.isRefreshing = false
             })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            //by invalidating data, loadInitial will be called again
+            factory.liveData.value!!.invalidate()
+        }
     }
 
     private fun makeContent(): LiveData<PagedList<Notification>> {
-        fun makeInitialCall(requestedLoadSize: Int): Call<List<Notification>> {
+        val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
+        val dataSource = NotificationListDataSource()
+        factory = FeedDataSourceFactory(dataSource)
+        return LivePagedListBuilder(factory, config).build()
+    }
+
+    inner class NotificationListDataSource: FeedDataSource<String, Notification>() {
+
+        override fun newSource(): NotificationListDataSource {
+            return NotificationListDataSource()
+        }
+
+        //We use the id as the key
+        override fun getKey(item: Notification): String {
+            return item.id
+        }
+
+        override fun makeInitialCall(requestedLoadSize: Int): Call<List<Notification>> {
             return pixelfedAPI
                 .notifications("Bearer $accessToken", limit="$requestedLoadSize")
         }
-        fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Notification>> {
+        override fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Notification>> {
             return pixelfedAPI
                 .notifications("Bearer $accessToken", max_id=key, limit="$requestedLoadSize")
         }
 
-        val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        val dataSource = FeedDataSource(::makeInitialCall, ::makeAfterCall)
-        factory = FeedDataSourceFactory(dataSource)
-        return LivePagedListBuilder(factory, config).build()
+        override fun enqueueCall(call: Call<List<Notification>>, callback: LoadCallback<Notification>){
+
+            call.enqueue(object : Callback<List<Notification>> {
+                override fun onResponse(call: Call<List<Notification>>, response: Response<List<Notification>>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val data = response.body()!!
+                        callback.onResult(data)
+                    } else{
+                        Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
+                    }
+                    swipeRefreshLayout.isRefreshing = false
+                    loadingIndicator.visibility = View.GONE
+                }
+
+                override fun onFailure(call: Call<List<Notification>>, t: Throwable) {
+                    Toast.makeText(context, getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                    Log.e("NotificationsFragment", t.toString())
+                }
+            })
+        }
     }
 
     /**

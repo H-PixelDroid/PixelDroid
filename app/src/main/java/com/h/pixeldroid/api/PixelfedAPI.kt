@@ -1,5 +1,6 @@
 package com.h.pixeldroid.api
 
+import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.objects.*
 import io.reactivex.Observable
 import okhttp3.MultipartBody
@@ -9,6 +10,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
+import javax.inject.Inject
+import javax.inject.Provider
 
 
 /*

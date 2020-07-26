@@ -14,15 +14,15 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
 import com.h.pixeldroid.fragments.feeds.NotificationsFragment
 import com.h.pixeldroid.fragments.feeds.OfflineFeedFragment
-import com.h.pixeldroid.fragments.feeds.PostsFeedFragment
-import com.h.pixeldroid.fragments.feeds.PublicTimelineFragment
+import com.h.pixeldroid.fragments.feeds.postFeeds.HomeTimelineFragment
+import com.h.pixeldroid.fragments.feeds.postFeeds.PublicTimelineFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.Utils.Companion.hasInternet
@@ -39,11 +39,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     private val searchDiscoverFragment: SearchDiscoverFragment = SearchDiscoverFragment()
-    private lateinit var db: AppDatabase
+    @Inject
+    lateinit var db: AppDatabase
+    @Inject
+    lateinit var apiHolder: PixelfedAPIHolder
+
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
 
@@ -56,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        db = DBUtils.initDB(applicationContext)
+        (this.application as Pixeldroid).getAppComponent().inject(this)
 
         //get the currently active user
         user = db.userDao().getActiveUser()
@@ -67,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             setupDrawer()
             val tabs = arrayOf(
-                if (hasInternet(applicationContext)) PostsFeedFragment()
+                if (hasInternet(applicationContext)) HomeTimelineFragment()
                 else OfflineFeedFragment(),
                 searchDiscoverFragment,
                 CameraFragment(),
@@ -163,14 +168,17 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-    private fun getUpdatedAccount(){
+    private fun getUpdatedAccount() {
         if (hasInternet(applicationContext)) {
             val domain = user?.instance_uri.orEmpty()
             val accessToken = user?.accessToken.orEmpty()
-            val pixelfedAPI = PixelfedAPI.create(domain)
-            pixelfedAPI.verifyCredentials("Bearer $accessToken")
+            val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+            api.verifyCredentials("Bearer $accessToken")
                 .enqueue(object : Callback<Account> {
-                    override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    override fun onResponse(
+                        call: Call<Account>,
+                        response: Response<Account>
+                    ) {
                         if (response.body() != null && response.isSuccessful) {
                             val account = response.body() as Account
                             DBUtils.addUser(db, account, domain, accessToken = accessToken)
@@ -197,9 +205,9 @@ class MainActivity : AppCompatActivity() {
             return false
         }
 
-        db.userDao().deActivateActiveUser()
+        db.userDao().deActivateActiveUsers()
         db.userDao().activateUser(profile.identifier.toString())
-
+        apiHolder.setDomainToCurrentUser(db)
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
@@ -271,9 +279,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-    Launches the given activity and put it as the current one
-     Setting argument firstTime to true means the task history will be reset (as if the app were launched anew into
-     this activity)
+     * Launches the given activity and put it as the current one
+     * @param firstTime to true means the task history will be reset (as if the app were
+     * launched anew into this activity)
      */
     private fun launchActivity(activity: AppCompatActivity, firstTime: Boolean = false) {
         val intent = Intent(this, activity::class.java)
@@ -285,7 +293,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-    Closes the drawer if it is open, when we press the back button
+     * Closes the drawer if it is open, when we press the back button
      */
     override fun onBackPressed() {
         if(drawer_layout.isDrawerOpen(GravityCompat.START)){

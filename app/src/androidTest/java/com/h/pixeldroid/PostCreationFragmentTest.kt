@@ -19,6 +19,7 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.initDB
 import com.h.pixeldroid.utils.DBUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import org.hamcrest.Matcher
@@ -73,7 +74,7 @@ class PostFragmentUITests {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         mockServer.start()
         val baseUrl = mockServer.getUrl()
-        db = DBUtils.initDB(context)
+        db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
             InstanceDatabaseEntity(

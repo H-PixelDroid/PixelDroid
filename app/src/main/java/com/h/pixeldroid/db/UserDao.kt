@@ -16,8 +16,8 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE isActive=1 LIMIT 1")
     fun getActiveUser(): UserDatabaseEntity?
 
-    @Query("UPDATE users SET isActive=0 WHERE isActive=1")
-    fun deActivateActiveUser()
+    @Query("UPDATE users SET isActive=0")
+    fun deActivateActiveUsers()
 
     @Query("UPDATE users SET isActive=1 WHERE user_id=:id")
     fun activateUser(id: String)

@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.h.pixeldroid.R
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.fragments.feeds.PostViewHolder
+import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
 import com.h.pixeldroid.objects.Context
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.ImageConverter.Companion.setImageFromDrawable

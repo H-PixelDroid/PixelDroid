@@ -14,6 +14,7 @@ import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.fragments.feeds.FeedFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Results
+import com.h.pixeldroid.objects.Tag
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,35 +35,38 @@ class SearchAccountFragment: AccountListFragment(){
         return view
     }
 
-    inner class SearchAccountListDataSource: FeedDataSource(null, null){
+    inner class SearchAccountListDataSource: FeedDataSource<String, Account>(){
 
-        override fun newSource(): FeedDataSource {
+        override fun newSource(): SearchAccountListDataSource {
             return SearchAccountListDataSource()
         }
 
-        private fun makeInitialCall(requestedLoadSize: Int): Call<Results> {
+        override fun getKey(item: Account): String {
+            return item.id
+        }
+
+        private fun searchMakeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken",
                     limit="$requestedLoadSize", q=query,
                     type = Results.SearchType.accounts)
         }
-        private fun makeAfterCall(requestedLoadSize: Int, key: String): Call<Results> {
+        private fun searchMakeAfterCall(requestedLoadSize: Int, key: String): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken", max_id=key,
                     limit="$requestedLoadSize", q = query,
                     type = Results.SearchType.accounts)
         }
+
         override fun loadInitial(
             params: LoadInitialParams<String>,
             callback: LoadInitialCallback<Account>
         ) {
-            searchEnqueueCall(makeInitialCall(params.requestedLoadSize), callback)
+            searchEnqueueCall(searchMakeInitialCall(params.requestedLoadSize), callback)
         }
 
-        //This is called to when we get to the bottom of the loaded content, so we want statuses
-        //older than the given key (params.key)
         override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Account>) {
-            searchEnqueueCall(makeAfterCall(params.requestedLoadSize, params.key), callback)
+            searchEnqueueCall(searchMakeAfterCall(params.requestedLoadSize, params.key), callback)
         }
         private fun searchEnqueueCall(call: Call<Results>, callback: LoadCallback<Account>) {
 
@@ -86,16 +90,22 @@ class SearchAccountFragment: AccountListFragment(){
             })
         }
 
+        override fun makeInitialCall(requestedLoadSize: Int): Call<List<Account>> {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
 
+        override fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Account>> {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
+
+        override fun enqueueCall(call: Call<List<Account>>, callback: LoadCallback<Account>) {
+            throw NotImplementedError("Should not be called, reimplemented for Search fragment")
+        }
     }
 
     override fun makeContent(): LiveData<PagedList<Account>> {
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
-        factory =
-            FeedFragment<Account, FollowsRecyclerViewAdapter.ViewHolder>()
-                .FeedDataSourceFactory(
-                SearchAccountListDataSource()
-            )
+        factory = FeedFragment().FeedDataSourceFactory(SearchAccountListDataSource())
         return LivePagedListBuilder(factory, config).build()
     }
 }

@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.interfaces.PostCreationListener
 import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Instance
@@ -35,6 +37,7 @@ import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
@@ -58,10 +61,18 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
     private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
 
     private var description: String = ""
+    @Inject
+    lateinit var db: AppDatabase
+
+    @Inject
+    lateinit var apiHolder: PixelfedAPIHolder
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_creation)
+
+        (this.application as Pixeldroid).getAppComponent().inject(this)
 
         // load images
         posts = intent.getStringArrayListExtra("pictures_uri")!!
@@ -69,11 +80,9 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         progressList = posts.map { 0 } as ArrayList<Int>
         muListOfIds = posts.map { "" }.toMutableList()
 
-        val db = DBUtils.initDB(applicationContext)
         user = db.userDao().getActiveUser()
 
         val instances = db.instanceDao().getAll()
-        db.close()
         maxLength = if (user!=null){
             val thisInstances =
                 instances.filter { instanceDatabaseEntity ->
@@ -84,9 +93,8 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
             Instance.DEFAULT_MAX_TOOT_CHARS
         }
 
-        val domain = user?.instance_uri.orEmpty()
         accessToken = user?.accessToken.orEmpty()
-        pixelfedAPI = PixelfedAPI.create(domain)
+        pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
         // check if the pictures are alright
         // TODO

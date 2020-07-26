@@ -16,6 +16,7 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.initDB
 import com.h.pixeldroid.utils.DBUtils
 import org.junit.Before
 import org.junit.Rule
@@ -40,7 +41,7 @@ class DrawerMenuTest {
         val baseUrl = mockServer.getUrl()
 
         context = ApplicationProvider.getApplicationContext()
-        db = DBUtils.initDB(context)
+        db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
             InstanceDatabaseEntity(

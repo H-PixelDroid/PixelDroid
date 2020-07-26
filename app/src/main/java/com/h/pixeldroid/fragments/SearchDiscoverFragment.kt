@@ -14,10 +14,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.h.pixeldroid.Pixeldroid
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.SearchActivity
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.DiscoverPost
 import com.h.pixeldroid.objects.DiscoverPosts
 import com.h.pixeldroid.objects.Status
@@ -26,6 +29,7 @@ import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 /**
  * This fragment lets you search and use Pixelfed's Discover feature
@@ -38,6 +42,12 @@ class SearchDiscoverFragment : Fragment() {
     private lateinit var accessToken: String
     private lateinit var discoverProgressBar: ProgressBar
     private lateinit var discoverRefreshLayout: SwipeRefreshLayout
+    @Inject
+    lateinit var db: AppDatabase
+
+    @Inject
+    lateinit var apiHolder: PixelfedAPIHolder
+
 
 
     override fun onCreateView(
@@ -47,6 +57,9 @@ class SearchDiscoverFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
         val button = view.findViewById<Button>(R.id.searchButton)
         val search = view.findViewById<EditText>(R.id.searchEditText)
+
+        (requireActivity().application as Pixeldroid).getAppComponent().inject(this)
+
         button.setOnClickListener {
             val intent = Intent(context, SearchActivity::class.java)
             intent.putExtra("searchFeed", search.text.toString())
@@ -64,13 +77,9 @@ class SearchDiscoverFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val db = DBUtils.initDB(requireContext())
+        api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
-        val user = db.userDao().getActiveUser()
-
-        val domain = user?.instance_uri.orEmpty()
-        api = PixelfedAPI.create(domain)
-        accessToken = user?.accessToken.orEmpty()
+        accessToken = db.userDao().getActiveUser()?.accessToken.orEmpty()
 
         discoverProgressBar = view.findViewById(R.id.discoverProgressBar)
         discoverRefreshLayout = view.findViewById(R.id.discoverRefreshLayout)
