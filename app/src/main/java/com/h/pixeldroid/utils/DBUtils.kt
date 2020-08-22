@@ -37,13 +37,13 @@ class DBUtils {
         }
 
         fun storeInstance(db: AppDatabase, instance: Instance) {
-            val maxTootChars = instance.max_toot_chars.toInt()
+            val maxTootChars = instance.max_toot_chars?.toInt() ?: Instance.DEFAULT_MAX_TOOT_CHARS
             val dbInstance = InstanceDatabaseEntity(
                 //make sure not to normalize to https when localhost, to allow testing
-                uri = normalizeOrNot(instance.uri),
-                title = instance.title,
+                uri = normalizeOrNot(instance.uri.orEmpty()),
+                title = instance.title.orEmpty(),
                 max_toot_chars = maxTootChars,
-                thumbnail = instance.thumbnail
+                thumbnail = instance.thumbnail.orEmpty()
             )
             db.instanceDao().insertInstance(dbInstance)
         }

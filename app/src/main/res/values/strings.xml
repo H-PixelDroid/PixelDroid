@@ -9,6 +9,9 @@
     <string name="auth_failed">"Could not authenticate"</string>
     <string name="token_error">"Error getting token"</string>
     <string name="instance_error">"Could not get instance information"</string>
+    <string name="instance_not_pixelfed_warning">"This doesn't seem to be a Pixelfed instance, so the app could break in unexpected ways."</string>
+    <string name="instance_not_pixelfed_continue">"OK, continue anyway"</string>
+    <string name="instance_not_pixelfed_cancel">"Cancel logging in"</string>
     <string name="title_activity_settings2">Settings</string>
     <!-- Theme Preferences -->
     <string name="theme_title">Application Theme</string>

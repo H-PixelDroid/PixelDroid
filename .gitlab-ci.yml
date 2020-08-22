@@ -22,7 +22,7 @@ test:
         - adb shell settings put global transition_animation_scale 0.0
         - adb shell settings put global animator_duration_scale 0.0
 
-        - ./gradlew build connectedCheck jacocoTestReport
+        - ./gradlew build connectedCheck connectedDebugAndroidTest jacocoTestReport
         
         - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
 

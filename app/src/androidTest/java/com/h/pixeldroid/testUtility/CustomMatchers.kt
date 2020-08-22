@@ -3,13 +3,17 @@ package com.h.pixeldroid.testUtility
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.*
+import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.BaseMatcher
+import org.hamcrest.Description
 import org.hamcrest.Matcher
+
 
 abstract class CustomMatchers {
     companion object {
@@ -50,6 +54,24 @@ abstract class CustomMatchers {
             }
         }
 
+
+        fun atPosition(position: Int, itemMatcher: Matcher<View?>): Matcher<View?>? {
+            return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
+                override fun describeTo(description: Description) {
+                    description.appendText("has item at position $position: ")
+                    itemMatcher.describeTo(description)
+                }
+
+                override fun matchesSafely(view: RecyclerView): Boolean {
+                    val viewHolder = view.findViewHolderForAdapterPosition(position)
+                        ?: // has no item on such position
+                        return false
+                    return itemMatcher.matches(viewHolder.itemView)
+                }
+            }
+        }
+
+
         /**
          * @param percent can be 1 or 0
          * 1: swipes all the way up
@@ -60,8 +82,9 @@ abstract class CustomMatchers {
                 GeneralSwipeAction(
                     Swipe.SLOW,
                     GeneralLocation.BOTTOM_CENTER,
-                    if(percent) GeneralLocation.TOP_CENTER else GeneralLocation.CENTER,
-                    Press.FINGER)
+                    if (percent) GeneralLocation.TOP_CENTER else GeneralLocation.CENTER,
+                    Press.FINGER
+                )
             )
         }
 
@@ -75,8 +98,9 @@ abstract class CustomMatchers {
                 GeneralSwipeAction(
                     Swipe.SLOW,
                     GeneralLocation.CENTER_RIGHT,
-                    if(percent) GeneralLocation.CENTER_LEFT else GeneralLocation.CENTER,
-                    Press.FINGER)
+                    if (percent) GeneralLocation.CENTER_LEFT else GeneralLocation.CENTER,
+                    Press.FINGER
+                )
             )
         }
 
