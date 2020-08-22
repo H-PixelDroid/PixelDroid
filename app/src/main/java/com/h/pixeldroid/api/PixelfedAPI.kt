@@ -1,8 +1,8 @@
 package com.h.pixeldroid.api
 
-import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.objects.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -10,9 +10,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
-import javax.inject.Inject
-import javax.inject.Provider
-
 
 /*
     Implements the Pixelfed API
@@ -23,7 +20,12 @@ import javax.inject.Provider
 
 interface PixelfedAPI {
 
+
     companion object {
+        @Deprecated(
+            "Use the DI-d PixelfedAPIHolder instead",
+            ReplaceWith("apiHolder.api")
+        )
         fun create(baseUrl: String): PixelfedAPI {
             return Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -41,7 +43,8 @@ interface PixelfedAPI {
         @Field("redirect_uris") redirect_uris: String,
         @Field("scopes") scopes: String? = null,
         @Field("website") website: String? = null
-    ): Call<Application>
+    ): Single<Application>
+
 
     @FormUrlEncoded
     @POST("/oauth/token")
@@ -52,7 +55,25 @@ interface PixelfedAPI {
         @Field("scope") scope: String? = "read",
         @Field("code") code: String? = null,
         @Field("grant_type") grant_type: String? = null
-    ): Call<Token>
+    ): Single<Token>
+
+    // get instance configuration
+    @GET("/api/v1/instance")
+    fun instance() : Single<Instance>
+
+    /**
+     * Instance info from the Nodeinfo .well_known (https://nodeinfo.diaspora.software/protocol.html) endpoint
+     */
+    @GET("/.well-known/nodeinfo")
+    fun wellKnownNodeInfo() : Single<NodeInfoJRD>
+
+    /**
+     * Instance info from [NodeInfo] (https://nodeinfo.diaspora.software/schema.html) endpoint
+     */
+    @GET
+    fun nodeInfoSchema(
+            @Url nodeInfo_schema_url: String
+    ) : Call<NodeInfo>
 
     @FormUrlEncoded
     @POST("/api/v1/accounts/{id}/follow")
@@ -239,10 +260,6 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String,
         @Part file: MultipartBody.Part
     ): Observable<Attachment>
-
-    // get instance configuration
-    @GET("/api/v1/instance")
-    fun instance() : Call<Instance>
 
     // get discover
     @GET("/api/v2/discover/posts")

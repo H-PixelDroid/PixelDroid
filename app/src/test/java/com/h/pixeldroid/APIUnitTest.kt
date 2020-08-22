@@ -4,6 +4,8 @@ import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.*
+import io.reactivex.Single
+import okhttp3.internal.wait
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -106,9 +108,10 @@ class APIUnitTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody(""" {"id":3197,"name":"Pixeldroid","website":null,"redirect_uri":"urn:ietf:wg:oauth:2.0:oob","client_id":3197,"client_secret":"hhRwLupqUJPghKsZzpZtxNV67g5DBdPYCqW6XE3m","vapid_key":null}"""
                         )))
-        val call: Call<Application> = PixelfedAPI.create("http://localhost:8089")
+        val call: Single<Application> = PixelfedAPI.create("http://localhost:8089")
             .registerApplication("Pixeldroid", "urn:ietf:wg:oauth:2.0:oob", "read write follow")
-        val application: Application = call.execute().body()!!
+
+        val application: Application = call.toFuture().get()
         assertEquals("3197", application.client_id)
         assertEquals("hhRwLupqUJPghKsZzpZtxNV67g5DBdPYCqW6XE3m", application.client_secret)
         assertEquals("Pixeldroid", application.name)
@@ -133,10 +136,10 @@ class APIUnitTest {
         val OAUTH_SCHEME = "oauth2redirect"
         val SCOPE = "read write follow"
         val PACKAGE_ID = "com.h.pixeldroid"
-        val call: Call<Token> = PixelfedAPI.create("http://localhost:8089")
+        val call: Single<Token> = PixelfedAPI.create("http://localhost:8089")
             .obtainToken("123", "ssqdfqsdfqds", "$OAUTH_SCHEME://$PACKAGE_ID", SCOPE, "abc",
                 "authorization_code")
-        val token: Token = call.execute().body()!!
+        val token: Token = call.toFuture().get()
         assertEquals("ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0", token.access_token)
         assertEquals("Bearer", token.token_type)
         assertEquals("read write follow push", token.scope)

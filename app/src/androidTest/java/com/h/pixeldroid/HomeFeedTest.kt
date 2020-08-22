@@ -2,6 +2,7 @@ package com.h.pixeldroid
 
 
 import android.content.Context
+import android.service.autofill.Validators.and
 import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -17,6 +18,7 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.atPosition
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.getText
@@ -26,6 +28,8 @@ import com.h.pixeldroid.testUtility.CustomMatchers.Companion.typeTextInViewWithI
 import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.testUtility.initDB
 import com.h.pixeldroid.utils.DBUtils
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -217,7 +221,8 @@ class HomeFeedTest {
                 (1, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(1000)
 
-        onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.GONE)))
+        onView(withId(R.id.list))
+            .check(matches(atPosition(1, not(withId(R.id.sensitiveWarning)))))
     }
 
     @Test
