@@ -33,6 +33,13 @@ import org.hamcrest.Matcher
 import org.junit.*
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate.parse
+import java.time.LocalDateTime.parse
+import java.time.LocalTime
+import java.time.LocalTime.parse
+import java.util.*
 
 
 @RunWith(AndroidJUnit4::class)
@@ -191,7 +198,7 @@ class PostTest {
     @Test
     fun getNLikesReturnsCorrectFormat() {
         val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
-            created_at="2020-03-03T08:00:16.000000Z",
+            created_at= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'").parse("2020-03-03T08:00:16.000000Z"),
             account= Account(id="115114166443970560", username="Miike", acct="Miike",
                 url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
                 avatar="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
@@ -218,7 +225,7 @@ class PostTest {
     @Test
     fun getNSharesReturnsCorrectFormat() {
         val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
-            created_at="2020-03-03T08:00:16.000000Z",
+            created_at= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'").parse("2020-03-03T08:00:16.000000Z"),
             account= Account(id="115114166443970560", username="Miike", acct="Miike",
                 url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
                 avatar="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",

@@ -1,3 +1,5 @@
 package com.h.pixeldroid.objects
 
-class Field
+import java.io.Serializable
+
+class Field: Serializable

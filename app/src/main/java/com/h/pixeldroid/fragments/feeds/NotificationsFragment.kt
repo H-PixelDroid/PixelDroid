@@ -29,6 +29,7 @@ import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Notification
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
+import com.h.pixeldroid.utils.Utils.Companion.setTextViewFromISO8601
 import kotlinx.android.synthetic.main.fragment_notifications.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -197,6 +198,7 @@ class NotificationsFragment : FeedFragment() {
             }
 
             setNotificationType(notification.type, notification.account.username, holder.notificationType)
+            setTextViewFromISO8601(notification.created_at, holder.notificationTime, false, context)
 
             //Convert HTML to clickable text
             holder.postDescription.text =
@@ -247,6 +249,7 @@ class NotificationsFragment : FeedFragment() {
 
         inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
             val notificationType: TextView = mView.notification_type
+            val notificationTime: TextView = mView.notification_time
             val postDescription: TextView = mView.notification_post_description
             val avatar: ImageView = mView.notification_avatar
             val photoThumbnail: ImageView = mView.notification_photo_thumbnail
