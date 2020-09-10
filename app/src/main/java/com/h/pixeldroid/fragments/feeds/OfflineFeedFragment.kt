@@ -25,8 +25,8 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.PostDatabaseEntity
 import com.h.pixeldroid.fragments.ImageFragment
-import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.*
+import com.h.pixeldroid.utils.Utils.Companion.setTextViewFromISO8601
 import kotlinx.android.synthetic.main.fragment_offline_feed.view.*
 import kotlinx.android.synthetic.main.post_fragment.view.*
 import javax.inject.Inject
@@ -146,7 +146,7 @@ class OfflineFeedFragment: Fragment() {
                 setTypeface(null, Typeface.BOLD)
             }
             //Convert the date to a readable string
-            Status.ISO8601toDate(post.date, holder.itemView.postDate, false, requireContext())
+            setTextViewFromISO8601(post.date, holder.itemView.postDate, false, requireContext())
 
             //Setup images
             ImageConverter.setRoundImageFromURL(

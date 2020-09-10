@@ -33,14 +33,13 @@ import com.h.pixeldroid.utils.PostUtils.Companion.toggleCommentInput
 import com.h.pixeldroid.utils.PostUtils.Companion.unLikePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.undoReblogPost
+import com.h.pixeldroid.utils.Utils.Companion.setTextViewFromISO8601
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.Serializable
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.collections.ArrayList
 
@@ -52,7 +51,7 @@ data class Status(
     //Base attributes
     override val id: String?,
     val uri: String? = "",
-    val created_at: String? = "", //ISO 8601 Datetime (maybe can use a date type)
+    val created_at: Date? = Date(0), //ISO 8601 Datetime
     val account: Account?,
     val content: String? = "", //HTML
     val visibility: Visibility? = Visibility.public,
@@ -90,31 +89,6 @@ data class Status(
         const val POST_TAG = "postTag"
         const val DOMAIN_TAG = "domainTag"
         const val DISCOVER_TAG = "discoverTag"
-
-        fun ISO8601toDate(dateString : String, textView: TextView, isActivity: Boolean, context: Context) {
-            var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
-            if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}Z".toRegex())) {
-                format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'")
-            } else if(dateString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}+[0-9]{2}:[0-9]{2}".toRegex())) {
-                format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+hh:mm")
-            }
-            val now = Date().time
-
-            try {
-                val date: Date = format.parse(dateString)!!
-                val then = date.time
-                val formattedDate = android.text.format.DateUtils
-                    .getRelativeTimeSpanString(then, now,
-                        android.text.format.DateUtils.SECOND_IN_MILLIS,
-                        android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
-
-                textView.text = if(isActivity) context.getString(R.string.posted_on).format(date)
-                else "$formattedDate"
-
-            } catch (e: ParseException) {
-                e.printStackTrace()
-            }
-        }
     }
 
     fun getPostUrl() : String? = media_attachments?.firstOrNull()?.url
@@ -237,7 +211,7 @@ data class Status(
         }
 
         //Convert the date to a readable string
-        ISO8601toDate(created_at!!, rootView.postDate, isActivity, rootView.context)
+        setTextViewFromISO8601(created_at!!, rootView.postDate, isActivity, rootView.context)
 
         rootView.postDomain.text = getStatusDomain(domain)
 

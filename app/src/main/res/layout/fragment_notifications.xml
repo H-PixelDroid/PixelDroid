@@ -12,22 +12,28 @@
         android:layout_margin="8dp">
 
         <TextView
-            android:id="@+id/notification_type"
-            android:layout_width="match_parent"
+            android:id="@+id/notification_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_heart"
+            app:layout_constraintBottom_toBottomOf="@+id/notification_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="July 23" />
+
+        <TextView
+            android:id="@+id/notification_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:drawablePadding="6dp"
-            android:gravity="center_vertical"
             android:paddingStart="38dp"
             android:textColor="?android:textColorTertiary"
             android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/notification_avatar"
+            app:drawableStartCompat="@drawable/ic_heart"
+            app:layout_constraintEnd_toStartOf="@+id/notification_time"
+            app:layout_constraintStart_toStartOf="@+id/notification_avatar"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlSymmetry"
-            tools:text="User liked your post"
-            tools:visibility="visible" />
+            tools:text="fdsqfdsfsqdfdsfqdsfsdfsfddsfqsdsdfsqdf liked your post" />
 
         <ImageView
             android:id="@+id/notification_avatar"

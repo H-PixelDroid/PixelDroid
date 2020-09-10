@@ -3,6 +3,7 @@ package com.h.pixeldroid.db
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import java.util.Date
 
 @Entity(
     tableName = "posts",
@@ -27,7 +28,7 @@ data class PostDatabaseEntity (
     var reply_count: Int,
     var share_count: Int,
     var description: String,
-    var date: String,
+    var date: Date,
     var likes: Int,
     var shares: Int
 )
