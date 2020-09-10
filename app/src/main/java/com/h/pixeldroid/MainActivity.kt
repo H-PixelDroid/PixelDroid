@@ -36,6 +36,7 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import kotlinx.android.synthetic.main.activity_main.*
+import org.ligi.tracedroid.sending.TraceDroidEmailSender
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,6 +61,9 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        TraceDroidEmailSender.sendStackTraces("contact@pixeldroid.org", this)
 
         (this.application as Pixeldroid).getAppComponent().inject(this)
 

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.preference.PreferenceManager
 import com.h.pixeldroid.di.*
 import com.h.pixeldroid.utils.ThemeUtils
+import org.ligi.tracedroid.TraceDroid
 
 
 class Pixeldroid: Application() {
@@ -12,6 +13,7 @@ class Pixeldroid: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        TraceDroid.init(this)
         val sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(this)
         ThemeUtils.setThemeFromPreferences(sharedPreferences, resources)

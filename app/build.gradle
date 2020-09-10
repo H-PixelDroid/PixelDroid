@@ -152,6 +152,9 @@ dependencies {
     implementation 'com.karumi:dexter:6.2.1'
 
     implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.github.ligi.tracedroid:lib:3.0'
+    implementation 'com.github.ligi.tracedroid:supportemail:3.0'
+
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
