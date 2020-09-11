@@ -102,4 +102,7 @@
     <string name="busy_dialog_ok_button">خوب، منتظر می‌مانم.</string>
     <string name="busy_dialog_text">منتظر بمانید تا پردازش تصویر پایان یابد!</string>
     <string name="nothing_to_see_here">چیزی برای دیدن نیست!</string>
+    <string name="instance_not_pixelfed_cancel">لغو ورود</string>
+    <string name="instance_not_pixelfed_continue">باشه، به هر حال ادامه بده</string>
+    <string name="instance_not_pixelfed_warning">به نظر می‌رسد که نشانی وارد شده مربوط به یک نمونه از پیکسل‌فد نباشد و در نتیجه، این برنامه ممکن است به شکل‌های پیش‌بینی نشده‌ای دچار مشکل شود.</string>
 </resources>
