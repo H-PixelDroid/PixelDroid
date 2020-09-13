@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -88,6 +89,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDrawer() {
+        main_toolbar.setNavigationOnClickListener {
+            drawer_layout.open()
+        }
+
         header = AccountHeaderView(this).apply {
             headerBackgroundScaleType = ImageView.ScaleType.CENTER_CROP
             currentHiddenInList = true
