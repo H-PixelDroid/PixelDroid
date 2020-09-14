@@ -88,6 +88,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDrawer() {
+        main_toolbar.setNavigationOnClickListener {
+            drawer_layout.open()
+        }
+
         header = AccountHeaderView(this).apply {
             headerBackgroundScaleType = ImageView.ScaleType.CENTER_CROP
             currentHiddenInList = true
