@@ -51,7 +51,6 @@ class PostFragment : Fragment() {
 
         val user = db.userDao().getActiveUser()
 
-        val domain = user?.instance_uri.orEmpty()
         val accessToken = user?.accessToken.orEmpty()
         val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 

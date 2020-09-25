@@ -3,14 +3,13 @@ package com.h.pixeldroid
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.fragments.feeds.AccountListFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
-import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
-import com.h.pixeldroid.utils.DBUtils
+import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
+import com.h.pixeldroid.objects.Account.Companion.FOLLOWERS_TAG
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,13 +27,14 @@ class FollowsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_followers)
         (this.application as Pixeldroid).getAppComponent().inject(this)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
         // Get account id
-        val id = intent.getSerializableExtra(ACCOUNT_ID_TAG) as String?
-        val following = intent.getSerializableExtra(FOLLOWING_TAG) as Boolean
+        val account = intent.getSerializableExtra(ACCOUNT_TAG) as Account?
+        val followers = intent.getSerializableExtra(FOLLOWERS_TAG) as Boolean
 
-        if(id == null) {
+        if(account == null) {
             val user = db.userDao().getActiveUser()
 
             val accessToken = user?.accessToken.orEmpty()
@@ -50,18 +50,32 @@ class FollowsActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
                     if(response.code() == 200) {
                         val id = response.body()!!.id
-                        launchActivity(id, following)
+                        val displayName = response.body()!!.display_name
+                        startFragment(id, displayName, followers)
                     }
                 }
             })
         } else {
-            launchActivity(id, following)
+            startFragment(account.id, account.display_name, followers)
         }
     }
 
-    private fun launchActivity(id : String, following : Boolean) {val arguments = Bundle()
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    private fun startFragment(id : String, displayName: String, followers : Boolean) {
+        supportActionBar?.title =
+            if (followers) {
+                getString(R.string.followers_title).format(displayName)
+            } else {
+                getString(R.string.follows_title).format(displayName)
+            }
+
+        val arguments = Bundle()
         arguments.putSerializable(ACCOUNT_ID_TAG, id)
-        arguments.putSerializable(FOLLOWING_TAG, following)
+        arguments.putSerializable(FOLLOWERS_TAG, followers)
         followsFragment.arguments = arguments
 
         supportFragmentManager.beginTransaction()

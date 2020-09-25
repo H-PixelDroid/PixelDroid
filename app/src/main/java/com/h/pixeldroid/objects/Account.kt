@@ -46,7 +46,7 @@ data class Account(
     companion object {
         const val ACCOUNT_TAG = "AccountTag"
         const val ACCOUNT_ID_TAG = "AccountIdTag"
-        const val FOLLOWING_TAG = "FollowingTag"
+        const val FOLLOWERS_TAG = "FollowingTag"
 
         /**
          * @brief Opens an activity of the profile with the given id
@@ -65,7 +65,7 @@ data class Account(
                     if(response.code() == 200) {
                         val account = response.body()!!
 
-                        //Open the account page in a seperate activity
+                        //Open the account page in a separate activity
                         account.openProfile(context)
                     } else {
                         Log.e("ERROR CODE", response.code().toString())
