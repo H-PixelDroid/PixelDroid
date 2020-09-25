@@ -1,8 +1,8 @@
 package com.h.pixeldroid
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_about.*
 
 class AboutActivity : AppCompatActivity() {
@@ -10,9 +10,9 @@ class AboutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "About PixelDroid"
+        supportActionBar?.setTitle(R.string.about_pixeldroid)
 
-
+        aboutVersionNumber.text = BuildConfig.VERSION_NAME
         licensesButton.setOnClickListener{
             val intent = Intent(this, LicenseActivity::class.java)
             startActivity(intent)

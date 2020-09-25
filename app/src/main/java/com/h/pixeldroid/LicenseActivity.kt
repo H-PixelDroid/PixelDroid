@@ -10,7 +10,7 @@ class LicenseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_licenses)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Dependencies and licenses"
-        webview.loadUrl("file:///android_asset/licenses.html");
+        supportActionBar?.setTitle(R.string.dependencies_licenses)
+        webview.loadUrl("file:///android_asset/licenses.html")
     }
 }
