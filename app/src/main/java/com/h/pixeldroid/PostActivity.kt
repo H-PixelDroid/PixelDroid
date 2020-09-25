@@ -33,6 +33,7 @@ class PostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         (this.application as Pixeldroid).getAppComponent().inject(this)
 
@@ -55,6 +56,11 @@ class PostActivity : AppCompatActivity() {
         } else {
             initializeFragment(arguments, status)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun getDiscoverPost(
@@ -80,6 +86,7 @@ class PostActivity : AppCompatActivity() {
     }
 
     private fun initializeFragment(arguments: Bundle, status: Status?){
+        supportActionBar?.title = getString(R.string.post_title).format(status!!.account?.display_name)
         arguments.putSerializable(POST_TAG, status)
         postFragment.arguments = arguments
         supportFragmentManager.beginTransaction()

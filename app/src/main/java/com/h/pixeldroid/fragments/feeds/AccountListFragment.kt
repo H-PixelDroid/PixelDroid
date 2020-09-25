@@ -23,7 +23,7 @@ import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.h.pixeldroid.R
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
-import com.h.pixeldroid.objects.Account.Companion.FOLLOWING_TAG
+import com.h.pixeldroid.objects.Account.Companion.FOLLOWERS_TAG
 import kotlinx.android.synthetic.main.account_list_entry.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -78,7 +78,7 @@ open class AccountListFragment : FeedFragment() {
 
     internal open fun makeContent(): LiveData<PagedList<Account>> {
         val id = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
-        val following = arguments?.getSerializable(FOLLOWING_TAG) as Boolean
+        val following = arguments?.getSerializable(FOLLOWERS_TAG) as Boolean
 
         val config: PagedList.Config = PagedList.Config.Builder().setPageSize(10).build()
         val dataSource = AccountListDataSource(following, id)

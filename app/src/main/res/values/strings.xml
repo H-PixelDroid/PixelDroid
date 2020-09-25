@@ -97,6 +97,7 @@
     <string name="default_nfollowing">-\nFollowing</string>
     <string name="no_username">No Username</string>
     <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
     <string name="edit_profile">Edit profile</string>
     <!-- Search page -->
     <string name="search">Search</string>
@@ -117,4 +118,9 @@
     <string name="project_website">Project website: https://pixeldroid.org</string>
     <string name="license_info">PixelDroid is free and open source software, licensed under the GNU General Public License (version 3 or later)</string>
     <string name="about">About</string>
+    <string name="post_title">%1$s\'s post</string>
+    <string name="followers_title">%1$s\'s followers</string>
+    <string name="follows_title">%1$s\'s follows</string>
+
+
 </resources>
