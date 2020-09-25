@@ -11,7 +11,7 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
-    <Preference android:title="About"
+    <Preference android:title="@string/about"
         android:key="about"
-        android:summary="About PixelDroid"/>
+        android:summary="@string/about_pixeldroid"/>
 </PreferenceScreen>

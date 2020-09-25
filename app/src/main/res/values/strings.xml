@@ -112,4 +112,9 @@
     <string name="posting_image_accessibility_hint">Image that is being posted</string>
     <string name="retry">Retry</string>
     <string name="nothing_to_see_here">Nothing to see here!</string>
+    <string name="about_pixeldroid">About PixelDroid</string>
+    <string name="dependencies_licenses">Dependencies and licenses</string>
+    <string name="project_website">Project website: https://pixeldroid.org</string>
+    <string name="license_info">PixelDroid is free and open source software, licensed under the GNU General Public License (version 3 or later)</string>
+    <string name="about">About</string>
 </resources>
