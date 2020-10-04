@@ -1,29 +1,36 @@
 package com.h.pixeldroid.objects
 
 import android.Manifest
+import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
+import android.database.Cursor
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Environment
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.*
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.RequestBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.R
+import com.h.pixeldroid.ReportActivity
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.fragments.ImageFragment
 import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
 import com.h.pixeldroid.utils.HtmlUtils.Companion.getDomain
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
-import com.h.pixeldroid.utils.ImageUtils.Companion.downloadImage
 import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.likePostCall
 import com.h.pixeldroid.utils.PostUtils.Companion.postComment
@@ -39,8 +46,9 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.android.synthetic.main.post_fragment.view.*
+import java.io.File
 import java.io.Serializable
-import java.util.Date
+import java.util.*
 import kotlin.collections.ArrayList
 
 /*
@@ -115,39 +123,70 @@ data class Status(
         return context.getString(R.string.shares).format(reblogs_count.toString())
     }
 
-    private fun getStatusDomain(domain : String) : String {
+    private fun getStatusDomain(domain: String) : String {
         val accountDomain = getDomain(account!!.url)
         return if(getDomain(domain) == accountDomain) ""
         else " from $accountDomain"
 
     }
 
-    private fun setupPostPics(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
+    private fun setupPostPics(
+        rootView: View,
+        request: RequestBuilder<Drawable>,
+        homeFragment: Fragment
+    ) {
 
         // Standard layout
         rootView.postPicture.visibility = VISIBLE
         rootView.postPager.visibility = GONE
         rootView.postTabs.visibility = GONE
 
-        if (sensitive!!) {
-            setupSensitiveLayout(rootView, request, homeFragment)
+
+        if(media_attachments?.size == 1) {
             request.load(this.getPostUrl()).into(rootView.postPicture)
+            val imgDescription = media_attachments[0].description.orEmpty().ifEmpty { rootView.context.getString(R.string.no_description) }
+            rootView.postPicture.contentDescription = imgDescription
 
-        } else {
-            rootView.sensitiveWarning.visibility = GONE
-
-            if(media_attachments?.size == 1) {
-                request.load(this.getPostUrl()).into(rootView.postPicture)
-
-            } else if(media_attachments?.size!! > 1) {
-                setupTabsLayout(rootView, request, homeFragment)
+            rootView.postPicture.setOnLongClickListener {
+                Snackbar.make(it, imgDescription, Snackbar.LENGTH_SHORT).show()
+                true
             }
 
-            imagePopUpMenu(rootView, homeFragment.requireActivity())
+        } else if(media_attachments?.size!! > 1) {
+            setupTabsLayout(rootView, request, homeFragment)
+        }
+
+        if (sensitive!!) {
+            setupSensitiveLayout(rootView)
         }
     }
 
-    private fun setupTabsLayout(rootView: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
+    private fun setupSensitiveLayout(view: View) {
+
+        // Set dark layout and warning message
+        view.sensitiveWarning.visibility = VISIBLE
+        view.postPicture.colorFilter = ColorMatrixColorFilter(censorColorMatrix())
+
+        fun uncensorPicture(view: View) {
+                view.sensitiveWarning.visibility = GONE
+                view.postPicture.colorFilter = ColorMatrixColorFilter(uncensorColorMatrix())
+        }
+
+
+        view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
+            uncensorPicture(view)
+        }
+
+        view.findViewById<ImageView>(R.id.postPicture).setOnClickListener {
+            uncensorPicture(view)
+        }
+    }
+
+    private fun setupTabsLayout(
+        rootView: View,
+        request: RequestBuilder<Drawable>,
+        homeFragment: Fragment
+    ) {
         //Only show the viewPager and tabs
         rootView.postPicture.visibility = GONE
         rootView.postPager.visibility = VISIBLE
@@ -157,7 +196,7 @@ data class Status(
 
         //Fill the tabs with each mediaAttachment
         for(media in media_attachments!!) {
-            tabs.add(ImageFragment.newInstance(media.url!!))
+            tabs.add(ImageFragment.newInstance(media.url!!, media.description.orEmpty()))
         }
 
         setupTabs(tabs, rootView, homeFragment)
@@ -185,8 +224,8 @@ data class Status(
         rootView: View,
         request: RequestBuilder<Drawable>,
         homeFragment: Fragment,
-        domain : String,
-        isActivity : Boolean
+        domain: String,
+        isActivity: Boolean
     ) {
         //Setup username as a button that opens the profile
         rootView.findViewById<TextView>(R.id.username).apply {
@@ -233,10 +272,8 @@ data class Status(
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = GONE
     }
 
-    fun setDescription(rootView: View, api : PixelfedAPI, credential: String) {
-        val desc = rootView.findViewById<TextView>(R.id.description)
-
-        desc.apply {
+    fun setDescription(rootView: View, api: PixelfedAPI, credential: String) {
+        rootView.findViewById<TextView>(R.id.description).apply {
             if (content.isNullOrBlank()) {
                 visibility = GONE
             } else {
@@ -246,11 +283,35 @@ data class Status(
         }
     }
 
+    fun activateButtons(holder: PostViewHolder, api: PixelfedAPI, credential: String){
+
+        //Set the special HTML text
+        setDescription(holder.postView, api, credential)
+
+        //Activate onclickListeners
+        activateLiker(
+            holder, api, credential,
+            this.favourited ?: false
+        )
+        activateReblogger(
+            holder, api, credential,
+            this.reblogged ?: false
+        )
+        activateCommenter(holder, api, credential)
+
+        showComments(holder, api, credential)
+
+        //Activate double tap liking
+        activateDoubleTapLiker(holder, api, credential)
+
+        activateMoreButton(holder)
+    }
+
     fun activateReblogger(
-        holder : PostViewHolder,
-        api : PixelfedAPI,
+        holder: PostViewHolder,
+        api: PixelfedAPI,
         credential: String,
-        isReblogged : Boolean
+        isReblogged: Boolean
     ) {
         holder.reblogger.apply {
             //Set initial button state
@@ -271,8 +332,165 @@ data class Status(
         }
     }
 
+    fun downloadImage(context: Context, url: String, view: View, share: Boolean = false) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+        val downloadUri = Uri.parse(url)
+
+        val title = url.substringAfterLast("/")
+        val request = DownloadManager.Request(downloadUri).apply {
+            setTitle(title)
+            if(!share) {
+                val directory = File(Environment.DIRECTORY_PICTURES)
+                if (!directory.exists()) {
+                    directory.mkdirs()
+                }
+                setDestinationInExternalPublicDir(directory.toString(), title)
+            }
+        }
+        val downloadId = downloadManager.enqueue(request)
+        val query = DownloadManager.Query().setFilterById(downloadId)
+
+        Thread {
+
+            var msg = ""
+            var lastMsg = ""
+            var downloading = true
+
+            while (downloading) {
+                val cursor: Cursor = downloadManager.query(query)
+                cursor.moveToFirst()
+                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                    == DownloadManager.STATUS_SUCCESSFUL
+                ) {
+                    downloading = false
+                }
+                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                if (!share) {
+                    msg = when (status) {
+                        DownloadManager.STATUS_FAILED ->
+                            context.getString(R.string.image_download_failed)
+                        DownloadManager.STATUS_RUNNING ->
+                            context.getString(R.string.image_download_downloading)
+                        DownloadManager.STATUS_SUCCESSFUL ->
+                            context.getString(R.string.image_download_success)
+                        else -> ""
+                    }
+                    if (msg != lastMsg && msg != "") {
+                        Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show()
+                        lastMsg = msg
+                    }
+                } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
+
+                    val ext = url.substringAfterLast(".", "*")
+
+                    val path = cursor.getString(
+                        cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                    )
+                    val file = path.toUri()
+
+                    val shareIntent: Intent = Intent.createChooser(Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_STREAM, file)
+                        data = file
+                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        type = "image/$ext"
+                    }, null)
+
+                    context.startActivity(shareIntent)
+                }
+                cursor.close()
+            }
+        }.start()
+    }
+
+    fun activateMoreButton(holder: PostViewHolder){
+        holder.more.setOnClickListener {
+            PopupMenu(it.context, it).apply {
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.post_more_menu_report -> {
+                            val intent = Intent(it.context, ReportActivity::class.java)
+                            intent.putExtra(POST_TAG, this@Status)
+                            startActivity(it.context, intent, null)
+                            true
+                        }
+                        R.id.post_more_menu_share_link -> {
+                            val share = Intent.createChooser(Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_TEXT, uri)
+
+                                type = "text/plain"
+
+                                putExtra(Intent.EXTRA_TITLE, content)
+                            }, null)
+                            startActivity(it.context, share, null)
+
+                            true
+                        }
+                        R.id.post_more_menu_save_to_gallery -> {
+                            Dexter.withContext(holder.context)
+                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                .withListener(object : BasePermissionListener() {
+                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                        Toast.makeText(
+                                            holder.context,
+                                            holder.context.getString(R.string.write_permission_download_pic),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                        downloadImage(
+                                            holder.context,
+                                            media_attachments?.get(holder.postPager.currentItem)?.url
+                                                ?: "",
+                                            holder.postView
+                                        )
+                                    }
+                                }).check()
+                            true
+                        }
+                        R.id.post_more_menu_share_picture -> {
+                            Dexter.withContext(holder.context)
+                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                .withListener(object : BasePermissionListener() {
+                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                        Toast.makeText(
+                                            holder.context,
+                                            holder.context.getString(R.string.write_permission_share_pic),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                        downloadImage(
+                                            holder.context,
+                                            media_attachments?.get(holder.postPager.currentItem)?.url
+                                                ?: "",
+                                            holder.postView,
+                                            share = true,
+                                        )
+                                    }
+                                }).check()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                inflate(R.menu.post_more_menu)
+                if(media_attachments.isNullOrEmpty()) {
+                    //make sure to disable image-related things if there aren't any
+                    menu.setGroupVisible(R.id.post_more_group_picture, false)
+                }
+                show()
+            }
+        }
+    }
+
+
     fun activateDoubleTapLiker(
-        holder : PostViewHolder,
+        holder: PostViewHolder,
         api: PixelfedAPI,
         credential: String
     ) {
@@ -305,7 +523,7 @@ data class Status(
     }
 
     fun activateLiker(
-        holder : PostViewHolder,
+        holder: PostViewHolder,
         api: PixelfedAPI,
         credential: String,
         isLiked: Boolean
@@ -332,7 +550,7 @@ data class Status(
 
 
     fun showComments(
-        holder : PostViewHolder,
+        holder: PostViewHolder,
         api: PixelfedAPI,
         credential: String
     ) {
@@ -353,19 +571,23 @@ data class Status(
     }
 
     fun activateCommenter(
-        holder : PostViewHolder,
+        holder: PostViewHolder,
         api: PixelfedAPI,
         credential: String
     ) {
         //Toggle comment button
         toggleCommentInput(holder)
 
-        //Activate commenter
+        //Activate commenterpostPicture
         holder.submitCmnt.setOnClickListener {
             val textIn = holder.comment.text
             //Open text input
             if(textIn.isNullOrEmpty()) {
-                Toast.makeText(holder.context, holder.context.getString(R.string.empty_comment), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    holder.context,
+                    holder.context.getString(R.string.empty_comment),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
 
                 //Post the comment
@@ -376,79 +598,5 @@ data class Status(
 
     enum class Visibility : Serializable {
         public, unlisted, private, direct
-    }
-
-
-    private fun imagePopUpMenu(view: View, activity: FragmentActivity) {
-        val anchor = view.findViewById<FrameLayout>(R.id.post_fragment_image_popup_menu_anchor)
-        if (!media_attachments.isNullOrEmpty() && media_attachments.size == 1) {
-            view.findViewById<ImageView>(R.id.postPicture).setOnLongClickListener {
-                PopupMenu(view.context, anchor).apply {
-                    setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.image_popup_menu_save_to_gallery -> {
-                                Dexter.withContext(view.context)
-                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                    .withListener(object: BasePermissionListener() {
-                                        override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                            Toast.makeText(view.context, view.context.getString(R.string.write_permission_download_pic), Toast.LENGTH_SHORT).show()
-                                        }
-
-                                        override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                            downloadImage(activity, getPostUrl()!!)
-                                        }
-                                    }).check()
-                                true
-                            }
-                            R.id.image_popup_menu_share_picture -> {
-                                Dexter.withContext(view.context)
-                                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                    .withListener(object: BasePermissionListener() {
-                                        override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                            Toast.makeText(view.context, view.context.getString(R.string.write_permission_share_pic), Toast.LENGTH_SHORT).show()
-                                        }
-
-                                        override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                            downloadImage(activity, getPostUrl()!!, share = true)
-                                        }
-                                    }).check()
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-                    inflate(R.menu.image_popup_menu)
-                    show()
-                }
-                true
-            }
-        }
-    }
-
-    private fun setupSensitiveLayout(view: View, request: RequestBuilder<Drawable>, homeFragment: Fragment) {
-
-        // Set dark layout and warning message
-        view.sensitiveWarning.visibility = VISIBLE
-        view.postPicture.colorFilter = ColorMatrixColorFilter(censorColorMatrix())
-
-        fun uncensorPicture(view: View) {
-            if (!media_attachments.isNullOrEmpty()) {
-                view.sensitiveWarning.visibility = GONE
-                view.postPicture.colorFilter = ColorMatrixColorFilter(uncensorColorMatrix())
-
-                if (media_attachments.size > 1)
-                    setupTabsLayout(view, request, homeFragment)
-            }
-            imagePopUpMenu(view, homeFragment.requireActivity())
-        }
-
-
-        view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
-            uncensorPicture(view)
-        }
-
-        view.findViewById<ImageView>(R.id.postPicture).setOnClickListener {
-            uncensorPicture(view)
-        }
     }
 }

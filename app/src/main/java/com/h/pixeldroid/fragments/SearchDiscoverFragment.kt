@@ -1,19 +1,21 @@
 package com.h.pixeldroid.fragments
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
+import android.widget.*
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.textview.MaterialTextView
 import com.h.pixeldroid.Pixeldroid
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
@@ -26,6 +28,12 @@ import com.h.pixeldroid.objects.DiscoverPosts
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.ImageConverter
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
+import com.mikepenz.iconics.utils.padding
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
+import kotlinx.android.synthetic.main.fragment_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,21 +63,29 @@ class SearchDiscoverFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
-        val button = view.findViewById<Button>(R.id.searchButton)
-        val search = view.findViewById<EditText>(R.id.searchEditText)
+        val search = view.findViewById<SearchView>(R.id.search)
 
         (requireActivity().application as Pixeldroid).getAppComponent().inject(this)
 
-        button.setOnClickListener {
-            val intent = Intent(context, SearchActivity::class.java)
-            intent.putExtra("searchFeed", search.text.toString())
-            startActivity(intent)
-        }
+
+        //Configure the search widget (see https://developer.android.com/guide/topics/search/search-dialog#ConfiguringWidget)
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        search.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+
+        search.isSubmitButtonEnabled = true
+
         // Set posts RecyclerView as a grid with 3 columns
         recycler = view.findViewById(R.id.discoverList)
         recycler.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = DiscoverRecyclerViewAdapter()
         recycler.adapter = adapter
+
+        val discoverText = view.findViewById<TextView>(R.id.discoverText)
+
+        discoverText.setCompoundDrawables(IconicsDrawable(requireContext(), GoogleMaterial.Icon.gmd_explore).apply {
+            sizeDp = 24
+            paddingDp = 20
+        }, null, null, null)
 
         return view
     }

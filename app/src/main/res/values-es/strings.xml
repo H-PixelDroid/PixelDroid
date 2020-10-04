@@ -12,7 +12,7 @@
     <string name="shared_notification">%1$s compartió tu publicación</string>
     <string name="liked_notification">%1$s le gustó tu publicación</string>
     <string name="description">Descripción…</string>
-    <string name="send">enviar</string>
+    <string name="post">enviar</string>
     <string name="whats_an_instance">¿Qué es una instancia\?</string>
     <string name="logout">Cerrar sesión</string>
     <string name="save_to_gallery">Guardar en la galería…</string>

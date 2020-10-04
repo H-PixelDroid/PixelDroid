@@ -30,7 +30,7 @@
     <string name="lbl_brightness">BRILHO</string>
     <string name="logout">Sair</string>
     <string name="whats_an_instance">O que é uma instância\?</string>
-    <string name="send">enviar</string>
+    <string name="post">enviar</string>
     <string name="description">Descrição…</string>
     <string name="liked_notification">%1$s curtiu o seu post</string>
     <string name="shared_notification">%1$s compartilhou o seu post</string>

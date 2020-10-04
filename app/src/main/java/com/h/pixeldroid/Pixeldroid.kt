@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.preference.PreferenceManager
 import com.h.pixeldroid.di.*
 import com.h.pixeldroid.utils.ThemeUtils
+import com.mikepenz.iconics.Iconics
 import org.ligi.tracedroid.TraceDroid
 
 
@@ -23,7 +24,9 @@ class Pixeldroid: Application() {
             .databaseModule(DatabaseModule(applicationContext))
             .aPIModule(APIModule())
             .build()
-        mApplicationComponent.inject(this);
+        mApplicationComponent.inject(this)
+
+        Iconics.init(applicationContext)
     }
 
     fun getAppComponent(): ApplicationComponent {

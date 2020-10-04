@@ -4,17 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
     xmlns:sparkbutton="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.PostFragment">
-    <androidx.cardview.widget.CardView
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,16 +26,18 @@
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_default_user"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/profile_picture" />
 
             <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            app:layout_constraintBottom_toBottomOf="@+id/profilePic"
-            app:layout_constraintStart_toEndOf="@+id/profilePic"
-            app:layout_constraintTop_toTopOf="@+id/profilePic"/>
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+                app:layout_constraintStart_toEndOf="@+id/profilePic"
+                app:layout_constraintTop_toTopOf="@+id/profilePic"
+                tools:text="username" />
 
             <TextView
                 android:id="@+id/postDomain"
@@ -51,14 +46,14 @@
                 android:textColor="#b3b3b3"
                 app:layout_constraintBottom_toBottomOf="@+id/profilePic"
                 app:layout_constraintStart_toEndOf="@+id/username"
-                app:layout_constraintTop_toTopOf="@+id/profilePic"/>
+                app:layout_constraintTop_toTopOf="@+id/profilePic"
+                tools:text=" from domain.tld" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/postConstraint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:adjustViewBounds="true"
                 app:layout_constraintTop_toBottomOf="@+id/profilePic">
 
                 <androidx.viewpager2.widget.ViewPager2
@@ -87,7 +82,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@color/browser_actions_bg_grey"
-                    android:longClickable="true" />
+                    tools:ignore="ContentDescription" />
 
                 <FrameLayout
                     android:id="@+id/post_fragment_image_popup_menu_anchor"
@@ -106,11 +101,13 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:gravity="center|center_horizontal|center_vertical"
-                    android:longClickable="true"
                     android:text="@string/cw_nsfw_hidden_media_n_click_to_show"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/ic_launcher_background"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/postPicture"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/postTabs"
                     tools:src="@color/browser_actions_bg_grey" />
 
@@ -121,7 +118,6 @@
                 android:id="@+id/commenter"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:importantForAccessibility="no"
                 android:padding="4dp"
                 android:src="@drawable/ic_comment_empty"
                 app:layout_constraintBottom_toBottomOf="@+id/liker"
@@ -137,7 +133,6 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:clipToPadding="false"
-                android:importantForAccessibility="no"
                 android:padding="4dp"
                 sparkbutton:activeImage="@drawable/ic_like_full"
                 sparkbutton:iconSize="28dp"
@@ -154,7 +149,6 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:clipToPadding="false"
-                android:importantForAccessibility="no"
                 android:padding="4dp"
                 app:layout_constraintBottom_toBottomOf="@+id/commenter"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -166,6 +160,17 @@
                 sparkbutton:primaryColor="@color/share_blue"
                 sparkbutton:secondaryColor="@color/black"/>
 
+            <ImageButton
+                android:id="@+id/status_more"
+                android:layout_width="24dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/status_more_options"
+                android:padding="4dp"
+                style="?android:attr/actionOverflowButtonStyle"
+                app:layout_constraintBottom_toBottomOf="@+id/postDomain"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/postDomain" />
 
             <TextView
                 android:id="@+id/nlikes"
@@ -182,7 +187,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
-                android:gravity="right"
+                android:gravity="end"
                 app:layout_constraintEnd_toEndOf="@+id/reblogger"
                 app:layout_constraintStart_toStartOf="@+id/reblogger"
                 app:layout_constraintTop_toBottomOf="@+id/reblogger"
@@ -214,7 +219,7 @@
                 android:textColor="#b3b3b3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description"
-                tools:text="time" />
+                tools:text="Yesterday" />
 
             <LinearLayout
                 android:id="@+id/commentIn"
@@ -234,7 +239,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/comment"
-                        android:importantForAutofill="no"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -262,15 +266,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="10dp"
-                    tools:text="TextView"/>
+                    tools:text="3 comments"/>
 
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </ScrollView>
-
-    </androidx.cardview.widget.CardView>
-
 
 </FrameLayout>

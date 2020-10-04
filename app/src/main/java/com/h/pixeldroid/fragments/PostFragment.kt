@@ -39,14 +39,6 @@ class PostFragment : Fragment() {
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        currentStatus?.setupPost(root, picRequest, this, statusDomain, true)
-
-        //Setup arguments needed for the onclicklisteners
-        val holder = PostViewHolder(
-            root,
-            requireContext()
-        )
-
         (requireActivity().application as Pixeldroid).getAppComponent().inject(this)
 
         val user = db.userDao().getActiveUser()
@@ -54,21 +46,17 @@ class PostFragment : Fragment() {
         val accessToken = user?.accessToken.orEmpty()
         val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
-        currentStatus?.setDescription(root, api, "Bearer $accessToken")
+        currentStatus?.setupPost(root, picRequest, this, statusDomain, true)
 
-        //Activate onclickListeners
-        currentStatus?.activateLiker(holder, api, "Bearer $accessToken",
-            currentStatus.favourited ?: false
+        val holder = PostViewHolder(
+            root,
+            root.context
         )
-        currentStatus?.activateReblogger(holder, api, "Bearer $accessToken",
-            currentStatus.reblogged ?: false
-        )
-        currentStatus?.activateCommenter(holder, api, "Bearer $accessToken")
-        currentStatus?.showComments(holder, api, "Bearer $accessToken")
 
-        //Activate double tap liking
-        currentStatus?.activateDoubleTapLiker(holder, api, "Bearer $accessToken")
+        currentStatus?.activateButtons(holder, api, "Bearer $accessToken")
+
         return root
+
     }
 
 }

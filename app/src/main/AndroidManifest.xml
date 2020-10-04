@@ -24,9 +24,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+        <activity android:name=".CameraActivity"></activity>
         <activity
-            android:name=".PhotoEditActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".ReportActivity"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".PhotoEditActivity" />
         <activity
             android:name=".PostCreationActivity"
             android:screenOrientation="sensorPortrait"
@@ -47,19 +50,24 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings2"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity"
-            android:parentActivityName=".MainActivity" />
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -89,28 +97,23 @@
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
-                <action
-                    android:name="android.intent.action.SEARCH"
-                    android:screenOrientation="sensorPortrait"
-                    tools:ignore="LockedOrientationActivity" />
+                <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
         <activity
             android:name=".AboutActivity"
+            android:parentActivityName=".SettingsActivity"
             android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity"
-            android:parentActivityName=".SettingsActivity" />
-
-        <activity android:name=".LicenseActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".LicenseActivity"
+            android:parentActivityName=".AboutActivity"
             android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity"
-        android:parentActivityName=".AboutActivity" />
-
+            tools:ignore="LockedOrientationActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

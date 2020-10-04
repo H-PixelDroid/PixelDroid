@@ -14,7 +14,7 @@
     <string name="mention_notification">%1$s ti ha menzionato</string>
     <string name="liked_notification">%1$s è piaciuto il tuo post</string>
     <string name="tab_filters">FILTRI</string>
-    <string name="send">invia</string>
+    <string name="post">invia</string>
     <string name="lbl_brightness">LUMINOSITÀ</string>
     <string name="description">Descrizione…</string>
     <string name="whats_an_instance">Cos\'è un\'istanza\?</string>

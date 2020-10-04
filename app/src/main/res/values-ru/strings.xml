@@ -8,7 +8,7 @@
     <string name="followed_notification">%1$s подписался(-лась) на вас</string>
     <string name="mention_notification">%1$s упомянул(а) вас</string>
     <string name="shared_notification">%1$s поделился(-лась) вашим постом</string>
-    <string name="send">отправить</string>
+    <string name="post">отправить</string>
     <string name="logout">Выйти</string>
     <string name="lbl_brightness">ЯРКОСТЬ</string>
     <string name="whats_an_instance">Что такое инстанс\?</string>

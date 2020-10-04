@@ -14,7 +14,7 @@
     <string name="liked_notification">a %1$s gustoulle a publicación</string>
     <string name="shared_notification">%1$s comparteu a publicación</string>
     <string name="description">Descrición…</string>
-    <string name="send">enviar</string>
+    <string name="post">enviar</string>
     <string name="whats_an_instance">Que é unha instancia\?</string>
     <string name="logout">Saír</string>
     <string name="lbl_brightness">BRILLO</string>

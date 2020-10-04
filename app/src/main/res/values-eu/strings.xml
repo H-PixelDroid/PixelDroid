@@ -9,7 +9,7 @@
     <string name="save_to_gallery">Gorde galerian…</string>
     <string name="logout">Saioa Itxi</string>
     <string name="whats_an_instance">Zer da instantzia bat\?</string>
-    <string name="send">bidali</string>
+    <string name="post">bidali</string>
     <string name="description">Deskribapena…</string>
     <string name="mention_notification">%1$s erabiltzaileak aipatu zaitu</string>
     <string name="followed_notification">%1$s jarraitzen hasi zaizu</string>

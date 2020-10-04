@@ -1,6 +1,5 @@
 package com.h.pixeldroid.fragments
 
-import android.Manifest
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,18 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.h.pixeldroid.R
-import com.h.pixeldroid.utils.ImageUtils
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.single.BasePermissionListener
+import kotlinx.android.synthetic.main.fragment_image.*
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val IMG_URL = "imgurl"
+private const val IMG_DESCRIPTION = "imgdescription"
 private const val RQST_BLDR = "rqstbldr"
 
 /**
@@ -30,11 +25,13 @@ private const val RQST_BLDR = "rqstbldr"
  */
 class ImageFragment : Fragment() {
     private lateinit var imgUrl: String
+    private lateinit var imgDescription: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            imgUrl = it.getString(IMG_URL)!!
+            imgUrl         = it.getString(IMG_URL)!!
+            imgDescription = it.getString(IMG_DESCRIPTION)!!.ifEmpty { getString(R.string.no_description) }
         }
     }
 
@@ -45,49 +42,10 @@ class ImageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_image, container, false)
 
         view.findViewById<ImageView>(R.id.imageImageView).setOnLongClickListener {
-            PopupMenu(view.context, it).apply {
-                setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.image_popup_menu_save_to_gallery -> {
-                            Dexter.withContext(view.context)
-                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .withListener(object: BasePermissionListener() {
-                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                        Toast.makeText(view.context,
-                                            view.context.getString(R.string.write_permission_download_pic),
-                                            Toast.LENGTH_SHORT).show()
-                                    }
-
-                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                        ImageUtils.downloadImage(requireActivity(), imgUrl)
-                                    }
-                                }).check()
-                            true
-                        }
-                        R.id.image_popup_menu_share_picture ->  {
-                            Dexter.withContext(view.context)
-                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .withListener(object: BasePermissionListener() {
-                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                        Toast.makeText(view.context,
-                                            view.context.getString(R.string.write_permission_share_pic),
-                                            Toast.LENGTH_SHORT).show()
-                                    }
-
-                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                        ImageUtils.downloadImage(requireActivity(), imgUrl, share = true)
-                                    }
-                                }).check()
-                            true
-                        }
-                        else -> false
-                    }
-                }
-                inflate(R.menu.image_popup_menu)
-                show()
-            }
+            Snackbar.make(it, imgDescription, Snackbar.LENGTH_SHORT).show()
             true
         }
+
         // Inflate the layout for this fragment
         return view
     }
@@ -100,6 +58,7 @@ class ImageFragment : Fragment() {
             .placeholder(ColorDrawable(Color.GRAY))
             .load(imgUrl)
             .into(view.findViewById(R.id.imageImageView)!!)
+        imageImageView.contentDescription = imgDescription
     }
 
     companion object {
@@ -111,10 +70,11 @@ class ImageFragment : Fragment() {
          * @return A new instance of fragment ImageFragment.
          */
         @JvmStatic
-        fun newInstance(imageUrl: String) =
+        fun newInstance(imageUrl: String, imageDescription: String) =
             ImageFragment().apply {
                 arguments = Bundle().apply {
                     putString(IMG_URL, imageUrl)
+                    putString(IMG_DESCRIPTION, imageDescription)
                 }
             }
     }

@@ -103,11 +103,9 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_edit)
 
-        //TODO move to xml:
-        setSupportActionBar(toolbar)
-        supportActionBar!!.title = "Edit"
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeButtonEnabled(true)
+        supportActionBar?.setTitle(R.string.toolbar_title_edit)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
 
         val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
 
@@ -267,7 +265,11 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     private fun startCrop() {
         val file = File.createTempFile("temp_crop_img", ".png", cacheDir)
 
-        val uCrop: UCrop = UCrop.of(initialUri!!, Uri.fromFile(file))
+        val options: UCrop.Options = UCrop.Options().apply {
+            setStatusBarColor(resources.getColor(R.color.colorPrimaryDark, theme))
+            setActiveControlsWidgetColor(resources.getColor(R.color.colorButtonBg, theme))
+        }
+        val uCrop: UCrop = UCrop.of(initialUri!!, Uri.fromFile(file)).withOptions(options)
         uCrop.start(this)
     }
 
@@ -470,14 +472,19 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
                     if(!save) {
                         sendBackImage(path)
                     } else {
-                        MediaScannerConnection.scanFile(
-                            this,
-                            arrayOf(path.toUri().toFile().absolutePath),
-                            null
+                        if(path.startsWith("file")) {
+                            MediaScannerConnection.scanFile(
+                                this,
+                                arrayOf(path.toUri().toFile().absolutePath),
+                                null
 
-                        ) { path, uri ->
-                            if(uri == null) {
-                                Log.e("NEW IMAGE SCAN FAILED", "Tried to scan $path, but it failed")
+                            ) { path, uri ->
+                                if (uri == null) {
+                                    Log.e(
+                                        "NEW IMAGE SCAN FAILED",
+                                        "Tried to scan $path, but it failed"
+                                    )
+                                }
                             }
                         }
 

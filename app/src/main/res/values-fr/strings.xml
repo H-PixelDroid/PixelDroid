@@ -9,7 +9,7 @@
     <string name="shared_notification">%1$s a partagé votre publication</string>
     <string name="liked_notification">%1$s a aimé votre publication</string>
     <string name="description">Description…</string>
-    <string name="send">envoyer</string>
+    <string name="post">envoyer</string>
     <string name="whats_an_instance">Qu\'est-ce qu\'une instance \?</string>
     <string name="logout">Se déconnecter</string>
     <string name="save_to_gallery">Sauvegarder dans la galerie…</string>

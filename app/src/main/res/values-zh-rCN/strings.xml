@@ -9,7 +9,7 @@
     <string name="auth_failed">无法验证</string>
     <string name="token_error">获取验证令牌时出错</string>
     <string name="theme_header">主题</string>
-    <string name="send">发送</string>
+    <string name="post">发送</string>
     <string name="logout">注销</string>
     <string name="app_name">PixelDroid</string>
     <string name="title_activity_settings2">配置</string>

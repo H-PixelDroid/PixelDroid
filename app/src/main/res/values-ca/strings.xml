@@ -19,7 +19,7 @@
     <string name="save_to_gallery">Desar a la galeria…</string>
     <string name="logout">Tancar sessió</string>
     <string name="whats_an_instance">Què és una instància\?</string>
-    <string name="send">enviar</string>
+    <string name="post">enviar</string>
     <string name="description">Descripció…</string>
     <string name="liked_notification">%1$s ha dona\'t m\'agrada a la teva publicació</string>
     <string name="theme_title">Tema de l\'aplicació</string>

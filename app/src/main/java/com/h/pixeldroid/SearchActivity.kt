@@ -20,9 +20,15 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        var query = intent.getSerializableExtra("searchFeed") as String
+        var query = ""
+        if (Intent.ACTION_SEARCH == intent.action) {
+            query = intent.getStringExtra(SearchManager.QUERY).orEmpty()
+        }
+
         query = query.trim()
+        supportActionBar?.title = query
 
         val searchType = when {
             query.startsWith("#") -> {
@@ -39,6 +45,11 @@ class SearchActivity : AppCompatActivity() {
         val tabs = createSearchTabs(query)
 
         setupTabs(tabs, searchType)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun createSearchTabs(query: String): Array<Fragment>{

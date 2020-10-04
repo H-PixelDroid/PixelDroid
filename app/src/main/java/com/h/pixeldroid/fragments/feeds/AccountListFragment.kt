@@ -1,5 +1,6 @@
 package com.h.pixeldroid.fragments.feeds
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -43,7 +44,7 @@ open class AccountListFragment : FeedFragment() {
 
         //RequestBuilder that is re-used for every image
         profilePicRequest = Glide.with(this)
-            .asDrawable().apply(RequestOptions().circleCrop())
+            .asDrawable().dontAnimate().apply(RequestOptions().circleCrop())
             .placeholder(R.drawable.ic_default_user)
 
         adapter = AccountsRecyclerViewAdapter()
@@ -160,9 +161,11 @@ open class AccountListFragment : FeedFragment() {
 
         override fun onBindViewHolder(holder : ViewHolder, position : Int) {
             val account = getItem(position) ?: return
-            profilePicRequest.load(account.avatar_static).into(holder.avatar)
+            profilePicRequest.load(account.avatar).into(holder.avatar)
 
             holder.username.text = account.username
+            @SuppressLint("SetTextI18n")
+            holder.acct.text = "@${account.acct}"
 
             holder.mView.setOnClickListener { account.openProfile(context) }
         }
@@ -170,6 +173,7 @@ open class AccountListFragment : FeedFragment() {
         inner class ViewHolder(val mView : View) : RecyclerView.ViewHolder(mView) {
             val avatar : ImageView = mView.account_entry_avatar
             val username : TextView = mView.account_entry_username
+            val acct: TextView = mView.account_entry_acct
         }
 
         override fun getPreloadItems(position : Int) : MutableList<Account> {

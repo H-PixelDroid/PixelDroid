@@ -3,7 +3,7 @@
 
     <PreferenceCategory app:title="@string/theme_header">
         <ListPreference
-            app:defaultValue="@string/default_theme"
+            app:defaultValue="default"
             app:entries="@array/theme_entries"
             app:entryValues="@array/theme_values"
             app:key="theme"
@@ -13,5 +13,9 @@
 
     <Preference android:title="@string/about"
         android:key="about"
-        android:summary="@string/about_pixeldroid"/>
+        android:summary="@string/about_pixeldroid">
+        <intent
+            android:targetPackage="com.h.pixeldroid"
+            android:targetClass="com.h.pixeldroid.AboutActivity"/>
+    </Preference>
 </PreferenceScreen>

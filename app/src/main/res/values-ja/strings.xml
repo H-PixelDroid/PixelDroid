@@ -11,7 +11,7 @@
     <string name="followed_notification">%1$s さんにフォローされました</string>
     <string name="liked_notification">%1$s さんがあなたの投稿をお気に入りに登録しました</string>
     <string name="description">説明…</string>
-    <string name="send">送信</string>
+    <string name="post">送信</string>
     <string name="whats_an_instance">インスタンスとは？</string>
     <string name="logout">ログアウト</string>
     <string name="lbl_brightness">輝度</string>

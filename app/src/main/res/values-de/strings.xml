@@ -13,7 +13,7 @@
     <string name="mention_notification">%1$s hat dich erwähnt</string>
     <string name="shared_notification">%1$s hat deinen Beitrag geteilt</string>
     <string name="liked_notification">%1$s hat deinen Beitrag favorisiert</string>
-    <string name="send">senden</string>
+    <string name="post">senden</string>
     <string name="whats_an_instance">Was ist eine Instanz\?</string>
     <string name="theme_title">Erscheinungsbild</string>
     <string name="description">Beschreibung…</string>
