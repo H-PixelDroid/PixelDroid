@@ -105,4 +105,13 @@
     <string name="instance_not_pixelfed_cancel">لغو ورود</string>
     <string name="instance_not_pixelfed_continue">باشه، به هر حال ادامه بده</string>
     <string name="instance_not_pixelfed_warning">به نظر می‌رسد که نشانی وارد شده مربوط به یک نمونه از پیکسل‌فد نباشد و در نتیجه، این برنامه ممکن است به شکل‌های پیش‌بینی نشده‌ای دچار مشکل شود.</string>
+    <string name="about">درباره</string>
+    <string name="license_info">پیکسل‌دروید یک نرم‌افزار آزاد تحت پروانه عمومی همگانی گنو (GPL نسخه ۳ یا بالاتر) است</string>
+    <string name="project_website">وب‌گاه پروژه: https://pixeldroid.org</string>
+    <string name="dependencies_licenses">وابستگی‌ها و پروانه‌ها</string>
+    <string name="about_pixeldroid">درباره پیکسل‌دروید</string>
+    <string name="follows_title">پی‌گیری‌های %1$s</string>
+    <string name="followers_title">پی‌گیرندگان %1$s</string>
+    <string name="post_title">مطلب %1$s</string>
+    <string name="unfollow">لغو پیگیری</string>
 </resources>
