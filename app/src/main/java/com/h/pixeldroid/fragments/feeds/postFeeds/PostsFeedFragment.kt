@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import at.connyduck.sparkbutton.SparkButton
 import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
@@ -60,7 +61,7 @@ abstract class PostsFeedFragment : FeedFragment() {
         super.onViewCreated(view, savedInstanceState)
         val content = makeContent()
         content.observe(viewLifecycleOwner,
-            Observer { c ->
+            { c ->
                 adapter.submitList(c)
                 //after a refresh is done we need to stop the pull to refresh spinner
                 swipeRefreshLayout.isRefreshing = false
@@ -99,29 +100,12 @@ abstract class PostsFeedFragment : FeedFragment() {
             val post = getItem(position) ?: return
             val metrics = context.resources.displayMetrics
             //Limit the height of the different images
-            holder.profilePic.maxHeight = metrics.heightPixels
-            holder.postPic.maxHeight = metrics.heightPixels
+            holder.postPic.maxHeight = metrics.heightPixels * 3/4
 
             //Setup the post layout
             post.setupPost(holder.postView, picRequest, this@PostsFeedFragment, domain, false)
 
-            //Set the special HTML text
-            post.setDescription(holder.postView, api, credential)
-
-            //Activate liker
-            post.activateLiker(holder, api, credential, post.favourited ?: false)
-
-            //Activate double tap liking
-            post.activateDoubleTapLiker(holder, api, credential)
-
-            //Show comments
-            post.showComments(holder, api, credential)
-
-            //Activate Commenter
-            post.activateCommenter(holder, api, credential)
-
-            //Activate Reblogger
-            post.activateReblogger(holder, api ,credential, post.reblogged ?: false)
+            post.activateButtons(holder, api, credential)
         }
 
         override fun getPreloadItems(position: Int): MutableList<Status> {
@@ -160,4 +144,7 @@ class PostViewHolder(val postView: View, val context: android.content.Context) :
     val postDate    : TextView = postView.findViewById(R.id.postDate)
     val postDomain  : TextView = postView.findViewById(R.id.postDomain)
     val sensitiveW  : TextView = postView.findViewById(R.id.sensitiveWarning)
+    val postPager  : ViewPager2 = postView.findViewById(R.id.postPager)
+
+    val more        : ImageButton = postView.findViewById(R.id.status_more)
 }

@@ -1,7 +1,6 @@
 package com.h.pixeldroid
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -26,7 +25,6 @@ import com.h.pixeldroid.interfaces.PostCreationListener
 import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.ProgressRequestBody
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -39,9 +37,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class PostCreationActivity : AppCompatActivity(), PostCreationListener {
+private val TAG = "Post Creation Activity"
+private val MORE_PICTURES_REQUEST_CODE = 0xffff
 
-    private val TAG = "Post Creation Activity"
+
+class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : PostCreationAdapter
@@ -74,16 +74,19 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
         (this.application as Pixeldroid).getAppComponent().inject(this)
 
-        // load images
-        posts = intent.getStringArrayListExtra("pictures_uri")!!
-
-        progressList = posts.map { 0 } as ArrayList<Int>
-        muListOfIds = posts.map { "" }.toMutableList()
+        // get image URIs
+        if(intent.clipData != null) {
+            val count = intent.clipData!!.itemCount
+            for (i in 0 until count) {
+                val imageUri: String = intent.clipData!!.getItemAt(i).uri.toString()
+                posts.add(imageUri)
+            }
+        }
 
         user = db.userDao().getActiveUser()
 
         val instances = db.instanceDao().getAll()
-        maxLength = if (user!=null){
+        maxLength = if (user != null){
             val thisInstances =
                 instances.filter { instanceDatabaseEntity ->
                     instanceDatabaseEntity.uri.contains(user!!.instance_uri)
@@ -100,12 +103,14 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         // TODO
 
         //upload the picture and display progress while doing so
+        muListOfIds = posts.map { "" }.toMutableList()
+        progressList = posts.map { 0 } as ArrayList<Int>
         upload()
 
         adapter = PostCreationAdapter(posts)
         adapter.listener = this
         recycler = findViewById(R.id.image_grid)
-        recycler.layoutManager = GridLayoutManager(this, if (posts.size > 2) 2 else 1)
+        recycler.layoutManager = GridLayoutManager(this, 3)
         recycler.adapter = adapter
 
         // get the description and send the post
@@ -126,8 +131,8 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         val textField = findViewById<TextInputEditText>(R.id.new_post_description_input_field)
         val content = textField.text.toString()
         if (content.length > maxLength) {
-            // error, too much characters
-            textField.error = "Description must contain $maxLength characters at most."
+            // error, too many characters
+            textField.error = getString(R.string.description_max_characters).format(maxLength)
             return false
         }
         // store the description
@@ -135,9 +140,26 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         return true
     }
 
-    private fun upload() {
-        for ((index, post) in posts.withIndex()) {
-            val imageUri = Uri.parse(post)
+    /**
+     * Uploads the images that are in the [posts] array.
+     * Keeps track of them in the [progressList] (for the upload progress), and the [muListOfIds]
+     * (for the list of ids of the uploads).
+     * @param newImagesStartingIndex is the index in the [posts] array we want to start uploading at.
+     * Indices before this are already uploading, or done uploading, from before.
+     * @param editedImage contains the index of the image that was edited. If set, other images are
+     * not uploaded again: they should already be uploading, or be done uploading, from before.
+     */
+    private fun upload(newImagesStartingIndex: Int = 0, editedImage: Int? = null) {
+        enableButton(false)
+        uploadProgressBar.visibility = View.VISIBLE
+        upload_completed_textview.visibility = View.INVISIBLE
+
+        val range: IntRange = if(editedImage == null){
+            newImagesStartingIndex until posts.size
+        } else IntRange(editedImage, editedImage)
+
+        for (index in range) {
+            val imageUri = Uri.parse(posts[index])
             val imageInputStream = contentResolver.openInputStream(imageUri)!!
 
             val size =
@@ -237,7 +259,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         if(enable){
             posting_progress_bar.visibility = View.GONE
             post_creation_send_button.visibility = View.VISIBLE
-        } else{
+        } else {
             posting_progress_bar.visibility = View.VISIBLE
             post_creation_send_button.visibility = View.GONE
         }
@@ -259,49 +281,83 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 posts[positionResult] = data.getStringExtra("result")!!
                 adapter.notifyItemChanged(positionResult)
-                muListOfIds.clear()
-                upload()
-            }
-            else if(resultCode == Activity.RESULT_CANCELED){
-                Toast.makeText(applicationContext, "Edition cancelled", Toast.LENGTH_SHORT).show()
+                muListOfIds[positionResult] = ""
+                progressList[positionResult] = 0
+                upload(editedImage = positionResult)
+            } else if(resultCode == Activity.RESULT_CANCELED){
+                Toast.makeText(applicationContext, "Editing cancelled", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
+            }
+        } else if (requestCode == MORE_PICTURES_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
+
+                val count = data.clipData!!.itemCount
+                for (i in 0 until count) {
+                    val imageUri: String = data.clipData!!.getItemAt(i).uri.toString()
+                    posts.add(imageUri)
+                    progressList.add(0)
+                    muListOfIds.add(i, "")
+                }
+                adapter.notifyDataSetChanged()
+                upload(newImagesStartingIndex = posts.size - count)
+            } else if(resultCode == Activity.RESULT_CANCELED){
+                Toast.makeText(applicationContext, "Adding images", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    class PostCreationAdapter(private val posts: ArrayList<String>): RecyclerView.Adapter<PostCreationAdapter.ViewHolder>() {
-        private var context: Context? = null
+    inner class PostCreationAdapter(private val posts: ArrayList<String>): RecyclerView.Adapter<PostCreationAdapter.ViewHolder>() {
         var listener: PostCreationListener? = null
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            context = parent.context
-            val view = LayoutInflater.from(parent.context)
+            val view =
+                if(viewType == 0) LayoutInflater.from(parent.context)
                 .inflate(R.layout.image_album_creation, parent, false)
+                else LayoutInflater.from(parent.context)
+                    .inflate(R.layout.add_more_album_creation, parent, false)
             return ViewHolder(view)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            Log.d("test", "binded")
-            holder.bind()
+        override fun getItemViewType(position: Int): Int {
+            if(position == posts.size) return 1
+            return 0
         }
 
-        override fun getItemCount(): Int = posts.size
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            if(position != posts.size) {
+                holder.bindImage()
+            } else{
+                holder.bindPlusButton()
+            }
+        }
+
+        override fun getItemCount(): Int = posts.size + 1
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            fun bind() {
-                val image = Uri.parse(posts[adapterPosition])
+            fun bindImage() {
+                val image = Uri.parse(
+                    posts[adapterPosition]
+                )
                 // load image
-                Glide.with(context!!)
+                Glide.with(itemView.context)
                     .load(image)
                     .centerCrop()
                     .into(itemView.galleryImage)
-
                 // adding click or tap handler for the image layout
-                itemView.galleryImage.setOnClickListener {
-                    Log.d("test", "clicked")
+                itemView.setOnClickListener {
                     listener?.onClick(adapterPosition)
+                }
+
+            }
+
+            fun bindPlusButton() {
+                itemView.setOnClickListener {
+                    val intent = Intent(itemView.context, CameraActivity::class.java)
+                    this@PostCreationActivity.startActivityForResult(intent, MORE_PICTURES_REQUEST_CODE)
                 }
             }
         }

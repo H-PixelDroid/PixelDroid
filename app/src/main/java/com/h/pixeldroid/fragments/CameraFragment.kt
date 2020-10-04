@@ -2,6 +2,7 @@ package com.h.pixeldroid.fragments
 
 import android.Manifest
 import android.app.Activity
+import android.content.ClipData
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -23,13 +24,14 @@ import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.PostCreationActivity
+import com.h.pixeldroid.CameraActivity
 import com.h.pixeldroid.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +41,7 @@ import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.properties.Delegates
 
 // This is an arbitrary number we are using to keep track of the permission
 // request. Where an app has multiple context for requesting permission,
@@ -54,7 +57,10 @@ class CameraFragment : Fragment() {
 
     private lateinit var container: ConstraintLayout
     private lateinit var viewFinder: PreviewView
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
+    private val REQUIRED_PERMISSIONS = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
     private val PICK_IMAGE_REQUEST = 1
     private val CAPTURE_IMAGE_REQUEST = 2
 
@@ -63,6 +69,8 @@ class CameraFragment : Fragment() {
     private var preview: Preview? = null
     private var imageCapture: ImageCapture? = null
     private var camera: Camera? = null
+
+    private var inActivity by Delegates.notNull<Boolean>()
 
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
@@ -90,7 +98,8 @@ class CameraFragment : Fragment() {
      */
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            requireContext(), it) == PackageManager.PERMISSION_GRANTED
+            requireContext(), it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onDestroyView() {
@@ -105,8 +114,12 @@ class CameraFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_camera, container, false)
+        savedInstanceState: Bundle?
+    ): View? {
+        inActivity = arguments?.getBoolean("CameraActivity") ?: false
+
+        return inflater.inflate(R.layout.fragment_camera, container, false)
+    }
 
     private fun setGalleryThumbnail(uri: String) {
         // Reference of the view that holds the gallery thumbnail
@@ -203,11 +216,12 @@ class CameraFragment : Fragment() {
                 // A variable number of use-cases can be passed here -
                 // camera provides access to CameraControl & CameraInfo
                 camera = cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture)
+                    this, cameraSelector, preview, imageCapture
+                )
 
                 // Attach the viewfinder's surface provider to preview use case
                 preview?.setSurfaceProvider(viewFinder.createSurfaceProvider())
-            } catch(exc: Exception) {
+            } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
@@ -246,7 +260,6 @@ class CameraFragment : Fragment() {
 
         // In the background, load latest photo taken (if any) for gallery thumbnail
         lifecycleScope.launch(Dispatchers.IO) {
-            // Find the last picture
             // Find the last picture
             val projection = arrayOf(
                 MediaStore.Images.ImageColumns._ID,
@@ -382,10 +395,29 @@ class CameraFragment : Fragment() {
     }
 
     private fun startAlbumCreation(uris: ArrayList<String>) {
-        startActivity(
-            Intent(activity, PostCreationActivity::class.java)
-                .putExtra("pictures_uri", uris)
-        )
+
+        val intent = Intent(requireActivity(), PostCreationActivity::class.java)
+            .apply {
+                uris.forEach{
+                    //Why are we using ClipData here? Because the FLAG_GRANT_READ_URI_PERMISSION
+                    //needs to be applied to the URIs, and this flag flag only applies to the
+                    //Intent's data and any URIs specified in its ClipData.
+                    if(clipData == null){
+                        clipData = ClipData("", emptyArray(), ClipData.Item(it.toUri()))
+                    } else {
+                        clipData!!.addItem(ClipData.Item(it.toUri()))
+                    }
+                }
+                addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+        if(inActivity){
+            requireActivity().setResult(Activity.RESULT_OK, intent)
+            requireActivity().finish()
+        } else {
+            startActivity(intent)
+        }
     }
 
     companion object {

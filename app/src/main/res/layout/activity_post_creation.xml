@@ -42,17 +42,29 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <com.mikepenz.iconics.view.IconicsTextView
+        android:id="@+id/upload_completed_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/media_upload_completed"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/image_grid"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@id/postTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@id/upload_completed_textview" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonConstraints"
@@ -61,7 +73,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textInputLayout2">
+        app:layout_constraintTop_toTopOf="@id/postTextInputLayout">
 
         <Button
             android:id="@+id/post_creation_send_button"
@@ -70,7 +82,7 @@
             android:backgroundTint="@color/colorButtonBg"
             android:enabled="false"
             android:visibility="gone"
-            android:text="@string/send"
+            android:text="@string/post"
             android:textColor="@color/colorButtonText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -93,12 +105,12 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/textInputLayout2"
+        app:layout_constraintBottom_toTopOf="@id/postTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
+        android:id="@+id/postTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/description"
@@ -121,16 +133,4 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.mikepenz.iconics.view.IconicsTextView
-        android:id="@+id/upload_completed_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/media_upload_completed"
-        android:textColor="@android:color/holo_green_light"
-        android:textSize="16sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

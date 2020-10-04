@@ -44,8 +44,9 @@
     <string name="upload_post_success">Post uploaded successfully</string>
     <string name="upload_post_error">Post upload failed</string>
     <string name="description">Description…</string>
-    <string name="send">send</string>
-    <!-- Post edition -->
+    <string name="post">post</string>
+    <string name="add_photo">Add a photo</string>
+    <!-- Post editing -->
     <string name="lbl_brightness">BRIGHTNESS</string>
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">SATURATION</string>
@@ -121,6 +122,19 @@
     <string name="post_title">%1$s\'s post</string>
     <string name="followers_title">%1$s\'s followers</string>
     <string name="follows_title">%1$s\'s follows</string>
+    <string name="search_empty_error">Search query can\'t be empty</string>
+    <string name="status_more_options">More options</string>
+    <string name="report">Report</string>
+    <string name="share_link">Share Link</string>
+    <string name="optional_report_comment">Optional message for mods/admins</string>
+    <string name="report_target">Report @%1$s\'s post</string>
+    <!-- Text on button, shown when report was successful. {gmd_check_circle} is an icon, position it as is appropriate in target language -->
+    <string name="reported">Reported {gmd_check_circle}</string>
+    <string name="report_error">Could not send report</string>
+    <string name="toolbar_title_edit">Edit</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="open_drawer_menu">Open drawer menu</string>
+    <string name="discover">DISCOVER</string>
 
 
 </resources>

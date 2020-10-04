@@ -16,7 +16,7 @@
     <string name="shared_notification">‏%1$s مطلب شما را هم‌رسانی کرد</string>
     <string name="liked_notification">‏%1$s مطلب شما را پسندید</string>
     <string name="description">توضیحات…</string>
-    <string name="send">بفرست</string>
+    <string name="post">بفرست</string>
     <string name="whats_an_instance">یک نمونه چیست؟</string>
     <string name="logout">خروج</string>
     <string name="lbl_brightness">روشنایی</string>

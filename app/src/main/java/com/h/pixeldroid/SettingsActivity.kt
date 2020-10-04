@@ -54,13 +54,6 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
      class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
-            val button: Preference? = findPreference("about")
-            button?.onPreferenceClickListener =
-                Preference.OnPreferenceClickListener {
-                    val intent = Intent(context, AboutActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
         }
     }
 

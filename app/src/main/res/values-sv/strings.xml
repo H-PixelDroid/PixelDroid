@@ -22,7 +22,7 @@
     <string name="shared_notification">%1$s delande ditt inlägg</string>
     <string name="liked_notification">%1$s gillar ditt inlägg</string>
     <string name="description">Beskrivning…</string>
-    <string name="send">skicka</string>
+    <string name="post">skicka</string>
     <string name="whats_an_instance">Vad är en instans\?</string>
     <string name="logout">Logga ut</string>
     <string name="lbl_brightness">LJUSSTYRKA</string>

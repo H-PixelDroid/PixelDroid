@@ -117,7 +117,7 @@ open class FeedFragment: Fragment() {
         }
 
         /**
-         * Do nothing here, it is expected to pull to refresh to load newer notifications
+         * Do nothing here, it is expected to pull to refresh to load newer items
          */
         override fun loadBefore(params: LoadParams<ObjectId>, callback: LoadCallback<APIObject>) {}
 

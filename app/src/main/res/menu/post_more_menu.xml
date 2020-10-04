@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/post_more_menu_report"
+        android:title="@string/report" />
+    <item android:id="@+id/post_more_menu_share_link"
+        android:title="@string/share_link" />
+
+
+    <!-- Group that should only be shown if there are pictures in the post -->
+    <group android:id="@+id/post_more_group_picture">
+        <item android:id="@+id/post_more_menu_share_picture"
+            android:title="@string/share_picture"/>
+        <item android:id="@+id/post_more_menu_save_to_gallery"
+            android:title="@string/save_to_gallery"/>
+    </group>
+</menu>

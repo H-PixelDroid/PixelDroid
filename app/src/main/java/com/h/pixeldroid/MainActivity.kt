@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDrawer() {
-        main_toolbar.setNavigationOnClickListener {
+        main_drawer_button.setOnClickListener{
             drawer_layout.open()
         }
 

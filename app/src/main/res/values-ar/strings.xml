@@ -15,7 +15,7 @@
     <string name="auth_failed">فشلت المصادقة</string>
     <string name="followed_notification">يتابعك %1$s</string>
     <string name="description">الوصف…</string>
-    <string name="send">ارسل</string>
+    <string name="post">ارسل</string>
     <string name="whats_an_instance">ماذا نعني بمثيل الخادم؟</string>
     <string name="logout">الخروج</string>
     <string name="tab_filters">الفلاتر</string>

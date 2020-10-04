@@ -266,4 +266,15 @@ interface PixelfedAPI {
     fun discover(
         @Header("Authorization") authorization: String
     ) : Call<DiscoverPosts>
+
+    @FormUrlEncoded
+    @POST("/api/v1/reports")
+    fun report(
+        @Header("Authorization") authorization: String,
+        @Field("account_id") account_id: String,
+        @Field("status_ids") status_ids: List<Status>,
+        @Field("comment") comment: String,
+        @Field("forward") forward: Boolean = true
+    ) : Call<Report>
+
 }

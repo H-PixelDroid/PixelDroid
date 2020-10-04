@@ -24,6 +24,7 @@ interface ApplicationComponent {
     fun inject(activity: PostCreationActivity?)
     fun inject(activity: ProfileActivity?)
     fun inject(mainActivity: MainActivity?)
+    fun inject(activity: ReportActivity?)
     fun inject(fragment: PostFragment)
     fun inject(fragment: SearchDiscoverFragment)
     fun inject(fragment: OfflineFeedFragment)

@@ -9,7 +9,7 @@
     <string name="theme_header">Тема</string>
     <string name="mention_notification">%1$s згадав(-ла) вас</string>
     <string name="description">Опис…</string>
-    <string name="send">відправити</string>
+    <string name="post">відправити</string>
     <string name="lbl_brightness">Яскравість</string>
     <string name="lbl_contrast">Контраст</string>
     <string name="lbl_saturation">Насичення</string>

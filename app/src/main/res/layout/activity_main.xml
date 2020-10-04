@@ -10,22 +10,27 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main_activity_main_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/main_toolbar"
+        <LinearLayout
+            android:id="@+id/main_activity_main_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryTab"
-            app:contentInsetStartWithNavigation="0dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:navigationContentDescription="Open drawer menu"
-            app:navigationIcon="@drawable/ic_baseline_menu_24">
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageButton
+                android:id="@+id/main_drawer_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryTab"
+                android:contentDescription="@string/open_drawer_menu"
+                android:padding="12dp"
+                android:src="@drawable/ic_baseline_menu_24" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
@@ -36,19 +41,17 @@
                 app:tabMaxWidth="0dp"
                 app:tabMode="fixed"
                 app:tabUnboundedRipple="false" />
-
-        </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            app:layout_constraintBottom_toTopOf="@+id/main_toolbar"
+            app:layout_constraintBottom_toTopOf="@+id/main_activity_main_linear_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

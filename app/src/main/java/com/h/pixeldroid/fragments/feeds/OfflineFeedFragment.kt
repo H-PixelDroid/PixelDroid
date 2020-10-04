@@ -172,8 +172,8 @@ class OfflineFeedFragment: Fragment() {
                     holder.itemView.postTabs.visibility = View.VISIBLE
                     val tabs : ArrayList<ImageFragment> = ArrayList()
                     //Fill the tabs with each mediaAttachment
-                    for(media in post.media_urls) {
-                        tabs.add(ImageFragment.newInstance(media))
+                    for((index, media) in post.media_urls.withIndex()) {
+                        tabs.add(ImageFragment.newInstance(media, "Photo $index"))
                     }
                     holder.itemView.postPager.adapter = object : FragmentStateAdapter(this@OfflineFeedFragment) {
                         override fun createFragment(position: Int): Fragment {

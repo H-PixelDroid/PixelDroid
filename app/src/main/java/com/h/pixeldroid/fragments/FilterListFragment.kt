@@ -50,9 +50,12 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
         recyclerView.addItemDecoration(SpaceItemDecoration(space))
         recyclerView.adapter = adapter
 
-        displayImage(null)
-
         return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        displayImage(null)
     }
 
     private fun displayImage(bitmap: Bitmap?) {
@@ -74,10 +77,10 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
             })
                 ?: return@Runnable
 
-            setupFilter(tbImage)
+            if(activity != null) setupFilter(tbImage)
 
-            tbItemList.addAll(ThumbnailsManager.processThumbs(activity))
-            requireActivity().runOnUiThread{ adapter.notifyDataSetChanged() }
+            if(context != null) tbItemList.addAll(ThumbnailsManager.processThumbs(context))
+            activity?.runOnUiThread{ adapter.notifyDataSetChanged() }
         }
 
         Thread(r).start()
@@ -93,7 +96,7 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
         tbItem.filterName = tbItem.filter.name
         ThumbnailsManager.addThumb(tbItem)
 
-        val filters = FilterPack.getFilterPack(requireActivity())
+        val filters = FilterPack.getFilterPack(context)
 
         for (filter in filters) {
             val item = ThumbnailItem()

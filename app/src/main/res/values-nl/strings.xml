@@ -11,7 +11,7 @@
     <string name="menu_account">Mijn profiel</string>
     <string name="logout">Log uit</string>
     <string name="whats_an_instance">Wat is een instance\?</string>
-    <string name="send">stuur</string>
+    <string name="post">stuur</string>
     <string name="description">Beschrijving…</string>
     <string name="liked_notification">%1$s vond je bericht leuk</string>
     <string name="shared_notification">%1$s heeft je bericht gedeeld</string>
