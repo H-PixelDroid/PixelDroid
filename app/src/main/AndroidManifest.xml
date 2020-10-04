@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".CameraActivity" />
         <activity
             android:name=".ReportActivity"
             android:screenOrientation="sensorPortrait"
