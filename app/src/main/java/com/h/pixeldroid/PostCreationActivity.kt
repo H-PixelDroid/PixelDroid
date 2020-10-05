@@ -16,7 +16,7 @@ import androidx.core.net.toFile
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.UserDatabaseEntity
@@ -58,9 +58,6 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
     private var posts: ArrayList<String> = ArrayList()
 
-    private var maxLength: Int = Instance.DEFAULT_MAX_TOOT_CHARS
-
-    private var description: String = ""
     @Inject
     lateinit var db: AppDatabase
 
@@ -86,7 +83,10 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         user = db.userDao().getActiveUser()
 
         val instances = db.instanceDao().getAll()
-        maxLength = if (user != null){
+
+        val textField = findViewById<TextInputLayout>(R.id.postTextInputLayout)
+
+        textField.counterMaxLength = if (user != null){
             val thisInstances =
                 instances.filter { instanceDatabaseEntity ->
                     instanceDatabaseEntity.uri.contains(user!!.instance_uri)
@@ -115,7 +115,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
 
         // get the description and send the post
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
-            if (setDescription() && muListOfIds.isNotEmpty()) post()
+            if (validateDescription() && muListOfIds.isNotEmpty()) post()
         }
 
         // Button to retry image upload when it fails
@@ -127,16 +127,14 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
         }
     }
 
-    private fun setDescription(): Boolean {
-        val textField = findViewById<TextInputEditText>(R.id.new_post_description_input_field)
-        val content = textField.text.toString()
-        if (content.length > maxLength) {
+    private fun validateDescription(): Boolean {
+        val textField = findViewById<TextInputLayout>(R.id.postTextInputLayout)
+        val content = textField.editText?.length() ?: 0
+        if (content > textField.counterMaxLength) {
             // error, too many characters
-            textField.error = getString(R.string.description_max_characters).format(maxLength)
+            textField.error = getString(R.string.description_max_characters).format(textField.counterMaxLength)
             return false
         }
-        // store the description
-        description = content
         return true
     }
 
@@ -224,6 +222,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
     }
 
     private fun post() {
+        val description = new_post_description_input_field.text.toString()
         enableButton(false)
         pixelfedAPI.postStatus(
             authorization = "Bearer $accessToken",
@@ -285,7 +284,7 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
                 progressList[positionResult] = 0
                 upload(editedImage = positionResult)
             } else if(resultCode == Activity.RESULT_CANCELED){
-                Toast.makeText(applicationContext, "Editing cancelled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Editing canceled", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
             }
@@ -297,12 +296,12 @@ class PostCreationActivity : AppCompatActivity(), PostCreationListener {
                     val imageUri: String = data.clipData!!.getItemAt(i).uri.toString()
                     posts.add(imageUri)
                     progressList.add(0)
-                    muListOfIds.add(i, "")
+                    muListOfIds.add("")
                 }
                 adapter.notifyDataSetChanged()
                 upload(newImagesStartingIndex = posts.size - count)
             } else if(resultCode == Activity.RESULT_CANCELED){
-                Toast.makeText(applicationContext, "Adding images", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Adding images canceled", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
             }
