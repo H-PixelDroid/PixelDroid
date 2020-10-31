@@ -3,6 +3,7 @@ package com.h.pixeldroid.fragments
 import android.Manifest
 import android.app.Activity
 import android.content.ClipData
+import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -31,7 +32,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.h.pixeldroid.PostCreationActivity
-import com.h.pixeldroid.CameraActivity
 import com.h.pixeldroid.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -121,7 +121,7 @@ class CameraFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
-    private fun setGalleryThumbnail(uri: String) {
+    private fun setGalleryThumbnail(uri: Uri) {
         // Reference of the view that holds the gallery thumbnail
         val thumbnail = container.findViewById<ImageButton>(R.id.photo_view_button)
 
@@ -263,19 +263,22 @@ class CameraFragment : Fragment() {
             // Find the last picture
             val projection = arrayOf(
                 MediaStore.Images.ImageColumns._ID,
-                MediaStore.Images.ImageColumns.DATA,
-                MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
-                MediaStore.Images.ImageColumns.DATE_TAKEN,
-                MediaStore.Images.ImageColumns.MIME_TYPE
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) MediaStore.Images.ImageColumns.DATE_TAKEN
+                else MediaStore.Images.ImageColumns.DATE_MODIFIED,
             )
             val cursor = requireContext().contentResolver
                 .query(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
-                    null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC"
+                    null,
+                    (if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) MediaStore.Images.ImageColumns.DATE_TAKEN
+                    else MediaStore.Images.ImageColumns.DATE_MODIFIED) + " DESC"
                 )
             if (cursor != null && cursor.moveToFirst()) {
-                val uri = Uri.parse(cursor.getString(1)).path ?: ""
-                setGalleryThumbnail(uri)
+                val url = ContentUris.withAppendedId(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    cursor.getLong(0)
+                )
+                setGalleryThumbnail(url)
                 cursor.close()
             }
         }
