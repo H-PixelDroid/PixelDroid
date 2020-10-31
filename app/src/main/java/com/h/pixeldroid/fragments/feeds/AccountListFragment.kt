@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.Observer
@@ -34,7 +33,9 @@ open class AccountListFragment : FeedFragment() {
     lateinit var profilePicRequest: RequestBuilder<Drawable>
     protected lateinit var adapter : FeedsRecyclerViewAdapter<Account, AccountsRecyclerViewAdapter.ViewHolder>
     lateinit var factory: FeedDataSourceFactory<String, Account>
+    lateinit var content: LiveData<PagedList<Account>>
 
+    private var currentPage = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +63,7 @@ open class AccountListFragment : FeedFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val content = makeContent()
+        content = makeContent()
 
         content.observe(viewLifecycleOwner,
             Observer { c ->
@@ -74,6 +75,7 @@ open class AccountListFragment : FeedFragment() {
         swipeRefreshLayout.setOnRefreshListener {
             showError(show = false)
 
+            currentPage = 0
             //by invalidating data, loadInitial will be called again
             factory.liveData.value!!.invalidate()
         }
@@ -98,7 +100,7 @@ open class AccountListFragment : FeedFragment() {
 
         //We use the id as the key
         override fun getKey(item: Account): String {
-            return item.id
+            return currentPage.toString()
         }
 
         override fun makeInitialCall(requestedLoadSize: Int): Call<List<Account>> {
@@ -116,15 +118,18 @@ open class AccountListFragment : FeedFragment() {
         }
 
         override fun makeAfterCall(requestedLoadSize: Int, key: String): Call<List<Account>> {
+            // Pixelfed and Mastodon don't implement this in the same fashion. Pixelfed uses
+            // Laravel's paging mechanism, while Mastodon uses the Link header for pagination.
+            // No need to know which is which, they should ignore the non-relevant argument
             return if (following) {
                 pixelfedAPI.followers(
                     id, "Bearer $accessToken",
-                    since_id = key, limit = requestedLoadSize
+                    limit = requestedLoadSize, page = key, max_id = key
                 )
             } else {
                 pixelfedAPI.following(
                     id, "Bearer $accessToken",
-                    since_id = key, limit = requestedLoadSize
+                    limit = requestedLoadSize, page = key, max_id = key
                 )
             }
         }
@@ -135,6 +140,20 @@ open class AccountListFragment : FeedFragment() {
                 override fun onResponse(call: Call<List<Account>>, response: Response<List<Account>>) {
                     if (response.isSuccessful && response.body() != null) {
                         val data = response.body()!!
+                        if(response.headers()["Link"] != null){
+                            //Header is of the form:
+                            // Link: <https://mastodon.social/api/v1/accounts/1/followers?limit=2&max_id=7628164>; rel="next", <https://mastodon.social/api/v1/accounts/1/followers?limit=2&since_id=7628165>; rel="prev"
+                            // So we want the first max_id value. In case there are arguments after
+                            // the max_id in the URL, we make sure to stop at the first '?'
+                            currentPage = response.headers()["Link"]
+                                .orEmpty()
+                                .substringAfter("max_id=")
+                                .substringBefore('?')
+                                .substringBefore('>')
+                                .toIntOrNull() ?: 0
+                        } else {
+                            currentPage++
+                        }
                         callback.onResult(data)
                     } else{
                         showError()

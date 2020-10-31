@@ -16,7 +16,7 @@ import com.h.pixeldroid.utils.ImageConverter.Companion.setSquareImageFromURL
 /**
  * [RecyclerView.Adapter] that can display a list of [Status]s
  */
-class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecyclerViewAdapter.ViewHolder>() {
+class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolder>() {
     private val posts: ArrayList<Status> = ArrayList()
 
     fun addPosts(newPosts : List<Status>) {
@@ -25,19 +25,23 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecycler
         notifyItemRangeInserted(size, newPosts.size)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfilePostViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_profile_posts, parent, false)
-        return ViewHolder(view)
+        return ProfilePostViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProfilePostViewHolder, position: Int) {
         val post = posts[position]
 
         if (post.sensitive!!)
             setSquareImageFromDrawable(holder.postView, getDrawable(holder.postView.context, R.drawable.ic_sensitive), holder.postPreview)
         else
             setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)
+
+        if(post.media_attachments?.size ?: 0 > 1){
+            holder.albumIcon.visibility = View.VISIBLE
+        }
 
         holder.postPreview.setOnClickListener {
             val intent = Intent(holder.postPreview.context, PostActivity::class.java)
@@ -47,8 +51,9 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostsRecycler
     }
 
     override fun getItemCount(): Int = posts.size
+}
 
-    inner class ViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
-        val postPreview: ImageView = postView.findViewById(R.id.postPreview)
-    }
+class ProfilePostViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
+    val postPreview: ImageView = postView.findViewById(R.id.postPreview)
+    val albumIcon: ImageView = postView.findViewById(R.id.albumIcon)
 }

@@ -29,7 +29,7 @@ class SearchHashtagFragment: FeedFragment(){
 
     private lateinit var query: String
     private lateinit var content: LiveData<PagedList<Tag>>
-    protected lateinit var adapter : TagsRecyclerViewAdapter
+    private lateinit var adapter : TagsRecyclerViewAdapter
     lateinit var factory: FeedDataSourceFactory<Int, Tag>
 
 
@@ -80,7 +80,7 @@ class SearchHashtagFragment: FeedFragment(){
         }
         private fun searchMakeAfterCall(requestedLoadSize: Int, key: Int): Call<Results> {
             return pixelfedAPI
-                .search("Bearer $accessToken", offset=key,
+                .search("Bearer $accessToken", offset = key.toString(),
                     limit="$requestedLoadSize", q = query,
                     type = Results.SearchType.hashtags)
         }

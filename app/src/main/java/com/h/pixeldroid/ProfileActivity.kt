@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Relationship
@@ -35,6 +36,8 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var accessToken : String
     private lateinit var domain : String
     private var account: Account? = null
+    private var user: UserDatabaseEntity? = null
+
     @Inject
     lateinit var db: AppDatabase
 
@@ -49,7 +52,7 @@ class ProfileActivity : AppCompatActivity() {
 
         (this.application as Pixeldroid).getAppComponent().inject(this)
 
-        val user = db.userDao().getActiveUser()
+        user = db.userDao().getActiveUser()
 
         domain = user?.instance_uri.orEmpty()
         pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
@@ -73,11 +76,10 @@ class ProfileActivity : AppCompatActivity() {
         // Set profile according to given account
         account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
 
-        account?.let {
+        if(account != null){
             setViews()
-            activateFollow()
             setPosts()
-        } ?: run {
+        } else {
             pixelfedAPI.verifyCredentials("Bearer $accessToken")
                 .enqueue(object : Callback<Account> {
                     override fun onResponse(call: Call<Account>, response: Response<Account>) {
@@ -94,12 +96,13 @@ class ProfileActivity : AppCompatActivity() {
                         Log.e("ProfileActivity:", t.toString())
                     }
                 })
-
-            // Edit button redirects to Pixelfed's "edit account" page
-            val editButton = findViewById<Button>(R.id.editButton)
-            editButton.visibility = View.VISIBLE
-            editButton.setOnClickListener{ onClickEditButton() }
         }
+
+        //if we aren't viewing our own account, activate follow button
+        if(account != null && account!!.id != user?.user_id) activateFollow()
+        //if we *are* viewing our own account, activate the edit button
+        else activateEditButton()
+
 
         // On click open followers list
         findViewById<TextView>(R.id.nbFollowersTextView).setOnClickListener{ onClickFollowers() }
@@ -187,7 +190,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun onClickFollowers() {
         val intent = Intent(this, FollowsActivity::class.java)
         intent.putExtra(Account.FOLLOWERS_TAG, true)
-        intent.putExtra(Account.ACCOUNT_ID_TAG, account?.id)
+        intent.putExtra(Account.ACCOUNT_TAG, account)
 
         ContextCompat.startActivity(this, intent, null)
     }
@@ -198,6 +201,13 @@ class ProfileActivity : AppCompatActivity() {
         intent.putExtra(Account.ACCOUNT_TAG, account)
 
         ContextCompat.startActivity(this, intent, null)
+    }
+
+    private fun activateEditButton() {
+        // Edit button redirects to Pixelfed's "edit account" page
+        val editButton = findViewById<Button>(R.id.editButton)
+        editButton.visibility = View.VISIBLE
+        editButton.setOnClickListener{ onClickEditButton() }
     }
 
     /**

@@ -9,6 +9,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
@@ -70,12 +71,15 @@ open class FeedFragment: Fragment() {
     }
 
     fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
+        val errorLayout = view?.findViewById<ConstraintLayout>(R.id.errorLayout)
+        val progressBar = view?.findViewById<ProgressBar>(R.id.progressBar)
+
         if(show){
-            errorLayout.visibility = VISIBLE
-            progressBar.visibility = GONE
+            errorLayout?.visibility = VISIBLE
+            progressBar?.visibility = GONE
         } else {
-            errorLayout.visibility = GONE
-            progressBar.visibility = VISIBLE
+            errorLayout?.visibility = GONE
+            progressBar?.visibility = VISIBLE
         }
     }
 

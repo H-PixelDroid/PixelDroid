@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.Pixeldroid
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
+import com.h.pixeldroid.adapters.ProfilePostViewHolder
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.di.PixelfedAPIHolder
@@ -29,7 +31,6 @@ import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.color
-import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -49,6 +50,7 @@ class SearchDiscoverFragment : Fragment() {
     private lateinit var accessToken: String
     private lateinit var discoverProgressBar: ProgressBar
     private lateinit var discoverRefreshLayout: SwipeRefreshLayout
+
     @Inject
     lateinit var db: AppDatabase
 
@@ -108,10 +110,11 @@ class SearchDiscoverFragment : Fragment() {
     }
 
     fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
+        val motionLayout = view?.findViewById<MotionLayout>(R.id.motionLayout)
         if(show){
-            motionLayout.transitionToEnd()
+            motionLayout?.transitionToEnd()
         } else {
-            motionLayout.transitionToStart()
+            motionLayout?.transitionToStart()
         }
         discoverRefreshLayout.isRefreshing = false
         discoverProgressBar.visibility = View.GONE
@@ -140,10 +143,11 @@ class SearchDiscoverFragment : Fragment() {
                 }
             })
     }
+
     /**
      * [RecyclerView.Adapter] that can display a list of [DiscoverPost]s
      */
-    class DiscoverRecyclerViewAdapter: RecyclerView.Adapter<DiscoverRecyclerViewAdapter.ViewHolder>() {
+    class DiscoverRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolder>() {
         private val posts: ArrayList<DiscoverPost> = ArrayList()
 
         fun addPosts(newPosts : List<DiscoverPost>) {
@@ -152,14 +156,17 @@ class SearchDiscoverFragment : Fragment() {
             notifyDataSetChanged()
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfilePostViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_profile_posts, parent, false)
-            return ViewHolder(view)
+            return ProfilePostViewHolder(view)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: ProfilePostViewHolder, position: Int) {
             val post = posts[position]
+            if(post.type?.contains("album") == true) {
+                holder.albumIcon.visibility = View.VISIBLE
+            }
             ImageConverter.setSquareImageFromURL(holder.postView, post.thumb, holder.postPreview)
             holder.postPreview.setOnClickListener {
                 val intent = Intent(holder.postView.context, PostActivity::class.java)
@@ -169,9 +176,5 @@ class SearchDiscoverFragment : Fragment() {
         }
 
         override fun getItemCount(): Int = posts.size
-
-        inner class ViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
-            val postPreview: ImageView = postView.findViewById(R.id.postPreview)
-        }
     }
 }
