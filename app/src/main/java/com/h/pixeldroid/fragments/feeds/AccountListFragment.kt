@@ -75,7 +75,7 @@ open class AccountListFragment : FeedFragment() {
         swipeRefreshLayout.setOnRefreshListener {
             showError(show = false)
 
-            currentPage = 0
+            currentPage = 1
             //by invalidating data, loadInitial will be called again
             factory.liveData.value!!.invalidate()
         }
