@@ -72,6 +72,8 @@ open class AccountListFragment : FeedFragment() {
             })
 
         swipeRefreshLayout.setOnRefreshListener {
+            showError(show = false)
+
             //by invalidating data, loadInitial will be called again
             factory.liveData.value!!.invalidate()
         }
@@ -135,14 +137,14 @@ open class AccountListFragment : FeedFragment() {
                         val data = response.body()!!
                         callback.onResult(data)
                     } else{
-                        Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
+                        showError()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<List<Account>>, t: Throwable) {
-                    Toast.makeText(context, getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                    showError(errorText = R.string.feed_failed)
                     Log.e("AccountListFragment", t.toString())
                 }
             })

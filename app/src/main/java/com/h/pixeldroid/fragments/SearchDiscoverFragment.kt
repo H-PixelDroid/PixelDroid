@@ -9,28 +9,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.textview.MaterialTextView
 import com.h.pixeldroid.Pixeldroid
 import com.h.pixeldroid.PostActivity
 import com.h.pixeldroid.R
-import com.h.pixeldroid.SearchActivity
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.DiscoverPost
 import com.h.pixeldroid.objects.DiscoverPosts
 import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.ImageConverter
+import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
-import com.mikepenz.iconics.utils.padding
+import com.mikepenz.iconics.utils.color
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -85,6 +84,7 @@ class SearchDiscoverFragment : Fragment() {
         discoverText.setCompoundDrawables(IconicsDrawable(requireContext(), GoogleMaterial.Icon.gmd_explore).apply {
             sizeDp = 24
             paddingDp = 20
+            color = IconicsColor.colorRes(R.color.colorDrawing)
         }, null, null, null)
 
         return view
@@ -107,12 +107,24 @@ class SearchDiscoverFragment : Fragment() {
         }
     }
 
+    fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
+        if(show){
+            motionLayout.transitionToEnd()
+        } else {
+            motionLayout.transitionToStart()
+        }
+        discoverRefreshLayout.isRefreshing = false
+        discoverProgressBar.visibility = View.GONE
+    }
+
+
     private fun getDiscover() {
 
         api.discover("Bearer $accessToken")
             .enqueue(object : Callback<DiscoverPosts> {
 
                 override fun onFailure(call: Call<DiscoverPosts>, t: Throwable) {
+                    showError()
                     Log.e("SearchDiscoverFragment:", t.toString())
                 }
 
@@ -120,8 +132,10 @@ class SearchDiscoverFragment : Fragment() {
                     if(response.code() == 200) {
                         val discoverPosts = response.body()!!
                         adapter.addPosts(discoverPosts.posts)
-                        discoverProgressBar.visibility = View.GONE
-                        discoverRefreshLayout.isRefreshing = false
+                        showError(show = false)
+                    }
+                    else {
+                        showError()
                     }
                 }
             })

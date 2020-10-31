@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.h.pixeldroid.R
 import com.h.pixeldroid.fragments.feeds.FeedFragment
 import com.h.pixeldroid.fragments.feeds.postFeeds.PostsFeedFragment
 import com.h.pixeldroid.objects.Results
@@ -68,15 +69,15 @@ class SearchPostsFragment: PostsFeedFragment(){
                     if (response.code() == 200) {
                         val notifications = response.body()!!.statuses as ArrayList<Status>
                         callback.onResult(notifications as List<Status>)
-
-                    } else{
-                        Log.e("FeedFragment", "got response code ${response.code()}")
+                    } else {
+                        showError()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<Results>, t: Throwable) {
+                    showError(errorText = R.string.feed_failed)
                     Log.e("FeedFragment", t.toString())
                 }
             })

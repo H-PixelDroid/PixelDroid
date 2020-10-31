@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
@@ -86,6 +85,8 @@ class NotificationsFragment : FeedFragment() {
             })
 
         swipeRefreshLayout.setOnRefreshListener {
+            showError(show = false)
+
             //by invalidating data, loadInitial will be called again
             factory.liveData.value!!.invalidate()
         }
@@ -125,15 +126,15 @@ class NotificationsFragment : FeedFragment() {
                     if (response.isSuccessful && response.body() != null) {
                         val data = response.body()!!
                         callback.onResult(data)
-                    } else{
-                        Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
+                    } else {
+                        showError()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<List<Notification>>, t: Throwable) {
-                    Toast.makeText(context, getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                    showError(errorText = R.string.feed_failed)
                     Log.e("NotificationsFragment", t.toString())
                 }
             })

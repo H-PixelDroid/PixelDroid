@@ -77,14 +77,14 @@ class SearchAccountFragment: AccountListFragment(){
                         callback.onResult(notifications as List<Account>)
 
                     } else{
-                        Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
+                        showError()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<Results>, t: Throwable) {
-                    Toast.makeText(context,getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                    showError(errorText = R.string.feed_failed)
                     Log.e("FeedFragment", t.toString())
                 }
             })
