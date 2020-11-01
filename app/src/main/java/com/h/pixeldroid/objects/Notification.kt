@@ -16,6 +16,6 @@ data class Notification(
     val status: Status? = null
 ): FeedContent() {
     enum class NotificationType {
-        follow, mention, reblog, favourite
+        follow, mention, reblog, favourite, poll
     }
 }

@@ -156,7 +156,7 @@ class NotificationsFragment : FeedFragment() {
             }
         }
 
-        private fun openPostFromNotifcation(notification: Notification) : Intent {
+        private fun openPostFromNotification(notification: Notification) : Intent {
             val intent = Intent(context, PostActivity::class.java)
             intent.putExtra(Status.POST_TAG, notification.status)
             return  intent
@@ -165,11 +165,9 @@ class NotificationsFragment : FeedFragment() {
         private fun openActivity(notification: Notification){
             val intent: Intent
             when (notification.type){
-                Notification.NotificationType.mention, Notification.NotificationType.favourite-> {
-                    intent = openPostFromNotifcation(notification)
-                }
-                Notification.NotificationType.reblog-> {
-                    intent = openPostFromNotifcation(notification)
+                Notification.NotificationType.mention, Notification.NotificationType.favourite,
+                Notification.NotificationType.poll, Notification.NotificationType.reblog -> {
+                    intent = openPostFromNotification(notification)
                 }
                 Notification.NotificationType.follow -> {
                     intent = Intent(context, ProfileActivity::class.java)
@@ -236,6 +234,9 @@ class NotificationsFragment : FeedFragment() {
 
                 Notification.NotificationType.favourite -> {
                     setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_like_full)
+                }
+                Notification.NotificationType.poll -> {
+                    setNotificationTypeTextView(context, R.string.poll_notification, R.drawable.poll)
                 }
             }
             textView.text = format.format(username)
