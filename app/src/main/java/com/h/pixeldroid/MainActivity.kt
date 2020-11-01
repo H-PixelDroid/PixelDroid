@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
                         if (response.body() != null && response.isSuccessful) {
                             val account = response.body() as Account
                             DBUtils.addUser(db, account, domain, accessToken = accessToken)
-                            fillDrawerAccountInfo(account.id)
+                            fillDrawerAccountInfo(account.id!!)
                         }
                     }
 
@@ -248,17 +248,16 @@ class MainActivity : AppCompatActivity() {
                 iconUrl = user.avatar_static
                 isNameShown = true
                 identifier = user.user_id.toLong()
-                descriptionText = "${user.username}@${user.instance_uri.removePrefix("https://")}"
+                descriptionText = "@${user.username}@${user.instance_uri.removePrefix("https://")}"
             }
         }.toMutableList()
 
         // reuse the already existing "add account" item
-        for (profile in header.profiles.orEmpty()) {
-            if (profile.identifier == ADD_ACCOUNT_IDENTIFIER) {
-                profiles.add(profile)
-                break
-            }
-        }
+        header.profiles.orEmpty()
+            .filter { it.identifier == ADD_ACCOUNT_IDENTIFIER }
+            .take(1)
+            .map { profiles.add(it) }
+
         header.clear()
         header.profiles = profiles
         header.setActiveProfile(account.toLong())

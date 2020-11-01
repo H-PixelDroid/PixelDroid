@@ -35,7 +35,7 @@ class FollowsActivity : AppCompatActivity() {
             val user = db.userDao().getActiveUser()!!
             startFragment(user.user_id, user.display_name, followers)
         } else {
-            startFragment(account.id, account.display_name, followers)
+            startFragment(account.id!!, account.getDisplayName(), followers)
         }
     }
 

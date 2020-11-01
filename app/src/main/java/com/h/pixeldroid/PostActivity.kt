@@ -86,7 +86,7 @@ class PostActivity : AppCompatActivity() {
     }
 
     private fun initializeFragment(arguments: Bundle, status: Status?){
-        supportActionBar?.title = getString(R.string.post_title).format(status!!.account?.display_name)
+        supportActionBar?.title = getString(R.string.post_title).format(status!!.account?.getDisplayName())
         arguments.putSerializable(POST_TAG, status)
         postFragment.arguments = arguments
         supportFragmentManager.beginTransaction()

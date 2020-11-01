@@ -177,7 +177,7 @@ abstract class PostUtils {
                         holder.commentIn.visibility = View.GONE
 
                         //Add the comment to the comment section
-                        addComment(holder.context, holder.commentCont, resp.account!!.username,
+                        addComment(holder.context, holder.commentCont, resp.account!!.username!!,
                             resp.content!!
                         )
 
@@ -222,7 +222,7 @@ abstract class PostUtils {
 
                         //Create the new views for each comment
                         for (status in statuses) {
-                            addComment(holder.context, holder.commentCont, status.account!!.username,
+                            addComment(holder.context, holder.commentCont, status.account!!.username!!,
                                 status.content!!
                             )
                         }

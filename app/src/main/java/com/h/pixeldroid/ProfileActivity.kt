@@ -123,15 +123,16 @@ class ProfileActivity : AppCompatActivity() {
 
         val description = findViewById<TextView>(R.id.descriptionTextView)
         description.text = parseHTMLText(
-            account!!.note, emptyList(), pixelfedAPI,
+            account!!.note ?: "", emptyList(), pixelfedAPI,
             applicationContext, "Bearer $accessToken"
         )
 
         val accountName = findViewById<TextView>(R.id.accountNameTextView)
-        accountName.text = account!!.display_name
+        accountName.text = account!!.getDisplayName()
 
-        supportActionBar?.title = account!!.display_name
-        if(account!!.display_name != account!!.acct){
+        val displayName = account!!.getDisplayName()
+        supportActionBar?.title = displayName
+        if(displayName != "@${account!!.acct}"){
             supportActionBar?.subtitle = "@${account!!.acct}"
         }
 
@@ -215,7 +216,7 @@ class ProfileActivity : AppCompatActivity() {
      */
     private fun activateFollow() {
         // Get relationship between the two users (credential and this) and set followButton accordingly
-        pixelfedAPI.checkRelationships("Bearer $accessToken", listOf(account!!.id))
+        pixelfedAPI.checkRelationships("Bearer $accessToken", listOf(account!!.id.orEmpty()))
             .enqueue(object : Callback<List<Relationship>> {
 
                 override fun onFailure(call: Call<List<Relationship>>, t: Throwable) {
@@ -257,7 +258,7 @@ class ProfileActivity : AppCompatActivity() {
         followButton.setText(R.string.follow)
 
         followButton.setOnClickListener {
-            pixelfedAPI.follow(account!!.id, "Bearer $accessToken")
+            pixelfedAPI.follow(account!!.id.orEmpty(), "Bearer $accessToken")
                 .enqueue(object : Callback<Relationship> {
 
                     override fun onFailure(call: Call<Relationship>, t: Throwable) {
@@ -291,7 +292,7 @@ class ProfileActivity : AppCompatActivity() {
         followButton.setText(R.string.unfollow)
 
         followButton.setOnClickListener {
-            pixelfedAPI.unfollow(account!!.id, "Bearer $accessToken")
+            pixelfedAPI.unfollow(account!!.id.orEmpty(), "Bearer $accessToken")
                 .enqueue(object : Callback<Relationship> {
 
                     override fun onFailure(call: Call<Relationship>, t: Throwable) {

@@ -198,7 +198,7 @@ class NotificationsFragment : FeedFragment() {
                 holder.photoThumbnail.visibility = View.GONE
             }
 
-            setNotificationType(notification.type, notification.account.username, holder.notificationType)
+            setNotificationType(notification.type, notification.account.username!!, holder.notificationType)
             setTextViewFromISO8601(notification.created_at, holder.notificationTime, false, context)
 
             //Convert HTML to clickable text

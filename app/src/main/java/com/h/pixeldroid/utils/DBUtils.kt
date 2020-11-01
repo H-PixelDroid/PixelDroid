@@ -25,12 +25,12 @@ class DBUtils {
         fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true, accessToken: String) {
             db.userDao().insertUser(
                     UserDatabaseEntity(
-                        user_id = account.id,
+                        user_id = account.id!!,
                         //make sure not to normalize to https when localhost, to allow testing
                         instance_uri = normalizeOrNot(instance_uri),
-                        username = account.username,
-                        display_name = account.display_name,
-                        avatar_static = account.avatar_static,
+                        username = account.username!!,
+                        display_name = account.getDisplayName(),
+                        avatar_static = account.avatar_static.orEmpty(),
                         isActive = activeUser,
                         accessToken = accessToken
                     )
@@ -68,7 +68,7 @@ class DBUtils {
                         instance_uri = user.instance_uri,
                         uri = post.uri ?: "",
                         account_profile_picture = post.getProfilePicUrl() ?: "",
-                        account_name = post.getUsername().toString(),
+                        account_name = (post.account?.getDisplayName() ?: "").toString(),
                         media_urls = post.media_attachments.map {
                                 attachment -> attachment.url ?: ""
                         },

@@ -107,8 +107,6 @@ class CameraFragment : Fragment() {
 
         // Shut down our background executor
         cameraExecutor.shutdown()
-
-        // Unregister the broadcast receivers and listeners
     }
 
     override fun onCreateView(
