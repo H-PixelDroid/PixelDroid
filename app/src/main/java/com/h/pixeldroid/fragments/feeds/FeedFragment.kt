@@ -8,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -28,6 +29,7 @@ import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.FeedContent
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
+import org.w3c.dom.Text
 import retrofit2.Call
 import javax.inject.Inject
 
@@ -75,6 +77,7 @@ open class FeedFragment: Fragment() {
         val progressBar = view?.findViewById<ProgressBar>(R.id.progressBar)
 
         if(show){
+            view?.findViewById<TextView>(R.id.error_text)?.setText(errorText)
             errorLayout?.visibility = VISIBLE
             progressBar?.visibility = GONE
         } else {

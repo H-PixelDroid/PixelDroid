@@ -79,8 +79,8 @@ data class Account(
 
     fun getDisplayName() : String = when {
         username.isNullOrBlank() && display_name.isNullOrBlank() -> ""
-        username.isNullOrBlank() -> "@${display_name.orEmpty()}"
-        else -> "@$username"
+        display_name.isNullOrBlank() -> "@$username"
+        else -> display_name.orEmpty()
     }
 
     /**
