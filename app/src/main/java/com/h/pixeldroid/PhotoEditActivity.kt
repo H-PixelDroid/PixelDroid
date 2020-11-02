@@ -129,7 +129,7 @@ class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditI
     //<editor-fold desc="ON LAUNCH">
     private fun loadImage() {
         originalImage = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-        compressedImage = resizeImage(originalImage!!.copy(BITMAP_CONFIG, true))
+        compressedImage = resizeImage(originalImage!!)
         compressedOriginalImage = compressedImage!!.copy(BITMAP_CONFIG, true)
         filteredImage = compressedImage!!.copy(BITMAP_CONFIG, true)
         Glide.with(this).load(compressedImage).into(image_preview)

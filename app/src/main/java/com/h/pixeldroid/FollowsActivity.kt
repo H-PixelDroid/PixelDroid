@@ -19,9 +19,6 @@ class FollowsActivity : AppCompatActivity() {
     private var followsFragment = AccountListFragment()
     @Inject
     lateinit var db: AppDatabase
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,28 +32,10 @@ class FollowsActivity : AppCompatActivity() {
         val followers = intent.getSerializableExtra(FOLLOWERS_TAG) as Boolean
 
         if(account == null) {
-            val user = db.userDao().getActiveUser()
-
-            val accessToken = user?.accessToken.orEmpty()
-
-            val pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-
-            pixelfedAPI.verifyCredentials("Bearer $accessToken").enqueue(object :
-                Callback<Account> {
-                override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("Cannot get account id", t.toString())
-                }
-
-                override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                    if(response.code() == 200) {
-                        val id = response.body()!!.id
-                        val displayName = response.body()!!.display_name
-                        startFragment(id, displayName, followers)
-                    }
-                }
-            })
+            val user = db.userDao().getActiveUser()!!
+            startFragment(user.user_id, user.display_name, followers)
         } else {
-            startFragment(account.id, account.display_name, followers)
+            startFragment(account.id!!, account.getDisplayName(), followers)
         }
     }
 

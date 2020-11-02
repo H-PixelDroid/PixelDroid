@@ -184,7 +184,7 @@ interface PixelfedAPI {
         @Query("q") q: String,
         @Query("resolve") resolve: Boolean? = null,
         @Query("limit") limit: String? = null,
-        @Query("offset") offset: Int? = null,
+        @Query("offset") offset: String? = null,
         @Query("following") following: Boolean? = null
     ): Call<Results>
 
@@ -229,7 +229,8 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String,
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
-        @Query("limit") limit: Number? = null
+        @Query("limit") limit: Number? = null,
+        @Query("page") page: String? = null
     ) : Call<List<Account>>
 
     @GET("/api/v1/accounts/{id}/following")
@@ -238,7 +239,8 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String,
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
-        @Query("limit") limit: Number? = 40
+        @Query("limit") limit: Number? = 40,
+        @Query("page") page: String? = null
     ) : Call<List<Account>>
 
     @GET("/api/v1/accounts/{id}")

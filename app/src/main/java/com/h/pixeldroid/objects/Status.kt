@@ -109,12 +109,6 @@ data class Status(
     private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned =
         parseHTMLText(content ?: "", mentions, api, context, credential)
 
-    fun getUsername() : CharSequence = when {
-        account?.username.isNullOrBlank() && account?.display_name.isNullOrBlank() -> "No Name"
-        account!!.username.isNullOrBlank() -> account.display_name as CharSequence
-        else -> account.username as CharSequence
-    }
-
     fun getNLikes(context: Context) : CharSequence {
         return context.getString(R.string.likes).format(favourites_count.toString())
     }
@@ -229,13 +223,13 @@ data class Status(
     ) {
         //Setup username as a button that opens the profile
         rootView.findViewById<TextView>(R.id.username).apply {
-            text = this@Status.getUsername()
+            text = this@Status.account?.getDisplayName() ?: ""
             setTypeface(null, Typeface.BOLD)
             setOnClickListener { account?.openProfile(rootView.context) }
         }
 
         rootView.findViewById<TextView>(R.id.usernameDesc).apply {
-            text = this@Status.getUsername()
+            text = this@Status.account?.getDisplayName() ?: ""
             setTypeface(null, Typeface.BOLD)
         }
 

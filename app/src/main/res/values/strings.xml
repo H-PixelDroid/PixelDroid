@@ -23,6 +23,8 @@
     <string name="mention_notification">%1$s mentioned you</string>
     <string name="shared_notification">%1$s shared your post</string>
     <string name="liked_notification">%1$s liked your post</string>
+    <string name="poll_notification">"%1$s's poll has ended"</string>
+
     <!-- Login page -->
     <string name="whats_an_instance">"What's an instance?"</string>
     <string name="domain_of_your_instance">Domain of your instance</string>
@@ -135,6 +137,8 @@
     <string name="profile_picture">Profile picture</string>
     <string name="open_drawer_menu">Open drawer menu</string>
     <string name="discover">DISCOVER</string>
+    <string name="something_went_wrong">Something went wrong…</string>
+    <string name="panda_pull_to_refresh_to_try_again">This panda is not happy. Pull to refresh to try again.</string>
 
 
 </resources>

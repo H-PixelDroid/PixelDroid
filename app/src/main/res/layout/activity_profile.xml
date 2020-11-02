@@ -1,164 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/profileRefreshLayout"
     tools:context=".ProfileActivity">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/profilePictureImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/nbPostsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="@string/default_nposts"
+            app:layout_constraintBottom_toBottomOf="@+id/profilePictureImageView"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
+            app:layout_constraintTop_toTopOf="@+id/profilePictureImageView" />
+
+        <TextView
+            android:id="@+id/nbFollowersTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/default_nfollowers"
+            app:layout_constraintBottom_toBottomOf="@+id/nbPostsTextView"
+            app:layout_constraintEnd_toStartOf="@+id/nbFollowingTextView"
+            app:layout_constraintStart_toEndOf="@+id/nbPostsTextView"
+            app:layout_constraintTop_toTopOf="@+id/nbPostsTextView" />
+
+        <TextView
+            android:id="@+id/nbFollowingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:text="@string/default_nfollowing"
+            app:layout_constraintBottom_toBottomOf="@+id/nbFollowersTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nbFollowersTextView" />
+
+        <TextView
+            android:id="@+id/accountNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/no_username"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profilePictureImageView"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/accountNameTextView"/>
 
-                    <ImageView
-                        android:id="@+id/profilePictureImageView"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_weight="1"
-                        tools:srcCompat="@tools:sample/avatars" />
+        <Button
+            android:id="@+id/followButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorButtonBg"
+            android:text="@string/follow"
+            android:textColor="@color/colorButtonText"
+            android:visibility="invisible"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="185dp"
+            tools:visibility="visible"
+            app:layout_constraintStart_toStartOf="@+id/profilePictureImageView"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="10"
-                        android:orientation="horizontal">
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/colorButtonBg"
+            android:text="@string/edit_profile"
+            android:textColor="@color/colorButtonText"
+            android:visibility="gone"
+            app:icon="@drawable/ic_baseline_open_in_browser_24"
+            app:iconTint="@color/colorButtonText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/profilePictureImageView"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
 
-                        <TextView
-                            android:id="@+id/nbPostsTextView"
-                            android:layout_width="15dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="@string/default_nposts" />
 
-                        <TextView
-                            android:id="@+id/nbFollowersTextView"
-                            android:layout_width="15dp"
-                            android:layout_height="120dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="@string/default_nfollowers" />
+        <ProgressBar
+            android:id="@+id/profileProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/followButton" />
 
-                        <TextView
-                            android:id="@+id/nbFollowingTextView"
-                            android:layout_width="15dp"
-                            android:layout_height="120dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="@string/default_nfollowing" />
-                    </LinearLayout>
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/motionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:layoutDescription="@xml/error_layout_xml_error_scene"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/followButton"
+            tools:visibility="visible">
 
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp">
-
-                <TextView
-                    android:id="@+id/accountNameTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_username"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:id="@+id/descriptionTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginBottom="15dp">
-
-                <Button
-                    android:id="@+id/followButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/follow"
-                    android:visibility="invisible"
-                    android:textColor="@color/colorButtonText"
-                    android:backgroundTint="@color/colorButtonBg"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/editButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorButtonText"
-                    android:backgroundTint="@color/colorButtonBg"
-                    android:visibility="gone"
-                    android:text="@string/edit_profile"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageButton
-                        android:id="@+id/postsButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/colorPrimaryTab"
-                        android:src="@android:drawable/ic_dialog_dialer"
-                        android:contentDescription="TODO" />
-
-                    <ImageButton
-                        android:id="@+id/collectionButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/colorPrimaryTab"
-                        android:src="@android:drawable/ic_menu_gallery"
-                        android:contentDescription="TODO" />
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                layout="@layout/error_layout"
+                tools:layout_editor_absoluteX="50dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/profilePostsRecyclerView"
@@ -167,9 +150,11 @@
                 android:layout_margin="5dp"
                 android:nestedScrollingEnabled="false"
                 app:layoutManager="LinearLayoutManager"
-                tools:context=".fragments.ProfileFragment"
+                app:layout_constraintTop_toBottomOf="@id/errorLayout"
                 tools:listitem="@layout/fragment_profile_posts" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

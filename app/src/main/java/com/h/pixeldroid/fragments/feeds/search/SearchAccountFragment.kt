@@ -42,18 +42,18 @@ class SearchAccountFragment: AccountListFragment(){
         }
 
         override fun getKey(item: Account): String {
-            return item.id
+            return content.value?.loadedCount.toString()
         }
 
         private fun searchMakeInitialCall(requestedLoadSize: Int): Call<Results> {
             return pixelfedAPI
                 .search("Bearer $accessToken",
-                    limit="$requestedLoadSize", q=query,
+                    limit="$requestedLoadSize", q = query,
                     type = Results.SearchType.accounts)
         }
         private fun searchMakeAfterCall(requestedLoadSize: Int, key: String): Call<Results> {
             return pixelfedAPI
-                .search("Bearer $accessToken", max_id=key,
+                .search("Bearer $accessToken", offset = key,
                     limit="$requestedLoadSize", q = query,
                     type = Results.SearchType.accounts)
         }
@@ -75,16 +75,15 @@ class SearchAccountFragment: AccountListFragment(){
                     if (response.code() == 200) {
                         val notifications = response.body()!!.accounts as ArrayList<Account>
                         callback.onResult(notifications as List<Account>)
-
                     } else{
-                        Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
+                        showError()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<Results>, t: Throwable) {
-                    Toast.makeText(context,getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                    showError(errorText = R.string.feed_failed)
                     Log.e("FeedFragment", t.toString())
                 }
             })

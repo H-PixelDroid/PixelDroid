@@ -1,11 +1,16 @@
-package com.h.pixeldroid.fragments.feeds
+ package com.h.pixeldroid.fragments.feeds
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.annotation.StringRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
@@ -22,7 +27,9 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.FeedContent
+import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
+import org.w3c.dom.Text
 import retrofit2.Call
 import javax.inject.Inject
 
@@ -63,6 +70,20 @@ open class FeedFragment: Fragment() {
         accessToken = user?.accessToken.orEmpty()
 
         return view
+    }
+
+    fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
+        val errorLayout = view?.findViewById<ConstraintLayout>(R.id.errorLayout)
+        val progressBar = view?.findViewById<ProgressBar>(R.id.progressBar)
+
+        if(show){
+            view?.findViewById<TextView>(R.id.error_text)?.setText(errorText)
+            errorLayout?.visibility = VISIBLE
+            progressBar?.visibility = GONE
+        } else {
+            errorLayout?.visibility = GONE
+            progressBar?.visibility = VISIBLE
+        }
     }
 
     open inner class FeedDataSourceFactory<ObjectId, APIObject: FeedContent>(

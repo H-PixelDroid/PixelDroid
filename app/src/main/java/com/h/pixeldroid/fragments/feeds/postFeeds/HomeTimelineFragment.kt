@@ -53,15 +53,15 @@ class HomeTimelineFragment: PostsFeedFragment() {
                         val notifications = response.body()!!
                         callback.onResult(notifications)
                         DBUtils.storePosts(db, notifications, user!!)
-                    } else{
-                        Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
+                    } else {
+                        showError()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<List<Status>>, t: Throwable) {
-                    Toast.makeText(context, getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                    showError(errorText = R.string.feed_failed)
                     Log.e("PostsFeedFragment", t.toString())
                 }
             })

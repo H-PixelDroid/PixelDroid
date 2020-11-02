@@ -29,7 +29,7 @@ class SearchHashtagFragment: FeedFragment(){
 
     private lateinit var query: String
     private lateinit var content: LiveData<PagedList<Tag>>
-    protected lateinit var adapter : TagsRecyclerViewAdapter
+    private lateinit var adapter : TagsRecyclerViewAdapter
     lateinit var factory: FeedDataSourceFactory<Int, Tag>
 
 
@@ -59,6 +59,8 @@ class SearchHashtagFragment: FeedFragment(){
             })
 
         swipeRefreshLayout.setOnRefreshListener {
+            showError(show = false)
+
             //by invalidating data, loadInitial will be called again
             factory.liveData.value!!.invalidate()
         }
@@ -78,7 +80,7 @@ class SearchHashtagFragment: FeedFragment(){
         }
         private fun searchMakeAfterCall(requestedLoadSize: Int, key: Int): Call<Results> {
             return pixelfedAPI
-                .search("Bearer $accessToken", offset=key,
+                .search("Bearer $accessToken", offset = key.toString(),
                     limit="$requestedLoadSize", q = query,
                     type = Results.SearchType.hashtags)
         }
@@ -107,14 +109,14 @@ class SearchHashtagFragment: FeedFragment(){
                         callback.onResult(notifications as List<Tag>)
 
                     } else{
-                        Toast.makeText(context,getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
+                        showError()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<Results>, t: Throwable) {
-                    Toast.makeText(context,getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                    showError(errorText = R.string.feed_failed)
                     Log.e("FeedFragment", t.toString())
                 }
             })

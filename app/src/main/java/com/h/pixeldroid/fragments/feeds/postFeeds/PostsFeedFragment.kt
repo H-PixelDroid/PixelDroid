@@ -68,6 +68,8 @@ abstract class PostsFeedFragment : FeedFragment() {
             })
 
         swipeRefreshLayout.setOnRefreshListener {
+            showError(show = false)
+
             //by invalidating data, loadInitial will be called again
             factory.liveData.value!!.invalidate()
         }

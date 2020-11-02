@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
@@ -86,6 +85,8 @@ class NotificationsFragment : FeedFragment() {
             })
 
         swipeRefreshLayout.setOnRefreshListener {
+            showError(show = false)
+
             //by invalidating data, loadInitial will be called again
             factory.liveData.value!!.invalidate()
         }
@@ -125,15 +126,15 @@ class NotificationsFragment : FeedFragment() {
                     if (response.isSuccessful && response.body() != null) {
                         val data = response.body()!!
                         callback.onResult(data)
-                    } else{
-                        Toast.makeText(context, getString(R.string.loading_toast), Toast.LENGTH_SHORT).show()
+                    } else {
+                        showError()
                     }
                     swipeRefreshLayout.isRefreshing = false
                     loadingIndicator.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<List<Notification>>, t: Throwable) {
-                    Toast.makeText(context, getString(R.string.feed_failed), Toast.LENGTH_SHORT).show()
+                    showError(errorText = R.string.feed_failed)
                     Log.e("NotificationsFragment", t.toString())
                 }
             })
@@ -155,7 +156,7 @@ class NotificationsFragment : FeedFragment() {
             }
         }
 
-        private fun openPostFromNotifcation(notification: Notification) : Intent {
+        private fun openPostFromNotification(notification: Notification) : Intent {
             val intent = Intent(context, PostActivity::class.java)
             intent.putExtra(Status.POST_TAG, notification.status)
             return  intent
@@ -164,11 +165,9 @@ class NotificationsFragment : FeedFragment() {
         private fun openActivity(notification: Notification){
             val intent: Intent
             when (notification.type){
-                Notification.NotificationType.mention, Notification.NotificationType.favourite-> {
-                    intent = openPostFromNotifcation(notification)
-                }
-                Notification.NotificationType.reblog-> {
-                    intent = openPostFromNotifcation(notification)
+                Notification.NotificationType.mention, Notification.NotificationType.favourite,
+                Notification.NotificationType.poll, Notification.NotificationType.reblog -> {
+                    intent = openPostFromNotification(notification)
                 }
                 Notification.NotificationType.follow -> {
                     intent = Intent(context, ProfileActivity::class.java)
@@ -197,7 +196,7 @@ class NotificationsFragment : FeedFragment() {
                 holder.photoThumbnail.visibility = View.GONE
             }
 
-            setNotificationType(notification.type, notification.account.username, holder.notificationType)
+            setNotificationType(notification.type, notification.account.username!!, holder.notificationType)
             setTextViewFromISO8601(notification.created_at, holder.notificationTime, false, context)
 
             //Convert HTML to clickable text
@@ -235,6 +234,9 @@ class NotificationsFragment : FeedFragment() {
 
                 Notification.NotificationType.favourite -> {
                     setNotificationTypeTextView(context, R.string.liked_notification, R.drawable.ic_like_full)
+                }
+                Notification.NotificationType.poll -> {
+                    setNotificationTypeTextView(context, R.string.poll_notification, R.drawable.poll)
                 }
             }
             textView.text = format.format(username)
