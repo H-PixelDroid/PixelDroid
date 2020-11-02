@@ -20,9 +20,9 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolde
     private val posts: ArrayList<Status> = ArrayList()
 
     fun addPosts(newPosts : List<Status>) {
-        val size = posts.size
+        posts.clear()
         posts.addAll(newPosts)
-        notifyItemRangeInserted(size, newPosts.size)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfilePostViewHolder {
@@ -41,6 +41,8 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolde
 
         if(post.media_attachments?.size ?: 0 > 1){
             holder.albumIcon.visibility = View.VISIBLE
+        } else {
+            holder.albumIcon.visibility = View.GONE
         }
 
         holder.postPreview.setOnClickListener {
