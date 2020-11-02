@@ -166,6 +166,8 @@ class SearchDiscoverFragment : Fragment() {
             val post = posts[position]
             if(post.type?.contains("album") == true) {
                 holder.albumIcon.visibility = View.VISIBLE
+            } else {
+                holder.albumIcon.visibility = View.GONE
             }
             ImageConverter.setSquareImageFromURL(holder.postView, post.thumb, holder.postPreview)
             holder.postPreview.setOnClickListener {
