@@ -127,4 +127,7 @@
     <string name="about_pixeldroid">Informazioni su PixelDroid</string>
     <string name="unfollow">Smettere di seguire</string>
     <string name="add_photo">Aggiungi una foto</string>
+    <string name="panda_pull_to_refresh_to_try_again">Questo panda non è felice. Trascina per aggiornare e riprova.</string>
+    <string name="something_went_wrong">Qualcosa è andato storto…</string>
+    <string name="poll_notification">%1$s\'s sondaggio è terminato</string>
 </resources>
