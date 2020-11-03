@@ -220,12 +220,15 @@ abstract class PostUtils {
                     if(response.code() == 200) {
                         val statuses = response.body()!!.descendants
 
+                        holder.commentCont.removeAllViews()
+
                         //Create the new views for each comment
                         for (status in statuses) {
                             addComment(holder.context, holder.commentCont, status.account!!.username!!,
                                 status.content!!
                             )
                         }
+                        holder.commentCont.visibility = View.VISIBLE
                     } else {
                         Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")
                     }
