@@ -259,11 +259,16 @@ data class Status(
         //Setup post pic only if there are media attachments
         if(!media_attachments.isNullOrEmpty()) {
             setupPostPics(rootView, request, homeFragment)
+        } else {
+            rootView.postPicture.visibility = GONE
+            rootView.postPager.visibility = GONE
+            rootView.postTabs.visibility = GONE
         }
 
 
         //Set comment initial visibility
         rootView.findViewById<LinearLayout>(R.id.commentIn).visibility = GONE
+        rootView.findViewById<LinearLayout>(R.id.commentContainer).visibility = GONE
     }
 
     fun setDescription(rootView: View, api: PixelfedAPI, credential: String) {
