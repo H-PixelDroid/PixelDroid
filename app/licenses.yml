@@ -565,12 +565,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
-- artifact: com.google.android:flexbox:+
-  name: flexbox
-  copyrightHolder: Google Inc.
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://github.com/google/flexbox-layout
 - artifact: com.squareup.retrofit2:converter-gson:+
   name: converter-gson
   copyrightHolder: Square, Inc.
@@ -726,3 +720,15 @@
   url: http://www.jetbrains.org
 - artifact: org.reactivestreams:reactive-streams:+
   skip: true
+- artifact: androidx.gridlayout:gridlayout:+
+  name: gridlayout
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: androidx.preference:preference-ktx:+
+  name: preference-ktx
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx

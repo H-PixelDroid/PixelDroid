@@ -256,7 +256,7 @@ class MainActivity : AppCompatActivity() {
         header.profiles.orEmpty()
             .filter { it.identifier == ADD_ACCOUNT_IDENTIFIER }
             .take(1)
-            .map { profiles.add(it) }
+            .forEach { profiles.add(it) }
 
         header.clear()
         header.profiles = profiles
