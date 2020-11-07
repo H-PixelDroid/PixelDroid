@@ -17,8 +17,8 @@
     <string name="tab_filters">ФИЛЬТРЫ</string>
     <string name="tab_edit">РЕДАКТИРОВАТЬ</string>
     <string name="save_to_gallery">Сохранить в Галерею…</string>
-    <string name="image_download_downloading">Скачивание…</string>
-    <string name="image_download_success">Изображение успешно загружено</string>
+    <string name="image_download_downloading">Сохранение…</string>
+    <string name="image_download_success">Изображение успешно сохранено</string>
     <string name="switch_camera_button_alt">Переключить камеру</string>
     <string name="gallery_button_alt">Галерея</string>
     <string name="NoCommentsToShow">Нет комментариев…</string>
@@ -28,50 +28,50 @@
     <string name="app_name">PixelDroid</string>
     <string name="menu_account">Мой профиль</string>
     <string name="menu_settings">Настройки</string>
-    <string name="invalid_domain">Неправильное доменное имя</string>
+    <string name="invalid_domain">Некорректный домен</string>
     <string name="browser_launch_failed">Не удалось запустить браузер, есть ли он у вас\?</string>
     <string name="liked_notification">%1$s оценил(а) ваш пост</string>
     <string name="description">Описание…</string>
-    <string name="image_download_failed">Скачивание не удалось, попробуйте ещё раз</string>
+    <string name="image_download_failed">Сохранение не удалось, попробуйте ещё раз</string>
     <string name="share_picture">Поделиться изображением…</string>
     <string name="login_connection_required_once">Вам необходимо быть в сети что бы добавить аккаунт и использовать PixelDroid :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Скрытое медиа
-\n (кликните что бы показать)</string>
+\n(кликните что бы показать)</string>
     <string name="registration_failed">Не удалось зарегистрировать приложение на этом инстансе</string>
     <string name="capture_button_alt">Сделать снимок</string>
-    <string name="add_account_description">Добавить другой аккаунт PixelFed</string>
+    <string name="add_account_description">Добавить другой аккаунт Pixelfed</string>
     <string name="add_account_name">Добавить аккаунт</string>
-    <string name="instance_error">Не удалось получить информацию о инстансе</string>
+    <string name="instance_error">Не удалось получить информацию об инстансе</string>
     <string name="nb_following">%1$s
-\nПодписок</string>
+\nПодписки</string>
     <string name="nb_followers">%1$s
-\nПодписчиков</string>
+\nПодписчики</string>
     <string name="nb_posts">%1$s
-\nПостов</string>
+\nПосты</string>
     <string name="comment">Комментарий</string>
     <string name="comment_posted">Комментарий: %1$s опубликован!</string>
-    <string name="comment_error">Ошибка комментария!</string>
+    <string name="comment_error">Ошибка при добавлении комментария!</string>
     <string name="share_image">Поделиться изображением</string>
-    <string name="write_permission_download_pic">Вы должны дать разрешение чтобы загрузить изображения!</string>
-    <string name="write_permission_share_pic">Вы должны дать разрешение чтобы поделиться изображениями!</string>
+    <string name="write_permission_download_pic">Вы должны дать разрешение на запись файлов чтобы сохранять изображения!</string>
+    <string name="write_permission_share_pic">Вы должны дать разрешение на запись файлов чтобы делиться изображениями!</string>
     <string name="empty_comment">Комментарий не может быть пустым!</string>
     <string name="posted_on">Опубликовано в %1$s</string>
     <string name="shares">%1$s репостов</string>
     <string name="likes">%1$s лайков</string>
     <string name="no_description">Нет описания</string>
-    <string name="feed_failed">Не удалось получить ленту</string>
+    <string name="feed_failed">Не удалось загрузить ленту</string>
     <string name="loading_toast">При загрузке что-то пошло не так</string>
     <string name="normal_filter">Обычный</string>
-    <string name="upload_post_error">Не удалось загрузить пост: не 200</string>
+    <string name="upload_post_error">Не удалось загрузить пост</string>
     <string name="upload_post_success">Пост успешно загружен</string>
     <string name="upload_post_failed">Не удалось загрузить пост</string>
-    <string name="request_format_error">Ошибка загрузки: плохой формат запроса</string>
-    <string name="picture_format_error">Ошибка загрузки: неправильный формат изображения.</string>
+    <string name="request_format_error">Ошибка загрузки: некорректный формат запроса</string>
+    <string name="picture_format_error">Ошибка загрузки: неверный формат изображения.</string>
     <string name="upload_picture_failed">Ошибка загрузки изображения!</string>
     <string name="description_max_characters">Описание должно содержать максимум %1$s символов.</string>
     <string name="save_image_success">Изображение успешно сохранено</string>
-    <string name="save_image_failed">Невозможно сохранить изображение</string>
-    <string name="permission_denied">Нет прав</string>
+    <string name="save_image_failed">Не удалось сохранить изображение</string>
+    <string name="permission_denied">Недостаточно прав</string>
     <string name="dark_theme">Тёмная</string>
     <string name="light_theme">Светлая</string>
     <string name="default_theme">По умолчанию (как в системе)</string>
@@ -81,11 +81,11 @@
     <string name="unfollow_error">Не удалось отписаться</string>
     <string name="access_token_invalid">Недействительный токен доступа</string>
     <string name="default_nposts">-
-\nПостов</string>
+\nПосты</string>
     <string name="default_nfollowers">-
-\nПодписчиков</string>
+\nПодписчики</string>
     <string name="default_nfollowing">-
-\nПодписок</string>
+\nПодписки</string>
     <string name="no_username">Нет имени пользователя</string>
     <string name="follow">Подписаться</string>
     <string name="edit_profile">Редактировать профиль</string>
@@ -95,11 +95,39 @@
     <string name="hashtags">ХЭШТЕГИ</string>
     <string name="follow_button_failed">Не удалось отобразить кнопку подписки</string>
     <string name="posting_image_accessibility_hint">Изображение, которое будет опубликовано</string>
-    <string name="media_upload_completed">{gmd_cloud_done} Загрузка медиа завершена</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Загрузка завершена</string>
     <string name="retry">Попробовать снова</string>
-    <string name="media_upload_failed">{gmd_cloud_off} Загрузка медиа не удалась, попробуйте снова или проверте состояние сети</string>
+    <string name="media_upload_failed">{gmd_cloud_off} Загрузка не удалась, попробуйте снова или проверьте сеть</string>
     <string name="nothing_to_see_here">Здесь ничего нет!</string>
     <string name="crop_result_error">Не удалось получить изображение после обрезки</string>
     <string name="busy_dialog_ok_button">Хорошо, подожду.</string>
-    <string name="busy_dialog_text">Изображение обрабатывается, дождитесь окончания процесса!</string>
+    <string name="busy_dialog_text">Изображение обрабатывается, пожалуйста, ожидайте!</string>
+    <string name="open_drawer_menu">Открыть навигационное меню</string>
+    <string name="panda_pull_to_refresh_to_try_again">Панде грустно. Потяни, чтобы обновить.</string>
+    <string name="something_went_wrong">Что-то пошло не так…</string>
+    <string name="discover">ОБЗОР</string>
+    <string name="profile_picture">Изображение профиля</string>
+    <string name="toolbar_title_edit">Редактировать</string>
+    <string name="report_error">Не удалось отправить жалобу</string>
+    <string name="reported">Отправлено {gmd_check_circle}</string>
+    <string name="report_target">Пожаловаться на пост @%1$s</string>
+    <string name="optional_report_comment">Дополнительное сообщение для модераторов/администраторов</string>
+    <string name="share_link">Поделиться ссылкой</string>
+    <string name="report">Пожаловаться</string>
+    <string name="status_more_options">Больше опций</string>
+    <string name="search_empty_error">Поисковый запрос не может быть пустым</string>
+    <string name="follows_title">Подписки %1$s</string>
+    <string name="followers_title">Подписчики %1$s</string>
+    <string name="post_title">Пост %1$s</string>
+    <string name="about">О приложении</string>
+    <string name="license_info">PixelDroid это свободное ПО с открытым исходным кодом, выпускаемое под лицензией GNU General Public License (версии 3 или новее)</string>
+    <string name="project_website">Сайт проекта: https://pixeldroid.org</string>
+    <string name="dependencies_licenses">Зависимости и лицензии</string>
+    <string name="about_pixeldroid">О PixelDroid</string>
+    <string name="unfollow">Отписаться</string>
+    <string name="add_photo">Добавить фото</string>
+    <string name="poll_notification">Опрос %1$s завершён</string>
+    <string name="instance_not_pixelfed_cancel">Отмена</string>
+    <string name="instance_not_pixelfed_continue">OK, всё равно продолжить</string>
+    <string name="instance_not_pixelfed_warning">Это не похоже на инстанс Pixelfed, приложение может работать нестабильно.</string>
 </resources>
