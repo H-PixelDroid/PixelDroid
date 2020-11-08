@@ -5,41 +5,27 @@ import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.RootMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.objects.Application
-import com.h.pixeldroid.objects.Attachment
-import com.h.pixeldroid.objects.Status
-import com.h.pixeldroid.objects.Tag
-
+import com.h.pixeldroid.objects.*
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
-import com.h.pixeldroid.utils.DBUtils
+import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.Matcher
 import org.junit.*
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate.parse
-import java.time.LocalDateTime.parse
-import java.time.LocalTime
-import java.time.LocalTime.parse
-import java.util.*
 
 
 @RunWith(AndroidJUnit4::class)
@@ -47,6 +33,7 @@ class PostTest {
 
     private lateinit var context: Context
     private lateinit var db: AppDatabase
+    private lateinit var mockServer: MockServer
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -54,7 +41,7 @@ class PostTest {
     @Before
     fun before(){
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        val mockServer = MockServer()
+        mockServer = MockServer()
         mockServer.start()
         val baseUrl = mockServer.getUrl()
         db = initDB(context)
@@ -99,13 +86,16 @@ class PostTest {
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
         ActivityScenario.launch<PostActivity>(intent)
-        onView(withId(R.id.postPicture)).perform(longClick())
+        onView(withId(R.id.status_more)).perform(click())
         onView(withText(R.string.save_to_gallery)).inRoot(RootMatchers.isPlatformPopup()).perform(click())
         Thread.sleep(300)
-        onView(withText(R.string.image_download_downloading)).inRoot(
-            RootMatchers.hasWindowLayoutParams()
-        ).check(matches(isDisplayed()))
-        Thread.sleep(5000)
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(anyOf(withText(R.string.image_download_downloading),
+                withText(R.string.image_download_success),
+                withText(R.string.image_download_failed)
+            )
+            )
+            )
     }
 
     @Test
@@ -130,13 +120,16 @@ class PostTest {
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
         ActivityScenario.launch<PostActivity>(intent)
-        onView(withId(R.id.imageImageView)).perform(longClick())
+        onView(withId(R.id.status_more)).perform(click())
         onView(withText(R.string.save_to_gallery)).inRoot(RootMatchers.isPlatformPopup()).perform(click())
         Thread.sleep(300)
-        onView(withText(R.string.image_download_downloading)).inRoot(
-            RootMatchers.hasWindowLayoutParams()
-        ).check(matches(isDisplayed()))
-        Thread.sleep(5000)
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(anyOf(withText(R.string.image_download_downloading),
+                                 withText(R.string.image_download_success),
+                                 withText(R.string.image_download_failed)
+                                )
+                            )
+                   )
     }
 
     @Test
@@ -158,7 +151,7 @@ class PostTest {
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
         ActivityScenario.launch<PostActivity>(intent)
-        onView(withId(R.id.postPicture)).perform(longClick())
+        onView(withId(R.id.status_more)).perform(click())
         onView(withText(R.string.share_picture)).inRoot(RootMatchers.isPlatformPopup()).perform(click())
         Thread.sleep(2000)
         Intents.intended(expectedIntent)
@@ -187,7 +180,7 @@ class PostTest {
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
         ActivityScenario.launch<PostActivity>(intent)
-        onView(withId(R.id.imageImageView)).perform(longClick())
+        onView(withId(R.id.status_more)).perform(click())
         onView(withText(R.string.share_picture)).inRoot(RootMatchers.isPlatformPopup()).perform(click())
         Thread.sleep(2000)
         Intents.intended(expectedIntent)
@@ -252,6 +245,8 @@ class PostTest {
     @After
     fun after() {
         Intents.release()
+        clearData()
+        mockServer.stop()
     }
 
 }

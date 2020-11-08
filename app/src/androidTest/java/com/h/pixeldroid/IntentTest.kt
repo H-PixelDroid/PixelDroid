@@ -30,8 +30,8 @@ import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
-import com.h.pixeldroid.utils.DBUtils
 import org.hamcrest.CoreMatchers
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -46,7 +46,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class IntentTest {
 
-    private val mockServer = MockServer()
+    private lateinit var mockServer: MockServer
     private lateinit var db: AppDatabase
     private lateinit var context: Context
 
@@ -56,11 +56,12 @@ class IntentTest {
     @get:Rule
     var mLoginActivityActivityTestRule =
         ActivityTestRule(
-            LoginActivity::class.java
+            AboutActivity::class.java
         )
 
     @Before
     fun before() {
+        mockServer = MockServer()
         mockServer.start()
         val baseUrl = mockServer.getUrl()
 
@@ -90,6 +91,7 @@ class IntentTest {
         Intents.init()
     }
 
+
     @Test
     fun clickingMentionOpensProfile() {
         ActivityScenario.launch(MainActivity::class.java)
@@ -99,7 +101,7 @@ class IntentTest {
             "",
             "https://pixelfed.social/storage/avatars/000/000/001/450/SMSep5NoabDam1W8UDMh_avatar.png?v=4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
             "https://pixelfed.social/storage/avatars/000/000/001/450/SMSep5NoabDam1W8UDMh_avatar.png?v=4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
-            "", "", false, emptyList(), false,
+            "", "", false, emptyList(), null,
             "2018-08-01T12:58:21.000000Z", 72, 68, 27,
             null, null, false, null)
         val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
@@ -195,5 +197,7 @@ class IntentTest {
     @After
     fun after() {
         Intents.release()
+        clearData()
+        mockServer.stop()
     }
 }

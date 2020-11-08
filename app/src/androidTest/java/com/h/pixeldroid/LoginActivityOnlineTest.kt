@@ -20,8 +20,9 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
-import com.h.pixeldroid.utils.DBUtils
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,6 +42,7 @@ class LoginActivityOnlineTest {
 
     @Before
     fun setup() {
+        context = ApplicationProvider.getApplicationContext()
         server = MockServer()
         server.start()
         context = ApplicationProvider.getApplicationContext()
@@ -49,6 +51,11 @@ class LoginActivityOnlineTest {
         db = initDB(context)
         db.clearAllTables()
         db.close()
+    }
+    @After
+    fun after() {
+        clearData()
+        server.stop()
     }
 
     @Test

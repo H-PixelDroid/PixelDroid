@@ -1,10 +1,10 @@
 package com.h.pixeldroid
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
-import android.os.Environment
 import android.view.View
 import android.widget.SeekBar
 import androidx.core.net.toUri
@@ -24,13 +24,11 @@ import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
 import com.h.pixeldroid.testUtility.CustomMatchers
+import com.h.pixeldroid.testUtility.clearData
 import junit.framework.Assert.assertTrue
 import kotlinx.android.synthetic.main.fragment_edit_image.*
 import org.hamcrest.CoreMatchers.allOf
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import java.io.File
@@ -40,6 +38,8 @@ class EditPhotoTest {
 
     private lateinit var activity: PhotoEditActivity
     private lateinit var activityScenario: ActivityScenario<PhotoEditActivity>
+    private lateinit var context: Context
+
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -56,18 +56,14 @@ class EditPhotoTest {
 
     @Before
     fun before() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        context = InstrumentationRegistry.getInstrumentation().targetContext
         var uri: Uri = "".toUri()
-        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
+        val scenario = ActivityScenario.launch(AboutActivity::class.java)
         scenario.onActivity {
             val image = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
             image.eraseColor(Color.GREEN)
-            val folder =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            if (!folder.exists()) {
-                folder.mkdir()
-            }
-            val file = File.createTempFile("temp_img", ".png", folder)
+
+            val file = File.createTempFile("temp_img", ".png")
             file.writeBitmap(image)
             uri = file.toUri()
         }
@@ -76,6 +72,11 @@ class EditPhotoTest {
         activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}
 
         Thread.sleep(1000)
+    }
+
+    @After
+    fun after() {
+        clearData()
     }
 
     private fun selectTabAtPosition(tabIndex: Int): ViewAction {
@@ -156,8 +157,7 @@ class EditPhotoTest {
     }
 
     @Test
-    fun SaveButton() {
-        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
+    fun saveButton() {
         Espresso.onView(withId(R.id.action_save)).perform(click())
         Espresso.onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText(R.string.save_image_success)))
@@ -165,9 +165,9 @@ class EditPhotoTest {
 
     @Test
     fun backButton() {
-        Espresso.onView(withId(R.id.toolbar)).check(matches(isDisplayed()))
         Espresso.onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
-        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)    }
+        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)
+    }
 
     @Test
     fun croppingIsPossible() {

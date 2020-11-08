@@ -1,32 +1,58 @@
-image: reactivecircus/android-emulator-23:latest
+image: reactivecircus/android-emulator-26:latest
+
 
 variables:
-  API_LEVEL: "23"
+  API_LEVEL: "26"
   ARCH: "x86"
   TARGET: "default"
-  #CC_TEST_REPORTER_ID defined in GitLab CI settings
 
-stages:
-    - test
-    - report
 
-test:
-    stage: test
-    script:
-        - echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
-        - $ANDROID_HOME/emulator/emulator -avd "api-${API_LEVEL}" -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none &
-        - chmod +x android-wait-for-emulator.sh
-        - ./gradlew build
-        - ./android-wait-for-emulator.sh
-        - adb shell settings put global window_animation_scale 0.0
-        - adb shell settings put global transition_animation_scale 0.0
-        - adb shell settings put global animator_duration_scale 0.0
+# Basic android and gradle stuff
+# Check linting
+lintDebug:
+  interruptible: true
+  stage: build
+  script:
+    - ./gradlew checkLicenses
+    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
 
-        - ./gradlew build connectedCheck connectedDebugAndroidTest jacocoTestReport
-        
-        - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
+# Make Project
+assembleDebug:
+  interruptible: true
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+  artifacts:
+    paths:
+      - app/build/outputs/
 
-    artifacts:
-        paths:
-        - ./app/build/reports/jacoco/jacocoTestReport/
-        expire_in: 1 week
+# Run all tests, if any fails, interrupt the pipeline(fail it)
+debugTests:
+  interruptible: true
+  stage: test
+  script:
+    - ./gradlew -Pci --console=plain :app:testDebug
+
+
+#emulatorTest:
+#    interruptible: true
+#    stage: test
+#    script:
+#        - sdkmanager --sdk_root=${ANDROID_HOME} "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
+#        - echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
+#        - $ANDROID_HOME/emulator/emulator -avd "api-${API_LEVEL}" -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none &
+#        - chmod +x android-wait-for-emulator.sh
+#        - ./gradlew build
+#        - ./android-wait-for-emulator.sh
+#        - adb shell settings put global window_animation_scale 0.0
+#        - adb shell settings put global transition_animation_scale 0.0
+#        - adb shell settings put global animator_duration_scale 0.0
+
+#        - ./gradlew build connectedCheck connectedDebugAndroidTest jacocoTestReport
+
+#        - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
+
+#    artifacts:
+#        paths:
+#        - ./app/build/reports/jacoco/jacocoTestReport/
+#        expire_in: 1 week

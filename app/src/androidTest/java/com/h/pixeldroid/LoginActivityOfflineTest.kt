@@ -13,6 +13,7 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
 import org.junit.After
 import org.junit.Before
@@ -21,9 +22,11 @@ import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 
-
+/*
 @RunWith(AndroidJUnit4::class)
 class LoginActivityOfflineTest {
+
+    private lateinit var context: Context
 
     companion object {
         fun switchAirplaneMode() {
@@ -42,7 +45,7 @@ class LoginActivityOfflineTest {
     @Before
     fun before() {
         switchAirplaneMode()
-        val context = ApplicationProvider.getApplicationContext<Context>()
+        context = ApplicationProvider.getApplicationContext<Context>()
         db = initDB(context)
         db.clearAllTables()
         ActivityScenario.launch(LoginActivity::class.java)
@@ -63,5 +66,8 @@ class LoginActivityOfflineTest {
     fun after() {
         switchAirplaneMode()
         db.close()
+        clearData()
     }
 }
+
+ */

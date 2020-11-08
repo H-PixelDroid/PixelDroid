@@ -16,8 +16,9 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
-import com.h.pixeldroid.utils.DBUtils
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +28,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class DrawerMenuTest {
 
-    private val mockServer = MockServer()
+    private lateinit var mockServer: MockServer
     private lateinit var db: AppDatabase
     private lateinit var context: Context
 
@@ -37,6 +38,7 @@ class DrawerMenuTest {
 
     @Before
     fun before(){
+        mockServer = MockServer()
         mockServer.start()
         val baseUrl = mockServer.getUrl()
 
@@ -70,7 +72,13 @@ class DrawerMenuTest {
             .perform(DrawerActions.open()) // Open Drawer
     }
 
-   @Test
+    @After
+    fun after() {
+        clearData()
+        mockServer.stop()
+    }
+
+    @Test
     fun testDrawerSettingsButton() {
         // Start the screen of your activity.
         onView(withText(R.string.menu_settings)).perform(click())
@@ -103,8 +111,8 @@ class DrawerMenuTest {
     fun testDrawerLogoutButton() {
         // Start the screen of your activity.
         onView(withText(R.string.logout)).perform(click())
-        // Check that settings activity was opened.
-        onView(withId(R.id.connect_instance_button)).check(matches(isDisplayed()))
+        // Check that login activity was opened.
+        onView(withId(R.id.mascotImage)).check(matches(isDisplayed()))
     }
 
     @Test
