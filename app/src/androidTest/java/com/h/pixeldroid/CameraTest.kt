@@ -1,19 +1,19 @@
 package com.h.pixeldroid
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_CHOOSER
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.media.MediaScannerConnection
-import android.os.Environment
-import android.webkit.MimeTypeMap
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import com.h.pixeldroid.db.InstanceDatabaseEntity
+import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.fragments.CameraFragment
+import com.h.pixeldroid.testUtility.clearData
+import com.h.pixeldroid.testUtility.initDB
 import kotlinx.android.synthetic.main.camera_ui_container.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.Matcher
@@ -21,65 +21,61 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
-
 
 class CameraTest {
+
+    private lateinit var context: Context
 
     @get:Rule
     val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-    private fun File.writeBitmap(bitmap: Bitmap) {
-        outputStream().use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 85, out)
-            out.flush()
-        }
-    }
-
     @Before
     fun before(){
+        context = ApplicationProvider.getApplicationContext()
+        val db = initDB(context)
+        db.clearAllTables()
+        db.instanceDao().insertInstance(
+            InstanceDatabaseEntity(
+                uri = "http://localhost",
+                title = "PixelTest"
+            )
+        )
+
+        db.userDao().insertUser(
+            UserDatabaseEntity(
+                user_id = "123",
+                instance_uri = "http://localhost",
+                username = "Testi",
+                display_name = "Testi Testo",
+                avatar_static = "some_avatar_url",
+                isActive = true,
+                accessToken = "token"
+            )
+        )
+        db.close()
         Intents.init()
     }
     @After
     fun after(){
         Intents.release()
+        clearData()
     }
+    /*
     @Test
     fun takePictureButton() {
-        var scenario = launchFragmentInContainer<CameraFragment>()
+        val scenario = launchFragmentInContainer<CameraFragment>()
 
-        scenario.onFragment {
-            val image = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
-            image.eraseColor(Color.GREEN)
-            val folder =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            if (!folder.exists()) {
-                folder.mkdir()
-            }
-            val file = File.createTempFile("temp_img", ".png", folder)
-            file.writeBitmap(image)
+        Thread.sleep(1000)
 
-            val context = InstrumentationRegistry.getInstrumentation().targetContext
-            val mimeType = MimeTypeMap.getSingleton()
-                .getMimeTypeFromExtension(file.extension)
-            MediaScannerConnection.scanFile(
-                context,
-                arrayOf(file.absolutePath),
-                arrayOf(mimeType)){_, _ ->
-            }
-
-        }
-        scenario = launchFragmentInContainer<CameraFragment>()
-
-        Thread.sleep(2000)
         scenario.onFragment { fragment ->
             fragment.camera_capture_button.performClick()
         }
-        scenario.onFragment { fragment ->
-            assert(fragment.isHidden)
-        }
+        Thread.sleep(3000)
 
+        Intents.intended(hasComponent(PostCreationActivity::class.java.name))
     }
+
+     */
 
     @Test
     fun uploadButton() {

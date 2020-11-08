@@ -35,12 +35,12 @@ class PostUnitTest {
     fun getProfilePicUrlReturnsAValidURL() = Assert.assertNotNull(status.getProfilePicUrl())
 
     @Test
-    fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account!!.username, status.getUsername())
+    fun getUsernameReturnsACorrectName() = Assert.assertEquals(status.account!!.display_name, status.account!!.getDisplayName())
 
     @Test
     fun getUsernameReturnsOtherNameIfUsernameIsNull() {
         val emptyDescStatus = status.copy(account = status.account!!.copy(username = ""))
-        Assert.assertEquals(status.account!!.display_name, emptyDescStatus.getUsername())
+        Assert.assertEquals(status.account!!.display_name, emptyDescStatus.account!!.getDisplayName())
     }
 
 }

@@ -1,5 +1,6 @@
 package com.h.pixeldroid
 
+import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -19,10 +20,11 @@ import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.InstanceDatabaseEntity
 import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
-import com.h.pixeldroid.utils.DBUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import org.hamcrest.Matcher
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,7 +45,7 @@ class PostCreationFragmentTest {
 
     @Before
     fun setup() {
-        onView(withId(R.id.main_activity_main_linear_layout))
+        onView(withId(R.id.drawer_layout))
             .perform(swipeLeft())
             .perform(swipeLeft())
         Thread.sleep(300)
@@ -62,7 +64,8 @@ class PostCreationFragmentTest {
 
 @RunWith(AndroidJUnit4::class)
 class PostFragmentUITests {
-    private val mockServer = MockServer()
+    private lateinit var mockServer: MockServer
+    private lateinit var context: Context
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(30)
@@ -71,7 +74,8 @@ class PostFragmentUITests {
 
     @Before
     fun setup() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        context = InstrumentationRegistry.getInstrumentation().targetContext
+        mockServer = MockServer()
         mockServer.start()
         val baseUrl = mockServer.getUrl()
         db = initDB(context)
@@ -96,6 +100,12 @@ class PostFragmentUITests {
         )
         db.close()
         Thread.sleep(300)
+    }
+
+    @After
+    fun after() {
+        clearData()
+        mockServer.stop()
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.h.pixeldroid
 
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.ColorMatrix
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -19,31 +20,32 @@ import com.h.pixeldroid.db.UserDatabaseEntity
 import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
+import com.h.pixeldroid.testUtility.CustomMatchers.Companion.second
 import com.h.pixeldroid.testUtility.MockServer
+import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
-import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
 import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
+import junit.framework.Assert.assertEquals
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
-
+/*
 
 @RunWith(AndroidJUnit4::class)
 class MockedServerTest {
 
-    private val mockServer = MockServer()
+    private lateinit var mockServer: MockServer
     private lateinit var activityScenario: ActivityScenario<MainActivity>
     private lateinit var db: AppDatabase
     private lateinit var context: Context
 
-    @get:Rule
-    var globalTimeout: Timeout = Timeout.seconds(100)
-
     @Before
     fun before(){
+        mockServer = MockServer()
         mockServer.start()
         val baseUrl = mockServer.getUrl()
         context = ApplicationProvider.getApplicationContext()
@@ -70,7 +72,12 @@ class MockedServerTest {
         db.close()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
     }
-
+    @After
+    fun after() {
+        clearData()
+        mockServer.stop()
+    }
+/*
     @Test
     fun searchPosts() {
         activityScenario.onActivity{
@@ -99,18 +106,20 @@ class MockedServerTest {
         onView(first(withId(R.id.tag_name))).check(matches(withText("#caturday")))
 
     }
+
+ */
     @Test
     fun openDiscoverPost(){
         activityScenario.onActivity{
                 a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
         }
         Thread.sleep(1000)
-        onView(withId(R.id.discoverList)).perform(click())
+        onView(first(withId(R.id.postPreview))).perform(click())
         Thread.sleep(1000)
-        onView(withId(R.id.username)).check(matches(withText("machintuck")))
+        onView(withId(R.id.username)).check(matches(withText("Arthur")))
 
     }
-
+/*
     @Test
     fun searchAccounts() {
         activityScenario.onActivity{
@@ -125,6 +134,8 @@ class MockedServerTest {
         onView(first(withId(R.id.account_entry_username))).check(matches(withText("dansup")))
 
     }
+
+ */
 
     @Test
     fun clickFollowButton() {
@@ -208,7 +219,7 @@ class MockedServerTest {
 
         onView(withText("Dobios followed you")).perform(click())
         Thread.sleep(1000)
-        onView(withText("Andrew Dobis")).check(matches(withId(R.id.accountNameTextView)))
+        onView(second(withText("Andrew Dobis"))).check(matches(withId(R.id.accountNameTextView)))
     }
 
     @Test
@@ -225,8 +236,8 @@ class MockedServerTest {
         Thread.sleep(1000)
 
         onView(withId(R.id.username)).perform(click())
-        Thread.sleep(10000)
-        onView(withText("Dante")).check(matches(withId(R.id.accountNameTextView)))
+        Thread.sleep(1000)
+        onView(second(withText("Dante"))).check(matches(withId(R.id.accountNameTextView)))
     }
 
     @Test
@@ -242,7 +253,7 @@ class MockedServerTest {
         onView(withText("Clement shared your post")).perform(click())
         Thread.sleep(1000)
 
-        onView(first(withText("Clement"))).check(matches(withId(R.id.username)))
+        onView(first(withText("Andrea"))).check(matches(withId(R.id.username)))
     }
 
     @Test
@@ -284,26 +295,31 @@ class MockedServerTest {
         } // go to the last tab
 
         Thread.sleep(1000)
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(ViewActions.swipeUp()) // notifications
-            .perform(ViewActions.swipeUp()) // camera
-            .perform(ViewActions.swipeUp()) // search
-            .perform(ViewActions.swipeUp()) // homepage
-            .perform(ViewActions.swipeUp()) // should stop at homepage
+        onView(withId(R.id.view_pager))
+            .perform(ViewActions.swipeRight()) // notifications
+            .perform(ViewActions.swipeRight()) // camera
+            .perform(ViewActions.swipeRight()) // search
+            .perform(ViewActions.swipeRight()) // homepage
+            .perform(ViewActions.swipeRight()) // should stop at homepage
+
         onView(withId(R.id.list)).check(matches(isDisplayed()))
+
+        activityScenario.onActivity {
+                a -> assert(a.findViewById<TabLayout>(R.id.tabs).getTabAt(0)?.isSelected ?: false)
+        }
     }
 
     @Test
     fun censorMatrices() {
-        // Doing these dummy checks as I can not get the matrix property from the ImageView
         val array: FloatArray = floatArrayOf(
-            0.1f, 0f, 0f, 0f, 0f,  // red vector
-            0f, 0.1f, 0f, 0f, 0f,  // green vector
-            0f, 0f, 0.1f, 0f, 0f,  // blue vector
+            0f, 0f, 0f, 0f, 0f,  // red vector
+            0f, 0f, 0f, 0f, 0f,  // green vector
+            0f, 0f, 0f, 0f, 0f,  // blue vector
             0f, 0f, 0f, 1f, 0f   ) // alpha vector
 
-        assert(censorColorMatrix().equals(array))
+        assert(censorColorMatrix().equals(ColorMatrix(array)))
         assert(uncensorColorMatrix().equals(ColorMatrix()))
     }
 }
 
+*/

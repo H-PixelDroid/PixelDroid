@@ -6,18 +6,26 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 
+
 class MockServer {
+    private val server = MockWebServer()
 
     companion object{
-        private val server = MockWebServer()
         private const val headerName = "Content-Type"
         private const val headerValue = "application/json; charset=utf-8"
     }
 
     fun start() {
         try {
+            server.start(45106)
             server.dispatcher = getDispatcher()
-            server.start()
+        } catch (e: IllegalArgumentException) {
+
+        }
+    }
+    fun stop(){
+        try {
+            server.shutdown()
         } catch (e: IllegalArgumentException) {
 
         }
@@ -45,29 +53,29 @@ class MockServer {
                         .setResponseCode(200).setBody(JsonValues.tokenJson)
                 }
                 when {
-                    request.path?.startsWith("/api/v1/apps") == true -> {
+                    request.path?.contains("/api/v1/apps") == true -> {
                         return MockResponse()
                             .addHeader("Content-Type", "application/json; charset=utf-8")
                             .setResponseCode(200).setBody(JsonValues.applicationJson)
                     }
-                    request.path?.startsWith("/api/v1/notifications") == true -> {
+                    request.path?.contains("/api/v1/notifications") == true -> {
                         return MockResponse()
                             .addHeader("Content-Type", "application/json; charset=utf-8")
                             .setResponseCode(200).setBody(JsonValues.notificationsJson)
                     }
-                    request.path?.startsWith("/api/v1/timelines/home") == true -> {
+                    request.path?.contains("/api/v1/timelines/home") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.feedJson)
                     }
-                    request.path?.startsWith("/api/v1/timelines/public") == true -> {
+                    request.path?.contains("/api/v1/timelines/public") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.feedJson)
                     }
-                    request.path?.startsWith("/api/v1/accounts/0/statuses") == true -> {
+                    request.path?.contains("/api/v1/accounts/0/statuses") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
                     }
                     request.path?.matches("/api/v1/accounts/[0-9]*/statuses".toRegex()) == true -> {
@@ -76,7 +84,7 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.accountStatusesJson)
                     }
-                    request.path?.startsWith("/api/v1/statuses/0/context") == true -> {
+                    request.path?.contains("/api/v1/statuses/0/context") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
                     }
                     request.path?.matches("/api/v1/statuses/[0-9]*/context".toRegex()) == true -> {
@@ -85,7 +93,7 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.commentStatusesJson)
                     }
-                    request.path?.startsWith("/api/v1/statuses/0/favourite") == true -> {
+                    request.path?.contains("/api/v1/statuses/0/favourite") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
                     }
                     request.path?.matches("/api/v1/statuses/[0-9]*/favourite".toRegex()) == true -> {
@@ -94,7 +102,7 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.likedJson)
                     }
-                    request.path?.startsWith("/api/v1/statuses/0/unfavourite") == true -> {
+                    request.path?.contains("/api/v1/statuses/0/unfavourite") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
                     }
                     request.path?.matches("/api/v1/statuses/[0-9]*/unfavourite".toRegex()) == true -> {
@@ -103,13 +111,13 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.unlikeJson)
                     }
-                    request.path?.startsWith("/api/v1/statuses") == true -> {
+                    request.path?.contains("/api/v1/statuses") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.unlikeJson)
                     }
-                    request.path?.startsWith("/api/v1/accounts/0") == true -> {
+                    request.path?.contains("/api/v1/accounts/0") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
                     }
                     request.path?.matches("/api/v1/accounts/[0-9]*".toRegex()) == true -> {
@@ -118,7 +126,7 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.accountJson)
                     }
-                    request.path?.startsWith("/api/v1/statuses/0/reblog") == true -> {
+                    request.path?.contains("/api/v1/statuses/0/reblog") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
                     }
                     request.path?.matches("/api/v1/statuses/[0-9]*/reblog".toRegex()) == true -> {
@@ -127,7 +135,7 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.reblogJson)
                     }
-                    request.path?.startsWith("/api/v1/statuses/0/unreblog") == true -> {
+                    request.path?.contains("/api/v1/statuses/0/unreblog") == true -> {
                         return MockResponse().setHttp2ErrorCode(401)
                     }
                     request.path?.matches("/api/v1/statuses/[0-9]*/unreblog".toRegex()) == true -> {
@@ -148,7 +156,7 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.unfollowRelationshipJson)
                     }
-                    request.path?.startsWith("/api/v1/accounts/relationships") == true -> {
+                    request.path?.contains("/api/v1/accounts/relationships") == true -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
@@ -184,19 +192,19 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.searchEmpty)
                     }
-                    request.path?.startsWith("/api/v2/search?type=hashtags&q=caturday")!!-> {
+                    request.path?.contains("/api/v2/search?type=hashtags&q=caturday")!!-> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.searchCaturdayHashtags)
                     }
-                    request.path?.startsWith("/api/v2/search?type=statuses&q=caturday")!! -> {
+                    request.path?.contains("/api/v2/search?type=statuses&q=caturday")!! -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.searchCaturday)
                     }
-                    request.path?.startsWith("/api/v2/search?type=accounts&q=dansup")!! -> {
+                    request.path?.contains("/api/v2/search?type=accounts&q=dansup")!! -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
@@ -208,7 +216,7 @@ class MockServer {
                             "application/json; charset=utf-8"
                         ).setResponseCode(200).setBody(JsonValues.searchEmpty)
                     }
-                    request.path?.startsWith("/api/v2/discover/posts")!! -> {
+                    request.path?.contains("/api/v2/discover/posts")!! -> {
                         return MockResponse().addHeader(
                             "Content-Type",
                             "application/json; charset=utf-8"
