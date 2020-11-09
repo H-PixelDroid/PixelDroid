@@ -127,4 +127,7 @@
     <string name="open_drawer_menu">Abrir o menú do editor</string>
     <string name="discover">DESCUBRIR</string>
     <string name="license_info">PixelDroid é softare libre e de código aberto, baixo licenza GNU General Public License (versión 3 ou posterior)</string>
+    <string name="panda_pull_to_refresh_to_try_again">O panda está triste. Arrastra hacia abaixo a pantalla e inténtao outra vez.</string>
+    <string name="something_went_wrong">Algo fallou…</string>
+    <string name="poll_notification">A enquisa de %1$s rematou</string>
 </resources>
