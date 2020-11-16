@@ -127,4 +127,7 @@
     <string name="status_more_options">انتخاب‌های بیش‌تر</string>
     <string name="search_empty_error">عبارت جست‌وجو نمی‌تواند خالی باشد</string>
     <string name="add_photo">افزودن یک عکس</string>
+    <string name="panda_pull_to_refresh_to_try_again">این پاندا خوشحال نیست. با پایین کشیدن صفحه، دوباره برای تازه‌سازی تلاش کنید.</string>
+    <string name="something_went_wrong">مشکلی پیش آمد…</string>
+    <string name="poll_notification">نظرسنجی %1$s پایان یافته است</string>
 </resources>
