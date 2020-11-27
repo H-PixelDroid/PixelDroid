@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.interfaces.PostCreationListener
 import com.h.pixeldroid.objects.Attachment

@@ -1,19 +1,15 @@
 package com.h.pixeldroid
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.di.PixelfedAPIHolder
-import com.h.pixeldroid.fragments.feeds.AccountListFragment
+import com.h.pixeldroid.fragments.feeds.uncachedFeeds.accountLists.AccountListFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Account.Companion.FOLLOWERS_TAG
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
+
 
 class FollowsActivity : AppCompatActivity() {
     private var followsFragment = AccountListFragment()

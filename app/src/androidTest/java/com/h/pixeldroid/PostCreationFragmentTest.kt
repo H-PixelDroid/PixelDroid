@@ -17,8 +17,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.InstanceDatabaseEntity
-import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
+import com.h.pixeldroid.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB

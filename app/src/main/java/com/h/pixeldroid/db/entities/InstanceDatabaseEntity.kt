@@ -1,4 +1,4 @@
-package com.h.pixeldroid.db
+package com.h.pixeldroid.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

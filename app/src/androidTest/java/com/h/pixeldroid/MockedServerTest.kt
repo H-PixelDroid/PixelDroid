@@ -1,38 +1,6 @@
 package com.h.pixeldroid
 
 
-import android.content.Context
-import android.graphics.Color
-import android.graphics.ColorMatrix
-import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.android.material.tabs.TabLayout
-import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.InstanceDatabaseEntity
-import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
-import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
-import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
-import com.h.pixeldroid.testUtility.CustomMatchers.Companion.second
-import com.h.pixeldroid.testUtility.MockServer
-import com.h.pixeldroid.testUtility.clearData
-import com.h.pixeldroid.testUtility.initDB
-import com.h.pixeldroid.utils.PostUtils.Companion.censorColorMatrix
-import com.h.pixeldroid.utils.PostUtils.Companion.uncensorColorMatrix
-import junit.framework.Assert.assertEquals
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.Timeout
-import org.junit.runner.RunWith
 /*
 
 @RunWith(AndroidJUnit4::class)

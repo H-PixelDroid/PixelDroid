@@ -1,0 +1,17 @@
+package com.h.pixeldroid.db.dao.feedContent
+
+import androidx.paging.PagingSource
+import androidx.room.Dao
+import androidx.room.Query
+import com.h.pixeldroid.objects.Notification
+
+@Dao
+interface NotificationDao: FeedContentDao<Notification> {
+
+    @Query("DELETE FROM notifications")
+    override suspend fun clearFeedContent()
+
+    @Query("""SELECT * FROM notifications WHERE user_id=:userId AND instance_uri=:instanceUri 
+            ORDER BY CAST(created_at AS FLOAT) DESC""")
+    override fun feedContent(userId: String, instanceUri: String): PagingSource<Int, Notification>
+}
