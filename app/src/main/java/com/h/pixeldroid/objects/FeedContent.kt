@@ -1,10 +1,13 @@
 package com.h.pixeldroid.objects
 
-abstract class FeedContent {
-    abstract val id: String?
+interface FeedContent {
+    val id: String?
+}
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+interface FeedContentDatabase {
+    val id: String?
 
+    var user_id: String
+
+    var instance_uri: String
 }

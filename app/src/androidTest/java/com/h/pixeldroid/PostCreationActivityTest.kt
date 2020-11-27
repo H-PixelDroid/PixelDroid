@@ -1,40 +1,5 @@
 package com.h.pixeldroid
 
-import android.Manifest
-import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.util.Log
-import android.view.View.VISIBLE
-import androidx.core.net.toUri
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.GrantPermissionRule
-import com.h.pixeldroid.adapters.ThumbnailAdapter
-import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.InstanceDatabaseEntity
-import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.testUtility.CustomMatchers
-import com.h.pixeldroid.testUtility.MockServer
-import com.h.pixeldroid.testUtility.clearData
-import com.h.pixeldroid.testUtility.initDB
-import kotlinx.android.synthetic.main.activity_post_creation.*
-import org.hamcrest.Matchers.not
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.rules.Timeout
-import org.junit.runner.RunWith
-import java.io.File
 /*
 @RunWith(AndroidJUnit4::class)
 class PostCreationActivityTest {

@@ -1,8 +1,9 @@
-package com.h.pixeldroid.db
+package com.h.pixeldroid.db.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
 
 @Entity(
     tableName = "users",

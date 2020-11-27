@@ -2,12 +2,9 @@ package com.h.pixeldroid
 
 
 import android.content.Context
-import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
@@ -15,9 +12,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.InstanceDatabaseEntity
-import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
+import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
+import com.h.pixeldroid.db.entities.UserDatabaseEntity
+import com.h.pixeldroid.fragments.StatusViewHolder
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.atPosition
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first
@@ -99,10 +96,10 @@ class HomeFeedTest {
     @Test
     fun clickingLikeButtonWorks() {
         onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<PostViewHolder>(0, clickChildViewWithId(R.id.liker))
+            actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.liker))
         )
         onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<PostViewHolder>(0, clickChildViewWithId(R.id.liker))
+            actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.liker))
         )
         onView(first(withId(R.id.nlikes)))
             .check(matches(withText(getText(first(withId(R.id.nlikes))))))
@@ -111,7 +108,7 @@ class HomeFeedTest {
     @Test
     fun clickingLikeButtonFails() {
         onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<PostViewHolder>(2, clickChildViewWithId(R.id.liker))
+            actionOnItemAtPosition<StatusViewHolder>(2, clickChildViewWithId(R.id.liker))
         )
         onView((withId(R.id.list))).check(matches(isDisplayed()))
     }
@@ -119,7 +116,7 @@ class HomeFeedTest {
     @Test
     fun clickingUsernameOpensProfile() {
         onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<PostViewHolder>(0, clickChildViewWithId(R.id.username))
+            actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.username))
         )
         onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
     }
@@ -127,7 +124,7 @@ class HomeFeedTest {
     @Test
     fun clickingProfilePicOpensProfile() {
         onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<PostViewHolder>(0, clickChildViewWithId(R.id.profilePic))
+            actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.profilePic))
         )
         onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
     }
@@ -135,10 +132,10 @@ class HomeFeedTest {
     @Test
     fun clickingReblogButtonWorks() {
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.reblogger)))
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.reblogger)))
         onView(first(withId(R.id.nshares)))
             .check(matches(withText(getText(first(withId(R.id.nshares))))))
@@ -147,7 +144,7 @@ class HomeFeedTest {
     @Test
     fun clickingMentionOpensProfile() {
         onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<PostViewHolder>(0, clickChildViewWithId(R.id.description))
+            actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.description))
         )
         onView(first(withId(R.id.username))).check(matches(isDisplayed()))
     }
@@ -155,7 +152,7 @@ class HomeFeedTest {
     @Test
     fun clickingHashTagsWorks() {
         onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<PostViewHolder>(1, clickChildViewWithId(R.id.description))
+            actionOnItemAtPosition<StatusViewHolder>(1, clickChildViewWithId(R.id.description))
         )
         onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
@@ -164,7 +161,7 @@ class HomeFeedTest {
     @Test
     fun clickingCommentButtonOpensCommentSection() {
         onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<PostViewHolder>(0, clickChildViewWithId(R.id.commenter))
+            actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.commenter))
         )
         onView(first(withId(R.id.commentIn)))
             .check(matches(hasDescendant(withId(R.id.editComment))))
@@ -174,7 +171,7 @@ class HomeFeedTest {
     fun clickingViewCommentShowsTheComments() {
         //Open the comment section
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.ViewComments)))
         Thread.sleep(1000)
         onView(first(withId(R.id.commentContainer)))
@@ -185,7 +182,7 @@ class HomeFeedTest {
     fun clickingViewCommentFails() {
         //Open the comment section
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (2, clickChildViewWithId(R.id.ViewComments)))
         Thread.sleep(1000)
         onView(withId(R.id.list)).check(matches(isDisplayed()))
@@ -195,17 +192,17 @@ class HomeFeedTest {
     fun postingACommentWorks() {
         //Open the comment section
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.commenter)))
 
         onView(withId(R.id.list)).perform(slowSwipeUp(false))
         Thread.sleep(1000)
 
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, typeTextInViewWithId(R.id.editComment, "test")))
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.submitComment)))
 
         Thread.sleep(1000)
@@ -215,14 +212,14 @@ class HomeFeedTest {
 
     @Test
     fun performClickOnSensitiveWarning() {
-        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(1))
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(1))
         Thread.sleep(1000)
 
         onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         Thread.sleep(1000)
 
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (1, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(1000)
 
@@ -232,14 +229,14 @@ class HomeFeedTest {
 
     @Test
     fun performClickOnSensitiveWarningTabs() {
-        onView(withId(R.id.list)).perform(scrollToPosition<PostViewHolder>(0))
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
         Thread.sleep(1000)
 
         onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         Thread.sleep(1000)
 
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(1000)
 
@@ -254,16 +251,16 @@ class HomeFeedTest {
 
         //Remove sensitive media warning
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(100)
 
         //Like the post
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.postPicture)))
         onView(withId(R.id.list))
-            .perform(actionOnItemAtPosition<PostViewHolder>
+            .perform(actionOnItemAtPosition<StatusViewHolder >
                 (0, clickChildViewWithId(R.id.postPicture)))
         //...
         Thread.sleep(100)

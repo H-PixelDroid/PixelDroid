@@ -41,8 +41,8 @@ data class Account(
     val moved: Account? = null,
     val fields: List<Field>? = emptyList(),
     val bot: Boolean? =  false,
-    val source: Source? = null
-) : Serializable, FeedContent() {
+    val source: Source? = null,
+) : Serializable, FeedContent {
     companion object {
         const val ACCOUNT_TAG = "AccountTag"
         const val ACCOUNT_ID_TAG = "AccountIdTag"

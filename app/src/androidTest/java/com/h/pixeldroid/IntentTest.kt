@@ -24,9 +24,9 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.InstanceDatabaseEntity
-import com.h.pixeldroid.db.UserDatabaseEntity
-import com.h.pixeldroid.fragments.feeds.postFeeds.PostViewHolder
+import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
+import com.h.pixeldroid.db.entities.UserDatabaseEntity
+import com.h.pixeldroid.fragments.StatusViewHolder
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.testUtility.MockServer
@@ -112,7 +112,7 @@ class IntentTest {
 
         //Click the mention
         Espresso.onView(ViewMatchers.withId(R.id.list))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<PostViewHolder>
+            .perform(RecyclerViewActions.actionOnItemAtPosition<StatusViewHolder>
                 (0, clickClickableSpanInDescription("@Dobios")))
 
         //Wait a bit

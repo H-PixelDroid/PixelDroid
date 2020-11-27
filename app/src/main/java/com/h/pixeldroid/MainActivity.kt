@@ -8,21 +8,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.paging.ExperimentalPagingApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.db.entities.HomeStatusDatabaseEntity
+import com.h.pixeldroid.db.entities.PublicFeedStatusDatabaseEntity
+import com.h.pixeldroid.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
-import com.h.pixeldroid.fragments.feeds.NotificationsFragment
-import com.h.pixeldroid.fragments.feeds.OfflineFeedFragment
-import com.h.pixeldroid.fragments.feeds.postFeeds.HomeTimelineFragment
-import com.h.pixeldroid.fragments.feeds.postFeeds.PublicTimelineFragment
+import com.h.pixeldroid.fragments.feeds.cachedFeeds.postFeeds.PostFeedFragment
+import com.h.pixeldroid.fragments.feeds.cachedFeeds.notifications.NotificationsFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.Utils.Companion.hasInternet
@@ -40,11 +43,11 @@ import org.ligi.tracedroid.sending.TraceDroidEmailSender
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private val searchDiscoverFragment: SearchDiscoverFragment = SearchDiscoverFragment()
     @Inject
     lateinit var db: AppDatabase
     @Inject
@@ -57,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         const val ADD_ACCOUNT_IDENTIFIER: Long = -13
     }
 
+    @ExperimentalPagingApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
@@ -75,13 +79,19 @@ class MainActivity : AppCompatActivity() {
             launchActivity(LoginActivity(), firstTime = true)
         } else {
             setupDrawer()
-            val tabs = arrayOf(
-                if (hasInternet(applicationContext)) HomeTimelineFragment()
-                else OfflineFeedFragment(),
-                searchDiscoverFragment,
+
+            val tabs: List<Fragment> = listOf(
+                PostFeedFragment<HomeStatusDatabaseEntity>()
+                    .apply {
+                        arguments = Bundle().apply { putBoolean("home", true) }
+                    },
+                SearchDiscoverFragment(),
                 CameraFragment(),
                 NotificationsFragment(),
-                PublicTimelineFragment()
+                PostFeedFragment<PublicFeedStatusDatabaseEntity>()
+                    .apply {
+                        arguments = Bundle().apply { putBoolean("home", false) }
+                    }
             )
             setupTabs(tabs)
         }
@@ -123,7 +133,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun placeholder(ctx: Context, tag: String?): Drawable {
                 if (tag == DrawerImageLoader.Tags.PROFILE.name || tag == DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name) {
-                    return ctx.getDrawable(R.drawable.ic_default_user)!!
+                    return ContextCompat.getDrawable(ctx, R.drawable.ic_default_user)!!
                 }
 
                 return super.placeholder(ctx, tag)
@@ -264,24 +274,30 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setupTabs(tab_array: Array<Fragment>){
+    private fun setupTabs(tab_array: List<Fragment>){
         view_pager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
                 return tab_array[position]
             }
 
             override fun getItemCount(): Int {
-                return 5
+                return tab_array.size
             }
         }
+
+        //Keep the tabs active to prevent reloads and stutters
+        view_pager.offscreenPageLimit = tab_array.size - 1
+
         TabLayoutMediator(tabs, view_pager) { tab, position ->
-            when(position){
-                0 -> tab.icon = getDrawable(R.drawable.ic_home_white_24dp)
-                1 -> tab.icon = getDrawable(R.drawable.ic_search_white_24dp)
-                2 -> tab.icon = getDrawable(R.drawable.ic_photo_camera_white_24dp)
-                3 -> tab.icon = getDrawable(R.drawable.ic_heart)
-                4 -> tab.icon = getDrawable(R.drawable.ic_filter_black_24dp)
-            }
+            tab.icon = ContextCompat.getDrawable(applicationContext,
+                    when(position){
+                        0 -> R.drawable.ic_home_white_24dp
+                        1 -> R.drawable.ic_search_white_24dp
+                        2 -> R.drawable.ic_photo_camera_white_24dp
+                        3 -> R.drawable.ic_heart
+                        4 -> R.drawable.ic_filter_black_24dp
+                        else -> throw IllegalArgumentException()
+                    })
         }.attach()
     }
 

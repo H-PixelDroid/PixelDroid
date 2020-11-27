@@ -10,9 +10,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.fragments.feeds.search.SearchAccountFragment
-import com.h.pixeldroid.fragments.feeds.search.SearchHashtagFragment
-import com.h.pixeldroid.fragments.feeds.search.SearchPostsFragment
+import com.h.pixeldroid.fragments.feeds.uncachedFeeds.search.SearchAccountFragment
+import com.h.pixeldroid.fragments.feeds.uncachedFeeds.search.SearchHashtagFragment
+import com.h.pixeldroid.fragments.feeds.uncachedFeeds.search.SearchPostsFragment
 import com.h.pixeldroid.objects.Results
 
 class SearchActivity : AppCompatActivity() {
@@ -54,8 +54,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun createSearchTabs(query: String): Array<Fragment>{
 
-        val searchFeedFragment =
-            SearchPostsFragment()
+        val searchFeedFragment = SearchPostsFragment()
         val searchAccountListFragment =
             SearchAccountFragment()
         val searchHashtagFragment: Fragment = SearchHashtagFragment()

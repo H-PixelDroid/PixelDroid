@@ -4,10 +4,10 @@ import android.app.Application
 import android.content.Context
 import com.h.pixeldroid.*
 import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.fragments.BaseFragment
 import com.h.pixeldroid.fragments.PostFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
-import com.h.pixeldroid.fragments.feeds.FeedFragment
-import com.h.pixeldroid.fragments.feeds.OfflineFeedFragment
+import com.h.pixeldroid.fragments.feeds.cachedFeeds.notifications.NotificationsFragment
 import dagger.Component
 
 import javax.inject.Singleton
@@ -18,8 +18,6 @@ import javax.inject.Singleton
 interface ApplicationComponent {
     fun inject(application: Pixeldroid?)
     fun inject(activity: LoginActivity?)
-    fun inject(feedFragment: FeedFragment)
-    fun inject(activity: FollowsActivity?)
     fun inject(activity: PostActivity?)
     fun inject(activity: PostCreationActivity?)
     fun inject(activity: ProfileActivity?)
@@ -27,7 +25,11 @@ interface ApplicationComponent {
     fun inject(activity: ReportActivity?)
     fun inject(fragment: PostFragment)
     fun inject(fragment: SearchDiscoverFragment)
-    fun inject(fragment: OfflineFeedFragment)
+
+    fun inject(fragment: NotificationsFragment)
+    fun inject(feedFragment: BaseFragment)
+    fun inject(followsActivity: FollowsActivity)
+
 
     val context: Context?
     val application: Application?

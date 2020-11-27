@@ -17,14 +17,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.UserDatabaseEntity
+import com.h.pixeldroid.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Relationship
 import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.utils.HtmlUtils.Companion.parseHTMLText
 import com.h.pixeldroid.utils.ImageConverter
-import kotlinx.android.synthetic.main.fragment_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -145,9 +144,9 @@ class ProfileActivity : AppCompatActivity() {
         if(show){
             motionLayout?.transitionToEnd()
         } else {
-            findViewById<ProgressBar>(R.id.profileProgressBar).visibility = View.GONE
             motionLayout?.transitionToStart()
         }
+        findViewById<ProgressBar>(R.id.profileProgressBar).visibility = View.GONE
         refreshLayout.isRefreshing = false
     }
 

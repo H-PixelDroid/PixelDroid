@@ -1,9 +1,10 @@
-package com.h.pixeldroid.db
+package com.h.pixeldroid.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.h.pixeldroid.db.entities.UserDatabaseEntity
 
 @Dao
 interface UserDao {

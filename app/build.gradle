@@ -11,13 +11,14 @@ apply plugin: 'jacoco'
 android {
 
     compileSdkVersion 30
-    buildToolsVersion '30.0.1'
+    buildToolsVersion '30.0.2'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
     defaultConfig {
         applicationId "com.h.pixeldroid"
@@ -53,6 +54,9 @@ android {
         animationsDisabled true
 
     }
+    buildFeatures {
+        viewBinding = true
+    }
 
     apply plugin: 'kotlin-kapt'
 }
@@ -75,7 +79,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
-    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
+    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha09'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
@@ -83,16 +87,16 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
     // Use the most recent version of CameraX
-    def camerax_version = '1.0.0-beta11'
+    def camerax_version = '1.0.0-beta12'
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     // CameraX Lifecycle library
     implementation "androidx.camera:camera-lifecycle:$camerax_version"
 
     // CameraX View class
-    implementation 'androidx.camera:camera-view:1.0.0-alpha18'
+    implementation 'androidx.camera:camera-view:1.0.0-alpha19'
 
-    def room_version = "2.2.5"
+    def room_version = "2.3.0-alpha03"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
@@ -148,7 +152,7 @@ dependencies {
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
 
 
-    implementation 'com.karumi:dexter:6.2.1'
+    implementation 'com.karumi:dexter:6.2.2'
 
     implementation 'com.github.ligi.tracedroid:lib:3.0'
     implementation 'com.github.ligi.tracedroid:supportemail:3.0'
