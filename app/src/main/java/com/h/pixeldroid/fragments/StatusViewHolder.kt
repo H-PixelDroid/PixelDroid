@@ -1,6 +1,7 @@
 package com.h.pixeldroid.fragments
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -13,6 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.paging.RemoteMediator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import at.connyduck.sparkbutton.SparkButton
@@ -23,6 +26,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.R
 import com.h.pixeldroid.ReportActivity
 import com.h.pixeldroid.api.PixelfedAPI
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.db.entities.HomeStatusDatabaseEntity
+import com.h.pixeldroid.db.entities.PublicFeedStatusDatabaseEntity
 import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Context
 import com.h.pixeldroid.objects.Status
@@ -35,9 +41,12 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.android.synthetic.main.comment.view.*
 import kotlinx.android.synthetic.main.post_fragment.view.*
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 
 /**
@@ -70,14 +79,9 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
     private var status: Status? = null
 
-    init {
-        itemView.setOnClickListener {
-            //notification?.openActivity()
-        }
-    }
+    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope) {
 
-    fun bind(status: Status?, instanceUri: String, pixelfedAPI: PixelfedAPI, credential: String) {
-
+        this.itemView.visibility = View.VISIBLE
         this.status = status
 
         val metrics = itemView.context.resources.displayMetrics
@@ -89,9 +93,11 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
             .asDrawable().fitCenter()
             .placeholder(ColorDrawable(Color.GRAY))
 
-        setupPost(itemView, picRequest, instanceUri, false)
+        val user = db.userDao().getActiveUser()!!
 
-        activateButtons(this, pixelfedAPI, credential)
+        setupPost(itemView, picRequest, user.instance_uri, false)
+
+        activateButtons(this, pixelfedAPI, db, lifecycleScope)
 
     }
 
@@ -217,8 +223,10 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun activateButtons(holder: StatusViewHolder, api: PixelfedAPI, credential: String){
+    fun activateButtons(holder: StatusViewHolder, api: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope){
+        val user = db.userDao().getActiveUser()!!
 
+        val credential = "Bearer ${user.accessToken}"
         //Set the special HTML text
         setDescription(holder.view, api, credential)
 
@@ -238,7 +246,7 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         //Activate double tap liking
         activateDoubleTapLiker(holder, api, credential)
 
-        activateMoreButton(holder)
+        activateMoreButton(holder, api, db, lifecycleScope)
     }
 
     fun activateReblogger(
@@ -326,7 +334,7 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun activateMoreButton(holder: StatusViewHolder){
+    fun activateMoreButton(holder: StatusViewHolder, api: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope){
         holder.more.setOnClickListener {
             PopupMenu(it.context, it).apply {
                 setOnMenuItemClickListener { item ->
@@ -397,6 +405,32 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
                                 }).check()
                             true
                         }
+                        R.id.post_more_menu_delete -> {
+                            val builder = AlertDialog.Builder(holder.itemView.context)
+                            builder.apply {
+                                setMessage(R.string.delete_dialog)
+                                setPositiveButton(R.string.OK) { _, _ ->
+
+                                    lifecycleScope.launch {
+                                        val user = db.userDao().getActiveUser()!!
+                                        status?.id?.let { id ->
+                                            db.homePostDao().delete(id, user.user_id, user.instance_uri)
+                                            db.publicPostDao().delete(id, user.user_id, user.instance_uri)
+                                            try {
+                                                api.deleteStatus("Bearer ${user.accessToken}", id)
+                                                holder.itemView.visibility = View.GONE
+                                            } catch (exception: IOException) {
+                                            } catch (exception: HttpException) {
+                                            }
+                                        }
+                                    }
+                                }
+                                setNegativeButton(R.string.cancel) { _, _ -> }
+                                show()
+                            }
+
+                            true
+                        }
                         else -> false
                     }
                 }
@@ -404,6 +438,10 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
                 if(status?.media_attachments.isNullOrEmpty()) {
                     //make sure to disable image-related things if there aren't any
                     menu.setGroupVisible(R.id.post_more_group_picture, false)
+                }
+                if(status?.account?.id == db.userDao().getActiveUser()!!.user_id){
+                    //make sure to enable deleting post if it's the user's
+                    menu.setGroupVisible(R.id.post_more_menu_group_delete, true)
                 }
                 show()
             }

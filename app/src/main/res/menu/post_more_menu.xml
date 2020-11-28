@@ -14,4 +14,14 @@
         <item android:id="@+id/post_more_menu_save_to_gallery"
             android:title="@string/save_to_gallery"/>
     </group>
+
+    <!-- Group that should only be shown if this is the user's post -->
+    <group
+        android:id="@+id/post_more_menu_group_delete"
+        android:visible="false">
+
+        <item android:id="@+id/post_more_menu_delete"
+            android:title="@string/delete"/>
+
+    </group>
 </menu>

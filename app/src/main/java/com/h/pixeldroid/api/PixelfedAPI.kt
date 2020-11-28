@@ -107,7 +107,7 @@ interface PixelfedAPI {
         @Path("id") statusId: String
     ) : Call<Status>
 
-    @POST("/api/v1/statuses/{id}/favourited_by")
+    @GET("/api/v1/statuses/{id}/favourited_by")
     fun postLikedBy(
         @Path("id") statusId: String
     ) : Call<List<Account>>
@@ -131,6 +131,12 @@ interface PixelfedAPI {
         @Field("scheduled_at") scheduled_at : String? = null,
         @Field("language") language : String? = null
     ) : Call<Status>
+
+    @DELETE("/api/v1/statuses/{id}")
+    suspend fun deleteStatus(
+            @Header("Authorization") authorization: String,
+            @Path("id") statusId: String
+    )
 
     @FormUrlEncoded
     @POST("/api/v1/statuses/{id}/reblog")
