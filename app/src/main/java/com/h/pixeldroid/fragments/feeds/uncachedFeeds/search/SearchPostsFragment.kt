@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.R
 import com.h.pixeldroid.fragments.StatusViewHolder
 import com.h.pixeldroid.fragments.feeds.uncachedFeeds.*
-import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Results
 import com.h.pixeldroid.objects.Status
 
@@ -80,8 +80,7 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
             val uiModel = getItem(position) as Status
             uiModel.let {
                 val instanceUri = db.userDao().getActiveUser()!!.instance_uri
-                val accessToken = db.userDao().getActiveUser()!!.accessToken
-                (holder as StatusViewHolder).bind(it, instanceUri, apiHolder.setDomain(instanceUri), "Bearer $accessToken")
+                (holder as StatusViewHolder).bind(it, apiHolder.setDomain(instanceUri), db, lifecycleScope)
             }
         }
     }

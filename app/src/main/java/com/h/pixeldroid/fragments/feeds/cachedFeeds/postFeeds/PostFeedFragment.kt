@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
 import androidx.paging.RemoteMediator
@@ -89,8 +90,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
             val uiModel = getItem(position) as Status
             uiModel.let {
                 val instanceUri = db.userDao().getActiveUser()!!.instance_uri
-                val accessToken = db.userDao().getActiveUser()!!.accessToken
-                (holder as StatusViewHolder).bind(it, instanceUri, apiHolder.setDomain(instanceUri), "Bearer $accessToken")
+                (holder as StatusViewHolder).bind(it, apiHolder.setDomain(instanceUri), db, lifecycleScope)
             }
         }
     }

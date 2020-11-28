@@ -139,6 +139,10 @@
     <string name="discover">DISCOVER</string>
     <string name="something_went_wrong">Something went wrong…</string>
     <string name="panda_pull_to_refresh_to_try_again">This panda is not happy. Pull to refresh to try again.</string>
+    <string name="delete">Delete</string>
+    <string name="OK">OK</string>
+    <string name="delete_dialog">Delete this post?</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>
