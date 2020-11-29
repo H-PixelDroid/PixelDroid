@@ -24,5 +24,7 @@ data class UserDatabaseEntity(
         var avatar_static: String,
         var isActive: Boolean,
         var accessToken: String,
-        val refreshToken: String?
+        val refreshToken: String?,
+        val clientId: String,
+        val clientSecret: String
 )

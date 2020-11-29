@@ -23,11 +23,7 @@ interface PixelfedAPI {
 
 
     companion object {
-        @Deprecated(
-            "Use the DI-d PixelfedAPIHolder instead",
-            ReplaceWith("apiHolder.api")
-        )
-        fun create(baseUrl: String): PixelfedAPI {
+        fun createFromUrl(baseUrl: String): PixelfedAPI {
             return Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -52,11 +48,12 @@ interface PixelfedAPI {
     fun obtainToken(
         @Field("client_id") client_id: String,
         @Field("client_secret") client_secret: String,
-        @Field("redirect_uri") redirect_uri: String,
+        @Field("redirect_uri") redirect_uri: String? = null,
         @Field("scope") scope: String? = "read",
         @Field("code") code: String? = null,
-        @Field("grant_type") grant_type: String? = null
-    ): Single<Token>
+        @Field("grant_type") grant_type: String? = null,
+        @Field("refresh_token") refresh_token: String? = null
+        ): Single<Token>
 
     // get instance configuration
     @GET("/api/v1/instance")

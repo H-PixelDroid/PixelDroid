@@ -30,6 +30,9 @@ import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -137,7 +140,7 @@ class LoginActivity : AppCompatActivity() {
         hideKeyboard()
         loadingAnimation(true)
 
-        pixelfedAPI = apiHolder.setDomain(normalizedDomain)
+        pixelfedAPI = PixelfedAPI.createFromUrl(normalizedDomain)
         
         Single.zip(
             pixelfedAPI.registerApplication(
@@ -250,7 +253,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         //Successful authorization
-        pixelfedAPI = apiHolder.setDomain(domain)
+        pixelfedAPI = PixelfedAPI.createFromUrl(domain)
 
         //TODO check why we can't do onErrorReturn { null } which would make more sense ¯\_(ツ)_/¯
         //Also, maybe find a nicer way to do this, this feels hacky (although it can work fine)
@@ -279,7 +282,7 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     DBUtils.storeInstance(db, instance)
-                    storeUser(token.access_token, token.refresh_token, instance.uri)
+                    storeUser(token.access_token, token.refresh_token, clientId, clientSecret, instance.uri)
                     wipeSharedSettings()
                 }
 
@@ -313,7 +316,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun storeUser(accessToken: String, refreshToken: String?, instance: String) {
+    private fun storeUser(accessToken: String, refreshToken: String?, clientId: String, clientSecret: String, instance: String) {
         pixelfedAPI.verifyCredentials("Bearer $accessToken")
             .enqueue(object : Callback<Account> {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
@@ -326,7 +329,9 @@ class LoginActivity : AppCompatActivity() {
                             instance,
                             activeUser = true,
                             accessToken = accessToken,
-                            refreshToken = refreshToken
+                            refreshToken = refreshToken,
+                            clientId = clientId,
+                            clientSecret = clientSecret
                         )
                         apiHolder.setDomainToCurrentUser(db)
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)

@@ -5,15 +5,11 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.objects.*
 import io.reactivex.Single
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import retrofit2.Call
 import java.text.SimpleDateFormat
-import java.util.*
 
 
 /**
@@ -92,9 +88,9 @@ class APIUnitTest {
         val statusesHome: List<Status>
 
         runBlocking {
-            statuses = PixelfedAPI.create("http://localhost:8089")
+            statuses = PixelfedAPI.createFromUrl("http://localhost:8089")
                     .timelinePublic(null, null, null, null, null)
-            statusesHome = PixelfedAPI.create("http://localhost:8089")
+            statusesHome = PixelfedAPI.createFromUrl("http://localhost:8089")
                 .timelineHome("abc", null, null, null,null, null)
         }
 
@@ -116,7 +112,7 @@ class APIUnitTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody(""" {"id":3197,"name":"Pixeldroid","website":null,"redirect_uri":"urn:ietf:wg:oauth:2.0:oob","client_id":3197,"client_secret":"hhRwLupqUJPghKsZzpZtxNV67g5DBdPYCqW6XE3m","vapid_key":null}"""
                         )))
-        val call: Single<Application> = PixelfedAPI.create("http://localhost:8089")
+        val call: Single<Application> = PixelfedAPI.createFromUrl("http://localhost:8089")
             .registerApplication("Pixeldroid", "urn:ietf:wg:oauth:2.0:oob", "read write follow")
 
         val application: Application = call.toFuture().get()
@@ -144,7 +140,7 @@ class APIUnitTest {
         val OAUTH_SCHEME = "oauth2redirect"
         val SCOPE = "read write follow"
         val PACKAGE_ID = "com.h.pixeldroid"
-        val call: Single<Token> = PixelfedAPI.create("http://localhost:8089")
+        val call: Single<Token> = PixelfedAPI.createFromUrl("http://localhost:8089")
             .obtainToken("123", "ssqdfqsdfqds", "$OAUTH_SCHEME://$PACKAGE_ID", SCOPE, "abc",
                 "authorization_code")
         val token: Token = call.toFuture().get()

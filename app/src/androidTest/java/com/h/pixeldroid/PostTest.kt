@@ -62,7 +62,9 @@ class PostTest {
                     avatar_static = "some_avatar_url",
                     isActive = true,
                     accessToken = "token",
-                    refreshToken = refreshToken
+                    refreshToken = refreshToken,
+                    clientId = clientId,
+                    clientSecret = clientSecret
             )
         )
         db.close()

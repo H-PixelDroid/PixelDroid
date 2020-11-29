@@ -32,7 +32,7 @@ class PostFragment : BaseFragment() {
 
         val user = db.userDao().getActiveUser()!!
 
-        val api = apiHolder.api ?: apiHolder.setDomain(user.instance_uri)
+        val api = apiHolder.api ?: apiHolder.setDomain(user)
 
         val holder = StatusViewHolder(root)
 
