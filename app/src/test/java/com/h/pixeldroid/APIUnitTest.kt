@@ -132,6 +132,7 @@ class APIUnitTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody("""{
   "access_token": "ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0",
+  "refresh_token": "ZA-Yj3aBD8U8Cm7lKUp-sqfdsqfdqfsdfqds",
   "token_type": "Bearer",
   "scope": "read write follow push",
   "created_at": 1573979017
@@ -148,7 +149,7 @@ class APIUnitTest {
         assertEquals("Bearer", token.token_type)
         assertEquals("read write follow push", token.scope)
         assertEquals(1573979017, token.created_at)
-        assertEquals(Token("ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0", "Bearer", "read write follow push",1573979017), token)
+        assertEquals(Token("ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0", "ZA-Yj3aBD8U8Cm7lKUp-sqfdsqfdqfsdfqds","Bearer", "read write follow push",1573979017), token)
 
 
     }
