@@ -3,7 +3,6 @@ package com.h.pixeldroid.db.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
-import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
 
 @Entity(
     tableName = "users",
@@ -17,12 +16,13 @@ import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
     )],
     indices = [Index(value = ["instance_uri"])]
 )
-data class UserDatabaseEntity (
-    var user_id: String,
-    var instance_uri: String,
-    var username: String,
-    var display_name: String,
-    var avatar_static: String,
-    var isActive: Boolean,
-    var accessToken: String
+data class UserDatabaseEntity(
+        var user_id: String,
+        var instance_uri: String,
+        var username: String,
+        var display_name: String,
+        var avatar_static: String,
+        var isActive: Boolean,
+        var accessToken: String,
+        val refreshToken: String?
 )
