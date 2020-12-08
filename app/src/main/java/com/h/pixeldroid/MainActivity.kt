@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -190,6 +189,9 @@ class MainActivity : AppCompatActivity() {
         if (hasInternet(applicationContext)) {
             val domain = user?.instance_uri.orEmpty()
             val accessToken = user?.accessToken.orEmpty()
+            val refreshToken = user?.refreshToken
+            val clientId = user?.clientId.orEmpty()
+            val clientSecret = user?.clientSecret.orEmpty()
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
             api.verifyCredentials("Bearer $accessToken")
                 .enqueue(object : Callback<Account> {
@@ -199,7 +201,7 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         if (response.body() != null && response.isSuccessful) {
                             val account = response.body() as Account
-                            DBUtils.addUser(db, account, domain, accessToken = accessToken)
+                            DBUtils.addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
                             fillDrawerAccountInfo(account.id!!)
                         }
                     }

@@ -43,13 +43,16 @@ class CameraTest {
 
         db.userDao().insertUser(
             UserDatabaseEntity(
-                user_id = "123",
-                instance_uri = "http://localhost",
-                username = "Testi",
-                display_name = "Testi Testo",
-                avatar_static = "some_avatar_url",
-                isActive = true,
-                accessToken = "token"
+                    user_id = "123",
+                    instance_uri = "http://localhost",
+                    username = "Testi",
+                    display_name = "Testi Testo",
+                    avatar_static = "some_avatar_url",
+                    isActive = true,
+                    accessToken = "token",
+                    refreshToken = refreshToken,
+                    clientId = clientId,
+                    clientSecret = clientSecret
             )
         )
         db.close()

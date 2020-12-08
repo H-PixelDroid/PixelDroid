@@ -24,7 +24,6 @@ import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import okhttp3.HttpUrl
@@ -32,6 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
+
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
 since they do not depend on each other)
@@ -138,7 +138,7 @@ class LoginActivity : AppCompatActivity() {
         hideKeyboard()
         loadingAnimation(true)
 
-        pixelfedAPI = apiHolder.setDomain(normalizedDomain)
+        pixelfedAPI = PixelfedAPI.createFromUrl(normalizedDomain)
         
         Single.zip(
             pixelfedAPI.registerApplication(
@@ -251,12 +251,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         //Successful authorization
-        pixelfedAPI = apiHolder.setDomain(domain)
+        pixelfedAPI = PixelfedAPI.createFromUrl(domain)
 
         //TODO check why we can't do onErrorReturn { null } which would make more sense ¯\_(ツ)_/¯
         //Also, maybe find a nicer way to do this, this feels hacky (although it can work fine)
         val nullInstance = Instance(null, null, null, null, null, null, null, null)
-        val nullToken = Token(null, null, null, null)
+        val nullToken = Token(null, null, null, null, null)
 
         Single.zip(
             pixelfedAPI.instance().onErrorReturn { nullInstance },
@@ -280,7 +280,7 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     DBUtils.storeInstance(db, instance)
-                    storeUser(token.access_token, instance.uri)
+                    storeUser(token.access_token, token.refresh_token, clientId, clientSecret, instance.uri)
                     wipeSharedSettings()
                 }
 
@@ -314,7 +314,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun storeUser(accessToken: String, instance: String) {
+    private fun storeUser(accessToken: String, refreshToken: String?, clientId: String, clientSecret: String, instance: String) {
         pixelfedAPI.verifyCredentials("Bearer $accessToken")
             .enqueue(object : Callback<Account> {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
@@ -326,7 +326,10 @@ class LoginActivity : AppCompatActivity() {
                             user,
                             instance,
                             activeUser = true,
-                            accessToken = accessToken
+                            accessToken = accessToken,
+                            refreshToken = refreshToken,
+                            clientId = clientId,
+                            clientSecret = clientSecret
                         )
                         apiHolder.setDomainToCurrentUser(db)
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)

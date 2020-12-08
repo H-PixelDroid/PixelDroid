@@ -19,19 +19,23 @@ class DBUtils {
             }
         }
 
-        fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true, accessToken: String) {
+        fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true,
+                    accessToken: String, refreshToken: String?, clientId: String, clientSecret: String) {
             db.userDao().insertUser(
                     UserDatabaseEntity(
-                        user_id = account.id!!,
-                        //make sure not to normalize to https when localhost, to allow testing
-                        instance_uri = normalizeOrNot(instance_uri),
-                        username = account.username!!,
-                        display_name = account.getDisplayName(),
-                        avatar_static = account.avatar_static.orEmpty(),
-                        isActive = activeUser,
-                        accessToken = accessToken
-                    )
-                )
+                            user_id = account.id!!,
+                            //make sure not to normalize to https when localhost, to allow testing
+                            instance_uri = normalizeOrNot(instance_uri),
+                            username = account.username!!,
+                            display_name = account.getDisplayName(),
+                            avatar_static = account.avatar_static.orEmpty(),
+                            isActive = activeUser,
+                            accessToken = accessToken,
+                            refreshToken = refreshToken,
+                            clientId = clientId,
+                            clientSecret = clientSecret
+                            )
+            )
         }
 
         fun storeInstance(db: AppDatabase, instance: Instance) {
