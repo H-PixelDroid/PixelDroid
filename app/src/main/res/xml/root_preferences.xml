@@ -11,14 +11,6 @@
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
-    <Preference android:title="@string/about"
-        android:key="about"
-        android:summary="@string/about_pixeldroid">
-        <intent
-            android:targetPackage="com.h.pixeldroid"
-            android:targetClass="com.h.pixeldroid.AboutActivity"/>
-    </Preference>
-
     <ListPreference
         app:defaultValue="default"
         app:entries="@array/languages_entries"
@@ -27,4 +19,12 @@
         app:title="@string/language"
         app:useSimpleSummaryProvider="true"
         app:icon="@drawable/translate_black_24dp" />
+
+    <Preference android:title="@string/about"
+        android:key="about"
+        android:summary="@string/about_pixeldroid">
+        <intent
+            android:targetPackage="com.h.pixeldroid"
+            android:targetClass="com.h.pixeldroid.AboutActivity"/>
+    </Preference>
 </PreferenceScreen>
