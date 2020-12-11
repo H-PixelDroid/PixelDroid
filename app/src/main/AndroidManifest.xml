@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+        <activity android:name=".BaseActivity"></activity>
         <activity android:name=".CameraActivity" />
         <activity
             android:name=".ReportActivity"

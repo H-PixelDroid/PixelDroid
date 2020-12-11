@@ -43,7 +43,7 @@ import javax.inject.Inject
  * This fragment lets you search and use Pixelfed's Discover feature
  */
 
-class SearchDiscoverFragment : Fragment() {
+class SearchDiscoverFragment : BaseFragment() {
     private lateinit var api: PixelfedAPI
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : DiscoverRecyclerViewAdapter
@@ -51,23 +51,12 @@ class SearchDiscoverFragment : Fragment() {
     private lateinit var discoverProgressBar: ProgressBar
     private lateinit var discoverRefreshLayout: SwipeRefreshLayout
 
-    @Inject
-    lateinit var db: AppDatabase
-
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
         val search = view.findViewById<SearchView>(R.id.search)
-
-        (requireActivity().application as Pixeldroid).getAppComponent().inject(this)
-
 
         //Configure the search widget (see https://developer.android.com/guide/topics/search/search-dialog#ConfiguringWidget)
         val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager

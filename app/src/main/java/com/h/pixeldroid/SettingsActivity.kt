@@ -3,14 +3,12 @@ package com.h.pixeldroid
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.h.pixeldroid.utils.ThemeUtils.Companion.setThemeFromPreferences
 
-class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
-    private var restartActivitiesOnExit = false
+class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private var restartMainOnExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +19,8 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
             .replace(R.id.settings, SettingsFragment())
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
 
-    private fun restartCurrentActivity() {
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        super.startActivity(intent)
+        restartMainOnExit = intent.getBooleanExtra("restartMain", false)
     }
 
     override fun onResume() {
@@ -42,16 +37,43 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         )
     }
 
+    override fun onBackPressed() {
+        // If a setting (for example language or theme) was changed, the main activity should be
+        // started without history so that the change is applied to the whole back stack
+        if (restartMainOnExit) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            super.startActivity(intent)
+        } else {
+            super.onBackPressed()
+        }
+    }
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            "theme" -> setThemeFromPreferences(sharedPreferences, resources)
+            "theme" -> {
+                setThemeFromPreferences(sharedPreferences, resources)
+                recreateWithRestartStatus()
+            }
+            "language" -> {
+                recreateWithRestartStatus()
+            }
         }
-
-        restartActivitiesOnExit = true
-        restartCurrentActivity()
     }
 
-     class SettingsFragment : PreferenceFragmentCompat() {
+    /**
+     * Mark main activity to be changed and recreate the current one
+     */
+    private fun recreateWithRestartStatus() {
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        val savedInstanceState = Bundle().apply {
+            putBoolean("restartMain", true)
+        }
+        intent.putExtras(savedInstanceState)
+        super.startActivity(intent)
+        finish()
+    }
+
+    class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
         }

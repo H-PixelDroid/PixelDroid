@@ -29,7 +29,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : BaseActivity() {
     private lateinit var pixelfedAPI : PixelfedAPI
     private lateinit var adapter : ProfilePostsRecyclerViewAdapter
     private lateinit var recycler : RecyclerView

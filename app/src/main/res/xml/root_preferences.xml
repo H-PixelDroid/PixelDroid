@@ -18,4 +18,13 @@
             android:targetPackage="com.h.pixeldroid"
             android:targetClass="com.h.pixeldroid.AboutActivity"/>
     </Preference>
+
+    <ListPreference
+        app:defaultValue="default"
+        app:entries="@array/languages_entries"
+        app:entryValues="@array/languages_values"
+        app:key="language"
+        app:title="@string/language"
+        app:useSimpleSummaryProvider="true"
+        app:icon="@drawable/translate_black_24dp" />
 </PreferenceScreen>

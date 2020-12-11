@@ -15,7 +15,7 @@ import com.h.pixeldroid.fragments.feeds.uncachedFeeds.search.SearchHashtagFragme
 import com.h.pixeldroid.fragments.feeds.uncachedFeeds.search.SearchPostsFragment
 import com.h.pixeldroid.objects.Results
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -45,7 +45,7 @@ import retrofit2.Response
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     @Inject
     lateinit var db: AppDatabase

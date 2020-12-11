@@ -20,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class PostActivity : AppCompatActivity() {
+class PostActivity : BaseActivity() {
     private lateinit var postFragment : PostFragment
     lateinit var domain : String
     private lateinit var accessToken : String

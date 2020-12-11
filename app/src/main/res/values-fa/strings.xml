@@ -45,7 +45,7 @@
     <string name="permission_denied">ممنوعیت دسترسی</string>
     <string name="save_image_failed">نتوانستیم تصویر را ذخیره کنیم</string>
     <string name="description_max_characters">توضیحات حداکثر می‌توانند تا %1$s حرف داشته باشند.</string>
-    <string name="default_theme">پیش‌گزیده (پیروی از سامانه)</string>
+    <string name="default_system">پیش‌گزیده (پیروی از سامانه)</string>
     <string name="light_theme">روشن</string>
     <string name="dark_theme">تاریک</string>
     <string name="upload_post_error">بارگذاری مطلب ناموفق بود</string>

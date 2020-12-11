@@ -16,7 +16,7 @@
     <!-- Theme Preferences -->
     <string name="theme_title">Application Theme</string>
     <string name="theme_header">Theme</string>
-    <string name="default_theme">Default (Follows system)</string>
+    <string name="default_system">Default (Follows system)</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
     <string name="followed_notification">%1$s followed you</string>
@@ -143,6 +143,7 @@
     <string name="OK">OK</string>
     <string name="delete_dialog">Delete this post?</string>
     <string name="cancel">Cancel</string>
+    <string name="language">Language</string>
 
 
 </resources>

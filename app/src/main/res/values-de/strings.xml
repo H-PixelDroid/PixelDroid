@@ -41,7 +41,7 @@
     <string name="registration_failed">Konnte die App nicht mit diesem Server verbinden</string>
     <string name="instance_error">Konnte die Informationen der Instanz nicht abrufen</string>
     <string name="upload_picture_failed">Fehler beim Hochladen!</string>
-    <string name="default_theme">Standard (Systemeinstellung)</string>
+    <string name="default_system">Standard (Systemeinstellung)</string>
     <string name="permission_denied">Berechtigung verweigert</string>
     <string name="save_image_failed">Bild kann nicht gespeichert werden</string>
     <string name="description_max_characters">Die Beschreibung darf höchstens %1$s Zeichen enthalten.</string>

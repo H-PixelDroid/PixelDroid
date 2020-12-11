@@ -48,7 +48,7 @@ since they do not depend on each other)
 
  */
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     companion object {
         private const val PACKAGE_ID = BuildConfig.APPLICATION_ID

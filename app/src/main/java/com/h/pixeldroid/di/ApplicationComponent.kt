@@ -23,10 +23,7 @@ interface ApplicationComponent {
     fun inject(activity: ProfileActivity?)
     fun inject(mainActivity: MainActivity?)
     fun inject(activity: ReportActivity?)
-    fun inject(fragment: PostFragment)
-    fun inject(fragment: SearchDiscoverFragment)
 
-    fun inject(fragment: NotificationsFragment)
     fun inject(feedFragment: BaseFragment)
     fun inject(followsActivity: FollowsActivity)
 

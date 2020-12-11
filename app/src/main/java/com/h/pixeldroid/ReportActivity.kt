@@ -14,7 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class ReportActivity : AppCompatActivity() {
+class ReportActivity : BaseActivity() {
 
     @Inject
     lateinit var db: AppDatabase

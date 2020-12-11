@@ -58,7 +58,7 @@
     <string name="registration_failed">Nie udało się zarejestrować aplikacji na tym serwerze</string>
     <string name="instance_error">Nie udało się pobrać informacji o instancji</string>
     <string name="instance_not_pixelfed_warning">To chyba nie jest instancja Pixelfed. Aplikacja może zachowywać się nieprzewidywalnie.</string>
-    <string name="default_theme">Systemowy</string>
+    <string name="default_system">Systemowy</string>
     <string name="followed_notification">%1$s obserwujących</string>
     <string name="liked_notification">%1$s polubień</string>
     <string name="whats_an_instance">Co to jest instancja\?</string>

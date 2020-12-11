@@ -41,7 +41,7 @@ private val TAG = "Post Creation Activity"
 private val MORE_PICTURES_REQUEST_CODE = 0xffff
 
 
-class PostCreationActivity : AppCompatActivity(), PostCreationListener {
+class PostCreationActivity : BaseActivity(), PostCreationListener {
 
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : PostCreationAdapter

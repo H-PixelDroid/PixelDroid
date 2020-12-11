@@ -11,7 +11,7 @@ import com.h.pixeldroid.objects.Account.Companion.FOLLOWERS_TAG
 import javax.inject.Inject
 
 
-class FollowsActivity : AppCompatActivity() {
+class FollowsActivity : BaseActivity() {
     private var followsFragment = AccountListFragment()
     @Inject
     lateinit var db: AppDatabase

@@ -93,7 +93,7 @@
     <string name="permission_denied">Permís denegat</string>
     <string name="dark_theme">Fosc</string>
     <string name="light_theme">Clar</string>
-    <string name="default_theme">Per defecte (seguint el sistema)</string>
+    <string name="default_system">Per defecte (seguint el sistema)</string>
     <string name="media_upload_completed">{gmd_cloud_done} S\'ha completat l\'enviament multimèdia</string>
     <string name="media_upload_failed">{gmd_cloud_off} L\'enviament multimèdia ha fallat, torna-ho a provar o comprova les condicions de la xarxa</string>
     <string name="posting_image_accessibility_hint">Imatge que s\'està publicant</string>
