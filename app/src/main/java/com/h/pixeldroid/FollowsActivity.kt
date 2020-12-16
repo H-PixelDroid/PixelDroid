@@ -1,7 +1,6 @@
 package com.h.pixeldroid
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.fragments.feeds.uncachedFeeds.accountLists.AccountListFragment
 import com.h.pixeldroid.objects.Account

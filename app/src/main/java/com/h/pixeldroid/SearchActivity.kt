@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -98,19 +97,6 @@ class SearchActivity : BaseActivity() {
             Results.SearchType.hashtags ->  tabLayout.selectTab(tabLayout.getTabAt(2))
 
         }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        if (intent.action == Intent.ACTION_SEARCH) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                search(query)
-            }
-        }
-    }
-
-    private fun search(query: String){
-        Log.e("search", "")
     }
 }
 

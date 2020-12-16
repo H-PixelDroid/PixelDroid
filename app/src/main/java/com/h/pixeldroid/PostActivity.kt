@@ -3,8 +3,6 @@ package com.h.pixeldroid
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.fragments.PostFragment
@@ -13,7 +11,6 @@ import com.h.pixeldroid.objects.Status
 import com.h.pixeldroid.objects.Status.Companion.DISCOVER_TAG
 import com.h.pixeldroid.objects.Status.Companion.DOMAIN_TAG
 import com.h.pixeldroid.objects.Status.Companion.POST_TAG
-import com.h.pixeldroid.utils.DBUtils
 import kotlinx.android.synthetic.main.activity_post.*
 import retrofit2.Call
 import retrofit2.Callback

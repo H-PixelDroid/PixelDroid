@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import java.util.*
@@ -34,7 +33,7 @@ open class BaseActivity : AppCompatActivity() {
                         .apply { setLocale(locale) }
         )
 
-    @SuppressWarnings("deprecation")
+    @Suppress("DEPRECATION")
     private fun updateResourcesLocaleLegacy(context: Context, locale: Locale): Context {
         val resources: Resources = context.resources
         val configuration: Configuration = resources.configuration

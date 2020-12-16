@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
