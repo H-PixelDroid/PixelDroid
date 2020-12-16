@@ -17,8 +17,8 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     private fun updateBaseContextLocale(context: Context): Context {
-        val language = PreferenceManager.getDefaultSharedPreferences(context).getString("language", "").orEmpty()
-        if(language.isEmpty()){
+        val language = PreferenceManager.getDefaultSharedPreferences(context).getString("language", "default") ?: "default"
+        if(language == "default"){
             return context
         }
         val locale = Locale.forLanguageTag(language)
