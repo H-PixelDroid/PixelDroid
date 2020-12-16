@@ -144,6 +144,8 @@
     <string name="delete_dialog">Delete this post?</string>
     <string name="cancel">Cancel</string>
     <string name="language">Language</string>
+    <string name="help_translate">Help translate PixelDroid to your language:</string>
+    <string name="issues_contribute">Report issues or contribute to the application:</string>
 
 
 </resources>

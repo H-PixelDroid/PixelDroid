@@ -11,6 +11,7 @@
     tools:context=".AboutActivity">
 
     <ImageView
+        android:importantForAccessibility="no"
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,10 +62,63 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autoLink="web"
+        android:textAlignment="center"
         android:text="@string/project_website"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/aboutAppDescription" />
+
+    <TextView
+        android:id="@+id/contributeTranslationsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autoLink="web"
+        android:drawablePadding="6dp"
+        android:textAlignment="center"
+        android:text="@string/help_translate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aboutWebsite"
+        app:drawableLeftCompat="@drawable/translate_black_24dp" />
+
+    <TextView
+        android:id="@+id/contributeTranslationsUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:textAlignment="center"
+        android:text="https://weblate.pixeldroid.org"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contributeTranslationsText"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/contributeForgeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autoLink="web"
+        android:drawablePadding="6dp"
+        android:textAlignment="center"
+        android:text="@string/issues_contribute"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contributeTranslationsUrl"
+        app:drawableLeftCompat="@drawable/bug_report_black_24dp" />
+
+    <TextView
+        android:id="@+id/contributeForgeUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:textAlignment="center"
+        android:text="https://gitlab.shinice.net/pixeldroid/PixelDroid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contributeForgeText"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/licensesButton"
@@ -74,7 +128,8 @@
         android:text="@string/dependencies_licenses"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aboutWebsite" />
+        app:layout_constraintTop_toBottomOf="@+id/contributeForgeUrl" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
