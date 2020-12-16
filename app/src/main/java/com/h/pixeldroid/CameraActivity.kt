@@ -1,10 +1,9 @@
 package com.h.pixeldroid
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.h.pixeldroid.fragments.CameraFragment
 
-class CameraActivity : AppCompatActivity() {
+class CameraActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)

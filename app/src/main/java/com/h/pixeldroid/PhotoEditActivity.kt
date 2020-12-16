@@ -21,7 +21,6 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
@@ -59,7 +58,7 @@ private const val REQUEST_CODE_PERMISSIONS_SEND_PHOTO = 7
 private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
     android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-class PhotoEditActivity : AppCompatActivity(), FilterListFragmentListener, EditImageFragmentListener {
+class PhotoEditActivity : BaseActivity(), FilterListFragmentListener, EditImageFragmentListener {
 
     internal var saving: Boolean = false
     private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888

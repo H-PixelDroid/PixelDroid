@@ -74,7 +74,7 @@
     <string name="upload_post_failed">Kon post niet uploaden</string>
     <string name="save_image_failed">Kon afbeelding niet opslaan</string>
     <string name="permission_denied">Toestemming geweigerd</string>
-    <string name="default_theme">Standaard (systeem instelling)</string>
+    <string name="default_system">Standaard (systeem instelling)</string>
     <string name="instance_error">Kon instance-informatie niet ophalen</string>
     <string name="likes">%1$s Vind-ik-leuks</string>
     <string name="request_format_error">Fout bij het uploaden: slecht verzoekformaat</string>

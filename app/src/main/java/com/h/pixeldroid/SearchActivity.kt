@@ -3,8 +3,6 @@ package com.h.pixeldroid
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -15,7 +13,7 @@ import com.h.pixeldroid.fragments.feeds.uncachedFeeds.search.SearchHashtagFragme
 import com.h.pixeldroid.fragments.feeds.uncachedFeeds.search.SearchPostsFragment
 import com.h.pixeldroid.objects.Results
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,19 +96,6 @@ class SearchActivity : AppCompatActivity() {
             Results.SearchType.hashtags ->  tabLayout.selectTab(tabLayout.getTabAt(2))
 
         }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        if (intent.action == Intent.ACTION_SEARCH) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                search(query)
-            }
-        }
-    }
-
-    private fun search(query: String){
-        Log.e("search", "")
     }
 }
 

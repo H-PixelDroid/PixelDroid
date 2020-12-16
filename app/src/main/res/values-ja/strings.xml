@@ -97,7 +97,7 @@
     <string name="permission_denied">権限がありません</string>
     <string name="dark_theme">ダーク</string>
     <string name="light_theme">ライト</string>
-    <string name="default_theme">デフォルト(システム設定)</string>
+    <string name="default_system">デフォルト(システム設定)</string>
     <string name="busy_dialog_ok_button">お待ちください。</string>
     <string name="busy_dialog_text">画像を処理しています。しばらくお待ちください。</string>
     <string name="nothing_to_see_here">ここには何もありません！</string>

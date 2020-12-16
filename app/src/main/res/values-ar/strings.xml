@@ -47,7 +47,7 @@
     <string name="dark_theme">داكن</string>
     <string name="light_theme">فاتح</string>
     <string name="save_image_success">تم حفظ الصورة بنجاح</string>
-    <string name="default_theme">افتراضي (يتبع النظام)</string>
+    <string name="default_system">افتراضي (يتبع النظام)</string>
     <string name="description_max_characters">يجب أن يحتوي الوصف على %1$s حرفًا على الأكثر.</string>
     <string name="upload_post_success">تم تحميل المنشور بنجاح</string>
     <string name="upload_post_failed">فشل في تحميل المنشور</string>

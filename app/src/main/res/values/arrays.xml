@@ -6,8 +6,53 @@
     </string-array>
 
     <string-array name="theme_entries">
-        <item>@string/default_theme</item>
+        <item>@string/default_system</item>
         <item>@string/light_theme</item>
         <item>@string/dark_theme</item>
+    </string-array>
+
+
+    <string-array name="languages_entries">
+        <item>@string/default_system</item>
+        <item>العربية</item>
+        <item>বাংলা (বাংলাদেশ)</item>
+        <item>Català</item>
+        <item>Deutsch</item>
+        <item>Esperanto</item>
+        <item>Euskara</item>
+        <item>فارسی</item>
+        <item>Français</item>
+        <item>Gaeilge</item>
+        <item>Italiano</item>
+        <item>日本語</item>
+        <item>Nederlands</item>
+        <item>Polski</item>
+        <item>Português (Brasil)</item>
+        <item>Русский</item>
+        <item>Svenska</item>
+        <item>Українська</item>
+        <item>中文(简体)</item>
+    </string-array>
+
+    <string-array name="languages_values">
+        <item>default</item>
+        <item>ar</item>
+        <item>bn-bd</item>
+        <item>ca</item>
+        <item>de</item>
+        <item>es</item>
+        <item>eu</item>
+        <item>fa</item>
+        <item>fr</item>
+        <item>gl</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>nl</item>
+        <item>pl</item>
+        <item>pt-br</item>
+        <item>ru</item>
+        <item>sv</item>
+        <item>uk</item>
+        <item>zh-CN</item>
     </string-array>
 </resources>

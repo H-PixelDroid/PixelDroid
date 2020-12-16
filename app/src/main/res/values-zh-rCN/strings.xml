@@ -95,7 +95,7 @@
     <string name="save_image_success">图片成功保存</string>
     <string name="save_image_failed">无法保存图像</string>
     <string name="permission_denied">没有权限</string>
-    <string name="default_theme">默认（跟随系统设置）</string>
+    <string name="default_system">默认（跟随系统设置）</string>
     <string name="light_theme">浅色</string>
     <string name="dark_theme">深色</string>
     <string name="nothing_to_see_here">这里什么也没有！</string>

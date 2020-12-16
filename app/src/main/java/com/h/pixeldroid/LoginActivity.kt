@@ -10,11 +10,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.*
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.Utils
@@ -30,7 +27,6 @@ import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -48,7 +44,7 @@ since they do not depend on each other)
 
  */
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     companion object {
         private const val PACKAGE_ID = BuildConfig.APPLICATION_ID
@@ -58,11 +54,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var oauthScheme: String
     private lateinit var appName: String
     private lateinit var preferences: SharedPreferences
-    @Inject
-    lateinit var db: AppDatabase
-
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
 
     private lateinit var pixelfedAPI: PixelfedAPI
     private var inputVisibility: Int = View.GONE
@@ -71,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        (application as Pixeldroid).getAppComponent().inject(this)
         loadingAnimation(true)
         appName = getString(R.string.app_name)
         oauthScheme = getString(R.string.auth_scheme)
