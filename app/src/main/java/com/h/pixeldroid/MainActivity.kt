@@ -16,15 +16,13 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.entities.HomeStatusDatabaseEntity
 import com.h.pixeldroid.db.entities.PublicFeedStatusDatabaseEntity
 import com.h.pixeldroid.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.fragments.CameraFragment
 import com.h.pixeldroid.fragments.SearchDiscoverFragment
-import com.h.pixeldroid.fragments.feeds.cachedFeeds.postFeeds.PostFeedFragment
 import com.h.pixeldroid.fragments.feeds.cachedFeeds.notifications.NotificationsFragment
+import com.h.pixeldroid.fragments.feeds.cachedFeeds.postFeeds.PostFeedFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.utils.DBUtils
 import com.h.pixeldroid.utils.Utils.Companion.hasInternet
@@ -42,15 +40,8 @@ import org.ligi.tracedroid.sending.TraceDroidEmailSender
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.IllegalArgumentException
-import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
-
-    @Inject
-    lateinit var db: AppDatabase
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
 
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
@@ -65,10 +56,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         TraceDroidEmailSender.sendStackTraces("contact@pixeldroid.org", this)
-
-        (this.application as Pixeldroid).getAppComponent().inject(this)
 
         //get the currently active user
         user = db.userDao().getActiveUser()

@@ -17,9 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.interfaces.PostCreationListener
 import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Instance
@@ -34,7 +32,6 @@ import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
 private val TAG = "Post Creation Activity"
 private val MORE_PICTURES_REQUEST_CODE = 0xffff
@@ -57,18 +54,9 @@ class PostCreationActivity : BaseActivity(), PostCreationListener {
 
     private var posts: ArrayList<String> = ArrayList()
 
-    @Inject
-    lateinit var db: AppDatabase
-
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_creation)
-
-        (this.application as Pixeldroid).getAppComponent().inject(this)
 
         // get image URIs
         if(intent.clipData != null) {

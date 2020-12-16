@@ -4,12 +4,25 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
+import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.di.PixelfedAPIHolder
 import java.util.*
-
+import javax.inject.Inject
 
 open class BaseActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var db: AppDatabase
+    @Inject
+    lateinit var apiHolder: PixelfedAPIHolder
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (this.application as Pixeldroid).getAppComponent().inject(this)
+    }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(updateBaseContextLocale(base))

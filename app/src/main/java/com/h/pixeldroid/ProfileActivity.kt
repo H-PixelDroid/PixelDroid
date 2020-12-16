@@ -15,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Relationship
 import com.h.pixeldroid.objects.Status
@@ -26,7 +24,6 @@ import com.h.pixeldroid.utils.ImageConverter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
 class ProfileActivity : BaseActivity() {
     private lateinit var pixelfedAPI : PixelfedAPI
@@ -37,19 +34,11 @@ class ProfileActivity : BaseActivity() {
     private lateinit var domain : String
     private var user: UserDatabaseEntity? = null
 
-    @Inject
-    lateinit var db: AppDatabase
-
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        (this.application as Pixeldroid).getAppComponent().inject(this)
 
         user = db.userDao().getActiveUser()
 

@@ -3,23 +3,14 @@ package com.h.pixeldroid
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.di.PixelfedAPIHolder
 import com.h.pixeldroid.objects.Report
 import com.h.pixeldroid.objects.Status
 import kotlinx.android.synthetic.main.activity_report.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
 class ReportActivity : BaseActivity() {
-
-    @Inject
-    lateinit var db: AppDatabase
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +20,6 @@ class ReportActivity : BaseActivity() {
 
         val status = intent.getSerializableExtra(Status.POST_TAG) as Status?
 
-        (this.application as Pixeldroid).getAppComponent().inject(this)
         //get the currently active user
         val user = db.userDao().getActiveUser()
 

@@ -1,24 +1,19 @@
 package com.h.pixeldroid
 
 import android.os.Bundle
-import com.h.pixeldroid.db.AppDatabase
 import com.h.pixeldroid.fragments.feeds.uncachedFeeds.accountLists.AccountListFragment
 import com.h.pixeldroid.objects.Account
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.objects.Account.Companion.FOLLOWERS_TAG
-import javax.inject.Inject
 
 
 class FollowsActivity : BaseActivity() {
     private var followsFragment = AccountListFragment()
-    @Inject
-    lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_followers)
-        (this.application as Pixeldroid).getAppComponent().inject(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
