@@ -67,17 +67,21 @@ class MainActivity : BaseActivity() {
         } else {
             setupDrawer()
 
-            val tabs: List<Fragment> = listOf(
-                PostFeedFragment<HomeStatusDatabaseEntity>()
-                    .apply {
-                        arguments = Bundle().apply { putBoolean("home", true) }
+            val tabs: List<() -> Fragment> = listOf(
+                    {
+                        PostFeedFragment<HomeStatusDatabaseEntity>()
+                                .apply {
+                                    arguments = Bundle().apply { putBoolean("home", true) }
+                                }
                     },
-                SearchDiscoverFragment(),
-                CameraFragment(),
-                NotificationsFragment(),
-                PostFeedFragment<PublicFeedStatusDatabaseEntity>()
-                    .apply {
-                        arguments = Bundle().apply { putBoolean("home", false) }
+                    { SearchDiscoverFragment() },
+                    { CameraFragment() },
+                    { NotificationsFragment() },
+                    {
+                        PostFeedFragment<PublicFeedStatusDatabaseEntity>()
+                                .apply {
+                                    arguments = Bundle().apply { putBoolean("home", false) }
+                                }
                     }
             )
             setupTabs(tabs)
@@ -234,13 +238,13 @@ class MainActivity : BaseActivity() {
 
     private fun fillDrawerAccountInfo(account: String) {
         val users = db.userDao().getAll().toMutableList()
-        users.sortWith(Comparator { l, r ->
+        users.sortWith { l, r ->
             when {
                 l.isActive && !r.isActive -> -1
                 r.isActive && !l.isActive -> 1
                 else -> 0
             }
-        })
+        }
         val profiles: MutableList<IProfile> = users.map { user ->
             ProfileDrawerItem().apply {
                 isSelected = user.isActive
@@ -264,19 +268,16 @@ class MainActivity : BaseActivity() {
     }
 
 
-    private fun setupTabs(tab_array: List<Fragment>){
+    private fun setupTabs(tab_array: List<() -> Fragment>){
         view_pager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                return tab_array[position]
+                return tab_array[position]()
             }
 
             override fun getItemCount(): Int {
                 return tab_array.size
             }
         }
-
-        //Keep the tabs active to prevent reloads and stutters
-        view_pager.offscreenPageLimit = tab_array.size - 1
 
         TabLayoutMediator(tabs, view_pager) { tab, position ->
             tab.icon = ContextCompat.getDrawable(applicationContext,
