@@ -30,6 +30,7 @@ class FeedViewModel<T: FeedContentDatabase>(private val repository: FeedContentR
 
     private var currentResult: Flow<PagingData<T>>? = null
 
+    @ExperimentalPagingApi
     fun flow(): Flow<PagingData<T>> {
         val lastResult = currentResult
         if (lastResult != null) {
