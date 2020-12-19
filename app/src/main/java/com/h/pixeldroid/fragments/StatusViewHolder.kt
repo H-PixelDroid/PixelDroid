@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.paging.RemoteMediator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import at.connyduck.sparkbutton.SparkButton
@@ -27,8 +26,6 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.ReportActivity
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.entities.HomeStatusDatabaseEntity
-import com.h.pixeldroid.db.entities.PublicFeedStatusDatabaseEntity
 import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Context
 import com.h.pixeldroid.objects.Status
@@ -440,8 +437,10 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
                     menu.setGroupVisible(R.id.post_more_group_picture, false)
                 }
                 if(status?.account?.id == db.userDao().getActiveUser()!!.user_id){
-                    //make sure to enable deleting post if it's the user's
+                    // Enable deleting post if it's the user's
                     menu.setGroupVisible(R.id.post_more_menu_group_delete, true)
+                    // And disable reporting your own post (just delete it if you don't like it :P)
+                    menu.setGroupVisible(R.id.post_more_menu_group_report, false)
                 }
                 show()
             }

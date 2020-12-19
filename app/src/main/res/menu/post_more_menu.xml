@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/post_more_menu_report"
-        android:title="@string/report" />
+    <group android:id="@+id/post_more_menu_group_report">
+        <item android:id="@+id/post_more_menu_report"
+            android:title="@string/report" />
+    </group>
+
     <item android:id="@+id/post_more_menu_share_link"
         android:title="@string/share_link" />
 
