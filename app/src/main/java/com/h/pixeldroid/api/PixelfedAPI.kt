@@ -270,6 +270,7 @@ interface PixelfedAPI {
 
     @FormUrlEncoded
     @POST("/api/v1/reports")
+    @JvmSuppressWildcards
     fun report(
         @Header("Authorization") authorization: String,
         @Field("account_id") account_id: String,
