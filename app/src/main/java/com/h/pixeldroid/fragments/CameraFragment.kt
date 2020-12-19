@@ -188,41 +188,45 @@ class CameraFragment : Fragment() {
             // CameraProvider
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            // Preview
-            preview = Preview.Builder()
-                // We request aspect ratio but no resolution
-                .setTargetAspectRatio(screenAspectRatio)
-                // Set initial target rotation
-                .setTargetRotation(rotation)
-                .build()
+            if (camera == null || preview == null || imageCapture == null || !cameraProvider.isBound(preview!!) || !cameraProvider.isBound(imageCapture!!)) {
 
-            // ImageCapture
-            imageCapture = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
-                // We request aspect ratio but no resolution to match preview config, but letting
-                // CameraX optimize for whatever specific resolution best fits our use cases
-                .setTargetAspectRatio(screenAspectRatio)
-                // Set initial target rotation, we will have to call this again if rotation changes
-                // during the lifecycle of this use case
-                .setTargetRotation(rotation)
-                .build()
 
-            // Must unbind the use-cases before rebinding them
-            cameraProvider.unbindAll()
+                // Preview
+                preview = Preview.Builder()
+                    // We request aspect ratio but no resolution
+                    .setTargetAspectRatio(screenAspectRatio)
+                    // Set initial target rotation
+                    .setTargetRotation(rotation)
+                    .build()
 
-            try {
-                // A variable number of use-cases can be passed here -
-                // camera provides access to CameraControl & CameraInfo
-                camera = cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture
-                )
+                // ImageCapture
+                imageCapture = ImageCapture.Builder()
+                    .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+                    // We request aspect ratio but no resolution to match preview config, but letting
+                    // CameraX optimize for whatever specific resolution best fits our use cases
+                    .setTargetAspectRatio(screenAspectRatio)
+                    // Set initial target rotation, we will have to call this again if rotation changes
+                    // during the lifecycle of this use case
+                    .setTargetRotation(rotation)
+                    .build()
 
-                // Attach the viewfinder's surface provider to preview use case
-                preview?.setSurfaceProvider(viewFinder.surfaceProvider)
-            } catch (exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
+                // Must unbind the use-cases before rebinding them
+                cameraProvider.unbindAll()
+
+                try {
+                    // A variable number of use-cases can be passed here -
+                    // camera provides access to CameraControl & CameraInfo
+                    camera = cameraProvider.bindToLifecycle(
+                        this, cameraSelector, preview, imageCapture
+                    )
+
+
+                    // Attach the viewfinder's surface provider to preview use case
+                    preview?.setSurfaceProvider(viewFinder.surfaceProvider)
+                } catch (exc: Exception) {
+                    Log.e(TAG, "Use case binding failed", exc)
+                }
             }
-
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
@@ -290,7 +294,7 @@ class CameraFragment : Fragment() {
 
     private fun setupUploadImage(controls: View) {
         // Listener for button used to view the most recent photo
-        controls.findViewById<ImageButton>(R.id.photo_view_button).setOnClickListener {
+        controls.findViewById<ImageButton>(R.id.photo_view_button)?.setOnClickListener {
             Intent().apply {
                 type = "image/*"
                 action = Intent.ACTION_GET_CONTENT
@@ -306,7 +310,7 @@ class CameraFragment : Fragment() {
 
     private fun setupFlipCameras(controls: View) {
         // Listener for button used to switch cameras
-        controls.findViewById<ImageButton>(R.id.camera_switch_button).setOnClickListener {
+        controls.findViewById<ImageButton>(R.id.camera_switch_button)?.setOnClickListener {
             lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
                 CameraSelector.LENS_FACING_BACK
             } else {
@@ -327,7 +331,7 @@ class CameraFragment : Fragment() {
 
     private fun setupImageCapture(controls: View) {
         // Listener for button used to capture photo
-        controls.findViewById<ImageButton>(R.id.camera_capture_button).setOnClickListener {
+        controls.findViewById<ImageButton>(R.id.camera_capture_button)?.setOnClickListener {
 
             // Get a stable reference of the modifiable image capture use case
             imageCapture?.let { imageCapture ->
