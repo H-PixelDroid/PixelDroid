@@ -37,6 +37,7 @@ class FeedContentRepository<T: FeedContentDatabase> @ExperimentalPagingApi
      * [FeedContentDatabase], exposed as a stream of data that will emit
      * every time we get more data from the network.
      */
+    @ExperimentalPagingApi
     fun stream(): Flow<PagingData<T>> {
 
         val pagingSourceFactory = {

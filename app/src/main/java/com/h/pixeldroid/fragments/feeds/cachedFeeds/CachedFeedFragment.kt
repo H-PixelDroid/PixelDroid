@@ -38,6 +38,7 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
     private var job: Job? = null
 
 
+    @ExperimentalPagingApi
     internal fun launch() {
         // Make sure we cancel the previous job before creating a new one
         job?.cancel()
