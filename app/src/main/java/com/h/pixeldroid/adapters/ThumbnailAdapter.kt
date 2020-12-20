@@ -8,14 +8,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.R
-import com.h.pixeldroid.interfaces.FilterListFragmentListener
+import com.h.pixeldroid.fragments.FilterListFragment
 import com.zomato.photofilters.utils.ThumbnailItem
 import kotlinx.android.synthetic.main.thumbnail_list_item.view.*
 
 class ThumbnailAdapter (private val context: Context,
                         private val tbItemList: List<ThumbnailItem>,
-                        private val listener: FilterListFragmentListener): RecyclerView.Adapter<ThumbnailAdapter.MyViewHolder>() {
+                        private val listener: FilterListFragment): RecyclerView.Adapter<ThumbnailAdapter.MyViewHolder>() {
 
     private var selectedIndex = 0
 

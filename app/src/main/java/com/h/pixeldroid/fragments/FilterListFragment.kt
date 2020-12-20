@@ -1,34 +1,29 @@
 package com.h.pixeldroid.fragments
 
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.decodeBitmap
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.adapters.ThumbnailAdapter
-import com.h.pixeldroid.interfaces.FilterListFragmentListener
 import com.h.pixeldroid.utils.SpaceItemDecoration
 import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.utils.ThumbnailItem
 import com.zomato.photofilters.utils.ThumbnailsManager
 
-class FilterListFragment : Fragment(), FilterListFragmentListener {
+class FilterListFragment : Fragment() {
 
     internal lateinit var recyclerView: RecyclerView
-    internal var listener : FilterListFragmentListener? = null
+    internal var listener : PhotoEditActivity? = null
     internal lateinit var adapter: ThumbnailAdapter
     internal lateinit var tbItemList: MutableList<ThumbnailItem>
 
@@ -107,13 +102,13 @@ class FilterListFragment : Fragment(), FilterListFragmentListener {
         }
     }
 
-    override fun onFilterSelected(filter: Filter) {
+    fun onFilterSelected(filter: Filter) {
         if(listener != null ){
             listener!!.onFilterSelected(filter)
         }
     }
 
-    fun setListener(listFragmentListener: FilterListFragmentListener) {
+    fun setListener(listFragmentListener: PhotoEditActivity) {
         this.listener = listFragmentListener
     }
 }

@@ -32,8 +32,6 @@ import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.EditPhotoViewPagerAdapter
 import com.h.pixeldroid.fragments.EditImageFragment
 import com.h.pixeldroid.fragments.FilterListFragment
-import com.h.pixeldroid.interfaces.EditImageFragmentListener
-import com.h.pixeldroid.interfaces.FilterListFragmentListener
 import com.h.pixeldroid.utils.NonSwipeableViewPager
 import com.yalantis.ucrop.UCrop
 import com.zomato.photofilters.imageprocessors.Filter
@@ -58,7 +56,7 @@ private const val REQUEST_CODE_PERMISSIONS_SEND_PHOTO = 7
 private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
     android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-class PhotoEditActivity : BaseActivity(), FilterListFragmentListener, EditImageFragmentListener {
+class PhotoEditActivity : BaseActivity() {
 
     internal var saving: Boolean = false
     private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
@@ -189,7 +187,7 @@ class PhotoEditActivity : BaseActivity(), FilterListFragmentListener, EditImageF
 }
 
 //</editor-fold>
-    override fun onFilterSelected(filter: Filter) {
+    fun onFilterSelected(filter: Filter) {
         resetControls()
         filteredImage = compressedOriginalImage!!.copy(BITMAP_CONFIG, true)
         image_preview.setImageBitmap(filter.processFilter(filteredImage))
@@ -219,21 +217,21 @@ class PhotoEditActivity : BaseActivity(), FilterListFragmentListener, EditImageF
         }
     }
 
-    override fun onBrightnessChange(brightness: Int) {
+    fun onBrightnessChange(brightness: Int) {
         brightnessFinal = brightness
         val myFilter = Filter()
         myFilter.addEditFilters(brightness, saturationFinal, contrastFinal)
         applyFilterAndShowImage(myFilter, filteredImage)
     }
 
-    override fun onSaturationChange(saturation: Float) {
+    fun onSaturationChange(saturation: Float) {
         saturationFinal = saturation
         val myFilter = Filter()
         myFilter.addEditFilters(brightnessFinal, saturation, contrastFinal)
         applyFilterAndShowImage(myFilter, filteredImage)
     }
 
-    override fun onContrastChange(contrast: Float) {
+    fun onContrastChange(contrast: Float) {
         contrastFinal = contrast
         val myFilter = Filter()
         myFilter.addEditFilters(brightnessFinal, saturationFinal, contrast)
@@ -247,10 +245,10 @@ class PhotoEditActivity : BaseActivity(), FilterListFragmentListener, EditImageF
         return this
     }
 
-    override fun onEditStarted() {
+    fun onEditStarted() {
     }
 
-    override fun onEditCompleted() {
+    fun onEditCompleted() {
         val myFilter = Filter()
         myFilter.addEditFilters(brightnessFinal, saturationFinal, contrastFinal)
         val bitmap = filteredImage.copy(BITMAP_CONFIG, true)

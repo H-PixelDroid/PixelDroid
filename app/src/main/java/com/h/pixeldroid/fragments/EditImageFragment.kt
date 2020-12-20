@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import com.h.pixeldroid.PhotoEditActivity
 import com.h.pixeldroid.R
-import com.h.pixeldroid.interfaces.EditImageFragmentListener
 
 class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
 
-    private var listener: EditImageFragmentListener? = null
+    private var listener: PhotoEditActivity? = null
 
     private lateinit var seekbarBrightness: SeekBar
     private lateinit var seekbarSaturation: SeekBar
@@ -86,7 +86,7 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
             listener!!.onEditCompleted()
     }
 
-    fun setListener(listener: EditImageFragmentListener) {
+    fun setListener(listener: PhotoEditActivity) {
         this.listener = listener
     }
 }

@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.h.pixeldroid.api.PixelfedAPI
 import com.h.pixeldroid.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.interfaces.PostCreationListener
 import com.h.pixeldroid.objects.Attachment
 import com.h.pixeldroid.objects.Instance
 import com.h.pixeldroid.objects.Status
@@ -37,7 +36,7 @@ private val TAG = "Post Creation Activity"
 private val MORE_PICTURES_REQUEST_CODE = 0xffff
 
 
-class PostCreationActivity : BaseActivity(), PostCreationListener {
+class PostCreationActivity : BaseActivity() {
 
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : PostCreationAdapter
@@ -95,7 +94,6 @@ class PostCreationActivity : BaseActivity(), PostCreationListener {
         upload()
 
         adapter = PostCreationAdapter(posts)
-        adapter.listener = this
         recycler = findViewById(R.id.image_grid)
         recycler.layoutManager = GridLayoutManager(this, 3)
         recycler.adapter = adapter
@@ -252,7 +250,7 @@ class PostCreationActivity : BaseActivity(), PostCreationListener {
 
     }
 
-    override fun onClick(position: Int) {
+    fun onClick(position: Int) {
         positionResult = position
 
         val intent = Intent(this, PhotoEditActivity::class.java)
@@ -296,7 +294,6 @@ class PostCreationActivity : BaseActivity(), PostCreationListener {
     }
 
     inner class PostCreationAdapter(private val posts: ArrayList<String>): RecyclerView.Adapter<PostCreationAdapter.ViewHolder>() {
-        var listener: PostCreationListener? = null
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view =
@@ -335,7 +332,7 @@ class PostCreationActivity : BaseActivity(), PostCreationListener {
                     .into(itemView.galleryImage)
                 // adding click or tap handler for the image layout
                 itemView.setOnClickListener {
-                    listener?.onClick(adapterPosition)
+                    this@PostCreationActivity.onClick(adapterPosition)
                 }
 
             }
