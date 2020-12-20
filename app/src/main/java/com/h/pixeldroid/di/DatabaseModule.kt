@@ -16,6 +16,9 @@ class DatabaseModule(private val context: Context) {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java, "pixeldroid"
-        ).allowMainThreadQueries().build()
+        ).allowMainThreadQueries()
+            //TODO remove this for 1.0 release
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

@@ -20,7 +20,7 @@ import com.h.pixeldroid.objects.Notification
         PublicFeedStatusDatabaseEntity::class,
         Notification::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
