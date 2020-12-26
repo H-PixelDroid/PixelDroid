@@ -11,11 +11,13 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.browser.customtabs.CustomTabsIntent
-import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.*
-import com.h.pixeldroid.utils.DBUtils
-import com.h.pixeldroid.utils.Utils
-import com.h.pixeldroid.utils.Utils.Companion.normalizeDomain
+import com.h.pixeldroid.utils.api.PixelfedAPI
+import com.h.pixeldroid.utils.db.addUser
+import com.h.pixeldroid.utils.db.storeInstance
+import com.h.pixeldroid.utils.api.objects.*
+import com.h.pixeldroid.utils.BaseActivity
+import com.h.pixeldroid.utils.hasInternet
+import com.h.pixeldroid.utils.normalizeDomain
 import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -67,7 +69,7 @@ class LoginActivity : BaseActivity() {
         oauthScheme = getString(R.string.auth_scheme)
         preferences = getSharedPreferences("$PACKAGE_ID.pref", Context.MODE_PRIVATE)
 
-        if (Utils.hasInternet(applicationContext)) {
+        if (hasInternet(applicationContext)) {
             connect_instance_button.setOnClickListener {
                 registerAppToServer(normalizeDomain(editText.text.toString()))
             }
@@ -269,7 +271,7 @@ class LoginActivity : BaseActivity() {
                         return failedRegistration(getString(R.string.instance_error))
                     }
 
-                    DBUtils.storeInstance(db, instance)
+                    storeInstance(db, instance)
                     storeUser(token.access_token, token.refresh_token, clientId, clientSecret, instance.uri)
                     wipeSharedSettings()
                 }
@@ -311,7 +313,7 @@ class LoginActivity : BaseActivity() {
                     if (response.body() != null && response.isSuccessful) {
                         db.userDao().deActivateActiveUsers()
                         val user = response.body() as Account
-                        DBUtils.addUser(
+                        addUser(
                             db,
                             user,
                             instance,

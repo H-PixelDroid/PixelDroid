@@ -12,9 +12,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
-import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
-import com.h.pixeldroid.db.entities.UserDatabaseEntity
+import com.h.pixeldroid.utils.db.AppDatabase
+import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB

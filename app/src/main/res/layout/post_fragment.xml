@@ -7,7 +7,7 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
     xmlns:sparkbutton="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.PostFragment">
+    tools:context=".posts.PostFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

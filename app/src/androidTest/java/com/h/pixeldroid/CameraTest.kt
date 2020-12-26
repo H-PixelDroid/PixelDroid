@@ -9,9 +9,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.rule.GrantPermissionRule
-import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
-import com.h.pixeldroid.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.fragments.CameraFragment
+import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
+import com.h.pixeldroid.postCreation.camera.CameraFragment
 import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
 import kotlinx.android.synthetic.main.camera_ui_container.*

@@ -3,8 +3,9 @@ package com.h.pixeldroid
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.h.pixeldroid.objects.Report
-import com.h.pixeldroid.objects.Status
+import com.h.pixeldroid.utils.api.objects.Report
+import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.BaseActivity
 import kotlinx.android.synthetic.main.activity_report.*
 import retrofit2.Call
 import retrofit2.Callback

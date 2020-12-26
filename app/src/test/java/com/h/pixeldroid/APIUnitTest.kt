@@ -2,8 +2,8 @@ package com.h.pixeldroid
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
-import com.h.pixeldroid.api.PixelfedAPI
-import com.h.pixeldroid.objects.*
+import com.h.pixeldroid.utils.api.PixelfedAPI
+import com.h.pixeldroid.utils.api.objects.*
 import io.reactivex.Single
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals

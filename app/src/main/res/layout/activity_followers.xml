@@ -4,6 +4,6 @@
     android:id="@+id/followsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FollowsActivity">
+    tools:context=".profile.FollowsActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

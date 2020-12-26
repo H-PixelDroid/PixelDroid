@@ -16,16 +16,19 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.db.entities.HomeStatusDatabaseEntity
-import com.h.pixeldroid.db.entities.PublicFeedStatusDatabaseEntity
-import com.h.pixeldroid.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.fragments.CameraFragment
-import com.h.pixeldroid.fragments.SearchDiscoverFragment
-import com.h.pixeldroid.fragments.feeds.cachedFeeds.notifications.NotificationsFragment
-import com.h.pixeldroid.fragments.feeds.cachedFeeds.postFeeds.PostFeedFragment
-import com.h.pixeldroid.objects.Account
-import com.h.pixeldroid.utils.DBUtils
-import com.h.pixeldroid.utils.Utils.Companion.hasInternet
+import com.h.pixeldroid.utils.db.addUser
+import com.h.pixeldroid.postCreation.camera.CameraFragment
+import com.h.pixeldroid.utils.db.entities.HomeStatusDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.PublicFeedStatusDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
+import com.h.pixeldroid.posts.feeds.cachedFeeds.notifications.NotificationsFragment
+import com.h.pixeldroid.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
+import com.h.pixeldroid.utils.api.objects.Account
+import com.h.pixeldroid.profile.ProfileActivity
+import com.h.pixeldroid.searchDiscover.SearchDiscoverFragment
+import com.h.pixeldroid.settings.SettingsActivity
+import com.h.pixeldroid.utils.BaseActivity
+import com.h.pixeldroid.utils.hasInternet
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.materialdrawer.iconics.iconicsIcon
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
@@ -193,7 +196,7 @@ class MainActivity : BaseActivity() {
                     ) {
                         if (response.body() != null && response.isSuccessful) {
                             val account = response.body() as Account
-                            DBUtils.addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
+                            addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
                             fillDrawerAccountInfo(account.id!!)
                         }
                     }

@@ -13,10 +13,11 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
-import com.h.pixeldroid.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.objects.*
+import com.h.pixeldroid.posts.PostActivity
+import com.h.pixeldroid.utils.db.AppDatabase
+import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
+import com.h.pixeldroid.utils.api.objects.*
 import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB

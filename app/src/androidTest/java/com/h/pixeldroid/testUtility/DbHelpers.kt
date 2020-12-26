@@ -2,7 +2,7 @@ package com.h.pixeldroid.testUtility
 
 import android.content.Context
 import androidx.room.Room
-import com.h.pixeldroid.db.AppDatabase
+import com.h.pixeldroid.utils.db.AppDatabase
 import org.ligi.tracedroid.TraceDroid
 
 
