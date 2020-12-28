@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".70"
-            android:scaleType="centerInside"/>
+            android:scaleType="centerInside"
+            android:contentDescription="@string/image_preview" />
 
         <com.h.pixeldroid.postCreation.photoEdit.NonSwipeableViewPager
             android:id="@+id/viewPager"
@@ -82,6 +83,7 @@
         android:src="@drawable/ic_crop_black_24dp"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline" />
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
+        android:contentDescription="@string/crop_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

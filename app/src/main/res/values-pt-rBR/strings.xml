@@ -15,7 +15,6 @@
     <string name="login_connection_required_once">Você precisa estar conectado para poder adicionar a primeira conta e usar o PixelDroid :(</string>
     <string name="connect_to_pixelfed">Conectar-se à Pixelfed</string>
     <string name="domain_of_your_instance">Domínio da sua instância</string>
-    <string name="CommentDisplay">mostrar…</string>
     <string name="NoCommentsToShow">Nenhum comentário…</string>
     <string name="share_picture">Compartilhar imagem…</string>
     <string name="gallery_button_alt">Galeria</string>

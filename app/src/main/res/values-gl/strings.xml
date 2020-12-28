@@ -31,7 +31,6 @@
     <string name="share_picture">Compartir foto…</string>
     <string name="NoCommentsToShow">Sen comentarios na publicación…</string>
     <string name="image_download_failed">Fallou a descarga, inténtao outra vez</string>
-    <string name="CommentDisplay">amostrar…</string>
     <string name="domain_of_your_instance">Dominio da túa instancia</string>
     <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
     <string name="login_connection_required_once">Debes ter conexión a internet para poder engadir a conta e usar PixelDroid :(</string>

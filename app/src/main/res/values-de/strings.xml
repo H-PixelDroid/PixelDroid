@@ -33,7 +33,6 @@
     <string name="capture_button_alt">Erfassen</string>
     <string name="gallery_button_alt">Galerie</string>
     <string name="share_picture">Foto teilen…</string>
-    <string name="CommentDisplay">zeigen…</string>
     <string name="domain_of_your_instance">Domain Ihrer Instanz</string>
     <string name="connect_to_pixelfed">Mit Pixelfed verbinden</string>
     <string name="login_connection_required_once">Sie müssen online sein, um das erste Konto hinzuzufügen und um PixelDroid zu verwenden :(</string>

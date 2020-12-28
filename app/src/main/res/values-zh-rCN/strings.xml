@@ -32,7 +32,6 @@
     <string name="switch_camera_button_alt">切换摄像头</string>
     <string name="gallery_button_alt">相册</string>
     <string name="NoCommentsToShow">这条帖文下没有评论……</string>
-    <string name="CommentDisplay">显示……</string>
     <string name="domain_of_your_instance">实例的域名</string>
     <string name="connect_to_pixelfed">连接至 Pixelfed</string>
     <string name="share_picture">分享图片……</string>

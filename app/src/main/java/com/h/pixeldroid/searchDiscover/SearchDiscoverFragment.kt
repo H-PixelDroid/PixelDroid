@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
-import com.h.pixeldroid.adapters.ProfilePostViewHolder
+import com.h.pixeldroid.profile.ProfilePostViewHolder
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.DiscoverPost
 import com.h.pixeldroid.utils.api.objects.DiscoverPosts

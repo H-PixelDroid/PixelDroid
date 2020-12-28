@@ -25,7 +25,6 @@
     <string name="switch_camera_button_alt">カメラを切り替え</string>
     <string name="gallery_button_alt">ギャラリー</string>
     <string name="share_picture">画像を共有…</string>
-    <string name="CommentDisplay">表示する…</string>
     <string name="domain_of_your_instance">あなたの参加しているインスタンスのドメイン</string>
     <string name="connect_to_pixelfed">Pixelfedに接続</string>
     <string name="login_connection_required_once">PixelDroidを利用するにははじめにインターネットにアクセスする必要があります</string>

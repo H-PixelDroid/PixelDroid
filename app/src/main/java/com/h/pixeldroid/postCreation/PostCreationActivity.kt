@@ -36,8 +36,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private val TAG = "Post Creation Activity"
-private val MORE_PICTURES_REQUEST_CODE = 0xffff
+private const val TAG = "Post Creation Activity"
+private const val MORE_PICTURES_REQUEST_CODE = 0xffff
 
 
 class PostCreationActivity : BaseActivity() {

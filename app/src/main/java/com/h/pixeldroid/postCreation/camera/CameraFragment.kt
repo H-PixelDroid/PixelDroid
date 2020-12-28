@@ -183,7 +183,7 @@ class CameraFragment : Fragment() {
         // Bind the CameraProvider to the LifeCycleOwner
         val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener(Runnable {
+        cameraProviderFuture.addListener({
 
             // CameraProvider
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()

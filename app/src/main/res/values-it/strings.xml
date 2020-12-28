@@ -29,7 +29,6 @@
     <string name="image_download_success">Immagine scaricata con successo</string>
     <string name="NoCommentsToShow">Nessun commento in questo post…</string>
     <string name="registration_failed">Impossibile registrare l\'applicazione con questo server</string>
-    <string name="CommentDisplay">mostrare…</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Media nascosti
 \n (cliccaper visualizzare)</string>
     <string name="capture_button_alt">Acquisizione</string>

@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/post_image" />
 
         <ImageView
             android:layout_width="30dp"
@@ -29,6 +30,7 @@
             android:foregroundGravity="center"
             android:foregroundTint="#FFFFFF"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/click_image_edit" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.h.pixeldroid.postCreation.SquareLayout>

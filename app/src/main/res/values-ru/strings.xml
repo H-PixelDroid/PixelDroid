@@ -22,7 +22,6 @@
     <string name="switch_camera_button_alt">Переключить камеру</string>
     <string name="gallery_button_alt">Галерея</string>
     <string name="NoCommentsToShow">Нет комментариев…</string>
-    <string name="CommentDisplay">показать…</string>
     <string name="domain_of_your_instance">Домен вашего инстанса</string>
     <string name="connect_to_pixelfed">Подключение к Pixelfed</string>
     <string name="app_name">PixelDroid</string>

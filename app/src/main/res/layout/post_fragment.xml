@@ -124,7 +124,7 @@
                 app:layout_constraintEnd_toStartOf="@id/reblogger"
                 app:layout_constraintStart_toEndOf="@id/liker"
                 app:layout_constraintTop_toTopOf="@id/liker"
-                />
+                android:contentDescription="@string/add_comment" />
 
             <at.connyduck.sparkbutton.SparkButton
                 android:id="@+id/liker"
@@ -258,7 +258,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:contentDescription="Submit button"
+                    android:contentDescription="@string/submit_comment"
                     android:src="@drawable/ic_send_blue" />
             </LinearLayout>
 
