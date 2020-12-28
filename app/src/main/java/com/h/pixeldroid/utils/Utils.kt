@@ -1,11 +1,15 @@
 package com.h.pixeldroid.utils
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.browser.customtabs.CustomTabsIntent
 import com.h.pixeldroid.R
 
 fun hasInternet(context: Context): Boolean {
@@ -20,6 +24,23 @@ fun normalizeDomain(domain: String): String {
             .trim(Char::isWhitespace)
 }
 
+fun BaseActivity.openUrl(url: String): Boolean{
+
+    val intent = CustomTabsIntent.Builder().build()
+
+    return try {
+        intent.launchUrl(this, Uri.parse(url))
+        true
+    } catch (e: ActivityNotFoundException) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        try {
+            startActivity(browserIntent)
+            true
+        } catch(e: ActivityNotFoundException) {
+            false
+        }
+    }
+}
 
 /**
  * @brief Updates the application's theme depending on the given preferences and resources
