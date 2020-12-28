@@ -23,7 +23,6 @@ import com.bumptech.glide.RequestBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.R
-import com.h.pixeldroid.ReportActivity
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.db.AppDatabase
 import com.h.pixeldroid.utils.api.objects.Attachment

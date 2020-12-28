@@ -26,7 +26,7 @@
         tools:replace="android:allowBackup">
         <activity android:name="com.h.pixeldroid.postCreation.camera.CameraActivity" />
         <activity
-            android:name=".ReportActivity"
+            android:name=".posts.ReportActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity android:name=".postCreation.photoEdit.PhotoEditActivity" />

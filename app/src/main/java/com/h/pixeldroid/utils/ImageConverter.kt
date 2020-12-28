@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.h.pixeldroid.R
-import java.io.File
 
 class ImageConverter {
     companion object {

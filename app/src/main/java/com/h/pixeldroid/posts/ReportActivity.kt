@@ -1,8 +1,9 @@
-package com.h.pixeldroid
+package com.h.pixeldroid.posts
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.h.pixeldroid.R
 import com.h.pixeldroid.utils.api.objects.Report
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.BaseActivity
