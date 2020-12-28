@@ -111,7 +111,7 @@
     <string name="followers_title">%1$s Follower</string>
     <string name="post_title">%1$s Beitrag</string>
     <string name="about">Über</string>
-    <string name="license_info">PixelDroid ist freie und quelloffene Software lizensiert unter der GNU General Public License (Version 3 oder höher)</string>
+    <string name="license_info">PixelDroid ist freie und quelloffene Software lizenziert unter der GNU General Public License (Version 3 oder höher)</string>
     <string name="project_website">Projektwebseite: https://pixeldroid.org</string>
     <string name="dependencies_licenses">Abhängigkeiten und Lizenzen</string>
     <string name="about_pixeldroid">Über PixelDroid</string>
