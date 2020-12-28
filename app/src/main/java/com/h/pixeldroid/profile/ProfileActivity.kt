@@ -23,6 +23,7 @@ import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.posts.parseHTMLText
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.openUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -214,12 +215,7 @@ class ProfileActivity : BaseActivity() {
     private fun onClickEditButton() {
         val url = "$domain/settings/home"
 
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        if(browserIntent.resolveActivity(packageManager) != null) {
-            startActivity(browserIntent)
-        } else {
-            Log.e("ProfileActivity", "Cannot open this link")
-        }
+        if (!openUrl(url)) Log.e("ProfileActivity", "Cannot open this link")
     }
 
     private fun onClickFollowers(account: Account?) {

@@ -18,6 +18,7 @@ import com.h.pixeldroid.utils.api.objects.*
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.hasInternet
 import com.h.pixeldroid.utils.normalizeDomain
+import com.h.pixeldroid.utils.openUrl
 import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -217,18 +218,7 @@ class LoginActivity : BaseActivity() {
                 "response_type=code" + "&" +
                 "scope=$SCOPE"
 
-        val intent = CustomTabsIntent.Builder().build()
-
-        try {
-            intent.launchUrl(this, Uri.parse(url))
-        } catch (e: ActivityNotFoundException) {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            if (browserIntent.resolveActivity(packageManager) != null) {
-                startActivity(browserIntent)
-            } else {
-                return failedRegistration(getString(R.string.browser_launch_failed))
-            }
-        }
+        if (!openUrl(url)) return failedRegistration(getString(R.string.browser_launch_failed))
     }
 
     private fun authenticate(code: String?) {
