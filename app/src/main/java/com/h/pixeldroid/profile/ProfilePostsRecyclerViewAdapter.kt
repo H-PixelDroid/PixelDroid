@@ -1,4 +1,4 @@
-package com.h.pixeldroid.adapters
+package com.h.pixeldroid.profile
 
 import android.content.Intent
 import android.view.LayoutInflater

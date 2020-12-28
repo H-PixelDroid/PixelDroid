@@ -1,7 +1,6 @@
 package com.h.pixeldroid
 
 import android.app.AlertDialog
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,12 +9,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.browser.customtabs.CustomTabsIntent
+import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.api.PixelfedAPI
+import com.h.pixeldroid.utils.api.objects.*
 import com.h.pixeldroid.utils.db.addUser
 import com.h.pixeldroid.utils.db.storeInstance
-import com.h.pixeldroid.utils.api.objects.*
-import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.hasInternet
 import com.h.pixeldroid.utils.normalizeDomain
 import com.h.pixeldroid.utils.openUrl
@@ -138,7 +136,7 @@ class LoginActivity : BaseActivity() {
                 appName,"$oauthScheme://$PACKAGE_ID", SCOPE
             ),
             pixelfedAPI.wellKnownNodeInfo(),
-            BiFunction<Application, NodeInfoJRD, Pair<Application, NodeInfoJRD>> { application, nodeInfoJRD ->
+            { application, nodeInfoJRD ->
                 // we get here when both results have come in:
                 Pair(application, nodeInfoJRD)
             })
@@ -246,7 +244,7 @@ class LoginActivity : BaseActivity() {
                 clientId, clientSecret, "$oauthScheme://$PACKAGE_ID", SCOPE, code,
                 "authorization_code"
             ).onErrorReturn { nullToken },
-            BiFunction<Instance, Token, Pair<Instance, Token>> { instance, token ->
+            { instance, token ->
                 // we get here when all results have come in:
                 Pair(instance, token)
             })

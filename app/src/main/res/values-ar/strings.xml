@@ -27,7 +27,6 @@
     <string name="gallery_button_alt">المعرض</string>
     <string name="share_picture">شارِك الصورة…</string>
     <string name="NoCommentsToShow">لا توجد تعليقات في هذا المنشور…</string>
-    <string name="CommentDisplay">لإظهاره…</string>
     <string name="connect_to_pixelfed">لِج إلى Pixelfed</string>
     <string name="lbl_brightness">السطوع</string>
     <string name="image_download_failed">فشل التنزيل ، حاول مجددًا مِن فضلك</string>

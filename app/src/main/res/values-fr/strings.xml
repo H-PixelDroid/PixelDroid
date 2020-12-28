@@ -37,7 +37,6 @@
     <string name="domain_of_your_instance">Domaine de votre instance</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Media caché
 \n(Cliquer pour le montrer)</string>
-    <string name="CommentDisplay">Montrer…</string>
     <string name="login_connection_required_once">Vous devez être connecté à internet pour pouvoir ajouter un compte et utiliser PixelDroid :(</string>
     <string name="add_account_description">Ajouter un autre compte Pixelfed</string>
     <string name="add_account_name">Ajouter un compte Pixelfed</string>

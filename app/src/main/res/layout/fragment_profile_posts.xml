@@ -38,7 +38,8 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            android:contentDescription="@string/post_is_album" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.gridlayout.widget.GridLayout>

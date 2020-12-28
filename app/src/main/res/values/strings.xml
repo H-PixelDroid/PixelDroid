@@ -48,16 +48,21 @@
     <string name="description">Description…</string>
     <string name="post">post</string>
     <string name="add_photo">Add a photo</string>
+    <string name="post_image">One of the images in the post</string>
+    <string name="click_image_edit">Click the image to edit it</string>
     <!-- Post editing -->
     <string name="lbl_brightness">BRIGHTNESS</string>
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">SATURATION</string>
     <string name="tab_filters">FILTERS</string>
     <string name="tab_edit">EDIT</string>
+    <string name="filter_thumbnail">Thumbnail of filter</string>
     <string name="normal_filter">Normal</string>
     <string name="busy_dialog_text">Still processing image, wait for that to finish first!</string>
     <string name="busy_dialog_ok_button">OK, wait for that.</string>
     <string name="crop_result_error">"Couldn't retrieve image after crop"</string>
+    <string name="image_preview">Preview of the image being edited</string>
+    <string name="crop_button">Button to crop or rotate the image</string>
     <!-- Camera -->
     <string name="capture_button_alt">Capture</string>
     <string name="switch_camera_button_alt">Switch camera</string>
@@ -84,7 +89,10 @@
     <string name="comment_error">Comment error!</string>
     <string name="comment_posted">"Comment: %1$s posted!"</string>
     <string name="comment">Comment</string>
-    <string name="CommentDisplay"> to show…</string>
+    <string name="number_comments">%1$s comments</string>
+    <string name="add_comment">Add a comment</string>
+    <string name="submit_comment">Submit comment</string>
+    <string name="post_is_album">This post is an album</string>
     <!-- Profile page -->
     <string name="nb_posts">"%1$s\nPosts"</string>
     <string name="nb_followers">"%1$s\nFollowers"</string>
@@ -146,6 +154,6 @@
     <string name="language">Language</string>
     <string name="help_translate">Help translate PixelDroid to your language:</string>
     <string name="issues_contribute">Report issues or contribute to the application:</string>
-
+    <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
 
 </resources>

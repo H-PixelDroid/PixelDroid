@@ -33,7 +33,6 @@
     <string name="capture_button_alt">Capturar</string>
     <string name="gallery_button_alt">Galería</string>
     <string name="NoCommentsToShow">No hay comentarios en esta publicación…</string>
-    <string name="CommentDisplay">para mostrar…</string>
     <string name="domain_of_your_instance">Dominio de tu nodo</string>
     <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
     <string name="login_connection_required_once">Necesitas estar conectado para poder añadir la primera cuenta y utilizar PixelDroid :(</string>

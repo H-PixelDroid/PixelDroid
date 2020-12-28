@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/notification_type"
             tools:src="@drawable/ic_default_user"
-            android:contentDescription="TODO" />
+            android:contentDescription="@string/profile_picture" />
 
         <ImageView
             android:id="@+id/notification_photo_thumbnail"

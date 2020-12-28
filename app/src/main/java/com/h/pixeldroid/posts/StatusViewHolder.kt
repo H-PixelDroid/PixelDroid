@@ -575,7 +575,8 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
             holder.viewComment.text =  holder.view.context.getString(R.string.NoCommentsToShow)
         } else {
             holder.viewComment.apply {
-                text = "${status?.replies_count} ${holder.view.context.getString(R.string.CommentDisplay)}"
+                text = holder.view.context.getString(R.string.number_comments)
+                    .format(status?.replies_count)
                 setOnClickListener {
                     visibility = View.GONE
 

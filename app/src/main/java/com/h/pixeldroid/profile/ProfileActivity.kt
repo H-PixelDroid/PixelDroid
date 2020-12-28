@@ -2,7 +2,6 @@ package com.h.pixeldroid.profile
 
 import android.content.Intent
 import android.graphics.Typeface
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
-import com.h.pixeldroid.adapters.ProfilePostsRecyclerViewAdapter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.api.objects.Account

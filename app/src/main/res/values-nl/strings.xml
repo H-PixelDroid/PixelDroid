@@ -35,7 +35,6 @@
     <string name="switch_camera_button_alt">Van camera wisselen</string>
     <string name="gallery_button_alt">Gallerij</string>
     <string name="NoCommentsToShow">Geen reacties op dit bericht…</string>
-    <string name="CommentDisplay">weer te geven…</string>
     <string name="domain_of_your_instance">Domein van je instance</string>
     <string name="connect_to_pixelfed">Met Pixelfed verbinden</string>
     <string name="login_connection_required_once">Je moet met het internet verbonden zijn om je eerste account toe te voegen en PixelDroid te kunnen gebruiken :(</string>
