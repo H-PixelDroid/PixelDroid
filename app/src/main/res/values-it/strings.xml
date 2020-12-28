@@ -130,4 +130,11 @@
     <string name="panda_pull_to_refresh_to_try_again">Questo panda non è felice. Trascina per aggiornare e riprova.</string>
     <string name="something_went_wrong">Qualcosa è andato storto…</string>
     <string name="poll_notification">%1$s\'s sondaggio è terminato</string>
+    <string name="delete">Elimina</string>
+    <string name="OK">OK</string>
+    <string name="delete_dialog">Eliminare questo post\?</string>
+    <string name="cancel">Cancella</string>
+    <string name="language">Lingua</string>
+    <string name="help_translate">Aiuta a tradurre PixelDroid nella tua lingua:</string>
+    <string name="issues_contribute">Segnala problemi o contribuisci all\'applicazione:</string>
 </resources>

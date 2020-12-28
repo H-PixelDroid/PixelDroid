@@ -102,4 +102,23 @@
     <string name="busy_dialog_ok_button">Ok, warten.</string>
     <string name="busy_dialog_text">Das Bild wird noch verarbeitet, warte bis es fertig ist!</string>
     <string name="nothing_to_see_here">Hier gibt es nichts zu sehen!</string>
+    <string name="optional_report_comment">Optionale Nachricht für mods/admins</string>
+    <string name="share_link">Link teilen</string>
+    <string name="report">Melden</string>
+    <string name="status_more_options">Mehr Optionen</string>
+    <string name="search_empty_error">Suchanfrage darf nicht leer sein</string>
+    <string name="follows_title">%1$s folgt</string>
+    <string name="followers_title">%1$s Follower</string>
+    <string name="post_title">%1$s Beitrag</string>
+    <string name="about">Über</string>
+    <string name="license_info">PixelDroid ist freie und quelloffene Software lizensiert unter der GNU General Public License (Version 3 oder höher)</string>
+    <string name="project_website">Projektwebseite: https://pixeldroid.org</string>
+    <string name="dependencies_licenses">Abhängigkeiten und Lizenzen</string>
+    <string name="about_pixeldroid">Über PixelDroid</string>
+    <string name="unfollow">Nicht mehr folgen</string>
+    <string name="add_photo">Ein Foto hinzufügen</string>
+    <string name="poll_notification">%1$s Umfrage ist beendet</string>
+    <string name="instance_not_pixelfed_cancel">Anmeldung abbrechen</string>
+    <string name="instance_not_pixelfed_continue">Ok, trotzdem fortfahren</string>
+    <string name="instance_not_pixelfed_warning">Dies scheint keine Pixelfed-Instanz zu sein. Die App könnte sich daher unerwartet verhalten.</string>
 </resources>
