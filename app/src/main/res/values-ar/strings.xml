@@ -70,7 +70,7 @@
     <string name="empty_comment">لا يجب ان يكون التعليق فارغًا!</string>
     <string name="posted_on">نُشِر في %1$s</string>
     <string name="shares">%1$s مشاركات</string>
-    <string name="likes">٪ 1 $ s إعجاب</string>
+    <string name="likes">%1$s إعجاب</string>
     <string name="no_description">مِن دون وصف</string>
     <string name="feed_failed">تعذّر جلب التدفق</string>
     <string name="retry">حاول مجدّدًا</string>
