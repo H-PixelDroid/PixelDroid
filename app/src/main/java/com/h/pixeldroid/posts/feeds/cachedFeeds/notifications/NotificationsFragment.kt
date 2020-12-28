@@ -115,7 +115,7 @@ class NotificationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 getStringAndDrawable(context, R.string.followed_notification, R.drawable.ic_follow)
             }
             Notification.NotificationType.mention -> {
-                getStringAndDrawable(context, R.string.mention_notification, R.drawable.ic_apenstaart)
+                getStringAndDrawable(context, R.string.mention_notification, R.drawable.mention_at_24dp)
             }
 
             Notification.NotificationType.reblog -> {

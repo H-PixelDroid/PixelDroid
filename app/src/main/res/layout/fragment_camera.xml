@@ -18,7 +18,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/camera_container"
-    android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layoutDirection="ltr"
     android:layout_height="match_parent">

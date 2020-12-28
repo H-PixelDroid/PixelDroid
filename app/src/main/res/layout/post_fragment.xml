@@ -248,7 +248,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/comment"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:importantForAutofill="no" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
