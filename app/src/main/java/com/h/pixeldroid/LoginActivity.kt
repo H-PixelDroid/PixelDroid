@@ -223,9 +223,9 @@ class LoginActivity : BaseActivity() {
             intent.launchUrl(this, Uri.parse(url))
         } catch (e: ActivityNotFoundException) {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            if (browserIntent.resolveActivity(packageManager) != null) {
+            try {
                 startActivity(browserIntent)
-            } else {
+            } catch(e: ActivityNotFoundException) {
                 return failedRegistration(getString(R.string.browser_launch_failed))
             }
         }
