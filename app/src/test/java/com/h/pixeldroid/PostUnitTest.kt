@@ -1,10 +1,9 @@
 package com.h.pixeldroid
 
-import com.h.pixeldroid.objects.*
+import com.h.pixeldroid.utils.api.objects.*
 import org.junit.Assert
 import org.junit.Test
 import java.text.SimpleDateFormat
-import java.util.*
 
 class PostUnitTest {
     private val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",

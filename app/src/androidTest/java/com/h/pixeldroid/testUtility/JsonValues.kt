@@ -1,7 +1,7 @@
 package com.h.pixeldroid.testUtility
 
 import com.google.gson.Gson
-import com.h.pixeldroid.objects.Application
+import com.h.pixeldroid.utils.api.objects.Application
 
 class JsonValues {
     companion object {

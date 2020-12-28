@@ -23,6 +23,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.adapters.ThumbnailAdapter
+import com.h.pixeldroid.settings.AboutActivity
 import com.h.pixeldroid.testUtility.CustomMatchers
 import com.h.pixeldroid.testUtility.clearData
 import junit.framework.Assert.assertTrue

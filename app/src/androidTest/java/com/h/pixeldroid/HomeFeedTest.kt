@@ -11,10 +11,10 @@ import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.tabs.TabLayout
-import com.h.pixeldroid.db.AppDatabase
-import com.h.pixeldroid.db.entities.InstanceDatabaseEntity
-import com.h.pixeldroid.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.fragments.StatusViewHolder
+import com.h.pixeldroid.utils.db.AppDatabase
+import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
+import com.h.pixeldroid.posts.StatusViewHolder
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.atPosition
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.clickChildViewWithId
 import com.h.pixeldroid.testUtility.CustomMatchers.Companion.first

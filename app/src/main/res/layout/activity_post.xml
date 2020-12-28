@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostActivity">
+    tools:context=".posts.PostActivity">
 
     <ProgressBar
         android:id="@+id/postProgressBar"
@@ -30,7 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".fragments.PostFragment"
+            tools:context=".posts.PostFragment"
             tools:visibility="visible"/>
     </ScrollView>
 

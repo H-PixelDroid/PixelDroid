@@ -5,7 +5,7 @@
     android:id="@+id/coordinator_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhotoEditActivity">
+    tools:context=".postCreation.photoEdit.PhotoEditActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -25,7 +25,7 @@
             android:layout_weight=".70"
             android:scaleType="centerInside"/>
 
-        <com.h.pixeldroid.utils.NonSwipeableViewPager
+        <com.h.pixeldroid.postCreation.photoEdit.NonSwipeableViewPager
             android:id="@+id/viewPager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
