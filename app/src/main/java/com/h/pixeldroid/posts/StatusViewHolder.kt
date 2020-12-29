@@ -245,7 +245,7 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
             holder, api, credential,
             status?.reblogged ?: false
         )
-        activateCommenter(holder, api, credential)
+        activateCommenter(holder, api, credential, lifecycleScope)
 
         showComments(holder, api, credential)
 
@@ -602,7 +602,8 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     private fun activateCommenter(
         holder: StatusViewHolder,
         api: PixelfedAPI,
-        credential: String
+        credential: String,
+        lifecycleScope: LifecycleCoroutineScope
     ) {
         //Toggle comment button
         toggleCommentInput(holder)
@@ -618,9 +619,10 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-
                 //Post the comment
-                postComment(holder, api, credential)
+                lifecycleScope.launchWhenCreated {
+                    postComment(holder, api, credential)
+                }
             }
         }
     }
@@ -696,7 +698,7 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    private fun postComment(
+    private suspend fun postComment(
         holder : StatusViewHolder,
         api: PixelfedAPI,
         credential: String,
@@ -704,39 +706,34 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val textIn = holder.comment.text
         val nonNullText = textIn.toString()
         status?.id?.let {
-            api.postStatus(credential, nonNullText, it).enqueue(object :
-                Callback<Status> {
-                override fun onFailure(call: Call<Status>, t: Throwable) {
-                    Log.e("COMMENT ERROR", t.toString())
-                    Toast.makeText(
-                        holder.view.context, holder.view.context.getString(R.string.comment_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            try {
+                val response = api.postStatus(credential, nonNullText, it)
+                holder.commentIn.visibility = View.GONE
 
-                override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                    //Check that the received response code is valid
-                    if (response.code() == 200) {
-                        val resp = response.body()!!
-                        holder.commentIn.visibility = View.GONE
+                //Add the comment to the comment section
+                addComment(
+                    holder.view.context, holder.commentCont, response.account!!.username!!,
+                    response.content!!
+                )
 
-                        //Add the comment to the comment section
-                        addComment(
-                            holder.view.context, holder.commentCont, resp.account!!.username!!,
-                            resp.content!!
-                        )
-
-                        Toast.makeText(
-                            holder.view.context,
-                            holder.view.context.getString(R.string.comment_posted).format(textIn),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.e("COMMENT SUCCESS", "posted: $textIn")
-                    } else {
-                        Log.e("ERROR_CODE", response.code().toString())
-                    }
-                }
-            })
+                Toast.makeText(
+                    holder.view.context,
+                    holder.view.context.getString(R.string.comment_posted).format(textIn),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (exception: IOException) {
+                Log.e("COMMENT ERROR", exception.toString())
+                Toast.makeText(
+                    holder.view.context, holder.view.context.getString(R.string.comment_error),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (exception: HttpException) {
+                Toast.makeText(
+                    holder.view.context, holder.view.context.getString(R.string.comment_error),
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.e("ERROR_CODE", exception.code().toString())
+            }
         }
     }
 

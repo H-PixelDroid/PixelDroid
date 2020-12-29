@@ -105,15 +105,10 @@ interface PixelfedAPI {
         @Path("id") statusId: String
     ) : Call<Status>
 
-    @GET("/api/v1/statuses/{id}/favourited_by")
-    fun postLikedBy(
-        @Path("id") statusId: String
-    ) : Call<List<Account>>
-
     //Used in our case to post a comment or a status
     @FormUrlEncoded
     @POST("/api/v1/statuses")
-    fun postStatus(
+    suspend fun postStatus(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Field("status") statusText : String,
@@ -128,7 +123,7 @@ interface PixelfedAPI {
         @Field("visibility") visibility : String = "public",
         @Field("scheduled_at") scheduled_at : String? = null,
         @Field("language") language : String? = null
-    ) : Call<Status>
+    ) : Status
 
     @DELETE("/api/v1/statuses/{id}")
     suspend fun deleteStatus(
