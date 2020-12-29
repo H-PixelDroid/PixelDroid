@@ -12,6 +12,7 @@ import android.widget.*
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -32,7 +33,9 @@ import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 /**
  * This fragment lets you search and use Pixelfed's Discover feature
@@ -107,25 +110,17 @@ class SearchDiscoverFragment : BaseFragment() {
 
     private fun getDiscover() {
 
-        api.discover("Bearer $accessToken")
-            .enqueue(object : Callback<DiscoverPosts> {
-
-                override fun onFailure(call: Call<DiscoverPosts>, t: Throwable) {
-                    showError()
-                    Log.e("SearchDiscoverFragment:", t.toString())
-                }
-
-                override fun onResponse(call: Call<DiscoverPosts>, response: Response<DiscoverPosts>) {
-                    if(response.code() == 200) {
-                        val discoverPosts = response.body()!!
-                        adapter.addPosts(discoverPosts.posts)
-                        showError(show = false)
-                    }
-                    else {
-                        showError()
-                    }
-                }
-            })
+        lifecycleScope.launchWhenCreated {
+            try {
+                val discoverPosts = api.discover("Bearer $accessToken")
+                adapter.addPosts(discoverPosts.posts)
+                showError(show = false)
+            } catch (exception: IOException) {
+                showError()
+            } catch (exception: HttpException) {
+                showError()
+            }
+        }
     }
 
     /**

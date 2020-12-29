@@ -206,12 +206,24 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         }.attach()
     }
 
-    private fun setDescription(rootView: View, api: PixelfedAPI, credential: String) {
+    private fun setDescription(
+        rootView: View,
+        api: PixelfedAPI,
+        credential: String,
+        lifecycleScope: LifecycleCoroutineScope
+    ) {
         rootView.findViewById<TextView>(R.id.description).apply {
             if (status?.content.isNullOrBlank()) {
                 visibility = View.GONE
             } else {
-                text = parseHTMLText(status?.content.orEmpty(), status?.mentions, api, rootView.context, credential)
+                text = parseHTMLText(
+                    status?.content.orEmpty(),
+                    status?.mentions,
+                    api,
+                    rootView.context,
+                    credential,
+                    lifecycleScope
+                )
                 movementMethod = LinkMovementMethod.getInstance()
             }
         }
@@ -222,7 +234,7 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         val credential = "Bearer ${user.accessToken}"
         //Set the special HTML text
-        setDescription(holder.view, api, credential)
+        setDescription(holder.view, api, credential, lifecycleScope)
 
         //Activate onclickListeners
         activateLiker(

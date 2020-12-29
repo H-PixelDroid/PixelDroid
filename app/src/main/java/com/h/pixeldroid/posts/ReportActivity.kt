@@ -3,6 +3,7 @@ package com.h.pixeldroid.posts
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.h.pixeldroid.R
 import com.h.pixeldroid.utils.api.objects.Report
 import com.h.pixeldroid.utils.api.objects.Status
@@ -10,7 +11,9 @@ import com.h.pixeldroid.utils.BaseActivity
 import kotlinx.android.synthetic.main.activity_report.*
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 class ReportActivity : BaseActivity() {
 
@@ -37,33 +40,34 @@ class ReportActivity : BaseActivity() {
 
             val accessToken = user?.accessToken.orEmpty()
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-            api.report("Bearer $accessToken", status?.account?.id!!, listOf(status), textInputLayout.editText?.text.toString())
-                .enqueue(object : Callback<Report> {
-                    override fun onResponse(
-                        call: Call<Report>,
-                        response: Response<Report>
-                    ) {
-                        if (response.body() == null || !response.isSuccessful) {
-                            textInputLayout.error = getString(R.string.report_error)
-                            reportButton.visibility = View.VISIBLE
-                            textInputLayout.editText?.isEnabled = true
-                            reportProgressBar.visibility = View.GONE
-                        } else {
-                            reportProgressBar.visibility = View.GONE
-                            reportButton.isEnabled = false
-                            reportButton.text = getString(R.string.reported)
-                            reportButton.visibility = View.VISIBLE
-                        }
-                    }
 
-                    override fun onFailure(call: Call<Report>, t: Throwable) {
-                        Log.e("REPORT:", t.toString())
-                    }
-                })
+            lifecycleScope.launchWhenCreated {
+                try {
+                    api.report("Bearer $accessToken", status?.account?.id!!, listOf(status), textInputLayout.editText?.text.toString())
 
+                    reportStatus(true)
+                } catch (exception: IOException) {
+                    reportStatus(false)
+                } catch (exception: HttpException) {
+                    reportStatus(false)
+                }
+            }
         }
     }
 
+    private fun reportStatus(success: Boolean){
+        if(success){
+            reportProgressBar.visibility = View.GONE
+            reportButton.isEnabled = false
+            reportButton.text = getString(R.string.reported)
+            reportButton.visibility = View.VISIBLE
+        } else {
+            textInputLayout.error = getString(R.string.report_error)
+            reportButton.visibility = View.VISIBLE
+            textInputLayout.editText?.isEnabled = true
+            reportProgressBar.visibility = View.GONE
+        }
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()

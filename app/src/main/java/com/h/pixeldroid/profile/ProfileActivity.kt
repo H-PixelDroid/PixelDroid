@@ -107,23 +107,17 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun getAndSetAccount(id: String){
-        pixelfedAPI.getAccount("Bearer $accessToken", id)
-            .enqueue(object : Callback<Account> {
-                override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                    if (response.code() == 200) {
-                        val account = response.body()!!
-
-                        setContent(account)
-                    } else {
-                        showError()
-                    }
-                }
-
-                override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("ProfileActivity:", t.toString())
-                    showError()
-                }
-            })
+        lifecycleScope.launchWhenCreated {
+            val account = try{
+                pixelfedAPI.getAccount("Bearer $accessToken", id)
+            } catch (exception: IOException) {
+                Log.e("ProfileActivity:", exception.toString())
+                return@launchWhenCreated showError()
+            } catch (exception: HttpException) {
+                return@launchWhenCreated showError()
+            }
+            setContent(account)
+        }
     }
 
     private fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
@@ -151,7 +145,8 @@ class ProfileActivity : BaseActivity() {
         val description = findViewById<TextView>(R.id.descriptionTextView)
         description.text = parseHTMLText(
             account.note ?: "", emptyList(), pixelfedAPI,
-            applicationContext, "Bearer $accessToken"
+            applicationContext, "Bearer $accessToken",
+            lifecycleScope
         )
 
         val accountName = findViewById<TextView>(R.id.accountNameTextView)

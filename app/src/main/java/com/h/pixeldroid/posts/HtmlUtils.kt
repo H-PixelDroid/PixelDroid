@@ -12,10 +12,13 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.text.toSpanned
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.h.pixeldroid.R
 import com.h.pixeldroid.utils.api.PixelfedAPI
-import com.h.pixeldroid.utils.api.objects.Account.Companion.getAccountFromId
+import com.h.pixeldroid.utils.api.objects.Account.Companion.openAccountFromId
 import com.h.pixeldroid.utils.api.objects.Mention
+import kotlinx.coroutines.coroutineScope
 import java.net.URI
 import java.net.URISyntaxException
 import java.text.ParseException
@@ -51,7 +54,8 @@ fun parseHTMLText(
         mentions: List<Mention>?,
         api : PixelfedAPI,
         context: Context,
-        credential: String
+        credential: String,
+        lifecycleScope: LifecycleCoroutineScope
 ) : Spanned {
     //Convert text to spannable
     val content = fromHtml(text)
@@ -103,7 +107,9 @@ fun parseHTMLText(
                     override fun onClick(widget: View) {
                         Log.e("MENTION", "CLICKED")
                         //Retrieve the account for the given profile
-                        getAccountFromId(accountId, api, context, credential)
+                        lifecycleScope.launchWhenCreated {
+                            openAccountFromId(accountId, api, context, credential)
+                        }
                     }
                 }
             }

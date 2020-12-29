@@ -245,10 +245,10 @@ interface PixelfedAPI {
     ) : Response<List<Account>>
 
     @GET("/api/v1/accounts/{id}")
-    fun getAccount(
+    suspend fun getAccount(
         @Header("Authorization") authorization: String,
         @Path("id") accountId : String
-    ): Call<Account>
+    ): Account
 
     @GET("/api/v1/statuses/{id}")
     suspend fun getStatus(
@@ -266,19 +266,19 @@ interface PixelfedAPI {
 
     // get discover
     @GET("/api/v2/discover/posts")
-    fun discover(
+    suspend fun discover(
         @Header("Authorization") authorization: String
-    ) : Call<DiscoverPosts>
+    ) : DiscoverPosts
 
     @FormUrlEncoded
     @POST("/api/v1/reports")
     @JvmSuppressWildcards
-    fun report(
+    suspend fun report(
         @Header("Authorization") authorization: String,
         @Field("account_id") account_id: String,
         @Field("status_ids") status_ids: List<Status>,
         @Field("comment") comment: String,
         @Field("forward") forward: Boolean = true
-    ) : Call<Report>
+    ) : Report
 
 }
