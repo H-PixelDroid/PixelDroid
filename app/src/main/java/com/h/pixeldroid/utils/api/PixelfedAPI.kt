@@ -3,6 +3,7 @@ package com.h.pixeldroid.utils.api
 import com.h.pixeldroid.utils.api.objects.*
 import io.reactivex.Observable
 import io.reactivex.Single
+import kotlinx.coroutines.Deferred
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
@@ -35,17 +36,17 @@ interface PixelfedAPI {
 
     @FormUrlEncoded
     @POST("/api/v1/apps")
-    fun registerApplication(
+    suspend fun registerApplication(
         @Field("client_name") client_name: String,
         @Field("redirect_uris") redirect_uris: String,
         @Field("scopes") scopes: String? = null,
         @Field("website") website: String? = null
-    ): Single<Application>
+    ): Application
 
 
     @FormUrlEncoded
     @POST("/oauth/token")
-    fun obtainToken(
+    suspend fun obtainToken(
         @Field("client_id") client_id: String,
         @Field("client_secret") client_secret: String,
         @Field("redirect_uri") redirect_uri: String? = null,
@@ -53,41 +54,41 @@ interface PixelfedAPI {
         @Field("code") code: String? = null,
         @Field("grant_type") grant_type: String? = null,
         @Field("refresh_token") refresh_token: String? = null
-        ): Single<Token>
+    ): Token
 
     // get instance configuration
     @GET("/api/v1/instance")
-    fun instance() : Single<Instance>
+    suspend fun instance() : Instance
 
     /**
      * Instance info from the Nodeinfo .well_known (https://nodeinfo.diaspora.software/protocol.html) endpoint
      */
     @GET("/.well-known/nodeinfo")
-    fun wellKnownNodeInfo() : Single<NodeInfoJRD>
+    suspend fun wellKnownNodeInfo() : NodeInfoJRD
 
     /**
      * Instance info from [NodeInfo] (https://nodeinfo.diaspora.software/schema.html) endpoint
      */
     @GET
-    fun nodeInfoSchema(
+    suspend fun nodeInfoSchema(
             @Url nodeInfo_schema_url: String
-    ) : Call<NodeInfo>
+    ) : NodeInfo
 
     @FormUrlEncoded
     @POST("/api/v1/accounts/{id}/follow")
-    fun follow(
+    suspend fun follow(
         //The authorization header needs to be of the form "Bearer <token>"
         @Path("id") statusId: String,
         @Header("Authorization") authorization: String,
         @Field("reblogs") reblogs : Boolean = true
-    ) : Call<Relationship>
+    ) : Relationship
 
     @POST("/api/v1/accounts/{id}/unfollow")
-    fun unfollow(
+    suspend fun unfollow(
         //The authorization header needs to be of the form "Bearer <token>"
         @Path("id") statusId: String,
         @Header("Authorization") authorization: String
-    ) : Call<Relationship>
+    ) : Relationship
 
     @POST("api/v1/statuses/{id}/favourite")
     fun likePost(
@@ -205,10 +206,11 @@ interface PixelfedAPI {
     ): List<Notification>
 
     @GET("/api/v1/accounts/verify_credentials")
-    fun verifyCredentials(
+    suspend fun verifyCredentials(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String
-        ): Call<Account>
+    ): Account
+
 
     @GET("/api/v1/accounts/{id}/statuses")
     fun accountPosts(
@@ -217,10 +219,10 @@ interface PixelfedAPI {
     ): Call<List<Status>>
 
     @GET("/api/v1/accounts/relationships")
-    fun checkRelationships(
+    suspend fun checkRelationships(
         @Header("Authorization") authorization : String,
         @Query("id[]") account_ids : List<String>
-    ) : Call<List<Relationship>>
+    ) : List<Relationship>
 
     @GET("/api/v1/accounts/{id}/followers")
     suspend fun followers(

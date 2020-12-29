@@ -7,6 +7,7 @@
     <string name="registration_failed">"Could not register the application with this server"</string>
     <string name="browser_launch_failed">"Could not launch a browser, do you have one?"</string>
     <string name="auth_failed">"Could not authenticate"</string>
+    <string name="verify_credentials">"Could not get user information"</string>
     <string name="token_error">"Error getting token"</string>
     <string name="instance_error">"Could not get instance information"</string>
     <string name="instance_not_pixelfed_warning">"This doesn't seem to be a Pixelfed instance, so the app could break in unexpected ways."</string>

@@ -1,15 +1,15 @@
 package com.h.pixeldroid.utils.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUser(user: UserDatabaseEntity)
+
+    @Query("UPDATE users SET accessToken = :accessToken WHERE user_id = :id and instance_uri = :instance_uri")
+    fun updateAccessToken(accessToken: String, id: String, instance_uri: String)
 
     @Query("SELECT * FROM users")
     fun getAll(): List<UserDatabaseEntity>

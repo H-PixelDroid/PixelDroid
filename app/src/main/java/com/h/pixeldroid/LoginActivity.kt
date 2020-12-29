@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.lifecycleScope
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.*
@@ -17,24 +18,22 @@ import com.h.pixeldroid.utils.db.storeInstance
 import com.h.pixeldroid.utils.hasInternet
 import com.h.pixeldroid.utils.normalizeDomain
 import com.h.pixeldroid.utils.openUrl
-import io.reactivex.Single
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
 since they do not depend on each other)
 
  _________________________________
-|[PixelfedAPI.registerApplication]|
+|[PixelfedAPI.registerApplicationAsync]|
 |[PixelfedAPI.wellKnownNodeInfo]  |
  ̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅ +----> [PixelfedAPI.nodeInfoSchema]
                                                                     +----> [promptOAuth]
@@ -130,81 +129,72 @@ class LoginActivity : BaseActivity() {
         loadingAnimation(true)
 
         pixelfedAPI = PixelfedAPI.createFromUrl(normalizedDomain)
-        
-        Single.zip(
-            pixelfedAPI.registerApplication(
-                appName,"$oauthScheme://$PACKAGE_ID", SCOPE
-            ),
-            pixelfedAPI.wellKnownNodeInfo(),
-            { application, nodeInfoJRD ->
-                // we get here when both results have come in:
-                Pair(application, nodeInfoJRD)
-            })
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<Pair<Application, NodeInfoJRD>> {
-                override fun onSuccess(pair: Pair<Application, NodeInfoJRD>) {
-                    val (credentials, nodeInfoJRD) = pair
-                    val clientId = credentials.client_id ?: return failedRegistration()
-                    preferences.edit()
-                        .putString("domain", normalizedDomain)
-                        .putString("clientID", clientId)
-                        .putString("clientSecret", credentials.client_secret)
-                        .apply()
 
-                    //c.f. https://nodeinfo.diaspora.software/protocol.html for more info
-                    val nodeInfoSchemaUrl = nodeInfoJRD.links.firstOrNull {
-                            it.rel == "http://nodeinfo.diaspora.software/ns/schema/2.0"
-                        }?.href ?: return failedRegistration(getString(R.string.instance_error))
-
-                    nodeInfoSchema(normalizedDomain, clientId, nodeInfoSchemaUrl)
+        lifecycleScope.launch {
+            try {
+                val credentialsDeferred = async {
+                    pixelfedAPI.registerApplication(
+                        appName, "$oauthScheme://$PACKAGE_ID", SCOPE
+                    )
                 }
 
-                override fun onError(e: Throwable) {
-                    //Error in any of the two requests will get to this
-                    Log.e("registerAppToServer", e.message.toString())
-                    failedRegistration()
-                }
+                val nodeInfoJRD = pixelfedAPI.wellKnownNodeInfo()
 
-                override fun onSubscribe(d: Disposable) {}
-            })
+                val credentials = credentialsDeferred.await()
+
+                val clientId = credentials.client_id ?: return@launch failedRegistration()
+                preferences.edit()
+                    .putString("domain", normalizedDomain)
+                    .putString("clientID", clientId)
+                    .putString("clientSecret", credentials.client_secret)
+                    .apply()
+
+
+                // c.f. https://nodeinfo.diaspora.software/protocol.html for more info
+                val nodeInfoSchemaUrl = nodeInfoJRD.links.firstOrNull {
+                    it.rel == "http://nodeinfo.diaspora.software/ns/schema/2.0"
+                }?.href ?: return@launch failedRegistration(getString(R.string.instance_error))
+
+                nodeInfoSchema(normalizedDomain, clientId, nodeInfoSchemaUrl)
+            } catch (exception: IOException) {
+                return@launch failedRegistration()
+            } catch (exception: HttpException) {
+                return@launch failedRegistration()
+            }
+        }
     }
 
-    private fun nodeInfoSchema(
+    private suspend fun nodeInfoSchema(
         normalizedDomain: String,
         clientId: String,
         nodeInfoSchemaUrl: String
     ) {
-        pixelfedAPI.nodeInfoSchema(nodeInfoSchemaUrl).enqueue(object : Callback<NodeInfo> {
-            override fun onResponse(call: Call<NodeInfo>, response: Response<NodeInfo>) {
-                if (response.body() == null || !response.isSuccessful) {
-                    return failedRegistration(getString(R.string.instance_error))
-                }
-                val nodeInfo = response.body() as NodeInfo
+        val nodeInfo = try {
+            pixelfedAPI.nodeInfoSchema(nodeInfoSchemaUrl)
+        } catch (exception: IOException) {
+            return failedRegistration(getString(R.string.instance_error))
+        } catch (exception: HttpException) {
+            return failedRegistration(getString(R.string.instance_error))
+        }
 
-                if (!nodeInfo.software?.name.orEmpty().contains("pixelfed")) {
-                    val builder = AlertDialog.Builder(this@LoginActivity)
-                    builder.apply {
-                        setMessage(R.string.instance_not_pixelfed_warning)
-                        setPositiveButton(R.string.instance_not_pixelfed_continue) { _, _ ->
-                            promptOAuth(normalizedDomain, clientId)
-                        }
-                        setNegativeButton(R.string.instance_not_pixelfed_cancel) { _, _ ->
-                            loadingAnimation(false)
-                            wipeSharedSettings()
-                        }
-                    }
-                    // Create the AlertDialog
-                    builder.show()
-                    return
-                } else {
+        if (!nodeInfo.software?.name.orEmpty().contains("pixelfed")) {
+            val builder = AlertDialog.Builder(this@LoginActivity)
+            builder.apply {
+                setMessage(R.string.instance_not_pixelfed_warning)
+                setPositiveButton(R.string.instance_not_pixelfed_continue) { _, _ ->
                     promptOAuth(normalizedDomain, clientId)
                 }
+                setNegativeButton(R.string.instance_not_pixelfed_cancel) { _, _ ->
+                    loadingAnimation(false)
+                    wipeSharedSettings()
+                }
             }
-            override fun onFailure(call: Call<NodeInfo>, t: Throwable) {
-                failedRegistration(getString(R.string.instance_error))
-            }
-        })
+            // Create the AlertDialog
+            builder.show()
+        } else {
+            promptOAuth(normalizedDomain, clientId)
+        }
+
     }
 
 
@@ -233,43 +223,41 @@ class LoginActivity : BaseActivity() {
         //Successful authorization
         pixelfedAPI = PixelfedAPI.createFromUrl(domain)
 
-        //TODO check why we can't do onErrorReturn { null } which would make more sense ¯\_(ツ)_/¯
-        //Also, maybe find a nicer way to do this, this feels hacky (although it can work fine)
-        val nullInstance = Instance(null, null, null, null, null, null, null, null)
-        val nullToken = Token(null, null, null, null, null)
-
-        Single.zip(
-            pixelfedAPI.instance().onErrorReturn { nullInstance },
-            pixelfedAPI.obtainToken(
-                clientId, clientSecret, "$oauthScheme://$PACKAGE_ID", SCOPE, code,
-                "authorization_code"
-            ).onErrorReturn { nullToken },
-            { instance, token ->
-                // we get here when all results have come in:
-                Pair(instance, token)
-            })
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<Pair<Instance, Token>> {
-                override fun onSuccess(triple: Pair<Instance, Token>) {
-                    val (instance, token) = triple
-                    if(token == nullToken || token.access_token == null){
-                        return failedRegistration(getString(R.string.token_error))
-                    } else if(instance == nullInstance || instance.uri == null){
-                        return failedRegistration(getString(R.string.instance_error))
-                    }
-
-                    storeInstance(db, instance)
-                    storeUser(token.access_token, token.refresh_token, clientId, clientSecret, instance.uri)
-                    wipeSharedSettings()
+        lifecycleScope.launch {
+            try {
+                val instanceDeferred = async {
+                    pixelfedAPI.instance()
+                }
+                val token = pixelfedAPI.obtainToken(
+                    clientId, clientSecret, "$oauthScheme://$PACKAGE_ID", SCOPE, code,
+                    "authorization_code"
+                )
+                if (token.access_token == null) {
+                    return@launch failedRegistration(getString(R.string.token_error))
                 }
 
-                override fun onError(e: Throwable) {
-                    Log.e("saveUserAndInstance", e.message.toString())
-                    failedRegistration(getString(R.string.token_error))
+                val instance = instanceDeferred.await()
+
+                if (instance.uri == null) {
+                    return@launch failedRegistration(getString(R.string.instance_error))
                 }
-                override fun onSubscribe(d: Disposable) {}
-            })
+
+                storeInstance(db, instance)
+                storeUser(
+                    token.access_token,
+                    token.refresh_token,
+                    clientId,
+                    clientSecret,
+                    instance.uri
+                )
+                wipeSharedSettings()
+            } catch (exception: IOException) {
+                return@launch failedRegistration(getString(R.string.token_error))
+
+            } catch (exception: HttpException) {
+                return@launch failedRegistration(getString(R.string.token_error))
+            }
+        }
     }
 
     private fun failedRegistration(message: String = getString(R.string.registration_failed)) {
@@ -294,32 +282,29 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun storeUser(accessToken: String, refreshToken: String?, clientId: String, clientSecret: String, instance: String) {
-        pixelfedAPI.verifyCredentials("Bearer $accessToken")
-            .enqueue(object : Callback<Account> {
-                override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                    if (response.body() != null && response.isSuccessful) {
-                        db.userDao().deActivateActiveUsers()
-                        val user = response.body() as Account
-                        addUser(
-                            db,
-                            user,
-                            instance,
-                            activeUser = true,
-                            accessToken = accessToken,
-                            refreshToken = refreshToken,
-                            clientId = clientId,
-                            clientSecret = clientSecret
-                        )
-                        apiHolder.setDomainToCurrentUser(db)
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                    }
-                }
-                override fun onFailure(call: Call<Account>, t: Throwable) {
-                }
-            })
+    private suspend fun storeUser(accessToken: String, refreshToken: String?, clientId: String, clientSecret: String, instance: String) {
+        try {
+            val user = pixelfedAPI.verifyCredentials("Bearer $accessToken")
+            db.userDao().deActivateActiveUsers()
+            addUser(
+                db,
+                user,
+                instance,
+                activeUser = true,
+                accessToken = accessToken,
+                refreshToken = refreshToken,
+                clientId = clientId,
+                clientSecret = clientSecret
+            )
+            apiHolder.setDomainToCurrentUser(db)
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        } catch (exception: IOException) {
+            return failedRegistration(getString(R.string.verify_credentials))
+        } catch (exception: HttpException) {
+            return failedRegistration(getString(R.string.verify_credentials))
+        }
     }
 
 }
