@@ -91,19 +91,19 @@ interface PixelfedAPI {
     ) : Relationship
 
     @POST("api/v1/statuses/{id}/favourite")
-    fun likePost(
+    suspend fun likePost(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Path("id") statusId: String
 
-    ) : Call<Status>
+    ) : Status
 
     @POST("/api/v1/statuses/{id}/unfavourite")
-    fun unlikePost(
+    suspend fun unlikePost(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
         @Path("id") statusId: String
-    ) : Call<Status>
+    ) : Status
 
     //Used in our case to post a comment or a status
     @FormUrlEncoded
@@ -133,24 +133,24 @@ interface PixelfedAPI {
 
     @FormUrlEncoded
     @POST("/api/v1/statuses/{id}/reblog")
-    fun reblogStatus(
+    suspend fun reblogStatus(
         @Header("Authorization") authorization: String,
         @Path("id") statusId: String,
         @Field("visibility") visibility: String? = null
-    ) : Call<Status>
+    ) : Status
 
     @POST("/api/v1/statuses/{id}/unreblog")
-    fun undoReblogStatus(
+    suspend fun undoReblogStatus(
         @Path("id") statusId: String,
         @Header("Authorization") authorization: String
-    ) : Call<Status>
+    ) : Status
 
     //Used in our case to retrieve comments for a given status
     @GET("/api/v1/statuses/{id}/context")
-    fun statusComments(
+    suspend fun statusComments(
         @Path("id") statusId: String,
         @Header("Authorization") authorization: String? = null
-    ) : Call<Context>
+    ) : Context
 
     @GET("/api/v1/timelines/public")
     suspend fun timelinePublic(

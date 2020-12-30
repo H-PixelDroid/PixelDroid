@@ -23,12 +23,12 @@ import com.bumptech.glide.RequestBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.R
+import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
-import com.h.pixeldroid.utils.db.AppDatabase
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Context
 import com.h.pixeldroid.utils.api.objects.Status
-import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.db.AppDatabase
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
@@ -239,27 +239,27 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         //Activate onclickListeners
         activateLiker(
             holder, api, credential,
-            status?.favourited ?: false
+            status?.favourited ?: false,
+                lifecycleScope
         )
         activateReblogger(
             holder, api, credential,
-            status?.reblogged ?: false
+            status?.reblogged ?: false,
+                lifecycleScope
         )
         activateCommenter(holder, api, credential, lifecycleScope)
 
-        showComments(holder, api, credential)
-
-        //Activate double tap liking
-        activateDoubleTapLiker(holder, api, credential)
+        showComments(holder, api, credential, lifecycleScope)
 
         activateMoreButton(holder, api, db, lifecycleScope)
     }
 
     private fun activateReblogger(
-        holder: StatusViewHolder,
-        api: PixelfedAPI,
-        credential: String,
-        isReblogged: Boolean
+            holder: StatusViewHolder,
+            api: PixelfedAPI,
+            credential: String,
+            isReblogged: Boolean,
+            lifecycleScope: LifecycleCoroutineScope
     ) {
         holder.reblogger.apply {
             //Set initial button state
@@ -267,12 +267,14 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
             //Activate the button
             setEventListener { _, buttonState ->
-                if (buttonState) {
-                    // Button is active
-                    undoReblogPost(holder, api, credential)
-                } else {
-                    // Button is inactive
-                    reblogPost(holder, api, credential)
+                lifecycleScope.launchWhenCreated {
+                    if (buttonState) {
+                        // Button is active
+                        undoReblogPost(holder, api, credential)
+                    } else {
+                        // Button is inactive
+                        reblogPost(holder, api, credential)
+                    }
                 }
                 //show animation or not?
                 true
@@ -280,63 +282,50 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    private fun reblogPost(
+    private suspend fun reblogPost(
         holder : StatusViewHolder,
         api: PixelfedAPI,
         credential: String
     ) {
         //Call the api function
         status?.id?.let {
-            api.reblogStatus(credential, it).enqueue(object : Callback<Status> {
-                override fun onFailure(call: Call<Status>, t: Throwable) {
-                    Log.e("REBLOG ERROR", t.toString())
-                    holder.reblogger.isChecked = false
-                }
 
-                override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                    if(response.code() == 200) {
-                        val resp = response.body()!!
+            try {
+                val resp = api.reblogStatus(credential, it)
 
-                        //Update shown share count
-                        holder.nshares.text = resp.getNShares(holder.view.context)
-                        holder.reblogger.isChecked = resp.reblogged!!
-                    } else {
-                        Log.e("RESPONSE_CODE", response.code().toString())
-                        holder.reblogger.isChecked = false
-                    }
-                }
-
-            })
+                //Update shown share count
+                holder.nshares.text = resp.getNShares(holder.view.context)
+                holder.reblogger.isChecked = resp.reblogged!!
+            } catch (exception: IOException) {
+                Log.e("REBLOG ERROR", exception.toString())
+                holder.reblogger.isChecked = false
+            } catch (exception: HttpException) {
+                Log.e("RESPONSE_CODE", exception.code().toString())
+                holder.reblogger.isChecked = false
+            }
         }
     }
 
-    private fun undoReblogPost(
+    private suspend fun undoReblogPost(
         holder : StatusViewHolder,
         api: PixelfedAPI,
         credential: String,
     ) {
         //Call the api function
         status?.id?.let {
-            api.undoReblogStatus(credential, it).enqueue(object : Callback<Status> {
-                override fun onFailure(call: Call<Status>, t: Throwable) {
-                    Log.e("REBLOG ERROR", t.toString())
-                    holder.reblogger.isChecked = true
-                }
+            try {
+                val resp = api.undoReblogStatus(credential, it)
 
-                override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                    if(response.code() == 200) {
-                        val resp = response.body()!!
-
-                        //Update shown share count
-                        holder.nshares.text = resp.getNShares(holder.view.context)
-                        holder.reblogger.isChecked = resp.reblogged!!
-                    } else {
-                        Log.e("RESPONSE_CODE", response.code().toString())
-                        holder.reblogger.isChecked = true
-                    }
-                }
-
-            })
+                //Update shown share count
+                holder.nshares.text = resp.getNShares(holder.view.context)
+                holder.reblogger.isChecked = resp.reblogged!!
+            } catch (exception: IOException) {
+                Log.e("REBLOG ERROR", exception.toString())
+                holder.reblogger.isChecked = true
+            } catch (exception: HttpException) {
+                Log.e("RESPONSE_CODE", exception.code().toString())
+                holder.reblogger.isChecked = true
+            }
         }
     }
 
@@ -456,45 +445,12 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-
-    private fun activateDoubleTapLiker(
-        holder: StatusViewHolder,
-        api: PixelfedAPI,
-        credential: String
-    ) {
-        holder.apply {
-            var clicked = false
-            postPic.setOnClickListener {
-                //Check that the post isn't hidden
-                if(sensitiveW.visibility == View.GONE) {
-                    //Check for double click
-                    if(clicked) {
-                        if (holder.liker.isChecked) {
-                            // Button is active, unlike
-                            holder.liker.isChecked = false
-                            unLikePostCall(holder, api, credential)
-                        } else {
-                            // Button is inactive, like
-                            holder.liker.playAnimation()
-                            holder.liker.isChecked = true
-                            likePostCall(holder, api, credential)
-                        }
-                    } else {
-                        clicked = true
-
-                        //Reset clicked to false after 500ms
-                        postPic.handler.postDelayed(fun() { clicked = false }, 500)
-                    }
-                }
-            }
-        }
-    }
-
     private fun activateLiker(
-        holder: StatusViewHolder,
-        api: PixelfedAPI,
-        credential: String,
-        isLiked: Boolean
+            holder: StatusViewHolder,
+            api: PixelfedAPI,
+            credential: String,
+            isLiked: Boolean,
+            lifecycleScope: LifecycleCoroutineScope
     ) {
 
         holder.liker.apply {
@@ -503,84 +459,104 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
             //Activate the liker
             setEventListener { _, buttonState ->
-                if (buttonState) {
-                    // Button is active, unlike
-                    unLikePostCall(holder, api, credential)
-                } else {
-                    // Button is inactive, like
-                    likePostCall(holder, api, credential)
+                lifecycleScope.launchWhenCreated {
+                    if (buttonState) {
+                        // Button is active, unlike
+                        unLikePostCall(holder, api, credential)
+                    } else {
+                        // Button is inactive, like
+                        likePostCall(holder, api, credential)
+                    }
                 }
                 //show animation or not?
                 true
             }
         }
-    }
 
-    private fun likePostCall(
-        holder : StatusViewHolder,
-        api: PixelfedAPI,
-        credential: String,
-    ) {
-        //Call the api function
-        status?.id?.let {
-            api.likePost(credential, it).enqueue(object : Callback<Status> {
-                override fun onFailure(call: Call<Status>, t: Throwable) {
-                    Log.e("LIKE ERROR", t.toString())
-                    holder.liker.isChecked = false
-                }
+        //Activate double tap liking
+        holder.apply {
+            var clicked = false
+            postPic.setOnClickListener {
+                lifecycleScope.launchWhenCreated {
+                    //Check that the post isn't hidden
+                    if(sensitiveW.visibility == View.GONE) {
+                        //Check for double click
+                        if(clicked) {
+                            if (holder.liker.isChecked) {
+                                // Button is active, unlike
+                                holder.liker.isChecked = false
+                                unLikePostCall(holder, api, credential)
+                            } else {
+                                // Button is inactive, like
+                                holder.liker.playAnimation()
+                                holder.liker.isChecked = true
+                                likePostCall(holder, api, credential)
+                            }
+                        } else {
+                            clicked = true
 
-                override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                    if(response.code() == 200) {
-                        val resp = response.body()!!
-
-                        //Update shown like count and internal like toggle
-                        holder.nlikes.text = resp.getNLikes(holder.view.context)
-                        holder.liker.isChecked = resp.favourited ?: false
-                    } else {
-                        Log.e("RESPONSE_CODE", response.code().toString())
-                        holder.liker.isChecked = false
+                            //Reset clicked to false after 500ms
+                            postPic.handler.postDelayed(fun() { clicked = false }, 500)
+                        }
                     }
                 }
-
-            })
+            }
         }
     }
 
-    private fun unLikePostCall(
+    private suspend fun likePostCall(
         holder : StatusViewHolder,
         api: PixelfedAPI,
         credential: String,
     ) {
         //Call the api function
         status?.id?.let {
-            api.unlikePost(credential, it).enqueue(object : Callback<Status> {
-                override fun onFailure(call: Call<Status>, t: Throwable) {
-                    Log.e("UNLIKE ERROR", t.toString())
-                    holder.liker.isChecked = true
-                }
 
-                override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                    if(response.code() == 200) {
-                        val resp = response.body()!!
+            try {
+                val resp = api.likePost(credential, it)
 
-                        //Update shown like count and internal like toggle
-                        holder.nlikes.text = resp.getNLikes(holder.view.context)
-                        holder.liker.isChecked = resp.favourited ?: false
-                    } else {
-                        Log.e("RESPONSE_CODE", response.code().toString())
-                        holder.liker.isChecked = true
-                    }
+                //Update shown like count and internal like toggle
+                holder.nlikes.text = resp.getNLikes(holder.view.context)
+                holder.liker.isChecked = resp.favourited ?: false
+            } catch (exception: IOException) {
+                Log.e("LIKE ERROR", exception.toString())
+                holder.liker.isChecked = false
+            } catch (exception: HttpException) {
+                Log.e("RESPONSE_CODE", exception.code().toString())
+                holder.liker.isChecked = false
+            }
+        }
+    }
 
-                }
+    private suspend fun unLikePostCall(
+        holder : StatusViewHolder,
+        api: PixelfedAPI,
+        credential: String,
+    ) {
+        //Call the api function
+        status?.id?.let {
 
-            })
+            try {
+                val resp = api.unlikePost(credential, it)
+
+                //Update shown like count and internal like toggle
+                holder.nlikes.text = resp.getNLikes(holder.view.context)
+                holder.liker.isChecked = resp.favourited ?: false
+            } catch (exception: IOException) {
+                Log.e("UNLIKE ERROR", exception.toString())
+                holder.liker.isChecked = true
+            } catch (exception: HttpException) {
+                Log.e("RESPONSE_CODE", exception.code().toString())
+                holder.liker.isChecked = true
+            }
         }
     }
 
     private fun showComments(
         holder: StatusViewHolder,
         api: PixelfedAPI,
-        credential: String
+        credential: String,
+        lifecycleScope: LifecycleCoroutineScope
     ) {
         //Show all comments of a post
         if (status?.replies_count == 0) {
@@ -592,8 +568,10 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
                 setOnClickListener {
                     visibility = View.GONE
 
-                    //Retrieve the comments
-                    retrieveComments(holder, api, credential)
+                    lifecycleScope.launchWhenCreated {
+                        //Retrieve the comments
+                        retrieveComments(holder, api, credential)
+                    }
                 }
             }
         }
@@ -662,39 +640,30 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         view.commentText.text = commentContent
     }
 
-    private fun retrieveComments(
-        holder : StatusViewHolder,
-        api: PixelfedAPI,
-        credential: String,
+    private suspend fun retrieveComments(
+            holder: StatusViewHolder,
+            api: PixelfedAPI,
+            credential: String,
     ) {
         status?.id?.let {
-            api.statusComments(it, credential).enqueue(object :
-                Callback<Context> {
-                override fun onFailure(call: Call<Context>, t: Throwable) {
-                    Log.e("COMMENT FETCH ERROR", t.toString())
+            try {
+                val statuses = api.statusComments(it, credential).descendants
+
+                holder.commentCont.removeAllViews()
+
+                //Create the new views for each comment
+                for (status in statuses) {
+                    addComment(holder.view.context, holder.commentCont, status.account!!.username!!,
+                            status.content!!
+                    )
                 }
+                holder.commentCont.visibility = View.VISIBLE
 
-                override fun onResponse(
-                    call: Call<Context>,
-                    response: Response<Context>
-                ) {
-                    if(response.code() == 200) {
-                        val statuses = response.body()!!.descendants
-
-                        holder.commentCont.removeAllViews()
-
-                        //Create the new views for each comment
-                        for (status in statuses) {
-                            addComment(holder.view.context, holder.commentCont, status.account!!.username!!,
-                                status.content!!
-                            )
-                        }
-                        holder.commentCont.visibility = View.VISIBLE
-                    } else {
-                        Log.e("COMMENT ERROR", "${response.code()} with body ${response.errorBody()}")
-                    }
-                }
-            })
+            } catch (exception: IOException) {
+                Log.e("COMMENT FETCH ERROR", exception.toString())
+            } catch (exception: HttpException) {
+                Log.e("COMMENT ERROR", "${exception.code()} with body ${exception.response()?.errorBody()}")
+            }
         }
     }
 
