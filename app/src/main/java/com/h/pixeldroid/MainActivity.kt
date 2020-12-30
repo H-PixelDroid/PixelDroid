@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
@@ -42,7 +43,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.ligi.tracedroid.sending.TraceDroidEmailSender
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 class MainActivity : BaseActivity() {
 
@@ -188,23 +191,18 @@ class MainActivity : BaseActivity() {
             val clientId = user?.clientId.orEmpty()
             val clientSecret = user?.clientSecret.orEmpty()
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-            api.verifyCredentials("Bearer $accessToken")
-                .enqueue(object : Callback<Account> {
-                    override fun onResponse(
-                        call: Call<Account>,
-                        response: Response<Account>
-                    ) {
-                        if (response.body() != null && response.isSuccessful) {
-                            val account = response.body() as Account
-                            addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
-                            fillDrawerAccountInfo(account.id!!)
-                        }
-                    }
 
-                    override fun onFailure(call: Call<Account>, t: Throwable) {
-                        Log.e("DRAWER ACCOUNT:", t.toString())
-                    }
-                })
+            lifecycleScope.launchWhenCreated {
+                try {
+                    val account = api.verifyCredentials("Bearer $accessToken")
+                    addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
+                    fillDrawerAccountInfo(account.id!!)
+                } catch (exception: IOException) {
+                    Log.e("ACCOUNT UPDATE:", exception.toString())
+                } catch (exception: HttpException) {
+                    Log.e("ACCOUNT UPDATE:", exception.toString())
+                }
+            }
         }
     }
 

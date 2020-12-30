@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.annotation.StringRes
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -22,9 +23,12 @@ import com.h.pixeldroid.posts.parseHTMLText
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.openUrl
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 class ProfileActivity : BaseActivity() {
     private lateinit var pixelfedAPI : PixelfedAPI
@@ -75,25 +79,19 @@ class ProfileActivity : BaseActivity() {
             setViews(account)
             setPosts(account)
         } else {
-            pixelfedAPI.verifyCredentials("Bearer $accessToken")
-                .enqueue(object : Callback<Account> {
-                    override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                        if (response.code() == 200) {
-                            val myAccount = response.body()!!
-
-                            setViews(myAccount)
-                            // Populate profile page with user's posts
-                            setPosts(myAccount)
-                        } else {
-                            showError()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<Account>, t: Throwable) {
-                        Log.e("ProfileActivity:", t.toString())
-                        showError()
-                    }
-                })
+            lifecycleScope.launchWhenResumed {
+                val myAccount: Account = try {
+                    pixelfedAPI.verifyCredentials("Bearer $accessToken")
+                } catch (exception: IOException) {
+                    Log.e("ProfileActivity:", exception.toString())
+                    return@launchWhenResumed showError()
+                } catch (exception: HttpException) {
+                    return@launchWhenResumed showError()
+                }
+                setViews(myAccount)
+                // Populate profile page with user's posts
+                setPosts(myAccount)
+            }
         }
 
         //if we aren't viewing our own account, activate follow button
@@ -109,23 +107,17 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun getAndSetAccount(id: String){
-        pixelfedAPI.getAccount("Bearer $accessToken", id)
-            .enqueue(object : Callback<Account> {
-                override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                    if (response.code() == 200) {
-                        val account = response.body()!!
-
-                        setContent(account)
-                    } else {
-                        showError()
-                    }
-                }
-
-                override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("ProfileActivity:", t.toString())
-                    showError()
-                }
-            })
+        lifecycleScope.launchWhenCreated {
+            val account = try{
+                pixelfedAPI.getAccount("Bearer $accessToken", id)
+            } catch (exception: IOException) {
+                Log.e("ProfileActivity:", exception.toString())
+                return@launchWhenCreated showError()
+            } catch (exception: HttpException) {
+                return@launchWhenCreated showError()
+            }
+            setContent(account)
+        }
     }
 
     private fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
@@ -153,7 +145,8 @@ class ProfileActivity : BaseActivity() {
         val description = findViewById<TextView>(R.id.descriptionTextView)
         description.text = parseHTMLText(
             account.note ?: "", emptyList(), pixelfedAPI,
-            applicationContext, "Bearer $accessToken"
+            applicationContext, "Bearer $accessToken",
+            lifecycleScope
         )
 
         val accountName = findViewById<TextView>(R.id.accountNameTextView)
@@ -244,40 +237,35 @@ class ProfileActivity : BaseActivity() {
      */
     private fun activateFollow(account: Account) {
         // Get relationship between the two users (credential and this) and set followButton accordingly
-        pixelfedAPI.checkRelationships("Bearer $accessToken", listOf(account.id.orEmpty()))
-            .enqueue(object : Callback<List<Relationship>> {
+        lifecycleScope.launch {
+            try {
+                val relationship = pixelfedAPI.checkRelationships(
+                    "Bearer $accessToken", listOf(account.id.orEmpty())
+                ).firstOrNull()
 
-                override fun onFailure(call: Call<List<Relationship>>, t: Throwable) {
-                    Log.e("FOLLOW ERROR", t.toString())
-                    Toast.makeText(
-                        applicationContext, getString(R.string.follow_status_failed),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                if(relationship != null){
+                    val followButton = findViewById<Button>(R.id.followButton)
 
-                override fun onResponse(
-                    call: Call<List<Relationship>>,
-                    response: Response<List<Relationship>>
-                ) {
-                    if (response.code() == 200) {
-                        if (response.body()!!.isNotEmpty()) {
-                            val followButton = findViewById<Button>(R.id.followButton)
-
-                            if (response.body()!![0].following) {
-                                setOnClickUnfollow(account)
-                            } else {
-                                setOnClickFollow(account)
-                            }
-                            followButton.visibility = View.VISIBLE
-                        }
+                    if (relationship.following) {
+                        setOnClickUnfollow(account)
                     } else {
-                        Toast.makeText(
-                            applicationContext, getString(R.string.follow_button_failed),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        setOnClickFollow(account)
                     }
+                    followButton.visibility = View.VISIBLE
                 }
-            })
+            } catch (exception: IOException) {
+                Log.e("FOLLOW ERROR", exception.toString())
+                Toast.makeText(
+                    applicationContext, getString(R.string.follow_status_failed),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (exception: HttpException) {
+                Toast.makeText(
+                    applicationContext, getString(R.string.follow_button_failed),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun setOnClickFollow(account: Account) {
@@ -286,31 +274,23 @@ class ProfileActivity : BaseActivity() {
         followButton.setText(R.string.follow)
 
         followButton.setOnClickListener {
-            pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
-                .enqueue(object : Callback<Relationship> {
-
-                    override fun onFailure(call: Call<Relationship>, t: Throwable) {
-                        Log.e("FOLLOW ERROR", t.toString())
-                        Toast.makeText(
-                            applicationContext, getString(R.string.follow_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    override fun onResponse(
-                        call: Call<Relationship>,
-                        response: Response<Relationship>
-                    ) {
-                        if (response.code() == 200) {
-                            setOnClickUnfollow(account)
-                        } else if (response.code() == 403) {
-                            Toast.makeText(
-                                applicationContext, getString(R.string.action_not_allowed),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                })
+            lifecycleScope.launchWhenResumed {
+                try {
+                    pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
+                    setOnClickUnfollow(account)
+                } catch (exception: IOException) {
+                    Log.e("FOLLOW ERROR", exception.toString())
+                    Toast.makeText(
+                        applicationContext, getString(R.string.follow_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (exception: HttpException) {
+                    Toast.makeText(
+                        applicationContext, getString(R.string.follow_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 
@@ -320,31 +300,24 @@ class ProfileActivity : BaseActivity() {
         followButton.setText(R.string.unfollow)
 
         followButton.setOnClickListener {
-            pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
-                .enqueue(object : Callback<Relationship> {
 
-                    override fun onFailure(call: Call<Relationship>, t: Throwable) {
-                        Log.e("UNFOLLOW ERROR", t.toString())
-                        Toast.makeText(
-                            applicationContext, getString(R.string.unfollow_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    override fun onResponse(
-                        call: Call<Relationship>,
-                        response: Response<Relationship>
-                    ) {
-                        if (response.code() == 200) {
-                            setOnClickFollow(account)
-                        } else if (response.code() == 401) {
-                            Toast.makeText(
-                                applicationContext, getString(R.string.access_token_invalid),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                })
+            lifecycleScope.launchWhenResumed {
+                try {
+                    pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
+                    setOnClickFollow(account)
+                } catch (exception: IOException) {
+                    Log.e("FOLLOW ERROR", exception.toString())
+                    Toast.makeText(
+                        applicationContext, getString(R.string.unfollow_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (exception: HttpException) {
+                    Toast.makeText(
+                        applicationContext, getString(R.string.unfollow_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 }

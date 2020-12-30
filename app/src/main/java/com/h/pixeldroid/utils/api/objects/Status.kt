@@ -77,11 +77,6 @@ open class Status(
     fun getProfilePicUrl() : String? = account?.avatar
     fun getPostPreviewURL() : String? = media_attachments?.firstOrNull()?.preview_url
 
-    /**
-     * @brief returns the parsed version of the HTML description
-     */
-    private fun getDescription(api: PixelfedAPI, context: Context, credential: String) : Spanned =
-        parseHTMLText(content ?: "", mentions, api, context, credential)
 
     fun getNLikes(context: Context) : CharSequence {
         return context.getString(R.string.likes).format(favourites_count.toString())

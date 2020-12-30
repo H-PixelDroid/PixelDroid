@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.net.toFile
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -34,7 +35,9 @@ import kotlinx.android.synthetic.main.image_album_creation.view.*
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 private const val TAG = "Post Creation Activity"
 private const val MORE_PICTURES_REQUEST_CODE = 0xffff
@@ -213,33 +216,30 @@ class PostCreationActivity : BaseActivity() {
     private fun post() {
         val description = new_post_description_input_field.text.toString()
         enableButton(false)
-        pixelfedAPI.postStatus(
-            authorization = "Bearer $accessToken",
-            statusText = description,
-            media_ids = muListOfIds.toList()
-        ).enqueue(object: Callback<Status> {
-            override fun onFailure(call: Call<Status>, t: Throwable) {
+        lifecycleScope.launchWhenCreated {
+            try {
+                pixelfedAPI.postStatus(
+                    authorization = "Bearer $accessToken",
+                    statusText = description,
+                    media_ids = muListOfIds.toList()
+                )
+                Toast.makeText(applicationContext,getString(R.string.upload_post_success),
+                    Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@PostCreationActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            } catch (exception: IOException) {
+                Toast.makeText(applicationContext,getString(R.string.upload_post_error),
+                    Toast.LENGTH_SHORT).show()
+                Log.e(TAG, exception.toString())
                 enableButton(true)
+            } catch (exception: HttpException) {
                 Toast.makeText(applicationContext,getString(R.string.upload_post_failed),
                     Toast.LENGTH_SHORT).show()
-                Log.e(TAG, t.message + call.request())
+                Log.e(TAG, exception.response().toString() + exception.message().toString())
+                enableButton(true)
             }
-
-            override fun onResponse(call: Call<Status>, response: Response<Status>) {
-                if (response.code() == 200) {
-                    Toast.makeText(applicationContext,getString(R.string.upload_post_success),
-                        Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@PostCreationActivity, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(applicationContext,getString(R.string.upload_post_error),
-                        Toast.LENGTH_SHORT).show()
-                    Log.e(TAG, call.request().toString() + response.raw().toString())
-                    enableButton(true)
-                }
-            }
-        })
+        }
     }
 
     private fun enableButton(enable: Boolean = true){
