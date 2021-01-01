@@ -136,4 +136,14 @@
     <string name="language">Lingua</string>
     <string name="help_translate">Aiuta a tradurre PixelDroid nella tua lingua:</string>
     <string name="issues_contribute">Segnala problemi o contribuisci all\'applicazione:</string>
+    <string name="mascot_description">Immagine che mostra un panda rosso, la mascotte di Pixelfed, mentre sta usando un telefono</string>
+    <string name="post_is_album">Questo post è un album</string>
+    <string name="submit_comment">Invia commento</string>
+    <string name="add_comment">Aggiungi un commento</string>
+    <string name="number_comments">%1$s commenti</string>
+    <string name="crop_button">Pulsante per ritagliare o ruotare l\'immagine</string>
+    <string name="image_preview">Anteprima dell\'immagine in fase di modifica</string>
+    <string name="filter_thumbnail">Miniatura del filtro</string>
+    <string name="click_image_edit">Clicca sull\'immagine per modificarla</string>
+    <string name="post_image">Una delle immagini nel post</string>
 </resources>
