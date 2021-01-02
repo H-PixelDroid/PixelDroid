@@ -47,7 +47,7 @@
     <string name="default_system">پیش‌گزیده (پیروی از سامانه)</string>
     <string name="light_theme">روشن</string>
     <string name="dark_theme">تاریک</string>
-    <string name="upload_post_error">بارگذاری مطلب ناموفق بود</string>
+    <string name="upload_post_error">خطا در بارگذاری فرسته</string>
     <string name="save_image_success">تصویر با موفقیت ذخیره شد</string>
     <string name="upload_picture_failed">خطا در بارگذاری تصویر!</string>
     <string name="picture_format_error">خطای بارگذاری: تصویر با قالب نادرست.</string>
@@ -136,4 +136,14 @@
     <string name="delete_dialog">این فرسته حذف شود؟</string>
     <string name="OK">باشه</string>
     <string name="delete">حذف</string>
+    <string name="post_is_album">این فرسته، یک آلبوم است</string>
+    <string name="submit_comment">فرستادن نظر</string>
+    <string name="add_comment">نظری اضافه کنید</string>
+    <string name="number_comments">%1$s نظر</string>
+    <string name="crop_button">دکمه برش یا چرخش تصویر</string>
+    <string name="image_preview">پیش‌نمایش تصویری که در حال ویرایش است</string>
+    <string name="filter_thumbnail">تصویر بندانگشتی پالایه</string>
+    <string name="click_image_edit">برای ویرایش تصویر، روی آن کلیک کنید</string>
+    <string name="post_image">یکی از تصاویر در فرسته</string>
+    <string name="verify_credentials">ناتوانی در دریافت اطلاعات کاربر</string>
 </resources>
