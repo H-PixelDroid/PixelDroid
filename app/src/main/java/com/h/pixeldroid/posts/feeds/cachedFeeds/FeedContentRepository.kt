@@ -39,9 +39,9 @@ class FeedContentRepository<T: FeedContentDatabase> @ExperimentalPagingApi
      */
     @ExperimentalPagingApi
     fun stream(): Flow<PagingData<T>> {
+        val user = db.userDao().getActiveUser()!!
 
         val pagingSourceFactory = {
-            val user = db.userDao().getActiveUser()!!
             dao.feedContent(user.user_id, user.instance_uri)
         }
 

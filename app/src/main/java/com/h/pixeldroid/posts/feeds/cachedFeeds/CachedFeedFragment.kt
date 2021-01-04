@@ -42,7 +42,7 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
     internal fun launch() {
         // Make sure we cancel the previous job before creating a new one
         job?.cancel()
-        job = lifecycleScope.launch {
+        job = lifecycleScope.launchWhenStarted {
             viewModel.flow().collectLatest {
                 adapter.submitData(it)
             }
@@ -88,8 +88,8 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
 
 /**
  * Factory that creates ViewModel from a [FeedContentRepository], to be used in cached feeds to
- * fetch the ViewModel that is responsible for preparing and managing the data for
- * an Activity or a Fragment
+ * fetch the ViewModel that is responsible for preparing and managing the data
+ * for a CachedFeedFragment
  */
 class ViewModelFactory<U: FeedContentDatabase> @ExperimentalPagingApi constructor(private val db: AppDatabase?,
                                                                                   private val dao: FeedContentDao<U>?,
