@@ -7,6 +7,7 @@ import com.h.pixeldroid.utils.di.PixelfedAPIHolder
 import com.h.pixeldroid.utils.db.entities.HomeStatusDatabaseEntity
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.NullPointerException
 import javax.inject.Inject
 
 
@@ -40,7 +41,8 @@ class HomeFeedRemoteMediator @Inject constructor(
         }
 
         try {
-            val user = db.userDao().getActiveUser()!!
+            val user = db.userDao().getActiveUser()
+                    ?: return MediatorResult.Error(NullPointerException("No active user exists"))
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
             val accessToken = user.accessToken
 

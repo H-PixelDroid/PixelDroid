@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
@@ -19,13 +18,12 @@ import com.h.pixeldroid.utils.hasInternet
 import com.h.pixeldroid.utils.normalizeDomain
 import com.h.pixeldroid.utils.openUrl
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import okhttp3.HttpUrl
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 
 /**
@@ -132,17 +130,24 @@ class LoginActivity : BaseActivity() {
 
         lifecycleScope.launch {
             try {
-                val credentialsDeferred = async {
-                    pixelfedAPI.registerApplication(
-                        appName, "$oauthScheme://$PACKAGE_ID", SCOPE
-                    )
+                supervisorScope {  }
+                val credentialsDeferred: Deferred<Application?> = async {
+                    try {
+                        pixelfedAPI.registerApplication(
+                                appName, "$oauthScheme://$PACKAGE_ID", SCOPE
+                        )
+                    } catch (exception: IOException) {
+                        return@async null
+                    } catch (exception: HttpException) {
+                        return@async null
+                    }
                 }
 
                 val nodeInfoJRD = pixelfedAPI.wellKnownNodeInfo()
 
                 val credentials = credentialsDeferred.await()
 
-                val clientId = credentials.client_id ?: return@launch failedRegistration()
+                val clientId = credentials?.client_id ?: return@launch failedRegistration()
                 preferences.edit()
                     .putString("domain", normalizedDomain)
                     .putString("clientID", clientId)

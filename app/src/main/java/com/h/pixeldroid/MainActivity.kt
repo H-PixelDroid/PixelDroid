@@ -14,6 +14,7 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
+import androidx.room.withTransaction
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
@@ -167,21 +168,21 @@ class MainActivity : BaseActivity() {
     }
 
     private fun logOut(){
-        db.userDao().deleteActiveUsers()
+        db.runInTransaction {
+            db.userDao().deleteActiveUsers()
 
-        val remainingUsers = db.userDao().getAll()
-        if (remainingUsers.isEmpty()){
-            //no more users, start first-time login flow
-            launchActivity(LoginActivity(), firstTime = true)
-        } else {
-            val newActive = remainingUsers.first()
-            db.userDao().activateUser(newActive.user_id)
-            //relaunch the app
-            launchActivity(MainActivity(), firstTime = true)
+            val remainingUsers = db.userDao().getAll()
+            if (remainingUsers.isEmpty()){
+                //no more users, start first-time login flow
+                launchActivity(LoginActivity(), firstTime = true)
+            } else {
+                val newActive = remainingUsers.first()
+                db.userDao().activateUser(newActive.user_id)
+                apiHolder.setDomainToCurrentUser(db)
+                //relaunch the app
+                launchActivity(MainActivity(), firstTime = true)
+            }
         }
-
-
-
     }
     private fun getUpdatedAccount() {
         if (hasInternet(applicationContext)) {
