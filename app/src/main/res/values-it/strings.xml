@@ -91,7 +91,7 @@
     <string name="nb_posts">%1$s
 \nPosts</string>
     <string name="action_not_allowed">Questa azione non è consentita</string>
-    <string name="upload_post_error">Caricamento post non riuscito</string>
+    <string name="upload_post_error">Errore di caricamento del post</string>
     <string name="media_upload_completed">{gmd_cloud_done} Caricamento contenuti completato</string>
     <string name="media_upload_failed">{gmd_cloud_off} Caricamento dei contenuti non riuscito, riprovare o verificare le condizioni della rete</string>
     <string name="follow_button_failed">Impossibile visualizzare il tasto segui</string>
@@ -146,4 +146,5 @@
     <string name="filter_thumbnail">Miniatura del filtro</string>
     <string name="click_image_edit">Clicca sull\'immagine per modificarla</string>
     <string name="post_image">Una delle immagini nel post</string>
+    <string name="verify_credentials">Impossibile ottenere le informazioni sull\'utente</string>
 </resources>
