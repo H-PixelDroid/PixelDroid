@@ -2,20 +2,14 @@ package com.h.pixeldroid.postCreation.photoEdit
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
-import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
@@ -23,15 +17,13 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
-import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.postCreation.PostCreationActivity
+import com.h.pixeldroid.utils.BaseActivity
 import com.yalantis.ucrop.UCrop
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
@@ -41,8 +33,6 @@ import kotlinx.android.synthetic.main.activity_photo_edit.*
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
-import java.text.SimpleDateFormat
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors.newSingleThreadExecutor
 import java.util.concurrent.Future
@@ -50,10 +40,11 @@ import java.util.concurrent.Future
 // This is an arbitrary number we are using to keep track of the permission
 // request. Where an app has multiple context for requesting permission,
 // this can help differentiate the different contexts.
-private const val REQUEST_CODE_PERMISSIONS_SAVE_PHOTO = 8
 private const val REQUEST_CODE_PERMISSIONS_SEND_PHOTO = 7
-private val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
-    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+private val REQUIRED_PERMISSIONS = arrayOf(
+    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+)
 
 class PhotoEditActivity : BaseActivity() {
 
@@ -108,7 +99,7 @@ class PhotoEditActivity : BaseActivity() {
         initialUri = intent.getParcelableExtra("picture_uri")
         imageUri = initialUri
         
-        // set on-click listener
+        // Crop button on-click listener
         cropButton.setOnClickListener {
             startCrop()
         }
@@ -122,7 +113,6 @@ class PhotoEditActivity : BaseActivity() {
     }
 
 
-    //<editor-fold desc="ON LAUNCH">
     private fun loadImage() {
         originalImage = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
         compressedImage = resizeImage(originalImage!!)
@@ -169,42 +159,53 @@ class PhotoEditActivity : BaseActivity() {
 
         when(item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
-            }
-            R.id.action_upload -> {
-                saveImageToGallery(false)
+                if (noEdits()) onBackPressed()
+                else {
+                    val builder = AlertDialog.Builder(this)
+                    builder.apply {
+                        setMessage(R.string.save_before_returning)
+                        setPositiveButton(android.R.string.ok) { _, _ ->
+                            saveImageToGallery()
+                        }
+                        setNegativeButton(R.string.no_cancel_edit) { _, _ ->
+                            onBackPressed()
+                        }
+                    }
+                    // Create the AlertDialog
+                    builder.show()
+                }
             }
             R.id.action_save -> {
-                saveImageToGallery(true)
-                return true
+                saveImageToGallery()
+            }
+            R.id.action_reset -> {
+                resetControls()
+                actualFilter = null
+                imageUri = initialUri
+                loadImage()
+                filterListFragment.resetSelectedFilter()
             }
         }
-
-    //<editor-fold desc="FILTERS">
 
     return super.onOptionsItemSelected(item)
 }
 
-//</editor-fold>
     fun onFilterSelected(filter: Filter) {
-        resetControls()
         filteredImage = compressedOriginalImage!!.copy(BITMAP_CONFIG, true)
         image_preview.setImageBitmap(filter.processFilter(filteredImage))
         compressedImage = filteredImage.copy(BITMAP_CONFIG, true)
         actualFilter = filter
+        resetControls()
     }
 
     private fun resetControls() {
-        editImageFragment.resetControl()
-
         brightnessFinal = BRIGHTNESS_START
         saturationFinal = SATURATION_START
         contrastFinal = CONTRAST_START
+
+        editImageFragment.resetControl()
     }
 
-
-    //</editor-fold>
-    //<editor-fold desc="EDITS">
 
     private fun applyFilterAndShowImage(filter: Filter, image: Bitmap?) {
         future?.cancel(true)
@@ -255,8 +256,6 @@ class PhotoEditActivity : BaseActivity() {
         compressedImage = myFilter.processFilter(bitmap)
     }
 
-    //</editor-fold>
-    //<editor-fold desc="CROPPING">
 
     private fun startCrop() {
         val file = File.createTempFile("temp_crop_img", ".png", cacheDir)
@@ -314,8 +313,6 @@ class PhotoEditActivity : BaseActivity() {
         }
     }
 
-    //</editor-fold>
-    //<editor-fold desc="FLOW">
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -325,10 +322,7 @@ class PhotoEditActivity : BaseActivity() {
             && grantResults[0] == PackageManager.PERMISSION_GRANTED
             && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             // permission was granted
-            when (requestCode) {
-                REQUEST_CODE_PERMISSIONS_SAVE_PHOTO -> permissionsGrantedToSave(true)
-                REQUEST_CODE_PERMISSIONS_SEND_PHOTO -> permissionsGrantedToSave(false)
-            }
+            permissionsGrantedToSave()
         } else {
             Snackbar.make(coordinator_edit, getString(R.string.permission_denied),
                 Snackbar.LENGTH_LONG).show()
@@ -354,16 +348,16 @@ class PhotoEditActivity : BaseActivity() {
         finish()
     }
 
-    private fun saveImageToGallery(save: Boolean) {
+    private fun saveImageToGallery() {
         // runtime permission and process
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
                 REQUIRED_PERMISSIONS,
-                if(save) REQUEST_CODE_PERMISSIONS_SAVE_PHOTO else REQUEST_CODE_PERMISSIONS_SEND_PHOTO
+                REQUEST_CODE_PERMISSIONS_SEND_PHOTO
             )
         } else {
-            permissionsGrantedToSave(save)
+            permissionsGrantedToSave()
         }
     }
 
@@ -375,32 +369,6 @@ class PhotoEditActivity : BaseActivity() {
             applicationContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun getOutputFile(name: String): Pair<OutputStream, String> {
-        val outputStream: OutputStream
-        val path: String
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val resolver: ContentResolver = contentResolver
-            val contentValues = ContentValues()
-            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
-            contentValues.put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                Environment.DIRECTORY_PICTURES
-            )
-            val imageUri: Uri =
-                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
-            path = imageUri.toString()
-            outputStream = resolver.openOutputStream(Objects.requireNonNull(imageUri))!!
-        } else {
-            val imagesDir =
-                Environment.getExternalStoragePublicDirectory(getString(R.string.app_name))
-            imagesDir.mkdir()
-            val file = File(imagesDir, name)
-            path = Uri.fromFile(file).toString()
-            outputStream = file.outputStream()
-        }
-        return Pair(outputStream, path)
-    }
 
     private fun OutputStream.writeBitmap(bitmap: Bitmap) {
         use { out ->
@@ -410,7 +378,13 @@ class PhotoEditActivity : BaseActivity() {
         }
     }
 
-    private fun permissionsGrantedToSave(save: Boolean) {
+    private fun noEdits(): Boolean =
+            brightnessFinal == BRIGHTNESS_START
+                    && contrastFinal == CONTRAST_START
+                    && saturationFinal == SATURATION_START
+                    && actualFilter?.let { it.name == getString(R.string.normal_filter)} ?: true
+
+    private fun permissionsGrantedToSave() {
         if (saving) {
             val builder = AlertDialog.Builder(this)
             builder.apply {
@@ -424,36 +398,24 @@ class PhotoEditActivity : BaseActivity() {
         saving = true
         progressBarSaveFile.visibility = VISIBLE
         saveFuture = saveExecutor.submit {
-            val outputStream: OutputStream
-            var path: String
-                if (!save) {
-                    //put picture in cache
+            try {
+                val path: String
+                if(!noEdits()) {
+                    // Save modified image in cache
                     val tempFile = File.createTempFile("temp_edit_img", ".png", cacheDir)
                     path = Uri.fromFile(tempFile).toString()
-                    outputStream = tempFile.outputStream()
-                } else {
-                    // Save the picture to gallery
-                    val name = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
-                        .format(System.currentTimeMillis()) + ".png"
-                    val pair = getOutputFile(name)
-                    outputStream = pair.first
-                    path = pair.second
-                }
-            try {
-                if(brightnessFinal != BRIGHTNESS_START || contrastFinal != CONTRAST_START
-                    || saturationFinal != SATURATION_START
-                    || (actualFilter != null && actualFilter!!.name != getString(R.string.normal_filter))) {
-                    outputStream.writeBitmap(applyFinalFilters(originalImage))
+                    tempFile.outputStream().writeBitmap(applyFinalFilters(originalImage))
                 }
                 else {
-                    if(save) {
-                        contentResolver.openInputStream(imageUri!!)!!.use { input ->
-                            outputStream.use { output ->
-                                input.copyTo(output)
-                            }
-                        }
+                    path = imageUri.toString()
+                }
+
+                if(saving) {
+                    this.runOnUiThread {
+                        sendBackImage(path)
+                        progressBarSaveFile.visibility = GONE
+                        saving = false
                     }
-                    else path = imageUri.toString()
                 }
             } catch (e: IOException) {
                 this.runOnUiThread {
@@ -461,39 +423,10 @@ class PhotoEditActivity : BaseActivity() {
                         coordinator_edit, getString(R.string.save_image_failed),
                         Snackbar.LENGTH_LONG
                     ).show()
-                }
-            }
-            if(saving) {
-                this.runOnUiThread {
-                    if(!save) {
-                        sendBackImage(path)
-                    } else {
-                        if(path.startsWith("file")) {
-                            MediaScannerConnection.scanFile(
-                                this,
-                                arrayOf(path.toUri().toFile().absolutePath),
-                                null
-
-                            ) { path, uri ->
-                                if (uri == null) {
-                                    Log.e(
-                                        "NEW IMAGE SCAN FAILED",
-                                        "Tried to scan $path, but it failed"
-                                    )
-                                }
-                            }
-                        }
-
-                        Snackbar.make(
-                            coordinator_edit, getString(R.string.save_image_success),
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                    }
                     progressBarSaveFile.visibility = GONE
                     saving = false
                 }
             }
         }
     }
-    //</editor-fold>
 }

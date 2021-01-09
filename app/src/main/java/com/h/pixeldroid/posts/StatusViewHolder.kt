@@ -404,7 +404,7 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
                             val builder = AlertDialog.Builder(holder.itemView.context)
                             builder.apply {
                                 setMessage(R.string.delete_dialog)
-                                setPositiveButton(R.string.OK) { _, _ ->
+                                setPositiveButton(android.R.string.ok) { _, _ ->
 
                                     lifecycleScope.launch {
                                         val user = db.userDao().getActiveUser()!!
@@ -420,7 +420,7 @@ class StatusViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
                                         }
                                     }
                                 }
-                                setNegativeButton(R.string.cancel) { _, _ -> }
+                                setNegativeButton(android.R.string.cancel) { _, _ -> }
                                 show()
                             }
 

@@ -32,7 +32,6 @@ class FilterListFragment : Fragment() {
         val view =  inflater.inflate(R.layout.fragment_filter_list, container, false)
 
         tbItemList = ArrayList()
-        adapter = ThumbnailAdapter(requireActivity(), tbItemList, this)
 
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -40,6 +39,8 @@ class FilterListFragment : Fragment() {
 
         val space = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics).toInt()
         recyclerView.addItemDecoration(SpaceItemDecoration(space))
+
+        adapter = ThumbnailAdapter(requireActivity(), tbItemList, this)
         recyclerView.adapter = adapter
 
         return view
@@ -99,10 +100,13 @@ class FilterListFragment : Fragment() {
         }
     }
 
+    fun resetSelectedFilter(){
+        adapter.resetSelected()
+        displayImage(null)
+    }
+
     fun onFilterSelected(filter: Filter) {
-        if(listener != null ){
-            listener!!.onFilterSelected(filter)
-        }
+        listener?.onFilterSelected(filter)
     }
 
     fun setListener(listFragmentListener: PhotoEditActivity) {

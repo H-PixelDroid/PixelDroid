@@ -1,9 +1,16 @@
 package com.h.pixeldroid.postCreation
 
 import android.app.Activity
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,10 +19,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.MainActivity
@@ -33,20 +42,24 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_post_creation.*
 import kotlinx.android.synthetic.main.image_album_creation.view.*
 import okhttp3.MultipartBody
+import org.imaginativeworld.whynotimagecarousel.CarouselItem
+import org.imaginativeworld.whynotimagecarousel.ImageCarousel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
+import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 private const val TAG = "Post Creation Activity"
 private const val MORE_PICTURES_REQUEST_CODE = 0xffff
 
 
 class PostCreationActivity : BaseActivity() {
-
-    private lateinit var recycler : RecyclerView
-    private lateinit var adapter : PostCreationAdapter
 
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
@@ -100,10 +113,9 @@ class PostCreationActivity : BaseActivity() {
         progressList = posts.map { 0 } as ArrayList<Int>
         upload()
 
-        adapter = PostCreationAdapter(posts)
-        recycler = findViewById(R.id.image_grid)
-        recycler.layoutManager = GridLayoutManager(this, 3)
-        recycler.adapter = adapter
+
+        val carousel: ImageCarousel = findViewById(R.id.carousel)
+        carousel.addData(posts.map { CarouselItem(it) })
 
         // get the description and send the post
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
@@ -117,7 +129,79 @@ class PostCreationActivity : BaseActivity() {
             progressList = posts.map { 0 } as ArrayList<Int>
             upload()
         }
+
+        findViewById<Button>(R.id.editPhotoButton).setOnClickListener {
+            onClick(carousel.currentPosition)
+        }
+
+        findViewById<Button>(R.id.addPhotoButton).setOnClickListener {
+            val intent = Intent(it.context, CameraActivity::class.java)
+            this@PostCreationActivity.startActivityForResult(intent, MORE_PICTURES_REQUEST_CODE)
+        }
+
+        findViewById<Button>(R.id.savePhotoButton).setOnClickListener {
+
+            val name = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
+                .format(System.currentTimeMillis()) + ".png"
+            val pair = getOutputFile(name)
+            val outputStream: OutputStream = pair.first
+            val path: String = pair.second
+
+            contentResolver.openInputStream(posts[carousel.currentPosition].toUri())!!.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            if(path.startsWith("file")) {
+                MediaScannerConnection.scanFile(
+                    this,
+                    arrayOf(path.toUri().toFile().absolutePath),
+                    null
+                ) { path, uri ->
+                    if (uri == null) {
+                        Log.e(
+                            "NEW IMAGE SCAN FAILED",
+                            "Tried to scan $path, but it failed"
+                        )
+                    }
+                }
+            }
+            Snackbar.make(
+                it, getString(R.string.save_image_success),
+                Snackbar.LENGTH_LONG
+            ).show()
+
+        }
+
     }
+    private fun getOutputFile(name: String): Pair<OutputStream, String> {
+        val outputStream: OutputStream
+        val path: String
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val resolver: ContentResolver = contentResolver
+            val contentValues = ContentValues()
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+            contentValues.put(
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                Environment.DIRECTORY_PICTURES
+            )
+            val imageUri: Uri =
+                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
+            path = imageUri.toString()
+            outputStream = resolver.openOutputStream(Objects.requireNonNull(imageUri))!!
+        } else {
+            @Suppress("DEPRECATION") val imagesDir =
+                Environment.getExternalStoragePublicDirectory(getString(R.string.app_name))
+            imagesDir.mkdir()
+            val file = File(imagesDir, name)
+            path = Uri.fromFile(file).toString()
+            outputStream = file.outputStream()
+        }
+        return Pair(outputStream, path)
+    }
+
 
     private fun validateDescription(): Boolean {
         val textField = findViewById<TextInputLayout>(R.id.postTextInputLayout)
@@ -268,13 +352,13 @@ class PostCreationActivity : BaseActivity() {
         if (requestCode == positionResult) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 posts[positionResult] = data.getStringExtra("result")!!
-                adapter.notifyItemChanged(positionResult)
+
+                carousel.addData(posts.map { CarouselItem(it) })
+
                 muListOfIds[positionResult] = ""
                 progressList[positionResult] = 0
                 upload(editedImage = positionResult)
-            } else if(resultCode == Activity.RESULT_CANCELED){
-                Toast.makeText(applicationContext, "Editing canceled", Toast.LENGTH_SHORT).show()
-            } else {
+            } else if(resultCode != Activity.RESULT_CANCELED){
                 Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
             }
         } else if (requestCode == MORE_PICTURES_REQUEST_CODE) {
@@ -287,16 +371,16 @@ class PostCreationActivity : BaseActivity() {
                     progressList.add(0)
                     muListOfIds.add("")
                 }
-                adapter.notifyDataSetChanged()
+
+                carousel.addData(posts.map { CarouselItem(it) })
+
                 upload(newImagesStartingIndex = posts.size - count)
-            } else if(resultCode == Activity.RESULT_CANCELED){
-                Toast.makeText(applicationContext, "Adding images canceled", Toast.LENGTH_SHORT).show()
-            } else {
+            } else if(resultCode != Activity.RESULT_CANCELED){
                 Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
+/*
     inner class PostCreationAdapter(private val posts: ArrayList<String>): RecyclerView.Adapter<PostCreationAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -349,4 +433,5 @@ class PostCreationActivity : BaseActivity() {
             }
         }
     }
+ */
 }

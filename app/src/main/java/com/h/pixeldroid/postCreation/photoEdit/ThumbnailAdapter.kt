@@ -18,6 +18,11 @@ class ThumbnailAdapter (private val context: Context,
 
     private var selectedIndex = 0
 
+    fun resetSelected(){
+        selectedIndex = 0
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.thumbnail_list_item, parent, false)
         return MyViewHolder(itemView)

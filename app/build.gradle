@@ -157,6 +157,7 @@ dependencies {
     implementation 'com.github.ligi.tracedroid:lib:3.0'
     implementation 'com.github.ligi.tracedroid:supportemail:3.0'
 
+    implementation 'com.github.ImaginativeShohag:Why-Not-Image-Carousel:v1.1.0'
 
     /**
      * Not in release, so not mentioned in licenses list

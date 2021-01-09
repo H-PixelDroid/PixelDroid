@@ -43,46 +43,50 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
         seekbarSaturation.max = SATURATION_MAX
         seekbarSaturation.progress = SATURATION_START
 
-        seekbarBrightness.setOnSeekBarChangeListener(this)
-        seekbarContrast.setOnSeekBarChangeListener(this)
-        seekbarSaturation.setOnSeekBarChangeListener(this)
+        setOnSeekBarChangeListeners(this)
 
         return view
+    }
+
+    private fun setOnSeekBarChangeListeners(listener: EditImageFragment?){
+        seekbarBrightness.setOnSeekBarChangeListener(listener)
+        seekbarContrast.setOnSeekBarChangeListener(listener)
+        seekbarSaturation.setOnSeekBarChangeListener(listener)
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
         var prog = progress
 
-        if(listener != null) {
+        listener?.let {
             when(seekBar!!.id) {
-                R.id.seekbar_brightness -> listener!!.onBrightnessChange(progress - 100)
+                R.id.seekbar_brightness -> it.onBrightnessChange(progress - 100)
                 R.id.seekbar_saturation -> {
                     prog += 10
-                    val tempProgress = .10f * prog
-                    listener!!.onSaturationChange(tempProgress)
+                    it.onSaturationChange(.10f * prog)
                 }
                 R.id.seekbar_contrast -> {
-                    val tempProgress = .10f * prog
-                    listener!!.onContrastChange(tempProgress)
+                    it.onContrastChange(.10f * prog)
                 }
             }
         }
     }
 
     fun resetControl() {
+        // Make sure to ignore seekbar change events, since we don't want to have the reset cause
+        // filter applications due to the onProgressChanged calls
+        setOnSeekBarChangeListeners(null)
         seekbarBrightness.progress = BRIGHTNESS_START
         seekbarContrast.progress = CONTRAST_START
         seekbarSaturation.progress = SATURATION_START
+        setOnSeekBarChangeListeners(this)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
-        if(listener != null)
-            listener!!.onEditStarted()
+        listener?.onEditStarted()
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
-        if(listener != null)
-            listener!!.onEditCompleted()
+        listener?.onEditCompleted()
     }
 
     fun setListener(listener: PhotoEditActivity) {

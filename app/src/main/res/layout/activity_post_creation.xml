@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -46,24 +47,22 @@
         android:id="@+id/upload_completed_textview"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/media_upload_completed"
         android:textColor="@android:color/holo_green_light"
         android:textSize="16sp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/image_grid"
-        android:layout_width="0dp"
+    <org.imaginativeworld.whynotimagecarousel.ImageCarousel
+        android:id="@+id/carousel"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@id/postTextInputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/upload_completed_textview" />
+        app:layout_constraintTop_toBottomOf="@id/upload_completed_textview">
+
+    </org.imaginativeworld.whynotimagecarousel.ImageCarousel>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonConstraints"
@@ -132,5 +131,44 @@
             android:textColor="@color/colorPrimary" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/addPhotoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="TODO"
+        app:icon="@drawable/add_photo_alternate_black_24dp"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/savePhotoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:contentDescription="TODO"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/addPhotoButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/addPhotoButton"
+        app:icon="@drawable/download_file_24dp" />
+
+    <Button
+        android:id="@+id/editPhotoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="TODO"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/addPhotoButton"
+        app:layout_constraintEnd_toStartOf="@+id/addPhotoButton"
+        app:layout_constraintTop_toTopOf="@+id/addPhotoButton"
+        app:icon="@drawable/ic_baseline_edit_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
