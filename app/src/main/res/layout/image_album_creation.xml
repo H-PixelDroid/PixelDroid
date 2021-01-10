@@ -26,7 +26,7 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/circle_black_24dp"
             android:backgroundTint="#7A3E3C3C"
-            android:foreground="@drawable/ic_baseline_edit_24"
+            android:foreground="@drawable/ic_baseline_edit_30"
             android:foregroundGravity="center"
             android:foregroundTint="#FFFFFF"
             app:layout_constraintStart_toStartOf="parent"

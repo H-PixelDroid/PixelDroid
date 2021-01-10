@@ -11,6 +11,6 @@
         android:layout_height="50dp"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/add_photo_alternate_black_24dp"
+        android:background="@drawable/add_photo_alternate_white_30dp"
         android:contentDescription="@string/add_photo" />
 </com.h.pixeldroid.postCreation.SquareLayout>
