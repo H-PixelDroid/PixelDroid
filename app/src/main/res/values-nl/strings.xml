@@ -30,7 +30,7 @@
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">VERZADIGING</string>
     <string name="tab_filters">FILTERS</string>
-    <string name="tab_edit">BEWERKEN</string>
+    <string name="edit">BEWERKEN</string>
     <string name="capture_button_alt">Vastleggen</string>
     <string name="switch_camera_button_alt">Van camera wisselen</string>
     <string name="gallery_button_alt">Gallerij</string>

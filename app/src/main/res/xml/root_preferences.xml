@@ -27,6 +27,6 @@
         app:icon="@drawable/info_black_24dp">
         <intent
             android:targetPackage="com.h.pixeldroid"
-            android:targetClass="com.h.pixeldroid.AboutActivity"/>
+            android:targetClass="com.h.pixeldroid.settings.AboutActivity"/>
     </Preference>
 </PreferenceScreen>

@@ -21,7 +21,7 @@
     <string name="lbl_contrast">CONTRASTE</string>
     <string name="lbl_saturation">SATURACIÓN</string>
     <string name="tab_filters">FILTROS</string>
-    <string name="tab_edit">EDITAR</string>
+    <string name="edit">EDITAR</string>
     <string name="save_to_gallery">Gardar na Galería…</string>
     <string name="image_download_downloading">Descargando…</string>
     <string name="image_download_success">Imaxe descargada correctamente</string>

@@ -22,7 +22,7 @@
     <string name="logout">Abmelden</string>
     <string name="lbl_brightness">Helligkeit</string>
     <string name="tab_filters">Filter</string>
-    <string name="tab_edit">bearbeiten</string>
+    <string name="edit">bearbeiten</string>
     <string name="lbl_contrast">Kontrast</string>
     <string name="lbl_saturation">Sättigung</string>
     <string name="NoCommentsToShow">Keine Kommentare zu diesem Beitrag…</string>

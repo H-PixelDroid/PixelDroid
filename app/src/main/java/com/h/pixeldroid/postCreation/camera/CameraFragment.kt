@@ -169,7 +169,7 @@ class CameraFragment : Fragment() {
     }
 
     /** Declare and bind preview, capture and analysis use cases */
-    private fun bindCameraUseCases() {
+    private fun bindCameraUseCases(forceRebind: Boolean = false) {
 
         // Get screen metrics used to setup camera for full screen resolution
         val metrics = DisplayMetrics().also { viewFinder.display?.getRealMetrics(it) }
@@ -188,7 +188,7 @@ class CameraFragment : Fragment() {
             // CameraProvider
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            if (camera == null || preview == null || imageCapture == null || !cameraProvider.isBound(preview!!) || !cameraProvider.isBound(imageCapture!!)) {
+            if (forceRebind || camera == null || preview == null || imageCapture == null || !cameraProvider.isBound(preview!!) || !cameraProvider.isBound(imageCapture!!)) {
 
 
                 // Preview
@@ -324,7 +324,7 @@ class CameraFragment : Fragment() {
                     REQUEST_CODE_PERMISSIONS
                 )
             } else {
-                bindCameraUseCases()
+                bindCameraUseCases(forceRebind = true)
             }
         }
     }

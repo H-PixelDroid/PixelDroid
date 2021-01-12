@@ -37,7 +37,7 @@
     <string name="domain_of_your_instance">Dominio della tua istanza</string>
     <string name="login_connection_required_once">Devi essere online per poter aggiungere il primo account e utilizzare PixelDroid :(</string>
     <string name="invalid_domain">Dominio non valido</string>
-    <string name="tab_edit">MODIFICA</string>
+    <string name="edit">MODIFICA</string>
     <string name="permission_denied">Permesso negato</string>
     <string name="instance_error">Impossibile ottenere informazioni sull\'istanza</string>
     <string name="save_image_failed">Impossibile salvare l\'immagine</string>

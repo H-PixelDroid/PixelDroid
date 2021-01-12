@@ -56,7 +56,7 @@
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">SATURATION</string>
     <string name="tab_filters">FILTERS</string>
-    <string name="tab_edit">EDIT</string>
+    <string name="edit">Edit</string>
     <string name="filter_thumbnail">Thumbnail of filter</string>
     <string name="normal_filter">Normal</string>
     <string name="busy_dialog_text">Still processing image, wait for that to finish first!</string>

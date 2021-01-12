@@ -22,7 +22,7 @@
     <string name="share_picture">Поділитися фотографією…</string>
     <string name="logout">Вийти</string>
     <string name="NoCommentsToShow">Немає коментарів до цієї публікації…</string>
-    <string name="tab_edit">Редагувати</string>
+    <string name="edit">Редагувати</string>
     <string name="app_name">PixelDroid</string>
     <string name="menu_settings">Налаштування</string>
 </resources>

@@ -25,7 +25,7 @@
     <string name="gallery_button_alt">Galeria</string>
     <string name="NoCommentsToShow">Iruzkinik gabeko argitalpena…</string>
     <string name="theme_title">Aplikazioaren gaia</string>
-    <string name="tab_edit">EDITATU</string>
+    <string name="edit">EDITATU</string>
     <string name="switch_camera_button_alt">Aldatu kamera</string>
     <string name="capture_button_alt">Atera</string>
     <string name="theme_header">Gaia</string>

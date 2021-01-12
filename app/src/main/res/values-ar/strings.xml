@@ -19,7 +19,7 @@
     <string name="whats_an_instance">ماذا نعني بمثيل الخادم؟</string>
     <string name="logout">الخروج</string>
     <string name="tab_filters">الفلاتر</string>
-    <string name="tab_edit">تعديل</string>
+    <string name="edit">تعديل</string>
     <string name="save_to_gallery">احتفظ بها في المعرض…</string>
     <string name="image_download_downloading">التنزيل جارٍ…</string>
     <string name="image_download_success">تم التنزيل بنجاح</string>

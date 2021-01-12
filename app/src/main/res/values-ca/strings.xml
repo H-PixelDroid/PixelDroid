@@ -30,7 +30,7 @@
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">SATURACIÓ</string>
     <string name="tab_filters">FILTRES</string>
-    <string name="tab_edit">EDITAR</string>
+    <string name="edit">EDITAR</string>
     <string name="capture_button_alt">Captura</string>
     <string name="gallery_button_alt">Galeria</string>
     <string name="NoCommentsToShow">No hi ha comentaris en aquesta publicació …</string>

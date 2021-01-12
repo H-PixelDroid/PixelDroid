@@ -3,6 +3,7 @@ package com.h.pixeldroid.postCreation
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -13,6 +14,8 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -26,6 +29,8 @@ import com.h.pixeldroid.MainActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.postCreation.camera.CameraActivity
+import com.h.pixeldroid.postCreation.carousel.CarouselItem
+import com.h.pixeldroid.postCreation.carousel.ImageCarousel
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Instance
@@ -34,10 +39,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_post_creation.*
+import kotlinx.android.synthetic.main.activity_post_creation.view.*
 import kotlinx.android.synthetic.main.image_album_creation.view.*
 import okhttp3.MultipartBody
-import org.imaginativeworld.whynotimagecarousel.CarouselItem
-import org.imaginativeworld.whynotimagecarousel.ImageCarousel
 import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
@@ -100,6 +104,19 @@ class PostCreationActivity : BaseActivity() {
 
         val carousel: ImageCarousel = findViewById(R.id.carousel)
         carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+        carousel.layoutCarouselCallback = {
+            //TODO transition instead of at once
+            if(it){
+                // Became a carousel
+                toolbar3.visibility = VISIBLE
+            } else {
+                // Became a grid
+                toolbar3.visibility = INVISIBLE
+            }
+        }
+        carousel.addPhotoButtonCallback = {
+            addPhoto(applicationContext)
+        }
 
         // get the description and send the post
         findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
@@ -123,8 +140,7 @@ class PostCreationActivity : BaseActivity() {
         }
 
         findViewById<ImageButton>(R.id.addPhotoButton).setOnClickListener {
-            val intent = Intent(it.context, CameraActivity::class.java)
-            this@PostCreationActivity.startActivityForResult(intent, MORE_PICTURES_REQUEST_CODE)
+            addPhoto(it.context)
         }
 
         findViewById<ImageButton>(R.id.savePhotoButton).setOnClickListener {
@@ -139,8 +155,12 @@ class PostCreationActivity : BaseActivity() {
                 photoData.removeAt(currentPosition)
                 carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
             }
-            //TODO("have to fix upload to allow deleting!")
         }
+    }
+
+    private fun addPhoto(context: Context){
+        val intent = Intent(context, CameraActivity::class.java)
+        this@PostCreationActivity.startActivityForResult(intent, MORE_PICTURES_REQUEST_CODE)
     }
 
     private fun savePicture(button: View, currentPosition: Int) {
@@ -375,58 +395,4 @@ class PostCreationActivity : BaseActivity() {
             }
         }
     }
-/*
-    inner class PostCreationAdapter(private val posts: ArrayList<String>): RecyclerView.Adapter<PostCreationAdapter.ViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view =
-                if(viewType == 0) LayoutInflater.from(parent.context)
-                .inflate(R.layout.image_album_creation, parent, false)
-                else LayoutInflater.from(parent.context)
-                    .inflate(R.layout.add_more_album_creation, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun getItemViewType(position: Int): Int {
-            if(position == posts.size) return 1
-            return 0
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            if(position != posts.size) {
-                holder.bindImage()
-            } else{
-                holder.bindPlusButton()
-            }
-        }
-
-        override fun getItemCount(): Int = posts.size + 1
-
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-            fun bindImage() {
-                val image = Uri.parse(
-                    posts[adapterPosition]
-                )
-                // load image
-                Glide.with(itemView.context)
-                    .load(image)
-                    .centerCrop()
-                    .into(itemView.galleryImage)
-                // adding click or tap handler for the image layout
-                itemView.setOnClickListener {
-                    this@PostCreationActivity.onClick(adapterPosition)
-                }
-
-            }
-
-            fun bindPlusButton() {
-                itemView.setOnClickListener {
-                    val intent = Intent(itemView.context, CameraActivity::class.java)
-                    this@PostCreationActivity.startActivityForResult(intent, MORE_PICTURES_REQUEST_CODE)
-                }
-            }
-        }
-    }
- */
 }

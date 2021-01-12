@@ -22,7 +22,7 @@
     <string name="image_download_downloading">Baixando o arquivo…</string>
     <string name="image_download_failed">O download não deu certo, por favor, tente novamente</string>
     <string name="save_to_gallery">Salvar na Galeria…</string>
-    <string name="tab_edit">EDITAR</string>
+    <string name="edit">EDITAR</string>
     <string name="tab_filters">FILTROS</string>
     <string name="lbl_saturation">SATURAÇÃO</string>
     <string name="lbl_contrast">CONTRASTE</string>

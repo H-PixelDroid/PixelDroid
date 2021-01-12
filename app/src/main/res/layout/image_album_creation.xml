@@ -7,10 +7,6 @@
     android:foreground="?selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <ImageView
             android:id="@+id/galleryImage"
             android:layout_width="match_parent"
@@ -18,19 +14,4 @@
             android:padding="8dp"
             android:scaleType="centerCrop"
             android:contentDescription="@string/post_image" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/circle_black_24dp"
-            android:backgroundTint="#7A3E3C3C"
-            android:foreground="@drawable/ic_baseline_edit_30"
-            android:foregroundGravity="center"
-            android:foregroundTint="#FFFFFF"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/click_image_edit" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.h.pixeldroid.postCreation.SquareLayout>

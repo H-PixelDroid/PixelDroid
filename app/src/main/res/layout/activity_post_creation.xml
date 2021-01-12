@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".postCreation.PostCreationActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/upload_error"
@@ -42,7 +43,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <org.imaginativeworld.whynotimagecarousel.ImageCarousel
+    <com.h.pixeldroid.postCreation.carousel.ImageCarousel
         android:id="@+id/carousel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -59,7 +60,7 @@
         android:textSize="16sp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
+        app:layout_constraintBottom_toTopOf="@id/postTextInputLayout"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonConstraints"
@@ -142,50 +143,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/savePhotoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/save_to_gallery"
+            android:tooltipText='@string/save_to_gallery'
             android:src="@drawable/download_file_30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/removePhotoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/delete"
+            android:tooltipText='@string/delete'
             android:src="@drawable/delete_30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/savePhotoButton"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/editPhotoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/edit"
+            android:tooltipText='@string/edit'
             android:src="@drawable/ic_baseline_edit_30"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/removePhotoButton"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/addPhotoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/add_photo"
+            android:tooltipText='@string/add_photo'
             android:src="@drawable/add_photo_alternate_white_30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

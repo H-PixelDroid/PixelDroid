@@ -23,7 +23,7 @@
     <string name="lbl_contrast">تضاد</string>
     <string name="lbl_saturation">اشباع</string>
     <string name="tab_filters">پالایه‌ها</string>
-    <string name="tab_edit">ویرایش</string>
+    <string name="edit">ویرایش</string>
     <string name="save_to_gallery">ذخیره در نگارخانه…</string>
     <string name="image_download_failed">بارگیری شکست خورد، دوباره تلاش کنید</string>
     <string name="image_download_downloading">در حال بارگیری…</string>

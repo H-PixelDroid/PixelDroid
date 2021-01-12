@@ -4,6 +4,7 @@ plugins {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco'
 
@@ -11,7 +12,7 @@ apply plugin: 'jacoco'
 android {
 
     compileSdkVersion 30
-    buildToolsVersion '30.0.2'
+    buildToolsVersion '30.0.3'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -56,6 +57,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 
     apply plugin: 'kotlin-kapt'
@@ -157,7 +159,7 @@ dependencies {
     implementation 'com.github.ligi.tracedroid:lib:3.0'
     implementation 'com.github.ligi.tracedroid:supportemail:3.0'
 
-    implementation 'com.github.ImaginativeShohag:Why-Not-Image-Carousel:v1.1.0'
+    implementation 'me.relex:circleindicator:2.1.4'
 
     /**
      * Not in release, so not mentioned in licenses list
