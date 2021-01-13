@@ -14,13 +14,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.h.pixeldroid.R
+import com.h.pixeldroid.databinding.AccountListEntryBinding
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.FeedViewModel
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.UncachedFeedFragment
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.ViewModelFactory
 import com.h.pixeldroid.utils.api.objects.Account
 import com.h.pixeldroid.utils.api.objects.Account.Companion.ACCOUNT_ID_TAG
 import com.h.pixeldroid.utils.api.objects.Account.Companion.FOLLOWERS_TAG
-import kotlinx.android.synthetic.main.account_list_entry.view.*
 
 
 /**
@@ -75,10 +75,10 @@ class AccountListFragment : UncachedFeedFragment<Account>() {
 /**
  * View Holder for an [Account] RecyclerView list item.
  */
-class AccountViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    private val avatar : ImageView = view.account_entry_avatar
-    private val username : TextView = view.account_entry_username
-    private val acct: TextView = view.account_entry_acct
+class AccountViewHolder(binding: AccountListEntryBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val avatar : ImageView = binding.accountEntryAvatar
+    private val username : TextView = binding.accountEntryUsername
+    private val acct: TextView = binding.accountEntryAcct
 
     private var account: Account? = null
 
@@ -104,9 +104,10 @@ class AccountViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     companion object {
         fun create(parent: ViewGroup): AccountViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.account_list_entry, parent, false)
-            return AccountViewHolder(view)
+            val itemBinding = AccountListEntryBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+            return AccountViewHolder(itemBinding)
         }
     }
 }

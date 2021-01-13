@@ -14,22 +14,21 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
-import androidx.room.withTransaction
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
-import com.h.pixeldroid.utils.db.addUser
+import com.h.pixeldroid.databinding.ActivityMainBinding
 import com.h.pixeldroid.postCreation.camera.CameraFragment
-import com.h.pixeldroid.utils.db.entities.HomeStatusDatabaseEntity
-import com.h.pixeldroid.utils.db.entities.PublicFeedStatusDatabaseEntity
-import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.posts.feeds.cachedFeeds.notifications.NotificationsFragment
 import com.h.pixeldroid.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
-import com.h.pixeldroid.utils.api.objects.Account
 import com.h.pixeldroid.profile.ProfileActivity
 import com.h.pixeldroid.searchDiscover.SearchDiscoverFragment
 import com.h.pixeldroid.settings.SettingsActivity
 import com.h.pixeldroid.utils.BaseActivity
+import com.h.pixeldroid.utils.db.addUser
+import com.h.pixeldroid.utils.db.entities.HomeStatusDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.PublicFeedStatusDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.hasInternet
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.materialdrawer.iconics.iconicsIcon
@@ -40,12 +39,8 @@ import com.mikepenz.materialdrawer.model.interfaces.*
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
-import kotlinx.android.synthetic.main.activity_main.*
 import org.ligi.tracedroid.sending.TraceDroidEmailSender
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 
 class MainActivity : BaseActivity() {
@@ -57,11 +52,14 @@ class MainActivity : BaseActivity() {
         const val ADD_ACCOUNT_IDENTIFIER: Long = -13
     }
 
+    private lateinit var binding: ActivityMainBinding
+
     @ExperimentalPagingApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         TraceDroidEmailSender.sendStackTraces("contact@pixeldroid.org", this)
 
@@ -96,8 +94,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupDrawer() {
-        main_drawer_button.setOnClickListener{
-            drawer_layout.open()
+        binding.mainDrawerButton.setOnClickListener{
+            binding.drawerLayout.open()
         }
 
         header = AccountHeaderView(this).apply {
@@ -112,7 +110,7 @@ class MainActivity : BaseActivity() {
                 descriptionRes = R.string.add_account_description
                 iconicsIcon = GoogleMaterial.Icon.gmd_add
             }, 0)
-            attachToSliderView(drawer)
+            attachToSliderView(binding.drawer)
             dividerBelowHeader = false
             closeDrawerOnProfileListClick = true
         }
@@ -144,7 +142,7 @@ class MainActivity : BaseActivity() {
         //with the received one. This happens asynchronously.
         getUpdatedAccount()
 
-        drawer.itemAdapter.add(
+        binding.drawer.itemAdapter.add(
             primaryDrawerItem {
                 nameRes = R.string.menu_account
                 iconicsIcon = GoogleMaterial.Icon.gmd_person
@@ -157,7 +155,7 @@ class MainActivity : BaseActivity() {
                 nameRes = R.string.logout
                 iconicsIcon = GoogleMaterial.Icon.gmd_close
             })
-        drawer.onDrawerItemClickListener = { v, drawerItem, position ->
+        binding.drawer.onDrawerItemClickListener = { v, drawerItem, position ->
             when (position){
                 1 -> launchActivity(ProfileActivity())
                 2 -> launchActivity(SettingsActivity())
@@ -271,7 +269,7 @@ class MainActivity : BaseActivity() {
 
 
     private fun setupTabs(tab_array: List<() -> Fragment>){
-        view_pager.adapter = object : FragmentStateAdapter(this) {
+        binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
                 return tab_array[position]()
             }
@@ -281,7 +279,7 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        TabLayoutMediator(tabs, view_pager) { tab, position ->
+        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.icon = ContextCompat.getDrawable(applicationContext,
                     when(position){
                         0 -> R.drawable.ic_home_white_24dp
@@ -312,8 +310,8 @@ class MainActivity : BaseActivity() {
      * Closes the drawer if it is open, when we press the back button
      */
     override fun onBackPressed() {
-        if(drawer_layout.isDrawerOpen(GravityCompat.START)){
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }

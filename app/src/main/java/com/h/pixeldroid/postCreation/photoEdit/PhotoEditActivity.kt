@@ -22,6 +22,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.R
+import com.h.pixeldroid.databinding.ActivityPhotoEditBinding
+import com.h.pixeldroid.databinding.ActivityPostCreationBinding
 import com.h.pixeldroid.postCreation.PostCreationActivity
 import com.h.pixeldroid.utils.BaseActivity
 import com.yalantis.ucrop.UCrop
@@ -29,7 +31,6 @@ import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
-import kotlinx.android.synthetic.main.activity_photo_edit.*
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -86,9 +87,14 @@ class PhotoEditActivity : BaseActivity() {
         internal var imageUri: Uri? = null
     }
 
+    private lateinit var binding: ActivityPhotoEditBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_edit)
+        binding = ActivityPhotoEditBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
+
 
         supportActionBar?.setTitle(R.string.toolbar_title_edit)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -118,7 +124,7 @@ class PhotoEditActivity : BaseActivity() {
         compressedImage = resizeImage(originalImage!!)
         compressedOriginalImage = compressedImage!!.copy(BITMAP_CONFIG, true)
         filteredImage = compressedImage!!.copy(BITMAP_CONFIG, true)
-        Glide.with(this).load(compressedImage).into(image_preview)
+        Glide.with(this).load(compressedImage).into(binding.imagePreview)
     }
 
     private fun resizeImage(image: Bitmap): Bitmap {
@@ -192,7 +198,7 @@ class PhotoEditActivity : BaseActivity() {
 
     fun onFilterSelected(filter: Filter) {
         filteredImage = compressedOriginalImage!!.copy(BITMAP_CONFIG, true)
-        image_preview.setImageBitmap(filter.processFilter(filteredImage))
+        binding.imagePreview.setImageBitmap(filter.processFilter(filteredImage))
         compressedImage = filteredImage.copy(BITMAP_CONFIG, true)
         actualFilter = filter
         resetControls()
@@ -211,8 +217,8 @@ class PhotoEditActivity : BaseActivity() {
         future?.cancel(true)
         future = executor.submit {
             val bitmap = filter.processFilter(image!!.copy(BITMAP_CONFIG, true))
-            image_preview.post {
-                image_preview.setImageBitmap(bitmap)
+            binding.imagePreview.post {
+                binding.imagePreview.setImageBitmap(bitmap)
             }
         }
     }
@@ -292,8 +298,8 @@ class PhotoEditActivity : BaseActivity() {
         val resultCrop: Uri? = UCrop.getOutput(data!!)
         if(resultCrop != null) {
             imageUri = resultCrop
-            image_preview.setImageURI(resultCrop)
-            val bitmap = (image_preview.drawable as BitmapDrawable).bitmap
+            binding.imagePreview.setImageURI(resultCrop)
+            val bitmap = (binding.imagePreview.drawable as BitmapDrawable).bitmap
             originalImage = bitmap.copy(Bitmap.Config.ARGB_8888, true)
             compressedImage = resizeImage(originalImage!!.copy(BITMAP_CONFIG, true))
             compressedOriginalImage = compressedImage!!.copy(BITMAP_CONFIG, true)
@@ -324,7 +330,7 @@ class PhotoEditActivity : BaseActivity() {
             // permission was granted
             permissionsGrantedToSave()
         } else {
-            Snackbar.make(coordinator_edit, getString(R.string.permission_denied),
+            Snackbar.make(binding.root, getString(R.string.permission_denied),
                 Snackbar.LENGTH_LONG).show()
         }
     }
@@ -396,7 +402,7 @@ class PhotoEditActivity : BaseActivity() {
             return
         }
         saving = true
-        progressBarSaveFile.visibility = VISIBLE
+        binding.progressBarSaveFile.visibility = VISIBLE
         saveFuture = saveExecutor.submit {
             try {
                 val path: String
@@ -413,17 +419,17 @@ class PhotoEditActivity : BaseActivity() {
                 if(saving) {
                     this.runOnUiThread {
                         sendBackImage(path)
-                        progressBarSaveFile.visibility = GONE
+                        binding.progressBarSaveFile.visibility = GONE
                         saving = false
                     }
                 }
             } catch (e: IOException) {
                 this.runOnUiThread {
                     Snackbar.make(
-                        coordinator_edit, getString(R.string.save_image_failed),
+                        binding.root, getString(R.string.save_image_failed),
                         Snackbar.LENGTH_LONG
                     ).show()
-                    progressBarSaveFile.visibility = GONE
+                    binding.progressBarSaveFile.visibility = GONE
                     saving = false
                 }
             }

@@ -222,7 +222,7 @@
                 tools:text="Yesterday" />
 
             <TextView
-                android:id="@+id/ViewComments"
+                android:id="@+id/viewComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"

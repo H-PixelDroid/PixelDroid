@@ -18,22 +18,21 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.h.pixeldroid.posts.PostActivity
-import com.h.pixeldroid.profile.ProfileActivity
 import com.h.pixeldroid.R
-import com.h.pixeldroid.utils.api.PixelfedAPI
-import com.h.pixeldroid.utils.db.AppDatabase
-import com.h.pixeldroid.utils.di.PixelfedAPIHolder
-import com.h.pixeldroid.utils.api.objects.Account
-import com.h.pixeldroid.utils.api.objects.Notification
-import com.h.pixeldroid.utils.api.objects.Status
-import kotlinx.android.synthetic.main.fragment_notifications.view.*
-
+import com.h.pixeldroid.databinding.FragmentNotificationsBinding
+import com.h.pixeldroid.posts.PostActivity
 import com.h.pixeldroid.posts.feeds.cachedFeeds.CachedFeedFragment
 import com.h.pixeldroid.posts.feeds.cachedFeeds.FeedViewModel
 import com.h.pixeldroid.posts.feeds.cachedFeeds.ViewModelFactory
 import com.h.pixeldroid.posts.parseHTMLText
 import com.h.pixeldroid.posts.setTextViewFromISO8601
+import com.h.pixeldroid.profile.ProfileActivity
+import com.h.pixeldroid.utils.api.PixelfedAPI
+import com.h.pixeldroid.utils.api.objects.Account
+import com.h.pixeldroid.utils.api.objects.Notification
+import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.db.AppDatabase
+import com.h.pixeldroid.utils.di.PixelfedAPIHolder
 
 
 /**
@@ -71,12 +70,12 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
     /**
      * View Holder for a [Notification] RecyclerView list item.
      */
-    class NotificationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val notificationType: TextView = view.notification_type
-        private val notificationTime: TextView = view.notification_time
-        private val postDescription: TextView = view.notification_post_description
-        private val avatar: ImageView = view.notification_avatar
-        private val photoThumbnail: ImageView = view.notification_photo_thumbnail
+    class NotificationViewHolder(binding: FragmentNotificationsBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val notificationType: TextView = binding.notificationType
+        private val notificationTime: TextView = binding.notificationTime
+        private val postDescription: TextView = binding.notificationPostDescription
+        private val avatar: ImageView = binding.notificationAvatar
+        private val photoThumbnail: ImageView = binding.notificationPhotoThumbnail
 
         private var notification: Notification? = null
 
@@ -216,9 +215,10 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
 
         companion object {
             fun create(parent: ViewGroup): NotificationViewHolder {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.fragment_notifications, parent, false)
-                return NotificationViewHolder(view)
+                val itemBinding = FragmentNotificationsBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+                return NotificationViewHolder(itemBinding)
             }
         }
     }

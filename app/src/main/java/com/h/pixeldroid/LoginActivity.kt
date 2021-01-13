@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
+import com.h.pixeldroid.databinding.ActivityLoginBinding
+import com.h.pixeldroid.databinding.ActivityPostCreationBinding
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.*
@@ -17,7 +19,6 @@ import com.h.pixeldroid.utils.db.storeInstance
 import com.h.pixeldroid.utils.hasInternet
 import com.h.pixeldroid.utils.normalizeDomain
 import com.h.pixeldroid.utils.openUrl
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -56,9 +57,12 @@ class LoginActivity : BaseActivity() {
     private lateinit var pixelfedAPI: PixelfedAPI
     private var inputVisibility: Int = View.GONE
 
+    private lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         loadingAnimation(true)
         appName = getString(R.string.app_name)
@@ -66,14 +70,14 @@ class LoginActivity : BaseActivity() {
         preferences = getSharedPreferences("$PACKAGE_ID.pref", Context.MODE_PRIVATE)
 
         if (hasInternet(applicationContext)) {
-            connect_instance_button.setOnClickListener {
-                registerAppToServer(normalizeDomain(editText.text.toString()))
+            binding.connectInstanceButton.setOnClickListener {
+                registerAppToServer(normalizeDomain(binding.editText.text.toString()))
             }
-            whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
+            binding.whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
             inputVisibility = View.VISIBLE
         } else {
-            login_activity_connection_required.visibility = View.VISIBLE
-            login_activity_connection_required_button.setOnClickListener {
+            binding.loginActivityConnectionRequired.visibility = View.VISIBLE
+            binding.loginActivityConnectionRequiredButton.setOnClickListener {
                 finish()
                 startActivity(intent)
             }
@@ -267,7 +271,7 @@ class LoginActivity : BaseActivity() {
 
     private fun failedRegistration(message: String = getString(R.string.registration_failed)) {
         loadingAnimation(false)
-        editText.error = message
+        binding.editText.error = message
         wipeSharedSettings()
     }
 
@@ -278,12 +282,12 @@ class LoginActivity : BaseActivity() {
 
     private fun loadingAnimation(on: Boolean){
         if(on) {
-            login_activity_instance_input_layout.visibility = View.GONE
-            progressLayout.visibility = View.VISIBLE
+            binding.loginActivityInstanceInputLayout.visibility = View.GONE
+            binding.progressLayout.visibility = View.VISIBLE
         }
         else {
-            login_activity_instance_input_layout.visibility = inputVisibility
-            progressLayout.visibility = View.GONE
+            binding.loginActivityInstanceInputLayout.visibility = inputVisibility
+            binding.progressLayout.visibility = View.GONE
         }
     }
 

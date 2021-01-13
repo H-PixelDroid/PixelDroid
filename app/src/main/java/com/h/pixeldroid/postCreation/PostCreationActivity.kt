@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.MainActivity
 import com.h.pixeldroid.R
+import com.h.pixeldroid.databinding.ActivityPostCreationBinding
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.postCreation.camera.CameraActivity
 import com.h.pixeldroid.postCreation.carousel.CarouselItem
@@ -38,9 +39,6 @@ import com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_post_creation.*
-import kotlinx.android.synthetic.main.activity_post_creation.view.*
-import kotlinx.android.synthetic.main.image_album_creation.view.*
 import okhttp3.MultipartBody
 import retrofit2.HttpException
 import java.io.File
@@ -69,9 +67,12 @@ class PostCreationActivity : BaseActivity() {
 
     private val photoData: ArrayList<PhotoData> = ArrayList()
 
+    private lateinit var binding: ActivityPostCreationBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post_creation)
+        binding = ActivityPostCreationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // get image URIs
         if(intent.clipData != null) {
@@ -108,10 +109,10 @@ class PostCreationActivity : BaseActivity() {
             //TODO transition instead of at once
             if(it){
                 // Became a carousel
-                toolbar3.visibility = VISIBLE
+                binding.toolbar3.visibility = VISIBLE
             } else {
                 // Became a grid
-                toolbar3.visibility = INVISIBLE
+                binding.toolbar3.visibility = INVISIBLE
             }
         }
         carousel.addPhotoButtonCallback = {
@@ -125,7 +126,7 @@ class PostCreationActivity : BaseActivity() {
 
         // Button to retry image upload when it fails
         findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
-            upload_error.visibility = View.GONE
+            binding.uploadError.visibility = View.GONE
             photoData.forEach {
                 it.uploadId = null
                 it.progress = null
@@ -236,23 +237,19 @@ class PostCreationActivity : BaseActivity() {
     }
 
     /**
-     * Uploads the images that are in the [posts] array.
-     * Keeps track of them in the [progressList] (for the upload progress), and the [muListOfIds]
-     * (for the list of ids of the uploads).
-     * @param newImagesStartingIndex is the index in the [posts] array we want to start uploading at.
-     * Indices before this are already uploading, or done uploading, from before.
-     * @param editedImage contains the index of the image that was edited. If set, other images are
-     * not uploaded again: they should already be uploading, or be done uploading, from before.
+     * Uploads the images that are in the [photoData] array.
+     * Keeps track of them in the [PhotoData.progress] (for the upload progress), and the
+     * [PhotoData.uploadId] (for the list of ids of the uploads).
      */
     private fun upload() {
         enableButton(false)
-        uploadProgressBar.visibility = View.VISIBLE
-        upload_completed_textview.visibility = View.INVISIBLE
-        removePhotoButton.isEnabled = false
-        editPhotoButton.isEnabled = false
-        addPhotoButton.isEnabled = false
+        binding.uploadProgressBar.visibility = View.VISIBLE
+        binding.uploadCompletedTextview.visibility = View.INVISIBLE
+        binding.removePhotoButton.isEnabled = false
+        binding.editPhotoButton.isEnabled = false
+        binding.addPhotoButton.isEnabled = false
 
-        for (data in photoData) {
+        for (data: PhotoData in photoData) {
             val imageUri = data.imageUri
             val imageInputStream = contentResolver.openInputStream(imageUri)!!
 
@@ -282,7 +279,7 @@ class PostCreationActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe { percentage ->
                     data.progress = percentage.toInt()
-                    uploadProgressBar.progress =
+                    binding.uploadProgressBar.progress =
                         photoData.sumBy { it.progress ?: 0 } / photoData.size
                 }
 
@@ -298,7 +295,7 @@ class PostCreationActivity : BaseActivity() {
                         data.uploadId = attachment.id!!
                     },
                     { e ->
-                        upload_error.visibility = View.VISIBLE
+                        binding.uploadError.visibility = View.VISIBLE
                         e.printStackTrace()
                         postSub?.dispose()
                         sub.dispose()
@@ -306,8 +303,8 @@ class PostCreationActivity : BaseActivity() {
                     {
                         data.progress = 100
                         if(photoData.all{it.progress == 100}){
-                            uploadProgressBar.visibility = View.GONE
-                            upload_completed_textview.visibility = View.VISIBLE
+                            binding.uploadProgressBar.visibility = View.GONE
+                            binding.uploadCompletedTextview.visibility = View.VISIBLE
                             post()
                         }
                         postSub?.dispose()
@@ -318,7 +315,7 @@ class PostCreationActivity : BaseActivity() {
     }
 
     private fun post() {
-        val description = new_post_description_input_field.text.toString()
+        val description = binding.newPostDescriptionInputField.text.toString()
         enableButton(false)
         lifecycleScope.launchWhenCreated {
             try {
@@ -347,13 +344,13 @@ class PostCreationActivity : BaseActivity() {
     }
 
     private fun enableButton(enable: Boolean = true){
-        post_creation_send_button.isEnabled = enable
+        binding.postCreationSendButton.isEnabled = enable
         if(enable){
-            posting_progress_bar.visibility = View.GONE
-            post_creation_send_button.visibility = View.VISIBLE
+            binding.postingProgressBar.visibility = View.GONE
+            binding.postCreationSendButton.visibility = View.VISIBLE
         } else {
-            posting_progress_bar.visibility = View.VISIBLE
-            post_creation_send_button.visibility = View.GONE
+            binding.postingProgressBar.visibility = View.VISIBLE
+            binding.postCreationSendButton.visibility = View.GONE
         }
 
     }
@@ -373,7 +370,7 @@ class PostCreationActivity : BaseActivity() {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 photoData[positionResult].imageUri = data.getStringExtra("result")!!.toUri()
 
-                carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
 
                 photoData[positionResult].progress = null
                 photoData[positionResult].uploadId = null
@@ -389,7 +386,7 @@ class PostCreationActivity : BaseActivity() {
                     photoData.add(PhotoData(imageUri))
                 }
 
-                carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
             } else if(resultCode != Activity.RESULT_CANCELED){
                 Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
             }

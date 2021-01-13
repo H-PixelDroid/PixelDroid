@@ -12,12 +12,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.R
-import com.h.pixeldroid.posts.feeds.uncachedFeeds.UncachedFeedFragment
+import com.h.pixeldroid.databinding.FragmentTagsBinding
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.FeedViewModel
+import com.h.pixeldroid.posts.feeds.uncachedFeeds.UncachedFeedFragment
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.ViewModelFactory
 import com.h.pixeldroid.utils.api.objects.Results
 import com.h.pixeldroid.utils.api.objects.Tag
-import kotlinx.android.synthetic.main.fragment_tags.view.*
 
 /**
  * Fragment to show a list of [hashtag][Tag]s, as a result of a search.
@@ -100,9 +100,9 @@ class HashTagAdapter : PagingDataAdapter<Tag, RecyclerView.ViewHolder>(
 /**
  * View Holder for a [Tag] RecyclerView list item.
  */
-class HashTagViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class HashTagViewHolder(binding: FragmentTagsBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    private val name : TextView = view.tag_name
+    private val name : TextView = binding.tagName
 
     private var tag: Tag? = null
 
@@ -124,9 +124,10 @@ class HashTagViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     companion object {
         fun create(parent: ViewGroup): HashTagViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_tags, parent, false)
-            return HashTagViewHolder(view)
+            val itemBinding = FragmentTagsBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+            return HashTagViewHolder(itemBinding)
         }
     }
 }
