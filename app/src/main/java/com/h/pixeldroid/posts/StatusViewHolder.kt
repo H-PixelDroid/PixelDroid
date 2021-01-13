@@ -154,7 +154,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
 
         if (status?.sensitive!!) {
-            status?.setupSensitiveLayout(binding.root)
+            status?.setupSensitiveLayout(binding)
         }
     }
 
