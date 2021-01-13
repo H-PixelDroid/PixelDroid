@@ -65,9 +65,6 @@ class PhotoEditActivity : BaseActivity() {
     private lateinit var filterListFragment: FilterListFragment
     private lateinit var editImageFragment: EditImageFragment
 
-    private lateinit var viewPager: NonSwipeableViewPager
-    private lateinit var tabLayout: TabLayout
-
     private var brightnessFinal = BRIGHTNESS_START
     private var saturationFinal = SATURATION_START
     private var contrastFinal = CONTRAST_START
@@ -100,22 +97,18 @@ class PhotoEditActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-        val cropButton: FloatingActionButton = findViewById(R.id.cropImageButton)
-
         initialUri = intent.getParcelableExtra("picture_uri")
         imageUri = initialUri
         
         // Crop button on-click listener
-        cropButton.setOnClickListener {
+        binding.cropImageButton.setOnClickListener {
             startCrop()
         }
 
         loadImage()
 
-        viewPager = findViewById(R.id.viewPager)
-        tabLayout = findViewById(R.id.tabs)
-        setupViewPager(viewPager)
-        tabLayout.setupWithViewPager(viewPager)
+        setupViewPager(binding.viewPager)
+        binding.tabs.setupWithViewPager(binding.viewPager)
     }
 
 

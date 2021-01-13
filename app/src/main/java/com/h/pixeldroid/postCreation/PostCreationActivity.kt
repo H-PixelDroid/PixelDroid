@@ -88,9 +88,7 @@ class PostCreationActivity : BaseActivity() {
 
         val instances = db.instanceDao().getAll()
 
-        val textField = findViewById<TextInputLayout>(R.id.postTextInputLayout)
-
-        textField.counterMaxLength = if (user != null){
+        binding.postTextInputLayout.counterMaxLength = if (user != null){
             val thisInstances =
                 instances.filter { instanceDatabaseEntity ->
                     instanceDatabaseEntity.uri.contains(user!!.instance_uri)
@@ -103,7 +101,7 @@ class PostCreationActivity : BaseActivity() {
         accessToken = user?.accessToken.orEmpty()
         pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
-        val carousel: ImageCarousel = findViewById(R.id.carousel)
+        val carousel: ImageCarousel = binding.carousel
         carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
         carousel.layoutCarouselCallback = {
             //TODO transition instead of at once
@@ -120,12 +118,12 @@ class PostCreationActivity : BaseActivity() {
         }
 
         // get the description and send the post
-        findViewById<Button>(R.id.post_creation_send_button).setOnClickListener {
+        binding.postCreationSendButton.setOnClickListener {
             if (validateDescription() && photoData.isNotEmpty()) upload()
         }
 
         // Button to retry image upload when it fails
-        findViewById<Button>(R.id.retry_upload_button).setOnClickListener {
+        binding.retryUploadButton.setOnClickListener {
             binding.uploadError.visibility = View.GONE
             photoData.forEach {
                 it.uploadId = null
@@ -134,24 +132,24 @@ class PostCreationActivity : BaseActivity() {
             upload()
         }
 
-        findViewById<ImageButton>(R.id.editPhotoButton).setOnClickListener {
+        binding.editPhotoButton.setOnClickListener {
             carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
                 edit(currentPosition)
             }
         }
 
-        findViewById<ImageButton>(R.id.addPhotoButton).setOnClickListener {
+        binding.addPhotoButton.setOnClickListener {
             addPhoto(it.context)
         }
 
-        findViewById<ImageButton>(R.id.savePhotoButton).setOnClickListener {
+        binding.savePhotoButton.setOnClickListener {
             carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
                 savePicture(it, currentPosition)
             }
         }
 
 
-        findViewById<ImageButton>(R.id.removePhotoButton).setOnClickListener {
+        binding.removePhotoButton.setOnClickListener {
             carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
                 photoData.removeAt(currentPosition)
                 carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
@@ -226,12 +224,13 @@ class PostCreationActivity : BaseActivity() {
 
 
     private fun validateDescription(): Boolean {
-        val textField = findViewById<TextInputLayout>(R.id.postTextInputLayout)
-        val content = textField.editText?.length() ?: 0
-        if (content > textField.counterMaxLength) {
-            // error, too many characters
-            textField.error = getString(R.string.description_max_characters).format(textField.counterMaxLength)
-            return false
+        binding.postTextInputLayout.run {
+            val content = editText?.length() ?: 0
+            if (content > counterMaxLength) {
+                // error, too many characters
+                error = getString(R.string.description_max_characters).format(counterMaxLength)
+                return false
+            }
         }
         return true
     }

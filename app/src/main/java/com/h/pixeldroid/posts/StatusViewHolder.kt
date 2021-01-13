@@ -181,7 +181,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         credential: String,
         lifecycleScope: LifecycleCoroutineScope
     ) {
-        rootView.findViewById<TextView>(R.id.description).apply {
+        binding.description.apply {
             if (status?.content.isNullOrBlank()) {
                 visibility = View.GONE
             } else {
