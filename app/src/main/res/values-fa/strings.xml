@@ -132,9 +132,7 @@
     <string name="issues_contribute">مشکلات را گزارش و یا در توسعه برنامه مشارکت کنید:</string>
     <string name="help_translate">برای ترجمه پیکس‌دروید به زبان خود کمک کنید:</string>
     <string name="language">زبان</string>
-    <string name="cancel">لغو</string>
     <string name="delete_dialog">این فرسته حذف شود؟</string>
-    <string name="OK">باشه</string>
     <string name="delete">حذف</string>
     <string name="post_is_album">این فرسته، یک آلبوم است</string>
     <string name="submit_comment">فرستادن نظر</string>

@@ -113,9 +113,7 @@
     <string name="issues_contribute">Problemen in de app melden of er aan meewerken:</string>
     <string name="help_translate">Help mee om PixelDroid naar jouw eigen taal te vertalen:</string>
     <string name="language">Taal</string>
-    <string name="cancel">Annuleren</string>
     <string name="delete_dialog">Deze post verwijderen\?</string>
-    <string name="OK">OK</string>
     <string name="delete">Verwijder</string>
     <string name="panda_pull_to_refresh_to_try_again">Deze panda ziet er niet gelukkig uit. Trek naar beneden om nog eens te proberen.</string>
     <string name="something_went_wrong">Er is iets misgegaan…</string>

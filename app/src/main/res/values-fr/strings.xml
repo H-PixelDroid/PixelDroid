@@ -112,9 +112,7 @@
     <string name="mascot_description">Image montrant un panda rouge (la mascotte de Pixelfed) qui utilise un téléphone</string>
     <string name="help_translate">Aidez pour traduire PixelDroid dans votre langue :</string>
     <string name="language">Langue</string>
-    <string name="cancel">Annuler</string>
     <string name="delete_dialog">Supprimer cette publication \?</string>
-    <string name="OK">OK</string>
     <string name="delete">Supprimer</string>
     <string name="discover">DÉCOUVRIR</string>
     <string name="profile_picture">Photo de profil</string>

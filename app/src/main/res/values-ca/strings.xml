@@ -101,9 +101,7 @@
     <string name="busy_dialog_ok_button">D\'acord, espera per això.</string>
     <string name="busy_dialog_text">Processant la imatge, espara abans de continuar!</string>
     <string name="nothing_to_see_here">Res per veure aquí!</string>
-    <string name="OK">D\'ACORD</string>
     <string name="delete_dialog">Esborra aquest contingut\?</string>
-    <string name="cancel">Cancel·lar</string>
     <string name="language">Idioma</string>
     <string name="poll_notification">%1$s l\'enquesta ha acabat</string>
     <string name="about_pixeldroid">Quant a PixelDroid</string>

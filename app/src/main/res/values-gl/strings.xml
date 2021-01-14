@@ -132,8 +132,6 @@
     <string name="issues_contribute">Informa de fallos ou colabora coa aplicación:</string>
     <string name="help_translate">Axuda a traducir PixelDroid ó teu idioma:</string>
     <string name="language">Idioma</string>
-    <string name="cancel">Cancelar</string>
     <string name="delete_dialog">Eliminar esta publicación\?</string>
-    <string name="OK">OK</string>
     <string name="delete">Eliminar</string>
 </resources>
