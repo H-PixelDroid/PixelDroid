@@ -17,8 +17,15 @@ If you want to contribute, you can check out [CONTRIBUTING.md](CONTRIBUTING.md) 
 
 
 ## ❤ Funding
-We have received [a grant](https://nlnet.nl/project/PixelDroid/) from the [NLnet Foundation](https://nlnet.nl) - [NGI0
-Discovery](https://nlnet.nl/discovery/), part of the [Next Generation
-Internet](https://ngi.eu) initiative by the European Commission 🇪🇺.  
-
 If you want to donate to the project, we have set up a [Liberapay profile](https://liberapay.com/PixelDroid/).
+
+This project was funded through the [NGI0 Discovery](https://nlnet.nl/discovery) Fund, a fund established by NLnet with financial support from the 🇪🇺 European
+Commission's [Next Generation Internet](https://ngi.eu) programme, under the aegis of DG Communications Networks, Content and Technology under grant agreement No 825322
+
+
+<a href="https://nlnet.nl/project/PixelDroid/">
+      <img width="250" src="https://nlnet.nl/logo/banner.png" alt="Logo NLnet: abstract logo of four people seen from above"/>
+</a>
+<a href="https://ngi.eu/">
+      <img width="250" src="https://nlnet.nl/image/logos/NGI0_tag.png" alt="Logo NGI Zero: letterlogo shaped like a tag" />
+</a>
