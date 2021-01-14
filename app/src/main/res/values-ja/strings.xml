@@ -35,7 +35,7 @@
     <string name="browser_launch_failed">ブラウザが起動できませんでした。インストールされているか確認してください。</string>
     <string name="mention_notification">%1$s さんがあなたにメンションしました</string>
     <string name="shared_notification">%1$s さんがあなたの投稿を再共有しました</string>
-    <string name="tab_edit">編集</string>
+    <string name="edit">編集</string>
     <string name="image_download_failed">ダウンロードに失敗しました、もう一度実行してください</string>
     <string name="NoCommentsToShow">この投稿にはコメントがありません</string>
     <string name="add_account_description">他のPixelfedアカウントを追加</string>

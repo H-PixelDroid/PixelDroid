@@ -175,7 +175,7 @@ class HomeFeedTest {
         //Open the comment section
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<StatusViewHolder>
-                (0, clickChildViewWithId(R.id.ViewComments)))
+                (0, clickChildViewWithId(R.id.viewComments)))
         Thread.sleep(1000)
         onView(first(withId(R.id.commentContainer)))
             .check(matches(hasDescendant(withId(R.id.comment))))
@@ -186,7 +186,7 @@ class HomeFeedTest {
         //Open the comment section
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<StatusViewHolder>
-                (2, clickChildViewWithId(R.id.ViewComments)))
+                (2, clickChildViewWithId(R.id.viewComments)))
         Thread.sleep(1000)
         onView(withId(R.id.list)).check(matches(isDisplayed()))
     }

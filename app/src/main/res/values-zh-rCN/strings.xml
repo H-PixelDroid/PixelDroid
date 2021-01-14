@@ -24,7 +24,7 @@
     <string name="lbl_contrast">对比度</string>
     <string name="lbl_saturation">饱和度</string>
     <string name="tab_filters">滤镜</string>
-    <string name="tab_edit">编辑</string>
+    <string name="edit">编辑</string>
     <string name="save_to_gallery">保存到相册……</string>
     <string name="image_download_failed">下载失败，请重试</string>
     <string name="image_download_downloading">下载中……</string>

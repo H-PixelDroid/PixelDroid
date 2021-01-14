@@ -15,7 +15,7 @@
     <string name="lbl_contrast">КОНТРАСТ</string>
     <string name="lbl_saturation">НАСЫЩЕННОСТЬ</string>
     <string name="tab_filters">ФИЛЬТРЫ</string>
-    <string name="tab_edit">РЕДАКТИРОВАТЬ</string>
+    <string name="edit">РЕДАКТИРОВАТЬ</string>
     <string name="save_to_gallery">Сохранить в Галерею…</string>
     <string name="image_download_downloading">Сохранение…</string>
     <string name="image_download_success">Изображение успешно сохранено</string>

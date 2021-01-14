@@ -14,14 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
-import com.h.pixeldroid.utils.api.PixelfedAPI
-import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.utils.api.objects.Account
-import com.h.pixeldroid.utils.api.objects.Relationship
-import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.databinding.ActivityProfileBinding
 import com.h.pixeldroid.posts.parseHTMLText
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.api.PixelfedAPI
+import com.h.pixeldroid.utils.api.objects.Account
+import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.openUrl
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -33,16 +33,17 @@ import java.io.IOException
 class ProfileActivity : BaseActivity() {
     private lateinit var pixelfedAPI : PixelfedAPI
     private lateinit var adapter : ProfilePostsRecyclerViewAdapter
-    private lateinit var recycler : RecyclerView
-    private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var accessToken : String
     private lateinit var domain : String
     private var user: UserDatabaseEntity? = null
 
+    private lateinit var binding: ActivityProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        binding = ActivityProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         user = db.userDao().getActiveUser()
@@ -52,19 +53,16 @@ class ProfileActivity : BaseActivity() {
         accessToken = user?.accessToken.orEmpty()
 
         // Set posts RecyclerView as a grid with 3 columns
-        recycler = findViewById(R.id.profilePostsRecyclerView)
-        recycler.layoutManager = GridLayoutManager(applicationContext, 3)
+        binding.profilePostsRecyclerView.layoutManager = GridLayoutManager(applicationContext, 3)
         adapter = ProfilePostsRecyclerViewAdapter()
-        recycler.adapter = adapter
+        binding.profilePostsRecyclerView.adapter = adapter
 
         // Set profile according to given account
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
 
         setContent(account)
 
-        refreshLayout = findViewById(R.id.profileRefreshLayout)
-
-        refreshLayout.setOnRefreshListener {
+        binding.profileRefreshLayout.setOnRefreshListener {
             getAndSetAccount(account?.id ?: user!!.user_id)
         }
     }
@@ -101,9 +99,9 @@ class ProfileActivity : BaseActivity() {
 
 
         // On click open followers list
-        findViewById<TextView>(R.id.nbFollowersTextView).setOnClickListener{ onClickFollowers(account) }
+        binding.nbFollowersTextView.setOnClickListener{ onClickFollowers(account) }
         // On click open followers list
-        findViewById<TextView>(R.id.nbFollowingTextView).setOnClickListener{ onClickFollowing(account) }
+        binding.nbFollowingTextView.setOnClickListener{ onClickFollowing(account) }
     }
 
     private fun getAndSetAccount(id: String){
@@ -121,59 +119,50 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
-        val motionLayout = findViewById<MotionLayout>(R.id.motionLayout)
+        val motionLayout = binding.motionLayout
         if(show){
-            motionLayout?.transitionToEnd()
+            motionLayout.transitionToEnd()
         } else {
-            motionLayout?.transitionToStart()
+            motionLayout.transitionToStart()
         }
-        findViewById<ProgressBar>(R.id.profileProgressBar).visibility = View.GONE
-        refreshLayout.isRefreshing = false
+        binding.profileProgressBar.visibility = View.GONE
+        binding.profileRefreshLayout.isRefreshing = false
     }
 
     /**
      * Populate profile page with user's data
      */
     private fun setViews(account: Account) {
-        val profilePicture = findViewById<ImageView>(R.id.profilePictureImageView)
+        val profilePicture = binding.profilePictureImageView
         ImageConverter.setRoundImageFromURL(
             View(applicationContext),
             account.avatar,
             profilePicture
         )
 
-        val description = findViewById<TextView>(R.id.descriptionTextView)
-        description.text = parseHTMLText(
+        binding.descriptionTextView.text = parseHTMLText(
             account.note ?: "", emptyList(), pixelfedAPI,
             applicationContext, "Bearer $accessToken",
             lifecycleScope
         )
 
-        val accountName = findViewById<TextView>(R.id.accountNameTextView)
-        accountName.text = account.getDisplayName()
-
         val displayName = account.getDisplayName()
+
+        binding.accountNameTextView.text = displayName
+
         supportActionBar?.title = displayName
         if(displayName != "@${account.acct}"){
             supportActionBar?.subtitle = "@${account.acct}"
         }
 
-        accountName.setTypeface(null, Typeface.BOLD)
-
-        val nbPosts = findViewById<TextView>(R.id.nbPostsTextView)
-        nbPosts.text = applicationContext.getString(R.string.nb_posts)
+        binding.nbPostsTextView.text = applicationContext.getString(R.string.nb_posts)
             .format(account.statuses_count.toString())
-        nbPosts.setTypeface(null, Typeface.BOLD)
 
-        val nbFollowers = findViewById<TextView>(R.id.nbFollowersTextView)
-        nbFollowers.text = applicationContext.getString(R.string.nb_followers)
+        binding.nbFollowersTextView.text = applicationContext.getString(R.string.nb_followers)
             .format(account.followers_count.toString())
-        nbFollowers.setTypeface(null, Typeface.BOLD)
 
-        val nbFollowing = findViewById<TextView>(R.id.nbFollowingTextView)
-        nbFollowing.text = applicationContext.getString(R.string.nb_following)
+        binding.nbFollowingTextView.text = applicationContext.getString(R.string.nb_following)
             .format(account.following_count.toString())
-        nbFollowing.setTypeface(null, Typeface.BOLD)
     }
 
     /**
@@ -227,9 +216,10 @@ class ProfileActivity : BaseActivity() {
 
     private fun activateEditButton() {
         // Edit button redirects to Pixelfed's "edit account" page
-        val editButton = findViewById<Button>(R.id.editButton)
-        editButton.visibility = View.VISIBLE
-        editButton.setOnClickListener{ onClickEditButton() }
+        binding.editButton.apply {
+            visibility = View.VISIBLE
+            setOnClickListener{ onClickEditButton() }
+        }
     }
 
     /**
@@ -244,14 +234,12 @@ class ProfileActivity : BaseActivity() {
                 ).firstOrNull()
 
                 if(relationship != null){
-                    val followButton = findViewById<Button>(R.id.followButton)
-
                     if (relationship.following) {
                         setOnClickUnfollow(account)
                     } else {
                         setOnClickFollow(account)
                     }
-                    followButton.visibility = View.VISIBLE
+                    binding.followButton.visibility = View.VISIBLE
                 }
             } catch (exception: IOException) {
                 Log.e("FOLLOW ERROR", exception.toString())
@@ -269,53 +257,51 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun setOnClickFollow(account: Account) {
-        val followButton = findViewById<Button>(R.id.followButton)
-
-        followButton.setText(R.string.follow)
-
-        followButton.setOnClickListener {
-            lifecycleScope.launchWhenResumed {
-                try {
-                    pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
-                    setOnClickUnfollow(account)
-                } catch (exception: IOException) {
-                    Log.e("FOLLOW ERROR", exception.toString())
-                    Toast.makeText(
-                        applicationContext, getString(R.string.follow_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } catch (exception: HttpException) {
-                    Toast.makeText(
-                        applicationContext, getString(R.string.follow_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
+        binding.followButton.apply {
+            setText(R.string.follow)
+            setOnClickListener {
+                lifecycleScope.launchWhenResumed {
+                    try {
+                        pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
+                        setOnClickUnfollow(account)
+                    } catch (exception: IOException) {
+                        Log.e("FOLLOW ERROR", exception.toString())
+                        Toast.makeText(
+                            applicationContext, getString(R.string.follow_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (exception: HttpException) {
+                        Toast.makeText(
+                            applicationContext, getString(R.string.follow_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
     }
 
     private fun setOnClickUnfollow(account: Account) {
-        val followButton = findViewById<Button>(R.id.followButton)
+        binding.followButton.apply {
+            setText(R.string.unfollow)
 
-        followButton.setText(R.string.unfollow)
-
-        followButton.setOnClickListener {
-
-            lifecycleScope.launchWhenResumed {
-                try {
-                    pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
-                    setOnClickFollow(account)
-                } catch (exception: IOException) {
-                    Log.e("FOLLOW ERROR", exception.toString())
-                    Toast.makeText(
-                        applicationContext, getString(R.string.unfollow_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } catch (exception: HttpException) {
-                    Toast.makeText(
-                        applicationContext, getString(R.string.unfollow_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
+            setOnClickListener {
+                lifecycleScope.launchWhenResumed {
+                    try {
+                        pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
+                        setOnClickFollow(account)
+                    } catch (exception: IOException) {
+                        Log.e("FOLLOW ERROR", exception.toString())
+                        Toast.makeText(
+                            applicationContext, getString(R.string.unfollow_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (exception: HttpException) {
+                        Toast.makeText(
+                            applicationContext, getString(R.string.unfollow_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }

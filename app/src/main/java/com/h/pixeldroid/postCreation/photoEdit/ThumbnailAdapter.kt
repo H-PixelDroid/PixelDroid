@@ -2,15 +2,14 @@ package com.h.pixeldroid.postCreation.photoEdit
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.R
+import com.h.pixeldroid.databinding.ThumbnailListItemBinding
 import com.zomato.photofilters.utils.ThumbnailItem
-import kotlinx.android.synthetic.main.thumbnail_list_item.view.*
 
 class ThumbnailAdapter (private val context: Context,
                         private val tbItemList: List<ThumbnailItem>,
@@ -18,9 +17,14 @@ class ThumbnailAdapter (private val context: Context,
 
     private var selectedIndex = 0
 
+    fun resetSelected(){
+        selectedIndex = 0
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.thumbnail_list_item, parent, false)
-        return MyViewHolder(itemView)
+        val itemBinding = ThumbnailListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyViewHolder(itemBinding)
     }
 
     override fun getItemCount(): Int {
@@ -44,8 +48,8 @@ class ThumbnailAdapter (private val context: Context,
             holder.filterName.setTextColor(ContextCompat.getColor(context, R.color.filterLabelNormal))
     }
 
-    class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var thumbnail: ImageView = itemView.thumbnail
-        var filterName: TextView = itemView.filter_name
+    class MyViewHolder(itemBinding: ThumbnailListItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        var thumbnail: ImageView = itemBinding.thumbnail
+        var filterName: TextView = itemBinding.filterName
     }
 }

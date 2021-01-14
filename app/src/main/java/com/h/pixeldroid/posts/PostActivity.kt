@@ -5,13 +5,13 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.h.pixeldroid.R
+import com.h.pixeldroid.databinding.ActivityPostBinding
 import com.h.pixeldroid.utils.api.objects.DiscoverPost
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.api.objects.Status.Companion.DISCOVER_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.DOMAIN_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.utils.BaseActivity
-import kotlinx.android.synthetic.main.activity_post.*
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -20,9 +20,13 @@ class PostActivity : BaseActivity() {
     lateinit var domain : String
     private lateinit var accessToken : String
 
+    private lateinit var binding: ActivityPostBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_post)
+        binding = ActivityPostBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val status = intent.getSerializableExtra(POST_TAG) as Status?
@@ -38,7 +42,7 @@ class PostActivity : BaseActivity() {
         arguments.putString(DOMAIN_TAG, domain)
 
         if (discoverPost != null) {
-            postProgressBar.visibility = View.VISIBLE
+            binding.postProgressBar.visibility = View.VISIBLE
             getDiscoverPost(arguments, discoverPost)
         } else {
             initializeFragment(arguments, status)
@@ -59,7 +63,7 @@ class PostActivity : BaseActivity() {
         lifecycleScope.launchWhenCreated {
             try {
                 val status = api.getStatus("Bearer $accessToken", id)
-                postProgressBar.visibility = View.GONE
+                binding.postProgressBar.visibility = View.GONE
                 initializeFragment(arguments, status)
             }  catch (exception: IOException) {
                 //TODO show error message
@@ -76,6 +80,6 @@ class PostActivity : BaseActivity() {
         supportFragmentManager.isStateSaved
         supportFragmentManager.beginTransaction()
             .add(R.id.postFragmentSingle, postFragment).commit()
-        postFragmentSingle.visibility = View.VISIBLE
+        binding.postFragmentSingle.visibility = View.VISIBLE
     }
 }

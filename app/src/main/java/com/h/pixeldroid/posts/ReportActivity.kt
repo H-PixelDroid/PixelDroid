@@ -1,25 +1,24 @@
 package com.h.pixeldroid.posts
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.h.pixeldroid.R
-import com.h.pixeldroid.utils.api.objects.Report
-import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.databinding.ActivityReportBinding
 import com.h.pixeldroid.utils.BaseActivity
-import kotlinx.android.synthetic.main.activity_report.*
-import retrofit2.Call
-import retrofit2.Callback
+import com.h.pixeldroid.utils.api.objects.Status
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 
 class ReportActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityReportBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_report)
+        binding = ActivityReportBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setTitle(R.string.report)
 
@@ -29,21 +28,21 @@ class ReportActivity : BaseActivity() {
         val user = db.userDao().getActiveUser()
 
 
-        report_target_textview.text = getString(R.string.report_target).format(status?.account?.acct)
+        binding.reportTargetTextview.text = getString(R.string.report_target).format(status?.account?.acct)
 
 
-        reportButton.setOnClickListener{
-            reportButton.visibility = View.INVISIBLE
-            reportProgressBar.visibility = View.VISIBLE
+        binding.reportButton.setOnClickListener{
+            binding.reportButton.visibility = View.INVISIBLE
+            binding.reportProgressBar.visibility = View.VISIBLE
 
-            textInputLayout.editText?.isEnabled = false
+            binding.textInputLayout.editText?.isEnabled = false
 
             val accessToken = user?.accessToken.orEmpty()
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
             lifecycleScope.launchWhenCreated {
                 try {
-                    api.report("Bearer $accessToken", status?.account?.id!!, listOf(status), textInputLayout.editText?.text.toString())
+                    api.report("Bearer $accessToken", status?.account?.id!!, listOf(status), binding.textInputLayout.editText?.text.toString())
 
                     reportStatus(true)
                 } catch (exception: IOException) {
@@ -57,15 +56,15 @@ class ReportActivity : BaseActivity() {
 
     private fun reportStatus(success: Boolean){
         if(success){
-            reportProgressBar.visibility = View.GONE
-            reportButton.isEnabled = false
-            reportButton.text = getString(R.string.reported)
-            reportButton.visibility = View.VISIBLE
+            binding.reportProgressBar.visibility = View.GONE
+            binding.reportButton.isEnabled = false
+            binding.reportButton.text = getString(R.string.reported)
+            binding.reportButton.visibility = View.VISIBLE
         } else {
-            textInputLayout.error = getString(R.string.report_error)
-            reportButton.visibility = View.VISIBLE
-            textInputLayout.editText?.isEnabled = true
-            reportProgressBar.visibility = View.GONE
+            binding.textInputLayout.error = getString(R.string.report_error)
+            binding.reportButton.visibility = View.VISIBLE
+            binding.textInputLayout.editText?.isEnabled = true
+            binding.reportProgressBar.visibility = View.GONE
         }
     }
 

@@ -29,7 +29,7 @@
     <string name="lbl_contrast">CONTRASTE</string>
     <string name="lbl_saturation">SATURATION</string>
     <string name="tab_filters">FILTRES</string>
-    <string name="tab_edit">MODIFIER</string>
+    <string name="edit">MODIFIER</string>
     <string name="capture_button_alt">Prendre une photo</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
     <string name="gallery_button_alt">Galerie</string>
@@ -112,9 +112,7 @@
     <string name="mascot_description">Image montrant un panda rouge (la mascotte de Pixelfed) qui utilise un téléphone</string>
     <string name="help_translate">Aidez pour traduire PixelDroid dans votre langue :</string>
     <string name="language">Langue</string>
-    <string name="cancel">Annuler</string>
     <string name="delete_dialog">Supprimer cette publication \?</string>
-    <string name="OK">OK</string>
     <string name="delete">Supprimer</string>
     <string name="discover">DÉCOUVRIR</string>
     <string name="profile_picture">Photo de profil</string>

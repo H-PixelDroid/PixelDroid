@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
+import com.h.pixeldroid.databinding.FragmentSearchBinding
+import com.h.pixeldroid.databinding.PostFragmentBinding
 import com.h.pixeldroid.profile.ProfilePostViewHolder
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.DiscoverPost
@@ -25,6 +27,7 @@ import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.posts.PostActivity
 import com.h.pixeldroid.utils.BaseFragment
 import com.h.pixeldroid.utils.ImageConverter
+import com.h.pixeldroid.utils.bindingLifecycleAware
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
@@ -46,37 +49,35 @@ class SearchDiscoverFragment : BaseFragment() {
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : DiscoverRecyclerViewAdapter
     private lateinit var accessToken: String
-    private lateinit var discoverProgressBar: ProgressBar
-    private lateinit var discoverRefreshLayout: SwipeRefreshLayout
+
+    var binding: FragmentSearchBinding by bindingLifecycleAware()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_search, container, false)
-        val search = view.findViewById<SearchView>(R.id.search)
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        //Configure the search widget (see https://developer.android.com/guide/topics/search/search-dialog#ConfiguringWidget)
+        // Configure the search widget (see https://developer.android.com/guide/topics/search/search-dialog#ConfiguringWidget)
         val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        search.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-
-        search.isSubmitButtonEnabled = true
+        binding.search.apply {
+            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+            isSubmitButtonEnabled = true
+        }
 
         // Set posts RecyclerView as a grid with 3 columns
-        recycler = view.findViewById(R.id.discoverList)
+        recycler = binding.discoverList
         recycler.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = DiscoverRecyclerViewAdapter()
         recycler.adapter = adapter
 
-        val discoverText = view.findViewById<TextView>(R.id.discoverText)
-
-        discoverText.setCompoundDrawables(IconicsDrawable(requireContext(), GoogleMaterial.Icon.gmd_explore).apply {
+        binding.discoverText.setCompoundDrawables(IconicsDrawable(requireContext(), GoogleMaterial.Icon.gmd_explore).apply {
             sizeDp = 24
             paddingDp = 20
             color = IconicsColor.colorRes(R.color.colorDrawing)
         }, null, null, null)
 
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,30 +87,27 @@ class SearchDiscoverFragment : BaseFragment() {
 
         accessToken = db.userDao().getActiveUser()?.accessToken.orEmpty()
 
-        discoverProgressBar = view.findViewById(R.id.discoverProgressBar)
-        discoverRefreshLayout = view.findViewById(R.id.discoverRefreshLayout)
-
         getDiscover()
 
-        discoverRefreshLayout.setOnRefreshListener {
+        binding.discoverRefreshLayout.setOnRefreshListener {
             getDiscover()
         }
     }
 
     fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
-        val motionLayout = view?.findViewById<MotionLayout>(R.id.motionLayout)
-        if(show){
-            motionLayout?.transitionToEnd()
-        } else {
-            motionLayout?.transitionToStart()
+        binding.motionLayout.apply {
+            if(show){
+                transitionToEnd()
+            } else {
+                transitionToStart()
+            }
         }
-        discoverRefreshLayout.isRefreshing = false
-        discoverProgressBar.visibility = View.GONE
+        binding.discoverRefreshLayout.isRefreshing = false
+        binding.discoverProgressBar.visibility = View.GONE
     }
 
 
     private fun getDiscover() {
-
         lifecycleScope.launchWhenCreated {
             try {
                 val discoverPosts = api.discover("Bearer $accessToken")

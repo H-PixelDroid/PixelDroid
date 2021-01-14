@@ -29,7 +29,7 @@
     <string name="lbl_contrast">KONTRAST</string>
     <string name="lbl_saturation">FÄRGMÄTTNAD</string>
     <string name="tab_filters">FILTER</string>
-    <string name="tab_edit">REDIGERA</string>
+    <string name="edit">REDIGERA</string>
     <string name="capture_button_alt">Lagra</string>
     <string name="switch_camera_button_alt">Byt kamera</string>
     <string name="gallery_button_alt">Galleri</string>

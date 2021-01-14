@@ -21,7 +21,7 @@
     <string name="lbl_contrast">CONTRASTE</string>
     <string name="lbl_saturation">SATURACIÓN</string>
     <string name="tab_filters">FILTROS</string>
-    <string name="tab_edit">EDITAR</string>
+    <string name="edit">EDITAR</string>
     <string name="save_to_gallery">Gardar na Galería…</string>
     <string name="image_download_downloading">Descargando…</string>
     <string name="image_download_success">Imaxe descargada correctamente</string>
@@ -132,8 +132,6 @@
     <string name="issues_contribute">Informa de fallos ou colabora coa aplicación:</string>
     <string name="help_translate">Axuda a traducir PixelDroid ó teu idioma:</string>
     <string name="language">Idioma</string>
-    <string name="cancel">Cancelar</string>
     <string name="delete_dialog">Eliminar esta publicación\?</string>
-    <string name="OK">OK</string>
     <string name="delete">Eliminar</string>
 </resources>

@@ -33,7 +33,7 @@
     <string name="lbl_contrast">KONTRAST</string>
     <string name="lbl_saturation">NASYCENIE</string>
     <string name="tab_filters">FILTRY</string>
-    <string name="tab_edit">EDYCJA</string>
+    <string name="edit">EDYCJA</string>
     <string name="normal_filter">Zwykły</string>
     <string name="busy_dialog_ok_button">OK, zaczekam.</string>
     <string name="crop_result_error">Nie udało się pobrać obrazka po przycięciu</string>

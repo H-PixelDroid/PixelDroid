@@ -10,7 +10,12 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.h.pixeldroid.R
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 fun hasInternet(context: Context): Boolean {
     val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -66,3 +71,25 @@ fun setThemeFromPreferences(preferences: SharedPreferences, resources : Resource
         }
     }
 }
+
+/**
+ * Delegated property to use in fragments to prevent memory leaks of bindings.
+ * This makes it unnecessary to set binding to null in onDestroyView.
+ * The value should be assigned in the Fragment's onCreateView()
+ */
+fun <T> Fragment.bindingLifecycleAware(): ReadWriteProperty<Fragment, T> =
+    object : ReadWriteProperty<Fragment, T>, DefaultLifecycleObserver {
+
+        private var binding: T? = null
+
+        override fun onDestroy(owner: LifecycleOwner) {
+            binding = null
+        }
+
+        override fun getValue(thisRef: Fragment, property: KProperty<*>): T = binding!!
+
+        override fun setValue(thisRef: Fragment, property: KProperty<*>, value: T) {
+            binding = value
+            this@bindingLifecycleAware.viewLifecycleOwner.lifecycle.addObserver(this)
+        }
+    }

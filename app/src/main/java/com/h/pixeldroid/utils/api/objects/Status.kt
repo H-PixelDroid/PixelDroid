@@ -8,19 +8,14 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.net.Uri
 import android.os.Environment
-import android.text.Spanned
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.net.toUri
 import com.google.android.material.snackbar.Snackbar
 import com.h.pixeldroid.R
-import com.h.pixeldroid.utils.api.PixelfedAPI
+import com.h.pixeldroid.databinding.PostFragmentBinding
 import com.h.pixeldroid.posts.getDomain
-import com.h.pixeldroid.posts.parseHTMLText
-import kotlinx.android.synthetic.main.post_fragment.view.*
 import java.io.File
 import java.io.Serializable
 import java.util.*
@@ -93,26 +88,26 @@ open class Status(
 
     }
 
-    fun setupSensitiveLayout(view: View) {
+    fun setupSensitiveLayout(binding: PostFragmentBinding) {
 
         // Set dark layout and warning message
-        view.sensitiveWarning.visibility = VISIBLE
+        binding.sensitiveWarning.visibility = VISIBLE
         val array = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 1f, 0f)
         val censorMatrix = ColorMatrix(array)
-        view.postPicture.colorFilter = ColorMatrixColorFilter(censorMatrix)
+        binding.postPicture.colorFilter = ColorMatrixColorFilter(censorMatrix)
 
-        fun uncensorPicture(view: View) {
-                view.sensitiveWarning.visibility = GONE
-                view.postPicture.clearColorFilter()
+        fun uncensorPicture(binding: PostFragmentBinding) {
+            binding.sensitiveWarning.visibility = GONE
+            binding.postPicture.clearColorFilter()
         }
 
 
-        view.findViewById<TextView>(R.id.sensitiveWarning).setOnClickListener {
-            uncensorPicture(view)
+        binding.sensitiveWarning.setOnClickListener {
+            uncensorPicture(binding)
         }
 
-        view.findViewById<ImageView>(R.id.postPicture).setOnClickListener {
-            uncensorPicture(view)
+        binding.postPicture.setOnClickListener {
+            uncensorPicture(binding)
         }
     }
 

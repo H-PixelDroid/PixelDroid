@@ -30,7 +30,7 @@
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">VERZADIGING</string>
     <string name="tab_filters">FILTERS</string>
-    <string name="tab_edit">BEWERKEN</string>
+    <string name="edit">BEWERKEN</string>
     <string name="capture_button_alt">Vastleggen</string>
     <string name="switch_camera_button_alt">Van camera wisselen</string>
     <string name="gallery_button_alt">Gallerij</string>
@@ -113,9 +113,7 @@
     <string name="issues_contribute">Problemen in de app melden of er aan meewerken:</string>
     <string name="help_translate">Help mee om PixelDroid naar jouw eigen taal te vertalen:</string>
     <string name="language">Taal</string>
-    <string name="cancel">Annuleren</string>
     <string name="delete_dialog">Deze post verwijderen\?</string>
-    <string name="OK">OK</string>
     <string name="delete">Verwijder</string>
     <string name="panda_pull_to_refresh_to_try_again">Deze panda ziet er niet gelukkig uit. Trek naar beneden om nog eens te proberen.</string>
     <string name="something_went_wrong">Er is iets misgegaan…</string>

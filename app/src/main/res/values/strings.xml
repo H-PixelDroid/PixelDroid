@@ -56,7 +56,7 @@
     <string name="lbl_contrast">CONTRAST</string>
     <string name="lbl_saturation">SATURATION</string>
     <string name="tab_filters">FILTERS</string>
-    <string name="tab_edit">EDIT</string>
+    <string name="edit">Edit</string>
     <string name="filter_thumbnail">Thumbnail of filter</string>
     <string name="normal_filter">Normal</string>
     <string name="busy_dialog_text">Still processing image, wait for that to finish first!</string>
@@ -149,12 +149,12 @@
     <string name="something_went_wrong">Something went wrong…</string>
     <string name="panda_pull_to_refresh_to_try_again">This panda is not happy. Pull to refresh to try again.</string>
     <string name="delete">Delete</string>
-    <string name="OK">OK</string>
     <string name="delete_dialog">Delete this post?</string>
-    <string name="cancel">Cancel</string>
     <string name="language">Language</string>
     <string name="help_translate">Help translate PixelDroid to your language:</string>
     <string name="issues_contribute">Report issues or contribute to the application:</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
+    <string name="save_before_returning">Save your edits?</string>
+    <string name="no_cancel_edit">No, cancel edit</string>
 
 </resources>

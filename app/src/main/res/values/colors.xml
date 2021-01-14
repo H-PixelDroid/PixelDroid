@@ -14,5 +14,6 @@
     <color name="filterLabelSelected">#221F20</color>
     <color name="colorPrimaryError">#FF0000</color>
     <color name="colorText">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="colorDrawing">#000000</color>
 </resources>
