@@ -154,26 +154,28 @@ class PhotoEditActivity : BaseActivity() {
         saving = false
     }
 
+    override fun onBackPressed() {
+        if (noEdits()) super.onBackPressed()
+        else {
+            val builder = AlertDialog.Builder(this)
+            builder.apply {
+                setMessage(R.string.save_before_returning)
+                setPositiveButton(android.R.string.ok) { _, _ ->
+                    saveImageToGallery()
+                }
+                setNegativeButton(R.string.no_cancel_edit) { _, _ ->
+                    onBackPressed()
+                }
+            }
+            // Create the AlertDialog
+            builder.show()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId) {
-            android.R.id.home -> {
-                if (noEdits()) onBackPressed()
-                else {
-                    val builder = AlertDialog.Builder(this)
-                    builder.apply {
-                        setMessage(R.string.save_before_returning)
-                        setPositiveButton(android.R.string.ok) { _, _ ->
-                            saveImageToGallery()
-                        }
-                        setNegativeButton(R.string.no_cancel_edit) { _, _ ->
-                            onBackPressed()
-                        }
-                    }
-                    // Create the AlertDialog
-                    builder.show()
-                }
-            }
+            android.R.id.home -> onBackPressed()
             R.id.action_save -> {
                 saveImageToGallery()
             }
