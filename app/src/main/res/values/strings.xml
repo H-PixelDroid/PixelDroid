@@ -156,5 +156,7 @@
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
     <string name="save_before_returning">Save your edits?</string>
     <string name="no_cancel_edit">No, cancel edit</string>
+    <string name="switch_to_grid">Switch to grid view</string>
+    <string name="switch_to_carousel">Switch to carousel</string>
 
 </resources>
