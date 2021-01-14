@@ -164,7 +164,7 @@ class PhotoEditActivity : BaseActivity() {
                     saveImageToGallery()
                 }
                 setNegativeButton(R.string.no_cancel_edit) { _, _ ->
-                    onBackPressed()
+                    super.onBackPressed()
                 }
             }
             // Create the AlertDialog
