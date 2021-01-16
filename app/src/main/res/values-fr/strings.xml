@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="registration_failed">Impossible d\'enregistrer l\'application sur ce serveur</string>
-    <string name="auth_failed">Échec de l’authentification</string>
+    <string name="auth_failed">Impossible de s\'authentifier</string>
     <string name="title_activity_settings2">Réglages</string>
     <string name="menu_account">Mon profil</string>
     <string name="menu_settings">Réglages</string>
@@ -25,10 +25,10 @@
     <string name="connect_to_pixelfed">Se connecter à Pixelfed</string>
     <string name="theme_title">Thème de l’application</string>
     <string name="theme_header">Thème</string>
-    <string name="lbl_brightness">LUMINOSITÉ</string>
+    <string name="lbl_brightness">Luminosité</string>
     <string name="lbl_contrast">CONTRASTE</string>
-    <string name="lbl_saturation">SATURATION</string>
-    <string name="tab_filters">FILTRES</string>
+    <string name="lbl_saturation">Saturation</string>
+    <string name="tab_filters">Filtres</string>
     <string name="edit">MODIFIER</string>
     <string name="capture_button_alt">Prendre une photo</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
@@ -125,7 +125,7 @@
     <string name="post_title">Publication de %1$s</string>
     <string name="about">À propos</string>
     <string name="license_info">PixelDroid est un logiciel libre, sous licence GNU General Public License (version 3 ou ultérieure)</string>
-    <string name="project_website">Site web du projet: https://pixeldroid.org</string>
+    <string name="project_website">Site web du projet : https ://pixeldroid.org</string>
     <string name="dependencies_licenses">Dépendances et licences</string>
     <string name="about_pixeldroid">À propos de PixelDroid</string>
     <string name="unfollow">Ne plus suivre</string>
@@ -140,4 +140,13 @@
     <string name="instance_not_pixelfed_cancel">Annuler la connexion</string>
     <string name="instance_not_pixelfed_continue">OK, continuer quand même</string>
     <string name="instance_not_pixelfed_warning">Il ne semble pas s\'agir d\'une instance Pixelfed, l\'application pourrait rencontrer des bugs de manière inattendue.</string>
+    <string name="switch_to_carousel">Changer vers la vue carrousel</string>
+    <string name="switch_to_grid">Changer vers la vue en grille</string>
+    <string name="no_cancel_edit">Non, annuler la modification</string>
+    <string name="save_before_returning">Enregistrer vos modifications \?</string>
+    <string name="panda_pull_to_refresh_to_try_again">Ce panda est malheureux. Glissez pour actualiser et réessayer.</string>
+    <string name="open_drawer_menu">Ouvrir le menu latéral</string>
+    <string name="follows_title">%1$s abonnements</string>
+    <string name="followers_title">%1$s abonnés</string>
+    <string name="verify_credentials">Impossible d\'obtenir les informations sur l\'utilisateur</string>
 </resources>
