@@ -136,4 +136,5 @@
     <string name="instance_not_pixelfed_continue">OK, toch verdergaan</string>
     <string name="instance_not_pixelfed_warning">Dit is geen Pixelfed instantie, dus de app zou zich op onverwachte wijze kunnen gedragen.</string>
     <string name="report">Melden</string>
+    <string name="poll_notification">De peiling van %1$s is beëindigd</string>
 </resources>
