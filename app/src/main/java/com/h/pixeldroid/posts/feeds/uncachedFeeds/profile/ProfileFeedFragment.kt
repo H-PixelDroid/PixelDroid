@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.FragmentProfilePostsBinding
@@ -34,8 +35,7 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
         super.onCreate(savedInstanceState)
         adapter = ProfileAdapter()
 
-        accountId = arguments?.getSerializable(ACCOUNT_ID_TAG) as String
-
+        accountId = arguments?.getSerializable(ACCOUNT_ID_TAG) as String? ?: db.userDao().getActiveUser()!!.user_id
     }
 
     @ExperimentalPagingApi
@@ -57,10 +57,16 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
             )
         ).get(FeedViewModel::class.java) as FeedViewModel<Status>
 
+        binding.list.layoutManager = GridLayoutManager(context, 3)
+
         launch()
         initSearch()
 
         return view
+    }
+
+    fun refresh(){
+        //TODO implement refresh here
     }
 }
 

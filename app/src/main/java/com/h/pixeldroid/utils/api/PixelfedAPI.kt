@@ -2,10 +2,7 @@ package com.h.pixeldroid.utils.api
 
 import com.h.pixeldroid.utils.api.objects.*
 import io.reactivex.Observable
-import io.reactivex.Single
-import kotlinx.coroutines.Deferred
 import okhttp3.MultipartBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -209,9 +206,11 @@ interface PixelfedAPI {
 
     @GET("/api/v1/accounts/{id}/statuses")
     suspend fun accountPosts(
-        @Header("Authorization") authorization: String,
-        @Path("id") account_id: String? = null
-    ) : Response<List<Status>>
+            @Header("Authorization") authorization: String,
+            @Path("id") account_id: String,
+            @Query("min_id") min_id: String?,
+            @Query("limit") limit: Int
+    ) : List<Status>
 
     @GET("/api/v1/accounts/relationships")
     suspend fun checkRelationships(

@@ -30,7 +30,7 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
     internal lateinit var viewModel: FeedViewModel<T>
     internal lateinit var adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>
 
-    private lateinit var binding: FragmentFeedBinding
+    lateinit var binding: FragmentFeedBinding
 
 
     private var job: Job? = null

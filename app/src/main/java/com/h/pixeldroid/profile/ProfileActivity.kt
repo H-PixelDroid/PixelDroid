@@ -1,40 +1,30 @@
 package com.h.pixeldroid.profile
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.StringRes
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityProfileBinding
-import com.h.pixeldroid.databinding.FragmentProfileFeedBinding
-import com.h.pixeldroid.databinding.FragmentProfilePostsBinding
 import com.h.pixeldroid.posts.parseHTMLText
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account
-import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.openUrl
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 
 class ProfileActivity : BaseActivity() {
     private lateinit var pixelfedAPI : PixelfedAPI
-//    private lateinit var adapter : ProfilePostsRecyclerViewAdapter
+
     private lateinit var accessToken : String
     private lateinit var domain : String
 
@@ -42,7 +32,6 @@ class ProfileActivity : BaseActivity() {
     private var postsFragment = ProfileFeedFragment()
 
     private lateinit var activityBinding: ActivityProfileBinding
-    private lateinit var feedFragmentBinding: FragmentProfileFeedBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,15 +46,11 @@ class ProfileActivity : BaseActivity() {
         pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
         accessToken = user?.accessToken.orEmpty()
 
-        // Set posts RecyclerView as a grid with 3 columns
-        feedFragmentBinding.profilePostsRecyclerView.layoutManager = GridLayoutManager(applicationContext, 3)
-//        adapter = ProfilePostsRecyclerViewAdapter()
-//        binding.profilePostsRecyclerView.adapter = adapter
-
         // Set profile according to given account
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
 
         setContent(account)
+        startFragment(account?.id)
 
         activityBinding.profileRefreshLayout.setOnRefreshListener {
             getAndSetAccount(account?.id ?: user!!.user_id)
@@ -80,8 +65,6 @@ class ProfileActivity : BaseActivity() {
     private fun setContent(account: Account?) {
         if(account != null) {
             setViews(account)
-//            setPosts(account)
-            startFragment(account)
         } else {
             lifecycleScope.launchWhenResumed {
                 val myAccount: Account = try {
@@ -93,9 +76,6 @@ class ProfileActivity : BaseActivity() {
                     return@launchWhenResumed showError()
                 }
                 setViews(myAccount)
-                // Populate profile page with user's posts
-//                setPosts(myAccount)
-                startFragment(myAccount)
             }
         }
 
@@ -126,14 +106,14 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
-        val motionLayout = activityBinding.motionLayout
+        /*val motionLayout = activityBinding.motionLayout
         if(show){
             motionLayout.transitionToEnd()
         } else {
             motionLayout.transitionToStart()
         }
         activityBinding.profileProgressBar.visibility = View.GONE
-        activityBinding.profileRefreshLayout.isRefreshing = false
+        activityBinding.profileRefreshLayout.isRefreshing = false*/
     }
 
     /**
@@ -172,41 +152,14 @@ class ProfileActivity : BaseActivity() {
             .format(account.following_count.toString())
     }
 
-    private fun startFragment(account: Account) {
+    private fun startFragment(accountId: String?) {
 
         val arguments = Bundle()
-        arguments.putSerializable(Account.ACCOUNT_ID_TAG, account.id)
+        arguments.putSerializable(Account.ACCOUNT_ID_TAG, accountId)
         postsFragment.arguments = arguments
 
         supportFragmentManager.beginTransaction().add(R.id.fragment_profile_feed, postsFragment).commit()
     }
-
-    /**
-     * Populate profile page with user's posts
-     */
-//    private fun setPosts(account: Account) {
-//        pixelfedAPI.accountPosts("Bearer $accessToken", account_id = account.id)
-//            .enqueue(object : Callback<List<Status>> {
-//
-//                override fun onFailure(call: Call<List<Status>>, t: Throwable) {
-//                    showError()
-//                    Log.e("ProfileActivity.Posts:", t.toString())
-//                }
-//
-//                override fun onResponse(
-//                    call: Call<List<Status>>,
-//                    response: Response<List<Status>>
-//                ) {
-//                    if (response.code() == 200) {
-//                        val statuses = response.body()!!
-//                        adapter.addPosts(statuses)
-//                        showError(show = false)
-//                    } else {
-//                        showError()
-//                    }
-//                }
-//            })
-//    }
 
     private fun onClickEditButton() {
         val url = "$domain/settings/home"

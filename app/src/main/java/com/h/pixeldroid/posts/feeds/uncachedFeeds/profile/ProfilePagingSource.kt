@@ -14,18 +14,16 @@ class ProfilePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Status> {
         val position = params.key
         return try {
-            val response = api.accountPosts("Bearer $accessToken", account_id = accountId)
-
-            val posts = if(response.isSuccessful){
-                response.body().orEmpty()
-            } else {
-                throw HttpException(response)
-            }
+            val posts = api.accountPosts("Bearer $accessToken",
+                    account_id = accountId,
+                    min_id = position?.toString(),
+                    limit = params.loadSize
+            )
 
             LoadResult.Page(
                 data = posts,
                 prevKey = null,
-                nextKey = if(posts.isEmpty()) null else (position ?: 0) + posts.size
+                nextKey = posts.lastOrNull()?.id?.toIntOrNull()
             )
         } catch (exception: IOException) {
             LoadResult.Error(exception)
