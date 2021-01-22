@@ -158,5 +158,7 @@
     <string name="no_cancel_edit">No, cancel edit</string>
     <string name="switch_to_grid">Switch to grid view</string>
     <string name="switch_to_carousel">Switch to carousel</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
