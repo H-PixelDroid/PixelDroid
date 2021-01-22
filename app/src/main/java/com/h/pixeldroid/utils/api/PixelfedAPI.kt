@@ -208,7 +208,8 @@ interface PixelfedAPI {
     suspend fun accountPosts(
             @Header("Authorization") authorization: String,
             @Path("id") account_id: String,
-            @Query("min_id") min_id: String?,
+            @Query("min_id") min_id: String? = null,
+            @Query("max_id") max_id: String?,
             @Query("limit") limit: Int
     ) : List<Status>
 

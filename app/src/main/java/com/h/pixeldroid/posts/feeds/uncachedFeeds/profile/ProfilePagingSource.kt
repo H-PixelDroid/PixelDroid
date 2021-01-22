@@ -10,20 +10,20 @@ class ProfilePagingSource(
     private val api: PixelfedAPI,
     private val accessToken: String,
     private val accountId: String
-) : PagingSource<Int, Status>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Status> {
+) : PagingSource<String, Status>() {
+    override suspend fun load(params: LoadParams<String>): LoadResult<String, Status> {
         val position = params.key
         return try {
             val posts = api.accountPosts("Bearer $accessToken",
                     account_id = accountId,
-                    min_id = position?.toString(),
+                    max_id = position,
                     limit = params.loadSize
             )
 
             LoadResult.Page(
                 data = posts,
                 prevKey = null,
-                nextKey = posts.lastOrNull()?.id?.toIntOrNull()
+                nextKey = posts.lastOrNull()?.id
             )
         } catch (exception: IOException) {
             LoadResult.Error(exception)
