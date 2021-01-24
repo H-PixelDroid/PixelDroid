@@ -47,6 +47,7 @@
         android:id="@+id/carousel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:showCaption="true"
         app:layout_constraintBottom_toBottomOf="@+id/uploadProgressBar"
         app:layout_constraintTop_toTopOf="parent"/>
 

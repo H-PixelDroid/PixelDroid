@@ -141,7 +141,6 @@
     <string name="crop_button">دکمه برش یا چرخش تصویر</string>
     <string name="image_preview">پیش‌نمایش تصویری که در حال ویرایش است</string>
     <string name="filter_thumbnail">تصویر بندانگشتی پالایه</string>
-    <string name="click_image_edit">برای ویرایش تصویر، روی آن کلیک کنید</string>
     <string name="post_image">یکی از تصاویر در فرسته</string>
     <string name="verify_credentials">ناتوانی در دریافت اطلاعات کاربر</string>
 </resources>

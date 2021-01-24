@@ -50,7 +50,11 @@
     <string name="post">post</string>
     <string name="add_photo">Add a photo</string>
     <string name="post_image">One of the images in the post</string>
-    <string name="click_image_edit">Click the image to edit it</string>
+    <string name="switch_to_grid">Switch to grid view</string>
+    <string name="switch_to_carousel">Switch to carousel</string>
+    <string name="save_image_description">Save image description</string>
+    <string name="no_media_description">Add a media description here…</string>
+
     <!-- Post editing -->
     <string name="lbl_brightness">BRIGHTNESS</string>
     <string name="lbl_contrast">CONTRAST</string>
@@ -64,6 +68,7 @@
     <string name="crop_result_error">"Couldn't retrieve image after crop"</string>
     <string name="image_preview">Preview of the image being edited</string>
     <string name="crop_button">Button to crop or rotate the image</string>
+
     <!-- Camera -->
     <string name="capture_button_alt">Capture</string>
     <string name="switch_camera_button_alt">Switch camera</string>
@@ -156,7 +161,5 @@
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
     <string name="save_before_returning">Save your edits?</string>
     <string name="no_cancel_edit">No, cancel edit</string>
-    <string name="switch_to_grid">Switch to grid view</string>
-    <string name="switch_to_carousel">Switch to carousel</string>
 
 </resources>

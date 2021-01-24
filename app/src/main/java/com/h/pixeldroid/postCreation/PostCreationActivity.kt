@@ -16,26 +16,23 @@ import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
-import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.MainActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityPostCreationBinding
-import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.postCreation.camera.CameraActivity
 import com.h.pixeldroid.postCreation.carousel.CarouselItem
 import com.h.pixeldroid.postCreation.carousel.ImageCarousel
-import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
+import com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity
+import com.h.pixeldroid.utils.BaseActivity
+import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Instance
-import com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -54,7 +51,8 @@ private const val MORE_PICTURES_REQUEST_CODE = 0xffff
 data class PhotoData(
         var imageUri: Uri,
         var uploadId: String? = null,
-        var progress: Int? = null
+        var progress: Int? = null,
+        var imageDescription: String? = null
 )
 
 class PostCreationActivity : BaseActivity() {
@@ -102,7 +100,7 @@ class PostCreationActivity : BaseActivity() {
         pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
         val carousel: ImageCarousel = binding.carousel
-        carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+        carousel.addData(photoData.map { CarouselItem(it.imageUri) })
         carousel.layoutCarouselCallback = {
             //TODO transition instead of at once
             if(it){
@@ -115,6 +113,9 @@ class PostCreationActivity : BaseActivity() {
         }
         carousel.addPhotoButtonCallback = {
             addPhoto(applicationContext)
+        }
+        carousel.updateDescriptionCallback = { position: Int, description: String ->
+            photoData[position].imageDescription = description
         }
 
         // get the description and send the post
@@ -152,7 +153,7 @@ class PostCreationActivity : BaseActivity() {
         binding.removePhotoButton.setOnClickListener {
             carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
                 photoData.removeAt(currentPosition)
-                carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+                carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
             }
         }
     }
@@ -283,7 +284,7 @@ class PostCreationActivity : BaseActivity() {
                 }
 
             var postSub: Disposable? = null
-            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", requestBody.parts[0])
+            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", data.imageDescription, requestBody.parts[0])
 
             postSub = inter
                 .subscribeOn(Schedulers.io())
@@ -369,7 +370,7 @@ class PostCreationActivity : BaseActivity() {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 photoData[positionResult].imageUri = data.getStringExtra("result")!!.toUri()
 
-                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
 
                 photoData[positionResult].progress = null
                 photoData[positionResult].uploadId = null
@@ -385,7 +386,7 @@ class PostCreationActivity : BaseActivity() {
                     photoData.add(PhotoData(imageUri))
                 }
 
-                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
             } else if(resultCode != Activity.RESULT_CANCELED){
                 Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
             }

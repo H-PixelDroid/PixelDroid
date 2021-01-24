@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:foregroundTint="#FFFFFF">
+    android:foregroundTint="#000000">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -25,6 +25,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:ellipsize="marquee"
+        android:text="@string/no_media_description"
         android:gravity="center"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
@@ -37,6 +38,49 @@
         app:layout_goneMarginBottom="8dp"
         tools:text="@tools:sample/lorem[5]" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/editMediaDescriptionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="#4D000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/indicator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_goneMarginBottom="8dp">
+
+        <EditText
+            android:id="@+id/editTextMediaDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/no_media_description"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageDescriptionButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imageDescriptionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/save_image_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editTextMediaDescription"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/check_circle_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <me.relex.circleindicator.CircleIndicator2
         android:id="@+id/indicator"
         android:layout_width="wrap_content"
@@ -45,21 +89,48 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/previous_button_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_previous"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:padding="0dp"
+        app:backgroundTint="#22000000"
+        app:cornerRadius="48dp"
+        app:icon="@drawable/ic_chevron_left_black_24dp"
+        app:iconGravity="textStart"
+        app:iconSize="48dp"
+        app:iconTint="@color/white"
+        app:rippleColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+        app:layout_constraintTop_toTopOf="@+id/recyclerView"/>
 
-    <FrameLayout
-        android:id="@+id/next_button_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_next"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:padding="0dp"
+        app:backgroundTint="#22000000"
+        app:cornerRadius="48dp"
+        app:icon="@drawable/ic_chevron_right_black_24dp"
+        app:iconGravity="textEnd"
+        app:iconSize="48dp"
+        app:iconTint="@color/white"
+        app:rippleColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+        app:layout_constraintTop_toTopOf="@+id/recyclerView"/>
 
     <ImageButton
         android:id="@+id/switchToGridButton"
@@ -81,13 +152,13 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/switch_to_carousel"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:src="@drawable/view_carousel_black_24dp"
         android:tint="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/indicator"
-        app:layout_constraintTop_toTopOf="@+id/indicator" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/indicator"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
