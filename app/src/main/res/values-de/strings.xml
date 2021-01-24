@@ -146,7 +146,6 @@
     <string name="crop_button">Schaltfläche zum ausschneiden oder rotieren des Bildes</string>
     <string name="image_preview">Vorschau des bearbeiteten Bildes</string>
     <string name="filter_thumbnail">Vorschaubild des Filters</string>
-    <string name="click_image_edit">Klicke auf das Bild um es zu ändern</string>
     <string name="post_image">Eines der Bilder im Beitrag</string>
     <string name="verify_credentials">Benutzerdaten konnten nicht geladen werden</string>
 </resources>

@@ -256,6 +256,7 @@ interface PixelfedAPI {
     fun mediaUpload(
         //The authorization header needs to be of the form "Bearer <token>"
         @Header("Authorization") authorization: String,
+        @Part("description") description: String?,
         @Part file: MultipartBody.Part
     ): Observable<Attachment>
 

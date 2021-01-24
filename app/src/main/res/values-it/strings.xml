@@ -142,7 +142,6 @@
     <string name="crop_button">Pulsante per ritagliare o ruotare l\'immagine</string>
     <string name="image_preview">Anteprima dell\'immagine in fase di modifica</string>
     <string name="filter_thumbnail">Miniatura del filtro</string>
-    <string name="click_image_edit">Clicca sull\'immagine per modificarla</string>
     <string name="post_image">Una delle immagini nel post</string>
     <string name="verify_credentials">Impossibile ottenere le informazioni sull\'utente</string>
     <string name="switch_to_grid">Passa alla visualizzazione a griglia</string>

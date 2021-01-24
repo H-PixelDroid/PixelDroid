@@ -95,6 +95,11 @@ class CarouselAdapter(
         }
     }
 
+    fun updateDescription(position: Int, description: String) {
+        dataList[position] = dataList[position].copy(caption = description)
+        notifyItemChanged(position)
+    }
+
     fun addAll(dataList: List<CarouselItem>) {
         this.dataList.clear()
 

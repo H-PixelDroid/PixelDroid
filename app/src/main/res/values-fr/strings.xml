@@ -108,7 +108,6 @@
     <string name="report">Rapporter</string>
     <string name="image_preview">Aperçu de l\'image en cours de modification</string>
     <string name="filter_thumbnail">Vignette d\'un filtre</string>
-    <string name="click_image_edit">Appuyez sur l\'image pour la modifier</string>
     <string name="mascot_description">Image montrant un panda rouge (la mascotte de Pixelfed) qui utilise un téléphone</string>
     <string name="help_translate">Aidez pour traduire PixelDroid dans votre langue :</string>
     <string name="language">Langue</string>
