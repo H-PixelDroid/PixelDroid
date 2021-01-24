@@ -1,5 +1,0 @@
-<resources>
-    <style name="AppTheme.Launcher">
-        <item name="android:windowBackground">@drawable/theme_night</item>
-    </style>
-</resources>
