@@ -522,8 +522,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             binding.viewComments.text =  binding.root.context.getString(R.string.NoCommentsToShow)
         } else {
             binding.viewComments.apply {
-                text = binding.root.context.getString(R.string.number_comments)
-                    .format(status?.replies_count)
+                text = resources.getQuantityString(R.plurals.number_comments,
+                                                    status?.replies_count ?: 0,
+                                                    status?.replies_count ?: 0
+                )
                 setOnClickListener {
                     visibility = View.GONE
 

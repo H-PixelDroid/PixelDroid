@@ -49,10 +49,6 @@
 \nJarraitzaile</string>
     <string name="default_nposts">-
 \nArgitalpen</string>
-    <string name="nb_following">%1$s
-\nJarraitzen</string>
-    <string name="nb_followers">%1$s
-\nJarraitzaile</string>
     <string name="share_image">Irudia partekatu</string>
     <string name="upload_picture_failed">Ezin izan da irudia kargatu!</string>
     <string name="save_image_failed">Ezinezkoa irudia gordetzea</string>
@@ -60,14 +56,11 @@
     <string name="light_theme">Argia</string>
     <string name="default_system">Lehenetsia (Sistemaren lehentsia)</string>
     <string name="no_description">Deskribapenik ez</string>
-    <string name="description_max_characters">Deskribapenak %1$s karaktere izan behar ditu gehienez.</string>
     <string name="save_image_success">Irudia behar bezala gorde da</string>
     <string name="feed_failed">Ezin izan da jarioa lortu</string>
     <string name="loading_toast">Zerbait gaizki joan da kargatzean</string>
-    <string name="shares">%1$s Partekatze</string>
     <string name="write_permission_download_pic">Idazteko baimena eman behar duzu irudiak deskargatzeko!</string>
     <string name="empty_comment">Iruzkina ez da hutsik egon behar!</string>
-    <string name="likes">%1$s Atsegite</string>
     <string name="normal_filter">Normala</string>
     <string name="upload_post_error">Argitalpenak huts egin du</string>
     <string name="comment_posted">Iruzkina: %1$s argitaratua!</string>
@@ -88,8 +81,6 @@
     <string name="follow_error">Ezin izan da jarraitu</string>
     <string name="follow_button_failed">Ezin izan da jarraipen-botoia erakutsi</string>
     <string name="follow_status_failed">Ezin izan da segimendu-egoera lortu</string>
-    <string name="nb_posts">%1$s
-\nArgitalpen</string>
     <string name="comment">Iruzkin</string>
     <string name="write_permission_share_pic">Idazteko baimena eman behar duzu argazkiak partekatzeko!</string>
     <string name="posted_on">%1$s(e)n argitaratua</string>

@@ -45,8 +45,6 @@
     <string name="image_download_downloading">Pobieranie…</string>
     <string name="image_download_success">Pobieranie zakończone powodzeniem</string>
     <string name="no_description">Bez opisu</string>
-    <string name="likes">Polubienia: %1$s</string>
-    <string name="shares">Udostępnienia: %1$s</string>
     <string name="posted_on">Opublikowano %1$s</string>
     <string name="empty_comment">Komentarz nie może być pusty!</string>
     <string name="write_permission_share_pic">Musisz nadać uprawnienia do zapisu, aby móc udostępniać obrazki!</string>
@@ -64,7 +62,6 @@
     <string name="whats_an_instance">Co to jest instancja\?</string>
     <string name="login_connection_required_once">Musisz być online, aby dodać konto i korzystać z PixelDroida :(</string>
     <string name="permission_denied">Brak dostępu</string>
-    <string name="description_max_characters">Opis może zawierać najwyżej %1$s znaków.</string>
     <string name="picture_format_error">Błąd wgrywania na serwer: niewłaściwy format pliku.</string>
     <string name="upload_post_error">Nie udało się opublikować posta</string>
     <string name="busy_dialog_text">Przetwarzam obrazek, zaczekaj aż skończę!</string>

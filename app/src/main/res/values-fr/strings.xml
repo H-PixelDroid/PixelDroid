@@ -44,7 +44,6 @@
     <string name="request_format_error">Erreur de téléchargement : format de requête incorrect</string>
     <string name="picture_format_error">Erreur de téléversement : format d\'image incorrect.</string>
     <string name="upload_picture_failed">Erreur de téléversement d\'image !</string>
-    <string name="description_max_characters">La description doit contenir au plus %1$s caractères.</string>
     <string name="save_image_success">Image enregistrée avec succès</string>
     <string name="save_image_failed">Impossible de sauvegarder l\'image</string>
     <string name="permission_denied">Permission refusée</string>
@@ -63,19 +62,11 @@
     <string name="loading_toast">Une erreur s\'est produite lors du chargement</string>
     <string name="feed_failed">Impossible d\'obtenir le flux</string>
     <string name="no_description">Sans description</string>
-    <string name="likes">%1$s J\'aimes</string>
-    <string name="shares">%1$s Partages</string>
     <string name="write_permission_download_pic">Vous devez accorder une autorisation d\'écriture pour télécharger des photos !</string>
     <string name="share_image">Partager image</string>
     <string name="comment_error">Erreur de commentaire !</string>
     <string name="comment_posted">Commentaire : %1$s publié !</string>
     <string name="comment">Commenter</string>
-    <string name="nb_posts">%1$s
-\nPublications</string>
-    <string name="nb_followers">%1$s 
-\nAbonné·e·s</string>
-    <string name="nb_following">%1$s
-\nAbonnements</string>
     <string name="follow_status_failed">Impossible d\'obtenir l\'état de suivi</string>
     <string name="follow_button_failed">Impossible d\'afficher le bouton de suivi</string>
     <string name="follow_error">Impossible de suivre</string>
@@ -131,7 +122,6 @@
     <string name="post_is_album">Cette publication est un album</string>
     <string name="submit_comment">Envoyer le commentaire</string>
     <string name="add_comment">Ajouter un commentaire</string>
-    <string name="number_comments">%1$s commentaires</string>
     <string name="crop_button">Bouton pour effectuer une rotation ou recadrement de l\'image</string>
     <string name="post_image">Une des images de la publication</string>
     <string name="add_photo">Ajouter une photo</string>

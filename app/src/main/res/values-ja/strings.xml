@@ -46,9 +46,6 @@
     <string name="write_permission_share_pic">画像を共有するためには書き込みの権限を更新する必要があります</string>
     <string name="write_permission_download_pic">画像をダウンロードするには書き込みの権限を更新する必要があります</string>
     <string name="empty_comment">コメントは空欄にできません</string>
-    <string name="shares">%1$s再共有</string>
-    <string name="likes">%1$sお気に入り</string>
-    <string name="description_max_characters">説明には最低 %1$s文字以上含める必要があります。</string>
     <string name="comment_posted">コメント: %1$s が投稿されました</string>
     <string name="retry">再試行</string>
     <string name="posting_image_accessibility_hint">投稿された画像</string>
@@ -72,12 +69,6 @@
     <string name="follow_error">フォローできませんでした</string>
     <string name="follow_button_failed">フォローボタンを表示できませんでした</string>
     <string name="follow_status_failed">フォローステータスを取得できませんでした</string>
-    <string name="nb_following">%1$s
-\nフォロー</string>
-    <string name="nb_followers">%1$s
-\nフォロワー</string>
-    <string name="nb_posts">%1$s
-\n投稿</string>
     <string name="comment">コメント</string>
     <string name="comment_error">コメントエラー</string>
     <string name="share_image">画像を共有</string>

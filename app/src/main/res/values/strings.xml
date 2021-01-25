@@ -39,7 +39,10 @@
     <string name="permission_denied">Permission denied</string>
     <string name="save_image_failed">Unable to save image</string>
     <string name="save_image_success">Image successfully saved</string>
-    <string name="description_max_characters">"Description must contain %1$s characters at most."</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">"Description must contain %d character at most."</item>
+        <item quantity="other">"Description must contain %d characters at most."</item>
+    </plurals>
     <string name="upload_picture_failed">Picture upload error!</string>
     <string name="picture_format_error">Upload error: wrong picture format.</string>
     <string name="request_format_error">Upload error: bad request format</string>
@@ -84,8 +87,14 @@
     <string name="image_download_success">Image downloaded successfully</string>
     <!-- Post attributes -->
     <string name="no_description">No description</string>
-    <string name="likes">"%1$s Likes"</string>
-    <string name="shares">"%1$s Shares"</string>
+    <plurals name="likes">
+        <item quantity="one">%d Like</item>
+        <item quantity="other">%d Likes</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d Share</item>
+        <item quantity="other">%d Shares</item>
+    </plurals>
     <string name="posted_on">"Posted on %1$s"</string>
     <string name="NoCommentsToShow">No comments on this post…</string>
     <string name="empty_comment">Comment must not be empty!</string>
@@ -95,14 +104,32 @@
     <string name="comment_error">Comment error!</string>
     <string name="comment_posted">"Comment: %1$s posted!"</string>
     <string name="comment">Comment</string>
-    <string name="number_comments">%1$s comments</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
     <string name="add_comment">Add a comment</string>
     <string name="submit_comment">Submit comment</string>
     <string name="post_is_album">This post is an album</string>
     <!-- Profile page -->
-    <string name="nb_posts">"%1$s\nPosts"</string>
-    <string name="nb_followers">"%1$s\nFollowers"</string>
-    <string name="nb_following">"%1$s\nFollowing"</string>
+    <plurals name="nb_posts">
+        <item quantity="one">"%d
+Post"</item>
+        <item quantity="other">"%d
+Posts"</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">"%d
+Follower"</item>
+        <item quantity="other">"%d
+Followers"</item>
+    </plurals>
+    <plurals name="nb_following">
+        <item quantity="one">"%d
+Following"</item>
+        <item quantity="other">"%d
+Following"</item>
+    </plurals>
     <string name="follow_status_failed">Could not get follow status</string>
     <string name="follow_button_failed">Could not display follow button</string>
     <string name="follow_error">Could not follow</string>
