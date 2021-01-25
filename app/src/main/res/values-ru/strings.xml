@@ -120,4 +120,7 @@
     <string name="instance_not_pixelfed_cancel">Отмена</string>
     <string name="instance_not_pixelfed_continue">OK, всё равно продолжить</string>
     <string name="instance_not_pixelfed_warning">Это не похоже на инстанс Pixelfed, приложение может работать нестабильно.</string>
+    <string name="save_image_description">Сохранить описание</string>
+    <string name="post_image">Одно из изображений в</string>
+    <string name="verify_credentials">Невозможно получить информацию о пользователе</string>
 </resources>
