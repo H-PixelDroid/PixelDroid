@@ -24,8 +24,8 @@ android {
         applicationId "com.h.pixeldroid"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.0.alpha8"
+        versionCode 10
+        versionName "1.0.alpha9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -46,8 +46,10 @@ android {
             testCoverageEnabled true
         }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            useProguard true
+            proguardFiles 'proguard-rules.pro'
         }
     }
     testOptions {
@@ -64,7 +66,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     /**
      * AndroidX dependencies:
@@ -80,7 +81,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
-    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha11'
+    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha12'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
