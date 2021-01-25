@@ -28,6 +28,13 @@
 
     <!-- Login page -->
     <string name="whats_an_instance">"What's an instance?"</string>
+    <string name="whats_an_instance_explanation">"You might be confused by the text field asking for the domain of your 'instance'.
+
+Pixelfed is a federated platform, and part of the 'fediverse', which means it can talk to other platforms which speak the same language, like Mastodon (see https://joinmastodon.org).
+
+It also means you have to choose which server, or 'instance' of Pixelfed to use. If you don't know any, you can look here: https://pixelfed.org/join
+
+For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="domain_of_your_instance">Domain of your instance</string>
     <string name="connect_to_pixelfed">Connect to Pixelfed</string>
     <string name="login_connection_required_once">You need to be online to be able to add the first account and use PixelDroid :(</string>
