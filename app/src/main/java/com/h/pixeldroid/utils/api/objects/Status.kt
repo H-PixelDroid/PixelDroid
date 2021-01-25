@@ -74,11 +74,19 @@ open class Status(
 
 
     fun getNLikes(context: Context) : CharSequence {
-        return context.getString(R.string.likes).format(favourites_count.toString())
+        return context.resources.getQuantityString(
+                R.plurals.likes,
+                favourites_count ?: 0,
+                favourites_count ?: 0
+        )
     }
 
     fun getNShares(context: Context) : CharSequence {
-        return context.getString(R.string.shares).format(reblogs_count.toString())
+        return context.resources.getQuantityString(
+                R.plurals.shares,
+                reblogs_count ?: 0,
+                reblogs_count ?: 0
+        )
     }
 
     fun getStatusDomain(domain: String) : String {

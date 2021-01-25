@@ -64,12 +64,6 @@
     <string name="follow_error">No pudo seguir</string>
     <string name="follow_button_failed">No se pudo mostrar el botón de seguimiento</string>
     <string name="follow_status_failed">No se pudo obtener el estado de seguidores</string>
-    <string name="nb_following">%1$s
-\nSeguidos</string>
-    <string name="nb_followers">%1$s
-\nSeguidores</string>
-    <string name="nb_posts">%1$s
-\nPublicaciones</string>
     <string name="comment">Comentar</string>
     <string name="comment_posted">¡Comentario: %1$s publicado!</string>
     <string name="comment_error">¡Error al comentar!</string>
@@ -78,8 +72,6 @@
     <string name="write_permission_download_pic">¡Tienes que dar permiso de escritura para descargar fotos!</string>
     <string name="empty_comment">¡Los comentarios no deben estar vacíos!</string>
     <string name="posted_on">Publicado en %1$s</string>
-    <string name="shares">%1$s Comparticiones</string>
-    <string name="likes">%1$s Me gustas</string>
     <string name="no_description">Sin descripción</string>
     <string name="feed_failed">No se pudieron obtener publicaciones</string>
     <string name="loading_toast">Algo salió mal al cargar</string>
@@ -90,7 +82,6 @@
     <string name="request_format_error">Error de carga: formato de petición erróneo</string>
     <string name="picture_format_error">Error de carga: formato de imagen incorrecto.</string>
     <string name="upload_picture_failed">¡Error al subir la foto!</string>
-    <string name="description_max_characters">La descripción debe contener %1$s caracteres como máximo.</string>
     <string name="save_image_success">Imagen guardada correctamente</string>
     <string name="save_image_failed">No se puede guardar la imagen</string>
     <string name="permission_denied">Permiso denegado</string>

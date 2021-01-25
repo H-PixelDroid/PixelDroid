@@ -41,7 +41,6 @@
     <string name="add_account_description">Andere Pixelfed account toevoegen</string>
     <string name="add_account_name">Account toevoegen</string>
     <string name="upload_picture_failed">Fout bij het uploaden!</string>
-    <string name="description_max_characters">De beschrijving mag maximaal %1$s karakters bevatten.</string>
     <string name="dark_theme">Donker</string>
     <string name="light_theme">Licht</string>
     <string name="search">Zoeken</string>
@@ -53,10 +52,6 @@
     <string name="default_nfollowers">-
 \nVolgers</string>
     <string name="action_not_allowed">Deze actie is niet toegestaan</string>
-    <string name="nb_following">%1$s
-\nVolgend</string>
-    <string name="nb_followers">%1$s
-\nVolgers</string>
     <string name="empty_comment">Commentaar mag niet leeg zijn!</string>
     <string name="no_description">Geen beschrijving</string>
     <string name="loading_toast">Er ging iets mis tijdens het laden</string>
@@ -75,9 +70,7 @@
     <string name="permission_denied">Toestemming geweigerd</string>
     <string name="default_system">Standaard (systeem instelling)</string>
     <string name="instance_error">Kon instance-informatie niet ophalen</string>
-    <string name="likes">%1$s Vind-ik-leuks</string>
     <string name="request_format_error">Fout bij het uploaden: slecht verzoekformaat</string>
-    <string name="shares">%1$s keer gedeeld</string>
     <string name="posted_on">Gepost op %1$s</string>
     <string name="comment">Commentaar maken</string>
     <string name="comment_posted">Commentaar: %1$s gepost!</string>
@@ -86,8 +79,6 @@
     <string name="write_permission_share_pic">Je moet schrijven toestaan om afbeeldingen te delen!</string>
     <string name="write_permission_download_pic">Je moet schrijven toestaan om afbeeldingen te downloaden!</string>
     <string name="follow_status_failed">Kon volgstatus niet ophalen</string>
-    <string name="nb_posts">%1$s
-\nPosts</string>
     <string name="busy_dialog_ok_button">Ok, wacht.</string>
     <string name="crop_result_error">Kon de afbeelding niet ophalen na bijsnijden</string>
     <string name="busy_dialog_text">Bezig met het verwerken van de afbeelding, wacht even tot dat het klaar is!</string>
@@ -129,7 +120,6 @@
     <string name="post_is_album">Deze post is een album</string>
     <string name="submit_comment">Commentaar versturen</string>
     <string name="add_comment">Commentaar toevoegen</string>
-    <string name="number_comments">%1$s commentaren</string>
     <string name="add_photo">Foto toevoegen</string>
     <string name="instance_not_pixelfed_cancel">Aanmelding annuleren</string>
     <string name="instance_not_pixelfed_continue">OK, toch verdergaan</string>

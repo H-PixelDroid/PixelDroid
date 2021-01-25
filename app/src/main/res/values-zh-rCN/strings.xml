@@ -64,12 +64,6 @@
     <string name="follow_error">无法关注</string>
     <string name="follow_button_failed">无法显示关注按钮</string>
     <string name="follow_status_failed">无法获得关注状态</string>
-    <string name="nb_following">%1$s
-\n正在关注</string>
-    <string name="nb_followers">%1$s
-\n关注者</string>
-    <string name="nb_posts">%1$s
-\n帖文</string>
     <string name="comment">评论</string>
     <string name="comment_posted">评论： %1$s 已发布！</string>
     <string name="comment_error">评论错误！</string>
@@ -78,8 +72,6 @@
     <string name="write_permission_download_pic">您需要允许读写权限才能下载图片！</string>
     <string name="empty_comment">评论不能为空！</string>
     <string name="posted_on">发表于 %1$s</string>
-    <string name="shares">%1$s 次分享</string>
-    <string name="likes">%1$s 个赞</string>
     <string name="no_description">没有描述</string>
     <string name="feed_failed">无法获取订阅</string>
     <string name="loading_toast">加载时出了一些问题</string>
@@ -90,7 +82,6 @@
     <string name="request_format_error">上传错误：错误的请求格式</string>
     <string name="picture_format_error">上传错误：图片格式错误。</string>
     <string name="upload_picture_failed">图片上传错误！</string>
-    <string name="description_max_characters">描述最多只能包含 %1$s 个字符。</string>
     <string name="save_image_success">图片成功保存</string>
     <string name="save_image_failed">无法保存图像</string>
     <string name="permission_denied">没有权限</string>

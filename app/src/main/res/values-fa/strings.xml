@@ -43,7 +43,6 @@
     <string name="instance_error">نتوانستیم اطلاعات نمونه را دریافت کنیم</string>
     <string name="permission_denied">ممنوعیت دسترسی</string>
     <string name="save_image_failed">نتوانستیم تصویر را ذخیره کنیم</string>
-    <string name="description_max_characters">توضیحات حداکثر می‌توانند تا %1$s حرف داشته باشند.</string>
     <string name="default_system">پیش‌گزیده (پیروی از سامانه)</string>
     <string name="light_theme">روشن</string>
     <string name="dark_theme">تاریک</string>
@@ -58,10 +57,8 @@
     <string name="loading_toast">مشکلی حین بارکردن رخ داد</string>
     <string name="feed_failed">نتوانستیم خوراک را دریافت کنیم</string>
     <string name="no_description">بدون توضیحات</string>
-    <string name="likes">%1$s پسند</string>
     <string name="accounts">حساب‌ها</string>
     <string name="hashtags">هشتگ‌ها</string>
-    <string name="shares">%1$s هم‌رسانی</string>
     <string name="posted_on">منتشر شده در %1$s</string>
     <string name="empty_comment">نظر نمی‌تواند خالی باشد!</string>
     <string name="write_permission_download_pic">برای بارگیری تصاویر بایستی مجوز نوشتن را بدهید!</string>
@@ -70,12 +67,6 @@
     <string name="comment_error">خطا در درج نظر!</string>
     <string name="comment_posted">نظر: %1$s منتشر کرد!</string>
     <string name="comment">نظر</string>
-    <string name="nb_posts">%1$s
-\nمطلب</string>
-    <string name="nb_followers">%1$s
-\nپی‌گیرنده</string>
-    <string name="nb_following">%1$s
-\nپی‌گیری</string>
     <string name="follow_status_failed">نتوانستیم وضعیت پی‌گیری را دریافت کنیم</string>
     <string name="follow_button_failed">نتوانستیم دکمه پی‌گیری را نمایش دهیم</string>
     <string name="follow_error">نتوانستیم پی‌گیری کنیم</string>
@@ -137,7 +128,6 @@
     <string name="post_is_album">این فرسته، یک آلبوم است</string>
     <string name="submit_comment">فرستادن نظر</string>
     <string name="add_comment">نظری اضافه کنید</string>
-    <string name="number_comments">%1$s نظر</string>
     <string name="crop_button">دکمه برش یا چرخش تصویر</string>
     <string name="image_preview">پیش‌نمایش تصویری که در حال ویرایش است</string>
     <string name="filter_thumbnail">تصویر بندانگشتی پالایه</string>

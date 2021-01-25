@@ -229,7 +229,7 @@ class PostCreationActivity : BaseActivity() {
             val content = editText?.length() ?: 0
             if (content > counterMaxLength) {
                 // error, too many characters
-                error = getString(R.string.description_max_characters).format(counterMaxLength)
+                error = resources.getQuantityString(R.plurals.description_max_characters, counterMaxLength, counterMaxLength)
                 return false
             }
         }

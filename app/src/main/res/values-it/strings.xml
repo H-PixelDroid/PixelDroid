@@ -48,7 +48,6 @@
     <string name="picture_format_error">Errore di caricamento: formato immagine errato.</string>
     <string name="add_account_name">Aggiungi Account</string>
     <string name="add_account_description">Aggiungi un altro account Pixelfed</string>
-    <string name="description_max_characters">La descrizione deve contenere al massimo %1$s caratteri.</string>
     <string name="loading_toast">Qualcosa è andato storto durante il caricamento</string>
     <string name="write_permission_download_pic">È necessario concedere i permessi di scrittura per scaricare le immagini!</string>
     <string name="request_format_error">Errore di caricamento: formato di richiesta errato</string>
@@ -58,8 +57,6 @@
     <string name="normal_filter">Normale</string>
     <string name="feed_failed">Impossibile ottenere il feed</string>
     <string name="no_description">Nessuna descrizione</string>
-    <string name="likes">%1$s Mi piace</string>
-    <string name="shares">%1$s Condivisioni</string>
     <string name="posted_on">Postato su %1$s</string>
     <string name="empty_comment">Il commento non deve essere vuoto!</string>
     <string name="write_permission_share_pic">È necessario concedere i permessi di scrittura per condividere le immagini!</string>
@@ -67,10 +64,6 @@
     <string name="comment_error">Errore nel commento!</string>
     <string name="comment_posted">Commento: %1$s postato!</string>
     <string name="comment">Commento</string>
-    <string name="nb_followers">%1$s
-\nSeguaci</string>
-    <string name="nb_following">%1$s
-\nSeguiti</string>
     <string name="follow_error">Impossibile seguire</string>
     <string name="unfollow_error">Impossibile smettere di seguire</string>
     <string name="access_token_invalid">Il token di accesso non è valido</string>
@@ -88,8 +81,6 @@
     <string name="accounts">ACCOUNTS</string>
     <string name="hashtags">HASHTAGS</string>
     <string name="posting_image_accessibility_hint">Immagine in corso di pubblicazione</string>
-    <string name="nb_posts">%1$s
-\nPosts</string>
     <string name="action_not_allowed">Questa azione non è consentita</string>
     <string name="upload_post_error">Errore di caricamento del post</string>
     <string name="media_upload_completed">{gmd_cloud_done} Caricamento contenuti completato</string>
@@ -138,7 +129,6 @@
     <string name="post_is_album">Questo post è un album</string>
     <string name="submit_comment">Invia commento</string>
     <string name="add_comment">Aggiungi un commento</string>
-    <string name="number_comments">%1$s commenti</string>
     <string name="crop_button">Pulsante per ritagliare o ruotare l\'immagine</string>
     <string name="image_preview">Anteprima dell\'immagine in fase di modifica</string>
     <string name="filter_thumbnail">Miniatura del filtro</string>

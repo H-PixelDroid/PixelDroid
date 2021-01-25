@@ -155,14 +155,23 @@ class ProfileActivity : BaseActivity() {
             supportActionBar?.subtitle = "@${account.acct}"
         }
 
-        binding.nbPostsTextView.text = applicationContext.getString(R.string.nb_posts)
-            .format(account.statuses_count.toString())
+        binding.nbPostsTextView.text = resources.getQuantityString(
+                R.plurals.nb_posts,
+                account.statuses_count ?: 0,
+                account.statuses_count ?: 0
+        )
 
-        binding.nbFollowersTextView.text = applicationContext.getString(R.string.nb_followers)
-            .format(account.followers_count.toString())
+        binding.nbFollowersTextView.text = resources.getQuantityString(
+                R.plurals.nb_followers,
+                account.followers_count ?: 0,
+                account.followers_count ?: 0
+        )
 
-        binding.nbFollowingTextView.text = applicationContext.getString(R.string.nb_following)
-            .format(account.following_count.toString())
+        binding.nbFollowingTextView.text = resources.getQuantityString(
+                R.plurals.nb_following,
+                account.following_count ?: 0,
+                account.following_count ?: 0
+        )
     }
 
     /**
