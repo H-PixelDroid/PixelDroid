@@ -284,7 +284,11 @@ class PostCreationActivity : BaseActivity() {
                 }
 
             var postSub: Disposable? = null
-            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", data.imageDescription, requestBody.parts[0])
+
+            val description = data.imageDescription?.let { MultipartBody.Part.createFormData("description", it) }
+
+
+            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", description, requestBody.parts[0])
 
             postSub = inter
                 .subscribeOn(Schedulers.io())
@@ -302,7 +306,7 @@ class PostCreationActivity : BaseActivity() {
                     },
                     {
                         data.progress = 100
-                        if(photoData.all{it.progress == 100}){
+                        if(photoData.all{it.progress == 100 && it.uploadId != null}){
                             binding.uploadProgressBar.visibility = View.GONE
                             binding.uploadCompletedTextview.visibility = View.VISIBLE
                             post()
