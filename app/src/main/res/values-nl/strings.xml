@@ -120,7 +120,6 @@
     <string name="post_is_album">Deze post is een album</string>
     <string name="submit_comment">Commentaar versturen</string>
     <string name="add_comment">Commentaar toevoegen</string>
-    <string name="number_comments">%1$s commentaren</string>
     <string name="add_photo">Foto toevoegen</string>
     <string name="instance_not_pixelfed_cancel">Aanmelding annuleren</string>
     <string name="instance_not_pixelfed_continue">OK, toch verdergaan</string>
