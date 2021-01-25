@@ -76,7 +76,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         binding.username.apply {
             text = status?.account?.getDisplayName() ?: ""
             setTypeface(null, Typeface.BOLD)
-            setOnClickListener { status?.account?.openProfile(rootView.context) }
+            setOnClickListener { status?.account?.openProfile(binding.root.context) }
         }
 
         binding.usernameDesc.apply {
@@ -85,12 +85,12 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
 
         binding.nlikes.apply {
-            text = status?.getNLikes(rootView.context)
+            text = status?.getNLikes(binding.root.context)
             setTypeface(null, Typeface.BOLD)
         }
 
         binding.nshares.apply {
-            text = status?.getNShares(rootView.context)
+            text = status?.getNShares(binding.root.context)
             setTypeface(null, Typeface.BOLD)
         }
 
@@ -176,7 +176,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     }
 
     private fun setDescription(
-        rootView: View,
         api: PixelfedAPI,
         credential: String,
         lifecycleScope: LifecycleCoroutineScope
@@ -189,7 +188,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                     status?.content.orEmpty(),
                     status?.mentions,
                     api,
-                    rootView.context,
+                    binding.root.context,
                     credential,
                     lifecycleScope
                 )
@@ -203,7 +202,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
         val credential = "Bearer ${user.accessToken}"
         //Set the special HTML text
-        setDescription(binding.root, api, credential, lifecycleScope)
+        setDescription(api, credential, lifecycleScope)
 
         //Activate onclickListeners
         activateLiker(
