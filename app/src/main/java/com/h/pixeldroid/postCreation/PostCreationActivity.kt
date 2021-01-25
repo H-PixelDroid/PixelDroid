@@ -302,7 +302,7 @@ class PostCreationActivity : BaseActivity() {
                     },
                     {
                         data.progress = 100
-                        if(photoData.all{it.progress == 100}){
+                        if(photoData.all{it.progress == 100 && it.uploadId != null}){
                             binding.uploadProgressBar.visibility = View.GONE
                             binding.uploadCompletedTextview.visibility = View.VISIBLE
                             post()
