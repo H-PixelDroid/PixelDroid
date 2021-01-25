@@ -454,8 +454,10 @@ class ImageCarousel(
 
                         dataItem?.apply {
                             caption.apply {
-                                binding.editMediaDescriptionLayout.visibility = INVISIBLE
-                                tvCaption.visibility = VISIBLE
+                                if(layoutCarousel){
+                                    binding.editMediaDescriptionLayout.visibility = INVISIBLE
+                                    tvCaption.visibility = VISIBLE
+                                }
                                 currentDescription = this
                             }
                         }

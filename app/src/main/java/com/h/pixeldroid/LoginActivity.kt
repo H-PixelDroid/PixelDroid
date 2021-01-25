@@ -104,9 +104,13 @@ class LoginActivity : BaseActivity() {
 
 
     private fun whatsAnInstance() {
-        val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse("https://pixelfed.org/join")
-        startActivity(i)
+        val builder = AlertDialog.Builder(this)
+        builder.apply {
+            setView(layoutInflater.inflate(R.layout.whats_an_instance_explanation, null))
+            setPositiveButton(android.R.string.ok) { _, _ -> }
+        }
+        // Create the AlertDialog
+        builder.show()
     }
 
     private fun hideKeyboard() {
