@@ -109,4 +109,10 @@
     <string name="instance_not_pixelfed_continue">了解，请继续</string>
     <string name="instance_not_pixelfed_warning">这似乎不是一个 Pixelfed 实例，可能会导致应用意外退出</string>
     <string name="verify_credentials">无法获得用户信息</string>
+    <string name="about">关于</string>
+    <string name="project_website">项目主页：https://pixeldroid.org</string>
+    <string name="unfollow">取消关注</string>
+    <string name="about_pixeldroid">关于 PixelDroid</string>
+    <string name="share_link">分享链接</string>
+    <string name="delete">删除</string>
 </resources>
