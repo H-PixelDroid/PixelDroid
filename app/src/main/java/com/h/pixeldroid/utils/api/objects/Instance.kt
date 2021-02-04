@@ -11,6 +11,8 @@ data class Instance (
     val version: String?
 ) {
     companion object {
+        // Default max number of chars for Mastodon: used when their is no other value supplied by
+        // either NodeInfo or the instance endpoint
         const val DEFAULT_MAX_TOOT_CHARS = 500
     }
 }

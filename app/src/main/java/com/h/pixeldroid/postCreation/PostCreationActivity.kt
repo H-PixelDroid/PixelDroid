@@ -91,7 +91,7 @@ class PostCreationActivity : BaseActivity() {
                 instances.filter { instanceDatabaseEntity ->
                     instanceDatabaseEntity.uri.contains(user!!.instance_uri)
                 }
-            thisInstances.first().max_toot_chars
+            thisInstances.first().maxStatusChars
         } else {
             Instance.DEFAULT_MAX_TOOT_CHARS
         }

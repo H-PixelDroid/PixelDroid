@@ -6,8 +6,8 @@ import com.h.pixeldroid.utils.api.objects.Instance
 
 @Entity(tableName = "instances")
 data class InstanceDatabaseEntity (
-    @PrimaryKey var uri: String,
-    var title: String = "",
-    var max_toot_chars: Int = Instance.DEFAULT_MAX_TOOT_CHARS,
-    var thumbnail: String = ""
+        @PrimaryKey var uri: String,
+        var title: String,
+        var maxStatusChars: Int = Instance.DEFAULT_MAX_TOOT_CHARS,
+
 )
