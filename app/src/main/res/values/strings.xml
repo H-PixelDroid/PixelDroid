@@ -195,5 +195,6 @@ Following"</item>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
     <string name="save_before_returning">Save your edits?</string>
     <string name="no_cancel_edit">No, cancel edit</string>
+    <string name="api_not_enabled_dialog">The API is not activated on this instance. Contact your administrator to ask them to activate it.</string>
 
 </resources>

@@ -32,6 +32,7 @@ import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Instance
+import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity.Companion.DEFAULT_MAX_TOOT_CHARS
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -93,7 +94,7 @@ class PostCreationActivity : BaseActivity() {
                 }
             thisInstances.first().maxStatusChars
         } else {
-            Instance.DEFAULT_MAX_TOOT_CHARS
+            DEFAULT_MAX_TOOT_CHARS
         }
 
         accessToken = user?.accessToken.orEmpty()

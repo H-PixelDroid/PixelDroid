@@ -178,11 +178,10 @@ class LoginActivity : BaseActivity() {
             return@coroutineScope failedRegistration(getString(R.string.instance_error))
         }
 
-        //TODO here check for api being activated, if not show dialog
         val domain: String = try {
             if (nodeInfo.hasInstanceEndpointInfo()) {
                 storeInstance(db, nodeInfo)
-                nodeInfo.metadata?.config?.site?.url!!
+                nodeInfo.metadata?.config?.site?.url
             } else {
                 val instance: Instance = try {
                     pixelfedAPI.instance()
@@ -192,18 +191,16 @@ class LoginActivity : BaseActivity() {
                     return@coroutineScope failedRegistration(getString(R.string.instance_error))
                 }
                 storeInstance(db, nodeInfo = null, instance = instance)
-                instance.uri ?: return@coroutineScope failedRegistration(getString(R.string.instance_error))
+                instance.uri
             }
-        } catch (e: IllegalArgumentException){
-            return@coroutineScope failedRegistration(getString(R.string.instance_error))
-        }
+        } catch (e: IllegalArgumentException){ null }
+                ?: return@coroutineScope failedRegistration(getString(R.string.instance_error))
 
-        preferences.edit().putString("domain", domain).apply()
+        preferences.edit().putString("domain", normalizeDomain(domain)).apply()
 
 
         if (!nodeInfo.software?.name.orEmpty().contains("pixelfed")) {
-            val builder = AlertDialog.Builder(this@LoginActivity)
-            builder.apply {
+            AlertDialog.Builder(this@LoginActivity).apply {
                 setMessage(R.string.instance_not_pixelfed_warning)
                 setPositiveButton(R.string.instance_not_pixelfed_continue) { _, _ ->
                     promptOAuth(normalizedDomain, clientId)
@@ -212,13 +209,18 @@ class LoginActivity : BaseActivity() {
                     loadingAnimation(false)
                     wipeSharedSettings()
                 }
-            }
-            // Create the AlertDialog
-            builder.show()
+            }.show()
+        } else if (nodeInfo.metadata?.config?.features?.mobile_apis != true) {
+            AlertDialog.Builder(this@LoginActivity).apply {
+                setMessage(R.string.api_not_enabled_dialog)
+                setNegativeButton(android.R.string.ok) { _, _ ->
+                    loadingAnimation(false)
+                    wipeSharedSettings()
+                }
+            }.show()
         } else {
             promptOAuth(normalizedDomain, clientId)
         }
-
     }
 
 
