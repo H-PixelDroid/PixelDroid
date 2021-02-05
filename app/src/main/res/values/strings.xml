@@ -196,5 +196,5 @@ Following"</item>
     <string name="save_before_returning">Save your edits?</string>
     <string name="no_cancel_edit">No, cancel edit</string>
     <string name="api_not_enabled_dialog">The API is not activated on this instance. Contact your administrator to ask them to activate it.</string>
-
+    <string name="total_exceeds_album_limit">You chose more images than the maximum your server allows (%1$s). Images beyond the limit have been ignored.</string>
 </resources>

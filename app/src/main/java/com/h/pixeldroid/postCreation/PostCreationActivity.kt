@@ -1,10 +1,8 @@
 package com.h.pixeldroid.postCreation
 
 import android.app.Activity
-import android.content.ContentResolver
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
+import android.app.AlertDialog
+import android.content.*
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -31,8 +29,7 @@ import com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
-import com.h.pixeldroid.utils.api.objects.Instance
-import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity.Companion.DEFAULT_MAX_TOOT_CHARS
+import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -45,6 +42,7 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 private const val TAG = "Post Creation Activity"
 private const val MORE_PICTURES_REQUEST_CODE = 0xffff
@@ -61,6 +59,8 @@ class PostCreationActivity : BaseActivity() {
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
 
+    private var albumLimit by Delegates.notNull<Int>()
+
     private var positionResult = 0
     private var user: UserDatabaseEntity? = null
 
@@ -73,29 +73,20 @@ class PostCreationActivity : BaseActivity() {
         binding = ActivityPostCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // get image URIs
-        if(intent.clipData != null) {
-            val count = intent.clipData!!.itemCount
-            for (i in 0 until count) {
-                intent.clipData!!.getItemAt(i).uri.let {
-                    photoData.add(PhotoData(it))
-                }
-            }
-        }
-
         user = db.userDao().getActiveUser()
 
-        val instances = db.instanceDao().getAll()
+        val instance: InstanceDatabaseEntity = user?.run {
+            db.instanceDao().getAll().first { instanceDatabaseEntity ->
+                instanceDatabaseEntity.uri.contains(instance_uri)
+            }
+        } ?: InstanceDatabaseEntity("", "")
 
-        binding.postTextInputLayout.counterMaxLength = if (user != null){
-            val thisInstances =
-                instances.filter { instanceDatabaseEntity ->
-                    instanceDatabaseEntity.uri.contains(user!!.instance_uri)
-                }
-            thisInstances.first().maxStatusChars
-        } else {
-            DEFAULT_MAX_TOOT_CHARS
-        }
+        binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
+
+        albumLimit = instance.albumLimit
+
+        // get image URIs
+        intent.clipData?.let { addPossibleImages(it) }
 
         accessToken = user?.accessToken.orEmpty()
         pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
@@ -103,7 +94,6 @@ class PostCreationActivity : BaseActivity() {
         val carousel: ImageCarousel = binding.carousel
         carousel.addData(photoData.map { CarouselItem(it.imageUri) })
         carousel.layoutCarouselCallback = {
-            //TODO transition instead of at once
             if(it){
                 // Became a carousel
                 binding.toolbar3.visibility = VISIBLE
@@ -155,6 +145,27 @@ class PostCreationActivity : BaseActivity() {
             carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
                 photoData.removeAt(currentPosition)
                 carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
+            }
+        }
+    }
+
+    /**
+     * Will add as many images as possible to [photoData], from the [clipData], and if
+     * ([photoData].size + [clipData].itemCount) > [albumLimit] then it will only add as many images
+     * as are legal (if any) and a dialog will be shown to the user alerting them of this fact.
+     */
+    private fun addPossibleImages(clipData: ClipData){
+        var count = clipData.itemCount
+        if(count + photoData.size > albumLimit){
+            AlertDialog.Builder(this).apply {
+                setMessage(getString(R.string.total_exceeds_album_limit).format(albumLimit))
+                setNegativeButton(android.R.string.ok) { _, _ -> }
+            }.show()
+            count = count.coerceAtMost(albumLimit - photoData.size)
+        }
+        for (i in 0 until count) {
+            clipData.getItemAt(i).uri.let {
+                photoData.add(PhotoData(it))
             }
         }
     }
@@ -383,12 +394,10 @@ class PostCreationActivity : BaseActivity() {
                 Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
             }
         } else if (requestCode == MORE_PICTURES_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
 
-                val count = data.clipData!!.itemCount
-                for (i in 0 until count) {
-                    val imageUri: Uri = data.clipData!!.getItemAt(i).uri
-                    photoData.add(PhotoData(imageUri))
+            if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
+                data.clipData?.let {
+                    addPossibleImages(it)
                 }
 
                 binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
