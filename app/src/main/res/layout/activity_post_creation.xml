@@ -192,7 +192,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/add_photo"
             android:tooltipText='@string/add_photo'
-            android:src="@drawable/add_photo_alternate_white_30dp"
+            android:src="@drawable/add_photo_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

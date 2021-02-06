@@ -102,6 +102,7 @@ class PostCreationActivity : BaseActivity() {
                 binding.toolbar3.visibility = INVISIBLE
             }
         }
+        carousel.maxEntries = albumLimit
         carousel.addPhotoButtonCallback = {
             addPhoto(applicationContext)
         }
@@ -145,6 +146,7 @@ class PostCreationActivity : BaseActivity() {
             carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
                 photoData.removeAt(currentPosition)
                 carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
+                binding.addPhotoButton.isEnabled = true
             }
         }
     }
@@ -162,6 +164,10 @@ class PostCreationActivity : BaseActivity() {
                 setNegativeButton(android.R.string.ok) { _, _ -> }
             }.show()
             count = count.coerceAtMost(albumLimit - photoData.size)
+        }
+        if (count + photoData.size >= albumLimit) {
+            // Disable buttons to add more images
+            binding.addPhotoButton.isEnabled = false
         }
         for (i in 0 until count) {
             clipData.getItemAt(i).uri.let {
