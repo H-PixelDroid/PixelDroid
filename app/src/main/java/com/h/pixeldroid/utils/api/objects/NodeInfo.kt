@@ -1,5 +1,7 @@
 package com.h.pixeldroid.utils.api.objects
 
+import com.h.pixeldroid.utils.validDomain
+
 /*
     See https://nodeinfo.diaspora.software/schema.html and https://pixelfed.social/api/nodeinfo/2.0.json
     A lot of attributes we don't need are omitted, if in the future they are needed we
@@ -11,8 +13,21 @@ data class NodeInfo (
     val software: Software?,
     val protocols: List<String>?,
     val openRegistrations: Boolean?,
-    val metadata: PixelfedMetadata?
+    val metadata: PixelfedMetadata?,
 ){
+    /**
+     * Check if this NodeInfo has the fields we need or if we also need to look into the
+     * /api/v1/instance endpoint
+     * This only checks for values that might be in the /api/v1/instance endpoint.
+     */
+    fun hasInstanceEndpointInfo(): Boolean {
+        return validDomain(metadata?.config?.site?.url)
+                && !metadata?.config?.site?.name.isNullOrBlank()
+                && metadata?.config?.uploader?.max_caption_length?.toIntOrNull() != null
+    }
+
+
+
     data class Software(
         val name: String?,
         val version: String?
@@ -31,7 +46,8 @@ data class NodeInfo (
         val open_registration: Boolean?,
         val uploader: Uploader?,
         val activitypub: ActivityPub?,
-        val features: Features?
+        val features: Features?,
+        val site: Site?
     ){
         data class Uploader(
             val max_photo_size: String?,
@@ -54,6 +70,13 @@ data class NodeInfo (
             val circles: Boolean?,
             val stories: Boolean?,
             val video: Boolean?
+        )
+
+        data class Site(
+                val name: String?,
+                val domain: String?,
+                val url: String?,
+                val description: String?
         )
     }
 }

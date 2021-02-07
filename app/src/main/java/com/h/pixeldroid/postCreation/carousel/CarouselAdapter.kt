@@ -13,17 +13,16 @@ import com.h.pixeldroid.R
 
 
 class CarouselAdapter(
-    @LayoutRes private val itemLayout: Int,
-    @IdRes private val imageViewId: Int,
-    var listener: OnItemClickListener? = null,
-    private val imageScaleType: ImageView.ScaleType,
-    private val imagePlaceholder: Drawable?,
-    private val carousel: Boolean
+        @LayoutRes private val itemLayout: Int,
+        @IdRes private val imageViewId: Int,
+        var listener: OnItemClickListener? = null,
+        private val imageScaleType: ImageView.ScaleType,
+        private val imagePlaceholder: Drawable?,
+        private val carousel: Boolean,
+        var maxEntries: Int?,
 ) : RecyclerView.Adapter<CarouselAdapter.MyViewHolder>() {
 
     private val dataList: MutableList<CarouselItem> = mutableListOf()
-
-
 
     class MyViewHolder(itemView: View, imageViewId: Int) : RecyclerView.ViewHolder(itemView) {
         var img: ImageView = itemView.findViewById(imageViewId)
@@ -51,6 +50,7 @@ class CarouselAdapter(
 
     override fun getItemCount(): Int {
         return if(carousel) dataList.size
+        else if (maxEntries != null && dataList.size >= maxEntries!!) maxEntries!!
         else dataList.size + 1
     }
 

@@ -318,6 +318,12 @@ class ImageCarousel(
 
         }
 
+    var maxEntries: Int? = null
+        set(value){
+            field = value
+            adapter?.maxEntries = value
+        }
+
 
 
     init {
@@ -419,12 +425,13 @@ class ImageCarousel(
 
     private fun initAdapter() {
         adapter = CarouselAdapter(
-            itemLayout = itemLayout,
-            imageViewId = imageViewId,
-            listener = onItemClickListener,
-            imageScaleType = imageScaleType,
-            imagePlaceholder = imagePlaceholder,
-            carousel = layoutCarousel
+                itemLayout = itemLayout,
+                imageViewId = imageViewId,
+                listener = onItemClickListener,
+                imageScaleType = imageScaleType,
+                imagePlaceholder = imagePlaceholder,
+                carousel = layoutCarousel,
+                maxEntries = maxEntries
         )
         recyclerView.adapter = adapter
 

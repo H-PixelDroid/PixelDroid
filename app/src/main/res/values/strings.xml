@@ -38,10 +38,11 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="domain_of_your_instance">Domain of your instance</string>
     <string name="connect_to_pixelfed">Connect to Pixelfed</string>
     <string name="login_connection_required_once">You need to be online to be able to add the first account and use PixelDroid :(</string>
-    <string name="add_account_name">Add Account</string>
-    <string name="add_account_description">Add another Pixelfed Account</string>
+    <string name="api_not_enabled_dialog">The API is not activated on this instance. Contact your administrator to ask them to activate it.</string>
     <!-- Drawer -->
     <string name="logout">Log out</string>
+    <string name="add_account_name">Add Account</string>
+    <string name="add_account_description">Add another Pixelfed Account</string>
     <!-- Post creation -->
     <string name="permission_denied">Permission denied</string>
     <string name="save_image_failed">Unable to save image</string>
@@ -64,6 +65,10 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="switch_to_carousel">Switch to carousel</string>
     <string name="save_image_description">Save image description</string>
     <string name="no_media_description">Add a media description here…</string>
+    <string name="total_exceeds_album_limit">You chose more images than the maximum your server allows (%1$s). Images beyond the limit have been ignored.</string>
+    <string name="size_exceeds_instance_limit">Size of image number %1$s in the album exceeds the maximum size allowed by the instance (%2$s kB but the limit is %3$s kB). You might not be able to upload it.</string>
+    <string name="upload_error">Error code returned by server: %1$s</string>
+
 
     <!-- Post editing -->
     <string name="lbl_brightness">BRIGHTNESS</string>
@@ -78,6 +83,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="crop_result_error">"Couldn't retrieve image after crop"</string>
     <string name="image_preview">Preview of the image being edited</string>
     <string name="crop_button">Button to crop or rotate the image</string>
+    <string name="save_before_returning">Save your edits?</string>
+    <string name="no_cancel_edit">No, cancel edit</string>
 
     <!-- Camera -->
     <string name="capture_button_alt">Capture</string>
@@ -193,7 +200,4 @@ Following"</item>
     <string name="help_translate">Help translate PixelDroid to your language:</string>
     <string name="issues_contribute">Report issues or contribute to the application:</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
-    <string name="save_before_returning">Save your edits?</string>
-    <string name="no_cancel_edit">No, cancel edit</string>
-
 </resources>
