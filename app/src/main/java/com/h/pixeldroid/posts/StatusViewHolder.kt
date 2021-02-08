@@ -3,16 +3,17 @@ package com.h.pixeldroid.posts
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.AlbumImageViewBinding
 import com.h.pixeldroid.databinding.CommentBinding
 import com.h.pixeldroid.databinding.PostFragmentBinding
+import com.h.pixeldroid.utils.BlurHashDecoder
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
@@ -57,7 +59,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         //Setup the post layout
         val picRequest = Glide.with(itemView)
             .asDrawable().fitCenter()
-            .placeholder(ColorDrawable(Color.GRAY))
 
         val user = db.userDao().getActiveUser()!!
 
@@ -139,7 +140,9 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
 
         if(status?.media_attachments?.size == 1) {
-            request.load(status?.getPostUrl()).into(binding.postPicture)
+            request.placeholder(
+                    BlurHashDecoder.blurHashBitmap(binding.root.context.resources, status?.media_attachments?.get(0))
+            ).load(status?.getPostUrl()).into(binding.postPicture)
             val imgDescription = status?.media_attachments?.get(0)?.description.orEmpty().ifEmpty { binding.root.context.getString(
                 R.string.no_description) }
             binding.postPicture.contentDescription = imgDescription
@@ -687,7 +690,10 @@ class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>) :
     override fun getItemCount() = media_attachments.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(holder.binding.root)
-            .asDrawable().fitCenter().placeholder(ColorDrawable(Color.GRAY))
+            .asDrawable().fitCenter().placeholder(
+                BlurHashDecoder.blurHashBitmap(
+                        holder.binding.root.context.resources, media_attachments[position])
+                )
             .load(media_attachments[position].url).into(holder.image)
 
         val description = media_attachments[position].description
