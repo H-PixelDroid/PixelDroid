@@ -121,15 +121,47 @@
             app:layout_constraintStart_toStartOf="@+id/profilePictureImageView"
             app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
 
-        <FrameLayout
-            android:id="@+id/fragment_profile_feed"
-            android:layout_width="match_parent"
+
+        <ProgressBar
+            android:id="@+id/profileProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            tools:context=".profile.ProfileFeedFragment"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/followButton" />
+
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/motionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:layoutDescription="@xml/error_layout_xml_error_scene"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/followButton"
+            tools:visibility="visible">
+
+            <include
+                layout="@layout/error_layout"
+                tools:layout_editor_absoluteX="50dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profilePostsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/errorLayout"
+                tools:listitem="@layout/fragment_profile_posts" />
+
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,21 +3,44 @@ package com.h.pixeldroid.profile
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.core.view.size
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadState
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityProfileBinding
+import com.h.pixeldroid.databinding.FragmentProfilePostsBinding
+import com.h.pixeldroid.posts.PostActivity
+import com.h.pixeldroid.posts.feeds.ReposLoadStateAdapter
+import com.h.pixeldroid.posts.feeds.uncachedFeeds.FeedViewModel
+import com.h.pixeldroid.posts.feeds.uncachedFeeds.UncachedContentRepository
+import com.h.pixeldroid.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
 import com.h.pixeldroid.posts.parseHTMLText
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account
+import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.openUrl
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -28,11 +51,17 @@ class ProfileActivity : BaseActivity() {
     private lateinit var accessToken : String
     private lateinit var domain : String
 
+    private lateinit var accountId : String
+
     private var user: UserDatabaseEntity? = null
-    private var postsFragment = ProfileFeedFragment()
 
     private lateinit var activityBinding: ActivityProfileBinding
 
+    private lateinit var profileAdapter: PagingDataAdapter<Status, RecyclerView.ViewHolder>
+    private lateinit var viewModel: FeedViewModel<Status>
+    private var job: Job? = null
+
+    @ExperimentalPagingApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityBinding = ActivityProfileBinding.inflate(layoutInflater)
@@ -48,13 +77,120 @@ class ProfileActivity : BaseActivity() {
 
         // Set profile according to given account
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
+        accountId = account?.id ?: user!!.user_id
 
         setContent(account)
-        startFragment(account?.id)
+
+        profileAdapter = ProfilePostsAdapter()
+
+        initAdapter(activityBinding, profileAdapter)
+
+        // get the view model
+        @Suppress("UNCHECKED_CAST")
+        viewModel = ViewModelProvider(this, ProfileViewModelFactory(
+                ProfileContentRepository(
+                        apiHolder.setDomainToCurrentUser(db),
+                        db.userDao().getActiveUser()!!.accessToken,
+                        accountId
+                )
+            )
+        ).get(FeedViewModel::class.java) as FeedViewModel<Status>
+
+        activityBinding.profilePostsRecyclerView.layoutManager = GridLayoutManager(this, 3)
+
+        profileLaunch()
+        profileInitSearch()
 
         activityBinding.profileRefreshLayout.setOnRefreshListener {
-            getAndSetAccount(account?.id ?: user!!.user_id)
+            //It shouldn't be necessary to also retry() in addition to refresh(),
+            //but if we don't do this, reloads after an error fail immediately...
+            profileAdapter.retry()
+            profileAdapter.refresh()
         }
+    }
+
+
+    private fun profileLaunch() {
+        // Make sure we cancel the previous job before creating a new one
+        job?.cancel()
+        job = lifecycleScope.launch {
+            viewModel.flow().collectLatest {
+                profileAdapter.submitData(it)
+            }
+        }
+    }
+
+    private fun profileInitSearch() {
+        // Scroll to top when the list is refreshed from network.
+        lifecycleScope.launch {
+            profileAdapter.loadStateFlow
+                    // Only emit when REFRESH LoadState for RemoteMediator changes.
+                    .distinctUntilChangedBy { it.refresh }
+                    // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+                    .filter { it.refresh is LoadState.NotLoading }
+                    .collect { activityBinding.profilePostsRecyclerView.scrollToPosition(0) }
+        }
+    }
+
+
+    /**
+     * Shows or hides the error in the different FeedFragments
+     */
+    private fun showError(errorText: String = "Something went wrong while loading", show: Boolean = true){
+        if(show){
+            activityBinding.motionLayout.transitionToEnd()
+//            binding.profileErrorLayout.errorText.text = errorText
+        } else if(activityBinding.motionLayout.progress == 1F) {
+            activityBinding.motionLayout.transitionToStart()
+        }
+        activityBinding.profileProgressBar.visibility = View.GONE
+        activityBinding.profileRefreshLayout.isRefreshing = false
+    }
+
+    /**
+     * Initialises the [RecyclerView] adapter for the different FeedFragments.
+     *
+     * Makes the UI respond to various [LoadState]s, including errors when an error message is shown.
+     */
+    internal fun <T: Any> initAdapter(binding: ActivityProfileBinding, adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>) {
+        binding.profilePostsRecyclerView.adapter = adapter.withLoadStateFooter(
+                footer = ReposLoadStateAdapter { adapter.retry() }
+        )
+
+        adapter.addLoadStateListener { loadState ->
+
+            if(!binding.profileProgressBar.isVisible && binding.profileRefreshLayout.isRefreshing) {
+                // Stop loading spinner when loading is done
+                binding.profileRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
+            } else {
+                // ProgressBar should stop showing as soon as the source stops loading ("source"
+                // meaning the database, so don't wait on the network)
+                val sourceLoading = loadState.source.refresh is LoadState.Loading
+                if(!sourceLoading && binding.profilePostsRecyclerView.size > 0){
+                    binding.profilePostsRecyclerView.isVisible = true
+                    binding.profileProgressBar.isVisible = false
+                } else if(binding.profilePostsRecyclerView.size ==  0
+                        && loadState.append is LoadState.NotLoading
+                        && loadState.append.endOfPaginationReached){
+                    binding.profileProgressBar.isVisible = false
+                    showError(errorText = "Nothing to see here :(")
+                }
+            }
+
+
+            // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
+            val errorState = loadState.source.append as? LoadState.Error
+                    ?: loadState.source.prepend as? LoadState.Error
+                    ?: loadState.source.refresh as? LoadState.Error
+                    ?: loadState.append as? LoadState.Error
+                    ?: loadState.prepend as? LoadState.Error
+                    ?: loadState.refresh as? LoadState.Error
+            errorState?.let {
+                showError(errorText = it.error.toString())
+            }
+            if (errorState == null) showError(show = false, errorText = "")
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -91,10 +227,10 @@ class ProfileActivity : BaseActivity() {
         activityBinding.nbFollowingTextView.setOnClickListener{ onClickFollowing(account) }
     }
 
-    private fun getAndSetAccount(id: String){
+    private fun getAndSetAccount(){
         lifecycleScope.launchWhenCreated {
             val account = try{
-                pixelfedAPI.getAccount("Bearer $accessToken", id)
+                pixelfedAPI.getAccount("Bearer $accessToken", accountId)
             } catch (exception: IOException) {
                 Log.e("ProfileActivity:", exception.toString())
                 return@launchWhenCreated showError()
@@ -103,17 +239,6 @@ class ProfileActivity : BaseActivity() {
             }
             setContent(account)
         }
-    }
-
-    private fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
-        /*val motionLayout = activityBinding.motionLayout
-        if(show){
-            motionLayout.transitionToEnd()
-        } else {
-            motionLayout.transitionToStart()
-        }
-        activityBinding.profileProgressBar.visibility = View.GONE
-        activityBinding.profileRefreshLayout.isRefreshing = false*/
     }
 
     /**
@@ -150,15 +275,6 @@ class ProfileActivity : BaseActivity() {
 
         activityBinding.nbFollowingTextView.text = applicationContext.getString(R.string.nb_following)
             .format(account.following_count.toString())
-    }
-
-    private fun startFragment(accountId: String?) {
-
-        val arguments = Bundle()
-        arguments.putSerializable(Account.ACCOUNT_ID_TAG, accountId)
-        postsFragment.arguments = arguments
-
-        supportFragmentManager.beginTransaction().add(R.id.fragment_profile_feed, postsFragment).commit()
     }
 
     private fun onClickEditButton() {
@@ -275,4 +391,89 @@ class ProfileActivity : BaseActivity() {
             }
         }
     }
+}
+
+
+class ProfileViewModelFactory @ExperimentalPagingApi constructor(
+        private val searchContentRepository: UncachedContentRepository<Status>
+) : ViewModelProvider.Factory {
+
+    @ExperimentalPagingApi
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(FeedViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return FeedViewModel(searchContentRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+
+class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val postPreview: ImageView = binding.postPreview
+    private val albumIcon: ImageView = binding.albumIcon
+
+    fun bind(post: Status) {
+
+        if(post.sensitive!!) {
+            ImageConverter.setSquareImageFromDrawable(
+                    itemView,
+                    AppCompatResources.getDrawable(itemView.context, R.drawable.ic_sensitive),
+                    postPreview
+            )
+        } else {
+            ImageConverter.setSquareImageFromURL(itemView, post.getPostPreviewURL(), postPreview)
+        }
+
+        if(post.media_attachments?.size ?: 0 > 1) {
+            albumIcon.visibility = View.VISIBLE
+        } else {
+            albumIcon.visibility = View.GONE
+        }
+
+        postPreview.setOnClickListener {
+            val intent = Intent(postPreview.context, PostActivity::class.java)
+            intent.putExtra(Status.POST_TAG, post)
+            postPreview.context.startActivity(intent)
+        }
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): ProfilePostsViewHolder {
+            val itemBinding = FragmentProfilePostsBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+            )
+            return ProfilePostsViewHolder(itemBinding)
+        }
+    }
+}
+
+
+class ProfilePostsAdapter : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
+        UIMODEL_COMPARATOR
+) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return ProfilePostsViewHolder.create(parent)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val post = getItem(position)
+
+        post?.let {
+            (holder as ProfilePostsViewHolder).bind(it)
+        }
+    }
+
+    companion object {
+        private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<Status>() {
+            override fun areItemsTheSame(oldItem: Status, newItem: Status): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Status, newItem: Status): Boolean =
+                    oldItem.content == newItem.content
+        }
+    }
+
 }
