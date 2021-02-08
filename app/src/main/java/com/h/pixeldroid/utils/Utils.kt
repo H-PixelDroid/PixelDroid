@@ -8,6 +8,8 @@ import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
@@ -36,6 +38,20 @@ fun validDomain(domain: String?): Boolean {
     } ?: return false
 
     return true
+}
+
+
+fun Context.displayDimensionsInPx(): Pair<Int, Int> {
+    val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        Pair(windowManager.currentWindowMetrics.bounds.width(), windowManager.currentWindowMetrics.bounds.height())
+    } else {
+        val metrics = DisplayMetrics()
+        @Suppress("DEPRECATION")
+        windowManager.defaultDisplay.getMetrics(metrics)
+        Pair(metrics.widthPixels, metrics.heightPixels)
+    }
 }
 
 fun normalizeDomain(domain: String): String {

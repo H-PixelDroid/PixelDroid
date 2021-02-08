@@ -10,10 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +28,7 @@ import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.AppDatabase
+import com.h.pixeldroid.utils.displayDimensionsInPx
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
@@ -38,6 +36,7 @@ import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import kotlin.math.roundToInt
 
 
 /**
@@ -47,14 +46,26 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private var status: Status? = null
 
-    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope) {
+    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>) {
 
         this.itemView.visibility = View.VISIBLE
         this.status = status
 
-        val metrics = itemView.context.resources.displayMetrics
-        //Limit the height of the different images
-        binding.postPicture.maxHeight = metrics.heightPixels * 3/4
+        val maxImageRatio: Float = status?.media_attachments?.map {
+            if (it.meta?.original?.width == null || it.meta.original.height == null) {
+                1f
+            } else {
+                it.meta.original.width.toFloat() / it.meta.original.height.toFloat()
+            }
+        }?.maxOrNull() ?: 1f
+
+        val (displayWidth, displayHeight) = displayDimensionsInPx
+        val height = if (displayWidth / maxImageRatio > displayHeight * 3/4f) {
+            binding.postPicture.layoutParams.width = ((displayHeight * 3 / 4f) * maxImageRatio).roundToInt()
+            displayHeight * 3 / 4f
+        } else displayWidth / maxImageRatio
+
+        binding.postPicture.layoutParams.height = height.toInt()
 
         //Setup the post layout
         val picRequest = Glide.with(itemView)

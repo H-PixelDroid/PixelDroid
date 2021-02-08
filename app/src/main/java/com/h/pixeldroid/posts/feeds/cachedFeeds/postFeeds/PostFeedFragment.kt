@@ -19,6 +19,7 @@ import com.h.pixeldroid.posts.feeds.cachedFeeds.CachedFeedFragment
 import com.h.pixeldroid.posts.feeds.cachedFeeds.ViewModelFactory
 import com.h.pixeldroid.utils.api.objects.FeedContentDatabase
 import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.displayDimensionsInPx
 
 
 /**
@@ -35,7 +36,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = PostsAdapter()
+        adapter = PostsAdapter(requireContext().displayDimensionsInPx())
 
         @Suppress("UNCHECKED_CAST")
         if (requireArguments().get("home") as Boolean){
@@ -67,7 +68,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
         return view
     }
 
-    inner class PostsAdapter : PagingDataAdapter<T, RecyclerView.ViewHolder>(
+    inner class PostsAdapter(private val displayDimensionsInPx: Pair<Int, Int>) : PagingDataAdapter<T, RecyclerView.ViewHolder>(
         object : DiffUtil.ItemCallback<T>() {
             override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
                 return oldItem.id == newItem.id
@@ -89,7 +90,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val uiModel = getItem(position) as Status
             uiModel.let {
-                (holder as StatusViewHolder).bind(it, apiHolder.setDomainToCurrentUser(db), db, lifecycleScope)
+                (holder as StatusViewHolder).bind(it, apiHolder.setDomainToCurrentUser(db), db, lifecycleScope, displayDimensionsInPx)
             }
         }
     }

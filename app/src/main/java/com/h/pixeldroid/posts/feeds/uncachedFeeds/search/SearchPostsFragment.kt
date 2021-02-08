@@ -15,6 +15,7 @@ import com.h.pixeldroid.posts.StatusViewHolder
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.*
 import com.h.pixeldroid.utils.api.objects.Results
 import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.displayDimensionsInPx
 
 /**
  * Fragment to show a list of [Status]es, as a result of a search.
@@ -25,7 +26,7 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = PostsAdapter()
+        adapter = PostsAdapter(requireContext().displayDimensionsInPx())
 
         query = arguments?.getSerializable("searchFeed") as String
 
@@ -57,7 +58,7 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
         return view
     }
 
-    inner class PostsAdapter : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
+    inner class PostsAdapter(private val displayDimensionsInPx: Pair<Int, Int>) : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
         object : DiffUtil.ItemCallback<Status>() {
             override fun areItemsTheSame(oldItem: Status, newItem: Status): Boolean {
                 return oldItem.id == newItem.id
@@ -79,7 +80,7 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val uiModel = getItem(position) as Status
             uiModel.let {
-                (holder as StatusViewHolder).bind(it, apiHolder.setDomainToCurrentUser(db), db, lifecycleScope)
+                (holder as StatusViewHolder).bind(it, apiHolder.setDomainToCurrentUser(db), db, lifecycleScope, displayDimensionsInPx)
             }
         }
     }

@@ -28,8 +28,8 @@ data class Attachment(
 
     {
         data class Focus(
-                val x: Int?,
-                val y: Int?
+                val x: Double?,
+                val y: Double?
         ) : Serializable
         data class Image(
                 val width: Int?,

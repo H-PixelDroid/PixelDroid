@@ -20,10 +20,13 @@ import kotlin.math.withSign
 object BlurHashDecoder {
 
     fun blurHashBitmap(resources: Resources, attachment: Attachment?): BitmapDrawable {
+        val ratioOr0 = (attachment?.meta?.original?.width?.toFloat() ?: 1f) / (attachment?.meta?.original?.height?.toFloat() ?: 1f)
+
+        val ratio = if (ratioOr0 == 0f) 1f else ratioOr0
         return BitmapDrawable(resources,
                 decode(attachment?.blurhash,
-                        (32 * (attachment?.meta?.original?.aspect ?: 1.0)).toInt(),
-                        32)
+                        (32f * ratio).toInt().coerceAtLeast(32),
+                        (32f / ratio).toInt().coerceAtLeast(32))
         )
     }
 
