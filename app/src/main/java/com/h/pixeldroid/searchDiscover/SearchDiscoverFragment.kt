@@ -135,7 +135,7 @@ class SearchDiscoverFragment : BaseFragment() {
             } else {
                 holder.albumIcon.visibility = View.GONE
             }
-            ImageConverter.setSquareImageFromURL(holder.postView, post.media_attachments?.firstOrNull()?.preview_url, holder.postPreview)
+            ImageConverter.setSquareImageFromURL(holder.postView, post.media_attachments?.firstOrNull()?.preview_url, holder.postPreview, post.media_attachments?.firstOrNull()?.blurhash)
             holder.postPreview.setOnClickListener {
                 val intent = Intent(holder.postView.context, PostActivity::class.java)
                 intent.putExtra(Status.POST_TAG, post)

@@ -152,7 +152,15 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
         if(status?.media_attachments?.size == 1) {
             request.placeholder(
-                    BlurHashDecoder.blurHashBitmap(binding.root.context.resources, status?.media_attachments?.get(0))
+                    status?.media_attachments?.get(0).let {
+                        it?.blurhash?.let { hash ->
+                            BlurHashDecoder.blurHashBitmap(binding.root.resources,
+                                    hash,
+                                    it.meta?.original?.width,
+                                    it.meta?.original?.height
+                            )
+                        }
+                    }
             ).load(status?.getPostUrl()).into(binding.postPicture)
             val imgDescription = status?.media_attachments?.get(0)?.description.orEmpty().ifEmpty { binding.root.context.getString(
                 R.string.no_description) }
@@ -702,8 +710,13 @@ class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(holder.binding.root)
             .asDrawable().fitCenter().placeholder(
-                BlurHashDecoder.blurHashBitmap(
-                        holder.binding.root.context.resources, media_attachments[position])
+                        media_attachments[position].blurhash?.let {
+                            BlurHashDecoder.blurHashBitmap(
+                                    holder.binding.root.resources,
+                                    it,
+                                    media_attachments[position].meta?.original?.width,
+                                    media_attachments[position].meta?.original?.height)
+                        }
                 )
             .load(media_attachments[position].url).into(holder.image)
 
