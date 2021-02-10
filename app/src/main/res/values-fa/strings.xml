@@ -133,4 +133,46 @@
     <string name="filter_thumbnail">تصویر بندانگشتی پالایه</string>
     <string name="post_image">یکی از تصاویر در فرسته</string>
     <string name="verify_credentials">ناتوانی در دریافت اطلاعات کاربر</string>
+    <string name="mascot_description">تصویر، یک پاندای قرمز که شگونهٔ پیکسل‌فد است را گوشی به دست نشان می‌دهد</string>
+    <plurals name="nb_posts">
+        <item quantity="one">%d فرسته</item>
+        <item quantity="other">%d فرسته</item>
+    </plurals>
+    <plurals name="number_comments">
+        <item quantity="one">%d نظر</item>
+        <item quantity="other">%d نظر</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d هم‌رسانی</item>
+        <item quantity="other">%d هم‌رسانی</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d پسند</item>
+        <item quantity="other">%d پسند</item>
+    </plurals>
+    <string name="switch_to_carousel">تغییر وضعیت به نمای گردونه</string>
+    <string name="no_cancel_edit">خیر، ویرایش لغو شود</string>
+    <string name="save_before_returning">ویرایش‌ها ذخیره شوند؟</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d پی‌گیر</item>
+        <item quantity="other">%d پی‌گیر</item>
+    </plurals>
+    <plurals name="nb_following">
+        <item quantity="one">%d پی‌گرفته</item>
+        <item quantity="other">%d پی‌گرفته</item>
+    </plurals>
+    <string name="no_media_description">این جا توضیحات رسانه را وارد کنید…</string>
+    <string name="save_image_description">ذخیره توضیحات تصویر</string>
+    <string name="switch_to_grid">تغییر وضعیت به نمای شبکه‌ای</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">توضیحات باید در بیشترین حالت حاوی %d حرف باشد.</item>
+        <item quantity="other">توضیحات باید در بیشترین حالت حاوی %d حرف باشد.</item>
+    </plurals>
+    <string name="whats_an_instance_explanation">ممکن است از دیدن بخشی که از شما می‌خواهد که دامنه مربوط به «نمونه» را وارد کنید گیج شده باشید.
+\n
+\nپیکسل‌فد یک بستر فدرالیزه و عضوی از«فدیورس» (دنیای شبکه‌های فدرالیزه) است به این معنا که می‌تواند با سایر بسترها مانند ماستودون (https://joinmastodon.org را ببینید) که زبان مشترکی دارند صحبت کرده و ارتباط برقرار کند.
+\n
+\nمعنای دیگر این موضوع آن است که شما باید انتخاب کنید که از کدام کارساز یا «نمونه» از پیکسل‌فد استفاده می‌کنید. اگر چیزی در این باره نمی‌دانید می‌توانید به این نشانی مراجعه کنید: https://pixelfed.org/join
+\n
+\nبرای کسب اطلاعات بیشتر درباره پیکسل‌فد می‌توانید این نشانی را ببینید: https://pixelfed.org</string>
 </resources>
