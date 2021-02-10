@@ -41,4 +41,60 @@
     <string name="menu_settings">Configurações</string>
     <string name="menu_account">Meu Perfil</string>
     <string name="app_name">PixelDroid</string>
+    <string name="no_cancel_edit">Não, cancelar edição</string>
+    <string name="help_translate">Ajude a traduzir o PixelDroid para a sua língua:</string>
+    <string name="delete">Apagar</string>
+    <string name="discover">DESCOBRIR</string>
+    <string name="toolbar_title_edit">Editar</string>
+    <string name="share_link">Partilhar Ligação</string>
+    <string name="report">Reportar</string>
+    <string name="status_more_options">Mais opções</string>
+    <string name="about">Sobre</string>
+    <string name="project_website">Website do projeto: https://pixeldroid.org</string>
+    <string name="about_pixeldroid">Sobre PixelDroid</string>
+    <string name="retry">Tentar novamente</string>
+    <string name="search">Pesquisar</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="follow">Seguir</string>
+    <string name="default_nfollowers">-
+\nSeguidores</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d Seguidor</item>
+        <item quantity="other">%d Seguidores</item>
+    </plurals>
+    <string name="submit_comment">Submeter comentário</string>
+    <string name="add_comment">Adicionar comentário</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d comentário</item>
+        <item quantity="other">%d comentários</item>
+    </plurals>
+    <string name="share_image">Partilhar Imagem</string>
+    <plurals name="shares">
+        <item quantity="one">%d Partilha</item>
+        <item quantity="other">%d Partilhas</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d Gosto</item>
+        <item quantity="other">%d Gostos</item>
+    </plurals>
+    <string name="no_description">Sem descrição</string>
+    <string name="feed_failed">Não foi possível obter feed</string>
+    <string name="crop_button">Botão para cortar ou rodar imagem</string>
+    <string name="image_preview">Pré-visualização da imagem editada</string>
+    <string name="busy_dialog_text">A processar imagem, espere que termine primeiro!</string>
+    <string name="normal_filter">Normal</string>
+    <string name="save_image_description">Guardar descrição da imagem</string>
+    <string name="post_image">Uma das imagens na publicação</string>
+    <string name="add_photo">Adicionar foto</string>
+    <string name="upload_post_error">Erro ao publicar</string>
+    <string name="upload_post_success">Publicado com sucesso</string>
+    <string name="upload_post_failed">Falha ao publicar</string>
+    <string name="picture_format_error">Erro de publicação: formato errado de imagem.</string>
+    <string name="upload_picture_failed">Erro ao publicar imagem!</string>
+    <string name="save_image_success">Imagem guardada com sucesso</string>
+    <string name="save_image_failed">Não foi possível guardar a imagem</string>
+    <string name="permission_denied">Permissão recusada</string>
+    <string name="dark_theme">Escuro</string>
+    <string name="light_theme">Claro</string>
+    <string name="verify_credentials">Não foi possível obter informação do utilizador</string>
 </resources>
