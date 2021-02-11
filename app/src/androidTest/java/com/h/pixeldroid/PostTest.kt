@@ -63,9 +63,9 @@ class PostTest {
                     avatar_static = "some_avatar_url",
                     isActive = true,
                     accessToken = "token",
-                    refreshToken = refreshToken,
-                    clientId = clientId,
-                    clientSecret = clientSecret
+                    refreshToken = "refreshToken",
+                    clientId = "clientId",
+                    clientSecret = "clientSecret"
             )
         )
         db.close()
@@ -76,14 +76,15 @@ class PostTest {
     fun saveToGalleryTestSimplePost() {
         val attachment = Attachment(
             id = "12",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png"
+            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                meta = null
         )
         val post = Status(
             id = "12",
             account = Account(
                 id = "12",
                 username = "douze",
-                url = "https://pixelfed.de/douze"
+                url = "https://pixelfed.de/douze",
             ),
             media_attachments = listOf(attachment)
         )
@@ -106,11 +107,13 @@ class PostTest {
     fun saveToGalleryTestAlbum() {
         val attachment1 = Attachment(
             id = "12",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png"
+            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                meta = null
         )
         val attachment2 = Attachment(
             id = "13",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png"
+            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                meta = null
         )
         val post = Status(
             id = "12",
@@ -141,14 +144,15 @@ class PostTest {
         val expectedIntent: Matcher<Intent> = IntentMatchers.hasAction(Intent.ACTION_CHOOSER)
         val attachment = Attachment(
             id = "12",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png"
+            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                meta = null
         )
         val post = Status(
             id = "12",
             account = Account(
                 id = "12",
                 username = "douze",
-                url = "https://pixelfed.de/douze"
+                url = "https://pixelfed.de/douze",
             ),
             media_attachments = listOf(attachment)
         )
@@ -166,11 +170,13 @@ class PostTest {
         val expectedIntent: Matcher<Intent> = IntentMatchers.hasAction(Intent.ACTION_CHOOSER)
         val attachment1 = Attachment(
             id = "12",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png"
+            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                meta = null
         )
         val attachment2 = Attachment(
             id = "13",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png"
+            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                meta = null
         )
         val post = Status(
             id = "12",
@@ -208,7 +214,7 @@ class PostTest {
             media_attachments= listOf(
                 Attachment(id="15888", type= Attachment.AttachmentType.image, url="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB.jpeg",
                     preview_url="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB_thumb.jpeg",
-                    remote_url=null, text_url=null, description=null, blurhash=null)
+                    remote_url=null, text_url=null, description=null, blurhash=null, meta = null)
             ),
             application= Application(name="web", website=null, vapid_key=null), mentions=emptyList(),
             tags= listOf(Tag(name="hiking", url="https://pixelfed.de/discover/tags/hiking", history=null), Tag(name="nature", url="https://pixelfed.de/discover/tags/nature", history=null), Tag(name="rotavicentina", url="https://pixelfed.de/discover/tags/rotavicentina", history=null)),
@@ -235,7 +241,7 @@ class PostTest {
             media_attachments= listOf(
                 Attachment(id="15888", type= Attachment.AttachmentType.image, url="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB.jpeg",
                     preview_url="https://pixelfed.de/storage/m/113a3e2124a33b1f5511e531953f5ee48456e0c7/34dd6d9fb1762dac8c7ddeeaf789d2d8fa083c9f/JtjO0eAbELpgO1UZqF5ydrKbCKRVyJUM1WAaqIeB_thumb.jpeg",
-                    remote_url=null, text_url=null, description=null, blurhash=null)
+                    remote_url=null, text_url=null, description=null, blurhash=null, meta = null)
             ),
             application= Application(name="web", website=null, vapid_key=null), mentions=emptyList(),
             tags= listOf(Tag(name="hiking", url="https://pixelfed.de/discover/tags/hiking", history=null), Tag(name="nature", url="https://pixelfed.de/discover/tags/nature", history=null), Tag(name="rotavicentina", url="https://pixelfed.de/discover/tags/rotavicentina", history=null)),

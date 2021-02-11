@@ -68,9 +68,9 @@ class HomeFeedTest {
                     avatar_static = "some_avatar_url",
                     isActive = true,
                     accessToken = "token",
-                    refreshToken = refreshToken,
-                    clientId = clientId,
-                    clientSecret = clientSecret
+                    refreshToken = "refreshToken",
+                    clientId = "clientId",
+                    clientSecret = "clientSecret"
             )
         )
         db.close()

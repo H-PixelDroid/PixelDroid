@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_CHOOSER
+import android.widget.ImageButton
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
@@ -14,7 +15,6 @@ import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.postCreation.camera.CameraFragment
 import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
-import kotlinx.android.synthetic.main.camera_ui_container.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.Matcher
 import org.junit.After
@@ -50,9 +50,9 @@ class CameraTest {
                     avatar_static = "some_avatar_url",
                     isActive = true,
                     accessToken = "token",
-                    refreshToken = refreshToken,
-                    clientId = clientId,
-                    clientSecret = clientSecret
+                    refreshToken = "refreshToken",
+                    clientId = "clientId",
+                    clientSecret = "clientSecret"
             )
         )
         db.close()
@@ -88,7 +88,7 @@ class CameraTest {
 
         val scenario = launchFragmentInContainer<CameraFragment>()
         scenario.onFragment { fragment ->
-            fragment.photo_view_button.performClick()
+            fragment.view?.findViewById<ImageButton>(R.id.photo_view_button)?.performClick()
         }
         Thread.sleep(1000)
 
@@ -102,7 +102,7 @@ class CameraTest {
     fun switchButton() {
         val scenario = launchFragmentInContainer<CameraFragment>()
         scenario.onFragment { fragment ->
-            fragment.camera_switch_button.performClick()
+            fragment.view?.findViewById<ImageButton>(R.id.camera_switch_button)?.performClick()
         }
         Thread.sleep(1000)
         scenario.onFragment { fragment ->

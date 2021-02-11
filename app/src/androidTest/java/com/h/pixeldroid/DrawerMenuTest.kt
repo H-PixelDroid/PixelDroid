@@ -61,9 +61,9 @@ class DrawerMenuTest {
                     avatar_static = "some_avatar_url",
                     isActive = true,
                     accessToken = "token",
-                    refreshToken = refreshToken,
-                    clientId = clientId,
-                    clientSecret = clientSecret
+                    refreshToken = "refreshToken",
+                    clientId = "clientId",
+                    clientSecret = "clientSecret"
             )
         )
         db.close()
@@ -132,8 +132,7 @@ class DrawerMenuTest {
         onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.editButton)).check(matches(isDisplayed()))
-        val followersText = context.getString(R.string.nb_followers)
-            .format(68)
+        val followersText = context.resources.getQuantityString(R.plurals.nb_followers, 68)
         onView(withText(followersText)).perform(click())
         onView(withText("Dobios")).check(matches(isDisplayed()))
     }
@@ -144,8 +143,7 @@ class DrawerMenuTest {
         onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.editButton)).check(matches(isDisplayed()))
-        val followingText = context.getString(R.string.nb_following)
-            .format(27)
+        val followingText = context.resources.getQuantityString(R.plurals.nb_followers, 27)
         onView(withText(followingText)).perform(click())
         onView(withText("Dobios")).check(matches(isDisplayed()))
     }
