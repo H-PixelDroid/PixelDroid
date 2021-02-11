@@ -49,7 +49,7 @@ private val REQUIRED_PERMISSIONS = arrayOf(
 
 class PhotoEditActivity : BaseActivity() {
 
-    private var saving: Boolean = false
+    var saving: Boolean = false
     private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
     private val BRIGHTNESS_START = 0
     private val SATURATION_START = 1.0f

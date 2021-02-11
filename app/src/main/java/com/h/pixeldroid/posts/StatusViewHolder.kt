@@ -3,9 +3,7 @@ package com.h.pixeldroid.posts
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -24,11 +22,13 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.AlbumImageViewBinding
 import com.h.pixeldroid.databinding.CommentBinding
 import com.h.pixeldroid.databinding.PostFragmentBinding
+import com.h.pixeldroid.utils.BlurHashDecoder
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.AppDatabase
+import com.h.pixeldroid.utils.displayDimensionsInPx
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
@@ -36,6 +36,7 @@ import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import kotlin.math.roundToInt
 
 
 /**
@@ -45,19 +46,30 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private var status: Status? = null
 
-    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope) {
+    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>) {
 
         this.itemView.visibility = View.VISIBLE
         this.status = status
 
-        val metrics = itemView.context.resources.displayMetrics
-        //Limit the height of the different images
-        binding.postPicture.maxHeight = metrics.heightPixels * 3/4
+        val maxImageRatio: Float = status?.media_attachments?.map {
+            if (it.meta?.original?.width == null || it.meta.original.height == null) {
+                1f
+            } else {
+                it.meta.original.width.toFloat() / it.meta.original.height.toFloat()
+            }
+        }?.maxOrNull() ?: 1f
+
+        val (displayWidth, displayHeight) = displayDimensionsInPx
+        val height = if (displayWidth / maxImageRatio > displayHeight * 3/4f) {
+            binding.postPicture.layoutParams.width = ((displayHeight * 3 / 4f) * maxImageRatio).roundToInt()
+            displayHeight * 3 / 4f
+        } else displayWidth / maxImageRatio
+
+        binding.postPicture.layoutParams.height = height.toInt()
 
         //Setup the post layout
         val picRequest = Glide.with(itemView)
             .asDrawable().fitCenter()
-            .placeholder(ColorDrawable(Color.GRAY))
 
         val user = db.userDao().getActiveUser()!!
 
@@ -139,7 +151,17 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
 
         if(status?.media_attachments?.size == 1) {
-            request.load(status?.getPostUrl()).into(binding.postPicture)
+            request.placeholder(
+                    status?.media_attachments?.get(0).let {
+                        it?.blurhash?.let { hash ->
+                            BlurHashDecoder.blurHashBitmap(binding.root.resources,
+                                    hash,
+                                    it.meta?.original?.width,
+                                    it.meta?.original?.height
+                            )
+                        }
+                    }
+            ).load(status?.getPostUrl()).into(binding.postPicture)
             val imgDescription = status?.media_attachments?.get(0)?.description.orEmpty().ifEmpty { binding.root.context.getString(
                 R.string.no_description) }
             binding.postPicture.contentDescription = imgDescription
@@ -687,7 +709,15 @@ class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>) :
     override fun getItemCount() = media_attachments.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(holder.binding.root)
-            .asDrawable().fitCenter().placeholder(ColorDrawable(Color.GRAY))
+            .asDrawable().fitCenter().placeholder(
+                        media_attachments[position].blurhash?.let {
+                            BlurHashDecoder.blurHashBitmap(
+                                    holder.binding.root.resources,
+                                    it,
+                                    media_attachments[position].meta?.original?.width,
+                                    media_attachments[position].meta?.original?.height)
+                        }
+                )
             .load(media_attachments[position].url).into(holder.image)
 
         val description = media_attachments[position].description

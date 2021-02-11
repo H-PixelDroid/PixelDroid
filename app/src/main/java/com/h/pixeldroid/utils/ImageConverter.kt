@@ -69,8 +69,10 @@ class ImageConverter {
          * @param url, the url of the image that will be loaded
          * @param image, the imageView into which we will load the image
          */
-        fun setSquareImageFromURL(view : View, url : String?, image : ImageView) {
-            Glide.with(view).load(url).apply(RequestOptions().centerCrop()).into(image)
+        fun setSquareImageFromURL(view : View, url : String?, image : ImageView, blurhash: String? = null) {
+            Glide.with(view).load(url).placeholder(
+                    blurhash?.let { BlurHashDecoder.blurHashBitmap(view.resources, it, 32,32) }
+            ).apply(RequestOptions().centerCrop()).into(image)
 
         }
 

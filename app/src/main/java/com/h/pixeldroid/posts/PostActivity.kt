@@ -6,7 +6,6 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityPostBinding
-import com.h.pixeldroid.utils.api.objects.DiscoverPost
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.api.objects.Status.Companion.DISCOVER_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.DOMAIN_TAG
@@ -30,7 +29,6 @@ class PostActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val status = intent.getSerializableExtra(POST_TAG) as Status?
-        val discoverPost: DiscoverPost? = intent.getSerializableExtra(DISCOVER_TAG) as DiscoverPost?
 
         val user = db.userDao().getActiveUser()
 
@@ -41,36 +39,12 @@ class PostActivity : BaseActivity() {
         val arguments = Bundle()
         arguments.putString(DOMAIN_TAG, domain)
 
-        if (discoverPost != null) {
-            binding.postProgressBar.visibility = View.VISIBLE
-            getDiscoverPost(arguments, discoverPost)
-        } else {
-            initializeFragment(arguments, status)
-        }
+        initializeFragment(arguments, status)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
-    }
-
-    private fun getDiscoverPost(
-        arguments: Bundle,
-        discoverPost: DiscoverPost
-    ) {
-        val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-        val id = discoverPost.url?.substringAfterLast('/') ?: ""
-        lifecycleScope.launchWhenCreated {
-            try {
-                val status = api.getStatus("Bearer $accessToken", id)
-                binding.postProgressBar.visibility = View.GONE
-                initializeFragment(arguments, status)
-            }  catch (exception: IOException) {
-                //TODO show error message
-                Log.e("PostActivity:", exception.toString())
-            } catch (exception: HttpException) {
-            }
-        }
     }
 
     private fun initializeFragment(arguments: Bundle, status: Status?){

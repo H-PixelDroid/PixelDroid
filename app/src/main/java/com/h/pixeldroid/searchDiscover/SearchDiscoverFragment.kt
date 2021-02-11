@@ -4,25 +4,17 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.SearchView
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.FragmentSearchBinding
-import com.h.pixeldroid.databinding.PostFragmentBinding
 import com.h.pixeldroid.profile.ProfilePostViewHolder
 import com.h.pixeldroid.utils.api.PixelfedAPI
-import com.h.pixeldroid.utils.api.objects.DiscoverPost
-import com.h.pixeldroid.utils.api.objects.DiscoverPosts
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.posts.PostActivity
 import com.h.pixeldroid.utils.BaseFragment
@@ -34,10 +26,7 @@ import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.color
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 
 /**
@@ -122,12 +111,12 @@ class SearchDiscoverFragment : BaseFragment() {
     }
 
     /**
-     * [RecyclerView.Adapter] that can display a list of [DiscoverPost]s
+     * [RecyclerView.Adapter] that can display a list of [Status]s' thumbnails for the discover view
      */
     class DiscoverRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolder>() {
-        private val posts: ArrayList<DiscoverPost> = ArrayList()
+        private val posts: ArrayList<Status> = ArrayList()
 
-        fun addPosts(newPosts : List<DiscoverPost>) {
+        fun addPosts(newPosts : List<Status>) {
             posts.clear()
             posts.addAll(newPosts)
             notifyDataSetChanged()
@@ -141,15 +130,15 @@ class SearchDiscoverFragment : BaseFragment() {
 
         override fun onBindViewHolder(holder: ProfilePostViewHolder, position: Int) {
             val post = posts[position]
-            if(post.type?.contains("album") == true) {
+            if(post.media_attachments?.size ?: 0 > 1) {
                 holder.albumIcon.visibility = View.VISIBLE
             } else {
                 holder.albumIcon.visibility = View.GONE
             }
-            ImageConverter.setSquareImageFromURL(holder.postView, post.thumb, holder.postPreview)
+            ImageConverter.setSquareImageFromURL(holder.postView, post.media_attachments?.firstOrNull()?.preview_url, holder.postPreview, post.media_attachments?.firstOrNull()?.blurhash)
             holder.postPreview.setOnClickListener {
                 val intent = Intent(holder.postView.context, PostActivity::class.java)
-                intent.putExtra(Status.DISCOVER_TAG, post)
+                intent.putExtra(Status.POST_TAG, post)
                 holder.postView.context.startActivity(intent)
             }
         }

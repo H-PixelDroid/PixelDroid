@@ -16,13 +16,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.utils.db.AppDatabase
 import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
-import kotlinx.android.synthetic.main.activity_main.*
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Before
@@ -96,9 +96,9 @@ class PostFragmentUITests {
                     avatar_static = "some_avatar_url",
                     isActive = true,
                     accessToken = "token",
-                    refreshToken = refreshToken,
-                    clientId = clientId,
-                    clientSecret = clientSecret
+                    refreshToken = "refreshToken",
+                    clientId = "clientId",
+                    clientSecret = "clientSecret"
             )
         )
         db.close()
@@ -114,7 +114,7 @@ class PostFragmentUITests {
     @Test
     fun newPostUiTest() {
         ActivityScenario.launch(MainActivity::class.java).onActivity {
-                a -> a.tabs.getTabAt(2)!!.select()
+                it.findViewById<TabLayout>(R.id.tabs).getTabAt(2)!!.select()
         }
         Thread.sleep(1500)
         onView(withId(R.id.photo_view_button)).check(matches(isDisplayed()))

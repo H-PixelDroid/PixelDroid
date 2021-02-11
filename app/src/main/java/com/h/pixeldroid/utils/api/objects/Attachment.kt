@@ -11,11 +11,31 @@ data class Attachment(
     //Optional attributes
     val remote_url: String? = null, //URL
     val text_url: String? = null, //URL
-    //TODO meta
+
+    val meta: Meta?,
+
     val description: String? = null,
     val blurhash: String? = null
 ) : Serializable {
     enum class AttachmentType {
         unknown, image, gifv, video, audio
+    }
+
+    data class Meta (
+            val focus: Focus?,
+            val original: Image?
+    ) : Serializable
+
+    {
+        data class Focus(
+                val x: Double?,
+                val y: Double?
+        ) : Serializable
+        data class Image(
+                val width: Int?,
+                val height: Int?,
+                val size: String?,
+                val aspect: Double?
+        ) : Serializable
     }
 }

@@ -22,14 +22,14 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
-import com.h.pixeldroid.adapters.ThumbnailAdapter
+import com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity
+import com.h.pixeldroid.postCreation.photoEdit.ThumbnailAdapter
 import com.h.pixeldroid.settings.AboutActivity
 import com.h.pixeldroid.testUtility.CustomMatchers
 import com.h.pixeldroid.testUtility.clearData
-import junit.framework.Assert.assertTrue
-import kotlinx.android.synthetic.main.fragment_edit_image.*
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.*
+import org.junit.Assert.assertTrue
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import java.io.File
@@ -141,9 +141,9 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
 
-        Assert.assertEquals(change, activity.seekbar_brightness.progress)
-        Assert.assertEquals(change, activity.seekbar_contrast.progress)
-        Assert.assertEquals(change, activity.seekbar_saturation.progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_brightness).progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_contrast).progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_saturation).progress)
 
         Thread.sleep(1000)
 
@@ -152,9 +152,9 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
 
-        Assert.assertEquals(change, activity.seekbar_brightness.progress)
-        Assert.assertEquals(change, activity.seekbar_contrast.progress)
-        Assert.assertEquals(change, activity.seekbar_saturation.progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_brightness).progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_contrast).progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_saturation).progress)
     }
 
     @Test
@@ -181,7 +181,7 @@ class EditPhotoTest {
     @Test
     fun alreadyUploadingDialog() {
         activityScenario.onActivity { a -> a.saving = true }
-        Espresso.onView(withId(R.id.action_upload)).perform(click())
+        Espresso.onView(withId(R.id.action_save)).perform(click())
         Thread.sleep(1000)
         Espresso.onView(withText(R.string.busy_dialog_text)).check(matches(isDisplayed()))
     }

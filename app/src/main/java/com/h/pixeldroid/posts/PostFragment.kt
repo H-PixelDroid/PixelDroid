@@ -11,6 +11,7 @@ import com.h.pixeldroid.utils.api.objects.Status.Companion.DOMAIN_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.utils.BaseFragment
 import com.h.pixeldroid.utils.bindingLifecycleAware
+import com.h.pixeldroid.utils.displayDimensionsInPx
 
 
 class PostFragment : BaseFragment() {
@@ -43,7 +44,9 @@ class PostFragment : BaseFragment() {
 
         val holder = StatusViewHolder(binding)
 
-        holder.bind(currentStatus, api, db, lifecycleScope)
+
+
+        holder.bind(currentStatus, api, db, lifecycleScope, requireContext().displayDimensionsInPx())
     }
 
 }

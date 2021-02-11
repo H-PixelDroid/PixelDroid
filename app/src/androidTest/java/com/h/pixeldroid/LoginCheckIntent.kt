@@ -1,6 +1,5 @@
 package com.h.pixeldroid
 
-import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import androidx.test.core.app.ActivityScenario
@@ -28,8 +27,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class LoginCheckIntent {
-    private lateinit var context: Context
-
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)

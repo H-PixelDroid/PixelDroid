@@ -4,5 +4,5 @@ import java.io.Serializable
 
 data class DiscoverPosts(
     //Required attributes
-    val posts: List<DiscoverPost>
+    val posts: List<Status>
 ) : Serializable
