@@ -19,9 +19,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.h.pixeldroid.utils.db.AppDatabase
 import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
+import com.h.pixeldroid.testUtility.testiTesto
+import com.h.pixeldroid.testUtility.testiTestoInstance
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -35,7 +36,6 @@ class LoginActivityOnlineTest {
     private lateinit var db: AppDatabase
     private lateinit var context: Context
     private lateinit var pref: SharedPreferences
-    private lateinit var server: MockServer
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -43,8 +43,6 @@ class LoginActivityOnlineTest {
     @Before
     fun setup() {
         context = ApplicationProvider.getApplicationContext()
-        server = MockServer()
-        server.start()
         context = ApplicationProvider.getApplicationContext()
         pref = context.getSharedPreferences("com.h.pixeldroid.pref", Context.MODE_PRIVATE)
         pref.edit().clear().apply()
@@ -55,7 +53,6 @@ class LoginActivityOnlineTest {
     @After
     fun after() {
         clearData()
-        server.stop()
     }
 
     @Test
@@ -102,6 +99,7 @@ class LoginActivityOnlineTest {
         ))
     }
 
+    /*
     @Test
     fun correctIntentReturnLoadsMainActivity() {
         context = ApplicationProvider.getApplicationContext()
@@ -109,36 +107,21 @@ class LoginActivityOnlineTest {
         db.clearAllTables()
 
         db.instanceDao().insertInstance(
-            InstanceDatabaseEntity(
-                uri = server.getUrl().toString(),
-                title = "PixelTest"
-            )
+            testiTestoInstance
         )
 
-        db.userDao().insertUser(
-            UserDatabaseEntity(
-                    user_id = "123",
-                    instance_uri = server.getUrl().toString(),
-                    username = "Testi",
-                    display_name = "Testi Testo",
-                    avatar_static = "some_avatar_url",
-                    isActive = true,
-                    accessToken = "token",
-                    refreshToken = "refreshToken",
-                    clientId = "clientId",
-                    clientSecret = "clientSecret"
-            )
-        )
+        db.userDao().insertUser(testiTesto)
         db.close()
         pref.edit()
-            .putString("domain", server.getUrl().toString())
-            .putString("clientID", "test_id")
-            .putString("clientSecret", "test_secret")
+            .putString("domain", testiTestoInstance.uri)
+            .putString("clientID", testiTesto.clientId)
+            .putString("clientSecret", testiTesto.clientSecret)
             .apply()
-        val uri = Uri.parse("oauth2redirect://com.h.pixeldroid?code=test_code")
+        val uri = Uri.parse("oauth2redirect://com.h.pixeldroid?code=$testiTesto.")
         val intent = Intent(ACTION_VIEW, uri, context, LoginActivity::class.java)
         ActivityScenario.launch<LoginActivity>(intent)
         Thread.sleep(1000)
         onView(withId(R.id.main_activity_main_linear_layout)).check(matches(isDisplayed()))
     }
+     */
 }

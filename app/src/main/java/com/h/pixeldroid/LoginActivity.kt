@@ -118,7 +118,7 @@ class LoginActivity : BaseActivity() {
 
     private fun registerAppToServer(normalizedDomain: String) {
 
-        if(!validDomain(normalizedDomain)) failedRegistration(getString(R.string.invalid_domain))
+        if(!validDomain(normalizedDomain)) return failedRegistration(getString(R.string.invalid_domain))
 
         hideKeyboard()
         loadingAnimation(true)

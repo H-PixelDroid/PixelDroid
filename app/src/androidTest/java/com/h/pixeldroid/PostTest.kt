@@ -13,14 +13,16 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import com.h.pixeldroid.BuildConfig.INSTANCE_URI
 import com.h.pixeldroid.posts.PostActivity
 import com.h.pixeldroid.utils.db.AppDatabase
 import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.api.objects.*
-import com.h.pixeldroid.testUtility.MockServer
 import com.h.pixeldroid.testUtility.clearData
 import com.h.pixeldroid.testUtility.initDB
+import com.h.pixeldroid.testUtility.testiTesto
+import com.h.pixeldroid.testUtility.testiTestoInstance
 import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.Matcher
 import org.junit.*
@@ -34,7 +36,6 @@ class PostTest {
 
     private lateinit var context: Context
     private lateinit var db: AppDatabase
-    private lateinit var mockServer: MockServer
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -42,32 +43,13 @@ class PostTest {
     @Before
     fun before(){
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        mockServer = MockServer()
-        mockServer.start()
-        val baseUrl = mockServer.getUrl()
         db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
-            InstanceDatabaseEntity(
-                uri = baseUrl.toString(),
-                title = "PixelTest"
-            )
+            testiTestoInstance
         )
 
-        db.userDao().insertUser(
-            UserDatabaseEntity(
-                    user_id = "123",
-                    instance_uri = baseUrl.toString(),
-                    username = "Testi",
-                    display_name = "Testi Testo",
-                    avatar_static = "some_avatar_url",
-                    isActive = true,
-                    accessToken = "token",
-                    refreshToken = "refreshToken",
-                    clientId = "clientId",
-                    clientSecret = "clientSecret"
-            )
-        )
+        db.userDao().insertUser(testiTesto)
         db.close()
         Intents.init()
     }
@@ -76,15 +58,15 @@ class PostTest {
     fun saveToGalleryTestSimplePost() {
         val attachment = Attachment(
             id = "12",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+            url = "$INSTANCE_URI/storage/avatars/default.jpg?v=0",
                 meta = null
         )
         val post = Status(
             id = "12",
             account = Account(
                 id = "12",
-                username = "douze",
-                url = "https://pixelfed.de/douze",
+                username = "SQDFSQDF",
+                url = "$INSTANCE_URI/pixeldroid",
             ),
             media_attachments = listOf(attachment)
         )
@@ -107,12 +89,12 @@ class PostTest {
     fun saveToGalleryTestAlbum() {
         val attachment1 = Attachment(
             id = "12",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+            url = "$INSTANCE_URI/storage/avatars/default.jpg?v=0",
                 meta = null
         )
         val attachment2 = Attachment(
             id = "13",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+            url = "$INSTANCE_URI/storage/avatars/default.jpg?v=0",
                 meta = null
         )
         val post = Status(
@@ -120,7 +102,7 @@ class PostTest {
             account = Account(
                 id = "12",
                 username = "douze",
-                url = "https://pixelfed.de/douze"
+                    url = "$INSTANCE_URI/pixeldroid",
             ),
             media_attachments = listOf(attachment1, attachment2)
         )
@@ -143,18 +125,18 @@ class PostTest {
     fun shareTestSimplePost() {
         val expectedIntent: Matcher<Intent> = IntentMatchers.hasAction(Intent.ACTION_CHOOSER)
         val attachment = Attachment(
-            id = "12",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                id = "12",
+                url = "$INSTANCE_URI/storage/avatars/default.jpg?v=0",
                 meta = null
         )
         val post = Status(
-            id = "12",
-            account = Account(
                 id = "12",
-                username = "douze",
-                url = "https://pixelfed.de/douze",
-            ),
-            media_attachments = listOf(attachment)
+                account = Account(
+                        id = "12",
+                        username = "douze",
+                        url = "$INSTANCE_URI/pixeldroid",
+                ),
+                media_attachments = listOf(attachment)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -170,22 +152,22 @@ class PostTest {
         val expectedIntent: Matcher<Intent> = IntentMatchers.hasAction(Intent.ACTION_CHOOSER)
         val attachment1 = Attachment(
             id = "12",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                url = "$INSTANCE_URI/storage/avatars/default.jpg?v=0",
                 meta = null
         )
         val attachment2 = Attachment(
-            id = "13",
-            url = "https://wiki.gnugen.ch/lib/tpl/gnugen/images/logo_web.png",
+                id = "13",
+                url = "$INSTANCE_URI/storage/avatars/default.jpg?v=0",
                 meta = null
         )
         val post = Status(
-            id = "12",
-            account = Account(
                 id = "12",
-                username = "douze",
-                url = "https://pixelfed.de/douze"
-            ),
-            media_attachments = listOf(attachment1, attachment2)
+                account = Account(
+                        id = "12",
+                        username = "douze",
+                        url = "$INSTANCE_URI/pixeldroid",
+                ),
+                media_attachments = listOf(attachment1, attachment2)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -249,14 +231,13 @@ class PostTest {
             in_reply_to_id=null, in_reply_to_account=null, reblog=null, poll=null, card=null, language=null, text=null, favourited=false, reblogged=false, muted=false, bookmarked=false, pinned=false)
 
         Assert.assertEquals("${status.reblogs_count} Shares",
-            status.getNShares(getInstrumentation().targetContext))
+            status.getNShares(context))
     }
 
     @After
     fun after() {
         Intents.release()
         clearData()
-        mockServer.stop()
     }
 
 }

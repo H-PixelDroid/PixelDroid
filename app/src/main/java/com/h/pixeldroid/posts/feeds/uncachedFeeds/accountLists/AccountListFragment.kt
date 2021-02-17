@@ -97,7 +97,7 @@ class AccountViewHolder(binding: AccountListEntryBinding) : RecyclerView.ViewHol
             .circleCrop().placeholder(R.drawable.ic_default_user)
             .into(avatar)
 
-        username.text = account?.username
+        username.text = account?.display_name
         @SuppressLint("SetTextI18n")
         acct.text = "@${account?.acct}"
     }

@@ -1,8 +1,8 @@
-image: reactivecircus/android-emulator-26:latest
+image: reactivecircus/android-emulator-23:latest
 
 
 variables:
-  API_LEVEL: "26"
+  API_LEVEL: "23"
   ARCH: "x86"
   TARGET: "default"
 
@@ -34,25 +34,24 @@ debugTests:
     - ./gradlew -Pci --console=plain :app:testDebug
 
 
-#emulatorTest:
-#    interruptible: true
-#    stage: test
-#    script:
-#        - sdkmanager --sdk_root=${ANDROID_HOME} "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
-#        - echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
-#        - $ANDROID_HOME/emulator/emulator -avd "api-${API_LEVEL}" -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none &
-#        - chmod +x android-wait-for-emulator.sh
-#        - ./gradlew build
-#        - ./android-wait-for-emulator.sh
-#        - adb shell settings put global window_animation_scale 0.0
-#        - adb shell settings put global transition_animation_scale 0.0
-#        - adb shell settings put global animator_duration_scale 0.0
+emulatorTest:
+    interruptible: true
+    stage: test
+    script:
+        - echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
+        - $ANDROID_SDK_ROOT/emulator/emulator -avd "api-${API_LEVEL}" -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none &
+        - chmod +x android-wait-for-emulator.sh
+        - ./gradlew build
+        - ./android-wait-for-emulator.sh
+        - adb shell settings put global window_animation_scale 0.0
+        - adb shell settings put global transition_animation_scale 0.0
+        - adb shell settings put global animator_duration_scale 0.0
 
-#        - ./gradlew build connectedCheck connectedDebugAndroidTest jacocoTestReport
+        - ./gradlew build connectedCheck connectedStagingAndroidTest jacocoTestReport
 
-#        - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
+        - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
 
-#    artifacts:
-#        paths:
-#        - ./app/build/reports/jacoco/jacocoTestReport/
-#        expire_in: 1 week
+    artifacts:
+        paths:
+        - ./app/build/reports/jacoco/jacocoTestReport/
+        expire_in: 1 week
