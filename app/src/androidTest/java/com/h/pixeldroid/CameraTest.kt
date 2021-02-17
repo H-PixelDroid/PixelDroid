@@ -93,9 +93,6 @@ class CameraTest {
         Thread.sleep(1000)
 
         Intents.intended(expectedIntent)
-
-
-
     }
 
     @Test
@@ -105,6 +102,9 @@ class CameraTest {
             fragment.view?.findViewById<ImageButton>(R.id.camera_switch_button)?.performClick()
         }
         Thread.sleep(1000)
+
+        //FIXME this assert doesn't actually do anything...
+        // All this test really does is make sure it doesn't crash
         scenario.onFragment { fragment ->
             assert(!fragment.isHidden)
         }

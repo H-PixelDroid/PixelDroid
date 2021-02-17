@@ -17,12 +17,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
+import com.h.pixeldroid.testUtility.*
 import com.h.pixeldroid.utils.db.AppDatabase
-import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
-import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.testUtility.MockServer
-import com.h.pixeldroid.testUtility.clearData
-import com.h.pixeldroid.testUtility.initDB
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Before
@@ -48,12 +44,12 @@ class PostCreationFragmentTest {
         onView(withId(R.id.drawer_layout))
             .perform(swipeLeft())
             .perform(swipeLeft())
-        Thread.sleep(300)
+        waitForView(R.id.photo_view_button)
     }
 
-    // upload intent
+    // image choosing intent
     @Test
-    fun uploadButtonLaunchesGalleryIntent() {
+    fun galleryButtonLaunchesGalleryIntent() {
         val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
         intending(expectedIntent)
         onView(withId(R.id.photo_view_button)).perform(click())
@@ -64,7 +60,6 @@ class PostCreationFragmentTest {
 
 @RunWith(AndroidJUnit4::class)
 class PostFragmentUITests {
-    private lateinit var mockServer: MockServer
     private lateinit var context: Context
 
     @get:Rule
@@ -75,40 +70,21 @@ class PostFragmentUITests {
     @Before
     fun setup() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        mockServer = MockServer()
-        mockServer.start()
-        val baseUrl = mockServer.getUrl()
         db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
-            InstanceDatabaseEntity(
-                uri = baseUrl.toString(),
-                title = "PixelTest"
-            )
+            testiTestoInstance
         )
 
         db.userDao().insertUser(
-            UserDatabaseEntity(
-                    user_id = "123",
-                    instance_uri = baseUrl.toString(),
-                    username = "Testi",
-                    display_name = "Testi Testo",
-                    avatar_static = "some_avatar_url",
-                    isActive = true,
-                    accessToken = "token",
-                    refreshToken = "refreshToken",
-                    clientId = "clientId",
-                    clientSecret = "clientSecret"
-            )
+            testiTesto
         )
         db.close()
-        Thread.sleep(300)
     }
 
     @After
     fun after() {
         clearData()
-        mockServer.stop()
     }
 
     @Test
@@ -116,7 +92,9 @@ class PostFragmentUITests {
         ActivityScenario.launch(MainActivity::class.java).onActivity {
                 it.findViewById<TabLayout>(R.id.tabs).getTabAt(2)!!.select()
         }
-        Thread.sleep(1500)
+
+        waitForView(R.id.photo_view_button)
+
         onView(withId(R.id.photo_view_button)).check(matches(isDisplayed()))
         onView(withId(R.id.camera_capture_button)).check(matches(isDisplayed()))
     }

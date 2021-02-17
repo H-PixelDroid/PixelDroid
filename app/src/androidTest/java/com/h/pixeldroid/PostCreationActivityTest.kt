@@ -1,11 +1,41 @@
 package com.h.pixeldroid
 
-/*
+import android.Manifest
+import android.content.ClipData
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.net.Uri
+import android.util.Log
+import android.view.View.VISIBLE
+import androidx.core.net.toUri
+import androidx.core.os.bundleOf
+import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
+import com.h.pixeldroid.postCreation.PostCreationActivity
+import com.h.pixeldroid.postCreation.photoEdit.ThumbnailAdapter
+import com.h.pixeldroid.settings.AboutActivity
+import com.h.pixeldroid.testUtility.*
+import com.h.pixeldroid.utils.db.AppDatabase
+import org.hamcrest.CoreMatchers.not
+import org.junit.*
+import org.junit.rules.Timeout
+import org.junit.runner.RunWith
+import java.io.File
+
 @RunWith(AndroidJUnit4::class)
 class PostCreationActivityTest {
 
     private var testScenario: ActivityScenario<PostCreationActivity>? = null
-    private lateinit var mockServer: MockServer
     private lateinit var db: AppDatabase
     private lateinit var context: Context
 
@@ -26,33 +56,19 @@ class PostCreationActivityTest {
     @Before
     fun setup() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        mockServer = MockServer()
-        mockServer.start()
-        val baseUrl = mockServer.getUrl()
         db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
-            InstanceDatabaseEntity(
-                uri = baseUrl.toString(),
-                title = "PixelTest"
-            )
+            testiTestoInstance
         )
 
         db.userDao().insertUser(
-            UserDatabaseEntity(
-                user_id = "123",
-                instance_uri = baseUrl.toString(),
-                username = "Testi",
-                display_name = "Testi Testo",
-                avatar_static = "some_avatar_url",
-                isActive = true,
-                accessToken = "token"
-            )
+            testiTesto
         )
         db.close()
 
-        var uri1: String = ""
-        var uri2: String = ""
+        var uri1: Uri? = null
+        var uri2: Uri? = null
         val scenario = ActivityScenario.launch(AboutActivity::class.java)
         scenario.onActivity {
             val image1 = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
@@ -63,28 +79,32 @@ class PostCreationActivityTest {
             val file1 = File.createTempFile("temp_img1", ".png")
             val file2 = File.createTempFile("temp_img2", ".png")
             file1.writeBitmap(image1)
-            uri1 = file1.toUri().toString()
+            uri1 = file1.toUri()
             file2.writeBitmap(image2)
-            uri2 = file2.toUri().toString()
-            Log.d("test", uri1+"\n"+uri2)
+            uri2 = file2.toUri()
         }
-        val intent = Intent(context, PostCreationActivity::class.java).putExtra("pictures_uri", arrayListOf(uri1, uri2))
+        val intent = Intent(context, PostCreationActivity::class.java)
+
+        intent.clipData = ClipData("", emptyArray(), ClipData.Item(uri1))
+        intent.clipData!!.addItem(ClipData.Item(uri2))
+
         testScenario = ActivityScenario.launch(intent)
     }
 
     @After
     fun after() {
         clearData()
-        mockServer.stop()
     }
 
     @Test
+    @Ignore("Annoying to deal with and also sometimes the intent is not working as it should")
     fun createPost() {
         onView(withId(R.id.post_creation_send_button)).perform(click())
         // should send on main activity
-        onView(withId(R.id.main_activity_main_linear_layout)).check(matches(isDisplayed()))
+        Thread.sleep(3000)
+        onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
-
+/*
     @Test
     fun errorShown() {
         testScenario!!.onActivity { a -> a.upload_error.visibility = VISIBLE }
@@ -113,9 +133,9 @@ class PostCreationActivityTest {
                 )
             )
         Thread.sleep(1000)
-        onView(withId(R.id.action_upload)).perform(click())
+        onView(withId(R.id.action_save)).perform(click())
         Thread.sleep(1000)
-        onView(withId(R.id.image_grid)).check(matches(isDisplayed()))
+        onView(withId(R.id.carousel)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -127,5 +147,5 @@ class PostCreationActivityTest {
             )
         )
         Thread.sleep(1000)
-    }
-}*/
+    }*/
+}
