@@ -137,4 +137,42 @@
     <string name="switch_to_grid">Passa alla visualizzazione a griglia</string>
     <string name="no_cancel_edit">No, cancella la modifica</string>
     <string name="save_before_returning">Salavre le tue modifiche\?</string>
+    <string name="switch_to_carousel">Passa alla panoramica</string>
+    <string name="whats_an_instance_explanation">Potresti essere confuso dal campo di testo che chiede il dominio della tua \'instanza\'.
+\n
+\nPixelfed è una piattaforma federata, e parte del \'fediverso\', il che significa che può comunicare con altre piattaforme che parlano la stessa lingua, come Mastodon (vedi https://joinmastodon.org).
+\n
+\nSignifica anche che è necessario scegliere quale server, o \'istanza\' di Pixelfed da utilizzare. Se non ne conosci uno, puoi guardare qui: https://pixelfed.org/join
+\n
+\nPer maggiori informazioni su Pixelfed, puoi controllare qui: https://pixelfed.org</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d Seguace</item>
+        <item quantity="other">%d Seguaci</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d Post</item>
+        <item quantity="other">%d Post</item>
+    </plurals>
+    <plurals name="number_comments">
+        <item quantity="one">%d commento</item>
+        <item quantity="other">%d commenti</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d Condivisione</item>
+        <item quantity="other">%d Condivisioni</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d Mi piace</item>
+        <item quantity="other">%d Mi piace</item>
+    </plurals>
+    <string name="upload_error">Codice di errore restituito dal server: %1$s</string>
+    <string name="size_exceeds_instance_limit">La dimensione del numero dell\'immagine %1$s nell\'album supera la dimensione massima consentita dall\'istanza (%2$s kB ma il limite è %3$s kB). Potresti non essere in grado di caricarla.</string>
+    <string name="total_exceeds_album_limit">Hai scelto più immagini del massimo che il server consente (%1$s). Le immagini oltre il limite sono state ignorate.</string>
+    <string name="no_media_description">Aggiungi una descrizione dell\'immagine qui…</string>
+    <string name="save_image_description">Salva la descrizione dell\'immagine</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">La descrizione deve contenere al massimo %d carattere</item>
+        <item quantity="other">La descrizione deve contenere al massimo %d caratteri</item>
+    </plurals>
+    <string name="api_not_enabled_dialog">L\'API non è attivata su questa istanza. Contatta l\'amministratore per chiedergli di attivarlo.</string>
 </resources>
