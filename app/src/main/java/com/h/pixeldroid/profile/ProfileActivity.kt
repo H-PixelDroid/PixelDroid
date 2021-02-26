@@ -46,26 +46,23 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class ProfileActivity : BaseActivity() {
-    private lateinit var pixelfedAPI : PixelfedAPI
 
+    private lateinit var pixelfedAPI : PixelfedAPI
     private lateinit var accessToken : String
     private lateinit var domain : String
-
     private lateinit var accountId : String
-
-    private var user: UserDatabaseEntity? = null
-
-    private lateinit var activityBinding: ActivityProfileBinding
-
+    private lateinit var binding: ActivityProfileBinding
     private lateinit var profileAdapter: PagingDataAdapter<Status, RecyclerView.ViewHolder>
     private lateinit var viewModel: FeedViewModel<Status>
+
+    private var user: UserDatabaseEntity? = null
     private var job: Job? = null
 
     @ExperimentalPagingApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityBinding = ActivityProfileBinding.inflate(layoutInflater)
-        setContentView(activityBinding.root)
+        binding = ActivityProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -79,12 +76,6 @@ class ProfileActivity : BaseActivity() {
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
         accountId = account?.id ?: user!!.user_id
 
-        setContent(account)
-
-        profileAdapter = ProfilePostsAdapter()
-
-        initAdapter(activityBinding, profileAdapter)
-
         // get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(this, ProfileViewModelFactory(
@@ -96,19 +87,22 @@ class ProfileActivity : BaseActivity() {
             )
         ).get(FeedViewModel::class.java) as FeedViewModel<Status>
 
-        activityBinding.profilePostsRecyclerView.layoutManager = GridLayoutManager(this, 3)
+        profileAdapter = ProfilePostsAdapter()
+        initAdapter(binding, profileAdapter)
 
-        profileLaunch()
-        profileInitSearch()
+        binding.profilePostsRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
-        activityBinding.profileRefreshLayout.setOnRefreshListener {
+        binding.profileRefreshLayout.setOnRefreshListener {
             //It shouldn't be necessary to also retry() in addition to refresh(),
             //but if we don't do this, reloads after an error fail immediately...
             profileAdapter.retry()
             profileAdapter.refresh()
         }
-    }
 
+        setContent(account)
+        profileLaunch()
+        profileInitSearch()
+    }
 
     private fun profileLaunch() {
         // Make sure we cancel the previous job before creating a new one
@@ -128,23 +122,21 @@ class ProfileActivity : BaseActivity() {
                     .distinctUntilChangedBy { it.refresh }
                     // Only react to cases where Remote REFRESH completes i.e., NotLoading.
                     .filter { it.refresh is LoadState.NotLoading }
-                    .collect { activityBinding.profilePostsRecyclerView.scrollToPosition(0) }
+                    .collect { binding.profilePostsRecyclerView.scrollToPosition(0) }
         }
     }
-
 
     /**
      * Shows or hides the error in the different FeedFragments
      */
     private fun showError(errorText: String = "Something went wrong while loading", show: Boolean = true){
         if(show){
-            activityBinding.motionLayout.transitionToEnd()
-//            binding.profileErrorLayout.errorText.text = errorText
-        } else if(activityBinding.motionLayout.progress == 1F) {
-            activityBinding.motionLayout.transitionToStart()
+            binding.profileProgressBar.visibility = View.GONE
+            binding.motionLayout.transitionToEnd()
+        } else if(binding.motionLayout.progress == 1F) {
+            binding.motionLayout.transitionToStart()
         }
-        activityBinding.profileProgressBar.visibility = View.GONE
-        activityBinding.profileRefreshLayout.isRefreshing = false
+        binding.profileRefreshLayout.isRefreshing = false
     }
 
     /**
@@ -215,44 +207,32 @@ class ProfileActivity : BaseActivity() {
             }
         }
 
-        //if we aren't viewing our own account, activate follow button
-        if(account != null && account.id != user?.user_id) activateFollow(account)
-        //if we *are* viewing our own account, activate the edit button
-        else activateEditButton()
-
-
-        // On click open followers list
-        activityBinding.nbFollowersTextView.setOnClickListener{ onClickFollowers(account) }
-        // On click open followers list
-        activityBinding.nbFollowingTextView.setOnClickListener{ onClickFollowing(account) }
-    }
-
-    private fun getAndSetAccount(){
-        lifecycleScope.launchWhenCreated {
-            val account = try{
-                pixelfedAPI.getAccount("Bearer $accessToken", accountId)
-            } catch (exception: IOException) {
-                Log.e("ProfileActivity:", exception.toString())
-                return@launchWhenCreated showError()
-            } catch (exception: HttpException) {
-                return@launchWhenCreated showError()
-            }
-            setContent(account)
+        if(account != null && account.id != user?.user_id) {
+            //if we aren't viewing our own account, activate follow button
+            activateFollow(account)
+        } else {
+            //if we *are* viewing our own account, activate the edit button
+            activateEditButton()
         }
+
+        // On click open followers list
+        binding.nbFollowersTextView.setOnClickListener{ onClickFollowers(account) }
+        // On click open followers list
+        binding.nbFollowingTextView.setOnClickListener{ onClickFollowing(account) }
     }
 
     /**
      * Populate profile page with user's data
      */
     private fun setViews(account: Account) {
-        val profilePicture = activityBinding.profilePictureImageView
+        val profilePicture = binding.profilePictureImageView
         ImageConverter.setRoundImageFromURL(
             View(applicationContext),
             account.avatar,
             profilePicture
         )
 
-        activityBinding.descriptionTextView.text = parseHTMLText(
+        binding.descriptionTextView.text = parseHTMLText(
             account.note ?: "", emptyList(), pixelfedAPI,
             applicationContext, "Bearer $accessToken",
             lifecycleScope
@@ -260,27 +240,29 @@ class ProfileActivity : BaseActivity() {
 
         val displayName = account.getDisplayName()
 
-        activityBinding.accountNameTextView.text = displayName
+        binding.accountNameTextView.text = displayName
 
         supportActionBar?.title = displayName
-        if(displayName != "@${account.acct}"){
+        if(displayName != "@${account.acct}") {
             supportActionBar?.subtitle = "@${account.acct}"
         }
 
-        activityBinding.nbPostsTextView.text = applicationContext.getString(R.string.nb_posts)
+        binding.nbPostsTextView.text = applicationContext.getString(R.string.nb_posts)
             .format(account.statuses_count.toString())
 
-        activityBinding.nbFollowersTextView.text = applicationContext.getString(R.string.nb_followers)
+        binding.nbFollowersTextView.text = applicationContext.getString(R.string.nb_followers)
             .format(account.followers_count.toString())
 
-        activityBinding.nbFollowingTextView.text = applicationContext.getString(R.string.nb_following)
+        binding.nbFollowingTextView.text = applicationContext.getString(R.string.nb_following)
             .format(account.following_count.toString())
     }
 
     private fun onClickEditButton() {
         val url = "$domain/settings/home"
 
-        if (!openUrl(url)) Log.e("ProfileActivity", "Cannot open this link")
+        if(!openUrl(url)) {
+            Log.e("ProfileActivity", "Cannot open this link")
+        }
     }
 
     private fun onClickFollowers(account: Account?) {
@@ -301,7 +283,7 @@ class ProfileActivity : BaseActivity() {
 
     private fun activateEditButton() {
         // Edit button redirects to Pixelfed's "edit account" page
-        activityBinding.editButton.apply {
+        binding.editButton.apply {
             visibility = View.VISIBLE
             setOnClickListener{ onClickEditButton() }
         }
@@ -324,7 +306,7 @@ class ProfileActivity : BaseActivity() {
                     } else {
                         setOnClickFollow(account)
                     }
-                    activityBinding.followButton.visibility = View.VISIBLE
+                    binding.followButton.visibility = View.VISIBLE
                 }
             } catch (exception: IOException) {
                 Log.e("FOLLOW ERROR", exception.toString())
@@ -342,7 +324,7 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun setOnClickFollow(account: Account) {
-        activityBinding.followButton.apply {
+        binding.followButton.apply {
             setText(R.string.follow)
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
@@ -367,7 +349,7 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun setOnClickUnfollow(account: Account) {
-        activityBinding.followButton.apply {
+        binding.followButton.apply {
             setText(R.string.unfollow)
 
             setOnClickListener {
