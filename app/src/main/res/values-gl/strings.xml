@@ -125,4 +125,5 @@
     <string name="language">Idioma</string>
     <string name="delete_dialog">Eliminar esta publicación\?</string>
     <string name="delete">Eliminar</string>
+    <string name="verify_credentials">Non se obtivo a información da usuaria</string>
 </resources>
