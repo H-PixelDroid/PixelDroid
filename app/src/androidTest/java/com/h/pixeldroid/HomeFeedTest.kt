@@ -10,6 +10,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.h.pixeldroid.utils.db.AppDatabase
 import com.h.pixeldroid.posts.StatusViewHolder
@@ -55,15 +56,15 @@ class HomeFeedTest {
     @Test
     fun clickingTabOnAlbumShowsNextPhoto() {
         //Wait for the feed to load
-        waitForView(R.id.postTabs)
+        waitForView(R.id.postPager)
 
         activityScenario.onActivity {
             a -> run {
                 //Pick the second photo
-                a.findViewById<TabLayout>(R.id.postTabs).getTabAt(1)?.select()
+                a.findViewById<ViewPager2>(R.id.postPager).currentItem = 2
             }
         }
-        onView(first(withId(R.id.postTabs))).check(matches(isDisplayed()))
+        onView(first(withId(R.id.postPager))).check(matches(isDisplayed()))
     }
 /*
     @Test

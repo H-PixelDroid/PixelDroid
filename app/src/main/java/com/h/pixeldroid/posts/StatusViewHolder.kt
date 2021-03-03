@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.AlbumImageViewBinding
 import com.h.pixeldroid.databinding.CommentBinding
@@ -28,7 +27,6 @@ import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.AppDatabase
-import com.h.pixeldroid.utils.displayDimensionsInPx
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
@@ -60,12 +58,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }?.maxOrNull() ?: 1f
 
         val (displayWidth, displayHeight) = displayDimensionsInPx
-        val height = if (displayWidth / maxImageRatio > displayHeight * 3/4f) {
-            binding.postPicture.layoutParams.width = ((displayHeight * 3 / 4f) * maxImageRatio).roundToInt()
-            displayHeight * 3 / 4f
-        } else displayWidth / maxImageRatio
-
-        binding.postPicture.layoutParams.height = height.toInt()
+        if (displayWidth / maxImageRatio > displayHeight * 3/4f) {
+            binding.postPager.layoutParams.width = ((displayHeight * 3 / 4f) * maxImageRatio).roundToInt()
+            binding.postPager.layoutParams.height = (displayHeight * 3 / 4f).toInt()
+        } else {
+            binding.postPager.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+            binding.postPager.layoutParams.height = (displayWidth / maxImageRatio).toInt()
+        }
 
         //Setup the post layout
         val picRequest = Glide.with(itemView)
@@ -128,11 +127,9 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         if(!status?.media_attachments.isNullOrEmpty()) {
             setupPostPics(binding, request)
         } else {
-            binding.postPicture.visibility = View.GONE
             binding.postPager.visibility = View.GONE
-            binding.postTabs.visibility = View.GONE
+            binding.postIndicator.visibility = View.GONE
         }
-
 
         //Set comment initial visibility
         binding.commentIn.visibility = View.GONE
@@ -145,56 +142,41 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     ) {
 
         // Standard layout
-        binding.postPicture.visibility = View.VISIBLE
-        binding.postPager.visibility = View.GONE
-        binding.postTabs.visibility = View.GONE
+        binding.postPager.visibility = View.VISIBLE
 
+        //Attach the given tabs to the view pager
+        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList(), status?.sensitive)
 
-        if(status?.media_attachments?.size == 1) {
-            request.placeholder(
-                    status?.media_attachments?.get(0).let {
-                        it?.blurhash?.let { hash ->
-                            BlurHashDecoder.blurHashBitmap(binding.root.resources,
-                                    hash,
-                                    it.meta?.original?.width,
-                                    it.meta?.original?.height
-                            )
-                        }
-                    }
-            ).load(status?.getPostUrl()).into(binding.postPicture)
-            val imgDescription = status?.media_attachments?.get(0)?.description.orEmpty().ifEmpty { binding.root.context.getString(
-                R.string.no_description) }
-            binding.postPicture.contentDescription = imgDescription
-
-            binding.postPicture.setOnLongClickListener {
-                Snackbar.make(it, imgDescription, Snackbar.LENGTH_SHORT).show()
-                true
-            }
-
-        } else if(status?.media_attachments?.size!! > 1) {
-            setupTabsLayout(binding, request)
+        if(status?.media_attachments?.size ?: 0 > 1) {
+            binding.postIndicator.setViewPager(binding.postPager)
+            binding.postIndicator.visibility = View.VISIBLE
+        } else {
+            binding.postIndicator.visibility = View.GONE
         }
 
-        if (status?.sensitive!!) {
-            status?.setupSensitiveLayout(binding)
+        if (status?.sensitive == true) {
+            setupSensitiveLayout()
+        } else {
+            // GONE is the default, but have to set it again because of how RecyclerViews work
+            binding.sensitiveWarning.visibility = View.GONE
         }
     }
 
-    private fun setupTabsLayout(
-        binding: PostFragmentBinding,
-        request: RequestBuilder<Drawable>,
-    ) {
-        //Only show the viewPager and tabs
-        binding.postPicture.visibility = View.GONE
-        binding.postPager.visibility = View.VISIBLE
-        binding.postTabs.visibility = View.VISIBLE
 
-        //Attach the given tabs to the view pager
-        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList())
+    private fun setupSensitiveLayout() {
 
-        TabLayoutMediator(binding.postTabs, binding.postPager) { tab, _ ->
-            tab.icon = ContextCompat.getDrawable(binding.root.context, R.drawable.ic_dot_blue_12dp)
-        }.attach()
+        // Set dark layout and warning message
+        binding.sensitiveWarning.visibility = View.VISIBLE
+        //binding.postPicture.colorFilter = ColorMatrixColorFilter(censorMatrix)
+
+        fun uncensorPicture(binding: PostFragmentBinding) {
+            binding.sensitiveWarning.visibility = View.GONE
+            (binding.postPager.adapter as AlbumViewPagerAdapter).uncensor()
+        }
+        
+        binding.sensitiveWarning.setOnClickListener {
+            uncensorPicture(binding)
+        }
     }
 
     private fun setDescription(
@@ -459,7 +441,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
         //Activate double tap liking
         var clicked = false
-        binding.postPicture.setOnClickListener {
+        binding.postPager.setOnClickListener {
             lifecycleScope.launchWhenCreated {
                 //Check that the post isn't hidden
                 if(binding.sensitiveWarning.visibility == View.GONE) {
@@ -479,7 +461,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                         clicked = true
 
                         //Reset clicked to false after 500ms
-                        binding.postPicture.handler.postDelayed(fun() { clicked = false }, 500)
+                        binding.postPager.handler.postDelayed(fun() { clicked = false }, 500)
                     }
                 }
 
@@ -696,7 +678,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     }
 }
 
-class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>) :
+private class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>, private var sensitive: Boolean?) :
     RecyclerView.Adapter<AlbumViewPagerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -708,27 +690,42 @@ class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>) :
 
     override fun getItemCount() = media_attachments.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(holder.binding.root)
-            .asDrawable().fitCenter().placeholder(
-                        media_attachments[position].blurhash?.let {
-                            BlurHashDecoder.blurHashBitmap(
-                                    holder.binding.root.resources,
-                                    it,
-                                    media_attachments[position].meta?.original?.width,
-                                    media_attachments[position].meta?.original?.height)
-                        }
+        media_attachments[position].apply {
+            val blurhashBitMap = blurhash?.let {
+                BlurHashDecoder.blurHashBitmap(
+                        holder.binding.root.resources,
+                        it,
+                        meta?.original?.width,
+                        meta?.original?.height
                 )
-            .load(media_attachments[position].url).into(holder.image)
+            }
+            if (sensitive == false) {
+                Glide.with(holder.binding.root)
+                        .asDrawable().fitCenter()
+                        .placeholder(blurhashBitMap)
+                        .load(url).into(holder.image)
+            } else {
+                Glide.with(holder.binding.root)
+                        .asDrawable().fitCenter()
+                        .load(blurhashBitMap).into(holder.image)
+            }
 
-        val description = media_attachments[position].description
-            .orEmpty().ifEmpty{ holder.binding.root.context.getString(R.string.no_description)}
+            val description = description
+                .orEmpty()
+                .ifEmpty { holder.binding.root.context.getString(R.string.no_description) }
 
-        holder.image.setOnLongClickListener {
-            Snackbar.make(it, description, Snackbar.LENGTH_SHORT).show()
-            true
+            holder.image.setOnLongClickListener {
+                Snackbar.make(it, description, Snackbar.LENGTH_SHORT).show()
+                true
+            }
+
+            holder.image.contentDescription = description
         }
+    }
 
-        holder.image.contentDescription = description
+    fun uncensor(){
+        sensitive = false
+        notifyDataSetChanged()
     }
 
     class ViewHolder(val binding: AlbumImageViewBinding) : RecyclerView.ViewHolder(binding.root){
