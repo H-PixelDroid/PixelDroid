@@ -12,13 +12,13 @@
     <string name="post">envoyer</string>
     <string name="whats_an_instance">Qu\'est-ce qu\'une instance \?</string>
     <string name="logout">Se déconnecter</string>
-    <string name="save_to_gallery">Sauvegarder dans la galerie…</string>
+    <string name="save_to_gallery">Enregistrer dans la galerie…</string>
     <string name="image_download_downloading">En cours de téléchargement…</string>
     <string name="image_download_success">Image téléchargée avec succès</string>
     <string name="share_picture">Partager l\'image…</string>
     <string name="invalid_domain">Domaine invalide</string>
     <string name="image_download_failed">Le téléchargement a échoué, veuillez réessayer</string>
-    <string name="browser_launch_failed">Impossible de lancer un navigateur, en avez-vous un \?</string>
+    <string name="browser_launch_failed">Impossible de lancer un navigateur web, en avez-vous un \?</string>
     <string name="mention_notification">%1$s vous a mentionné</string>
     <string name="app_name">PixelDroid</string>
     <string name="token_error">Erreur lors de l\'obtention du token</string>
@@ -26,17 +26,17 @@
     <string name="theme_title">Thème de l’application</string>
     <string name="theme_header">Thème</string>
     <string name="lbl_brightness">Luminosité</string>
-    <string name="lbl_contrast">CONTRASTE</string>
+    <string name="lbl_contrast">Contraste</string>
     <string name="lbl_saturation">Saturation</string>
     <string name="tab_filters">Filtres</string>
-    <string name="edit">MODIFIER</string>
+    <string name="edit">Modifier</string>
     <string name="capture_button_alt">Prendre une photo</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
     <string name="gallery_button_alt">Galerie</string>
-    <string name="NoCommentsToShow">Pas de commentaire pour cette publication…</string>
+    <string name="NoCommentsToShow">Aucun commentaire pour cette publication…</string>
     <string name="domain_of_your_instance">Domaine de votre instance</string>
-    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Media caché
-\n(Cliquer pour le montrer)</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Média caché
+\n(Cliquer pour l\'afficher)</string>
     <string name="login_connection_required_once">Vous devez être connecté à internet pour pouvoir ajouter un compte et utiliser PixelDroid :(</string>
     <string name="add_account_description">Ajouter un autre compte Pixelfed</string>
     <string name="add_account_name">Ajouter un compte Pixelfed</string>
@@ -45,7 +45,7 @@
     <string name="picture_format_error">Erreur de téléversement : format d\'image incorrect.</string>
     <string name="upload_picture_failed">Erreur de téléversement d\'image !</string>
     <string name="save_image_success">Image enregistrée avec succès</string>
-    <string name="save_image_failed">Impossible de sauvegarder l\'image</string>
+    <string name="save_image_failed">Impossible d\'enregistrer l\'image</string>
     <string name="permission_denied">Permission refusée</string>
     <string name="dark_theme">Sombre</string>
     <string name="light_theme">Clair</string>
@@ -80,7 +80,7 @@
     <string name="no_username">Pas de nom d\'utilisateur</string>
     <string name="follow">S\'abonner</string>
     <string name="edit_profile">Modifier le profil</string>
-    <string name="search">Chercher</string>
+    <string name="search">Rechercher</string>
     <string name="posts">PUBLICATIONS</string>
     <string name="accounts">COMPTES</string>
     <string name="hashtags">HASHTAGS</string>
@@ -90,28 +90,28 @@
     <string name="media_upload_failed">{gmd_cloud_off} Échec du téléversement du média, réessayez ou vérifiez l\'état du réseau</string>
     <string name="crop_result_error">Impossible de récupérer l\'image après le recadrage</string>
     <string name="busy_dialog_ok_button">D\'accord, attendez pour ça.</string>
-    <string name="busy_dialog_text">Toujours en train de traiter l\'image, attendez que cela se termine en premier !</string>
+    <string name="busy_dialog_text">Toujours en train de traiter l\'image, attendez tout d\'abord que cela se termine !</string>
     <string name="nothing_to_see_here">Rien à voir ici !</string>
-    <string name="issues_contribute">Rapporter des problèmes ou contribuer à l\'application :</string>
+    <string name="issues_contribute">Signaler des problèmes ou contribuer à l\'application :</string>
     <string name="something_went_wrong">Il y a eu un problème…</string>
-    <string name="reported">Rapporté {gmd_check_circle}</string>
-    <string name="report_target">Rapporter la publication de @%1$s</string>
-    <string name="report">Rapporter</string>
+    <string name="reported">Signalé {gmd_check_circle}</string>
+    <string name="report_target">Signaler la publication de @%1$s</string>
+    <string name="report">Signaler</string>
     <string name="image_preview">Aperçu de l\'image en cours de modification</string>
     <string name="filter_thumbnail">Vignette d\'un filtre</string>
-    <string name="mascot_description">Image montrant un panda rouge (la mascotte de Pixelfed) qui utilise un téléphone</string>
-    <string name="help_translate">Aidez pour traduire PixelDroid dans votre langue :</string>
+    <string name="mascot_description">Image montrant un panda rouge (la mascotte de Pixelfed) utilisant un téléphone</string>
+    <string name="help_translate">Aidez à traduire PixelDroid dans votre langue :</string>
     <string name="language">Langue</string>
     <string name="delete_dialog">Supprimer cette publication \?</string>
     <string name="delete">Supprimer</string>
     <string name="discover">DÉCOUVRIR</string>
     <string name="profile_picture">Photo de profil</string>
     <string name="toolbar_title_edit">Modifier</string>
-    <string name="report_error">Échec lors de l\'envoi du rapport</string>
-    <string name="optional_report_comment">Message facultatif pour les mods/admins</string>
+    <string name="report_error">Échec lors de l\'envoi du signalement</string>
+    <string name="optional_report_comment">Message facultatif pour les modérateurs/admins</string>
     <string name="share_link">Partager le lien</string>
     <string name="status_more_options">Plus d\'options</string>
-    <string name="search_empty_error">La requête de recherche ne peut pas être vide</string>
+    <string name="search_empty_error">La recherche ne peut pas être vide</string>
     <string name="post_title">Publication de %1$s</string>
     <string name="about">À propos</string>
     <string name="license_info">PixelDroid est un logiciel libre, sous licence GNU General Public License (version 3 ou ultérieure)</string>
@@ -135,7 +135,48 @@
     <string name="save_before_returning">Enregistrer vos modifications \?</string>
     <string name="panda_pull_to_refresh_to_try_again">Ce panda est malheureux. Glissez pour actualiser et réessayer.</string>
     <string name="open_drawer_menu">Ouvrir le menu latéral</string>
-    <string name="follows_title">%1$s abonnements</string>
-    <string name="followers_title">%1$s abonnés</string>
+    <string name="follows_title">Abonnements de %1$s</string>
+    <string name="followers_title">Abonné·e·s de %1$s</string>
     <string name="verify_credentials">Impossible d\'obtenir les informations sur l\'utilisateur</string>
+    <string name="size_exceeds_instance_limit">La taille de l\'image n°%1$s dans l\'album dépasse la taille maximale autorisée (%2$s ko mais la limite est %3$s ko). Il se peut que vous ne puissiez pas la télécharger.</string>
+    <string name="upload_error">Le serveur a retourné le code d\'erreur : %1$s</string>
+    <string name="total_exceeds_album_limit">Vous avez choisi plus d\'images que le maximum autorisé par votre serveur (%1$s). Les images au delà de la limite ont été ignorées.</string>
+    <string name="no_media_description">Ajouter une description du média ici…</string>
+    <string name="save_image_description">Enregistrer la description de l\'image</string>
+    <string name="api_not_enabled_dialog">L\'API n\'est pas activée sur cette instance. Veuillez contacter votre administrateur pour lui demander de l\'activer.</string>
+    <string name="whats_an_instance_explanation">Vous risquez d\'être déroutés par le champ demandant le domaine de votre \"instance\".
+\n
+\nPixelfed est une plateforme fédérée, et fait partie de \"fediverse\", ce qui signifie qu\'elle peut communiquer avec d\'autres plateformes qui parlent la même langue, comme Mastodon (voir https://joinmastodon.org).
+\n
+\nCela signifie également que vous devez choisir quel serveur ou \"instance\" de Pixelfed utiliser. Si vous n\'en connaissez aucun, vous pouvez regarder ici : https://pixelfed.org/join
+\n
+\nPour plus d\'informations sur Pixelfed, vous pouvez consulter le site suivant : https://pixelfed.org</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d Abonnement</item>
+        <item quantity="other">%d Abonnements</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">%d Abonné·e</item>
+        <item quantity="other">%d Abonné·e·s</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d Publication</item>
+        <item quantity="other">%d Publications</item>
+    </plurals>
+    <plurals name="number_comments">
+        <item quantity="one">%d commentaire</item>
+        <item quantity="other">%d commentaires</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d Partage</item>
+        <item quantity="other">%d Partages</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d J\'aime</item>
+        <item quantity="other">%d J\'aime</item>
+    </plurals>
+    <plurals name="description_max_characters">
+        <item quantity="one">La description doit contenir au moins %d lettre.</item>
+        <item quantity="other">La description doit contenir au moins %d lettres.</item>
+    </plurals>
 </resources>
