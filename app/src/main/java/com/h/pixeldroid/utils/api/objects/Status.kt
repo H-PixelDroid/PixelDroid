@@ -96,29 +96,6 @@ open class Status(
 
     }
 
-    fun setupSensitiveLayout(binding: PostFragmentBinding) {
-
-        // Set dark layout and warning message
-        binding.sensitiveWarning.visibility = VISIBLE
-        val array = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 1f, 0f)
-        val censorMatrix = ColorMatrix(array)
-        binding.postPicture.colorFilter = ColorMatrixColorFilter(censorMatrix)
-
-        fun uncensorPicture(binding: PostFragmentBinding) {
-            binding.sensitiveWarning.visibility = GONE
-            binding.postPicture.clearColorFilter()
-        }
-
-
-        binding.sensitiveWarning.setOnClickListener {
-            uncensorPicture(binding)
-        }
-
-        binding.postPicture.setOnClickListener {
-            uncensorPicture(binding)
-        }
-    }
-
     fun downloadImage(context: Context, url: String, view: View, share: Boolean = false) {
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
