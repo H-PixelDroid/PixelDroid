@@ -220,9 +220,7 @@ class HomeFeedTest {
     @Test
     fun performClickOnSensitiveWarning() {
         waitForView(R.id.username)
-
-        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(1))
-
+        
         onView(second(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         onView(withId(R.id.list))

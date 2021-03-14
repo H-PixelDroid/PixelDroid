@@ -6,14 +6,15 @@ import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account
 import retrofit2.HttpException
 import java.io.IOException
+import java.math.BigInteger
 
 class FollowersPagingSource(
     private val api: PixelfedAPI,
     private val accessToken: String,
     private val accountId: String,
     private val following: Boolean
-) : PagingSource<Int, Account>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Account> {
+) : PagingSource<String, Account>() {
+    override suspend fun load(params: LoadParams<String>): LoadResult<String, Account> {
         val position = params.key
         return try {
             val response =
@@ -24,14 +25,14 @@ class FollowersPagingSource(
                     api.followers(account_id = accountId,
                         authorization = "Bearer $accessToken",
                         limit = params.loadSize,
-                        page = position?.toString(),
-                        max_id = position?.toString())
+                        page = position,
+                        max_id = position)
                 } else {
                     api.following(account_id = accountId,
                         authorization = "Bearer $accessToken",
                         limit = params.loadSize,
-                        page = position?.toString(),
-                        max_id = position?.toString())
+                        page = position,
+                        max_id = position)
                 }
 
             val accounts = if(response.isSuccessful){
@@ -40,19 +41,19 @@ class FollowersPagingSource(
                 throw HttpException(response)
             }
 
-            val nextPosition = if(response.headers()["Link"] != null){
+            val nextPosition: String = if(response.headers()["Link"] != null){
                 //Header is of the form:
                 // Link: <https://mastodon.social/api/v1/accounts/1/followers?limit=2&max_id=7628164>; rel="next", <https://mastodon.social/api/v1/accounts/1/followers?limit=2&since_id=7628165>; rel="prev"
                 // So we want the first max_id value. In case there are arguments after
                 // the max_id in the URL, we make sure to stop at the first '?'
                 response.headers()["Link"]
                     .orEmpty()
-                    .substringAfter("max_id=")
-                    .substringBefore('?')
-                    .substringBefore('>')
-                    .toIntOrNull() ?: 0
+                    .substringAfter("max_id=", "")
+                    .substringBefore('?', "")
+                    .substringBefore('>', "")
             } else {
-                params.key?.plus(1) ?: 2
+                // No Link header, so we just increment the position value
+                (position?.toBigIntegerOrNull() ?: 1.toBigInteger()).inc().toString()
             }
 
             LoadResult.Page(
@@ -66,4 +67,9 @@ class FollowersPagingSource(
             LoadResult.Error(exception)
         }
     }
+
+    override fun getRefreshKey(state: PagingState<String, Account>): String? =
+        state.anchorPosition?.run {
+            state.closestItemToPosition(this)?.id
+        }
 }
