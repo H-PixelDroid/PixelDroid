@@ -19,13 +19,15 @@ import com.bumptech.glide.RequestBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.AlbumImageViewBinding
-import com.h.pixeldroid.databinding.CommentBinding
 import com.h.pixeldroid.databinding.PostFragmentBinding
 import com.h.pixeldroid.utils.BlurHashDecoder
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_COMMENT_TAG
+import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_TAG
+import com.h.pixeldroid.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import com.h.pixeldroid.utils.db.AppDatabase
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -44,7 +46,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private var status: Status? = null
 
-    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>) {
+    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>, isActivity: Boolean = false) {
 
         this.itemView.visibility = View.VISIBLE
         this.status = status
@@ -67,14 +69,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
 
         //Setup the post layout
-        val picRequest = Glide.with(itemView)
-            .asDrawable().fitCenter()
+        val picRequest = Glide.with(itemView).asDrawable().fitCenter()
 
         val user = db.userDao().getActiveUser()!!
 
-        setupPost(picRequest, user.instance_uri, false)
+        setupPost(picRequest, user.instance_uri, isActivity)
 
-        activateButtons(pixelfedAPI, db, lifecycleScope)
+        activateButtons(pixelfedAPI, db, lifecycleScope, isActivity)
 
     }
 
@@ -130,10 +131,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             binding.postPager.visibility = View.GONE
             binding.postIndicator.visibility = View.GONE
         }
-
-        //Set comment initial visibility
-        binding.commentIn.visibility = View.GONE
-        binding.commentContainer.visibility = View.GONE
     }
 
     private fun setupPostPics(
@@ -200,8 +197,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             }
         }
     }
-
-    private fun activateButtons(api: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope){
+    //region buttons
+    private fun activateButtons(
+        api: PixelfedAPI,
+        db: AppDatabase,
+        lifecycleScope: LifecycleCoroutineScope,
+        isActivity: Boolean
+    ){
         val user = db.userDao().getActiveUser()!!
 
         val credential = "Bearer ${user.accessToken}"
@@ -217,9 +219,23 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             api, credential, status?.reblogged ?: false,
             lifecycleScope
         )
-        activateCommenter(api, credential, lifecycleScope)
 
-        showComments(api, credential, lifecycleScope)
+        if(isActivity){
+            binding.commenter.visibility = View.INVISIBLE
+        }
+        else {
+            binding.commenter.setOnClickListener {
+                lifecycleScope.launchWhenCreated {
+                    //Open status in activity
+                    val intent = Intent(it.context, PostActivity::class.java)
+                    intent.putExtra(POST_TAG, status)
+                    intent.putExtra(POST_COMMENT_TAG, true)
+                    it.context.startActivity(intent)
+                }
+            }
+        }
+
+        showComments(lifecycleScope, isActivity)
 
         activateMoreButton(api, db, lifecycleScope)
     }
@@ -514,13 +530,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             }
         }
     }
+    //endregion
 
     private fun showComments(
-        api: PixelfedAPI,
-        credential: String,
-        lifecycleScope: LifecycleCoroutineScope
+            lifecycleScope: LifecycleCoroutineScope,
+            isActivity: Boolean
     ) {
-        //Show all comments of a post
+        //Show number of comments on the post
         if (status?.replies_count == 0) {
             binding.viewComments.text =  binding.root.context.getString(R.string.NoCommentsToShow)
         } else {
@@ -529,143 +545,22 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                     status?.replies_count ?: 0,
                                                     status?.replies_count ?: 0
                 )
-                setOnClickListener {
-                    visibility = View.GONE
-
-                    lifecycleScope.launchWhenCreated {
-                        //Retrieve the comments
-                        retrieveComments(api, credential)
+                if(!isActivity) {
+                    setOnClickListener {
+                        lifecycleScope.launchWhenCreated {
+                            //Open status in activity
+                            val intent = Intent(context, PostActivity::class.java)
+                            intent.putExtra(POST_TAG, status)
+                            intent.putExtra(VIEW_COMMENTS_TAG, true)
+                            context.startActivity(intent)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun activateCommenter(
-        api: PixelfedAPI,
-        credential: String,
-        lifecycleScope: LifecycleCoroutineScope
-    ) {
-        //Toggle comment button
-        toggleCommentInput()
 
-        //Activate commenterpostPicture
-        binding.submitComment.setOnClickListener {
-            val textIn = binding.editComment.text
-            //Open text input
-            if(textIn.isNullOrEmpty()) {
-                Toast.makeText(
-                    binding.root.context,
-                    binding.root.context.getString(R.string.empty_comment),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                //Post the comment
-                lifecycleScope.launchWhenCreated {
-                    postComment(api, credential)
-                }
-            }
-        }
-    }
-
-    private fun toggleCommentInput() {
-        //Toggle comment button
-        binding.commenter.setOnClickListener {
-            when(binding.commentIn.visibility) {
-                View.VISIBLE -> {
-                    binding.commentIn.visibility = View.GONE
-                    ImageConverter.setImageFromDrawable(
-                        binding.root,
-                        binding.commenter,
-                        R.drawable.ic_comment_empty
-                    )
-                }
-                View.GONE -> {
-                    binding.commentIn.visibility = View.VISIBLE
-                    ImageConverter.setImageFromDrawable(
-                        binding.root,
-                        binding.commenter,
-                        R.drawable.ic_comment_blue
-                    )
-                }
-            }
-        }
-    }
-
-    fun addComment(context: android.content.Context, commentContainer: LinearLayout, commentUsername: String, commentContent: String) {
-
-
-        val itemBinding = CommentBinding.inflate(
-            LayoutInflater.from(context), commentContainer, false
-        )
-
-        itemBinding.user.text = commentUsername
-        itemBinding.commentText.text = commentContent
-    }
-
-    private suspend fun retrieveComments(
-            api: PixelfedAPI,
-            credential: String,
-    ) {
-        status?.id?.let {
-            try {
-                val statuses = api.statusComments(it, credential).descendants
-
-                binding.commentContainer.removeAllViews()
-
-                //Create the new views for each comment
-                for (status in statuses) {
-                    addComment(binding.root.context, binding.commentContainer, status.account!!.username!!,
-                            status.content!!
-                    )
-                }
-                binding.commentContainer.visibility = View.VISIBLE
-
-            } catch (exception: IOException) {
-                Log.e("COMMENT FETCH ERROR", exception.toString())
-            } catch (exception: HttpException) {
-                Log.e("COMMENT ERROR", "${exception.code()} with body ${exception.response()?.errorBody()}")
-            }
-        }
-    }
-
-    private suspend fun postComment(
-        api: PixelfedAPI,
-        credential: String,
-    ) {
-        val textIn = binding.editComment.text
-        val nonNullText = textIn.toString()
-        status?.id?.let {
-            try {
-                val response = api.postStatus(credential, nonNullText, it)
-                binding.commentIn.visibility = View.GONE
-
-                //Add the comment to the comment section
-                addComment(
-                    binding.root.context, binding.commentContainer, response.account!!.username!!,
-                    response.content!!
-                )
-
-                Toast.makeText(
-                    binding.root.context,
-                    binding.root.context.getString(R.string.comment_posted).format(textIn),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } catch (exception: IOException) {
-                Log.e("COMMENT ERROR", exception.toString())
-                Toast.makeText(
-                    binding.root.context, binding.root.context.getString(R.string.comment_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } catch (exception: HttpException) {
-                Toast.makeText(
-                    binding.root.context, binding.root.context.getString(R.string.comment_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.e("ERROR_CODE", exception.code().toString())
-            }
-        }
-    }
 
 
     companion object {

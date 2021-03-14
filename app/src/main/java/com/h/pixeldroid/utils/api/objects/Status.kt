@@ -64,8 +64,8 @@ open class Status(
 {
     companion object {
         const val POST_TAG = "postTag"
-        const val DOMAIN_TAG = "domainTag"
-        const val DISCOVER_TAG = "discoverTag"
+        const val VIEW_COMMENTS_TAG = "view_comments_tag"
+        const val POST_COMMENT_TAG = "post_comment_tag"
     }
 
     fun getPostUrl() : String? = media_attachments?.firstOrNull()?.url
