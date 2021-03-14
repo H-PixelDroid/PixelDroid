@@ -1,6 +1,7 @@
 package com.h.pixeldroid.posts.feeds.uncachedFeeds.profile
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Status
 import retrofit2.HttpException
@@ -31,4 +32,9 @@ class ProfilePagingSource(
             LoadResult.Error(exception)
         }
     }
+
+    override fun getRefreshKey(state: PagingState<String, Status>): String? =
+        state.anchorPosition?.run {
+            state.closestItemToPosition(this)?.id
+        }
 }
