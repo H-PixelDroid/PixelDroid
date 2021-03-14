@@ -25,6 +25,7 @@ import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_COMMENT_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import com.h.pixeldroid.utils.db.AppDatabase
@@ -68,8 +69,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
 
         //Setup the post layout
-        val picRequest = Glide.with(itemView)
-            .asDrawable().fitCenter()
+        val picRequest = Glide.with(itemView).asDrawable().fitCenter()
 
         val user = db.userDao().getActiveUser()!!
 
@@ -197,7 +197,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             }
         }
     }
-
+    //region buttons
     private fun activateButtons(
         api: PixelfedAPI,
         db: AppDatabase,
@@ -220,7 +220,22 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             lifecycleScope
         )
 
-        showComments(api, credential, lifecycleScope, isActivity)
+        if(isActivity){
+            binding.commenter.visibility = View.INVISIBLE
+        }
+        else {
+            binding.commenter.setOnClickListener {
+                lifecycleScope.launchWhenCreated {
+                    //Open status in activity
+                    val intent = Intent(it.context, PostActivity::class.java)
+                    intent.putExtra(POST_TAG, status)
+                    intent.putExtra(POST_COMMENT_TAG, true)
+                    it.context.startActivity(intent)
+                }
+            }
+        }
+
+        showComments(lifecycleScope, isActivity)
 
         activateMoreButton(api, db, lifecycleScope)
     }
@@ -515,14 +530,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             }
         }
     }
+    //endregion
 
     private fun showComments(
-        api: PixelfedAPI,
-        credential: String,
-        lifecycleScope: LifecycleCoroutineScope,
-        isActivity: Boolean
+            lifecycleScope: LifecycleCoroutineScope,
+            isActivity: Boolean
     ) {
-        //Show all comments of a post
+        //Show number of comments on the post
         if (status?.replies_count == 0) {
             binding.viewComments.text =  binding.root.context.getString(R.string.NoCommentsToShow)
         } else {
@@ -531,14 +545,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                     status?.replies_count ?: 0,
                                                     status?.replies_count ?: 0
                 )
-                if(isActivity) {
-                    setOnClickListener {
-                        lifecycleScope.launchWhenCreated {
-                            //Retrieve the comments
-                            //TODO retrieveComments(api, credential)
-                        }
-                    }
-                } else {
+                if(!isActivity) {
                     setOnClickListener {
                         lifecycleScope.launchWhenCreated {
                             //Open status in activity

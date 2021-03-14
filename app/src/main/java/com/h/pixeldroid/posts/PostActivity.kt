@@ -5,18 +5,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityPostBinding
 import com.h.pixeldroid.databinding.CommentBinding
-import com.h.pixeldroid.utils.api.objects.Status
-import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.utils.BaseActivity
-import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Mention
+import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_COMMENT_TAG
+import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import com.h.pixeldroid.utils.displayDimensionsInPx
 import retrofit2.HttpException
@@ -38,7 +39,8 @@ class PostActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         status = intent.getSerializableExtra(POST_TAG) as Status
-        val viewComments = intent.getSerializableExtra(VIEW_COMMENTS_TAG) as Boolean
+        val viewComments: Boolean = (intent.getSerializableExtra(VIEW_COMMENTS_TAG) ?: false) as Boolean
+        val postComment: Boolean = (intent.getSerializableExtra(POST_COMMENT_TAG) ?: false) as Boolean
 
         val user = db.userDao().getActiveUser()
 
@@ -52,10 +54,23 @@ class PostActivity : BaseActivity() {
 
         holder.bind(status, apiHolder.api!!, db, lifecycleScope, displayDimensionsInPx(), isActivity = true)
 
-        val credential: String = "Bearer $accessToken"
+        val credential = "Bearer $accessToken"
         activateCommenter(credential)
 
-        if(viewComments){
+        if(viewComments || postComment){
+            //Scroll already down as much as possible (since comments are not loaded yet)
+            binding.scrollview.requestChildFocus(binding.editComment, binding.editComment)
+
+            //Open keyboard if we want to post a comment
+            if(postComment && binding.editComment.requestFocus()) {
+                window.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
+                binding.editComment.requestFocus()
+            }
+
+            // also retrieve comments if we're not posting the comment
+            if(!postComment) retrieveComments(apiHolder.api!!, credential)
+        }
+        binding.postFragmentSingle.viewComments.setOnClickListener {
             retrieveComments(apiHolder.api!!, credential)
         }
     }
@@ -66,10 +81,7 @@ class PostActivity : BaseActivity() {
     }
 
     private fun activateCommenter(credential: String) {
-        //Toggle comment button
-        toggleCommentInput()
-
-        //Activate commenterpostPicture
+        //Activate commenter
         binding.submitComment.setOnClickListener {
             val textIn = binding.editComment.text
             //Open text input
@@ -88,33 +100,9 @@ class PostActivity : BaseActivity() {
         }
     }
 
-    private fun toggleCommentInput() {
-        //Toggle comment button
-        binding.postFragmentSingle.commenter.setOnClickListener {
-            when(binding.commentIn.visibility) {
-                View.VISIBLE -> {
-                    binding.commentIn.visibility = View.GONE
-                    ImageConverter.setImageFromDrawable(
-                        binding.root,
-                        binding.postFragmentSingle.commenter,
-                        R.drawable.ic_comment_empty
-                    )
-                }
-                View.GONE -> {
-                    binding.commentIn.visibility = View.VISIBLE
-                    ImageConverter.setImageFromDrawable(
-                        binding.root,
-                        binding.postFragmentSingle.commenter,
-                        R.drawable.ic_comment_blue
-                    )
-                }
-            }
-        }
-    }
-
-    fun addComment(context: Context, commentContainer: LinearLayout,
-                   commentUsername: String, commentContent: String, mentions: List<Mention>,
-                   credential: String) {
+    private fun addComment(context: Context, commentContainer: LinearLayout,
+                           commentUsername: String, commentContent: String, mentions: List<Mention>,
+                           credential: String) {
 
 
         val itemBinding = CommentBinding.inflate(
@@ -148,6 +136,8 @@ class PostActivity : BaseActivity() {
                     }
                     binding.commentContainer.visibility = View.VISIBLE
 
+                    //Focus the comments
+                    binding.scrollview.requestChildFocus(binding.commentContainer, binding.commentContainer)
                 } catch (exception: IOException) {
                     Log.e("COMMENT FETCH ERROR", exception.toString())
                 } catch (exception: HttpException) {
