@@ -1,6 +1,7 @@
 package com.h.pixeldroid.posts.feeds.uncachedFeeds.search
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.FeedContent
 import com.h.pixeldroid.utils.api.objects.Results
@@ -44,4 +45,9 @@ class SearchPagingSource<T: FeedContent>(
             LoadResult.Error(exception)
         }
     }
+
+    override fun getRefreshKey(state: PagingState<Int, T>): Int? =
+        state.anchorPosition?.run {
+            state.closestItemToPosition(this)?.id?.toIntOrNull()
+        }
 }
