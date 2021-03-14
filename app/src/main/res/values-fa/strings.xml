@@ -43,7 +43,6 @@
     <string name="instance_error">نتوانستیم اطلاعات نمونه را دریافت کنیم</string>
     <string name="permission_denied">ممنوعیت دسترسی</string>
     <string name="save_image_failed">نتوانستیم تصویر را ذخیره کنیم</string>
-    <string name="description_max_characters">توضیحات حداکثر می‌توانند تا %1$s حرف داشته باشند.</string>
     <string name="default_system">پیش‌گزیده (پیروی از سامانه)</string>
     <string name="light_theme">روشن</string>
     <string name="dark_theme">تاریک</string>
@@ -58,10 +57,8 @@
     <string name="loading_toast">مشکلی حین بارکردن رخ داد</string>
     <string name="feed_failed">نتوانستیم خوراک را دریافت کنیم</string>
     <string name="no_description">بدون توضیحات</string>
-    <string name="likes">%1$s پسند</string>
     <string name="accounts">حساب‌ها</string>
     <string name="hashtags">هشتگ‌ها</string>
-    <string name="shares">%1$s هم‌رسانی</string>
     <string name="posted_on">منتشر شده در %1$s</string>
     <string name="empty_comment">نظر نمی‌تواند خالی باشد!</string>
     <string name="write_permission_download_pic">برای بارگیری تصاویر بایستی مجوز نوشتن را بدهید!</string>
@@ -70,12 +67,6 @@
     <string name="comment_error">خطا در درج نظر!</string>
     <string name="comment_posted">نظر: %1$s منتشر کرد!</string>
     <string name="comment">نظر</string>
-    <string name="nb_posts">%1$s
-\nمطلب</string>
-    <string name="nb_followers">%1$s
-\nپی‌گیرنده</string>
-    <string name="nb_following">%1$s
-\nپی‌گیری</string>
     <string name="follow_status_failed">نتوانستیم وضعیت پی‌گیری را دریافت کنیم</string>
     <string name="follow_button_failed">نتوانستیم دکمه پی‌گیری را نمایش دهیم</string>
     <string name="follow_error">نتوانستیم پی‌گیری کنیم</string>
@@ -137,11 +128,55 @@
     <string name="post_is_album">این فرسته، یک آلبوم است</string>
     <string name="submit_comment">فرستادن نظر</string>
     <string name="add_comment">نظری اضافه کنید</string>
-    <string name="number_comments">%1$s نظر</string>
     <string name="crop_button">دکمه برش یا چرخش تصویر</string>
     <string name="image_preview">پیش‌نمایش تصویری که در حال ویرایش است</string>
     <string name="filter_thumbnail">تصویر بندانگشتی پالایه</string>
-    <string name="click_image_edit">برای ویرایش تصویر، روی آن کلیک کنید</string>
     <string name="post_image">یکی از تصاویر در فرسته</string>
     <string name="verify_credentials">ناتوانی در دریافت اطلاعات کاربر</string>
+    <string name="mascot_description">تصویر، یک پاندای قرمز که شگونهٔ پیکسل‌فد است را گوشی به دست نشان می‌دهد</string>
+    <plurals name="nb_posts">
+        <item quantity="one">%d فرسته</item>
+        <item quantity="other">%d فرسته</item>
+    </plurals>
+    <plurals name="number_comments">
+        <item quantity="one">%d نظر</item>
+        <item quantity="other">%d نظر</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d هم‌رسانی</item>
+        <item quantity="other">%d هم‌رسانی</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d پسند</item>
+        <item quantity="other">%d پسند</item>
+    </plurals>
+    <string name="switch_to_carousel">تغییر وضعیت به نمای گردونه</string>
+    <string name="no_cancel_edit">خیر، ویرایش لغو شود</string>
+    <string name="save_before_returning">ویرایش‌ها ذخیره شوند؟</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d پی‌گیر</item>
+        <item quantity="other">%d پی‌گیر</item>
+    </plurals>
+    <plurals name="nb_following">
+        <item quantity="one">%d پی‌گرفته</item>
+        <item quantity="other">%d پی‌گرفته</item>
+    </plurals>
+    <string name="no_media_description">این جا توضیحات رسانه را وارد کنید…</string>
+    <string name="save_image_description">ذخیره توضیحات تصویر</string>
+    <string name="switch_to_grid">تغییر وضعیت به نمای شبکه‌ای</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">توضیحات باید در بیشترین حالت حاوی %d حرف باشد.</item>
+        <item quantity="other">توضیحات باید در بیشترین حالت حاوی %d حرف باشد.</item>
+    </plurals>
+    <string name="whats_an_instance_explanation">ممکن است از دیدن بخشی که از شما می‌خواهد که دامنه مربوط به «نمونه» را وارد کنید گیج شده باشید.
+\n
+\nپیکسل‌فد یک بستر فدرالیزه و عضوی از«فدیورس» (دنیای شبکه‌های فدرالیزه) است به این معنا که می‌تواند با سایر بسترها مانند ماستودون (https://joinmastodon.org را ببینید) که زبان مشترکی دارند صحبت کرده و ارتباط برقرار کند.
+\n
+\nمعنای دیگر این موضوع آن است که شما باید انتخاب کنید که از کدام کارساز یا «نمونه» از پیکسل‌فد استفاده می‌کنید. اگر چیزی در این باره نمی‌دانید می‌توانید به این نشانی مراجعه کنید: https://pixelfed.org/join
+\n
+\nبرای کسب اطلاعات بیشتر درباره پیکسل‌فد می‌توانید این نشانی را ببینید: https://pixelfed.org</string>
+    <string name="upload_error">کد خطای دریافت شده از کارساز: %1$s</string>
+    <string name="size_exceeds_instance_limit">اندازه تصویر شماره %1$s در آلبوم از بیشینه اندازه مجاز در نمونه (%2$s کیلوبایت در مقابل آستانه مجاز %3$s کیلوبایت) تجاوز رده است.</string>
+    <string name="total_exceeds_album_limit">تعداد تصاویر انتخاب شده شما بیش از بیشینه مجاز روی کارساز است (%1$s). تصاویر بیش از آن تعداد، نادیده گرفته شده‌اند.</string>
+    <string name="api_not_enabled_dialog">روی این نمونه، API فعال نیست. با مدیر نمونه تماس گرفته و از او بخواهید آن را فعال کند.</string>
 </resources>

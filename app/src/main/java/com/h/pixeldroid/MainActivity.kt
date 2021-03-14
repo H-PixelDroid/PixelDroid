@@ -61,15 +61,16 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        TraceDroidEmailSender.sendStackTraces("contact@pixeldroid.org", this)
-
         //get the currently active user
         user = db.userDao().getActiveUser()
 
         //Check if we have logged in and gotten an access token
         if (user == null) {
             launchActivity(LoginActivity(), firstTime = true)
+            finish()
         } else {
+            TraceDroidEmailSender.sendStackTraces("contact@pixeldroid.org", this)
+
             setupDrawer()
 
             val tabs: List<() -> Fragment> = listOf(

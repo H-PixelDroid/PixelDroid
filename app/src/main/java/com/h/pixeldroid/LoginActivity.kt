@@ -10,22 +10,15 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
 import com.h.pixeldroid.databinding.ActivityLoginBinding
-import com.h.pixeldroid.databinding.ActivityPostCreationBinding
-import com.h.pixeldroid.utils.BaseActivity
+import com.h.pixeldroid.utils.*
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.*
 import com.h.pixeldroid.utils.db.addUser
 import com.h.pixeldroid.utils.db.storeInstance
-import com.h.pixeldroid.utils.hasInternet
-import com.h.pixeldroid.utils.normalizeDomain
-import com.h.pixeldroid.utils.openUrl
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
-import okhttp3.HttpUrl
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.IllegalArgumentException
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -104,9 +97,13 @@ class LoginActivity : BaseActivity() {
 
 
     private fun whatsAnInstance() {
-        val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse("https://pixelfed.org/join")
-        startActivity(i)
+        val builder = AlertDialog.Builder(this)
+        builder.apply {
+            setView(layoutInflater.inflate(R.layout.whats_an_instance_explanation, null))
+            setPositiveButton(android.R.string.ok) { _, _ -> }
+        }
+        // Create the AlertDialog
+        builder.show()
     }
 
     private fun hideKeyboard() {
@@ -121,11 +118,7 @@ class LoginActivity : BaseActivity() {
 
     private fun registerAppToServer(normalizedDomain: String) {
 
-        try{
-            HttpUrl.Builder().host(normalizedDomain.replace("https://", "")).scheme("https").build()
-        } catch (e: IllegalArgumentException) {
-            return failedRegistration(getString(R.string.invalid_domain))
-        }
+        if(!validDomain(normalizedDomain)) return failedRegistration(getString(R.string.invalid_domain))
 
         hideKeyboard()
         loadingAnimation(true)
@@ -134,7 +127,6 @@ class LoginActivity : BaseActivity() {
 
         lifecycleScope.launch {
             try {
-                supervisorScope {  }
                 val credentialsDeferred: Deferred<Application?> = async {
                     try {
                         pixelfedAPI.registerApplication(
@@ -153,7 +145,6 @@ class LoginActivity : BaseActivity() {
 
                 val clientId = credentials?.client_id ?: return@launch failedRegistration()
                 preferences.edit()
-                    .putString("domain", normalizedDomain)
                     .putString("clientID", clientId)
                     .putString("clientSecret", credentials.client_secret)
                     .apply()
@@ -177,18 +168,39 @@ class LoginActivity : BaseActivity() {
         normalizedDomain: String,
         clientId: String,
         nodeInfoSchemaUrl: String
-    ) {
-        val nodeInfo = try {
+    ) = coroutineScope {
+
+        val nodeInfo: NodeInfo = try {
             pixelfedAPI.nodeInfoSchema(nodeInfoSchemaUrl)
         } catch (exception: IOException) {
-            return failedRegistration(getString(R.string.instance_error))
+            return@coroutineScope failedRegistration(getString(R.string.instance_error))
         } catch (exception: HttpException) {
-            return failedRegistration(getString(R.string.instance_error))
+            return@coroutineScope failedRegistration(getString(R.string.instance_error))
         }
 
+        val domain: String = try {
+            if (nodeInfo.hasInstanceEndpointInfo()) {
+                storeInstance(db, nodeInfo)
+                nodeInfo.metadata?.config?.site?.url
+            } else {
+                val instance: Instance = try {
+                    pixelfedAPI.instance()
+                } catch (exception: IOException) {
+                    return@coroutineScope failedRegistration(getString(R.string.instance_error))
+                } catch (exception: HttpException) {
+                    return@coroutineScope failedRegistration(getString(R.string.instance_error))
+                }
+                storeInstance(db, nodeInfo = null, instance = instance)
+                instance.uri
+            }
+        } catch (e: IllegalArgumentException){ null }
+                ?: return@coroutineScope failedRegistration(getString(R.string.instance_error))
+
+        preferences.edit().putString("domain", normalizeDomain(domain)).apply()
+
+
         if (!nodeInfo.software?.name.orEmpty().contains("pixelfed")) {
-            val builder = AlertDialog.Builder(this@LoginActivity)
-            builder.apply {
+            AlertDialog.Builder(this@LoginActivity).apply {
                 setMessage(R.string.instance_not_pixelfed_warning)
                 setPositiveButton(R.string.instance_not_pixelfed_continue) { _, _ ->
                     promptOAuth(normalizedDomain, clientId)
@@ -197,13 +209,18 @@ class LoginActivity : BaseActivity() {
                     loadingAnimation(false)
                     wipeSharedSettings()
                 }
-            }
-            // Create the AlertDialog
-            builder.show()
+            }.show()
+        } else if (nodeInfo.metadata?.config?.features?.mobile_apis != true) {
+            AlertDialog.Builder(this@LoginActivity).apply {
+                setMessage(R.string.api_not_enabled_dialog)
+                setNegativeButton(android.R.string.ok) { _, _ ->
+                    loadingAnimation(false)
+                    wipeSharedSettings()
+                }
+            }.show()
         } else {
             promptOAuth(normalizedDomain, clientId)
         }
-
     }
 
 
@@ -234,9 +251,6 @@ class LoginActivity : BaseActivity() {
 
         lifecycleScope.launch {
             try {
-                val instanceDeferred = async {
-                    pixelfedAPI.instance()
-                }
                 val token = pixelfedAPI.obtainToken(
                     clientId, clientSecret, "$oauthScheme://$PACKAGE_ID", SCOPE, code,
                     "authorization_code"
@@ -244,20 +258,12 @@ class LoginActivity : BaseActivity() {
                 if (token.access_token == null) {
                     return@launch failedRegistration(getString(R.string.token_error))
                 }
-
-                val instance = instanceDeferred.await()
-
-                if (instance.uri == null) {
-                    return@launch failedRegistration(getString(R.string.instance_error))
-                }
-
-                storeInstance(db, instance)
                 storeUser(
                     token.access_token,
                     token.refresh_token,
                     clientId,
                     clientSecret,
-                    instance.uri
+                    domain
                 )
                 wipeSharedSettings()
             } catch (exception: IOException) {

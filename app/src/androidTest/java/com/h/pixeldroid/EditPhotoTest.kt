@@ -22,14 +22,16 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.material.tabs.TabLayout
-import com.h.pixeldroid.adapters.ThumbnailAdapter
+import com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity
+import com.h.pixeldroid.postCreation.photoEdit.ThumbnailAdapter
 import com.h.pixeldroid.settings.AboutActivity
-import com.h.pixeldroid.testUtility.CustomMatchers
 import com.h.pixeldroid.testUtility.clearData
-import junit.framework.Assert.assertTrue
-import kotlinx.android.synthetic.main.fragment_edit_image.*
+import com.h.pixeldroid.testUtility.clickChildViewWithId
+import com.h.pixeldroid.testUtility.slowSwipeLeft
+import com.h.pixeldroid.testUtility.waitForView
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.*
+import org.junit.Assert.assertTrue
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import java.io.File
@@ -72,7 +74,7 @@ class EditPhotoTest {
 
         activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}
 
-        Thread.sleep(1000)
+        waitForView(R.id.coordinator_edit)
     }
 
     @After
@@ -119,14 +121,15 @@ class EditPhotoTest {
 
     @Test
     fun FiltersIsSwipeableAndClickeable() {
+        waitForView(R.id.thumbnail)
         Espresso.onView(withId(R.id.recycler_view))
-            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(1, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
+            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(1, clickChildViewWithId(R.id.thumbnail)))
         Thread.sleep(1000)
         Espresso.onView(withId(R.id.recycler_view))
-            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(1, CustomMatchers.slowSwipeLeft(false)))
+            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(1, slowSwipeLeft(false)))
         Thread.sleep(1000)
         Espresso.onView(withId(R.id.recycler_view))
-            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(5, CustomMatchers.clickChildViewWithId(R.id.thumbnail)))
+            .perform(actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(5, clickChildViewWithId(R.id.thumbnail)))
         Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
     }
 
@@ -134,16 +137,16 @@ class EditPhotoTest {
     fun BrightnessSaturationContrastTest() {
         Espresso.onView(withId(R.id.tabs)).perform(selectTabAtPosition(1))
 
-        Thread.sleep(1000)
+        waitForView(R.id.seekbar_brightness)
 
         var change = 5
         Espresso.onView(withId(R.id.seekbar_brightness)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
 
-        Assert.assertEquals(change, activity.seekbar_brightness.progress)
-        Assert.assertEquals(change, activity.seekbar_contrast.progress)
-        Assert.assertEquals(change, activity.seekbar_saturation.progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_brightness).progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_contrast).progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_saturation).progress)
 
         Thread.sleep(1000)
 
@@ -152,28 +155,32 @@ class EditPhotoTest {
         Espresso.onView(withId(R.id.seekbar_contrast)).perform(setProgress(change))
         Espresso.onView(withId(R.id.seekbar_saturation)).perform(setProgress(change))
 
-        Assert.assertEquals(change, activity.seekbar_brightness.progress)
-        Assert.assertEquals(change, activity.seekbar_contrast.progress)
-        Assert.assertEquals(change, activity.seekbar_saturation.progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_brightness).progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_contrast).progress)
+        Assert.assertEquals(change, activity.findViewById<SeekBar>(R.id.seekbar_saturation).progress)
     }
 
     @Test
     fun saveButton() {
+        // The save button saves the edits and goes back to the post creation activity.
         Espresso.onView(withId(R.id.action_save)).perform(click())
-        Espresso.onView(withId(com.google.android.material.R.id.snackbar_text))
-            .check(matches(withText(R.string.save_image_success)))
+        Thread.sleep(1000)
+        assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)
     }
 
     @Test
     fun backButton() {
         Espresso.onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
+        Thread.sleep(1000)
         assertTrue(activityScenario.state == Lifecycle.State.DESTROYED)
     }
 
     @Test
     fun croppingIsPossible() {
         Espresso.onView(withId(R.id.cropImageButton)).perform(click())
-        Thread.sleep(1000)
+
+        waitForView(R.id.menu_crop)
+
         Espresso.onView(withId(R.id.menu_crop)).perform(click())
         Espresso.onView(withId(R.id.image_preview)).check(matches(isDisplayed()))
     }
@@ -181,7 +188,7 @@ class EditPhotoTest {
     @Test
     fun alreadyUploadingDialog() {
         activityScenario.onActivity { a -> a.saving = true }
-        Espresso.onView(withId(R.id.action_upload)).perform(click())
+        Espresso.onView(withId(R.id.action_save)).perform(click())
         Thread.sleep(1000)
         Espresso.onView(withText(R.string.busy_dialog_text)).check(matches(isDisplayed()))
     }

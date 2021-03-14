@@ -64,8 +64,8 @@ open class Status(
 {
     companion object {
         const val POST_TAG = "postTag"
-        const val DOMAIN_TAG = "domainTag"
-        const val DISCOVER_TAG = "discoverTag"
+        const val VIEW_COMMENTS_TAG = "view_comments_tag"
+        const val POST_COMMENT_TAG = "post_comment_tag"
     }
 
     fun getPostUrl() : String? = media_attachments?.firstOrNull()?.url
@@ -74,11 +74,19 @@ open class Status(
 
 
     fun getNLikes(context: Context) : CharSequence {
-        return context.getString(R.string.likes).format(favourites_count.toString())
+        return context.resources.getQuantityString(
+                R.plurals.likes,
+                favourites_count ?: 0,
+                favourites_count ?: 0
+        )
     }
 
     fun getNShares(context: Context) : CharSequence {
-        return context.getString(R.string.shares).format(reblogs_count.toString())
+        return context.resources.getQuantityString(
+                R.plurals.shares,
+                reblogs_count ?: 0,
+                reblogs_count ?: 0
+        )
     }
 
     fun getStatusDomain(domain: String) : String {
@@ -86,29 +94,6 @@ open class Status(
         return if(getDomain(domain) == accountDomain) ""
         else " from $accountDomain"
 
-    }
-
-    fun setupSensitiveLayout(binding: PostFragmentBinding) {
-
-        // Set dark layout and warning message
-        binding.sensitiveWarning.visibility = VISIBLE
-        val array = floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 1f, 0f)
-        val censorMatrix = ColorMatrix(array)
-        binding.postPicture.colorFilter = ColorMatrixColorFilter(censorMatrix)
-
-        fun uncensorPicture(binding: PostFragmentBinding) {
-            binding.sensitiveWarning.visibility = GONE
-            binding.postPicture.clearColorFilter()
-        }
-
-
-        binding.sensitiveWarning.setOnClickListener {
-            uncensorPicture(binding)
-        }
-
-        binding.postPicture.setOnClickListener {
-            uncensorPicture(binding)
-        }
     }
 
     fun downloadImage(context: Context, url: String, view: View, share: Boolean = false) {

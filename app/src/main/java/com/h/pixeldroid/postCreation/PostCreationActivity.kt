@@ -1,10 +1,8 @@
 package com.h.pixeldroid.postCreation
 
 import android.app.Activity
-import android.content.ContentResolver
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
+import android.app.AlertDialog
+import android.content.*
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -16,26 +14,23 @@ import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
-import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.MainActivity
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityPostCreationBinding
-import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.postCreation.camera.CameraActivity
 import com.h.pixeldroid.postCreation.carousel.CarouselItem
 import com.h.pixeldroid.postCreation.carousel.ImageCarousel
-import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.utils.api.objects.Attachment
-import com.h.pixeldroid.utils.api.objects.Instance
 import com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity
+import com.h.pixeldroid.utils.BaseActivity
+import com.h.pixeldroid.utils.api.PixelfedAPI
+import com.h.pixeldroid.utils.api.objects.Attachment
+import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
+import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -47,14 +42,18 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.ceil
+import kotlin.properties.Delegates
 
 private const val TAG = "Post Creation Activity"
 private const val MORE_PICTURES_REQUEST_CODE = 0xffff
 
 data class PhotoData(
         var imageUri: Uri,
+        var size: Long,
         var uploadId: String? = null,
-        var progress: Int? = null
+        var progress: Int? = null,
+        var imageDescription: String? = null,
 )
 
 class PostCreationActivity : BaseActivity() {
@@ -64,6 +63,7 @@ class PostCreationActivity : BaseActivity() {
 
     private var positionResult = 0
     private var user: UserDatabaseEntity? = null
+    private lateinit var instance: InstanceDatabaseEntity
 
     private val photoData: ArrayList<PhotoData> = ArrayList()
 
@@ -74,47 +74,39 @@ class PostCreationActivity : BaseActivity() {
         binding = ActivityPostCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // get image URIs
-        if(intent.clipData != null) {
-            val count = intent.clipData!!.itemCount
-            for (i in 0 until count) {
-                intent.clipData!!.getItemAt(i).uri.let {
-                    photoData.add(PhotoData(it))
-                }
-            }
-        }
-
         user = db.userDao().getActiveUser()
 
-        val instances = db.instanceDao().getAll()
+        instance = user?.run {
+            db.instanceDao().getAll().first { instanceDatabaseEntity ->
+                instanceDatabaseEntity.uri.contains(instance_uri)
+            }
+        } ?: InstanceDatabaseEntity("", "")
 
-        binding.postTextInputLayout.counterMaxLength = if (user != null){
-            val thisInstances =
-                instances.filter { instanceDatabaseEntity ->
-                    instanceDatabaseEntity.uri.contains(user!!.instance_uri)
-                }
-            thisInstances.first().max_toot_chars
-        } else {
-            Instance.DEFAULT_MAX_TOOT_CHARS
-        }
+        binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
+
+        // get image URIs
+        intent.clipData?.let { addPossibleImages(it) }
 
         accessToken = user?.accessToken.orEmpty()
         pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
         val carousel: ImageCarousel = binding.carousel
-        carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+        carousel.addData(photoData.map { CarouselItem(it.imageUri) })
         carousel.layoutCarouselCallback = {
-            //TODO transition instead of at once
             if(it){
                 // Became a carousel
-                binding.toolbar3.visibility = VISIBLE
+                binding.toolbarPostCreation.visibility = VISIBLE
             } else {
                 // Became a grid
-                binding.toolbar3.visibility = INVISIBLE
+                binding.toolbarPostCreation.visibility = INVISIBLE
             }
         }
+        carousel.maxEntries = instance.albumLimit
         carousel.addPhotoButtonCallback = {
             addPhoto(applicationContext)
+        }
+        carousel.updateDescriptionCallback = { position: Int, description: String ->
+            photoData[position].imageDescription = description
         }
 
         // get the description and send the post
@@ -152,7 +144,64 @@ class PostCreationActivity : BaseActivity() {
         binding.removePhotoButton.setOnClickListener {
             carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
                 photoData.removeAt(currentPosition)
-                carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+                carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
+                binding.addPhotoButton.isEnabled = true
+            }
+        }
+    }
+
+    /**
+     * Will add as many images as possible to [photoData], from the [clipData], and if
+     * ([photoData].size + [clipData].itemCount) > [albumLimit] then it will only add as many images
+     * as are legal (if any) and a dialog will be shown to the user alerting them of this fact.
+     */
+    private fun addPossibleImages(clipData: ClipData){
+        var count = clipData.itemCount
+        if(count + photoData.size > instance.albumLimit){
+            AlertDialog.Builder(this).apply {
+                setMessage(getString(R.string.total_exceeds_album_limit).format(instance.albumLimit))
+                setNegativeButton(android.R.string.ok) { _, _ -> }
+            }.show()
+            count = count.coerceAtMost(instance.albumLimit - photoData.size)
+        }
+        if (count + photoData.size >= instance.albumLimit) {
+            // Disable buttons to add more images
+            binding.addPhotoButton.isEnabled = false
+        }
+        for (i in 0 until count) {
+            clipData.getItemAt(i).uri.let {
+                val size: Long =
+                        if (it.toString().startsWith("content")) {
+                            contentResolver.query(it, null, null, null, null)
+                                    ?.use { cursor ->
+                                        /* Get the column indexes of the data in the Cursor,
+                                                         * move to the first row in the Cursor, get the data,
+                                                         * and display it.
+                                                         */
+                                        val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                                        cursor.moveToFirst()
+                                        cursor.getLong(sizeIndex)
+                                    } ?: 0
+                        } else {
+                            it.toFile().length()
+                        }
+                val sizeInkBytes = ceil(size.toDouble() / 1000).toLong()
+                if(sizeInkBytes > instance.maxPhotoSize || sizeInkBytes > instance.maxVideoSize){
+                    val maxSize = when {
+                        instance.maxPhotoSize != instance.maxVideoSize -> {
+                            val type = contentResolver.getType(it)
+                            if(type?.startsWith("video/") == true){
+                                instance.maxVideoSize
+                            } else instance.maxPhotoSize
+                        }
+                        else -> instance.maxPhotoSize
+                    }
+                    AlertDialog.Builder(this).apply {
+                        setMessage(getString(R.string.size_exceeds_instance_limit).format(photoData.size + 1, sizeInkBytes, maxSize))
+                        setNegativeButton(android.R.string.ok) { _, _ -> }
+                    }.show()
+                }
+                photoData.add(PhotoData(imageUri = it, size = size))
             }
         }
     }
@@ -177,21 +226,21 @@ class PostCreationActivity : BaseActivity() {
 
         if(path.startsWith("file")) {
             MediaScannerConnection.scanFile(
-                this,
-                arrayOf(path.toUri().toFile().absolutePath),
-                null
+                    this,
+                    arrayOf(path.toUri().toFile().absolutePath),
+                    null
             ) { path, uri ->
                 if (uri == null) {
                     Log.e(
-                        "NEW IMAGE SCAN FAILED",
-                        "Tried to scan $path, but it failed"
+                            "NEW IMAGE SCAN FAILED",
+                            "Tried to scan $path, but it failed"
                     )
                 }
             }
         }
         Snackbar.make(
-            button, getString(R.string.save_image_success),
-            Snackbar.LENGTH_LONG
+                button, getString(R.string.save_image_success),
+                Snackbar.LENGTH_LONG
         ).show()
     }
 
@@ -204,8 +253,8 @@ class PostCreationActivity : BaseActivity() {
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
             contentValues.put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                Environment.DIRECTORY_PICTURES
+                    MediaStore.MediaColumns.RELATIVE_PATH,
+                    Environment.DIRECTORY_PICTURES
             )
             val imageUri: Uri =
                 resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
@@ -228,7 +277,7 @@ class PostCreationActivity : BaseActivity() {
             val content = editText?.length() ?: 0
             if (content > counterMaxLength) {
                 // error, too many characters
-                error = getString(R.string.description_max_characters).format(counterMaxLength)
+                error = resources.getQuantityString(R.plurals.description_max_characters, counterMaxLength, counterMaxLength)
                 return false
             }
         }
@@ -252,23 +301,7 @@ class PostCreationActivity : BaseActivity() {
             val imageUri = data.imageUri
             val imageInputStream = contentResolver.openInputStream(imageUri)!!
 
-            val size =
-                if (imageUri.toString().startsWith("content")) {
-                    contentResolver.query(imageUri, null, null, null, null)
-                        ?.use { cursor ->
-                        /* Get the column indexes of the data in the Cursor,
-                         * move to the first row in the Cursor, get the data,
-                         * and display it.
-                         */
-                            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-                            cursor.moveToFirst()
-                            cursor.getLong(sizeIndex)
-                        } ?: 0
-                } else {
-                    imageUri.toFile().length()
-                }
-
-            val imagePart = ProgressRequestBody(imageInputStream, size)
+            val imagePart = ProgressRequestBody(imageInputStream, data.size)
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", System.currentTimeMillis().toString(), imagePart)
@@ -283,32 +316,43 @@ class PostCreationActivity : BaseActivity() {
                 }
 
             var postSub: Disposable? = null
-            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", requestBody.parts[0])
+
+            val description = data.imageDescription?.let { MultipartBody.Part.createFormData("description", it) }
+
+
+            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", description, requestBody.parts[0])
 
             postSub = inter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { attachment: Attachment ->
-                        data.progress = 0
-                        data.uploadId = attachment.id!!
-                    },
-                    { e ->
-                        binding.uploadError.visibility = View.VISIBLE
-                        e.printStackTrace()
-                        postSub?.dispose()
-                        sub.dispose()
-                    },
-                    {
-                        data.progress = 100
-                        if(photoData.all{it.progress == 100}){
-                            binding.uploadProgressBar.visibility = View.GONE
-                            binding.uploadCompletedTextview.visibility = View.VISIBLE
-                            post()
+                        { attachment: Attachment ->
+                            data.progress = 0
+                            data.uploadId = attachment.id!!
+                        },
+                        { e: Throwable ->
+                            binding.uploadError.visibility = View.VISIBLE
+                            if(e is HttpException){
+                                binding.uploadErrorTextExplanation.text =
+                                        getString(R.string.upload_error).format(e.code())
+                                binding.uploadErrorTextExplanation.visibility= VISIBLE
+                            } else {
+                                binding.uploadErrorTextExplanation.visibility= View.GONE
+                            }
+                            e.printStackTrace()
+                            postSub?.dispose()
+                            sub.dispose()
+                        },
+                        {
+                            data.progress = 100
+                            if (photoData.all { it.progress == 100 && it.uploadId != null }) {
+                                binding.uploadProgressBar.visibility = View.GONE
+                                binding.uploadCompletedTextview.visibility = View.VISIBLE
+                                post()
+                            }
+                            postSub?.dispose()
+                            sub.dispose()
                         }
-                        postSub?.dispose()
-                        sub.dispose()
-                    }
                 )
         }
     }
@@ -319,23 +363,23 @@ class PostCreationActivity : BaseActivity() {
         lifecycleScope.launchWhenCreated {
             try {
                 pixelfedAPI.postStatus(
-                    authorization = "Bearer $accessToken",
-                    statusText = description,
-                    media_ids = photoData.mapNotNull { it.uploadId }.toList()
+                        authorization = "Bearer $accessToken",
+                        statusText = description,
+                        media_ids = photoData.mapNotNull { it.uploadId }.toList()
                 )
-                Toast.makeText(applicationContext,getString(R.string.upload_post_success),
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.upload_post_success),
+                        Toast.LENGTH_SHORT).show()
                 val intent = Intent(this@PostCreationActivity, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             } catch (exception: IOException) {
-                Toast.makeText(applicationContext,getString(R.string.upload_post_error),
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.upload_post_error),
+                        Toast.LENGTH_SHORT).show()
                 Log.e(TAG, exception.toString())
                 enableButton(true)
             } catch (exception: HttpException) {
-                Toast.makeText(applicationContext,getString(R.string.upload_post_failed),
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.upload_post_failed),
+                        Toast.LENGTH_SHORT).show()
                 Log.e(TAG, exception.response().toString() + exception.message().toString())
                 enableButton(true)
             }
@@ -369,7 +413,7 @@ class PostCreationActivity : BaseActivity() {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 photoData[positionResult].imageUri = data.getStringExtra("result")!!.toUri()
 
-                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
 
                 photoData[positionResult].progress = null
                 photoData[positionResult].uploadId = null
@@ -377,15 +421,13 @@ class PostCreationActivity : BaseActivity() {
                 Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
             }
         } else if (requestCode == MORE_PICTURES_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
 
-                val count = data.clipData!!.itemCount
-                for (i in 0 until count) {
-                    val imageUri: Uri = data.clipData!!.getItemAt(i).uri
-                    photoData.add(PhotoData(imageUri))
+            if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
+                data.clipData?.let {
+                    addPossibleImages(it)
                 }
 
-                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri.toString()) })
+                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
             } else if(resultCode != Activity.RESULT_CANCELED){
                 Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
             }

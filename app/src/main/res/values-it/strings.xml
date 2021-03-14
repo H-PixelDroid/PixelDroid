@@ -48,7 +48,6 @@
     <string name="picture_format_error">Errore di caricamento: formato immagine errato.</string>
     <string name="add_account_name">Aggiungi Account</string>
     <string name="add_account_description">Aggiungi un altro account Pixelfed</string>
-    <string name="description_max_characters">La descrizione deve contenere al massimo %1$s caratteri.</string>
     <string name="loading_toast">Qualcosa è andato storto durante il caricamento</string>
     <string name="write_permission_download_pic">È necessario concedere i permessi di scrittura per scaricare le immagini!</string>
     <string name="request_format_error">Errore di caricamento: formato di richiesta errato</string>
@@ -58,8 +57,6 @@
     <string name="normal_filter">Normale</string>
     <string name="feed_failed">Impossibile ottenere il feed</string>
     <string name="no_description">Nessuna descrizione</string>
-    <string name="likes">%1$s Mi piace</string>
-    <string name="shares">%1$s Condivisioni</string>
     <string name="posted_on">Postato su %1$s</string>
     <string name="empty_comment">Il commento non deve essere vuoto!</string>
     <string name="write_permission_share_pic">È necessario concedere i permessi di scrittura per condividere le immagini!</string>
@@ -67,10 +64,6 @@
     <string name="comment_error">Errore nel commento!</string>
     <string name="comment_posted">Commento: %1$s postato!</string>
     <string name="comment">Commento</string>
-    <string name="nb_followers">%1$s
-\nSeguaci</string>
-    <string name="nb_following">%1$s
-\nSeguiti</string>
     <string name="follow_error">Impossibile seguire</string>
     <string name="unfollow_error">Impossibile smettere di seguire</string>
     <string name="access_token_invalid">Il token di accesso non è valido</string>
@@ -88,8 +81,6 @@
     <string name="accounts">ACCOUNTS</string>
     <string name="hashtags">HASHTAGS</string>
     <string name="posting_image_accessibility_hint">Immagine in corso di pubblicazione</string>
-    <string name="nb_posts">%1$s
-\nPosts</string>
     <string name="action_not_allowed">Questa azione non è consentita</string>
     <string name="upload_post_error">Errore di caricamento del post</string>
     <string name="media_upload_completed">{gmd_cloud_done} Caricamento contenuti completato</string>
@@ -138,11 +129,50 @@
     <string name="post_is_album">Questo post è un album</string>
     <string name="submit_comment">Invia commento</string>
     <string name="add_comment">Aggiungi un commento</string>
-    <string name="number_comments">%1$s commenti</string>
     <string name="crop_button">Pulsante per ritagliare o ruotare l\'immagine</string>
     <string name="image_preview">Anteprima dell\'immagine in fase di modifica</string>
     <string name="filter_thumbnail">Miniatura del filtro</string>
-    <string name="click_image_edit">Clicca sull\'immagine per modificarla</string>
     <string name="post_image">Una delle immagini nel post</string>
     <string name="verify_credentials">Impossibile ottenere le informazioni sull\'utente</string>
+    <string name="switch_to_grid">Passa alla visualizzazione a griglia</string>
+    <string name="no_cancel_edit">No, cancella la modifica</string>
+    <string name="save_before_returning">Salavre le tue modifiche\?</string>
+    <string name="switch_to_carousel">Passa alla panoramica</string>
+    <string name="whats_an_instance_explanation">Potresti essere confuso dal campo di testo che chiede il dominio della tua \'instanza\'.
+\n
+\nPixelfed è una piattaforma federata, e parte del \'fediverso\', il che significa che può comunicare con altre piattaforme che parlano la stessa lingua, come Mastodon (vedi https://joinmastodon.org).
+\n
+\nSignifica anche che è necessario scegliere quale server, o \'istanza\' di Pixelfed da utilizzare. Se non ne conosci uno, puoi guardare qui: https://pixelfed.org/join
+\n
+\nPer maggiori informazioni su Pixelfed, puoi controllare qui: https://pixelfed.org</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d Seguace</item>
+        <item quantity="other">%d Seguaci</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d Post</item>
+        <item quantity="other">%d Post</item>
+    </plurals>
+    <plurals name="number_comments">
+        <item quantity="one">%d commento</item>
+        <item quantity="other">%d commenti</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d Condivisione</item>
+        <item quantity="other">%d Condivisioni</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d Mi piace</item>
+        <item quantity="other">%d Mi piace</item>
+    </plurals>
+    <string name="upload_error">Codice di errore restituito dal server: %1$s</string>
+    <string name="size_exceeds_instance_limit">La dimensione del numero dell\'immagine %1$s nell\'album supera la dimensione massima consentita dall\'istanza (%2$s kB ma il limite è %3$s kB). Potresti non essere in grado di caricarla.</string>
+    <string name="total_exceeds_album_limit">Hai scelto più immagini del massimo che il server consente (%1$s). Le immagini oltre il limite sono state ignorate.</string>
+    <string name="no_media_description">Aggiungi una descrizione dell\'immagine qui…</string>
+    <string name="save_image_description">Salva la descrizione dell\'immagine</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">La descrizione deve contenere al massimo %d carattere</item>
+        <item quantity="other">La descrizione deve contenere al massimo %d caratteri</item>
+    </plurals>
+    <string name="api_not_enabled_dialog">L\'API non è attivata su questa istanza. Contatta l\'amministratore per chiedergli di attivarlo.</string>
 </resources>

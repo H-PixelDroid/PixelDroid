@@ -28,18 +28,29 @@
 
     <!-- Login page -->
     <string name="whats_an_instance">"What's an instance?"</string>
+    <string name="whats_an_instance_explanation">"You might be confused by the text field asking for the domain of your 'instance'.
+
+Pixelfed is a federated platform, and part of the 'fediverse', which means it can talk to other platforms which speak the same language, like Mastodon (see https://joinmastodon.org).
+
+It also means you have to choose which server, or 'instance' of Pixelfed to use. If you don't know any, you can look here: https://pixelfed.org/join
+
+For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="domain_of_your_instance">Domain of your instance</string>
     <string name="connect_to_pixelfed">Connect to Pixelfed</string>
     <string name="login_connection_required_once">You need to be online to be able to add the first account and use PixelDroid :(</string>
-    <string name="add_account_name">Add Account</string>
-    <string name="add_account_description">Add another Pixelfed Account</string>
+    <string name="api_not_enabled_dialog">The API is not activated on this instance. Contact your administrator to ask them to activate it.</string>
     <!-- Drawer -->
     <string name="logout">Log out</string>
+    <string name="add_account_name">Add Account</string>
+    <string name="add_account_description">Add another Pixelfed Account</string>
     <!-- Post creation -->
     <string name="permission_denied">Permission denied</string>
     <string name="save_image_failed">Unable to save image</string>
     <string name="save_image_success">Image successfully saved</string>
-    <string name="description_max_characters">"Description must contain %1$s characters at most."</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">"Description must contain %d character at most."</item>
+        <item quantity="other">"Description must contain %d characters at most."</item>
+    </plurals>
     <string name="upload_picture_failed">Picture upload error!</string>
     <string name="picture_format_error">Upload error: wrong picture format.</string>
     <string name="request_format_error">Upload error: bad request format</string>
@@ -50,7 +61,15 @@
     <string name="post">post</string>
     <string name="add_photo">Add a photo</string>
     <string name="post_image">One of the images in the post</string>
-    <string name="click_image_edit">Click the image to edit it</string>
+    <string name="switch_to_grid">Switch to grid view</string>
+    <string name="switch_to_carousel">Switch to carousel</string>
+    <string name="save_image_description">Save image description</string>
+    <string name="no_media_description">Add a media description here…</string>
+    <string name="total_exceeds_album_limit">You chose more images than the maximum your server allows (%1$s). Images beyond the limit have been ignored.</string>
+    <string name="size_exceeds_instance_limit">Size of image number %1$s in the album exceeds the maximum size allowed by the instance (%2$s kB but the limit is %3$s kB). You might not be able to upload it.</string>
+    <string name="upload_error">Error code returned by server: %1$s</string>
+
+
     <!-- Post editing -->
     <string name="lbl_brightness">BRIGHTNESS</string>
     <string name="lbl_contrast">CONTRAST</string>
@@ -64,6 +83,9 @@
     <string name="crop_result_error">"Couldn't retrieve image after crop"</string>
     <string name="image_preview">Preview of the image being edited</string>
     <string name="crop_button">Button to crop or rotate the image</string>
+    <string name="save_before_returning">Save your edits?</string>
+    <string name="no_cancel_edit">No, cancel edit</string>
+
     <!-- Camera -->
     <string name="capture_button_alt">Capture</string>
     <string name="switch_camera_button_alt">Switch camera</string>
@@ -79,8 +101,14 @@
     <string name="image_download_success">Image downloaded successfully</string>
     <!-- Post attributes -->
     <string name="no_description">No description</string>
-    <string name="likes">"%1$s Likes"</string>
-    <string name="shares">"%1$s Shares"</string>
+    <plurals name="likes">
+        <item quantity="one">%d Like</item>
+        <item quantity="other">%d Likes</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d Share</item>
+        <item quantity="other">%d Shares</item>
+    </plurals>
     <string name="posted_on">"Posted on %1$s"</string>
     <string name="NoCommentsToShow">No comments on this post…</string>
     <string name="empty_comment">Comment must not be empty!</string>
@@ -90,14 +118,32 @@
     <string name="comment_error">Comment error!</string>
     <string name="comment_posted">"Comment: %1$s posted!"</string>
     <string name="comment">Comment</string>
-    <string name="number_comments">%1$s comments</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
     <string name="add_comment">Add a comment</string>
     <string name="submit_comment">Submit comment</string>
     <string name="post_is_album">This post is an album</string>
     <!-- Profile page -->
-    <string name="nb_posts">"%1$s\nPosts"</string>
-    <string name="nb_followers">"%1$s\nFollowers"</string>
-    <string name="nb_following">"%1$s\nFollowing"</string>
+    <plurals name="nb_posts">
+        <item quantity="one">"%d
+Post"</item>
+        <item quantity="other">"%d
+Posts"</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">"%d
+Follower"</item>
+        <item quantity="other">"%d
+Followers"</item>
+    </plurals>
+    <plurals name="nb_following">
+        <item quantity="one">"%d
+Following"</item>
+        <item quantity="other">"%d
+Following"</item>
+    </plurals>
     <string name="follow_status_failed">Could not get follow status</string>
     <string name="follow_button_failed">Could not display follow button</string>
     <string name="follow_error">Could not follow</string>
@@ -117,7 +163,7 @@
     <string name="accounts">ACCOUNTS</string>
     <string name="hashtags">HASHTAGS</string>
     <!-- Sensitive media -->
-    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media \n (click to show)</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media\n (click to show)</string>
     <!-- Shown when image has finished uploading. {gmd_cloud_done} is an icon, position it as is appropriate in target language -->
     <string name="media_upload_completed">{gmd_cloud_done} Media upload completed</string>
     <!-- Shown when image uploading has failed. {gmd_cloud_off} is an icon, position it as is appropriate in target language -->
@@ -154,11 +200,4 @@
     <string name="help_translate">Help translate PixelDroid to your language:</string>
     <string name="issues_contribute">Report issues or contribute to the application:</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
-    <string name="save_before_returning">Save your edits?</string>
-    <string name="no_cancel_edit">No, cancel edit</string>
-    <string name="switch_to_grid">Switch to grid view</string>
-    <string name="switch_to_carousel">Switch to carousel</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

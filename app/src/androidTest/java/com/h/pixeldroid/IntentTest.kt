@@ -30,9 +30,7 @@ import com.h.pixeldroid.posts.StatusViewHolder
 import com.h.pixeldroid.utils.api.objects.Account
 import com.h.pixeldroid.utils.api.objects.Account.Companion.ACCOUNT_TAG
 import com.h.pixeldroid.settings.AboutActivity
-import com.h.pixeldroid.testUtility.MockServer
-import com.h.pixeldroid.testUtility.clearData
-import com.h.pixeldroid.testUtility.initDB
+import com.h.pixeldroid.testUtility.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -47,7 +45,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class IntentTest {
 
-    private lateinit var mockServer: MockServer
     private lateinit var db: AppDatabase
     private lateinit var context: Context
 
@@ -62,34 +59,14 @@ class IntentTest {
 
     @Before
     fun before() {
-        mockServer = MockServer()
-        mockServer.start()
-        val baseUrl = mockServer.getUrl()
-
         context = ApplicationProvider.getApplicationContext()
         db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
-            InstanceDatabaseEntity(
-                uri = baseUrl.toString(),
-                title = "PixelTest"
-            )
+            testiTestoInstance
         )
 
-        db.userDao().insertUser(
-            UserDatabaseEntity(
-                    user_id = "123",
-                    instance_uri = baseUrl.toString(),
-                    username = "Testi",
-                    display_name = "Testi Testo",
-                    avatar_static = "some_avatar_url",
-                    isActive = true,
-                    accessToken = "token",
-                    refreshToken = refreshToken,
-                    clientId = clientId,
-                    clientSecret = clientSecret
-            )
-        )
+        db.userDao().insertUser(testiTesto)
         db.close()
 
         Intents.init()
@@ -100,79 +77,30 @@ class IntentTest {
     fun clickingMentionOpensProfile() {
         ActivityScenario.launch(MainActivity::class.java)
 
-        val account = Account("1450", "deerbard_photo", "deerbard_photo",
-            "https://pixelfed.social/deerbard_photo", "deerbard photography",
+        val account = Account("265626292148375552", "user2", "user2",
+            "https://testing2.pixeldroid.org/user2", "User 2",
             "",
-            "https://pixelfed.social/storage/avatars/000/000/001/450/SMSep5NoabDam1W8UDMh_avatar.png?v=4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
-            "https://pixelfed.social/storage/avatars/000/000/001/450/SMSep5NoabDam1W8UDMh_avatar.png?v=4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+            "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0",
+            "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0",
             "", "", false, emptyList(), null,
-            "2018-08-01T12:58:21.000000Z", 72, 68, 27,
+            "2021-02-11T23:44:03.000000Z", 0, 1, 1,
             null, null, false, null)
         val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
             IntentMatchers.hasExtra(ACCOUNT_TAG, account)
         )
 
-        Thread.sleep(1000)
+        waitForView(R.id.description)
 
         //Click the mention
         Espresso.onView(ViewMatchers.withId(R.id.list))
             .perform(RecyclerViewActions.actionOnItemAtPosition<StatusViewHolder>
-                (0, clickClickableSpanInDescription("@Dobios")))
+                (0, clickClickableSpanInDescription("@user2")))
 
         //Wait a bit
         Thread.sleep(1000)
 
-        //Check that the Profile is shown
+        //Check that the right intent was launched
         intended(expectedIntent)
-    }
-
-    private fun clickClickableSpanInDescription(textToClick: CharSequence): ViewAction {
-        return object : ViewAction {
-
-            override fun getConstraints(): Matcher<View> {
-                return Matchers.instanceOf(TextView::class.java)
-            }
-
-            override fun getDescription(): String {
-                return "clicking on a ClickableSpan"
-            }
-
-            override fun perform(uiController: UiController, view: View) {
-                val textView = view.findViewById<View>(R.id.description) as TextView
-                val spannableString = textView.text as SpannableString
-
-                if (spannableString.isEmpty()) {
-                    // TextView is empty, nothing to do
-                    throw NoMatchingViewException.Builder()
-                        .includeViewHierarchy(true)
-                        .withRootView(textView)
-                        .build()
-                }
-
-                // Get the links inside the TextView and check if we find textToClick
-                val spans = spannableString.getSpans(0, spannableString.length, ClickableSpan::class.java)
-                if (spans.isNotEmpty()) {
-                    var spanCandidate: ClickableSpan
-                    for (span: ClickableSpan in spans) {
-                        spanCandidate = span
-                        val start = spannableString.getSpanStart(spanCandidate)
-                        val end = spannableString.getSpanEnd(spanCandidate)
-                        val sequence = spannableString.subSequence(start, end)
-                        if (textToClick.toString() == sequence.toString()) {
-                            span.onClick(textView)
-                            return
-                        }
-                    }
-                }
-
-                // textToClick not found in TextView
-                throw NoMatchingViewException.Builder()
-                    .includeViewHierarchy(true)
-                    .withRootView(textView)
-                    .build()
-
-            }
-        }
     }
 
 
@@ -202,6 +130,5 @@ class IntentTest {
     fun after() {
         Intents.release()
         clearData()
-        mockServer.stop()
     }
 }

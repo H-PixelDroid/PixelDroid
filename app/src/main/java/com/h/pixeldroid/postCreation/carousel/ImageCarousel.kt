@@ -8,10 +8,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.Dimension
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
@@ -19,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.*
 import com.h.pixeldroid.R
+import com.h.pixeldroid.databinding.ImageCarouselBinding
 import me.relex.circleindicator.CircleIndicator2
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
@@ -31,6 +29,8 @@ class ImageCarousel(
 
     private var adapter: CarouselAdapter? = null
 
+    private lateinit var binding: ImageCarouselBinding
+
     private val scaleTypeArray = arrayOf(
             ImageView.ScaleType.MATRIX,
             ImageView.ScaleType.FIT_XY,
@@ -42,11 +42,9 @@ class ImageCarousel(
             ImageView.ScaleType.CENTER_INSIDE
     )
 
-    private lateinit var carouselView: View
     private lateinit var recyclerView: RecyclerView
     private lateinit var tvCaption: TextView
-    private lateinit var previousButtonContainer: FrameLayout
-    private lateinit var nextButtonContainer: FrameLayout
+    private lateinit var editTextMediaDescription: EditText
     private var snapHelper: SnapHelper = PagerSnapHelper()
 
     var indicator: CircleIndicator2? = null
@@ -151,9 +149,9 @@ class ImageCarousel(
         set(value) {
             field = value
 
-            previousButtonContainer.visibility =
+            binding.btnPrevious.visibility =
                     if (showNavigationButtons) View.VISIBLE else View.GONE
-            nextButtonContainer.visibility =
+            binding.btnNext.visibility =
                     if (showNavigationButtons) View.VISIBLE else View.GONE
         }
 
@@ -194,69 +192,19 @@ class ImageCarousel(
             initAdapter()
         }
 
-    @LayoutRes
-    var previousButtonLayout: Int = R.layout.previous_button_layout
-        set(value) {
-            field = value
-
-            btnPrevious = null
-
-            previousButtonContainer.removeAllViews()
-            LayoutInflater.from(context).apply {
-                inflate(previousButtonLayout, previousButtonContainer, true)
-            }
-        }
-
-    @IdRes
-    var previousButtonId: Int = R.id.btn_next
-        set(value) {
-            field = value
-
-            btnPrevious = carouselView.findViewById(previousButtonId)
-
-            btnPrevious?.setOnClickListener {
-                previous()
-            }
-        }
-
     @Dimension(unit = Dimension.PX)
     var previousButtonMargin: Int = 0
         set(value) {
             field = value
 
-            val previousButtonParams = previousButtonContainer.layoutParams as LayoutParams
+            val previousButtonParams = binding.btnPrevious.layoutParams as LayoutParams
             previousButtonParams.setMargins(
                     previousButtonMargin,
                     0,
                     0,
                     0
             )
-            previousButtonContainer.layoutParams = previousButtonParams
-        }
-
-    @LayoutRes
-    var nextButtonLayout: Int = R.layout.next_button_layout
-        set(value) {
-            field = value
-
-            btnNext = null
-
-            nextButtonContainer.removeAllViews()
-            LayoutInflater.from(context).apply {
-                inflate(nextButtonLayout, nextButtonContainer, true)
-            }
-        }
-
-    @IdRes
-    var nextButtonId: Int = R.id.btn_previous
-        set(value) {
-            field = value
-
-            btnNext = carouselView.findViewById(nextButtonId)
-
-            btnNext?.setOnClickListener {
-                next()
-            }
+            binding.btnPrevious.layoutParams = previousButtonParams
         }
 
     @Dimension(unit = Dimension.PX)
@@ -264,22 +212,22 @@ class ImageCarousel(
         set(value) {
             field = value
 
-            val nextButtonParams = nextButtonContainer.layoutParams as LayoutParams
+            val nextButtonParams = binding.btnNext.layoutParams as LayoutParams
             nextButtonParams.setMargins(
                     0,
                     0,
                     nextButtonMargin,
                     0
             )
-            nextButtonContainer.layoutParams = nextButtonParams
+            binding.btnNext.layoutParams = nextButtonParams
         }
 
     var showLayoutSwitchButton: Boolean = true
         set(value) {
             field = value
 
-            btnGrid = findViewById<ImageButton>(R.id.switchToGridButton)
-            btnCarousel = findViewById<ImageButton>(R.id.switchToCarouselButton)
+            btnGrid = binding.switchToGridButton
+            btnCarousel = binding.switchToCarouselButton
 
             btnGrid?.setOnClickListener {
                 layoutCarousel = false
@@ -304,6 +252,9 @@ class ImageCarousel(
 
     var layoutCarouselCallback: ((Boolean) -> Unit)? = null
 
+    var updateDescriptionCallback: ((position: Int, description: String) -> Unit)? = null
+
+
     var layoutCarousel: Boolean = true
         set(value) {
             field = value
@@ -313,10 +264,16 @@ class ImageCarousel(
 
                 btnNext?.visibility = VISIBLE
                 btnPrevious?.visibility = VISIBLE
+
+                binding.editMediaDescriptionLayout.visibility = if(editingMediaDescription) VISIBLE else INVISIBLE
+                tvCaption.visibility = if(editingMediaDescription) INVISIBLE else VISIBLE
             } else {
                 recyclerView.layoutManager = GridLayoutManager(context, 3)
                 btnNext?.visibility = GONE
                 btnPrevious?.visibility = GONE
+
+                binding.editMediaDescriptionLayout.visibility = INVISIBLE
+                tvCaption.visibility = INVISIBLE
             }
             showIndicator = value
 
@@ -330,6 +287,43 @@ class ImageCarousel(
 
     var addPhotoButtonCallback: (() -> Unit)? = null
 
+    var editingMediaDescription: Boolean = false
+        set(value){
+
+            if(layoutCarousel){
+                field = value
+                if(value) editTextMediaDescription.setText(currentDescription)
+                else {
+                    val description = editTextMediaDescription.text.toString()
+                    currentDescription = description
+                    adapter?.updateDescription(currentPosition, description)
+                    updateDescriptionCallback?.invoke(currentPosition, description)
+                }
+                binding.editMediaDescriptionLayout.visibility = if(value) VISIBLE else INVISIBLE
+                tvCaption.visibility = if(value) INVISIBLE else VISIBLE
+
+            }
+
+        }
+
+    var currentDescription: String? = null
+        set(value) {
+            if(!value.isNullOrEmpty()) {
+                field = value
+                tvCaption.text = value
+            } else {
+                field = null
+                tvCaption.text = context.getText(R.string.no_media_description)
+            }
+
+        }
+
+    var maxEntries: Int? = null
+        set(value){
+            field = value
+            adapter?.maxEntries = value
+        }
+
 
 
     init {
@@ -341,12 +335,11 @@ class ImageCarousel(
 
 
     private fun initViews() {
-        carouselView = LayoutInflater.from(context).inflate(R.layout.image_carousel, this)
+        binding = ImageCarouselBinding.inflate(LayoutInflater.from(context),this,  true)
 
-        recyclerView = carouselView.findViewById(R.id.recyclerView)
-        tvCaption = carouselView.findViewById(R.id.tv_caption)
-        previousButtonContainer = carouselView.findViewById(R.id.previous_button_container)
-        nextButtonContainer = carouselView.findViewById(R.id.next_button_container)
+        recyclerView = binding.recyclerView
+        tvCaption = binding.tvCaption
+        editTextMediaDescription = binding.editTextMediaDescription
 
         recyclerView.setHasFixedSize(true)
 
@@ -403,15 +396,7 @@ class ImageCarousel(
                         R.id.img
                 )
 
-                previousButtonLayout = R.layout.previous_button_layout
-
-                previousButtonId = R.id.btn_previous
-
                 previousButtonMargin = 4.dpToPx(context)
-
-                nextButtonLayout = R.layout.next_button_layout
-
-                nextButtonId = R.id.btn_next
 
                 nextButtonMargin = 4.dpToPx(context)
 
@@ -440,12 +425,13 @@ class ImageCarousel(
 
     private fun initAdapter() {
         adapter = CarouselAdapter(
-            itemLayout = itemLayout,
-            imageViewId = imageViewId,
-            listener = onItemClickListener,
-            imageScaleType = imageScaleType,
-            imagePlaceholder = imagePlaceholder,
-            carousel = layoutCarousel
+                itemLayout = itemLayout,
+                imageViewId = imageViewId,
+                listener = onItemClickListener,
+                imageScaleType = imageScaleType,
+                imagePlaceholder = imagePlaceholder,
+                carousel = layoutCarousel,
+                maxEntries = maxEntries
         )
         recyclerView.adapter = adapter
 
@@ -474,7 +460,13 @@ class ImageCarousel(
                         val dataItem = adapter?.getItem(position)
 
                         dataItem?.apply {
-                            tvCaption.text = this.caption
+                            caption.apply {
+                                if(layoutCarousel){
+                                    binding.editMediaDescriptionLayout.visibility = INVISIBLE
+                                    tvCaption.visibility = VISIBLE
+                                }
+                                currentDescription = this
+                            }
                         }
                     }
                 }
@@ -499,12 +491,27 @@ class ImageCarousel(
 
             }
         })
+
+        tvCaption.setOnClickListener {
+            editingMediaDescription = true
+        }
+
+        binding.btnNext.setOnClickListener {
+            next()
+        }
+
+        binding.btnPrevious.setOnClickListener {
+            previous()
+        }
+        binding.imageDescriptionButton.setOnClickListener {
+            editingMediaDescription = false
+        }
     }
 
     private fun initIndicator() {
         // If no custom indicator added, then default indicator will be shown.
         if (indicator == null) {
-            indicator = carouselView.findViewById(R.id.indicator)
+            indicator = binding.indicator
             isBuiltInIndicator = true
         }
 

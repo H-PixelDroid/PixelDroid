@@ -8,14 +8,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/upload_error"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:elevation="2dp"
         android:layout_height="match_parent"
+        android:elevation="2dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <com.mikepenz.iconics.view.IconicsTextView
             android:id="@+id/upload_error_text_view"
@@ -30,15 +31,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.mikepenz.iconics.view.IconicsTextView
+            android:id="@+id/upload_error_text_explanation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#90000000"
+            tools:text="Error code returned by server: 413"
+            android:textColor="@color/colorPrimaryError"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upload_error_text_view"
+            tools:visibility="visible" />
+
         <Button
             android:id="@+id/retry_upload_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="@string/retry"
             app:layout_constraintEnd_toEndOf="@id/upload_error_text_view"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="@id/upload_error_text_view"
-            app:layout_constraintTop_toBottomOf="@id/upload_error_text_view" />
+            app:layout_constraintTop_toBottomOf="@+id/upload_error_text_explanation" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -47,6 +62,7 @@
         android:id="@+id/carousel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:showCaption="true"
         app:layout_constraintBottom_toBottomOf="@+id/uploadProgressBar"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -134,7 +150,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbar3"
+        android:id="@+id/toolbarPostCreation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#40000000"
@@ -191,7 +207,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/add_photo"
             android:tooltipText='@string/add_photo'
-            android:src="@drawable/add_photo_alternate_white_30dp"
+            android:src="@drawable/add_photo_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -43,7 +43,6 @@
     <string name="default_system">Standard (Systemeinstellung)</string>
     <string name="permission_denied">Berechtigung verweigert</string>
     <string name="save_image_failed">Bild kann nicht gespeichert werden</string>
-    <string name="description_max_characters">Die Beschreibung darf höchstens %1$s Zeichen enthalten.</string>
     <string name="normal_filter">Normal</string>
     <string name="save_image_success">Bild erfolgreich gespeichert</string>
     <string name="picture_format_error">Upload-Fehler: falsches Bildformat.</string>
@@ -55,8 +54,6 @@
     <string name="comment">Kommentieren</string>
     <string name="share_image">Bild teilen</string>
     <string name="empty_comment">Der Kommentar darf nicht leer sein!</string>
-    <string name="shares">%1$s Geteilt</string>
-    <string name="likes">%1$s Likes</string>
     <string name="no_description">Keine Beschreibung</string>
     <string name="loading_toast">Beim Laden ist etwas schiefgegangen</string>
     <string name="search">Suchen</string>
@@ -66,12 +63,6 @@
     <string name="upload_post_error">Fehler beim Senden des Beitrags</string>
     <string name="comment_error">Kommentarfehler!</string>
     <string name="comment_posted">Kommentar: %1$s geschrieben!</string>
-    <string name="nb_posts">%1$s
-\nBeiträge</string>
-    <string name="nb_followers">%1$s
-\nFollower</string>
-    <string name="nb_following">%1$s
-\nFolgt</string>
     <string name="follow_button_failed">Konnte Knopf zum Folgen nicht anzeigen</string>
     <string name="follow_error">Konnte nicht folgen</string>
     <string name="no_username">Kein Benutzername</string>
@@ -142,11 +133,32 @@
     <string name="post_is_album">Dieser Beitrag ist ein Album</string>
     <string name="submit_comment">Kommentar senden</string>
     <string name="add_comment">Erstelle einen Kommentar</string>
-    <string name="number_comments">%1$s Kommentare</string>
     <string name="crop_button">Schaltfläche zum ausschneiden oder rotieren des Bildes</string>
     <string name="image_preview">Vorschau des bearbeiteten Bildes</string>
     <string name="filter_thumbnail">Vorschaubild des Filters</string>
-    <string name="click_image_edit">Klicke auf das Bild um es zu ändern</string>
     <string name="post_image">Eines der Bilder im Beitrag</string>
     <string name="verify_credentials">Benutzerdaten konnten nicht geladen werden</string>
+    <plurals name="nb_posts">
+        <item quantity="one">%d Beitrag</item>
+        <item quantity="other">%d Beiträge</item>
+    </plurals>
+    <plurals name="number_comments">
+        <item quantity="one">%d Kommentar</item>
+        <item quantity="other">%d Kommentar</item>
+    </plurals>
+    <string name="no_media_description">Ergänze hier eine Medienbeschreibung hier…</string>
+    <string name="save_image_description">Bildbeschreibung speichern</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Die Beschreibung muss mindestens %d Zeichen enthalten.</item>
+        <item quantity="other">Die Beschreibung muss mindestens %d Zeichen enthalten.</item>
+    </plurals>
+    <string name="whats_an_instance_explanation">Das Textfeld, mit der Frage nach der Domain deiner Instanz, hat dich vielleicht verwirrt.
+\n
+\n
+\nPixelfed ist eine Föderierte Platform und Teil des \"Fediverse\". Das bedeutet, dass es mit anderen Plattformen kommunizieren kann, wie Mastodon (https://joinmastodon.org).
+\n
+\nEs bedeutend auch, dass du wählen musst welchen Server, oder \"Pixelfed-Instanz\", du nutzen möchtest.
+\nWenn du keine kennst kannst u hier nachsehen: https://pixelfed.org/join
+\n
+\nMehr Informationen zu Pixelfed findest du hier: https://pixelfed.org</string>
 </resources>

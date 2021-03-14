@@ -3,9 +3,7 @@ package com.h.pixeldroid.posts
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -19,15 +17,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayoutMediator
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.AlbumImageViewBinding
-import com.h.pixeldroid.databinding.CommentBinding
 import com.h.pixeldroid.databinding.PostFragmentBinding
+import com.h.pixeldroid.utils.BlurHashDecoder
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.api.objects.Status
+import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_COMMENT_TAG
+import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_TAG
+import com.h.pixeldroid.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import com.h.pixeldroid.utils.db.AppDatabase
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -36,6 +36,7 @@ import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import kotlin.math.roundToInt
 
 
 /**
@@ -45,25 +46,36 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private var status: Status? = null
 
-    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope) {
+    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>, isActivity: Boolean = false) {
 
         this.itemView.visibility = View.VISIBLE
         this.status = status
 
-        val metrics = itemView.context.resources.displayMetrics
-        //Limit the height of the different images
-        binding.postPicture.maxHeight = metrics.heightPixels * 3/4
+        val maxImageRatio: Float = status?.media_attachments?.map {
+            if (it.meta?.original?.width == null || it.meta.original.height == null) {
+                1f
+            } else {
+                it.meta.original.width.toFloat() / it.meta.original.height.toFloat()
+            }
+        }?.maxOrNull() ?: 1f
+
+        val (displayWidth, displayHeight) = displayDimensionsInPx
+        if (displayWidth / maxImageRatio > displayHeight * 3/4f) {
+            binding.postPager.layoutParams.width = ((displayHeight * 3 / 4f) * maxImageRatio).roundToInt()
+            binding.postPager.layoutParams.height = (displayHeight * 3 / 4f).toInt()
+        } else {
+            binding.postPager.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+            binding.postPager.layoutParams.height = (displayWidth / maxImageRatio).toInt()
+        }
 
         //Setup the post layout
-        val picRequest = Glide.with(itemView)
-            .asDrawable().fitCenter()
-            .placeholder(ColorDrawable(Color.GRAY))
+        val picRequest = Glide.with(itemView).asDrawable().fitCenter()
 
         val user = db.userDao().getActiveUser()!!
 
-        setupPost(picRequest, user.instance_uri, false)
+        setupPost(picRequest, user.instance_uri, isActivity)
 
-        activateButtons(pixelfedAPI, db, lifecycleScope)
+        activateButtons(pixelfedAPI, db, lifecycleScope, isActivity)
 
     }
 
@@ -76,7 +88,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         binding.username.apply {
             text = status?.account?.getDisplayName() ?: ""
             setTypeface(null, Typeface.BOLD)
-            setOnClickListener { status?.account?.openProfile(rootView.context) }
+            setOnClickListener { status?.account?.openProfile(binding.root.context) }
         }
 
         binding.usernameDesc.apply {
@@ -85,12 +97,12 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
 
         binding.nlikes.apply {
-            text = status?.getNLikes(rootView.context)
+            text = status?.getNLikes(binding.root.context)
             setTypeface(null, Typeface.BOLD)
         }
 
         binding.nshares.apply {
-            text = status?.getNShares(rootView.context)
+            text = status?.getNShares(binding.root.context)
             setTypeface(null, Typeface.BOLD)
         }
 
@@ -116,15 +128,9 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         if(!status?.media_attachments.isNullOrEmpty()) {
             setupPostPics(binding, request)
         } else {
-            binding.postPicture.visibility = View.GONE
             binding.postPager.visibility = View.GONE
-            binding.postTabs.visibility = View.GONE
+            binding.postIndicator.visibility = View.GONE
         }
-
-
-        //Set comment initial visibility
-        binding.commentIn.visibility = View.GONE
-        binding.commentContainer.visibility = View.GONE
     }
 
     private fun setupPostPics(
@@ -133,50 +139,44 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     ) {
 
         // Standard layout
-        binding.postPicture.visibility = View.VISIBLE
-        binding.postPager.visibility = View.GONE
-        binding.postTabs.visibility = View.GONE
+        binding.postPager.visibility = View.VISIBLE
 
+        //Attach the given tabs to the view pager
+        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList(), status?.sensitive)
 
-        if(status?.media_attachments?.size == 1) {
-            request.load(status?.getPostUrl()).into(binding.postPicture)
-            val imgDescription = status?.media_attachments?.get(0)?.description.orEmpty().ifEmpty { binding.root.context.getString(
-                R.string.no_description) }
-            binding.postPicture.contentDescription = imgDescription
-
-            binding.postPicture.setOnLongClickListener {
-                Snackbar.make(it, imgDescription, Snackbar.LENGTH_SHORT).show()
-                true
-            }
-
-        } else if(status?.media_attachments?.size!! > 1) {
-            setupTabsLayout(binding, request)
+        if(status?.media_attachments?.size ?: 0 > 1) {
+            binding.postIndicator.setViewPager(binding.postPager)
+            binding.postIndicator.visibility = View.VISIBLE
+        } else {
+            binding.postIndicator.visibility = View.GONE
         }
 
-        if (status?.sensitive!!) {
-            status?.setupSensitiveLayout(binding)
+        if (status?.sensitive == true) {
+            setupSensitiveLayout()
+        } else {
+            // GONE is the default, but have to set it again because of how RecyclerViews work
+            binding.sensitiveWarning.visibility = View.GONE
         }
     }
 
-    private fun setupTabsLayout(
-        binding: PostFragmentBinding,
-        request: RequestBuilder<Drawable>,
-    ) {
-        //Only show the viewPager and tabs
-        binding.postPicture.visibility = View.GONE
-        binding.postPager.visibility = View.VISIBLE
-        binding.postTabs.visibility = View.VISIBLE
 
-        //Attach the given tabs to the view pager
-        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList())
+    private fun setupSensitiveLayout() {
 
-        TabLayoutMediator(binding.postTabs, binding.postPager) { tab, _ ->
-            tab.icon = ContextCompat.getDrawable(binding.root.context, R.drawable.ic_dot_blue_12dp)
-        }.attach()
+        // Set dark layout and warning message
+        binding.sensitiveWarning.visibility = View.VISIBLE
+        //binding.postPicture.colorFilter = ColorMatrixColorFilter(censorMatrix)
+
+        fun uncensorPicture(binding: PostFragmentBinding) {
+            binding.sensitiveWarning.visibility = View.GONE
+            (binding.postPager.adapter as AlbumViewPagerAdapter).uncensor()
+        }
+        
+        binding.sensitiveWarning.setOnClickListener {
+            uncensorPicture(binding)
+        }
     }
 
     private fun setDescription(
-        rootView: View,
         api: PixelfedAPI,
         credential: String,
         lifecycleScope: LifecycleCoroutineScope
@@ -189,7 +189,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                     status?.content.orEmpty(),
                     status?.mentions,
                     api,
-                    rootView.context,
+                    binding.root.context,
                     credential,
                     lifecycleScope
                 )
@@ -197,13 +197,18 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             }
         }
     }
-
-    private fun activateButtons(api: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope){
+    //region buttons
+    private fun activateButtons(
+        api: PixelfedAPI,
+        db: AppDatabase,
+        lifecycleScope: LifecycleCoroutineScope,
+        isActivity: Boolean
+    ){
         val user = db.userDao().getActiveUser()!!
 
         val credential = "Bearer ${user.accessToken}"
         //Set the special HTML text
-        setDescription(binding.root, api, credential, lifecycleScope)
+        setDescription(api, credential, lifecycleScope)
 
         //Activate onclickListeners
         activateLiker(
@@ -214,9 +219,23 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             api, credential, status?.reblogged ?: false,
             lifecycleScope
         )
-        activateCommenter(api, credential, lifecycleScope)
 
-        showComments(api, credential, lifecycleScope)
+        if(isActivity){
+            binding.commenter.visibility = View.INVISIBLE
+        }
+        else {
+            binding.commenter.setOnClickListener {
+                lifecycleScope.launchWhenCreated {
+                    //Open status in activity
+                    val intent = Intent(it.context, PostActivity::class.java)
+                    intent.putExtra(POST_TAG, status)
+                    intent.putExtra(POST_COMMENT_TAG, true)
+                    it.context.startActivity(intent)
+                }
+            }
+        }
+
+        showComments(lifecycleScope, isActivity)
 
         activateMoreButton(api, db, lifecycleScope)
     }
@@ -438,7 +457,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
         //Activate double tap liking
         var clicked = false
-        binding.postPicture.setOnClickListener {
+        binding.postPager.setOnClickListener {
             lifecycleScope.launchWhenCreated {
                 //Check that the post isn't hidden
                 if(binding.sensitiveWarning.visibility == View.GONE) {
@@ -458,7 +477,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                         clicked = true
 
                         //Reset clicked to false after 500ms
-                        binding.postPicture.handler.postDelayed(fun() { clicked = false }, 500)
+                        binding.postPager.handler.postDelayed(fun() { clicked = false }, 500)
                     }
                 }
 
@@ -511,156 +530,37 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             }
         }
     }
+    //endregion
 
     private fun showComments(
-        api: PixelfedAPI,
-        credential: String,
-        lifecycleScope: LifecycleCoroutineScope
+            lifecycleScope: LifecycleCoroutineScope,
+            isActivity: Boolean
     ) {
-        //Show all comments of a post
+        //Show number of comments on the post
         if (status?.replies_count == 0) {
             binding.viewComments.text =  binding.root.context.getString(R.string.NoCommentsToShow)
         } else {
             binding.viewComments.apply {
-                text = binding.root.context.getString(R.string.number_comments)
-                    .format(status?.replies_count)
-                setOnClickListener {
-                    visibility = View.GONE
-
-                    lifecycleScope.launchWhenCreated {
-                        //Retrieve the comments
-                        retrieveComments(api, credential)
+                text = resources.getQuantityString(R.plurals.number_comments,
+                                                    status?.replies_count ?: 0,
+                                                    status?.replies_count ?: 0
+                )
+                if(!isActivity) {
+                    setOnClickListener {
+                        lifecycleScope.launchWhenCreated {
+                            //Open status in activity
+                            val intent = Intent(context, PostActivity::class.java)
+                            intent.putExtra(POST_TAG, status)
+                            intent.putExtra(VIEW_COMMENTS_TAG, true)
+                            context.startActivity(intent)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun activateCommenter(
-        api: PixelfedAPI,
-        credential: String,
-        lifecycleScope: LifecycleCoroutineScope
-    ) {
-        //Toggle comment button
-        toggleCommentInput()
 
-        //Activate commenterpostPicture
-        binding.submitComment.setOnClickListener {
-            val textIn = binding.editComment.text
-            //Open text input
-            if(textIn.isNullOrEmpty()) {
-                Toast.makeText(
-                    binding.root.context,
-                    binding.root.context.getString(R.string.empty_comment),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                //Post the comment
-                lifecycleScope.launchWhenCreated {
-                    postComment(api, credential)
-                }
-            }
-        }
-    }
-
-    private fun toggleCommentInput() {
-        //Toggle comment button
-        binding.commenter.setOnClickListener {
-            when(binding.commentIn.visibility) {
-                View.VISIBLE -> {
-                    binding.commentIn.visibility = View.GONE
-                    ImageConverter.setImageFromDrawable(
-                        binding.root,
-                        binding.commenter,
-                        R.drawable.ic_comment_empty
-                    )
-                }
-                View.GONE -> {
-                    binding.commentIn.visibility = View.VISIBLE
-                    ImageConverter.setImageFromDrawable(
-                        binding.root,
-                        binding.commenter,
-                        R.drawable.ic_comment_blue
-                    )
-                }
-            }
-        }
-    }
-
-    fun addComment(context: android.content.Context, commentContainer: LinearLayout, commentUsername: String, commentContent: String) {
-
-
-        val itemBinding = CommentBinding.inflate(
-            LayoutInflater.from(context), commentContainer, false
-        )
-
-        itemBinding.user.text = commentUsername
-        itemBinding.commentText.text = commentContent
-    }
-
-    private suspend fun retrieveComments(
-            api: PixelfedAPI,
-            credential: String,
-    ) {
-        status?.id?.let {
-            try {
-                val statuses = api.statusComments(it, credential).descendants
-
-                binding.commentContainer.removeAllViews()
-
-                //Create the new views for each comment
-                for (status in statuses) {
-                    addComment(binding.root.context, binding.commentContainer, status.account!!.username!!,
-                            status.content!!
-                    )
-                }
-                binding.commentContainer.visibility = View.VISIBLE
-
-            } catch (exception: IOException) {
-                Log.e("COMMENT FETCH ERROR", exception.toString())
-            } catch (exception: HttpException) {
-                Log.e("COMMENT ERROR", "${exception.code()} with body ${exception.response()?.errorBody()}")
-            }
-        }
-    }
-
-    private suspend fun postComment(
-        api: PixelfedAPI,
-        credential: String,
-    ) {
-        val textIn = binding.editComment.text
-        val nonNullText = textIn.toString()
-        status?.id?.let {
-            try {
-                val response = api.postStatus(credential, nonNullText, it)
-                binding.commentIn.visibility = View.GONE
-
-                //Add the comment to the comment section
-                addComment(
-                    binding.root.context, binding.commentContainer, response.account!!.username!!,
-                    response.content!!
-                )
-
-                Toast.makeText(
-                    binding.root.context,
-                    binding.root.context.getString(R.string.comment_posted).format(textIn),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } catch (exception: IOException) {
-                Log.e("COMMENT ERROR", exception.toString())
-                Toast.makeText(
-                    binding.root.context, binding.root.context.getString(R.string.comment_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } catch (exception: HttpException) {
-                Toast.makeText(
-                    binding.root.context, binding.root.context.getString(R.string.comment_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.e("ERROR_CODE", exception.code().toString())
-            }
-        }
-    }
 
 
     companion object {
@@ -673,7 +573,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     }
 }
 
-class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>) :
+private class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>, private var sensitive: Boolean?) :
     RecyclerView.Adapter<AlbumViewPagerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -685,19 +585,42 @@ class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>) :
 
     override fun getItemCount() = media_attachments.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(holder.binding.root)
-            .asDrawable().fitCenter().placeholder(ColorDrawable(Color.GRAY))
-            .load(media_attachments[position].url).into(holder.image)
+        media_attachments[position].apply {
+            val blurhashBitMap = blurhash?.let {
+                BlurHashDecoder.blurHashBitmap(
+                        holder.binding.root.resources,
+                        it,
+                        meta?.original?.width,
+                        meta?.original?.height
+                )
+            }
+            if (sensitive == false) {
+                Glide.with(holder.binding.root)
+                        .asDrawable().fitCenter()
+                        .placeholder(blurhashBitMap)
+                        .load(url).into(holder.image)
+            } else {
+                Glide.with(holder.binding.root)
+                        .asDrawable().fitCenter()
+                        .load(blurhashBitMap).into(holder.image)
+            }
 
-        val description = media_attachments[position].description
-            .orEmpty().ifEmpty{ holder.binding.root.context.getString(R.string.no_description)}
+            val description = description
+                .orEmpty()
+                .ifEmpty { holder.binding.root.context.getString(R.string.no_description) }
 
-        holder.image.setOnLongClickListener {
-            Snackbar.make(it, description, Snackbar.LENGTH_SHORT).show()
-            true
+            holder.image.setOnLongClickListener {
+                Snackbar.make(it, description, Snackbar.LENGTH_SHORT).show()
+                true
+            }
+
+            holder.image.contentDescription = description
         }
+    }
 
-        holder.image.contentDescription = description
+    fun uncensor(){
+        sensitive = false
+        notifyDataSetChanged()
     }
 
     class ViewHolder(val binding: AlbumImageViewBinding) : RecyclerView.ViewHolder(binding.root){

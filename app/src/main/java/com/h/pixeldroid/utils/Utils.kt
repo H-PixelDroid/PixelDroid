@@ -8,18 +8,50 @@ import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.h.pixeldroid.R
+import okhttp3.HttpUrl
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 fun hasInternet(context: Context): Boolean {
     val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return cm.activeNetwork != null
+}
+
+/**
+ * Check if domain is valid or not
+ */
+fun validDomain(domain: String?): Boolean {
+    domain?.apply {
+        try {
+            HttpUrl.Builder().host(replace("https://", "")).scheme("https").build()
+        } catch (e: IllegalArgumentException) {
+            return false
+        }
+    } ?: return false
+
+    return true
+}
+
+
+fun Context.displayDimensionsInPx(): Pair<Int, Int> {
+    val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        Pair(windowManager.currentWindowMetrics.bounds.width(), windowManager.currentWindowMetrics.bounds.height())
+    } else {
+        val metrics = DisplayMetrics()
+        @Suppress("DEPRECATION")
+        windowManager.defaultDisplay.getMetrics(metrics)
+        Pair(metrics.widthPixels, metrics.heightPixels)
+    }
 }
 
 fun normalizeDomain(domain: String): String {

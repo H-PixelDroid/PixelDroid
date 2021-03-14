@@ -1,8 +1,10 @@
 package com.h.pixeldroid.postCreation.carousel
 
+import android.net.Uri
+
 data class CarouselItem constructor(
-    val imageUrl: String? = null,
-    val caption: String? = null
+        val imageUrl: Uri,
+        val caption: String? = null
 ) {
-    constructor(imageUrl: String? = null) : this(imageUrl, null)
+    constructor(imageUrl: Uri) : this(imageUrl, null)
 }

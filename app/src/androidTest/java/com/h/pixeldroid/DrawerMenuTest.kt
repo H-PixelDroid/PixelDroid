@@ -12,12 +12,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
+import com.h.pixeldroid.testUtility.*
 import com.h.pixeldroid.utils.db.AppDatabase
-import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
-import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
-import com.h.pixeldroid.testUtility.MockServer
-import com.h.pixeldroid.testUtility.clearData
-import com.h.pixeldroid.testUtility.initDB
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -28,7 +24,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class DrawerMenuTest {
 
-    private lateinit var mockServer: MockServer
     private lateinit var db: AppDatabase
     private lateinit var context: Context
 
@@ -38,33 +33,15 @@ class DrawerMenuTest {
 
     @Before
     fun before(){
-        mockServer = MockServer()
-        mockServer.start()
-        val baseUrl = mockServer.getUrl()
-
         context = ApplicationProvider.getApplicationContext()
         db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(
-            InstanceDatabaseEntity(
-                uri = baseUrl.toString(),
-                title = "PixelTest"
-            )
+            testiTestoInstance
         )
 
         db.userDao().insertUser(
-            UserDatabaseEntity(
-                    user_id = "123",
-                    instance_uri = baseUrl.toString(),
-                    username = "Testi",
-                    display_name = "Testi Testo",
-                    avatar_static = "some_avatar_url",
-                    isActive = true,
-                    accessToken = "token",
-                    refreshToken = refreshToken,
-                    clientId = clientId,
-                    clientSecret = clientSecret
-            )
+            testiTesto
         )
         db.close()
 
@@ -78,7 +55,6 @@ class DrawerMenuTest {
     @After
     fun after() {
         clearData()
-        mockServer.stop()
     }
 
     @Test
@@ -132,10 +108,11 @@ class DrawerMenuTest {
         onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.editButton)).check(matches(isDisplayed()))
-        val followersText = context.getString(R.string.nb_followers)
-            .format(68)
+        val followersText = context.resources.getQuantityString(R.plurals.nb_followers, 2, 2)
         onView(withText(followersText)).perform(click())
-        onView(withText("Dobios")).check(matches(isDisplayed()))
+
+        waitForView(R.id.account_entry_avatar)
+        onView(withText("PixelDroid Developer")).check(matches(isDisplayed()))
     }
 
     @Test
@@ -144,10 +121,11 @@ class DrawerMenuTest {
         onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
         onView(withId(R.id.editButton)).check(matches(isDisplayed()))
-        val followingText = context.getString(R.string.nb_following)
-            .format(27)
+        val followingText = context.resources.getQuantityString(R.plurals.nb_following, 3, 3)
         onView(withText(followingText)).perform(click())
-        onView(withText("Dobios")).check(matches(isDisplayed()))
+
+        waitForView(R.id.account_entry_avatar)
+        onView(withText("@User 1")).check(matches(isDisplayed()))
     }
 
     /*@Test
@@ -162,31 +140,38 @@ class DrawerMenuTest {
     fun clickFollowers() {
         // Open My Profile from drawer
         onView(withText(R.string.menu_account)).perform(click())
-        Thread.sleep(1000)
+
+        waitForView(R.id.nbFollowersTextView)
 
         // Open followers list
         onView(withId(R.id.nbFollowersTextView)).perform(click())
-        Thread.sleep(1000)
-        // Open follower's profile
-        onView(withText("ete2")).perform(click())
-        Thread.sleep(1000)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("Christian")))
+        waitForView(R.id.account_entry_avatar)
+
+        // Open follower's profile
+        onView(withText("@pixeldroid")).perform(click())
+
+        waitForView(R.id.profilePictureImageView)
+
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("PixelDroid Developer")))
     }
 
     @Test
     fun clickFollowing() {
         // Open My Profile from drawer
         onView(withText(R.string.menu_account)).perform(click())
-        Thread.sleep(1000)
+        waitForView(R.id.nbFollowersTextView)
+
         // Open followers list
         onView(withId(R.id.nbFollowingTextView)).perform(click())
-        Thread.sleep(1000)
-        // Open following's profile
-        onView(withText("Dobios")).perform(click())
-        Thread.sleep(1000)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("Andrew Dobis")))
+        waitForView(R.id.account_entry_avatar)
+
+        // Open following's profile
+        onView(withText("@user2")).perform(click())
+        waitForView(R.id.profilePictureImageView)
+
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("User 2")))
     }
 
     @Test

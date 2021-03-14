@@ -49,7 +49,7 @@ private val REQUIRED_PERMISSIONS = arrayOf(
 
 class PhotoEditActivity : BaseActivity() {
 
-    private var saving: Boolean = false
+    var saving: Boolean = false
     private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
     private val BRIGHTNESS_START = 0
     private val SATURATION_START = 1.0f
@@ -319,6 +319,7 @@ class PhotoEditActivity : BaseActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(grantResults.size > 1
             && grantResults[0] == PackageManager.PERMISSION_GRANTED
             && grantResults[1] == PackageManager.PERMISSION_GRANTED) {

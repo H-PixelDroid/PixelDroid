@@ -49,10 +49,6 @@
 \nJarraitzaile</string>
     <string name="default_nposts">-
 \nArgitalpen</string>
-    <string name="nb_following">%1$s
-\nJarraitzen</string>
-    <string name="nb_followers">%1$s
-\nJarraitzaile</string>
     <string name="share_image">Irudia partekatu</string>
     <string name="upload_picture_failed">Ezin izan da irudia kargatu!</string>
     <string name="save_image_failed">Ezinezkoa irudia gordetzea</string>
@@ -60,16 +56,13 @@
     <string name="light_theme">Argia</string>
     <string name="default_system">Lehenetsia (Sistemaren lehentsia)</string>
     <string name="no_description">Deskribapenik ez</string>
-    <string name="description_max_characters">Deskribapenak %1$s karaktere izan behar ditu gehienez.</string>
     <string name="save_image_success">Irudia behar bezala gorde da</string>
     <string name="feed_failed">Ezin izan da jarioa lortu</string>
     <string name="loading_toast">Zerbait gaizki joan da kargatzean</string>
-    <string name="shares">%1$s Partekatze</string>
     <string name="write_permission_download_pic">Idazteko baimena eman behar duzu irudiak deskargatzeko!</string>
     <string name="empty_comment">Iruzkina ez da hutsik egon behar!</string>
-    <string name="likes">%1$s Atsegite</string>
     <string name="normal_filter">Normala</string>
-    <string name="upload_post_error">Argitalpenak huts egin du</string>
+    <string name="upload_post_error">Argitalpena igotzean errorea</string>
     <string name="comment_posted">Iruzkina: %1$s argitaratua!</string>
     <string name="upload_post_success">Argitalpena ongi kargatu da</string>
     <string name="media_upload_failed">{gmd_cloud_off} Multimedia-kargak huts egin du, saiatu berriro edo egiaztatu sareko egoera</string>
@@ -80,7 +73,7 @@
     <string name="permission_denied">Baimena ukatuta</string>
     <string name="retry">Saiatu berriz</string>
     <string name="posting_image_accessibility_hint">Argitaratzen ari den irudia</string>
-    <string name="edit_profile">Profila editatu</string>
+    <string name="edit_profile">Editatu profila</string>
     <string name="no_username">Erabiltzaile-izenik ez</string>
     <string name="access_token_invalid">Sartzeko tokena baliogabea</string>
     <string name="unfollow_error">Ezin izan da jarraitzeari utzi</string>
@@ -88,13 +81,98 @@
     <string name="follow_error">Ezin izan da jarraitu</string>
     <string name="follow_button_failed">Ezin izan da jarraipen-botoia erakutsi</string>
     <string name="follow_status_failed">Ezin izan da segimendu-egoera lortu</string>
-    <string name="nb_posts">%1$s
-\nArgitalpen</string>
     <string name="comment">Iruzkin</string>
     <string name="write_permission_share_pic">Idazteko baimena eman behar duzu argazkiak partekatzeko!</string>
     <string name="posted_on">%1$s(e)n argitaratua</string>
     <string name="hashtags">TRAOLAK</string>
     <string name="accounts">KONTUAK</string>
-    <string name="media_upload_completed">{gmd_cloud_done} Multimedia karga burutu da</string>
-    <string name="upload_post_failed">Argitalpenak huts egin du</string>
+    <string name="media_upload_completed">{gmd_cloud_done} Multimedia karga amaitu da</string>
+    <string name="upload_post_failed">Argitalpena igotzeak huts egin du</string>
+    <string name="no_cancel_edit">Ez, utzi editatzeari</string>
+    <string name="save_before_returning">Zure edizioak gorde\?</string>
+    <string name="mascot_description">Panda gorri bat, Pixelfeden maskota, mugikor bat erabiltzen erakusten duen irudia</string>
+    <string name="issues_contribute">Jakinarazi arazoak edo aplikazioan lagundu:</string>
+    <string name="help_translate">Lagundu PixelDroid zure hizkuntzara itzultzen:</string>
+    <string name="language">Hizkuntza</string>
+    <string name="delete_dialog">Argitalpen hau ezabatu\?</string>
+    <string name="delete">Ezabatu</string>
+    <string name="panda_pull_to_refresh_to_try_again">Panda hau ez dago pozik. Tira freskatzeko berriz saiatzeko.</string>
+    <string name="something_went_wrong">Arazoren bat izan da…</string>
+    <string name="discover">AURKITU</string>
+    <string name="open_drawer_menu">Ireki menu lerrakorra</string>
+    <string name="profile_picture">Profileko irudia</string>
+    <string name="toolbar_title_edit">Editatu</string>
+    <string name="report_error">Ezin izan da salaketa bidali</string>
+    <string name="reported">Salatua {gmd_check_circle}</string>
+    <string name="report_target">Salatu @%1$s erabiltzailearen argitalpena</string>
+    <string name="optional_report_comment">Moderatzaile/administratzaileentzako hautazko mezua</string>
+    <string name="share_link">Partekatu esteka</string>
+    <string name="report">Salatu</string>
+    <string name="status_more_options">Aukera gehiago</string>
+    <string name="search_empty_error">Bilaketak ezin du hutsik egon</string>
+    <string name="follows_title">%1$s erabiltzaileak jarraituak</string>
+    <string name="followers_title">%1$s erabiltzailearen jarraitzaileak</string>
+    <string name="post_title">%1$s erabiltzailearen argitalpena</string>
+    <string name="about">Honi buruz</string>
+    <string name="license_info">PixelDroid software libre eta kode irekikoa da, GNU General Public License (3 bertsioa edo berriagoa) lizentzia duena</string>
+    <string name="project_website">Proiektuaren webgunea: https://pixeldroid.org</string>
+    <string name="dependencies_licenses">Menpekotasunak eta lizentziak</string>
+    <string name="about_pixeldroid">PixelDroidi buruz</string>
+    <string name="nothing_to_see_here">Hemen ez dago ezer!</string>
+    <string name="unfollow">Utzi jarraitzeari</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d jarraitzen</item>
+        <item quantity="other">%d jarraitzen</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">Jarraitzaile %d</item>
+        <item quantity="other">%d jarraitzaile</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">Argitalpen %d</item>
+        <item quantity="other">%d argitalpen</item>
+    </plurals>
+    <string name="post_is_album">Argitalpen hau album bat da</string>
+    <string name="submit_comment">Bidali iruzkina</string>
+    <string name="add_comment">Gehitu iruzkin bat</string>
+    <plurals name="number_comments">
+        <item quantity="one">Iruzkin %d</item>
+        <item quantity="other">%d iruzkin</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">Partekatze %d</item>
+        <item quantity="other">%d partekatze</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">Gogoko %d</item>
+        <item quantity="other">%d gogoko</item>
+    </plurals>
+    <string name="crop_button">Irudia moztu edo biratzeko botoia</string>
+    <string name="image_preview">Editatutako irudiaren aurrebista</string>
+    <string name="crop_result_error">Ezin izan da irudia berreskuratu moztu ondoren</string>
+    <string name="busy_dialog_ok_button">Ados, itxaron.</string>
+    <string name="busy_dialog_text">Oraindik irudia prozesatzen ari da, itxaron amaitu arte!</string>
+    <string name="filter_thumbnail">Iragazkiaren koadro txikia</string>
+    <string name="no_media_description">Gehitu multimediaren deskribapena hemen…</string>
+    <string name="save_image_description">Gorde irudiaren deskribapena</string>
+    <string name="switch_to_carousel">Aldatu karruselera</string>
+    <string name="switch_to_grid">Aldatu sareta-ikuspegira</string>
+    <string name="post_image">Argitalpeneko irudietako bat</string>
+    <string name="add_photo">Gehitu argazki bat</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Deskribapenak karaktere %d izan behar du gehienez.</item>
+        <item quantity="other">Deskribapenak %d karaktere izan behar ditu gehienez.</item>
+    </plurals>
+    <string name="whats_an_instance_explanation">Behar bada zure \'instantziaren\' domeinua eskatzen dizun testu-eremua nahasgarria iruditu zaizu.
+\n
+\nPixelfed plataforma federatu bat da, eta \'fedibertsoaren\' parte da. Horrek esan nahi du hizkuntza bera erabiltzen duten beste plataforma batzuekin hitz egin dezakeela, adibidez Mastodonekin (ikusi https://joinmastodon.org).
+\n
+\nHorregatik Pixelfeden ze zerbitzari, edo \'instantzia\', erabili nahi duzun aukeratu behar duzu. Ez baduzu bat ere ezagutzen, hemen begira dezakezu: https://pixelfed.org/join
+\n
+\nPixelfedi buruzko informazio gehiago nahi baduzu: https://pixelfed.org</string>
+    <string name="poll_notification">%1$s erabiltzailearen inkesta amaitu da</string>
+    <string name="instance_not_pixelfed_cancel">Utzi saioa hastea</string>
+    <string name="instance_not_pixelfed_continue">Ados, jarraitu hala ere</string>
+    <string name="instance_not_pixelfed_warning">Honek ez dirudi Pixelfed instantzia bat, aplikazioa ustekabeko moduetan huts egin dezake.</string>
+    <string name="verify_credentials">Ezin izan da erabiltzailearen informazioa eskuratu</string>
 </resources>
