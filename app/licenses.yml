@@ -115,6 +115,16 @@
   copyrightHolder: ligi
   license: The Apache Software License, Version 2.0
   url: https://github.com/ligi/tracedroid
+- artifact: com.github.ligi.tracedroid:supportemail:+
+  name: supportemail
+  copyrightHolder: ligi
+  license: The Apache Software License, Version 2.0
+  url: https://github.com/ligi/tracedroid
+- artifact: com.github.ligi.tracedroid:lib:+
+  name: lib
+  copyrightHolder: ligi
+  license: The Apache Software License, Version 2.0
+  url: https://github.com/ligi/tracedroid
 - artifact: com.jakewharton.timber:timber:+
   name: timber
   copyrightHolder: Jake Wharton and contributors
