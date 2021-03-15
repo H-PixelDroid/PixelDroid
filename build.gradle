@@ -4,7 +4,15 @@ buildscript {
     ext.kotlin_version = '1.4.31'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        jcenter {
+            content {
+                // org.jetbrains.trove4j is only available in JCenter
+                //TODO remove JCenter repo:
+                // see issue https://gitlab.shinice.net/pixeldroid/PixelDroid/-/issues/278
+                includeGroup("org.jetbrains.trove4j")
+            }
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.2'
@@ -18,9 +26,16 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url "https://jitpack.io" }
-
+        jcenter {
+            content {
+                // info.androidhive:imagefilters is only available in JCenter
+                //TODO remove JCenter repo:
+                // see issue https://gitlab.shinice.net/pixeldroid/PixelDroid/-/issues/278
+                includeGroup("info.androidhive")
+            }
+        }
     }
 }
 
