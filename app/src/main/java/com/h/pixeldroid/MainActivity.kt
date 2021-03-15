@@ -39,7 +39,6 @@ import com.mikepenz.materialdrawer.model.interfaces.*
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
-import org.ligi.tracedroid.sending.TraceDroidEmailSender
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -69,8 +68,6 @@ class MainActivity : BaseActivity() {
             launchActivity(LoginActivity(), firstTime = true)
             finish()
         } else {
-            TraceDroidEmailSender.sendStackTraces("contact@pixeldroid.org", this)
-
             setupDrawer()
 
             val tabs: List<() -> Fragment> = listOf(
