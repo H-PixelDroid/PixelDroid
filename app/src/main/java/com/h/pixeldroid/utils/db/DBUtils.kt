@@ -49,5 +49,5 @@ fun storeInstance(db: AppDatabase, nodeInfo: NodeInfo?, instance: Instance? = nu
         )
     } ?: throw IllegalArgumentException("Cannot store instance where both are null")
 
-    db.instanceDao().insertInstance(dbInstance)
+    db.instanceDao().insertOrUpdate(dbInstance)
 }
