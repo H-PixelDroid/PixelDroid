@@ -34,6 +34,11 @@ allprojects {
                 //TODO remove JCenter repo:
                 // see issue https://gitlab.shinice.net/pixeldroid/PixelDroid/-/issues/278
                 includeGroup("info.androidhive")
+
+                // org.jetbrains.trove4j is only available in JCenter
+                //TODO remove JCenter repo:
+                // see issue https://gitlab.shinice.net/pixeldroid/PixelDroid/-/issues/278
+                includeGroup("org.jetbrains.trove4j")
             }
         }
     }
