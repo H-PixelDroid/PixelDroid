@@ -179,10 +179,9 @@ dependencies {
 
     implementation 'com.karumi:dexter:6.2.2'
 
-    implementation 'com.github.ligi.tracedroid:lib:3.0'
-    implementation 'com.github.ligi.tracedroid:supportemail:3.0'
+    implementation 'com.github.ligi:tracedroid:4.1'
 
-    implementation 'me.relex:circleindicator:2.1.4'
+    implementation 'me.relex:circleindicator:2.1.6'
 
     /**
      * Not in release, so not mentioned in licenses list
