@@ -16,7 +16,6 @@ class PixelDroidApplication: Application() {
         super.onCreate()
 
         TraceDroid.init(this)
-        sendTraceDroidStackTracesIfExist("contact@pixeldroid.org", this)
 
         val sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(this)

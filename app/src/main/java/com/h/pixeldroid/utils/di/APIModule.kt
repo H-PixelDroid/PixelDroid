@@ -2,7 +2,6 @@ package com.h.pixeldroid.utils.di
 
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.db.AppDatabase
-import com.h.pixeldroid.utils.db.addUser
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import dagger.Module
 import dagger.Provides
@@ -11,7 +10,6 @@ import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Exception
 import javax.inject.Singleton
 
 @Module
@@ -74,9 +72,18 @@ class PixelfedAPIHolder(db: AppDatabase?){
     ): PixelfedAPI {
         val newAPI = intermediate
             .baseUrl(user.instance_uri)
-            .client(OkHttpClient().newBuilder().authenticator(TokenAuthenticator(user, db)).build())
+            .client(
+                OkHttpClient().newBuilder().authenticator(TokenAuthenticator(user, db))
+                    .addInterceptor {
+                    it.request().newBuilder().run {
+                        header("Accept", "application/json")
+                        it.proceed(build())
+                    }
+                }.build()
+            )
             .build().create(PixelfedAPI::class.java)
         api = newAPI
         return newAPI
     }
+
 }
