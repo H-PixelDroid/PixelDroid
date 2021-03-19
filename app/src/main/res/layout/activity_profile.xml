@@ -143,6 +143,7 @@
             tools:visibility="visible">
 
             <include
+                android:id="@+id/profileErrorLayout"
                 layout="@layout/error_layout"
                 tools:layout_editor_absoluteX="50dp" />
 

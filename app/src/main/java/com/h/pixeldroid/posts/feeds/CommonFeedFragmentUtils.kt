@@ -2,25 +2,32 @@ package com.h.pixeldroid.posts.feeds
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import androidx.core.view.size
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
-import com.h.pixeldroid.databinding.FragmentFeedBinding
+import com.h.pixeldroid.databinding.ErrorLayoutBinding
 import com.h.pixeldroid.databinding.LoadStateFooterViewItemBinding
 
 /**
  * Shows or hides the error in the different FeedFragments
  */
-private fun showError(errorText: String, show: Boolean = true, binding: FragmentFeedBinding){
-    if(show){
-        binding.motionLayout.transitionToEnd()
-        binding.errorLayout.errorText.text = errorText
-    } else if(binding.motionLayout.progress == 1F){
-        binding.motionLayout.transitionToStart()
+private fun showError(
+        errorText: String, show: Boolean = true,
+        motionLayout: MotionLayout,
+        errorLayout: ErrorLayoutBinding){
+
+    if(show) {
+        motionLayout.transitionToEnd()
+        errorLayout.errorText.text = errorText
+    } else if(motionLayout.progress == 1F) {
+        motionLayout.transitionToStart()
     }
 }
 
@@ -29,28 +36,32 @@ private fun showError(errorText: String, show: Boolean = true, binding: Fragment
  *
  * Makes the UI respond to various [LoadState]s, including errors when an error message is shown.
  */
-internal fun <T: Any> initAdapter(binding: FragmentFeedBinding, adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>) {
-    binding.list.adapter = adapter.withLoadStateFooter(
+internal fun <T: Any> initAdapter(
+    progressBar: ProgressBar, swipeRefreshLayout: SwipeRefreshLayout,
+    recyclerView: RecyclerView, motionLayout: MotionLayout, errorLayout: ErrorLayoutBinding,
+    adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>) {
+
+    recyclerView.adapter = adapter.withLoadStateFooter(
         footer = ReposLoadStateAdapter { adapter.retry() }
     )
 
     adapter.addLoadStateListener { loadState ->
 
-        if(!binding.progressBar.isVisible && binding.swipeRefreshLayout.isRefreshing) {
+        if(!progressBar.isVisible && swipeRefreshLayout.isRefreshing) {
             // Stop loading spinner when loading is done
-            binding.swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
+            swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
         } else {
             // ProgressBar should stop showing as soon as the source stops loading ("source"
             // meaning the database, so don't wait on the network)
             val sourceLoading = loadState.source.refresh is LoadState.Loading
-            if(!sourceLoading && binding.list.size > 0){
-                binding.list.isVisible = true
-                binding.progressBar.isVisible = false
-            } else if(binding.list.size ==  0
+            if(!sourceLoading && recyclerView.size > 0){
+                recyclerView.isVisible = true
+                progressBar.isVisible = false
+            } else if(recyclerView.size ==  0
                     && loadState.append is LoadState.NotLoading
                     && loadState.append.endOfPaginationReached){
-                binding.progressBar.isVisible = false
-                showError(binding = binding, errorText = "Nothing to see here :(")
+                progressBar.isVisible = false
+                showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = "Nothing to see here :(")
             }
         }
 
@@ -63,12 +74,14 @@ internal fun <T: Any> initAdapter(binding: FragmentFeedBinding, adapter: PagingD
             ?: loadState.prepend as? LoadState.Error
             ?: loadState.refresh as? LoadState.Error
         errorState?.let {
-            showError(binding = binding, errorText = it.error.toString())
+            showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = it.error.toString())
         }
-        if (errorState == null) showError(binding = binding, show = false, errorText = "")
+        if(errorState == null) {
+            showError(motionLayout = motionLayout, errorLayout = errorLayout, show = false, errorText = "")
+        }
     }
-
 }
+
 
 /**
  * Adapter to the show the a [RecyclerView] item for a [LoadState], with a callback to retry if

@@ -67,7 +67,8 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
 
         binding = FragmentFeedBinding.inflate(layoutInflater)
 
-        initAdapter(binding, adapter)
+        initAdapter(binding.progressBar, binding.swipeRefreshLayout, binding.list,
+            binding.motionLayout, binding.errorLayout, adapter)
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             //It shouldn't be necessary to also retry() in addition to refresh(),

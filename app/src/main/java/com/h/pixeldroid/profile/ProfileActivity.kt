@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.core.view.size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +22,7 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityProfileBinding
 import com.h.pixeldroid.databinding.FragmentProfilePostsBinding
 import com.h.pixeldroid.posts.PostActivity
-import com.h.pixeldroid.posts.feeds.ReposLoadStateAdapter
+import com.h.pixeldroid.posts.feeds.initAdapter
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.FeedViewModel
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.UncachedContentRepository
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
@@ -88,14 +86,13 @@ class ProfileActivity : BaseActivity() {
         ).get(FeedViewModel::class.java) as FeedViewModel<Status>
 
         profileAdapter = ProfilePostsAdapter()
-        initAdapter(binding, profileAdapter)
+        initAdapter(binding.profileProgressBar, binding.profileRefreshLayout,
+            binding.profilePostsRecyclerView, binding.motionLayout, binding.profileErrorLayout,
+            profileAdapter)
 
         binding.profilePostsRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
         binding.profileRefreshLayout.setOnRefreshListener {
-            //It shouldn't be necessary to also retry() in addition to refresh(),
-            //but if we don't do this, reloads after an error fail immediately...
-            profileAdapter.retry()
             profileAdapter.refresh()
         }
 
@@ -137,52 +134,6 @@ class ProfileActivity : BaseActivity() {
             binding.motionLayout.transitionToStart()
         }
         binding.profileRefreshLayout.isRefreshing = false
-    }
-
-    /**
-     * Initialises the [RecyclerView] adapter for the different FeedFragments.
-     *
-     * Makes the UI respond to various [LoadState]s, including errors when an error message is shown.
-     */
-    internal fun <T: Any> initAdapter(binding: ActivityProfileBinding, adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>) {
-        binding.profilePostsRecyclerView.adapter = adapter.withLoadStateFooter(
-                footer = ReposLoadStateAdapter { adapter.retry() }
-        )
-
-        adapter.addLoadStateListener { loadState ->
-
-            if(!binding.profileProgressBar.isVisible && binding.profileRefreshLayout.isRefreshing) {
-                // Stop loading spinner when loading is done
-                binding.profileRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
-            } else {
-                // ProgressBar should stop showing as soon as the source stops loading ("source"
-                // meaning the database, so don't wait on the network)
-                val sourceLoading = loadState.source.refresh is LoadState.Loading
-                if(!sourceLoading && binding.profilePostsRecyclerView.size > 0){
-                    binding.profilePostsRecyclerView.isVisible = true
-                    binding.profileProgressBar.isVisible = false
-                } else if(binding.profilePostsRecyclerView.size ==  0
-                        && loadState.append is LoadState.NotLoading
-                        && loadState.append.endOfPaginationReached){
-                    binding.profileProgressBar.isVisible = false
-                    showError(errorText = "Nothing to see here :(")
-                }
-            }
-
-
-            // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
-            val errorState = loadState.source.append as? LoadState.Error
-                    ?: loadState.source.prepend as? LoadState.Error
-                    ?: loadState.source.refresh as? LoadState.Error
-                    ?: loadState.append as? LoadState.Error
-                    ?: loadState.prepend as? LoadState.Error
-                    ?: loadState.refresh as? LoadState.Error
-            errorState?.let {
-                showError(errorText = it.error.toString())
-            }
-            if (errorState == null) showError(show = false, errorText = "")
-        }
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

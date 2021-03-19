@@ -33,8 +33,5 @@ class ProfilePagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<String, Status>): String? =
-        state.anchorPosition?.run {
-            state.closestItemToPosition(this)?.id
-        }
+    override fun getRefreshKey(state: PagingState<String, Status>): String? = null
 }
