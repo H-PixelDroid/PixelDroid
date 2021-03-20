@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,10 +34,7 @@ import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.openUrl
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -98,7 +94,6 @@ class ProfileActivity : BaseActivity() {
 
         setContent(account)
         profileLaunch()
-        profileInitSearch()
     }
 
     private fun profileLaunch() {
@@ -108,18 +103,6 @@ class ProfileActivity : BaseActivity() {
             viewModel.flow().collectLatest {
                 profileAdapter.submitData(it)
             }
-        }
-    }
-
-    private fun profileInitSearch() {
-        // Scroll to top when the list is refreshed from network.
-        lifecycleScope.launch {
-            profileAdapter.loadStateFlow
-                    // Only emit when REFRESH LoadState for RemoteMediator changes.
-                    .distinctUntilChangedBy { it.refresh }
-                    // Only react to cases where Remote REFRESH completes i.e., NotLoading.
-                    .filter { it.refresh is LoadState.NotLoading }
-                    .collect { binding.profilePostsRecyclerView.scrollToPosition(0) }
         }
     }
 

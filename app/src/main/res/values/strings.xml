@@ -127,22 +127,16 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="post_is_album">This post is an album</string>
     <!-- Profile page -->
     <plurals name="nb_posts">
-        <item quantity="one">"%d
-Post"</item>
-        <item quantity="other">"%d
-Posts"</item>
+        <item quantity="one">"%d\nPost"</item>
+        <item quantity="other">"%d\nPosts"</item>
     </plurals>
     <plurals name="nb_followers">
-        <item quantity="one">"%d
-Follower"</item>
-        <item quantity="other">"%d
-Followers"</item>
+        <item quantity="one">"%d\nFollower"</item>
+        <item quantity="other">"%d\nFollowers"</item>
     </plurals>
     <plurals name="nb_following">
-        <item quantity="one">"%d
-Following"</item>
-        <item quantity="other">"%d
-Following"</item>
+        <item quantity="one">"%d\nFollowing"</item>
+        <item quantity="other">"%d\nFollowing"</item>
     </plurals>
     <string name="follow_status_failed">Could not get follow status</string>
     <string name="follow_button_failed">Could not display follow button</string>
