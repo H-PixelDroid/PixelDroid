@@ -165,8 +165,8 @@
         <item quantity="one">%d Mi piace</item>
         <item quantity="other">%d Mi piace</item>
     </plurals>
-    <string name="upload_error">Codice di errore restituito dal server: %1$s</string>
-    <string name="size_exceeds_instance_limit">La dimensione del numero dell\'immagine %1$s nell\'album supera la dimensione massima consentita dall\'istanza (%2$s kB ma il limite è %3$s kB). Potresti non essere in grado di caricarla.</string>
+    <string name="upload_error">Codice di errore restituito dal server: %1$d</string>
+    <string name="size_exceeds_instance_limit">La dimensione del numero dell\'immagine %1$d nell\'album supera la dimensione massima consentita dall\'istanza (%2$d kB ma il limite è %3$d kB). Potresti non essere in grado di caricarla.</string>
     <string name="total_exceeds_album_limit">Hai scelto più immagini del massimo che il server consente (%1$s). Le immagini oltre il limite sono state ignorate.</string>
     <string name="no_media_description">Aggiungi una descrizione dell\'immagine qui…</string>
     <string name="save_image_description">Salva la descrizione dell\'immagine</string>
