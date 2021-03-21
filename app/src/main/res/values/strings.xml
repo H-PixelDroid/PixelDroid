@@ -66,8 +66,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="save_image_description">Save image description</string>
     <string name="no_media_description">Add a media description here…</string>
     <string name="total_exceeds_album_limit">You chose more images than the maximum your server allows (%1$s). Images beyond the limit have been ignored.</string>
-    <string name="size_exceeds_instance_limit">Size of image number %1$s in the album exceeds the maximum size allowed by the instance (%2$s kB but the limit is %3$s kB). You might not be able to upload it.</string>
-    <string name="upload_error">Error code returned by server: %1$s</string>
+    <string name="size_exceeds_instance_limit">Size of image number %1$d in the album exceeds the maximum size allowed by the instance (%2$d kB but the limit is %3$d kB). You might not be able to upload it.</string>
+    <string name="upload_error">Error code returned by server: %1$d</string>
 
 
     <!-- Post editing -->
@@ -200,4 +200,6 @@ Following"</item>
     <string name="help_translate">Help translate PixelDroid to your language:</string>
     <string name="issues_contribute">Report issues or contribute to the application:</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
+    <string name="delete_post_failed_error">Could not delete the post, error %1$d</string>
+    <string name="delete_post_failed_io_except">Could not delete the post, check your connection?</string>
 </resources>
