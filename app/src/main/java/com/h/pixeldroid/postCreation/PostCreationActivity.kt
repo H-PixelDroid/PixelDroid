@@ -16,7 +16,6 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.core.net.toUri
@@ -46,7 +45,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.ceil
-import kotlin.properties.Delegates
 
 private const val TAG = "Post Creation Activity"
 
