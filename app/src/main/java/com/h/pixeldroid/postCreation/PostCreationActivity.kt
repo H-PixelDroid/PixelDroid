@@ -15,6 +15,8 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
@@ -43,10 +45,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.ceil
-import kotlin.properties.Delegates
 
 private const val TAG = "Post Creation Activity"
-private const val MORE_PICTURES_REQUEST_CODE = 0xffff
 
 data class PhotoData(
         var imageUri: Uri,
@@ -61,7 +61,6 @@ class PostCreationActivity : BaseActivity() {
     private lateinit var accessToken: String
     private lateinit var pixelfedAPI: PixelfedAPI
 
-    private var positionResult = 0
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
 
@@ -103,7 +102,7 @@ class PostCreationActivity : BaseActivity() {
         }
         carousel.maxEntries = instance.albumLimit
         carousel.addPhotoButtonCallback = {
-            addPhoto(applicationContext)
+            addPhoto()
         }
         carousel.updateDescriptionCallback = { position: Int, description: String ->
             photoData[position].imageDescription = description
@@ -131,7 +130,7 @@ class PostCreationActivity : BaseActivity() {
         }
 
         binding.addPhotoButton.setOnClickListener {
-            addPhoto(it.context)
+            addPhoto()
         }
 
         binding.savePhotoButton.setOnClickListener {
@@ -170,45 +169,66 @@ class PostCreationActivity : BaseActivity() {
         }
         for (i in 0 until count) {
             clipData.getItemAt(i).uri.let {
-                val size: Long =
-                        if (it.toString().startsWith("content")) {
-                            contentResolver.query(it, null, null, null, null)
-                                    ?.use { cursor ->
-                                        /* Get the column indexes of the data in the Cursor,
-                                                         * move to the first row in the Cursor, get the data,
-                                                         * and display it.
-                                                         */
-                                        val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-                                        cursor.moveToFirst()
-                                        cursor.getLong(sizeIndex)
-                                    } ?: 0
-                        } else {
-                            it.toFile().length()
-                        }
-                val sizeInkBytes = ceil(size.toDouble() / 1000).toLong()
-                if(sizeInkBytes > instance.maxPhotoSize || sizeInkBytes > instance.maxVideoSize){
-                    val maxSize = when {
-                        instance.maxPhotoSize != instance.maxVideoSize -> {
-                            val type = contentResolver.getType(it)
-                            if(type?.startsWith("video/") == true){
-                                instance.maxVideoSize
-                            } else instance.maxPhotoSize
-                        }
-                        else -> instance.maxPhotoSize
-                    }
-                    AlertDialog.Builder(this).apply {
-                        setMessage(getString(R.string.size_exceeds_instance_limit).format(photoData.size + 1, sizeInkBytes, maxSize))
-                        setNegativeButton(android.R.string.ok) { _, _ -> }
-                    }.show()
-                }
+                val size = it.getSize()
                 photoData.add(PhotoData(imageUri = it, size = size))
             }
         }
     }
 
-    private fun addPhoto(context: Context){
-        val intent = Intent(context, CameraActivity::class.java)
-        this@PostCreationActivity.startActivityForResult(intent, MORE_PICTURES_REQUEST_CODE)
+    /**
+     * Returns the size of the file of the Uri, and opens a dialog in case it is too big.
+     */
+    private fun Uri.getSize(): Long {
+        val size: Long =
+                if (toString().startsWith("content")) {
+                    contentResolver.query(this, null, null, null, null)
+                            ?.use { cursor ->
+                                /* Get the column indexes of the data in the Cursor,
+                                                 * move to the first row in the Cursor, get the data,
+                                                 * and display it.
+                                                 */
+                                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                                cursor.moveToFirst()
+                                cursor.getLong(sizeIndex)
+                            } ?: 0
+                } else {
+                    toFile().length()
+                }
+
+        val sizeInkBytes = ceil(size.toDouble() / 1000).toLong()
+        if (sizeInkBytes > instance.maxPhotoSize || sizeInkBytes > instance.maxVideoSize) {
+            val maxSize = when {
+                instance.maxPhotoSize != instance.maxVideoSize -> {
+                    val type = contentResolver.getType(this)
+                    if (type?.startsWith("video/") == true) {
+                        instance.maxVideoSize
+                    } else instance.maxPhotoSize
+                }
+                else -> instance.maxPhotoSize
+            }
+            AlertDialog.Builder(this@PostCreationActivity).apply {
+                setMessage(getString(R.string.size_exceeds_instance_limit, photoData.size + 1, sizeInkBytes, maxSize))
+                setNegativeButton(android.R.string.ok) { _, _ -> }
+            }.show()
+        }
+        return size
+    }
+
+    private val addPhotoResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data?.clipData != null) {
+            result.data?.clipData?.let {
+                addPossibleImages(it)
+            }
+            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
+        } else if (result.resultCode != Activity.RESULT_CANCELED) {
+            Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun addPhoto(){
+        addPhotoResultContract.launch(
+                Intent(this, CameraActivity::class.java)
+        )
     }
 
     private fun savePicture(button: View, currentPosition: Int) {
@@ -334,7 +354,7 @@ class PostCreationActivity : BaseActivity() {
                             binding.uploadError.visibility = View.VISIBLE
                             if(e is HttpException){
                                 binding.uploadErrorTextExplanation.text =
-                                        getString(R.string.upload_error).format(e.code())
+                                        getString(R.string.upload_error, e.code())
                                 binding.uploadErrorTextExplanation.visibility= VISIBLE
                             } else {
                                 binding.uploadErrorTextExplanation.visibility= View.GONE
@@ -398,39 +418,27 @@ class PostCreationActivity : BaseActivity() {
 
     }
 
-    private fun edit(position: Int) {
-        positionResult = position
+    private fun editResultContract(position: Int) = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        result: ActivityResult? ->
+        if (result?.resultCode == Activity.RESULT_OK && result.data != null) {
+            photoData[position].apply {
+                imageUri = result.data!!.getStringExtra("result")!!.toUri()
+                size = imageUri.getSize()
+            }
 
+            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
+
+            photoData[position].progress = null
+            photoData[position].uploadId = null
+        } else if(result?.resultCode != Activity.RESULT_CANCELED){
+            Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun edit(position: Int) {
         val intent = Intent(this, PhotoEditActivity::class.java)
             .putExtra("picture_uri", photoData[position].imageUri)
             .putExtra("no upload", false)
-        startActivityForResult(intent, positionResult)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == positionResult) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                photoData[positionResult].imageUri = data.getStringExtra("result")!!.toUri()
-
-                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
-
-                photoData[positionResult].progress = null
-                photoData[positionResult].uploadId = null
-            } else if(resultCode != Activity.RESULT_CANCELED){
-                Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
-            }
-        } else if (requestCode == MORE_PICTURES_REQUEST_CODE) {
-
-            if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
-                data.clipData?.let {
-                    addPossibleImages(it)
-                }
-
-                binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
-            } else if(resultCode != Activity.RESULT_CANCELED){
-                Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
-            }
-        }
+        editResultContract(position).launch(intent)
     }
 }

@@ -110,6 +110,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:2.3.0"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
+    implementation "androidx.activity:activity-ktx:1.2.1"
 
     // Use the most recent version of CameraX
     def cameraX_version = '1.0.0-rc03'

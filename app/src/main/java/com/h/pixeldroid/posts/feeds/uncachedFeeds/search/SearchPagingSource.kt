@@ -39,9 +39,9 @@ class SearchPagingSource<T: FeedContent>(
                 prevKey = null,
                 nextKey = if (repos.isEmpty()) null else (position ?: 0) + repos.size
             )
-        } catch (exception: IOException) {
-            LoadResult.Error(exception)
         } catch (exception: HttpException) {
+            LoadResult.Error(exception)
+        } catch (exception: IOException) {
             LoadResult.Error(exception)
         }
     }

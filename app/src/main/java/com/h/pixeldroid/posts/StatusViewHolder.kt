@@ -280,11 +280,11 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 //Update shown share count
                 binding.nshares.text = resp.getNShares(binding.root.context)
                 binding.reblogger.isChecked = resp.reblogged!!
-            } catch (exception: IOException) {
-                Log.e("REBLOG ERROR", exception.toString())
-                binding.reblogger.isChecked = false
             } catch (exception: HttpException) {
                 Log.e("RESPONSE_CODE", exception.code().toString())
+                binding.reblogger.isChecked = false
+            } catch (exception: IOException) {
+                Log.e("REBLOG ERROR", exception.toString())
                 binding.reblogger.isChecked = false
             }
         }
@@ -302,11 +302,11 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 //Update shown share count
                 binding.nshares.text = resp.getNShares(binding.root.context)
                 binding.reblogger.isChecked = resp.reblogged!!
-            } catch (exception: IOException) {
-                Log.e("REBLOG ERROR", exception.toString())
-                binding.reblogger.isChecked = true
             } catch (exception: HttpException) {
                 Log.e("RESPONSE_CODE", exception.code().toString())
+                binding.reblogger.isChecked = true
+            } catch (exception: IOException) {
+                Log.e("REBLOG ERROR", exception.toString())
                 binding.reblogger.isChecked = true
             }
         }
@@ -397,8 +397,18 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                             try {
                                                 api.deleteStatus("Bearer ${user.accessToken}", id)
                                                 binding.root.visibility = View.GONE
-                                            } catch (exception: IOException) {
                                             } catch (exception: HttpException) {
+                                                Toast.makeText(
+                                                        binding.root.context,
+                                                        binding.root.context.getString(R.string.delete_post_failed_error, exception.code()),
+                                                        Toast.LENGTH_SHORT
+                                                ).show()
+                                            } catch (exception: IOException) {
+                                                Toast.makeText(
+                                                        binding.root.context,
+                                                        binding.root.context.getString(R.string.delete_post_failed_io_except),
+                                                        Toast.LENGTH_SHORT
+                                                ).show()
                                             }
                                         }
                                     }
