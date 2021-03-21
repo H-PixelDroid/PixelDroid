@@ -138,8 +138,8 @@
     <string name="follows_title">Abonnements de %1$s</string>
     <string name="followers_title">Abonné·e·s de %1$s</string>
     <string name="verify_credentials">Impossible d\'obtenir les informations sur l\'utilisateur</string>
-    <string name="size_exceeds_instance_limit">La taille de l\'image n°%1$s dans l\'album dépasse la taille maximale autorisée (%2$s ko mais la limite est %3$s ko). Il se peut que vous ne puissiez pas la télécharger.</string>
-    <string name="upload_error">Le serveur a retourné le code d\'erreur : %1$s</string>
+    <string name="size_exceeds_instance_limit">La taille de l\'image n°%1$d dans l\'album dépasse la taille maximale autorisée (%2$d ko mais la limite est %3$d ko). Il se peut que vous ne puissiez pas la télécharger.</string>
+    <string name="upload_error">Le serveur a retourné le code d\'erreur : %1$d</string>
     <string name="total_exceeds_album_limit">Vous avez choisi plus d\'images que le maximum autorisé par votre serveur (%1$s). Les images au delà de la limite ont été ignorées.</string>
     <string name="no_media_description">Ajouter une description du média ici…</string>
     <string name="save_image_description">Enregistrer la description de l\'image</string>
