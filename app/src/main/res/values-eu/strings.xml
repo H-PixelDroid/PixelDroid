@@ -175,4 +175,10 @@
     <string name="instance_not_pixelfed_continue">Ados, jarraitu hala ere</string>
     <string name="instance_not_pixelfed_warning">Honek ez dirudi Pixelfed instantzia bat, aplikazioa ustekabeko moduetan huts egin dezake.</string>
     <string name="verify_credentials">Ezin izan da erabiltzailearen informazioa eskuratu</string>
+    <string name="delete_post_failed_io_except">Ezin izan da bidalketa ezabatu, konexioa egiaztatu dezakezu\?</string>
+    <string name="delete_post_failed_error">Ezin izan da bidalketa ezabatu, %1$d errorea</string>
+    <string name="upload_error">Zerbitzariak itzulitako errore-kodea: %1$d</string>
+    <string name="size_exceeds_instance_limit">Albumean %1$d zenbakia duen irudiaren tamainak instantziak onartutako gehienezko tamaina gainditzen du (%2$d kB ditu, eta muga %3$d kB da). Baliteke ezin igo ahal izatea.</string>
+    <string name="total_exceeds_album_limit">Zerbitzariak onartutako kopurua (%1$s) baino irudi gehiago aukeratu dituzu. Mugatik gorako irudiei ez ikusia egin zaie.</string>
+    <string name="api_not_enabled_dialog">APIa ez dago aktibo instantzia honetan. Jarri zure administratzailearekin kontaktuan aktibatzeko.</string>
 </resources>
