@@ -21,7 +21,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
-import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL
@@ -52,6 +51,8 @@ class NestedScrollableHost : ConstraintLayout {
             return v as? ViewPager2
         }
 
+    var doubleTapCallback: ((Unit) -> Unit)? = null
+
     private val child: View? get() = if (childCount > 0) getChildAt(0) else null
 
     init {
@@ -75,14 +76,17 @@ class NestedScrollableHost : ConstraintLayout {
     private fun handleInterceptTouchEvent(e: MotionEvent) {
         val orientation = parentViewPager?.orientation ?: return
 
+        if (e.action == MotionEvent.ACTION_DOWN) {
+            initialX = e.x
+            initialY = e.y
+            doubleTapCallback?.invoke(Unit)
+        }
         // Early return if child can't scroll in same direction as parent
         if (!canChildScroll(orientation, -1f) && !canChildScroll(orientation, 1f)) {
             return
         }
 
         if (e.action == MotionEvent.ACTION_DOWN) {
-            initialX = e.x
-            initialY = e.y
             parent.requestDisallowInterceptTouchEvent(true)
         } else if (e.action == MotionEvent.ACTION_MOVE) {
             val dx = e.x - initialX

@@ -83,7 +83,7 @@ class IntentTest {
             "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0",
             "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0",
             "", "", false, emptyList(), null,
-            "2021-02-11T23:44:03.000000Z", 0, 1, 1,
+            "2021-02-11T23:44:03.000000Z", 0, 1, 2,
             null, null, false, null)
         val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
             IntentMatchers.hasExtra(ACCOUNT_TAG, account)

@@ -31,7 +31,7 @@ debugTests:
   interruptible: true
   stage: test
   script:
-    - ./gradlew -Pci --console=plain :app:testDebug
+    - ./gradlew -Pci --console=plain :app:testDebug -x lint
 
 
 emulatorTest:
@@ -41,13 +41,13 @@ emulatorTest:
         - echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
         - $ANDROID_SDK_ROOT/emulator/emulator -avd "api-${API_LEVEL}" -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none &
         - chmod +x android-wait-for-emulator.sh
-        - ./gradlew build
+        - ./gradlew build -x lint
         - ./android-wait-for-emulator.sh
         - adb shell settings put global window_animation_scale 0.0
         - adb shell settings put global transition_animation_scale 0.0
         - adb shell settings put global animator_duration_scale 0.0
 
-        - ./gradlew build connectedCheck connectedStagingAndroidTest jacocoTestReport
+        - ./gradlew build connectedCheck connectedStagingAndroidTest jacocoTestReport -x lint
 
         - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
 
