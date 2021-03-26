@@ -1,44 +1,61 @@
 package com.h.pixeldroid.profile
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.StringRes
-import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.snackbar.Snackbar
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityProfileBinding
+import com.h.pixeldroid.databinding.FragmentProfilePostsBinding
+import com.h.pixeldroid.posts.PostActivity
+import com.h.pixeldroid.posts.feeds.initAdapter
+import com.h.pixeldroid.posts.feeds.launch
+import com.h.pixeldroid.posts.feeds.uncachedFeeds.FeedViewModel
+import com.h.pixeldroid.posts.feeds.uncachedFeeds.UncachedContentRepository
+import com.h.pixeldroid.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
 import com.h.pixeldroid.posts.parseHTMLText
 import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account
+import com.h.pixeldroid.utils.api.objects.FeedContent
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.openUrl
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 
 class ProfileActivity : BaseActivity() {
+
     private lateinit var pixelfedAPI : PixelfedAPI
-    private lateinit var adapter : ProfilePostsRecyclerViewAdapter
     private lateinit var accessToken : String
     private lateinit var domain : String
-    private var user: UserDatabaseEntity? = null
-
+    private lateinit var accountId : String
     private lateinit var binding: ActivityProfileBinding
+    private lateinit var profileAdapter: PagingDataAdapter<Status, RecyclerView.ViewHolder>
+    private lateinit var viewModel: FeedViewModel<Status>
 
+    private var user: UserDatabaseEntity? = null
+    private var job: Job? = null
+
+    @ExperimentalPagingApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -52,19 +69,49 @@ class ProfileActivity : BaseActivity() {
         pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
         accessToken = user?.accessToken.orEmpty()
 
-        // Set posts RecyclerView as a grid with 3 columns
-        binding.profilePostsRecyclerView.layoutManager = GridLayoutManager(applicationContext, 3)
-        adapter = ProfilePostsRecyclerViewAdapter()
-        binding.profilePostsRecyclerView.adapter = adapter
-
         // Set profile according to given account
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
+        accountId = account?.id ?: user!!.user_id
 
-        setContent(account)
+        // get the view model
+        @Suppress("UNCHECKED_CAST")
+        viewModel = ViewModelProvider(this, ProfileViewModelFactory(
+                ProfileContentRepository(
+                        apiHolder.setDomainToCurrentUser(db),
+                        db.userDao().getActiveUser()!!.accessToken,
+                        accountId
+                )
+            )
+        ).get(FeedViewModel::class.java) as FeedViewModel<Status>
+
+        profileAdapter = ProfilePostsAdapter()
+        initAdapter(binding.profileProgressBar, binding.profileRefreshLayout,
+            binding.profilePostsRecyclerView, binding.motionLayout, binding.profileErrorLayout,
+            profileAdapter)
+
+        binding.profilePostsRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
         binding.profileRefreshLayout.setOnRefreshListener {
-            getAndSetAccount(account?.id ?: user!!.user_id)
+            profileAdapter.refresh()
         }
+
+        setContent(account)
+        @Suppress("UNCHECKED_CAST")
+        job = launch(job, lifecycleScope, viewModel as FeedViewModel<FeedContent>,
+                profileAdapter as PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>)
+    }
+
+    /**
+     * Shows or hides the error in the different FeedFragments
+     */
+    private fun showError(errorText: String = "Something went wrong while loading", show: Boolean = true){
+        if(show){
+            binding.profileProgressBar.visibility = View.GONE
+            binding.motionLayout.transitionToEnd()
+        } else if(binding.motionLayout.progress == 1F) {
+            binding.motionLayout.transitionToStart()
+        }
+        binding.profileRefreshLayout.isRefreshing = false
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -73,9 +120,8 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun setContent(account: Account?) {
-        if(account != null){
+        if(account != null) {
             setViews(account)
-            setPosts(account)
         } else {
             lifecycleScope.launchWhenResumed {
                 val myAccount: Account = try {
@@ -87,46 +133,21 @@ class ProfileActivity : BaseActivity() {
                     return@launchWhenResumed showError()
                 }
                 setViews(myAccount)
-                // Populate profile page with user's posts
-                setPosts(myAccount)
             }
         }
 
-        //if we aren't viewing our own account, activate follow button
-        if(account != null && account.id != user?.user_id) activateFollow(account)
-        //if we *are* viewing our own account, activate the edit button
-        else activateEditButton()
-
+        if(account != null && account.id != user?.user_id) {
+            //if we aren't viewing our own account, activate follow button
+            activateFollow(account)
+        } else {
+            //if we *are* viewing our own account, activate the edit button
+            activateEditButton()
+        }
 
         // On click open followers list
         binding.nbFollowersTextView.setOnClickListener{ onClickFollowers(account) }
         // On click open followers list
         binding.nbFollowingTextView.setOnClickListener{ onClickFollowing(account) }
-    }
-
-    private fun getAndSetAccount(id: String){
-        lifecycleScope.launchWhenCreated {
-            val account = try{
-                pixelfedAPI.getAccount("Bearer $accessToken", id)
-            } catch (exception: IOException) {
-                Log.e("ProfileActivity:", exception.toString())
-                return@launchWhenCreated showError()
-            } catch (exception: HttpException) {
-                return@launchWhenCreated showError()
-            }
-            setContent(account)
-        }
-    }
-
-    private fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
-        val motionLayout = binding.motionLayout
-        if(show){
-            motionLayout.transitionToEnd()
-        } else {
-            motionLayout.transitionToStart()
-        }
-        binding.profileProgressBar.visibility = View.GONE
-        binding.profileRefreshLayout.isRefreshing = false
     }
 
     /**
@@ -151,7 +172,7 @@ class ProfileActivity : BaseActivity() {
         binding.accountNameTextView.text = displayName
 
         supportActionBar?.title = displayName
-        if(displayName != "@${account.acct}"){
+        if(displayName != "@${account.acct}") {
             supportActionBar?.subtitle = "@${account.acct}"
         }
 
@@ -174,37 +195,13 @@ class ProfileActivity : BaseActivity() {
         )
     }
 
-    /**
-     * Populate profile page with user's posts
-     */
-    private fun setPosts(account: Account) {
-        pixelfedAPI.accountPosts("Bearer $accessToken", account_id = account.id)
-            .enqueue(object : Callback<List<Status>> {
-
-                override fun onFailure(call: Call<List<Status>>, t: Throwable) {
-                    showError()
-                    Log.e("ProfileActivity.Posts:", t.toString())
-                }
-
-                override fun onResponse(
-                    call: Call<List<Status>>,
-                    response: Response<List<Status>>
-                ) {
-                    if (response.code() == 200) {
-                        val statuses = response.body()!!
-                        adapter.addPosts(statuses)
-                        showError(show = false)
-                    } else {
-                        showError()
-                    }
-                }
-            })
-    }
-
     private fun onClickEditButton() {
         val url = "$domain/settings/home"
 
-        if (!openUrl(url)) Log.e("ProfileActivity", "Cannot open this link")
+        if(!openUrl(url)) {
+            Snackbar.make(binding.root, getString(R.string.edit_link_failed),
+                    Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun onClickFollowers(account: Account?) {
@@ -315,4 +312,89 @@ class ProfileActivity : BaseActivity() {
             }
         }
     }
+}
+
+
+class ProfileViewModelFactory @ExperimentalPagingApi constructor(
+        private val searchContentRepository: UncachedContentRepository<Status>
+) : ViewModelProvider.Factory {
+
+    @ExperimentalPagingApi
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(FeedViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return FeedViewModel(searchContentRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+
+class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val postPreview: ImageView = binding.postPreview
+    private val albumIcon: ImageView = binding.albumIcon
+
+    fun bind(post: Status) {
+
+        if(post.sensitive!!) {
+            ImageConverter.setSquareImageFromDrawable(
+                    itemView,
+                    AppCompatResources.getDrawable(itemView.context, R.drawable.ic_sensitive),
+                    postPreview
+            )
+        } else {
+            ImageConverter.setSquareImageFromURL(itemView, post.getPostPreviewURL(), postPreview)
+        }
+
+        if(post.media_attachments?.size ?: 0 > 1) {
+            albumIcon.visibility = View.VISIBLE
+        } else {
+            albumIcon.visibility = View.GONE
+        }
+
+        postPreview.setOnClickListener {
+            val intent = Intent(postPreview.context, PostActivity::class.java)
+            intent.putExtra(Status.POST_TAG, post)
+            postPreview.context.startActivity(intent)
+        }
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): ProfilePostsViewHolder {
+            val itemBinding = FragmentProfilePostsBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+            )
+            return ProfilePostsViewHolder(itemBinding)
+        }
+    }
+}
+
+
+class ProfilePostsAdapter : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
+        UIMODEL_COMPARATOR
+) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return ProfilePostsViewHolder.create(parent)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val post = getItem(position)
+
+        post?.let {
+            (holder as ProfilePostsViewHolder).bind(it)
+        }
+    }
+
+    companion object {
+        private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<Status>() {
+            override fun areItemsTheSame(oldItem: Status, newItem: Status): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Status, newItem: Status): Boolean =
+                    oldItem.content == newItem.content
+        }
+    }
+
 }
