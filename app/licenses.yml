@@ -110,11 +110,27 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0
   url: https://github.com/Yalantis/uCrop
+- artifact: com.github.ligi:tracedroid:+
+  name: tracedroid
+  copyrightHolder: ligi
+  license: The Apache Software License, Version 2.0
+  url: https://github.com/ligi/tracedroid
 - artifact: com.github.ligi.tracedroid:supportemail:+
   name: supportemail
   copyrightHolder: ligi
   license: The Apache Software License, Version 2.0
   url: https://github.com/ligi/tracedroid
+- artifact: com.github.ligi.tracedroid:lib:+
+  name: lib
+  copyrightHolder: ligi
+  license: The Apache Software License, Version 2.0
+  url: https://github.com/ligi/tracedroid
+- artifact: com.jakewharton.timber:timber:+
+  name: timber
+  copyrightHolder: Jake Wharton and contributors
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/JakeWharton/timber
 - artifact: com.mikepenz:fastadapter-extensions-expandable:+
   name: fastadapter-extensions-expandable
   copyrightHolder: Mike Penz and contributors
@@ -619,11 +635,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/mikepenz/Android-Iconics
-- artifact: com.github.ligi.tracedroid:lib:+
-  name: lib
-  copyrightHolder: ligi
-  license: The Apache Software License, Version 2.0
-  url: https://github.com/ligi/tracedroid
 - artifact: org.jetbrains.kotlinx:kotlinx-coroutines-android:+
   name: kotlinx-coroutines-android
   copyrightHolder: JetBrains s.r.o. and contributors
@@ -771,4 +782,15 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
-
+- artifact: androidx.savedstate:savedstate-ktx:+
+  name: savedstate-ktx
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/savedstate#1.1.0
+- artifact: androidx.tracing:tracing:+
+  name: tracing
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/tracing#1.0.0

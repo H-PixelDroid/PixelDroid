@@ -159,8 +159,8 @@
     <string name="crop_button">Botón para recortar ou rotar a imaxe</string>
     <string name="image_preview">Vista previa da imaxe a ser editada</string>
     <string name="filter_thumbnail">Miniatura do filtro</string>
-    <string name="upload_error">Código de erro devolto polo servidor: %1$s</string>
-    <string name="size_exceeds_instance_limit">O tamaño do número de imaxes %1$s no álbume supera o máximo permitido pola instancia (%2$s kB pero o límite é %3$s kB). É posible que non poidas subilas.</string>
+    <string name="upload_error">Código de erro devolto polo servidor: %1$d</string>
+    <string name="size_exceeds_instance_limit">O tamaño do número de imaxes %1$d no álbume supera o máximo permitido pola instancia (%2$d kB pero o límite é %3$d kB). É posible que non poidas subilas.</string>
     <string name="total_exceeds_album_limit">Elexiches máis imaxes das que permite o servidor (%1$s). As imaxes que superan o límite serán ignoradas.</string>
     <string name="no_media_description">Engade aquí unha descrición…</string>
     <string name="save_image_description">Gardar descrición da imaxe</string>
@@ -179,4 +179,6 @@
 \nTamén significa que tes que escoller un servidor, ou \'instancia\' de Pixelfed para utilizar. Se non coñeces ningunha, mira aquí: https://pixelfed.org/join
 \n
 \nPara saber máis acerca de Pixelfed, podes mirar aquí: https://pixelfed.org</string>
+    <string name="delete_post_failed_io_except">Non se puido eliminar a publicación, tes conexión a internet\?</string>
+    <string name="delete_post_failed_error">Non se puido eliminar a publicación, erro %1$d</string>
 </resources>

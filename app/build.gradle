@@ -110,6 +110,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:2.3.0"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
+    implementation "androidx.activity:activity-ktx:1.2.1"
 
     // Use the most recent version of CameraX
     def cameraX_version = '1.0.0-rc03'
@@ -179,10 +180,9 @@ dependencies {
 
     implementation 'com.karumi:dexter:6.2.2'
 
-    implementation 'com.github.ligi.tracedroid:lib:3.0'
-    implementation 'com.github.ligi.tracedroid:supportemail:3.0'
+    implementation 'com.github.ligi:tracedroid:4.1'
 
-    implementation 'me.relex:circleindicator:2.1.4'
+    implementation 'me.relex:circleindicator:2.1.6'
 
     /**
      * Not in release, so not mentioned in licenses list

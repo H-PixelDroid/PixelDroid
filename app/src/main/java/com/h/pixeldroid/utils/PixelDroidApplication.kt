@@ -5,6 +5,7 @@ import androidx.preference.PreferenceManager
 import com.h.pixeldroid.utils.di.*
 import com.mikepenz.iconics.Iconics
 import org.ligi.tracedroid.TraceDroid
+import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 
 
 class PixelDroidApplication: Application() {
@@ -13,7 +14,9 @@ class PixelDroidApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         TraceDroid.init(this)
+
         val sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(this)
         setThemeFromPreferences(sharedPreferences, resources)

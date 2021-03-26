@@ -56,7 +56,8 @@
                     android:text="@string/discover"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/errorLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/errorLayout"
+                    app:drawableStartCompat="@drawable/explore_24dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/discoverList"

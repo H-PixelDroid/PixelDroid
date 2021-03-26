@@ -60,12 +60,6 @@ class SearchDiscoverFragment : BaseFragment() {
         adapter = DiscoverRecyclerViewAdapter()
         recycler.adapter = adapter
 
-        binding.discoverText.setCompoundDrawables(IconicsDrawable(requireContext(), GoogleMaterial.Icon.gmd_explore).apply {
-            sizeDp = 24
-            paddingDp = 20
-            color = IconicsColor.colorRes(R.color.colorDrawing)
-        }, null, null, null)
-
         return binding.root
     }
 
