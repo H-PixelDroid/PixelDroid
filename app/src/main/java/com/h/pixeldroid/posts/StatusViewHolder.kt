@@ -467,7 +467,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
         //Activate double tap liking
         var clicked = false
-        binding.postPager.setOnClickListener {
+        binding.postPagerHost.doubleTapCallback = {
             lifecycleScope.launchWhenCreated {
                 //Check that the post isn't hidden
                 if(binding.sensitiveWarning.visibility == View.GONE) {
