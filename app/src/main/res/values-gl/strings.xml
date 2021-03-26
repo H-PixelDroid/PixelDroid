@@ -179,4 +179,6 @@
 \nTamén significa que tes que escoller un servidor, ou \'instancia\' de Pixelfed para utilizar. Se non coñeces ningunha, mira aquí: https://pixelfed.org/join
 \n
 \nPara saber máis acerca de Pixelfed, podes mirar aquí: https://pixelfed.org</string>
+    <string name="delete_post_failed_io_except">Non se puido eliminar a publicación, tes conexión a internet\?</string>
+    <string name="delete_post_failed_error">Non se puido eliminar a publicación, erro %1$d</string>
 </resources>
