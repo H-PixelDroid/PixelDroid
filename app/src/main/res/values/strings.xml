@@ -156,6 +156,7 @@ Following"</item>
     <string name="no_username">No Username</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="follow_requested">Follow Requested</string>
     <string name="edit_profile">Edit profile</string>
     <!-- Search page -->
     <string name="search">Search</string>

@@ -1,18 +1,14 @@
 package com.h.pixeldroid.profile
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.StringRes
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityProfileBinding
 import com.h.pixeldroid.posts.parseHTMLText
@@ -244,9 +240,9 @@ class ProfileActivity : BaseActivity() {
 
                 if(relationship != null){
                     if (relationship.following) {
-                        setOnClickUnfollow(account)
+                        setOnClickUnfollow(account, true)
                     } else {
-                        setOnClickFollow(account)
+                        setOnClickFollow(account, relationship.requested)
                     }
                     binding.followButton.visibility = View.VISIBLE
                 }
@@ -265,13 +261,17 @@ class ProfileActivity : BaseActivity() {
         }
     }
 
-    private fun setOnClickFollow(account: Account) {
+    private fun setOnClickFollow(account: Account, requested: Boolean) {
         binding.followButton.apply {
-            setText(R.string.follow)
+            if(account.locked == true && requested) {
+                setText(R.string.follow_requested)
+                isEnabled = false
+                return
+            } else setText(R.string.follow)
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
+                        val rel = pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
                         setOnClickUnfollow(account)
                     } catch (exception: IOException) {
                         Log.e("FOLLOW ERROR", exception.toString())
@@ -290,15 +290,19 @@ class ProfileActivity : BaseActivity() {
         }
     }
 
-    private fun setOnClickUnfollow(account: Account) {
+    private fun setOnClickUnfollow(account: Account, follow: Boolean = false) {
         binding.followButton.apply {
-            setText(R.string.unfollow)
+            if(account.locked == true && !follow) {
+                setText(R.string.follow_requested)
+                isEnabled = false
+                return
+            } else setText(R.string.unfollow)
 
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
                     try {
                         pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
-                        setOnClickFollow(account)
+                        setOnClickFollow(account, false)
                     } catch (exception: IOException) {
                         Log.e("FOLLOW ERROR", exception.toString())
                         Toast.makeText(
