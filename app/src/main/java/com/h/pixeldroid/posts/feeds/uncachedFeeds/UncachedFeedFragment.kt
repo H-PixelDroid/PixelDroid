@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.*
 import androidx.recyclerview.widget.RecyclerView
+import com.h.pixeldroid.posts.feeds.launch
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -37,13 +37,10 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
 
 
     internal fun launch() {
-        // Make sure we cancel the previous job before creating a new one
-        job?.cancel()
-        job = lifecycleScope.launch {
-            viewModel.flow().collectLatest {
-                adapter.submitData(it)
-            }
-        }
+        @Suppress("UNCHECKED_CAST")
+        job = launch(job, lifecycleScope,
+                viewModel as FeedViewModel<FeedContent>,
+                adapter as PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>)
     }
 
     internal fun initSearch() {

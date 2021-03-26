@@ -6,6 +6,7 @@ import android.widget.ProgressBar
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import androidx.core.view.size
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.paging.PagingDataAdapter
@@ -14,6 +15,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ErrorLayoutBinding
 import com.h.pixeldroid.databinding.LoadStateFooterViewItemBinding
+import com.h.pixeldroid.posts.feeds.uncachedFeeds.FeedViewModel
+import com.h.pixeldroid.utils.api.objects.FeedContent
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Shows or hides the error in the different FeedFragments
@@ -80,6 +86,20 @@ internal fun <T: Any> initAdapter(
             showError(motionLayout = motionLayout, errorLayout = errorLayout, show = false, errorText = "")
         }
     }
+}
+
+fun launch(
+        job: Job?, lifecycleScope: LifecycleCoroutineScope, viewModel: FeedViewModel<FeedContent>,
+        pagingDataAdapter: PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>): Job {
+    // Make sure we cancel the previous job before creating a new one
+    job?.cancel()
+    return lifecycleScope.launch {
+        viewModel.flow().collectLatest {
+            pagingDataAdapter.submitData(it)
+        }
+    }
+
+
 }
 
 

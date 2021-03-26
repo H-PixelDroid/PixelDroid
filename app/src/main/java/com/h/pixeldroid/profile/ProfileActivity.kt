@@ -22,6 +22,7 @@ import com.h.pixeldroid.databinding.ActivityProfileBinding
 import com.h.pixeldroid.databinding.FragmentProfilePostsBinding
 import com.h.pixeldroid.posts.PostActivity
 import com.h.pixeldroid.posts.feeds.initAdapter
+import com.h.pixeldroid.posts.feeds.launch
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.FeedViewModel
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.UncachedContentRepository
 import com.h.pixeldroid.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
@@ -30,6 +31,7 @@ import com.h.pixeldroid.utils.BaseActivity
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account
+import com.h.pixeldroid.utils.api.objects.FeedContent
 import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.openUrl
@@ -93,17 +95,9 @@ class ProfileActivity : BaseActivity() {
         }
 
         setContent(account)
-        profileLaunch()
-    }
-
-    private fun profileLaunch() {
-        // Make sure we cancel the previous job before creating a new one
-        job?.cancel()
-        job = lifecycleScope.launch {
-            viewModel.flow().collectLatest {
-                profileAdapter.submitData(it)
-            }
-        }
+        @Suppress("UNCHECKED_CAST")
+        job = launch(job, lifecycleScope, viewModel as FeedViewModel<FeedContent>,
+                profileAdapter as PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>)
     }
 
     /**
