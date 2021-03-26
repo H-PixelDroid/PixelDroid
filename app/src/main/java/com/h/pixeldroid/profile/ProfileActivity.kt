@@ -17,6 +17,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.h.pixeldroid.R
 import com.h.pixeldroid.databinding.ActivityProfileBinding
 import com.h.pixeldroid.databinding.FragmentProfilePostsBinding
@@ -198,7 +199,8 @@ class ProfileActivity : BaseActivity() {
         val url = "$domain/settings/home"
 
         if(!openUrl(url)) {
-            Log.e("ProfileActivity", "Cannot open this link")
+            Snackbar.make(binding.root, getString(R.string.edit_link_failed),
+                    Snackbar.LENGTH_LONG).show()
         }
     }
 

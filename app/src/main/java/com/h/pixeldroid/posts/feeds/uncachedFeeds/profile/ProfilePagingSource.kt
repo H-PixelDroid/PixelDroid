@@ -26,9 +26,9 @@ class ProfilePagingSource(
                 prevKey = null,
                 nextKey = posts.lastOrNull()?.id
             )
-        } catch (exception: IOException) {
-            LoadResult.Error(exception)
         } catch (exception: HttpException) {
+            LoadResult.Error(exception)
+        } catch (exception: IOException) {
             LoadResult.Error(exception)
         }
     }

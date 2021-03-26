@@ -67,7 +67,8 @@ internal fun <T: Any> initAdapter(
                     && loadState.append is LoadState.NotLoading
                     && loadState.append.endOfPaginationReached){
                 progressBar.isVisible = false
-                showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = "Nothing to see here :(")
+                showError(motionLayout = motionLayout, errorLayout = errorLayout,
+                        errorText = errorLayout.root.context.getString(R.string.empty_feed))
             }
         }
 
