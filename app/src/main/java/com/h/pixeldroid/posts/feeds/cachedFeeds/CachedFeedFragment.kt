@@ -70,7 +70,8 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
 
         binding = FragmentFeedBinding.inflate(layoutInflater)
 
-        initAdapter(binding, adapter)
+        initAdapter(binding.progressBar, binding.swipeRefreshLayout,
+            binding.list, binding.motionLayout, binding.errorLayout, adapter)
 
         //binding.progressBar.visibility = View.GONE
         binding.swipeRefreshLayout.setOnRefreshListener {

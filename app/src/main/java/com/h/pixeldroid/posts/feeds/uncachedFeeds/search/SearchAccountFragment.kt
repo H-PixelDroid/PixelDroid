@@ -45,8 +45,7 @@ class SearchAccountFragment : UncachedFeedFragment<Account>() {
                     query
                 )
             )
-        )
-            .get(FeedViewModel::class.java) as FeedViewModel<Account>
+        ).get(FeedViewModel::class.java) as FeedViewModel<Account>
 
         launch()
         initSearch()

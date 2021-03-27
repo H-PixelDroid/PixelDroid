@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.*
 import androidx.recyclerview.widget.RecyclerView
+import com.h.pixeldroid.posts.feeds.launch
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -30,20 +30,17 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
     internal lateinit var viewModel: FeedViewModel<T>
     internal lateinit var adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>
 
-    private lateinit var binding: FragmentFeedBinding
+    lateinit var binding: FragmentFeedBinding
 
 
     private var job: Job? = null
 
 
     internal fun launch() {
-        // Make sure we cancel the previous job before creating a new one
-        job?.cancel()
-        job = lifecycleScope.launch {
-            viewModel.flow().collectLatest {
-                adapter.submitData(it)
-            }
-        }
+        @Suppress("UNCHECKED_CAST")
+        job = launch(job, lifecycleScope,
+                viewModel as FeedViewModel<FeedContent>,
+                adapter as PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>)
     }
 
     internal fun initSearch() {
@@ -67,7 +64,8 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
 
         binding = FragmentFeedBinding.inflate(layoutInflater)
 
-        initAdapter(binding, adapter)
+        initAdapter(binding.progressBar, binding.swipeRefreshLayout, binding.list,
+            binding.motionLayout, binding.errorLayout, adapter)
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             //It shouldn't be necessary to also retry() in addition to refresh(),
