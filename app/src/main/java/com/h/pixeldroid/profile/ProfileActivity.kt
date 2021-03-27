@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
@@ -239,10 +240,10 @@ class ProfileActivity : BaseActivity() {
                 ).firstOrNull()
 
                 if(relationship != null){
-                    if (relationship.following) {
-                        setOnClickUnfollow(account, true)
+                    if (relationship.following == true || relationship.requested == true) {
+                        setOnClickUnfollow(account, relationship.requested == true)
                     } else {
-                        setOnClickFollow(account, relationship.requested)
+                        setOnClickFollow(account)
                     }
                     binding.followButton.visibility = View.VISIBLE
                 }
@@ -261,18 +262,15 @@ class ProfileActivity : BaseActivity() {
         }
     }
 
-    private fun setOnClickFollow(account: Account, requested: Boolean) {
+    private fun setOnClickFollow(account: Account) {
         binding.followButton.apply {
-            if(account.locked == true && requested) {
-                setText(R.string.follow_requested)
-                isEnabled = false
-                return
-            } else setText(R.string.follow)
+            setText(R.string.follow)
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
                     try {
                         val rel = pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
-                        setOnClickUnfollow(account)
+                        if(rel.following == true) setOnClickUnfollow(account, rel.requested == true)
+                        else setOnClickFollow(account)
                     } catch (exception: IOException) {
                         Log.e("FOLLOW ERROR", exception.toString())
                         Toast.makeText(
@@ -290,32 +288,44 @@ class ProfileActivity : BaseActivity() {
         }
     }
 
-    private fun setOnClickUnfollow(account: Account, follow: Boolean = false) {
+    private fun setOnClickUnfollow(account: Account, requested: Boolean) {
         binding.followButton.apply {
-            if(account.locked == true && !follow) {
+            if(account.locked == true && requested) {
                 setText(R.string.follow_requested)
-                isEnabled = false
-                return
             } else setText(R.string.unfollow)
 
-            setOnClickListener {
+
+            fun unfollow() {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
-                        setOnClickFollow(account, false)
+                        val rel = pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
+                        if(rel.following == false && rel.requested == false) setOnClickFollow(account)
+                        else setOnClickUnfollow(account, rel.requested == true)
                     } catch (exception: IOException) {
                         Log.e("FOLLOW ERROR", exception.toString())
                         Toast.makeText(
-                            applicationContext, getString(R.string.unfollow_error),
-                            Toast.LENGTH_SHORT
+                                applicationContext, getString(R.string.unfollow_error),
+                                Toast.LENGTH_SHORT
                         ).show()
                     } catch (exception: HttpException) {
                         Toast.makeText(
-                            applicationContext, getString(R.string.unfollow_error),
-                            Toast.LENGTH_SHORT
+                                applicationContext, getString(R.string.unfollow_error),
+                                Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
+            }
+
+            setOnClickListener {
+                if(account.locked == true && requested){
+                    AlertDialog.Builder(context)
+                            .setMessage(R.string.dialog_message_cancel_follow_request)
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                unfollow()
+                            }
+                            .setNegativeButton(android.R.string.cancel){_, _ -> }
+                            .show()
+                } else unfollow()
             }
         }
     }

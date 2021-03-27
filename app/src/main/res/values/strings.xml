@@ -199,4 +199,5 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
     <string name="delete_post_failed_error">Could not delete the post, error %1$d</string>
     <string name="delete_post_failed_io_except">Could not delete the post, check your connection?</string>
+    <string name="dialog_message_cancel_follow_request">Cancel the follow request?</string>
 </resources>
