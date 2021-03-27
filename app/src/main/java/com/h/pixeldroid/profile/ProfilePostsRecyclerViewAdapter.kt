@@ -34,12 +34,17 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolde
     override fun onBindViewHolder(holder: ProfilePostViewHolder, position: Int) {
         val post = posts[position]
 
-        if (post.sensitive!!)
-            setSquareImageFromDrawable(holder.postView, getDrawable(holder.postView.context, R.drawable.ic_sensitive), holder.postPreview)
-        else
+        if(post.sensitive!!) {
+            setSquareImageFromDrawable(
+                holder.postView,
+                getDrawable(holder.postView.context, R.drawable.ic_sensitive),
+                holder.postPreview
+            )
+        } else {
             setSquareImageFromURL(holder.postView, post.getPostPreviewURL(), holder.postPreview)
+        }
 
-        if(post.media_attachments?.size ?: 0 > 1){
+        if(post.media_attachments?.size ?: 0 > 1) {
             holder.albumIcon.visibility = View.VISIBLE
         } else {
             holder.albumIcon.visibility = View.GONE
@@ -54,6 +59,7 @@ class ProfilePostsRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolde
 
     override fun getItemCount(): Int = posts.size
 }
+
 
 class ProfilePostViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
     val postPreview: ImageView = postView.findViewById(R.id.postPreview)
