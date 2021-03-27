@@ -88,16 +88,20 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         private fun Notification.openActivity() {
             val intent: Intent =
                 when (type) {
-                    Notification.NotificationType.mention, Notification.NotificationType.favourite,
+                    Notification.NotificationType.favourite,
                     Notification.NotificationType.poll, Notification.NotificationType.reblog -> {
                         openPostFromNotification()
                     }
                     Notification.NotificationType.follow -> {
-                        Intent(itemView.context, ProfileActivity::class.java).apply {
-                            putExtra(Account.ACCOUNT_TAG, account)
-                        }
+                        openAccountFromNotification()
                     }
-                    null -> return //TODO show an error here?
+                    Notification.NotificationType.mention -> {
+                        /*Intent(itemView.context, PostActivity::class.java).apply {
+                            putExtra(Status.POST_TAG, status?.in_reply_to_id)
+                        }*/ // TODO
+                        openPostFromNotification()
+                    }
+                    null -> return
                 }
             itemView.context.startActivity(intent)
         }
@@ -105,6 +109,11 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         private fun Notification.openPostFromNotification(): Intent =
             Intent(itemView.context, PostActivity::class.java).apply {
                 putExtra(Status.POST_TAG, status)
+            }
+
+        private fun Notification.openAccountFromNotification(): Intent =
+            Intent(itemView.context, ProfileActivity::class.java).apply {
+                putExtra(Account.ACCOUNT_TAG, account)
             }
 
 
@@ -211,6 +220,11 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                     "Bearer $accessToken",
                     lifecycleScope
                 )
+
+            avatar.setOnClickListener {
+                val intent = notification?.openAccountFromNotification()
+                itemView.context.startActivity(intent)
+            }
         }
 
         companion object {

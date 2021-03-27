@@ -4,17 +4,12 @@ import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.net.Uri
 import android.os.Environment
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.core.net.toUri
 import com.google.android.material.snackbar.Snackbar
 import com.h.pixeldroid.R
-import com.h.pixeldroid.databinding.PostFragmentBinding
 import com.h.pixeldroid.posts.getDomain
 import java.io.File
 import java.io.Serializable
@@ -64,6 +59,7 @@ open class Status(
 {
     companion object {
         const val POST_TAG = "postTag"
+        const val POST_ID_TAG = "post_id_tag"
         const val VIEW_COMMENTS_TAG = "view_comments_tag"
         const val POST_COMMENT_TAG = "post_comment_tag"
     }
