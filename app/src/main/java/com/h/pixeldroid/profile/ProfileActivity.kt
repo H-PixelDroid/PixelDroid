@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
@@ -37,7 +38,6 @@ import com.h.pixeldroid.utils.api.objects.Status
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.openUrl
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -240,8 +240,8 @@ class ProfileActivity : BaseActivity() {
                 ).firstOrNull()
 
                 if(relationship != null){
-                    if (relationship.following) {
-                        setOnClickUnfollow(account)
+                    if (relationship.following == true || relationship.requested == true) {
+                        setOnClickUnfollow(account, relationship.requested == true)
                     } else {
                         setOnClickFollow(account)
                     }
@@ -268,8 +268,9 @@ class ProfileActivity : BaseActivity() {
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
-                        setOnClickUnfollow(account)
+                        val rel = pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
+                        if(rel.following == true) setOnClickUnfollow(account, rel.requested == true)
+                        else setOnClickFollow(account)
                     } catch (exception: IOException) {
                         Log.e("FOLLOW ERROR", exception.toString())
                         Toast.makeText(
@@ -287,28 +288,44 @@ class ProfileActivity : BaseActivity() {
         }
     }
 
-    private fun setOnClickUnfollow(account: Account) {
+    private fun setOnClickUnfollow(account: Account, requested: Boolean) {
         binding.followButton.apply {
-            setText(R.string.unfollow)
+            if(account.locked == true && requested) {
+                setText(R.string.follow_requested)
+            } else setText(R.string.unfollow)
 
-            setOnClickListener {
+
+            fun unfollow() {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
-                        setOnClickFollow(account)
+                        val rel = pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
+                        if(rel.following == false && rel.requested == false) setOnClickFollow(account)
+                        else setOnClickUnfollow(account, rel.requested == true)
                     } catch (exception: IOException) {
                         Log.e("FOLLOW ERROR", exception.toString())
                         Toast.makeText(
-                            applicationContext, getString(R.string.unfollow_error),
-                            Toast.LENGTH_SHORT
+                                applicationContext, getString(R.string.unfollow_error),
+                                Toast.LENGTH_SHORT
                         ).show()
                     } catch (exception: HttpException) {
                         Toast.makeText(
-                            applicationContext, getString(R.string.unfollow_error),
-                            Toast.LENGTH_SHORT
+                                applicationContext, getString(R.string.unfollow_error),
+                                Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
+            }
+
+            setOnClickListener {
+                if(account.locked == true && requested){
+                    AlertDialog.Builder(context)
+                            .setMessage(R.string.dialog_message_cancel_follow_request)
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                unfollow()
+                            }
+                            .setNegativeButton(android.R.string.cancel){_, _ -> }
+                            .show()
+                } else unfollow()
             }
         }
     }

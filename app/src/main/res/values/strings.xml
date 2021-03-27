@@ -152,6 +152,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="no_username">No Username</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="follow_requested">Follow Requested</string>
+    <string name="dialog_message_cancel_follow_request">Cancel the follow request?</string>
     <string name="edit_profile">Edit profile</string>
     <!-- Search page -->
     <string name="search">Search</string>
