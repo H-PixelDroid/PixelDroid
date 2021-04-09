@@ -167,7 +167,7 @@ class ProfileActivity : BaseActivity() {
             lifecycleScope
         )
 
-        val displayName = account.getDisplayName()
+        val displayName = account.getusername()
 
         binding.accountNameTextView.text = displayName
 

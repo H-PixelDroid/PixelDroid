@@ -48,7 +48,7 @@ class PostActivity : BaseActivity() {
         accessToken = user?.accessToken.orEmpty()
 
 
-        supportActionBar?.title = getString(R.string.post_title).format(status.account?.getDisplayName())
+        supportActionBar?.title = getString(R.string.post_title).format(status.account?.getusername())
 
         val holder = StatusViewHolder(binding.postFragmentSingle)
 

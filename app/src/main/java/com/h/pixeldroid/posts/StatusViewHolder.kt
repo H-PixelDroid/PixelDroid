@@ -86,13 +86,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     ) {
         //Setup username as a button that opens the profile
         binding.username.apply {
-            text = status?.account?.getDisplayName() ?: ""
+            text = status?.account?.getusername() ?: ""
             setTypeface(null, Typeface.BOLD)
             setOnClickListener { status?.account?.openProfile(binding.root.context) }
         }
 
         binding.usernameDesc.apply {
-            text = status?.account?.getDisplayName() ?: ""
+            text = status?.account?.getusername() ?: ""
             setTypeface(null, Typeface.BOLD)
         }
 

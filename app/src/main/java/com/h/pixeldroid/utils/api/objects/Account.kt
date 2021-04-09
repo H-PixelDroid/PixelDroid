@@ -79,6 +79,12 @@ data class Account(
         else -> display_name.orEmpty()
     }
 
+    fun getusername() : String = when {
+        username.isNullOrBlank() && display_name.isNullOrBlank() -> ""
+        username.isNullOrBlank() -> "@$display_name"
+        else -> username.orEmpty()
+    }
+
     /**
      * @brief Open profile activity with given account
      */
