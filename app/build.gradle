@@ -61,12 +61,12 @@ android {
                 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
             }
 
-            buildConfigField "String", "USER_ID", System.getenv("USER_ID") ?: localProperties['USER_ID']
-            buildConfigField "String", "INSTANCE_URI", System.getenv("INSTANCE_URI") ?: localProperties['INSTANCE_URI']
-            buildConfigField "String", "ACCESS_TOKEN", System.getenv("ACCESS_TOKEN") ?: localProperties['ACCESS_TOKEN']
-            buildConfigField "String", "REFRESH_TOKEN", System.getenv("REFRESH_TOKEN") ?: localProperties['REFRESH_TOKEN']
-            buildConfigField "String", "CLIENT_ID", System.getenv("CLIENT_ID") ?: localProperties['CLIENT_ID']
-            buildConfigField "String", "CLIENT_SECRET", System.getenv("CLIENT_SECRET") ?: localProperties['CLIENT_SECRET']
+            buildConfigField "String", "USER_ID", System.getenv("USER_ID") ?: localProperties['USER_ID'] ?: ""
+            buildConfigField "String", "INSTANCE_URI", System.getenv("INSTANCE_URI") ?: localProperties['INSTANCE_URI'] ?: ""
+            buildConfigField "String", "ACCESS_TOKEN", System.getenv("ACCESS_TOKEN") ?: localProperties['ACCESS_TOKEN'] ?: ""
+            buildConfigField "String", "REFRESH_TOKEN", System.getenv("REFRESH_TOKEN") ?: localProperties['REFRESH_TOKEN'] ?: ""
+            buildConfigField "String", "CLIENT_ID", System.getenv("CLIENT_ID") ?: localProperties['CLIENT_ID'] ?: ""
+            buildConfigField "String", "CLIENT_SECRET", System.getenv("CLIENT_SECRET") ?: localProperties['CLIENT_SECRET'] ?: ""
         }
         release {
             minifyEnabled true
