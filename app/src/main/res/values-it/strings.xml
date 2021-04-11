@@ -171,8 +171,14 @@
     <string name="no_media_description">Aggiungi una descrizione dell\'immagine qui…</string>
     <string name="save_image_description">Salva la descrizione dell\'immagine</string>
     <plurals name="description_max_characters">
-        <item quantity="one">La descrizione deve contenere al massimo %d carattere</item>
-        <item quantity="other">La descrizione deve contenere al massimo %d caratteri</item>
+        <item quantity="one">La descrizione deve contenere al massimo %d carattere.</item>
+        <item quantity="other">La descrizione deve contenere al massimo %d caratteri.</item>
     </plurals>
     <string name="api_not_enabled_dialog">L\'API non è attivata su questa istanza. Contatta l\'amministratore per chiedergli di attivarlo.</string>
+    <string name="delete_post_failed_io_except">Impossibile eliminare il post, controlla la tua connesione\?</string>
+    <string name="delete_post_failed_error">Impossibile eliminare il post, errore %1$d</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d Utente che stai seguendo</item>
+        <item quantity="other">%d Utenti che stai seguendo</item>
+    </plurals>
 </resources>
