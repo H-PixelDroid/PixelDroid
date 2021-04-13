@@ -135,8 +135,10 @@
     <string name="verify_credentials">ناتوانی در دریافت اطلاعات کاربر</string>
     <string name="mascot_description">تصویر، یک پاندای قرمز که شگونهٔ پیکسل‌فد است را گوشی به دست نشان می‌دهد</string>
     <plurals name="nb_posts">
-        <item quantity="one">%d فرسته</item>
-        <item quantity="other">%d فرسته</item>
+        <item quantity="one">%d
+\nفرسته</item>
+        <item quantity="other">%d
+\nفرسته</item>
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d نظر</item>
@@ -154,12 +156,16 @@
     <string name="no_cancel_edit">خیر، ویرایش لغو شود</string>
     <string name="save_before_returning">ویرایش‌ها ذخیره شوند؟</string>
     <plurals name="nb_followers">
-        <item quantity="one">%d پی‌گیر</item>
-        <item quantity="other">%d پی‌گیر</item>
+        <item quantity="one">%d
+\nپی‌گیر</item>
+        <item quantity="other">%d
+\nپی‌گیر</item>
     </plurals>
     <plurals name="nb_following">
-        <item quantity="one">%d پی‌گرفته</item>
-        <item quantity="other">%d پی‌گرفته</item>
+        <item quantity="one">%d
+\nپی‌گرفته</item>
+        <item quantity="other">%d
+\nپی‌گرفته</item>
     </plurals>
     <string name="no_media_description">این جا توضیحات رسانه را وارد کنید…</string>
     <string name="save_image_description">ذخیره توضیحات تصویر</string>
@@ -181,4 +187,8 @@
     <string name="api_not_enabled_dialog">روی این نمونه، API فعال نیست. با مدیر نمونه تماس گرفته و از او بخواهید آن را فعال کند.</string>
     <string name="delete_post_failed_io_except">نتوانستیم فرسته را پاک کنیم. به اینترنت وصل هستید؟</string>
     <string name="delete_post_failed_error">نتوانستیم این فرسته را پاک کنیم. خطا: %1$d</string>
+    <string name="dialog_message_cancel_follow_request">درخواست پیگیری لغو شود؟</string>
+    <string name="follow_requested">درخواست پیگیری فرستاده شد</string>
+    <string name="empty_feed">اینجا چیزی برای دیدن نیست :(</string>
+    <string name="edit_link_failed">ناتوانی در باز کردن صفحه ویرایش</string>
 </resources>
