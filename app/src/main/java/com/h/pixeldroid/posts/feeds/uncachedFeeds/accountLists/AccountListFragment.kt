@@ -55,7 +55,6 @@ class AccountListFragment : UncachedFeedFragment<Account>() {
         viewModel = ViewModelProvider(this, ViewModelFactory(
             FollowersContentRepository(
                 apiHolder.setDomainToCurrentUser(db),
-                db.userDao().getActiveUser()!!.accessToken,
                 id,
                 following
             )

@@ -54,7 +54,6 @@ fun parseHTMLText(
         mentions: List<Mention>?,
         api : PixelfedAPI,
         context: Context,
-        credential: String,
         lifecycleScope: LifecycleCoroutineScope
 ) : Spanned {
     //Convert text to spannable
@@ -108,7 +107,7 @@ fun parseHTMLText(
                         Log.e("MENTION", "CLICKED")
                         //Retrieve the account for the given profile
                         lifecycleScope.launchWhenCreated {
-                            openAccountFromId(accountId, api, context, credential)
+                            openAccountFromId(accountId, api, context)
                         }
                     }
                 }

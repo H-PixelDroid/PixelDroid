@@ -31,7 +31,6 @@ class SearchDiscoverFragment : BaseFragment() {
     private lateinit var api: PixelfedAPI
     private lateinit var recycler : RecyclerView
     private lateinit var adapter : DiscoverRecyclerViewAdapter
-    private lateinit var accessToken: String
 
     var binding: FragmentSearchBinding by bindingLifecycleAware()
 
@@ -61,8 +60,6 @@ class SearchDiscoverFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-
-        accessToken = db.userDao().getActiveUser()?.accessToken.orEmpty()
 
         getDiscover()
 

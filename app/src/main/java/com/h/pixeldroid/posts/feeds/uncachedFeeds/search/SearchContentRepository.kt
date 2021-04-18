@@ -22,7 +22,6 @@ class SearchContentRepository<T: FeedContent> @ExperimentalPagingApi
 @Inject constructor(
     private val api: PixelfedAPI,
     private val type: Results.SearchType,
-    private val accessToken: String,
     private val query: String,
 ): UncachedContentRepository<T> {
     override fun getStream(): Flow<PagingData<T>> {
@@ -32,7 +31,7 @@ class SearchContentRepository<T: FeedContent> @ExperimentalPagingApi
                 pageSize = NETWORK_PAGE_SIZE,
                 enablePlaceholders = false),
             pagingSourceFactory = {
-                SearchPagingSource<T>(api, query, type, accessToken)
+                SearchPagingSource<T>(api, query, type)
             }
         ).flow
     }

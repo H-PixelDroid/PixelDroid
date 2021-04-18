@@ -166,7 +166,6 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         fun bind(
             notification: Notification?,
             api: PixelfedAPI,
-            accessToken: String,
             lifecycleScope: LifecycleCoroutineScope
         ) {
 
@@ -208,7 +207,6 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                     notification?.status?.mentions,
                     api,
                     itemView.context,
-                    "Bearer $accessToken",
                     lifecycleScope
                 )
         }
@@ -258,7 +256,6 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                 (holder as NotificationViewHolder).bind(
                     it,
                     apiHolder.setDomainToCurrentUser(db),
-                    db.userDao().getActiveUser()!!.accessToken,
                     lifecycleScope
                 )
             }

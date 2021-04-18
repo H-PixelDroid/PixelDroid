@@ -45,7 +45,6 @@ import java.io.IOException
 class ProfileActivity : BaseActivity() {
 
     private lateinit var pixelfedAPI : PixelfedAPI
-    private lateinit var accessToken : String
     private lateinit var domain : String
     private lateinit var accountId : String
     private lateinit var binding: ActivityProfileBinding
@@ -67,7 +66,6 @@ class ProfileActivity : BaseActivity() {
 
         domain = user?.instance_uri.orEmpty()
         pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-        accessToken = user?.accessToken.orEmpty()
 
         // Set profile according to given account
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
@@ -77,9 +75,8 @@ class ProfileActivity : BaseActivity() {
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(this, ProfileViewModelFactory(
                 ProfileContentRepository(
-                        apiHolder.setDomainToCurrentUser(db),
-                        db.userDao().getActiveUser()!!.accessToken,
-                        accountId
+                    apiHolder.setDomainToCurrentUser(db),
+                    accountId
                 )
             )
         ).get(FeedViewModel::class.java) as FeedViewModel<Status>
@@ -163,7 +160,7 @@ class ProfileActivity : BaseActivity() {
 
         binding.descriptionTextView.text = parseHTMLText(
             account.note ?: "", emptyList(), pixelfedAPI,
-            applicationContext, "Bearer $accessToken",
+            applicationContext,
             lifecycleScope
         )
 

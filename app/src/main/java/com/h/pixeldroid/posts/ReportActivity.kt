@@ -24,10 +24,6 @@ class ReportActivity : BaseActivity() {
 
         val status = intent.getSerializableExtra(Status.POST_TAG) as Status?
 
-        //get the currently active user
-        val user = db.userDao().getActiveUser()
-
-
         binding.reportTargetTextview.text = getString(R.string.report_target).format(status?.account?.acct)
 
 
@@ -37,7 +33,6 @@ class ReportActivity : BaseActivity() {
 
             binding.textInputLayout.editText?.isEnabled = false
 
-            val accessToken = user?.accessToken.orEmpty()
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
             lifecycleScope.launchWhenCreated {

@@ -59,7 +59,6 @@ class NotificationsRemoteMediator @Inject constructor(
             val user = db.userDao().getActiveUser()
                     ?: return MediatorResult.Error(NullPointerException("No active user exists"))
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-            val accessToken = user.accessToken
 
             val apiResponse = api.notifications(
                     max_id = max_id,

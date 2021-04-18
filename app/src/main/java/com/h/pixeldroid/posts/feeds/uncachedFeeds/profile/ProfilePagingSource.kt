@@ -9,7 +9,6 @@ import java.io.IOException
 
 class ProfilePagingSource(
     private val api: PixelfedAPI,
-    private val accessToken: String,
     private val accountId: String
 ) : PagingSource<String, Status>() {
     override suspend fun load(params: LoadParams<String>): LoadResult<String, Status> {

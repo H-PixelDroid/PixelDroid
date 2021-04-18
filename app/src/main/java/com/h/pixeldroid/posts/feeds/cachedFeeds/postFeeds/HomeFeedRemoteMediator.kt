@@ -44,7 +44,6 @@ class HomeFeedRemoteMediator @Inject constructor(
             val user = db.userDao().getActiveUser()
                     ?: return MediatorResult.Error(NullPointerException("No active user exists"))
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-            val accessToken = user.accessToken
 
             val apiResponse = api.timelineHome(
                 max_id= max_id,

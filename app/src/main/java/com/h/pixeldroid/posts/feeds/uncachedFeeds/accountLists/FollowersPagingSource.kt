@@ -9,7 +9,6 @@ import java.io.IOException
 
 class FollowersPagingSource(
     private val api: PixelfedAPI,
-    private val accessToken: String,
     private val accountId: String,
     private val following: Boolean
 ) : PagingSource<String, Account>() {

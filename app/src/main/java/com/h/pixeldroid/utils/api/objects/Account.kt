@@ -51,7 +51,7 @@ data class Account(
         /**
          * @brief Opens an activity of the profile with the given id
          */
-        suspend fun openAccountFromId(id: String, api : PixelfedAPI, context: Context, credential: String) {
+        suspend fun openAccountFromId(id: String, api : PixelfedAPI, context: Context) {
                 val account = try {
                     api.getAccount(id)
                 } catch (exception: IOException) {

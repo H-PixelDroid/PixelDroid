@@ -57,8 +57,6 @@ data class PhotoData(
 
 class PostCreationActivity : BaseActivity() {
 
-    private lateinit var accessToken: String
-
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
 
@@ -83,8 +81,6 @@ class PostCreationActivity : BaseActivity() {
 
         // get image URIs
         intent.clipData?.let { addPossibleImages(it) }
-
-        accessToken = user?.accessToken.orEmpty()
 
         val carousel: ImageCarousel = binding.carousel
         carousel.addData(photoData.map { CarouselItem(it.imageUri) })

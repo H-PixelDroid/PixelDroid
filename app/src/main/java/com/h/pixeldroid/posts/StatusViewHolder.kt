@@ -178,7 +178,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private fun setDescription(
         api: PixelfedAPI,
-        credential: String,
         lifecycleScope: LifecycleCoroutineScope
     ) {
         binding.description.apply {
@@ -190,7 +189,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                     status?.mentions,
                     api,
                     binding.root.context,
-                    credential,
                     lifecycleScope
                 )
                 movementMethod = LinkMovementMethod.getInstance()
@@ -204,20 +202,15 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         lifecycleScope: LifecycleCoroutineScope,
         isActivity: Boolean
     ){
-        val user = db.userDao().getActiveUser()!!
-
-        val credential = "Bearer ${user.accessToken}"
         //Set the special HTML text
-        setDescription(api, credential, lifecycleScope)
+        setDescription(api, lifecycleScope)
 
         //Activate onclickListeners
         activateLiker(
-            api, credential, status?.favourited ?: false,
-            lifecycleScope
+            api, status?.favourited ?: false, lifecycleScope
         )
         activateReblogger(
-            api, credential, status?.reblogged ?: false,
-            lifecycleScope
+            api, status?.reblogged ?: false, lifecycleScope
         )
 
         if(isActivity){
@@ -242,7 +235,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private fun activateReblogger(
             api: PixelfedAPI,
-            credential: String,
             isReblogged: Boolean,
             lifecycleScope: LifecycleCoroutineScope
     ) {
@@ -255,10 +247,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 lifecycleScope.launchWhenCreated {
                     if (buttonState) {
                         // Button is active
-                        undoReblogPost(api, credential)
+                        undoReblogPost(api)
                     } else {
                         // Button is inactive
-                        reblogPost(api, credential)
+                        reblogPost(api)
                     }
                 }
                 //show animation or not?
@@ -267,10 +259,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
     }
 
-    private suspend fun reblogPost(
-        api: PixelfedAPI,
-        credential: String
-    ) {
+    private suspend fun reblogPost(api: PixelfedAPI) {
         //Call the api function
         status?.id?.let {
 
@@ -290,14 +279,11 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
     }
 
-    private suspend fun undoReblogPost(
-        api: PixelfedAPI,
-        credential: String,
-    ) {
+    private suspend fun undoReblogPost(api: PixelfedAPI) {
         //Call the api function
         status?.id?.let {
             try {
-                val resp = api.undoReblogStatus(credential)
+                val resp = api.undoReblogStatus(it)
 
                 //Update shown share count
                 binding.nshares.text = resp.getNShares(binding.root.context)
@@ -440,7 +426,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private fun activateLiker(
             api: PixelfedAPI,
-            credential: String,
             isLiked: Boolean,
             lifecycleScope: LifecycleCoroutineScope
     ) {
@@ -454,10 +439,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 lifecycleScope.launchWhenCreated {
                     if (buttonState) {
                         // Button is active, unlike
-                        unLikePostCall(api, credential)
+                        unLikePostCall(api)
                     } else {
                         // Button is inactive, like
-                        likePostCall(api, credential)
+                        likePostCall(api)
                     }
                 }
                 //show animation or not?
@@ -476,12 +461,12 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                         if (binding.liker.isChecked) {
                             // Button is active, unlike
                             binding.liker.isChecked = false
-                            unLikePostCall(api, credential)
+                            unLikePostCall(api)
                         } else {
                             // Button is inactive, like
                             binding.liker.playAnimation()
                             binding.liker.isChecked = true
-                            likePostCall(api, credential)
+                            likePostCall(api)
                         }
                     } else {
                         clicked = true
@@ -495,10 +480,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
     }
 
-    private suspend fun likePostCall(
-        api: PixelfedAPI,
-        credential: String,
-    ) {
+    private suspend fun likePostCall(api: PixelfedAPI) {
         //Call the api function
         status?.id?.let {
 
@@ -518,10 +500,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
     }
 
-    private suspend fun unLikePostCall(
-        api: PixelfedAPI,
-        credential: String,
-    ) {
+    private suspend fun unLikePostCall(api: PixelfedAPI) {
         //Call the api function
         status?.id?.let {
 
