@@ -44,7 +44,6 @@ class ImageCarousel(
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var tvCaption: TextView
-    private lateinit var editTextMediaDescription: EditText
     private var snapHelper: SnapHelper = PagerSnapHelper()
 
     var indicator: CircleIndicator2? = null
@@ -292,9 +291,9 @@ class ImageCarousel(
 
             if(layoutCarousel){
                 field = value
-                if(value) editTextMediaDescription.setText(currentDescription)
+                if(value) binding.editTextMediaDescription.setText(currentDescription)
                 else {
-                    val description = editTextMediaDescription.text.toString()
+                    val description = binding.editTextMediaDescription.text.toString()
                     currentDescription = description
                     adapter?.updateDescription(currentPosition, description)
                     updateDescriptionCallback?.invoke(currentPosition, description)
@@ -339,7 +338,6 @@ class ImageCarousel(
 
         recyclerView = binding.recyclerView
         tvCaption = binding.tvCaption
-        editTextMediaDescription = binding.editTextMediaDescription
 
         recyclerView.setHasFixedSize(true)
 
