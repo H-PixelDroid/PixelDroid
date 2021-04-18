@@ -59,7 +59,6 @@ data class PhotoData(
 class PostCreationActivity : BaseActivity() {
 
     private lateinit var accessToken: String
-    private lateinit var pixelfedAPI: PixelfedAPI
 
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
@@ -87,7 +86,6 @@ class PostCreationActivity : BaseActivity() {
         intent.clipData?.let { addPossibleImages(it) }
 
         accessToken = user?.accessToken.orEmpty()
-        pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
         val carousel: ImageCarousel = binding.carousel
         carousel.addData(photoData.map { CarouselItem(it.imageUri) })
@@ -105,7 +103,7 @@ class PostCreationActivity : BaseActivity() {
             addPhoto()
         }
         carousel.updateDescriptionCallback = { position: Int, description: String ->
-            photoData[position].imageDescription = description
+            photoData.getOrNull(position)?.imageDescription = description
         }
 
         // get the description and send the post
@@ -339,8 +337,8 @@ class PostCreationActivity : BaseActivity() {
 
             val description = data.imageDescription?.let { MultipartBody.Part.createFormData("description", it) }
 
-
-            val inter = pixelfedAPI.mediaUpload("Bearer $accessToken", description, requestBody.parts[0])
+            val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+            val inter = api.mediaUpload("Bearer $accessToken", description, requestBody.parts[0])
 
             postSub = inter
                 .subscribeOn(Schedulers.io())
@@ -382,7 +380,9 @@ class PostCreationActivity : BaseActivity() {
         enableButton(false)
         lifecycleScope.launchWhenCreated {
             try {
-                pixelfedAPI.postStatus(
+                val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+
+                api.postStatus(
                         authorization = "Bearer $accessToken",
                         statusText = description,
                         media_ids = photoData.mapNotNull { it.uploadId }.toList()
