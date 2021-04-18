@@ -124,7 +124,7 @@ class PostActivity : BaseActivity() {
         lifecycleScope.launchWhenCreated {
             status.id.let {
                 try {
-                    val statuses = api.statusComments(it, credential).descendants
+                    val statuses = api.statusComments(it).descendants
 
                     binding.commentContainer.removeAllViews()
 
@@ -155,7 +155,7 @@ class PostActivity : BaseActivity() {
         val nonNullText = textIn.toString()
         status.id.let {
             try {
-                val response = api.postStatus(credential, nonNullText, it)
+                val response = api.postStatus(nonNullText, it)
                 binding.commentIn.visibility = View.GONE
 
                 //Add the comment to the comment section

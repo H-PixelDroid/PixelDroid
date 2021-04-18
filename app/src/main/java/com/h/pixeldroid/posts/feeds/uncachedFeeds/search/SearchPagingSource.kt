@@ -20,11 +20,12 @@ class SearchPagingSource<T: FeedContent>(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         val position = params.key
         return try {
-            val response = api.search(authorization = "Bearer $accessToken",
-                offset = position?.toString(),
-                q = query,
+            val response = api.search(
                 type = type,
-                limit = params.loadSize.toString())
+                q = query,
+                limit = params.loadSize.toString(),
+                offset = position?.toString()
+            )
 
 
             @Suppress("UNCHECKED_CAST")

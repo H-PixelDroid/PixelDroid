@@ -125,7 +125,7 @@ class ProfileActivity : BaseActivity() {
         } else {
             lifecycleScope.launchWhenResumed {
                 val myAccount: Account = try {
-                    pixelfedAPI.verifyCredentials("Bearer $accessToken")
+                    pixelfedAPI.verifyCredentials()
                 } catch (exception: IOException) {
                     Log.e("ProfileActivity:", exception.toString())
                     return@launchWhenResumed showError()
@@ -236,7 +236,7 @@ class ProfileActivity : BaseActivity() {
         lifecycleScope.launch {
             try {
                 val relationship = pixelfedAPI.checkRelationships(
-                    "Bearer $accessToken", listOf(account.id.orEmpty())
+                    listOf(account.id.orEmpty())
                 ).firstOrNull()
 
                 if(relationship != null){
@@ -268,7 +268,7 @@ class ProfileActivity : BaseActivity() {
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        val rel = pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
+                        val rel = pixelfedAPI.follow(account.id.orEmpty())
                         if(rel.following == true) setOnClickUnfollow(account, rel.requested == true)
                         else setOnClickFollow(account)
                     } catch (exception: IOException) {
@@ -298,7 +298,7 @@ class ProfileActivity : BaseActivity() {
             fun unfollow() {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        val rel = pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
+                        val rel = pixelfedAPI.unfollow(account.id.orEmpty())
                         if(rel.following == false && rel.requested == false) setOnClickFollow(account)
                         else setOnClickUnfollow(account, rel.requested == true)
                     } catch (exception: IOException) {

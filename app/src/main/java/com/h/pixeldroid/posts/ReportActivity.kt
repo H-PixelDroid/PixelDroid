@@ -42,7 +42,11 @@ class ReportActivity : BaseActivity() {
 
             lifecycleScope.launchWhenCreated {
                 try {
-                    api.report("Bearer $accessToken", status?.account?.id!!, listOf(status), binding.textInputLayout.editText?.text.toString())
+                    api.report(
+                        status?.account?.id!!,
+                        listOf(status),
+                        binding.textInputLayout.editText?.text.toString()
+                    )
 
                     reportStatus(true)
                 } catch (exception: IOException) {

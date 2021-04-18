@@ -275,7 +275,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         status?.id?.let {
 
             try {
-                val resp = api.reblogStatus(credential, it)
+                val resp = api.reblogStatus(it)
 
                 //Update shown share count
                 binding.nshares.text = resp.getNShares(binding.root.context)
@@ -297,7 +297,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         //Call the api function
         status?.id?.let {
             try {
-                val resp = api.undoReblogStatus(credential, it)
+                val resp = api.undoReblogStatus(credential)
 
                 //Update shown share count
                 binding.nshares.text = resp.getNShares(binding.root.context)
@@ -395,7 +395,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                             db.homePostDao().delete(id, user.user_id, user.instance_uri)
                                             db.publicPostDao().delete(id, user.user_id, user.instance_uri)
                                             try {
-                                                api.deleteStatus("Bearer ${user.accessToken}", id)
+                                                api.deleteStatus(id)
                                                 binding.root.visibility = View.GONE
                                             } catch (exception: HttpException) {
                                                 Toast.makeText(
@@ -503,7 +503,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         status?.id?.let {
 
             try {
-                val resp = api.likePost(credential, it)
+                val resp = api.likePost(it)
 
                 //Update shown like count and internal like toggle
                 binding.nlikes.text = resp.getNLikes(binding.root.context)
@@ -526,7 +526,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         status?.id?.let {
 
             try {
-                val resp = api.unlikePost(credential, it)
+                val resp = api.unlikePost(it)
 
                 //Update shown like count and internal like toggle
                 binding.nlikes.text = resp.getNLikes(binding.root.context)

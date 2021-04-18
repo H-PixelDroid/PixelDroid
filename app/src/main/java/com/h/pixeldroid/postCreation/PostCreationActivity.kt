@@ -29,7 +29,6 @@ import com.h.pixeldroid.postCreation.carousel.CarouselItem
 import com.h.pixeldroid.postCreation.carousel.ImageCarousel
 import com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity
 import com.h.pixeldroid.utils.BaseActivity
-import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Attachment
 import com.h.pixeldroid.utils.db.entities.InstanceDatabaseEntity
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
@@ -338,7 +337,7 @@ class PostCreationActivity : BaseActivity() {
             val description = data.imageDescription?.let { MultipartBody.Part.createFormData("description", it) }
 
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-            val inter = api.mediaUpload("Bearer $accessToken", description, requestBody.parts[0])
+            val inter = api.mediaUpload(description, requestBody.parts[0])
 
             postSub = inter
                 .subscribeOn(Schedulers.io())
@@ -383,7 +382,6 @@ class PostCreationActivity : BaseActivity() {
                 val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
                 api.postStatus(
-                        authorization = "Bearer $accessToken",
                         statusText = description,
                         media_ids = photoData.mapNotNull { it.uploadId }.toList()
                 )

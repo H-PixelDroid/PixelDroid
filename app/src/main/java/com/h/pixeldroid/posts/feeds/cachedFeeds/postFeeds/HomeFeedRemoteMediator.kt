@@ -46,9 +46,10 @@ class HomeFeedRemoteMediator @Inject constructor(
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
             val accessToken = user.accessToken
 
-            val apiResponse = api.timelineHome( "Bearer $accessToken",
-                                                    max_id= max_id, min_id = min_id,
-                                                    limit = state.config.pageSize.toString())
+            val apiResponse = api.timelineHome(
+                max_id= max_id,
+                min_id = min_id, limit = state.config.pageSize.toString()
+            )
 
             val dbObjects = apiResponse.map{
                 HomeStatusDatabaseEntity(user.user_id, user.instance_uri, it)

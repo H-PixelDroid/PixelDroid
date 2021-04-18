@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.*
-import io.reactivex.Single
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -91,7 +90,7 @@ class APIUnitTest {
             statuses = PixelfedAPI.createFromUrl("http://localhost:8089")
                     .timelinePublic(null, null, null, null, null)
             statusesHome = PixelfedAPI.createFromUrl("http://localhost:8089")
-                .timelineHome("abc", null, null, null,null, null)
+                .timelineHome(null, null, null, null, null)
         }
 
 

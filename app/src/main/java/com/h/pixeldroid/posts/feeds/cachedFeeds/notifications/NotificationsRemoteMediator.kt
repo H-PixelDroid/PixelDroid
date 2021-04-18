@@ -61,10 +61,10 @@ class NotificationsRemoteMediator @Inject constructor(
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
             val accessToken = user.accessToken
 
-            val apiResponse = api.notifications("Bearer $accessToken",
-                                                 max_id = max_id,
-                                                 min_id = min_id,
-                                                 limit = state.config.pageSize.toString(),
+            val apiResponse = api.notifications(
+                    max_id = max_id,
+                    min_id = min_id,
+                    limit = state.config.pageSize.toString(),
                                                 )
 
             apiResponse.forEach{it.user_id = user.user_id; it.instance_uri = user.instance_uri}

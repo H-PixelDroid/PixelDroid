@@ -20,12 +20,6 @@ import com.h.pixeldroid.posts.PostActivity
 import com.h.pixeldroid.utils.BaseFragment
 import com.h.pixeldroid.utils.ImageConverter
 import com.h.pixeldroid.utils.bindingLifecycleAware
-import com.mikepenz.iconics.IconicsColor
-import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
-import com.mikepenz.iconics.utils.color
-import com.mikepenz.iconics.utils.paddingDp
-import com.mikepenz.iconics.utils.sizeDp
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -93,7 +87,7 @@ class SearchDiscoverFragment : BaseFragment() {
     private fun getDiscover() {
         lifecycleScope.launchWhenCreated {
             try {
-                val discoverPosts = api.discover("Bearer $accessToken")
+                val discoverPosts = api.discover()
                 adapter.addPosts(discoverPosts.posts)
                 showError(show = false)
             } catch (exception: IOException) {
