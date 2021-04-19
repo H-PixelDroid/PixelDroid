@@ -90,7 +90,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val uiModel = getItem(position) as Status
             uiModel.let {
-                (holder as StatusViewHolder).bind(it, apiHolder.setDomainToCurrentUser(db), db, lifecycleScope, displayDimensionsInPx)
+                (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
             }
         }
     }

@@ -50,7 +50,7 @@ class PostActivity : BaseActivity() {
 
         val holder = StatusViewHolder(binding.postFragmentSingle)
 
-        holder.bind(status, apiHolder.api!!, db, lifecycleScope, displayDimensionsInPx(), isActivity = true)
+        holder.bind(status, apiHolder, db, lifecycleScope, displayDimensionsInPx(), isActivity = true)
 
         activateCommenter()
 
@@ -109,9 +109,10 @@ class PostActivity : BaseActivity() {
         itemBinding.commentText.text = parseHTMLText(
             commentContent,
             mentions,
-            apiHolder.api!!,
+            apiHolder,
             context,
-            lifecycleScope
+            lifecycleScope,
+            db
         )
     }
 

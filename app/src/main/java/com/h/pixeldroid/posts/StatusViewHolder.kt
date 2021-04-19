@@ -29,6 +29,7 @@ import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_COMMENT_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.POST_TAG
 import com.h.pixeldroid.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import com.h.pixeldroid.utils.db.AppDatabase
+import com.h.pixeldroid.utils.di.PixelfedAPIHolder
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
@@ -46,7 +47,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private var status: Status? = null
 
-    fun bind(status: Status?, pixelfedAPI: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>, isActivity: Boolean = false) {
+    fun bind(status: Status?, pixelfedAPI: PixelfedAPIHolder, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>, isActivity: Boolean = false) {
 
         this.itemView.visibility = View.VISIBLE
         this.status = status
@@ -177,8 +178,9 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     }
 
     private fun setDescription(
-        api: PixelfedAPI,
-        lifecycleScope: LifecycleCoroutineScope
+        apiHolder: PixelfedAPIHolder,
+        lifecycleScope: LifecycleCoroutineScope,
+        db: AppDatabase
     ) {
         binding.description.apply {
             if (status?.content.isNullOrBlank()) {
@@ -187,9 +189,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 text = parseHTMLText(
                     status?.content.orEmpty(),
                     status?.mentions,
-                    api,
+                    apiHolder,
                     binding.root.context,
-                    lifecycleScope
+                    lifecycleScope,
+                    db
                 )
                 movementMethod = LinkMovementMethod.getInstance()
             }
@@ -197,20 +200,20 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     }
     //region buttons
     private fun activateButtons(
-        api: PixelfedAPI,
+        apiHolder: PixelfedAPIHolder,
         db: AppDatabase,
         lifecycleScope: LifecycleCoroutineScope,
         isActivity: Boolean
     ){
         //Set the special HTML text
-        setDescription(api, lifecycleScope)
+        setDescription(apiHolder, lifecycleScope, db)
 
         //Activate onclickListeners
         activateLiker(
-            api, status?.favourited ?: false, lifecycleScope
+            apiHolder, status?.favourited ?: false, lifecycleScope, db
         )
         activateReblogger(
-            api, status?.reblogged ?: false, lifecycleScope
+            apiHolder, status?.reblogged ?: false, lifecycleScope, db
         )
 
         if(isActivity){
@@ -230,13 +233,14 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
         showComments(lifecycleScope, isActivity)
 
-        activateMoreButton(api, db, lifecycleScope)
+        activateMoreButton(apiHolder, db, lifecycleScope)
     }
 
     private fun activateReblogger(
-            api: PixelfedAPI,
-            isReblogged: Boolean,
-            lifecycleScope: LifecycleCoroutineScope
+        apiHolder: PixelfedAPIHolder,
+        isReblogged: Boolean,
+        lifecycleScope: LifecycleCoroutineScope,
+        db: AppDatabase
     ) {
         binding.reblogger.apply {
             //Set initial button state
@@ -245,6 +249,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             //Activate the button
             setEventListener { _, buttonState ->
                 lifecycleScope.launchWhenCreated {
+                    val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
                     if (buttonState) {
                         // Button is active
                         undoReblogPost(api)
@@ -298,7 +303,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
     }
 
-    private fun activateMoreButton(api: PixelfedAPI, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope){
+    private fun activateMoreButton(apiHolder: PixelfedAPIHolder, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope){
         binding.statusMore.setOnClickListener {
             PopupMenu(it.context, it).apply {
                 setOnMenuItemClickListener { item ->
@@ -381,6 +386,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                             db.homePostDao().delete(id, user.user_id, user.instance_uri)
                                             db.publicPostDao().delete(id, user.user_id, user.instance_uri)
                                             try {
+                                                val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
                                                 api.deleteStatus(id)
                                                 binding.root.visibility = View.GONE
                                             } catch (exception: HttpException) {
@@ -425,9 +431,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     }
 
     private fun activateLiker(
-            api: PixelfedAPI,
-            isLiked: Boolean,
-            lifecycleScope: LifecycleCoroutineScope
+        apiHolder: PixelfedAPIHolder,
+        isLiked: Boolean,
+        lifecycleScope: LifecycleCoroutineScope,
+        db: AppDatabase
     ) {
 
         binding.liker.apply {
@@ -437,6 +444,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             //Activate the liker
             setEventListener { _, buttonState ->
                 lifecycleScope.launchWhenCreated {
+                    val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
                     if (buttonState) {
                         // Button is active, unlike
                         unLikePostCall(api)
@@ -458,6 +466,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 if(binding.sensitiveWarning.visibility == View.GONE) {
                     //Check for double click
                     if(clicked) {
+                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
                         if (binding.liker.isChecked) {
                             // Button is active, unlike
                             binding.liker.isChecked = false
