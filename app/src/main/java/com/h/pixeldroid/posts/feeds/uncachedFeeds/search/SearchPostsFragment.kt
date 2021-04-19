@@ -45,7 +45,6 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
             SearchContentRepository<Status>(
                 apiHolder.setDomainToCurrentUser(db),
                 Results.SearchType.statuses,
-                db.userDao().getActiveUser()!!.accessToken,
                 query
             )
         )
@@ -80,7 +79,7 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val uiModel = getItem(position) as Status
             uiModel.let {
-                (holder as StatusViewHolder).bind(it, apiHolder.setDomainToCurrentUser(db), db, lifecycleScope, displayDimensionsInPx)
+                (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
             }
         }
     }

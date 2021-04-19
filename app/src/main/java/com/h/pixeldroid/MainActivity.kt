@@ -185,16 +185,17 @@ class MainActivity : BaseActivity() {
     }
     private fun getUpdatedAccount() {
         if (hasInternet(applicationContext)) {
-            val domain = user?.instance_uri.orEmpty()
-            val accessToken = user?.accessToken.orEmpty()
-            val refreshToken = user?.refreshToken
-            val clientId = user?.clientId.orEmpty()
-            val clientSecret = user?.clientSecret.orEmpty()
-            val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
             lifecycleScope.launchWhenCreated {
                 try {
-                    val account = api.verifyCredentials("Bearer $accessToken")
+                    val domain = user?.instance_uri.orEmpty()
+                    val accessToken = user?.accessToken.orEmpty()
+                    val refreshToken = user?.refreshToken
+                    val clientId = user?.clientId.orEmpty()
+                    val clientSecret = user?.clientSecret.orEmpty()
+                    val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+
+                    val account = api.verifyCredentials()
                     addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
                     fillDrawerAccountInfo(account.id!!)
                 } catch (exception: IOException) {

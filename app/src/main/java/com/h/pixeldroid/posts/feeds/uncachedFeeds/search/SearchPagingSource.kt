@@ -15,16 +15,16 @@ class SearchPagingSource<T: FeedContent>(
     private val api: PixelfedAPI,
     private val query: String,
     private val type: Results.SearchType,
-    private val accessToken: String,
 ) : PagingSource<Int, T>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         val position = params.key
         return try {
-            val response = api.search(authorization = "Bearer $accessToken",
-                offset = position?.toString(),
-                q = query,
+            val response = api.search(
                 type = type,
-                limit = params.loadSize.toString())
+                q = query,
+                limit = params.loadSize.toString(),
+                offset = position?.toString()
+            )
 
 
             @Suppress("UNCHECKED_CAST")

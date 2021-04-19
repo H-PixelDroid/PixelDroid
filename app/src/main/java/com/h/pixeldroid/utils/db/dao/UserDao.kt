@@ -8,8 +8,8 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUser(user: UserDatabaseEntity)
 
-    @Query("UPDATE users SET accessToken = :accessToken WHERE user_id = :id and instance_uri = :instance_uri")
-    fun updateAccessToken(accessToken: String, id: String, instance_uri: String)
+    @Query("UPDATE users SET accessToken = :accessToken, refreshToken = :refreshToken WHERE user_id = :id and instance_uri = :instance_uri")
+    fun updateAccessToken(accessToken: String, refreshToken: String, id: String, instance_uri: String)
 
     @Query("SELECT * FROM users")
     fun getAll(): List<UserDatabaseEntity>

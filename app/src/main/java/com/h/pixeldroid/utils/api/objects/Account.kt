@@ -6,13 +6,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import com.h.pixeldroid.profile.ProfileActivity
 import com.h.pixeldroid.utils.api.PixelfedAPI
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.supervisorScope
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 import java.io.Serializable
 
@@ -57,9 +51,9 @@ data class Account(
         /**
          * @brief Opens an activity of the profile with the given id
          */
-        suspend fun openAccountFromId(id: String, api : PixelfedAPI, context: Context, credential: String) {
+        suspend fun openAccountFromId(id: String, api : PixelfedAPI, context: Context) {
                 val account = try {
-                    api.getAccount(credential, id)
+                    api.getAccount(id)
                 } catch (exception: IOException) {
                     Log.e("GET ACCOUNT ERROR", exception.toString())
                     return

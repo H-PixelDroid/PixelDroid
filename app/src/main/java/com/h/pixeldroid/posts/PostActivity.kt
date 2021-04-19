@@ -25,7 +25,6 @@ import java.io.IOException
 
 class PostActivity : BaseActivity() {
     lateinit var domain : String
-    private lateinit var accessToken : String
 
     private lateinit var binding: ActivityPostBinding
 
@@ -45,17 +44,15 @@ class PostActivity : BaseActivity() {
         val user = db.userDao().getActiveUser()
 
         domain = user?.instance_uri.orEmpty()
-        accessToken = user?.accessToken.orEmpty()
 
 
         supportActionBar?.title = getString(R.string.post_title).format(status.account?.getDisplayName())
 
         val holder = StatusViewHolder(binding.postFragmentSingle)
 
-        holder.bind(status, apiHolder.api!!, db, lifecycleScope, displayDimensionsInPx(), isActivity = true)
+        holder.bind(status, apiHolder, db, lifecycleScope, displayDimensionsInPx(), isActivity = true)
 
-        val credential = "Bearer $accessToken"
-        activateCommenter(credential)
+        activateCommenter()
 
         if(viewComments || postComment){
             //Scroll already down as much as possible (since comments are not loaded yet)
@@ -68,10 +65,10 @@ class PostActivity : BaseActivity() {
             }
 
             // also retrieve comments if we're not posting the comment
-            if(!postComment) retrieveComments(apiHolder.api!!, credential)
+            if(!postComment) retrieveComments(apiHolder.api!!)
         }
         binding.postFragmentSingle.viewComments.setOnClickListener {
-            retrieveComments(apiHolder.api!!, credential)
+            retrieveComments(apiHolder.api!!)
         }
     }
 
@@ -80,7 +77,7 @@ class PostActivity : BaseActivity() {
         return true
     }
 
-    private fun activateCommenter(credential: String) {
+    private fun activateCommenter() {
         //Activate commenter
         binding.submitComment.setOnClickListener {
             val textIn = binding.editComment.text
@@ -94,15 +91,14 @@ class PostActivity : BaseActivity() {
             } else {
                 //Post the comment
                 lifecycleScope.launchWhenCreated {
-                    apiHolder.api?.let { it1 -> postComment(it1, credential) }
+                    apiHolder.api?.let { it1 -> postComment(it1) }
                 }
             }
         }
     }
 
     private fun addComment(context: Context, commentContainer: LinearLayout,
-                           commentUsername: String, commentContent: String, mentions: List<Mention>,
-                           credential: String) {
+                           commentUsername: String, commentContent: String, mentions: List<Mention>) {
 
 
         val itemBinding = CommentBinding.inflate(
@@ -113,25 +109,29 @@ class PostActivity : BaseActivity() {
         itemBinding.commentText.text = parseHTMLText(
             commentContent,
             mentions,
-            apiHolder.api!!,
+            apiHolder,
             context,
-            credential,
-            lifecycleScope
+            lifecycleScope,
+            db
         )
     }
 
-    private fun retrieveComments(api: PixelfedAPI, credential: String) {
+    private fun retrieveComments(api: PixelfedAPI) {
         lifecycleScope.launchWhenCreated {
             status.id.let {
                 try {
-                    val statuses = api.statusComments(it, credential).descendants
+                    val statuses = api.statusComments(it).descendants
 
                     binding.commentContainer.removeAllViews()
 
                     //Create the new views for each comment
                     for (status in statuses) {
-                        addComment(binding.root.context, binding.commentContainer, status.account!!.username!!,
-                            status.content!!, status.mentions.orEmpty(), credential
+                        addComment(
+                            binding.root.context,
+                            binding.commentContainer,
+                            status.account!!.username!!,
+                            status.content!!,
+                            status.mentions.orEmpty()
                         )
                     }
                     binding.commentContainer.visibility = View.VISIBLE
@@ -149,19 +149,18 @@ class PostActivity : BaseActivity() {
 
     private suspend fun postComment(
         api: PixelfedAPI,
-        credential: String,
     ) {
         val textIn = binding.editComment.text
         val nonNullText = textIn.toString()
         status.id.let {
             try {
-                val response = api.postStatus(credential, nonNullText, it)
+                val response = api.postStatus(nonNullText, it)
                 binding.commentIn.visibility = View.GONE
 
                 //Add the comment to the comment section
                 addComment(
                     binding.root.context, binding.commentContainer, response.account!!.username!!,
-                    response.content!!, response.mentions.orEmpty(), credential
+                    response.content!!, response.mentions.orEmpty()
                 )
 
                 Toast.makeText(

@@ -12,13 +12,13 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.text.toSpanned
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.h.pixeldroid.R
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account.Companion.openAccountFromId
 import com.h.pixeldroid.utils.api.objects.Mention
-import kotlinx.coroutines.coroutineScope
+import com.h.pixeldroid.utils.db.AppDatabase
+import com.h.pixeldroid.utils.di.PixelfedAPIHolder
 import java.net.URI
 import java.net.URISyntaxException
 import java.text.ParseException
@@ -50,12 +50,12 @@ fun getDomain(urlString: String?): String {
 }
 
 fun parseHTMLText(
-        text : String,
-        mentions: List<Mention>?,
-        api : PixelfedAPI,
-        context: Context,
-        credential: String,
-        lifecycleScope: LifecycleCoroutineScope
+    text: String,
+    mentions: List<Mention>?,
+    apiHolder: PixelfedAPIHolder,
+    context: Context,
+    lifecycleScope: LifecycleCoroutineScope,
+    db: AppDatabase
 ) : Spanned {
     //Convert text to spannable
     val content = fromHtml(text)
@@ -108,7 +108,8 @@ fun parseHTMLText(
                         Log.e("MENTION", "CLICKED")
                         //Retrieve the account for the given profile
                         lifecycleScope.launchWhenCreated {
-                            openAccountFromId(accountId, api, context, credential)
+                            val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                            openAccountFromId(accountId, api, context)
                         }
                     }
                 }

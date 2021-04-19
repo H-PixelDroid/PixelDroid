@@ -74,31 +74,23 @@ interface PixelfedAPI {
     @FormUrlEncoded
     @POST("/api/v1/accounts/{id}/follow")
     suspend fun follow(
-        //The authorization header needs to be of the form "Bearer <token>"
         @Path("id") statusId: String,
-        @Header("Authorization") authorization: String,
         @Field("reblogs") reblogs : Boolean = true
     ) : Relationship
 
     @POST("/api/v1/accounts/{id}/unfollow")
     suspend fun unfollow(
-        //The authorization header needs to be of the form "Bearer <token>"
         @Path("id") statusId: String,
-        @Header("Authorization") authorization: String
     ) : Relationship
 
     @POST("api/v1/statuses/{id}/favourite")
     suspend fun likePost(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
         @Path("id") statusId: String
 
     ) : Status
 
     @POST("/api/v1/statuses/{id}/unfavourite")
     suspend fun unlikePost(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
         @Path("id") statusId: String
     ) : Status
 
@@ -106,8 +98,6 @@ interface PixelfedAPI {
     @FormUrlEncoded
     @POST("/api/v1/statuses")
     suspend fun postStatus(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
         @Field("status") statusText : String,
         @Field("in_reply_to_id") in_reply_to_id : String? = null,
         @Field("media_ids[]") media_ids : List<String> = emptyList(),
@@ -124,14 +114,12 @@ interface PixelfedAPI {
 
     @DELETE("/api/v1/statuses/{id}")
     suspend fun deleteStatus(
-            @Header("Authorization") authorization: String,
             @Path("id") statusId: String
     )
 
     @FormUrlEncoded
     @POST("/api/v1/statuses/{id}/reblog")
     suspend fun reblogStatus(
-        @Header("Authorization") authorization: String,
         @Path("id") statusId: String,
         @Field("visibility") visibility: String? = null
     ) : Status
@@ -139,14 +127,12 @@ interface PixelfedAPI {
     @POST("/api/v1/statuses/{id}/unreblog")
     suspend fun undoReblogStatus(
         @Path("id") statusId: String,
-        @Header("Authorization") authorization: String
     ) : Status
 
     //Used in our case to retrieve comments for a given status
     @GET("/api/v1/statuses/{id}/context")
     suspend fun statusComments(
         @Path("id") statusId: String,
-        @Header("Authorization") authorization: String? = null
     ) : Context
 
     @GET("/api/v1/timelines/public")
@@ -160,8 +146,6 @@ interface PixelfedAPI {
 
     @GET("/api/v1/timelines/home")
     suspend fun timelineHome(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
         @Query("min_id") min_id: String? = null,
@@ -171,8 +155,6 @@ interface PixelfedAPI {
 
     @GET("/api/v2/search")
     suspend fun search(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
         @Query("account_id") account_id: String? = null,
         @Query("max_id") max_id: String? = null,
         @Query("min_id") min_id: String? = null,
@@ -187,8 +169,6 @@ interface PixelfedAPI {
 
     @GET("/api/v1/notifications")
     suspend fun notifications(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
         @Query("min_id") min_id: String? = null,
@@ -200,13 +180,12 @@ interface PixelfedAPI {
     @GET("/api/v1/accounts/verify_credentials")
     suspend fun verifyCredentials(
         //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String
+        @Header("Authorization") authorization: String? = null
     ): Account
 
 
     @GET("/api/v1/accounts/{id}/statuses")
     suspend fun accountPosts(
-            @Header("Authorization") authorization: String,
             @Path("id") account_id: String,
             @Query("min_id") min_id: String? = null,
             @Query("max_id") max_id: String?,
@@ -215,14 +194,12 @@ interface PixelfedAPI {
 
     @GET("/api/v1/accounts/relationships")
     suspend fun checkRelationships(
-        @Header("Authorization") authorization : String,
         @Query("id[]") account_ids : List<String>
     ) : List<Relationship>
 
     @GET("/api/v1/accounts/{id}/followers")
     suspend fun followers(
         @Path("id") account_id: String,
-        @Header("Authorization") authorization: String,
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
         @Query("limit") limit: Number? = null,
@@ -232,7 +209,6 @@ interface PixelfedAPI {
     @GET("/api/v1/accounts/{id}/following")
     suspend fun following(
         @Path("id") account_id: String,
-        @Header("Authorization") authorization: String,
         @Query("max_id") max_id: String? = null,
         @Query("since_id") since_id: String? = null,
         @Query("limit") limit: Number? = 40,
@@ -241,36 +217,29 @@ interface PixelfedAPI {
 
     @GET("/api/v1/accounts/{id}")
     suspend fun getAccount(
-        @Header("Authorization") authorization: String,
         @Path("id") accountId : String
     ): Account
 
     @GET("/api/v1/statuses/{id}")
     suspend fun getStatus(
-        @Header("Authorization") authorization: String,
         @Path("id") accountId : String
     ): Status
 
     @Multipart
     @POST("/api/v1/media")
     fun mediaUpload(
-        //The authorization header needs to be of the form "Bearer <token>"
-        @Header("Authorization") authorization: String,
         @Part description: MultipartBody.Part? = null,
         @Part file: MultipartBody.Part
     ): Observable<Attachment>
 
     // get discover
     @GET("/api/v2/discover/posts")
-    suspend fun discover(
-        @Header("Authorization") authorization: String
-    ) : DiscoverPosts
+    suspend fun discover() : DiscoverPosts
 
     @FormUrlEncoded
     @POST("/api/v1/reports")
     @JvmSuppressWildcards
     suspend fun report(
-        @Header("Authorization") authorization: String,
         @Field("account_id") account_id: String,
         @Field("status_ids") status_ids: List<Status>,
         @Field("comment") comment: String,

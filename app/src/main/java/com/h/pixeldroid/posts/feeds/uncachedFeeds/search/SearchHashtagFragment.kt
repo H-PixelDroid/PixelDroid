@@ -48,7 +48,6 @@ class SearchHashtagFragment : UncachedFeedFragment<Tag>() {
             SearchContentRepository<Tag>(
                 apiHolder.setDomainToCurrentUser(db),
                 Results.SearchType.hashtags,
-                db.userDao().getActiveUser()!!.accessToken,
                 query
             )
         )

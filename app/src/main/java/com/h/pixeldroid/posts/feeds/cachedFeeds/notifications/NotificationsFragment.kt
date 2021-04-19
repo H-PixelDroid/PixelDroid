@@ -27,7 +27,6 @@ import com.h.pixeldroid.posts.feeds.cachedFeeds.ViewModelFactory
 import com.h.pixeldroid.posts.parseHTMLText
 import com.h.pixeldroid.posts.setTextViewFromISO8601
 import com.h.pixeldroid.profile.ProfileActivity
-import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account
 import com.h.pixeldroid.utils.api.objects.Notification
 import com.h.pixeldroid.utils.api.objects.Status
@@ -165,9 +164,9 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
 
         fun bind(
             notification: Notification?,
-            api: PixelfedAPI,
-            accessToken: String,
-            lifecycleScope: LifecycleCoroutineScope
+            api: PixelfedAPIHolder,
+            lifecycleScope: LifecycleCoroutineScope,
+            db: AppDatabase
         ) {
 
             this.notification = notification
@@ -208,8 +207,8 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                     notification?.status?.mentions,
                     api,
                     itemView.context,
-                    "Bearer $accessToken",
-                    lifecycleScope
+                    lifecycleScope,
+                    db
                 )
         }
 
@@ -257,9 +256,9 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             uiModel.let {
                 (holder as NotificationViewHolder).bind(
                     it,
-                    apiHolder.setDomainToCurrentUser(db),
-                    db.userDao().getActiveUser()!!.accessToken,
-                    lifecycleScope
+                    apiHolder,
+                    lifecycleScope,
+                    db
                 )
             }
         }

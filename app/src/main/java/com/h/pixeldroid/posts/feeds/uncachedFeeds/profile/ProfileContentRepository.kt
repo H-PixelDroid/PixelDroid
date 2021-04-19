@@ -13,7 +13,6 @@ import javax.inject.Inject
 class ProfileContentRepository @ExperimentalPagingApi
 @Inject constructor(
     private val api: PixelfedAPI,
-    private val accessToken: String,
     private val accountId: String
 ) : UncachedContentRepository<Status> {
     override fun getStream(): Flow<PagingData<Status>> {
@@ -23,7 +22,7 @@ class ProfileContentRepository @ExperimentalPagingApi
                 pageSize = NETWORK_PAGE_SIZE,
                 enablePlaceholders = false),
             pagingSourceFactory = {
-                ProfilePagingSource(api, accessToken, accountId)
+                ProfilePagingSource(api, accountId)
             }
         ).flow
     }

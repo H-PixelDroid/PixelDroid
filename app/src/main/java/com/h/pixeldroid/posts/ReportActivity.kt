@@ -24,10 +24,6 @@ class ReportActivity : BaseActivity() {
 
         val status = intent.getSerializableExtra(Status.POST_TAG) as Status?
 
-        //get the currently active user
-        val user = db.userDao().getActiveUser()
-
-
         binding.reportTargetTextview.text = getString(R.string.report_target).format(status?.account?.acct)
 
 
@@ -37,12 +33,15 @@ class ReportActivity : BaseActivity() {
 
             binding.textInputLayout.editText?.isEnabled = false
 
-            val accessToken = user?.accessToken.orEmpty()
             val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
 
             lifecycleScope.launchWhenCreated {
                 try {
-                    api.report("Bearer $accessToken", status?.account?.id!!, listOf(status), binding.textInputLayout.editText?.text.toString())
+                    api.report(
+                        status?.account?.id!!,
+                        listOf(status),
+                        binding.textInputLayout.editText?.text.toString()
+                    )
 
                     reportStatus(true)
                 } catch (exception: IOException) {

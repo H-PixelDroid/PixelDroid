@@ -44,8 +44,6 @@ import java.io.IOException
 
 class ProfileActivity : BaseActivity() {
 
-    private lateinit var pixelfedAPI : PixelfedAPI
-    private lateinit var accessToken : String
     private lateinit var domain : String
     private lateinit var accountId : String
     private lateinit var binding: ActivityProfileBinding
@@ -66,8 +64,6 @@ class ProfileActivity : BaseActivity() {
         user = db.userDao().getActiveUser()
 
         domain = user?.instance_uri.orEmpty()
-        pixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
-        accessToken = user?.accessToken.orEmpty()
 
         // Set profile according to given account
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
@@ -77,9 +73,8 @@ class ProfileActivity : BaseActivity() {
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(this, ProfileViewModelFactory(
                 ProfileContentRepository(
-                        apiHolder.setDomainToCurrentUser(db),
-                        db.userDao().getActiveUser()!!.accessToken,
-                        accountId
+                    apiHolder.setDomainToCurrentUser(db),
+                    accountId
                 )
             )
         ).get(FeedViewModel::class.java) as FeedViewModel<Status>
@@ -124,8 +119,9 @@ class ProfileActivity : BaseActivity() {
             setViews(account)
         } else {
             lifecycleScope.launchWhenResumed {
+                val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
                 val myAccount: Account = try {
-                    pixelfedAPI.verifyCredentials("Bearer $accessToken")
+                    api.verifyCredentials()
                 } catch (exception: IOException) {
                     Log.e("ProfileActivity:", exception.toString())
                     return@launchWhenResumed showError()
@@ -162,9 +158,10 @@ class ProfileActivity : BaseActivity() {
         )
 
         binding.descriptionTextView.text = parseHTMLText(
-            account.note ?: "", emptyList(), pixelfedAPI,
-            applicationContext, "Bearer $accessToken",
-            lifecycleScope
+            account.note ?: "", emptyList(), apiHolder,
+            applicationContext,
+            lifecycleScope,
+            db
         )
 
         val displayName = account.getDisplayName()
@@ -235,8 +232,9 @@ class ProfileActivity : BaseActivity() {
         // Get relationship between the two users (credential and this) and set followButton accordingly
         lifecycleScope.launch {
             try {
-                val relationship = pixelfedAPI.checkRelationships(
-                    "Bearer $accessToken", listOf(account.id.orEmpty())
+                val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                val relationship = api.checkRelationships(
+                    listOf(account.id.orEmpty())
                 ).firstOrNull()
 
                 if(relationship != null){
@@ -268,7 +266,8 @@ class ProfileActivity : BaseActivity() {
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        val rel = pixelfedAPI.follow(account.id.orEmpty(), "Bearer $accessToken")
+                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                        val rel = api.follow(account.id.orEmpty())
                         if(rel.following == true) setOnClickUnfollow(account, rel.requested == true)
                         else setOnClickFollow(account)
                     } catch (exception: IOException) {
@@ -298,7 +297,8 @@ class ProfileActivity : BaseActivity() {
             fun unfollow() {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        val rel = pixelfedAPI.unfollow(account.id.orEmpty(), "Bearer $accessToken")
+                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                        val rel = api.unfollow(account.id.orEmpty())
                         if(rel.following == false && rel.requested == false) setOnClickFollow(account)
                         else setOnClickUnfollow(account, rel.requested == true)
                     } catch (exception: IOException) {

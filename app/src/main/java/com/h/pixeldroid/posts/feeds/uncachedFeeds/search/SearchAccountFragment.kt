@@ -41,7 +41,6 @@ class SearchAccountFragment : UncachedFeedFragment<Account>() {
                 SearchContentRepository<Account>(
                     apiHolder.setDomainToCurrentUser(db),
                     Results.SearchType.accounts,
-                    db.userDao().getActiveUser()!!.accessToken,
                     query
                 )
             )

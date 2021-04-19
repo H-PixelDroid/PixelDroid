@@ -14,7 +14,6 @@ import javax.inject.Inject
 class FollowersContentRepository @ExperimentalPagingApi
 @Inject constructor(
     private val api: PixelfedAPI,
-    private val accessToken: String,
     private val accountId: String,
     private val following: Boolean,
 ): UncachedContentRepository<Account> {
@@ -25,7 +24,7 @@ class FollowersContentRepository @ExperimentalPagingApi
                 pageSize = NETWORK_PAGE_SIZE,
                 enablePlaceholders = false),
             pagingSourceFactory = {
-                FollowersPagingSource(api, accessToken, accountId, following)
+                FollowersPagingSource(api, accountId, following)
             }
         ).flow
     }

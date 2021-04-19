@@ -6,11 +6,9 @@ import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account
 import retrofit2.HttpException
 import java.io.IOException
-import java.math.BigInteger
 
 class FollowersPagingSource(
     private val api: PixelfedAPI,
-    private val accessToken: String,
     private val accountId: String,
     private val following: Boolean
 ) : PagingSource<String, Account>() {
@@ -22,17 +20,19 @@ class FollowersPagingSource(
             // Laravel's paging mechanism, while Mastodon uses the Link header for pagination.
                 // No need to know which is which, they should ignore the non-relevant argument
                 if(following) {
-                    api.followers(account_id = accountId,
-                        authorization = "Bearer $accessToken",
+                    api.followers(
+                        account_id = accountId,
+                        max_id = position,
                         limit = params.loadSize,
-                        page = position,
-                        max_id = position)
+                        page = position
+                    )
                 } else {
-                    api.following(account_id = accountId,
-                        authorization = "Bearer $accessToken",
+                    api.following(
+                        account_id = accountId,
+                        max_id = position,
                         limit = params.loadSize,
-                        page = position,
-                        max_id = position)
+                        page = position
+                    )
                 }
 
             val accounts = if(response.isSuccessful){
