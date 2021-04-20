@@ -51,7 +51,7 @@ class NestedScrollableHost : ConstraintLayout {
             return v as? ViewPager2
         }
 
-    var doubleTapCallback: ((Unit) -> Unit)? = null
+    var doubleTapCallback: ((Boolean) -> Unit)? = null
 
     private val child: View? get() = if (childCount > 0) getChildAt(0) else null
 
@@ -79,7 +79,7 @@ class NestedScrollableHost : ConstraintLayout {
         if (e.action == MotionEvent.ACTION_DOWN) {
             initialX = e.x
             initialY = e.y
-            doubleTapCallback?.invoke(Unit)
+            doubleTapCallback?.invoke(true)
         }
         // Early return if child can't scroll in same direction as parent
         if (!canChildScroll(orientation, -1f) && !canChildScroll(orientation, 1f)) {
@@ -98,6 +98,8 @@ class NestedScrollableHost : ConstraintLayout {
             val scaledDy = dy.absoluteValue * if (isVpHorizontal) 1f else .5f
 
             if (scaledDx > touchSlop || scaledDy > touchSlop) {
+                doubleTapCallback?.invoke(false)
+
                 if (isVpHorizontal == (scaledDy > scaledDx)) {
                     // Gesture is perpendicular, allow all parents to intercept
                     parent.requestDisallowInterceptTouchEvent(false)
