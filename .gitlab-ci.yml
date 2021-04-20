@@ -52,6 +52,7 @@ emulatorTest:
         - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
 
     artifacts:
+        when: always
         paths:
         - ./app/build/reports/jacoco/jacocoTestReport/
         expire_in: 1 week

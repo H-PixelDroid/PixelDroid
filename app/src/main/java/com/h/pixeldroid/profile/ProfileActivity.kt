@@ -73,7 +73,7 @@ class ProfileActivity : BaseActivity() {
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(this, ProfileViewModelFactory(
                 ProfileContentRepository(
-                    apiHolder.setDomainToCurrentUser(db),
+                    apiHolder.setToCurrentUser(),
                     accountId
                 )
             )
@@ -119,7 +119,7 @@ class ProfileActivity : BaseActivity() {
             setViews(account)
         } else {
             lifecycleScope.launchWhenResumed {
-                val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                 val myAccount: Account = try {
                     api.verifyCredentials()
                 } catch (exception: IOException) {
@@ -158,10 +158,9 @@ class ProfileActivity : BaseActivity() {
         )
 
         binding.descriptionTextView.text = parseHTMLText(
-            account.note ?: "", emptyList(), apiHolder,
-            applicationContext,
-            lifecycleScope,
-            db
+                account.note ?: "", emptyList(), apiHolder,
+                applicationContext,
+                lifecycleScope
         )
 
         val displayName = account.getDisplayName()
@@ -232,7 +231,7 @@ class ProfileActivity : BaseActivity() {
         // Get relationship between the two users (credential and this) and set followButton accordingly
         lifecycleScope.launch {
             try {
-                val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                 val relationship = api.checkRelationships(
                     listOf(account.id.orEmpty())
                 ).firstOrNull()
@@ -266,7 +265,7 @@ class ProfileActivity : BaseActivity() {
             setOnClickListener {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                         val rel = api.follow(account.id.orEmpty())
                         if(rel.following == true) setOnClickUnfollow(account, rel.requested == true)
                         else setOnClickFollow(account)
@@ -297,7 +296,7 @@ class ProfileActivity : BaseActivity() {
             fun unfollow() {
                 lifecycleScope.launchWhenResumed {
                     try {
-                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                         val rel = api.unfollow(account.id.orEmpty())
                         if(rel.following == false && rel.requested == false) setOnClickFollow(account)
                         else setOnClickUnfollow(account, rel.requested == true)

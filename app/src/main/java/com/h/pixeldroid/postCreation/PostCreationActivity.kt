@@ -332,7 +332,7 @@ class PostCreationActivity : BaseActivity() {
 
             val description = data.imageDescription?.let { MultipartBody.Part.createFormData("description", it) }
 
-            val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+            val api = apiHolder.api ?: apiHolder.setToCurrentUser()
             val inter = api.mediaUpload(description, requestBody.parts[0])
 
             postSub = inter
@@ -375,7 +375,7 @@ class PostCreationActivity : BaseActivity() {
         enableButton(false)
         lifecycleScope.launchWhenCreated {
             try {
-                val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                val api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
                 api.postStatus(
                         statusText = description,

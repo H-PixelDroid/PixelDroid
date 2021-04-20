@@ -67,7 +67,7 @@ class TokenAuthenticator(val user: UserDatabaseEntity, val db: AppDatabase, val 
                     newAccessToken.refresh_token,
                     user.user_id, user.instance_uri
             )
-            apiHolder.setDomainToCurrentUser(db)
+            apiHolder.setToCurrentUser()
         }
 
         // Add new header to rejected request and retry it
@@ -77,18 +77,17 @@ class TokenAuthenticator(val user: UserDatabaseEntity, val db: AppDatabase, val 
     }
 }
 
-class PixelfedAPIHolder(db: AppDatabase?){
+class PixelfedAPIHolder(private val db: AppDatabase){
     private val intermediate: Retrofit.Builder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 
     var api: PixelfedAPI? =
-        db?.userDao()?.getActiveUser()?.let {
-            setDomainToCurrentUser(db, it)
+        db.userDao().getActiveUser()?.let {
+            setToCurrentUser(it)
         }
 
-    fun setDomainToCurrentUser(
-        db: AppDatabase,
+    fun setToCurrentUser(
         user: UserDatabaseEntity = db.userDao().getActiveUser()!!
     ): PixelfedAPI {
         val newAPI = intermediate

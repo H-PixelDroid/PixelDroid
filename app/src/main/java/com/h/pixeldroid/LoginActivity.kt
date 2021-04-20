@@ -25,14 +25,13 @@ Overview of the flow of the login process: (boxes are requests done in parallel,
 since they do not depend on each other)
 
  _________________________________
-|[PixelfedAPI.registerApplicationAsync]|
+|[PixelfedAPI.registerApplication]|
 |[PixelfedAPI.wellKnownNodeInfo]  |
- ̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅ +----> [PixelfedAPI.nodeInfoSchema]
-                                                                    +----> [promptOAuth]
-                                                                                       +---->____________________________
-                                                                                            |[PixelfedAPI.instance]      |
-                                                                                            |[PixelfedAPI.obtainToken]   |
-                                                                                             ̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅ +----> [PixelfedAPI.verifyCredentials]
+ ̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅̅
++----> [PixelfedAPI.nodeInfoSchema] (and then [PixelfedAPI.instance] if needed)
++----> [promptOAuth]
++----> [PixelfedAPI.obtainToken]
++----> [PixelfedAPI.verifyCredentials]
 
  */
 
@@ -311,7 +310,7 @@ class LoginActivity : BaseActivity() {
                 clientId = clientId,
                 clientSecret = clientSecret
             )
-            apiHolder.setDomainToCurrentUser(db)
+            apiHolder.setToCurrentUser()
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

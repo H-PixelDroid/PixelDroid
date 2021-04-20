@@ -17,7 +17,6 @@ import com.h.pixeldroid.R
 import com.h.pixeldroid.utils.api.PixelfedAPI
 import com.h.pixeldroid.utils.api.objects.Account.Companion.openAccountFromId
 import com.h.pixeldroid.utils.api.objects.Mention
-import com.h.pixeldroid.utils.db.AppDatabase
 import com.h.pixeldroid.utils.di.PixelfedAPIHolder
 import java.net.URI
 import java.net.URISyntaxException
@@ -55,7 +54,6 @@ fun parseHTMLText(
     apiHolder: PixelfedAPIHolder,
     context: Context,
     lifecycleScope: LifecycleCoroutineScope,
-    db: AppDatabase
 ) : Spanned {
     //Convert text to spannable
     val content = fromHtml(text)
@@ -108,7 +106,7 @@ fun parseHTMLText(
                         Log.e("MENTION", "CLICKED")
                         //Retrieve the account for the given profile
                         lifecycleScope.launchWhenCreated {
-                            val api: PixelfedAPI = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                            val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                             openAccountFromId(accountId, api, context)
                         }
                     }
