@@ -33,7 +33,7 @@ class ReportActivity : BaseActivity() {
 
             binding.textInputLayout.editText?.isEnabled = false
 
-            val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+            val api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
             lifecycleScope.launchWhenCreated {
                 try {

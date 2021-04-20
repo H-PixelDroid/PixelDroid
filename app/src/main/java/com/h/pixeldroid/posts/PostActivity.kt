@@ -107,12 +107,11 @@ class PostActivity : BaseActivity() {
 
         itemBinding.user.text = commentUsername
         itemBinding.commentText.text = parseHTMLText(
-            commentContent,
-            mentions,
-            apiHolder,
-            context,
-            lifecycleScope,
-            db
+                commentContent,
+                mentions,
+                apiHolder,
+                context,
+                lifecycleScope
         )
     }
 

@@ -43,7 +43,7 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(this, ViewModelFactory(
             SearchContentRepository<Status>(
-                apiHolder.setDomainToCurrentUser(db),
+                apiHolder.setToCurrentUser(),
                 Results.SearchType.statuses,
                 query
             )

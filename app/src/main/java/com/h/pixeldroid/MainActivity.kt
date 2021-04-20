@@ -177,7 +177,7 @@ class MainActivity : BaseActivity() {
             } else {
                 val newActive = remainingUsers.first()
                 db.userDao().activateUser(newActive.user_id)
-                apiHolder.setDomainToCurrentUser(db)
+                apiHolder.setToCurrentUser()
                 //relaunch the app
                 launchActivity(MainActivity(), firstTime = true)
             }
@@ -193,7 +193,7 @@ class MainActivity : BaseActivity() {
                     val refreshToken = user?.refreshToken
                     val clientId = user?.clientId.orEmpty()
                     val clientSecret = user?.clientSecret.orEmpty()
-                    val api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+                    val api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
                     val account = api.verifyCredentials()
                     addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
@@ -221,7 +221,7 @@ class MainActivity : BaseActivity() {
 
         db.userDao().deActivateActiveUsers()
         db.userDao().activateUser(profile.identifier.toString())
-        apiHolder.setDomainToCurrentUser(db)
+        apiHolder.setToCurrentUser()
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

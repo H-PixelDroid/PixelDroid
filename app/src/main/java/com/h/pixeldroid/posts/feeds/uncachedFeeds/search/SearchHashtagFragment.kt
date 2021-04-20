@@ -46,7 +46,7 @@ class SearchHashtagFragment : UncachedFeedFragment<Tag>() {
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(this, ViewModelFactory(
             SearchContentRepository<Tag>(
-                apiHolder.setDomainToCurrentUser(db),
+                apiHolder.setToCurrentUser(),
                 Results.SearchType.hashtags,
                 query
             )

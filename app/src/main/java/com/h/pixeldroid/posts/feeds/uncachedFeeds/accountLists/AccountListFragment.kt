@@ -54,7 +54,7 @@ class AccountListFragment : UncachedFeedFragment<Account>() {
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(this, ViewModelFactory(
             FollowersContentRepository(
-                apiHolder.setDomainToCurrentUser(db),
+                apiHolder.setToCurrentUser(),
                 id,
                 following
             )

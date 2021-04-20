@@ -30,7 +30,6 @@ import com.h.pixeldroid.profile.ProfileActivity
 import com.h.pixeldroid.utils.api.objects.Account
 import com.h.pixeldroid.utils.api.objects.Notification
 import com.h.pixeldroid.utils.api.objects.Status
-import com.h.pixeldroid.utils.db.AppDatabase
 import com.h.pixeldroid.utils.di.PixelfedAPIHolder
 
 
@@ -41,7 +40,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = NotificationsAdapter(apiHolder, db)
+        adapter = NotificationsAdapter(apiHolder)
     }
 
     @ExperimentalPagingApi
@@ -166,7 +165,6 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             notification: Notification?,
             api: PixelfedAPIHolder,
             lifecycleScope: LifecycleCoroutineScope,
-            db: AppDatabase
         ) {
 
             this.notification = notification
@@ -203,12 +201,11 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             //Convert HTML to clickable text
             postDescription.text =
                 parseHTMLText(
-                    notification?.status?.content ?: "",
-                    notification?.status?.mentions,
-                    api,
-                    itemView.context,
-                    lifecycleScope,
-                    db
+                        notification?.status?.content ?: "",
+                        notification?.status?.mentions,
+                        api,
+                        itemView.context,
+                        lifecycleScope
                 )
         }
 
@@ -225,7 +222,6 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
 
     inner class NotificationsAdapter(
         private val apiHolder: PixelfedAPIHolder,
-        private val db: AppDatabase
     ) : PagingDataAdapter<Notification, RecyclerView.ViewHolder>(
         object : DiffUtil.ItemCallback<Notification>() {
             override fun areItemsTheSame(
@@ -255,10 +251,9 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             val uiModel = getItem(position)
             uiModel.let {
                 (holder as NotificationViewHolder).bind(
-                    it,
-                    apiHolder,
-                    lifecycleScope,
-                    db
+                        it,
+                        apiHolder,
+                        lifecycleScope
                 )
             }
         }

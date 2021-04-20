@@ -59,7 +59,7 @@ class SearchDiscoverFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        api = apiHolder.api ?: apiHolder.setDomainToCurrentUser(db)
+        api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
         getDiscover()
 
