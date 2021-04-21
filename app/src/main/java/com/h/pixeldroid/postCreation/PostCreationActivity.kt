@@ -16,6 +16,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.core.net.toUri
@@ -412,18 +413,18 @@ class PostCreationActivity : BaseActivity() {
 
     }
 
-    private fun editResultContract(position: Int) = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+    private val editResultContract: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         result: ActivityResult? ->
         if (result?.resultCode == Activity.RESULT_OK && result.data != null) {
-            photoData[position].apply {
-                imageUri = result.data!!.getStringExtra("result")!!.toUri()
+            val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
+            photoData.getOrNull(position)?.apply {
+                imageUri = result.data!!.getStringExtra(PhotoEditActivity.PICTURE_URI)!!.toUri()
                 size = imageUri.getSize()
-            }
+                progress = null
+                uploadId = null
+            } ?: Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
 
             binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
-
-            photoData[position].progress = null
-            photoData[position].uploadId = null
         } else if(result?.resultCode != Activity.RESULT_CANCELED){
             Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
         }
@@ -431,8 +432,8 @@ class PostCreationActivity : BaseActivity() {
 
     private fun edit(position: Int) {
         val intent = Intent(this, PhotoEditActivity::class.java)
-            .putExtra("picture_uri", photoData[position].imageUri)
-            .putExtra("no upload", false)
-        editResultContract(position).launch(intent)
+            .putExtra(PhotoEditActivity.PICTURE_URI, photoData[position].imageUri)
+            .putExtra(PhotoEditActivity.PICTURE_POSITION, position)
+        editResultContract.launch(intent)
     }
 }

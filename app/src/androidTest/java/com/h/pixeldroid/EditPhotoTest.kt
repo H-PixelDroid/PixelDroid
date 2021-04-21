@@ -70,7 +70,9 @@ class EditPhotoTest {
             file.writeBitmap(image)
             uri = file.toUri()
         }
-        val intent = Intent(context, PhotoEditActivity::class.java).putExtra("picture_uri", uri)
+        val intent = Intent(context, PhotoEditActivity::class.java)
+            .putExtra(PhotoEditActivity.PICTURE_URI, uri)
+            .putExtra(PhotoEditActivity.PICTURE_POSITION, 0)
 
         activityScenario = ActivityScenario.launch<PhotoEditActivity>(intent).onActivity{a -> activity = a}
 
