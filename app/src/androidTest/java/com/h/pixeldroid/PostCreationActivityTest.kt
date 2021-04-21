@@ -7,26 +7,21 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
-import android.util.Log
-import android.view.View.VISIBLE
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.h.pixeldroid.postCreation.PostCreationActivity
-import com.h.pixeldroid.postCreation.photoEdit.ThumbnailAdapter
 import com.h.pixeldroid.settings.AboutActivity
 import com.h.pixeldroid.testUtility.*
 import com.h.pixeldroid.utils.db.AppDatabase
-import org.hamcrest.CoreMatchers.not
 import org.junit.*
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
@@ -44,7 +39,8 @@ class PostCreationActivityTest {
     val globalTimeout: Timeout = Timeout.seconds(30)
 
     @get:Rule
-    val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val mRuntimePermissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     private fun File.writeBitmap(bitmap: Bitmap) {
         outputStream().use { out ->
@@ -112,32 +108,65 @@ class PostCreationActivityTest {
         // should send on main activity
         onView(withId(R.id.retry_upload_button)).check(matches(not(isDisplayed())))
     }
+*/
 
+    /**
+     * Makes sure the [com.h.pixeldroid.postCreation.photoEdit.PhotoEditActivity] is launched
+     * when the edit button is pressed
+     */
     @Test
     fun editImage() {
-        Thread.sleep(1000)
+        waitForView(R.id.postTextInputLayout)
 
-        onView(withId(R.id.image_grid)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<PostCreationActivity.PostCreationAdapter.ViewHolder>(
-                0,
-                CustomMatchers.clickChildViewWithId(R.id.galleryImage)
-            )
-        )
-        Thread.sleep(1000)
+        onView(withId(R.id.editPhotoButton)).perform(click())
 
-        onView(withId(R.id.recycler_view))
-            .perform(
-                RecyclerViewActions.actionOnItemAtPosition<ThumbnailAdapter.MyViewHolder>(
-                    2,
-                    CustomMatchers.clickChildViewWithId(R.id.thumbnail)
-                )
-            )
-        Thread.sleep(1000)
-        onView(withId(R.id.action_save)).perform(click())
-        Thread.sleep(1000)
-        onView(withId(R.id.carousel)).check(matches(isDisplayed()))
+        waitForView(R.id.cropImageButton)
     }
 
+    /**
+     * Switch from carousel to grid and back
+     */
+    @Test
+    fun carouselSwitch() {
+        waitForView(R.id.postTextInputLayout)
+
+        onView(withId(R.id.switchToGridButton)).perform(click())
+
+        waitForView(R.id.galleryImage)
+
+        onView(withId(R.id.switchToCarouselButton)).perform(click())
+
+        waitForView(R.id.btn_previous)
+    }
+
+    /**
+     * Delete images and check if it worked
+     */
+    @Test
+    fun deleteImages() {
+        waitForView(R.id.postTextInputLayout)
+
+        onView(withId(R.id.removePhotoButton)).perform(click()).perform(click())
+
+        onView(withId(R.id.switchToGridButton)).perform(click())
+
+        onView(withId(R.id.galleryImage)).check(doesNotExist())
+        onView(withId(R.id.addPhotoSquare)).check(matches(isDisplayed()))
+    }
+
+    /**
+     * Makes sure the [com.h.pixeldroid.postCreation.camera.CameraActivity] is launched
+     * when the add image button is pressed
+     */
+    @Test
+    fun addImage() {
+        waitForView(R.id.postTextInputLayout)
+
+        onView(withId(R.id.addPhotoButton)).perform(click())
+
+        waitForView(R.id.camera_activity_fragment)
+    }
+/*
     @Test
     fun cancelEdit() {
         onView(withId(R.id.image_grid)).perform(

@@ -65,6 +65,8 @@ class PhotoEditActivity : BaseActivity() {
     private lateinit var filterListFragment: FilterListFragment
     private lateinit var editImageFragment: EditImageFragment
 
+    private var picturePosition: Int? = null
+
     private var brightnessFinal = BRIGHTNESS_START
     private var saturationFinal = SATURATION_START
     private var contrastFinal = CONTRAST_START
@@ -74,6 +76,9 @@ class PhotoEditActivity : BaseActivity() {
     }
 
     companion object{
+        internal const val PICTURE_URI = "picture_uri"
+        internal const val PICTURE_POSITION = "picture_position"
+
         private var executor: ExecutorService = newSingleThreadExecutor()
         private var future: Future<*>? = null
 
@@ -97,7 +102,8 @@ class PhotoEditActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-        initialUri = intent.getParcelableExtra("picture_uri")
+        initialUri = intent.getParcelableExtra(PICTURE_URI)
+        picturePosition = intent.getIntExtra(PICTURE_POSITION, 0)
         imageUri = initialUri
         
         // Crop button on-click listener
@@ -342,7 +348,8 @@ class PhotoEditActivity : BaseActivity() {
     private fun sendBackImage(file: String) {
         val intent = Intent(this, PostCreationActivity::class.java)
         .apply {
-            putExtra("result", file)
+            putExtra(PICTURE_URI, file)
+            putExtra(PICTURE_POSITION, picturePosition)
             addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         }
 
