@@ -88,7 +88,7 @@ class CameraTest {
 
         val scenario = launchFragmentInContainer<CameraFragment>()
         scenario.onFragment { fragment ->
-            fragment.view?.findViewById<ImageButton>(_root_ide_package_.org.pixeldroid.app.R.id.photo_view_button)?.performClick()
+            fragment.view?.findViewById<ImageButton>(R.id.photo_view_button)?.performClick()
         }
         Thread.sleep(1000)
 
@@ -99,7 +99,7 @@ class CameraTest {
     fun switchButton() {
         val scenario = launchFragmentInContainer<CameraFragment>()
         scenario.onFragment { fragment ->
-            fragment.view?.findViewById<ImageButton>(_root_ide_package_.org.pixeldroid.app.R.id.camera_switch_button)?.performClick()
+            fragment.view?.findViewById<ImageButton>(R.id.camera_switch_button)?.performClick()
         }
         Thread.sleep(1000)
 
