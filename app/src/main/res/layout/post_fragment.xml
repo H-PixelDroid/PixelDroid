@@ -55,7 +55,7 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/profilePic">
 
-                <com.h.pixeldroid.posts.NestedScrollableHost
+                <org.pixeldroid.app.posts.NestedScrollableHost
                     android:id="@+id/postPagerHost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:orientation="horizontal" />
 
-                </com.h.pixeldroid.posts.NestedScrollableHost>
+                </org.pixeldroid.app.posts.NestedScrollableHost>
 
                 <me.relex.circleindicator.CircleIndicator3
                     android:id="@+id/postIndicator"

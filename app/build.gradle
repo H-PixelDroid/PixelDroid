@@ -21,7 +21,7 @@ android {
         freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
     defaultConfig {
-        applicationId "com.h.pixeldroid"
+        applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 10

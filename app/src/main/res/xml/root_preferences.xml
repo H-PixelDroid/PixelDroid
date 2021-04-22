@@ -26,7 +26,7 @@
         android:summary="@string/about_pixeldroid"
         app:icon="@drawable/info_black_24dp">
         <intent
-            android:targetPackage="com.h.pixeldroid"
-            android:targetClass="com.h.pixeldroid.settings.AboutActivity"/>
+            android:targetPackage="org.pixeldroid.app"
+            android:targetClass="org.pixeldroid.app.settings.AboutActivity"/>
     </Preference>
 </PreferenceScreen>

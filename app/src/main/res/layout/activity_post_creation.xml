@@ -58,7 +58,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.h.pixeldroid.postCreation.carousel.ImageCarousel
+    <org.pixeldroid.app.postCreation.carousel.ImageCarousel
         android:id="@+id/carousel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
