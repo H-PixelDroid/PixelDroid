@@ -128,16 +128,22 @@
     <string name="verify_credentials">Non se obtivo a información da usuaria</string>
     <string name="mascot_description">Imaxe amosando un panda vermello, mascota de Pixelfed, usando un móbil</string>
     <plurals name="nb_following">
-        <item quantity="one">%d seguimento</item>
-        <item quantity="other">%d seguimentos</item>
+        <item quantity="one">%d
+\nseguimento</item>
+        <item quantity="other">%d
+\nseguimentos</item>
     </plurals>
     <plurals name="nb_followers">
-        <item quantity="one">%d Seguidora</item>
-        <item quantity="other">%d Seguidoras</item>
+        <item quantity="one">%d
+\nSeguidora</item>
+        <item quantity="other">%d
+\nSeguidoras</item>
     </plurals>
     <plurals name="nb_posts">
-        <item quantity="one">%d Publicación</item>
-        <item quantity="other">%d Publicacións</item>
+        <item quantity="one">%d
+\nPublicación</item>
+        <item quantity="other">%d
+\nPublicacións</item>
     </plurals>
     <string name="post_is_album">Esta publicación é un álbume</string>
     <string name="submit_comment">Enviar comentario</string>
