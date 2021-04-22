@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.h.pixeldroid">
+    package="org.pixeldroid.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,7 +15,7 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
-        android:name=".utils.PixelDroidApplication"
+        android:name="org.pixeldroid.app.utils.PixelDroidApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,37 +23,37 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name="com.h.pixeldroid.postCreation.camera.CameraActivity" />
+        <activity android:name="org.pixeldroid.app.postCreation.camera.CameraActivity" />
         <activity
-            android:name=".posts.ReportActivity"
+            android:name="org.pixeldroid.app.posts.ReportActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".postCreation.photoEdit.PhotoEditActivity" />
+        <activity android:name="org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity" />
         <activity
-            android:name=".postCreation.PostCreationActivity"
+            android:name="org.pixeldroid.app.postCreation.PostCreationActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".profile.FollowsActivity"
+            android:name="org.pixeldroid.app.profile.FollowsActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".posts.PostActivity"
+            android:name="org.pixeldroid.app.posts.PostActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".profile.ProfileActivity"
+            android:name="org.pixeldroid.app.profile.ProfileActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="org.pixeldroid.app.settings.SettingsActivity"
             android:label="@string/title_activity_settings2"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="org.pixeldroid.app.MainActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name="org.pixeldroid.app.MainActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan"
@@ -69,7 +69,7 @@
                 android:value=".searchDiscover.SearchActivity" />
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="org.pixeldroid.app.LoginActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
@@ -91,7 +91,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".searchDiscover.SearchActivity"
+            android:name="org.pixeldroid.app.searchDiscover.SearchActivity"
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity">
@@ -104,19 +104,19 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".settings.AboutActivity"
-            android:parentActivityName=".settings.SettingsActivity"
+            android:name="org.pixeldroid.app.settings.AboutActivity"
+            android:parentActivityName="org.pixeldroid.app.settings.SettingsActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".settings.LicenseActivity"
-            android:parentActivityName=".settings.AboutActivity"
+            android:name="org.pixeldroid.app.settings.LicenseActivity"
+            android:parentActivityName="org.pixeldroid.app.settings.AboutActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.h.pixeldroid.fileprovider"
+            android:authorities="org.pixeldroid.app.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
