@@ -11,10 +11,10 @@ import androidx.core.net.toUri
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
@@ -152,6 +152,42 @@ class PostCreationActivityTest {
 
         onView(withId(R.id.galleryImage)).check(doesNotExist())
         onView(withId(R.id.addPhotoSquare)).check(matches(isDisplayed()))
+    }
+
+    /**
+     * Type media description and check it's saved
+     */
+    @Test
+    fun mediaDescription() {
+        waitForView(R.id.postTextInputLayout)
+
+
+        fun typeDescription(text: String) {
+            onView(withId(R.id.tv_caption)).perform(click())
+
+            waitForView(R.id.editTextMediaDescription)
+
+            onView(withId(R.id.editTextMediaDescription)).perform(typeText(text))
+            onView(withId(R.id.imageDescriptionButton)).perform(click())
+
+            onView(withId(R.id.tv_caption)).check(matches(withText(text)))
+        }
+
+        val typedText1 = "Testi testo description"
+        typeDescription(typedText1)
+
+        onView(withId(R.id.btn_next)).perform(click())
+
+        val typedText2 = "Description 2"
+        typeDescription(typedText2)
+
+        onView(withId(R.id.btn_previous)).perform(click())
+
+        onView(withId(R.id.tv_caption)).check(matches(withText(typedText1)))
+
+        onView(withId(R.id.btn_next)).perform(click())
+
+        onView(withId(R.id.tv_caption)).check(matches(withText(typedText2)))
     }
 
     /**
