@@ -70,12 +70,8 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
 
     inner class PostsAdapter(private val displayDimensionsInPx: Pair<Int, Int>) : PagingDataAdapter<T, RecyclerView.ViewHolder>(
         object : DiffUtil.ItemCallback<T>() {
-            override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: T, newItem: T): Boolean =
-                oldItem.id == newItem.id
+            override fun areItemsTheSame   (oldItem: T, newItem: T): Boolean = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: T, newItem: T): Boolean = oldItem.id == newItem.id
         }
     ) {
 

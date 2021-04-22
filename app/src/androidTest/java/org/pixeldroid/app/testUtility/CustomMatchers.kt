@@ -21,8 +21,36 @@ import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
+import org.junit.rules.TestRule
+import org.junit.runners.model.Statement
 import java.util.concurrent.TimeoutException
 
+
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.ANNOTATION_CLASS)
+annotation class RepeatTest(val value: Int = 1)
+
+class RepeatRule : TestRule {
+
+    private class RepeatStatement(private val statement: Statement, private val repeat: Int) : Statement() {
+        @Throws(Throwable::class)
+        override fun evaluate() {
+            for (i in 0 until repeat) {
+                statement.evaluate()
+            }
+        }
+    }
+
+    override fun apply(statement: Statement, description: org.junit.runner.Description): Statement {
+        var result = statement
+        val repeat = description.getAnnotation(RepeatTest::class.java)
+        if (repeat != null) {
+            val times = repeat.value
+            result = RepeatStatement(statement, times)
+        }
+        return result
+    }
+}
 
 fun ViewInteraction.isDisplayed(): Boolean {
     return try {
