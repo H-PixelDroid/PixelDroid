@@ -10,10 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.*
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 import org.pixeldroid.app.databinding.FragmentFeedBinding
@@ -54,9 +51,11 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
         lifecycleScope.launch {
             adapter.loadStateFlow
                 // Only emit when REFRESH LoadState for RemoteMediator changes.
-                .distinctUntilChangedBy { it.refresh }
+                .distinctUntilChangedBy {
+                    it.source.refresh
+                }
                 // Only react to cases where Remote REFRESH completes i.e., NotLoading.
-                .filter { it.refresh is LoadState.NotLoading }
+                .filter { it.refresh is LoadState.NotLoading && it.source.refresh is LoadState.NotLoading}
                 .collect { binding.list.scrollToPosition(0) }
         }
     }
