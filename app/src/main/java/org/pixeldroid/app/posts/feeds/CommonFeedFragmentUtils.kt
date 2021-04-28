@@ -55,7 +55,7 @@ internal fun <T: Any> initAdapter(
 
         if(!progressBar.isVisible && swipeRefreshLayout.isRefreshing) {
             // Stop loading spinner when loading is done
-            swipeRefreshLayout.isRefreshing = loadState.mediator?.refresh is LoadState.Loading
+            swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
         } else {
             // ProgressBar should stop showing as soon as the source stops loading ("source"
             // meaning the database, so don't wait on the network)
@@ -63,7 +63,7 @@ internal fun <T: Any> initAdapter(
             if(!sourceLoading && recyclerView.size > 0){
                 recyclerView.isVisible = true
                 progressBar.isVisible = false
-            } else if(recyclerView.size ==  0
+            } else if(adapter.itemCount ==  0
                     && loadState.append is LoadState.NotLoading
                     && loadState.append.endOfPaginationReached){
                 progressBar.isVisible = false
@@ -73,7 +73,7 @@ internal fun <T: Any> initAdapter(
         }
 
 
-        // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
+        // Show any error, regardless of whether it came from RemoteMediator or PagingSource
         val errorState = loadState.source.append as? LoadState.Error
             ?: loadState.source.prepend as? LoadState.Error
             ?: loadState.source.refresh as? LoadState.Error
@@ -83,6 +83,7 @@ internal fun <T: Any> initAdapter(
         errorState?.let {
             showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = it.error.toString())
         }
+        // If the state is not an error, hide the error layout
         if(errorState == null) {
             showError(motionLayout = motionLayout, errorLayout = errorLayout, show = false, errorText = "")
         }
