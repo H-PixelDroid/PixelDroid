@@ -37,10 +37,7 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
 
 
     internal fun launch() {
-        @Suppress("UNCHECKED_CAST")
-        job = launch(job, lifecycleScope,
-                viewModel as FeedViewModel<FeedContent>,
-                adapter as PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>)
+        job = launch(job, lifecycleScope, viewModel, adapter)
     }
 
     internal fun initSearch() {

@@ -55,7 +55,7 @@ internal fun <T: Any> initAdapter(
 
         if(!progressBar.isVisible && swipeRefreshLayout.isRefreshing) {
             // Stop loading spinner when loading is done
-            swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
+            swipeRefreshLayout.isRefreshing = loadState.mediator?.refresh is LoadState.Loading
         } else {
             // ProgressBar should stop showing as soon as the source stops loading ("source"
             // meaning the database, so don't wait on the network)
@@ -89,13 +89,13 @@ internal fun <T: Any> initAdapter(
     }
 }
 
-fun launch(
-        job: Job?, lifecycleScope: LifecycleCoroutineScope, viewModel: FeedViewModel<FeedContent>,
-        pagingDataAdapter: PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>): Job {
+fun <T: FeedContent> launch(
+        job: Job?, lifecycleScope: LifecycleCoroutineScope, viewModel: FeedViewModel<T>,
+        pagingDataAdapter: PagingDataAdapter<T, RecyclerView.ViewHolder>): Job {
     // Make sure we cancel the previous job before creating a new one
     job?.cancel()
     return lifecycleScope.launch {
-        viewModel.flow().collectLatest {
+        viewModel.flow.collectLatest {
             pagingDataAdapter.submitData(it)
         }
     }

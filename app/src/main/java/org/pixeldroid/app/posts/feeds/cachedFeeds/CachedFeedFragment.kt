@@ -8,18 +8,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.*
+import androidx.paging.LoadState.*
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-
 import org.pixeldroid.app.databinding.FragmentFeedBinding
+import org.pixeldroid.app.posts.feeds.initAdapter
+import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
-import org.pixeldroid.app.utils.BaseFragment
-import org.pixeldroid.app.posts.feeds.initAdapter
-import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
-
 
 /**
  * A fragment representing a list of [FeedContentDatabase] items that are cached by the database.
@@ -40,7 +38,7 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
         // Make sure we cancel the previous job before creating a new one
         job?.cancel()
         job = lifecycleScope.launchWhenStarted {
-            viewModel.flow().collectLatest {
+            viewModel.flow.collectLatest {
                 adapter.submitData(it)
             }
         }
@@ -48,14 +46,14 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
 
     internal fun initSearch() {
         // Scroll to top when the list is refreshed from network.
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow
                 // Only emit when REFRESH LoadState for RemoteMediator changes.
                 .distinctUntilChangedBy {
                     it.source.refresh
                 }
                 // Only react to cases where Remote REFRESH completes i.e., NotLoading.
-                .filter { it.refresh is LoadState.NotLoading && it.source.refresh is LoadState.NotLoading}
+                .filter { it.refresh is NotLoading}
                 .collect { binding.list.scrollToPosition(0) }
         }
     }
@@ -72,12 +70,7 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
         initAdapter(binding.progressBar, binding.swipeRefreshLayout,
             binding.list, binding.motionLayout, binding.errorLayout, adapter)
 
-        //binding.progressBar.visibility = View.GONE
         binding.swipeRefreshLayout.setOnRefreshListener {
-            //It shouldn't be necessary to also retry() in addition to refresh(),
-            //but if we don't do this, reloads after an error fail immediately...
-            // https://issuetracker.google.com/issues/173438474
-            adapter.retry()
             adapter.refresh()
         }
 
