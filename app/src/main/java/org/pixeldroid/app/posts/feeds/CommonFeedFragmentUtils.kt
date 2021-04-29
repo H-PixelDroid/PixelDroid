@@ -60,7 +60,7 @@ internal fun <T: Any> initAdapter(
             // ProgressBar should stop showing as soon as the source stops loading ("source"
             // meaning the database, so don't wait on the network)
             val sourceLoading = loadState.source.refresh is LoadState.Loading
-            if(!sourceLoading && recyclerView.size > 0){
+            if(!sourceLoading && adapter.itemCount > 0){
                 recyclerView.isVisible = true
                 progressBar.isVisible = false
             } else if(adapter.itemCount ==  0
