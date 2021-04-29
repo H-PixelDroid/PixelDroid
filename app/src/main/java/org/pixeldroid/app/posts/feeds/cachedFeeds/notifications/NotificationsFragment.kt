@@ -53,10 +53,10 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         // get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(
-            this,
+            requireActivity(),
             ViewModelFactory(db, db.notificationDao(), NotificationsRemoteMediator(apiHolder, db))
         )
-            .get(FeedViewModel::class.java) as FeedViewModel<Notification>
+            .get("notifications", FeedViewModel::class.java) as FeedViewModel<Notification>
 
         launch()
         initSearch()

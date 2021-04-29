@@ -44,7 +44,7 @@ class SearchHashtagFragment : UncachedFeedFragment<Tag>() {
 
         // get the view model
         @Suppress("UNCHECKED_CAST")
-        viewModel = ViewModelProvider(this, ViewModelFactory(
+        viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(
             SearchContentRepository<Tag>(
                 apiHolder.setToCurrentUser(),
                 Results.SearchType.hashtags,
@@ -52,7 +52,7 @@ class SearchHashtagFragment : UncachedFeedFragment<Tag>() {
             )
         )
         )
-            .get(FeedViewModel::class.java) as FeedViewModel<Tag>
+            .get("searchHashtag", FeedViewModel::class.java) as FeedViewModel<Tag>
 
         launch()
         initSearch()

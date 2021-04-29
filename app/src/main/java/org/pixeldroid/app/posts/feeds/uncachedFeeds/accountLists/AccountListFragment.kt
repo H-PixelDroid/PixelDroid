@@ -52,7 +52,7 @@ class AccountListFragment : UncachedFeedFragment<Account>() {
 
         // get the view model
         @Suppress("UNCHECKED_CAST")
-        viewModel = ViewModelProvider(this, ViewModelFactory(
+        viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(
             FollowersContentRepository(
                 apiHolder.setToCurrentUser(),
                 id,
@@ -60,7 +60,7 @@ class AccountListFragment : UncachedFeedFragment<Account>() {
             )
         )
         )
-            .get(FeedViewModel::class.java) as FeedViewModel<Account>
+            .get("accountList", FeedViewModel::class.java) as FeedViewModel<Account>
 
         launch()
         initSearch()

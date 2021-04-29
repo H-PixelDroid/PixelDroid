@@ -37,14 +37,14 @@ class SearchAccountFragment : UncachedFeedFragment<Account>() {
 
         // get the view model
         @Suppress("UNCHECKED_CAST")
-        viewModel = ViewModelProvider(this, ViewModelFactory(
+        viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(
                 SearchContentRepository<Account>(
                     apiHolder.setToCurrentUser(),
                     Results.SearchType.accounts,
                     query
                 )
             )
-        ).get(FeedViewModel::class.java) as FeedViewModel<Account>
+        ).get("searchAccounts", FeedViewModel::class.java) as FeedViewModel<Account>
 
         launch()
         initSearch()

@@ -41,25 +41,22 @@ class FollowersPagingSource(
                 throw HttpException(response)
             }
 
-            val nextPosition: String = if(response.headers()["Link"] != null){
-                //Header is of the form:
+            val nextPosition: String = response.headers()["Link"]
+                // Header is of the form:
                 // Link: <https://mastodon.social/api/v1/accounts/1/followers?limit=2&max_id=7628164>; rel="next", <https://mastodon.social/api/v1/accounts/1/followers?limit=2&since_id=7628165>; rel="prev"
                 // So we want the first max_id value. In case there are arguments after
                 // the max_id in the URL, we make sure to stop at the first '?'
-                response.headers()["Link"]
-                    .orEmpty()
-                    .substringAfter("max_id=", "")
-                    .substringBefore('?', "")
-                    .substringBefore('>', "")
-            } else {
-                // No Link header, so we just increment the position value
+                ?.substringAfter("max_id=", "")
+                ?.substringBefore('?', "")
+                ?.substringBefore('>', "")
+
+                ?: // No Link header, so we just increment the position value (Pixelfed case)
                 (position?.toBigIntegerOrNull() ?: 1.toBigInteger()).inc().toString()
-            }
 
             LoadResult.Page(
                 data = accounts,
                 prevKey = null,
-                nextKey = if (accounts.isEmpty()) null else nextPosition
+                nextKey = if (accounts.isEmpty() or nextPosition.isEmpty()) null else nextPosition
             )
         } catch (exception: IOException) {
             LoadResult.Error(exception)
@@ -68,8 +65,5 @@ class FollowersPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<String, Account>): String? =
-        state.anchorPosition?.run {
-            state.closestItemToPosition(this)?.id
-        }
+    override fun getRefreshKey(state: PagingState<String, Account>): String? = null
 }

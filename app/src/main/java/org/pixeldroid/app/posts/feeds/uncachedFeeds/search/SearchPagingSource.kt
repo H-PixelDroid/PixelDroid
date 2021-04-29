@@ -46,8 +46,9 @@ class SearchPagingSource<T: FeedContent>(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, T>): Int? =
-        state.anchorPosition?.run {
-            state.closestItemToPosition(this)?.id?.toIntOrNull()
-        }
+    /**
+     * FIXME if implemented with [PagingState.anchorPosition], this breaks refreshes? How is this
+     * supposed to work?
+     */
+    override fun getRefreshKey(state: PagingState<Int, T>): Int? = null
 }
