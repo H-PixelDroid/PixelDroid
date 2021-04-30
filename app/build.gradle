@@ -24,8 +24,8 @@ android {
         applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 10
-        versionName "1.0.alpha9"
+        versionCode 11
+        versionName "1.0.beta1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
