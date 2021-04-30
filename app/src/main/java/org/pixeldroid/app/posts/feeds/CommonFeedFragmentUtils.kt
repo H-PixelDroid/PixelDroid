@@ -12,6 +12,7 @@ import androidx.paging.LoadStateAdapter
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.gson.Gson
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ErrorLayoutBinding
 import org.pixeldroid.app.databinding.LoadStateFooterViewItemBinding
@@ -20,6 +21,7 @@ import org.pixeldroid.app.utils.api.objects.FeedContent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 /**
  * Shows or hides the error in the different FeedFragments
@@ -56,22 +58,15 @@ internal fun <T: Any> initAdapter(
         if(!progressBar.isVisible && swipeRefreshLayout.isRefreshing) {
             // Stop loading spinner when loading is done
             swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
-        } else {
-            // ProgressBar should stop showing as soon as the source stops loading ("source"
-            // meaning the database, so don't wait on the network)
-            val sourceLoading = loadState.source.refresh is LoadState.Loading
-            if(!sourceLoading && adapter.itemCount > 0){
-                recyclerView.isVisible = true
-                progressBar.isVisible = false
-            } else if(adapter.itemCount ==  0
-                    && loadState.append is LoadState.NotLoading
-                    && loadState.append.endOfPaginationReached){
-                progressBar.isVisible = false
-                showError(motionLayout = motionLayout, errorLayout = errorLayout,
-                        errorText = errorLayout.root.context.getString(R.string.empty_feed))
-            }
         }
 
+        // ProgressBar should stop showing as soon as the source stops loading ("source"
+        // meaning the database, so don't wait on the network)
+        val sourceLoading = loadState.source.refresh is LoadState.Loading
+        if (!sourceLoading && adapter.itemCount > 0) {
+            recyclerView.isVisible = true
+            progressBar.isVisible = false
+        }
 
         // Show any error, regardless of whether it came from RemoteMediator or PagingSource
         val errorState = loadState.source.append as? LoadState.Error
@@ -81,11 +76,26 @@ internal fun <T: Any> initAdapter(
             ?: loadState.prepend as? LoadState.Error
             ?: loadState.refresh as? LoadState.Error
         errorState?.let {
-            showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = it.error.toString())
+            val error: String = (it.error as? HttpException)?.response()?.errorBody()?.string()?.ifEmpty { null }?.let { s ->
+                Gson().fromJson(s, org.pixeldroid.app.utils.api.objects.Error::class.java)?.error?.ifBlank { null }
+            } ?: it.error.localizedMessage.orEmpty()
+            showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = error)
         }
-        // If the state is not an error, hide the error layout
+
+        // If the state is not an error, hide the error layout, or show message that the feed is empty
         if(errorState == null) {
-            showError(motionLayout = motionLayout, errorLayout = errorLayout, show = false, errorText = "")
+            if (adapter.itemCount == 0
+                && loadState.append is LoadState.NotLoading
+                && loadState.append.endOfPaginationReached
+            ) {
+                progressBar.isVisible = false
+                showError(
+                    motionLayout = motionLayout, errorLayout = errorLayout,
+                    errorText = errorLayout.root.context.getString(R.string.empty_feed)
+                )
+            } else {
+                showError(motionLayout = motionLayout, errorLayout = errorLayout, show = false, errorText = "")
+            }
         }
     }
 }
