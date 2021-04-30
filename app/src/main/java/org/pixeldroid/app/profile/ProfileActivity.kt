@@ -91,9 +91,7 @@ class ProfileActivity : BaseActivity() {
         }
 
         setContent(account)
-        @Suppress("UNCHECKED_CAST")
-        job = launch(job, lifecycleScope, viewModel as FeedViewModel<FeedContent>,
-                profileAdapter as PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>)
+        job = launch(job, lifecycleScope, viewModel, profileAdapter)
     }
 
     /**

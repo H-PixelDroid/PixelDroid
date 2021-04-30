@@ -73,21 +73,20 @@ class MainActivity : BaseActivity() {
 
             setupDrawer()
 
-            val tabs: List<() -> Fragment> = listOf(
-                    {
+            val tabs: List<Fragment> = listOf(
+
                         PostFeedFragment<HomeStatusDatabaseEntity>()
                                 .apply {
                                     arguments = Bundle().apply { putBoolean("home", true) }
                                 }
-                    },
-                    { SearchDiscoverFragment() },
-                    { CameraFragment() },
-                    { NotificationsFragment() },
-                    {
+                    ,
+                    SearchDiscoverFragment() ,
+                    CameraFragment() ,
+                    NotificationsFragment() ,
+
                         PostFeedFragment<PublicFeedStatusDatabaseEntity>()
                                 .apply {
                                     arguments = Bundle().apply { putBoolean("home", false) }
-                                }
                     }
             )
             setupTabs(tabs)
@@ -270,10 +269,10 @@ class MainActivity : BaseActivity() {
     }
 
 
-    private fun setupTabs(tab_array: List<() -> Fragment>){
+    private fun setupTabs(tab_array: List<Fragment>){
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                return tab_array[position]()
+                return tab_array[position]
             }
 
             override fun getItemCount(): Int {

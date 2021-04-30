@@ -41,7 +41,7 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
 
         // get the view model
         @Suppress("UNCHECKED_CAST")
-        viewModel = ViewModelProvider(this, ViewModelFactory(
+        viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(
             SearchContentRepository<Status>(
                 apiHolder.setToCurrentUser(),
                 Results.SearchType.statuses,
@@ -49,7 +49,7 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
             )
         )
         )
-            .get(FeedViewModel::class.java) as FeedViewModel<Status>
+            .get("searchPosts", FeedViewModel::class.java) as FeedViewModel<Status>
 
         launch()
         initSearch()

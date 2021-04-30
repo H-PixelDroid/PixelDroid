@@ -19,9 +19,11 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.junit.rules.Timeout
+import org.junit.runner.Description
 import org.junit.runner.RunWith
-
+import org.junit.runners.model.Statement
 
 @RunWith(AndroidJUnit4::class)
 class HomeFeedTest {
@@ -29,6 +31,9 @@ class HomeFeedTest {
     private lateinit var activityScenario: ActivityScenario<MainActivity>
     private lateinit var db: AppDatabase
     private lateinit var context: Context
+
+    @Rule @JvmField
+    var repeatRule: RepeatRule = RepeatRule()
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(100)
@@ -46,6 +51,10 @@ class HomeFeedTest {
         )
         db.close()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
+
+        waitForView(R.id.username)
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
+
     }
     @After
     fun after() {
@@ -53,6 +62,7 @@ class HomeFeedTest {
     }
 
     @Test
+    @RepeatTest
     fun clickingTabOnAlbumShowsNextPhoto() {
         //Wait for the feed to load
         waitForView(R.id.postPager)
@@ -126,6 +136,7 @@ class HomeFeedTest {
     }*/
 
     @Test
+    @RepeatTest
     fun clickingUsernameOpensProfile() {
         waitForView(R.id.username)
 
@@ -136,6 +147,7 @@ class HomeFeedTest {
     }
 
     @Test
+    @RepeatTest
     fun clickingProfilePicOpensProfile() {
         waitForView(R.id.profilePic)
 
@@ -146,6 +158,7 @@ class HomeFeedTest {
     }
 
     @Test
+    @RepeatTest
     fun clickingMentionOpensProfile() {
         waitForView(R.id.description)
 
@@ -216,6 +229,7 @@ class HomeFeedTest {
             .check(matches(hasDescendant(withId(R.id.comment))))
     }*/
 
+    @RepeatTest
     @Test
     fun performClickOnSensitiveWarning() {
         waitForView(R.id.username)
@@ -231,10 +245,9 @@ class HomeFeedTest {
     }
 
     @Test
+    @RepeatTest
     fun performClickOnSensitiveWarningTabs() {
         waitForView(R.id.username)
-
-        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
 
         onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 

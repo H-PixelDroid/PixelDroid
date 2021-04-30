@@ -26,19 +26,8 @@ import kotlinx.coroutines.flow.Flow
  * ViewModel for the cached feeds.
  * The ViewModel works with the [FeedContentRepository] to get the data.
  */
-class FeedViewModel<T: FeedContentDatabase>(private val repository: FeedContentRepository<T>) : ViewModel() {
-
-    private var currentResult: Flow<PagingData<T>>? = null
+class FeedViewModel<T: FeedContentDatabase>(repository: FeedContentRepository<T>) : ViewModel() {
 
     @ExperimentalPagingApi
-    fun flow(): Flow<PagingData<T>> {
-        val lastResult = currentResult
-        if (lastResult != null) {
-            return lastResult
-        }
-        val newResult: Flow<PagingData<T>> = repository.stream()
-                .cachedIn(viewModelScope)
-        currentResult = newResult
-        return newResult
-    }
+    val flow: Flow<PagingData<T>> = repository.stream().cachedIn(viewModelScope)
 }

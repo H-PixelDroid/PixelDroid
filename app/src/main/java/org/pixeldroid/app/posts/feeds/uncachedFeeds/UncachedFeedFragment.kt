@@ -37,10 +37,7 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
 
 
     internal fun launch() {
-        @Suppress("UNCHECKED_CAST")
-        job = launch(job, lifecycleScope,
-                viewModel as FeedViewModel<FeedContent>,
-                adapter as PagingDataAdapter<FeedContent, RecyclerView.ViewHolder>)
+        job = launch(job, lifecycleScope, viewModel, adapter)
     }
 
     internal fun initSearch() {
@@ -68,9 +65,6 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
             binding.motionLayout, binding.errorLayout, adapter)
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            //It shouldn't be necessary to also retry() in addition to refresh(),
-            //but if we don't do this, reloads after an error fail immediately...
-            adapter.retry()
             adapter.refresh()
         }
 
