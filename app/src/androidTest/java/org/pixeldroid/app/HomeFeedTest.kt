@@ -51,6 +51,10 @@ class HomeFeedTest {
         )
         db.close()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
+
+        waitForView(R.id.username)
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
+
     }
     @After
     fun after() {
@@ -62,6 +66,9 @@ class HomeFeedTest {
     fun clickingTabOnAlbumShowsNextPhoto() {
         //Wait for the feed to load
         waitForView(R.id.postPager)
+
+
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
 
         activityScenario.onActivity {
             a -> run {
@@ -136,6 +143,8 @@ class HomeFeedTest {
     fun clickingUsernameOpensProfile() {
         waitForView(R.id.username)
 
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
+
         onView(withId(R.id.list)).perform(
             actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.username))
         )
@@ -147,6 +156,8 @@ class HomeFeedTest {
     fun clickingProfilePicOpensProfile() {
         waitForView(R.id.profilePic)
 
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
+
         onView(withId(R.id.list)).perform(
             actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.profilePic))
         )
@@ -157,6 +168,8 @@ class HomeFeedTest {
     @RepeatTest
     fun clickingMentionOpensProfile() {
         waitForView(R.id.description)
+
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
 
         onView(withId(R.id.list)).perform(
             actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.description))
