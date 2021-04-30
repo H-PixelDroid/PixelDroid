@@ -67,9 +67,6 @@ class HomeFeedTest {
         //Wait for the feed to load
         waitForView(R.id.postPager)
 
-
-        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
-
         activityScenario.onActivity {
             a -> run {
                 //Pick the second photo
@@ -143,8 +140,6 @@ class HomeFeedTest {
     fun clickingUsernameOpensProfile() {
         waitForView(R.id.username)
 
-        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
-
         onView(withId(R.id.list)).perform(
             actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.username))
         )
@@ -156,8 +151,6 @@ class HomeFeedTest {
     fun clickingProfilePicOpensProfile() {
         waitForView(R.id.profilePic)
 
-        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
-
         onView(withId(R.id.list)).perform(
             actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.profilePic))
         )
@@ -168,8 +161,6 @@ class HomeFeedTest {
     @RepeatTest
     fun clickingMentionOpensProfile() {
         waitForView(R.id.description)
-
-        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
 
         onView(withId(R.id.list)).perform(
             actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.description))
@@ -257,8 +248,6 @@ class HomeFeedTest {
     @RepeatTest
     fun performClickOnSensitiveWarningTabs() {
         waitForView(R.id.username)
-
-        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(0))
 
         onView(first(withId(R.id.sensitiveWarning))).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
