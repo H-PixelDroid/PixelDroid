@@ -1,3 +1,11 @@
 PixelDroid is a Free and Open Source Android client for Pixelfed, the federated image sharing platform.
 
-One may upload new posts, search or interact with others inluding liking and sharing others' posts as well as leaving comments under them.
+Browse feeds and profiles, upload new posts, discover posts, interact with others on the fediverse.
+
+• Multi-Account support
+• Dark and light themes
+• Apply filters, crop, change brightness/contrast/saturation
+• Takes into account the configuration of your Pixelfed server
+• 100% Free and Open Source software. No proprietary dependencies.
+
+Check out https://pixelfed.org to learn more about Pixelfed.
