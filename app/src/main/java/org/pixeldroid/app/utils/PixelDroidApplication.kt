@@ -26,8 +26,6 @@ class PixelDroidApplication: Application() {
             .aPIModule(APIModule())
             .build()
         mApplicationComponent.inject(this)
-
-        Iconics.init(applicationContext)
     }
 
     fun getAppComponent(): ApplicationComponent {
