@@ -194,6 +194,8 @@ dependencies {
         exclude group:'androidx.test', module:'monitor'
     }
 
+    //stagingImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
     testImplementation 'com.github.tomakehurst:wiremock-jre8:2.27.2'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13.2'
