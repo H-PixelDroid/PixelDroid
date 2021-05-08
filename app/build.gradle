@@ -27,7 +27,7 @@ android {
         versionCode 11
         versionName "1.0.beta1"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "org.pixeldroid.app.testUtility.TestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
     lintOptions{
@@ -187,6 +187,9 @@ dependencies {
     /**
      * Not in release, so not mentioned in licenses list
      */
+
+    androidTestImplementation 'com.linkedin.testbutler:test-butler-library:2.2.1'
+    androidTestUtil 'com.linkedin.testbutler:test-butler-app:2.2.1'
 
     // debugImplementation required vs testImplementation: https://issuetracker.google.com/issues/128612536
     //noinspection FragmentGradleConfiguration

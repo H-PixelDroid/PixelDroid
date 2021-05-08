@@ -1,5 +1,5 @@
 package org.pixeldroid.app
-/*
+
 import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
+import com.linkedin.android.testbutler.TestButler
 import org.pixeldroid.app.testUtility.clearData
 import org.pixeldroid.app.testUtility.initDB
 import org.pixeldroid.app.utils.db.AppDatabase
@@ -21,20 +22,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import org.pixeldroid.app.testUtility.waitForView
 
 @RunWith(AndroidJUnit4::class)
 class LoginActivityOfflineTest {
 
     private lateinit var context: Context
-
-    companion object {
-        fun switchAirplaneMode() {
-            val device = UiDevice.getInstance(getInstrumentation())
-            device.openQuickSettings()
-            device.findObject(UiSelector().textContains("Airplane")).click()
-            device.pressHome()
-        }
-    }
 
     private lateinit var db: AppDatabase
 
@@ -43,7 +36,8 @@ class LoginActivityOfflineTest {
 
     @Before
     fun before() {
-        switchAirplaneMode()
+        TestButler.setWifiState(false)
+        TestButler.setGsmState(false)
         context = ApplicationProvider.getApplicationContext<Context>()
         db = initDB(context)
         db.clearAllTables()
@@ -52,19 +46,22 @@ class LoginActivityOfflineTest {
 
     @Test
     fun emptyDBandOfflineModeDisplayCorrectMessage() {
+        waitForView(R.id.login_activity_connection_required)
         onView(withId(R.id.login_activity_connection_required)).check(matches(isDisplayed()))
     }
 
     @Test
     fun retryButtonReloadsLoginActivity() {
+        waitForView(R.id.login_activity_connection_required_button)
         onView(withId(R.id.login_activity_connection_required_button)).perform(click())
         onView(withId(R.id.login_activity_connection_required)).check(matches(isDisplayed()))
     }
 
     @After
     fun after() {
-        switchAirplaneMode()
+        TestButler.setWifiState(true)
+        TestButler.setGsmState(true)
         db.close()
         clearData()
     }
-}*/
+}
