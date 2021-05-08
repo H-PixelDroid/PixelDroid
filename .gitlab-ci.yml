@@ -7,6 +7,14 @@ variables:
   TARGET: "default"
 
 
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
 # Basic android and gradle stuff
 # Check linting
 lintDebug:
