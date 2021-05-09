@@ -1,5 +1,5 @@
 package org.pixeldroid.app.testUtility
-
+/*
 import android.os.Bundle
 import androidx.test.runner.AndroidJUnitRunner
 import com.linkedin.android.testbutler.TestButler
@@ -16,3 +16,5 @@ class TestRunner: AndroidJUnitRunner() {
         super.finish(resultCode, results)
     }
 }
+
+ */
