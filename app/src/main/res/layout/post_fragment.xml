@@ -82,6 +82,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
+                <ImageView
+                    android:id="@+id/like_animation"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/heart_anim"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/postPagerHost"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/postPagerHost"
+                    tools:ignore="ContentDescription"
+                    tools:visibility="visible" />
+
                 <FrameLayout
                     android:id="@+id/post_fragment_image_popup_menu_anchor"
                     android:layout_width="1dp"
