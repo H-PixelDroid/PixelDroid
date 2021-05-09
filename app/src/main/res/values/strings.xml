@@ -190,6 +190,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="profile_picture">Profile picture</string>
     <string name="open_drawer_menu">Open drawer menu</string>
     <string name="discover">DISCOVER</string>
+    <string name="discover_no_infinite_load">Discover doesn\'t load infinitely. Pull to refresh for other images.</string>
     <string name="something_went_wrong">Something went wrong…</string>
     <string name="panda_pull_to_refresh_to_try_again">This panda is not happy. Pull to refresh to try again.</string>
     <string name="delete">Delete</string>
