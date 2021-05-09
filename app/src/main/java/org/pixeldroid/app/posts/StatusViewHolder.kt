@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Typeface
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -14,6 +15,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -472,6 +474,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                             // Button is inactive, like
                             binding.liker.playAnimation()
                             binding.liker.isChecked = true
+                            binding.likeAnimation.animateView()
                             likePostCall(api)
                         }
                     } else {
@@ -481,6 +484,17 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                         binding.postPager.handler.postDelayed(fun() { clicked = false }, 500)
                     }
                 }
+            }
+        }
+    }
+    private fun ImageView.animateView() {
+        visibility = View.VISIBLE
+        when (val drawable = drawable) {
+            is AnimatedVectorDrawableCompat -> {
+                drawable.start()
+            }
+            is AnimatedVectorDrawable -> {
+                drawable.start()
             }
         }
     }
