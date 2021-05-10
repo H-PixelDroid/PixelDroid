@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.NestedScrollingChild
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
@@ -42,6 +43,7 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
+import org.pixeldroid.app.posts.NestedScrollableHost
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -281,7 +283,7 @@ class MainActivity : BaseActivity() {
         val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
         touchSlopField.isAccessible = true
         val touchSlop = touchSlopField.get(recyclerView) as Int
-        touchSlopField.set(recyclerView, touchSlop*2)
+        touchSlopField.set(recyclerView, touchSlop*NestedScrollableHost.touchSlopModifier)
     }
 
     private fun setupTabs(tab_array: List<() -> Fragment>){

@@ -94,11 +94,12 @@ class NestedScrollableHost : ConstraintLayout {
             val isVpHorizontal = orientation == ORIENTATION_HORIZONTAL
 
             // assuming ViewPager2 touch-slop is 2x touch-slop of child
-            val scaledDx = dx.absoluteValue * if (isVpHorizontal) .5f else 1f
-            val scaledDy = dy.absoluteValue * if (isVpHorizontal) 1f else .5f
+            val scaledDx = dx.absoluteValue * if (isVpHorizontal) .5f/ touchSlopModifier else 1f
+            val scaledDy = dy.absoluteValue * if (isVpHorizontal) 1f else .5f/touchSlopModifier
+
+            if(dx.absoluteValue * .5f > touchSlop || scaledDy > touchSlop) doubleTapCallback?.invoke(false)
 
             if (scaledDx > touchSlop || scaledDy > touchSlop) {
-                doubleTapCallback?.invoke(false)
 
                 if (isVpHorizontal == (scaledDy > scaledDx)) {
                     // Gesture is perpendicular, allow all parents to intercept
@@ -115,5 +116,9 @@ class NestedScrollableHost : ConstraintLayout {
                 }
             }
         }
+    }
+
+    companion object {
+        const val touchSlopModifier = 2
     }
 }
