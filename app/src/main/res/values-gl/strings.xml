@@ -181,4 +181,8 @@
 \nPara saber máis acerca de Pixelfed, podes mirar aquí: https://pixelfed.org</string>
     <string name="delete_post_failed_io_except">Non se puido eliminar a publicación, tes conexión a internet\?</string>
     <string name="delete_post_failed_error">Non se puido eliminar a publicación, erro %1$d</string>
+    <string name="dialog_message_cancel_follow_request">Cancelar a solicitude de seguimento\?</string>
+    <string name="follow_requested">Seguimento solicitado</string>
+    <string name="empty_feed">Nada por aquí :(</string>
+    <string name="edit_link_failed">Non se puido abrir a páxina de edición</string>
 </resources>
