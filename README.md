@@ -1,6 +1,6 @@
 # PixelDroid
 ![Pixeldroid project logo](pixeldroid_logo.png)  
-Free (as in freedom) Android client for Pixelfed, the federated image sharing platform.
+Free (as in freedom) Android client for Pixelfed, the federated image sharing platform. Licensed under the GNU General Public License version 3 (or any later version)
 
 [![Build Status](https://gitlab.shinice.net/pixeldroid/PixelDroid/badges/master/pipeline.svg)](https://gitlab.shinice.net/pixeldroid/PixelDroid/pipelines) [![Maintainability](https://api.codeclimate.com/v1/badges/a4f1747dc60b96eb74df/maintainability)](https://codeclimate.com/github/H-PixelDroid/PixelDroid/maintainability) [![Translation status](https://weblate.pixeldroid.org/widgets/pixeldroid/-/pixeldroid/svg-badge.svg)](https://weblate.pixeldroid.org/engage/pixeldroid/?utm_source=widget)  
 
