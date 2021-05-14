@@ -11,10 +11,13 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.NestedScrollingChild
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import org.pixeldroid.app.databinding.ActivityMainBinding
@@ -40,6 +43,7 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
+import org.pixeldroid.app.posts.NestedScrollableHost
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -268,8 +272,22 @@ class MainActivity : BaseActivity() {
         header.setActiveProfile(account.toLong())
     }
 
+    /**
+     * Use reflection to make it a bit harder to swipe between tabs
+     */
+    private fun ViewPager2.reduceDragSensitivity() {
+        val recyclerViewField = ViewPager2::class.java.getDeclaredField("mRecyclerView")
+        recyclerViewField.isAccessible = true
+        val recyclerView = recyclerViewField.get(this) as RecyclerView
+
+        val touchSlopField = RecyclerView::class.java.getDeclaredField("mTouchSlop")
+        touchSlopField.isAccessible = true
+        val touchSlop = touchSlopField.get(recyclerView) as Int
+        touchSlopField.set(recyclerView, touchSlop*NestedScrollableHost.touchSlopModifier)
+    }
 
     private fun setupTabs(tab_array: List<() -> Fragment>){
+        binding.viewPager.reduceDragSensitivity()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
                 return tab_array[position]()
