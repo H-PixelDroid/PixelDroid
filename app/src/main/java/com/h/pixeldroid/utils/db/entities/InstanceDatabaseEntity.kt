@@ -15,6 +15,7 @@ data class InstanceDatabaseEntity (
         var maxVideoSize: Int = DEFAULT_MAX_VIDEO_SIZE,
         // How many photos can go into an album. Default limit for Pixelfed and Mastodon is 4
         var albumLimit: Int = DEFAULT_ALBUM_LIMIT,
+        var thumbnail: String = ""
 ) {
     companion object{
         // Default max number of chars for Mastodon: used when their is no other value supplied by

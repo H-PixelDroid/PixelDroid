@@ -1,5 +1,6 @@
 package com.h.pixeldroid
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -30,6 +31,7 @@ import com.h.pixeldroid.utils.db.entities.HomeStatusDatabaseEntity
 import com.h.pixeldroid.utils.db.entities.PublicFeedStatusDatabaseEntity
 import com.h.pixeldroid.utils.db.entities.UserDatabaseEntity
 import com.h.pixeldroid.utils.hasInternet
+import com.h.pixeldroid.utils.openUrl
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.materialdrawer.iconics.iconicsIcon
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
@@ -91,6 +93,12 @@ class MainActivity : BaseActivity() {
                     }
             )
             setupTabs(tabs)
+
+            AlertDialog.Builder(this).apply {
+                setMessage("PixelDroid is now published on the main F-Droid repo. The version from the IzzyOnDroid repo is very out of date. Press OK to go to the main F-Droid repo to get the new and improved version, and don't forget to uninstall this version.")
+                setPositiveButton(android.R.string.ok) { _, _ -> openUrl("https://f-droid.org/en/packages/org.pixeldroid.app/")}
+                setNegativeButton(android.R.string.cancel) { _, _ -> }
+            }.show()
         }
     }
 
