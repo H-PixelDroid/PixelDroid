@@ -82,12 +82,12 @@
     <string name="edit_profile">ویرایش نمایه</string>
     <string name="search">جستجو</string>
     <string name="posts">مطالب</string>
-    <string name="media_upload_completed">‏{gmd_cloud_done} بارگذاری رسانه کامل شد</string>
+    <string name="media_upload_completed">بارگذاری رسانه به پایان رسید</string>
     <string name="posting_image_accessibility_hint">تصویری که در حال فرستاده شدن است</string>
     <string name="retry">تلاش دوباره</string>
     <string name="default_nfollowing">-
 \nپی‌گیری</string>
-    <string name="media_upload_failed">‏{gmd_cloud_off} بارگذاری رسانه شکست خورد، وضعیت شبکه را بررسی کرده و دوباره تلاش کنید</string>
+    <string name="media_upload_failed">بارگذاری رسانه شکست خورد، وضعیت شبکه را بررسی کرده یا دوباره تلاش کنید</string>
     <string name="crop_result_error">تصویر برش یافته از دسترس خارج شده است</string>
     <string name="busy_dialog_ok_button">خوب، منتظر می‌مانم.</string>
     <string name="busy_dialog_text">منتظر بمانید تا پردازش تصویر پایان یابد!</string>
@@ -191,4 +191,5 @@
     <string name="follow_requested">درخواست پیگیری فرستاده شد</string>
     <string name="empty_feed">اینجا چیزی برای دیدن نیست :(</string>
     <string name="edit_link_failed">ناتوانی در باز کردن صفحه ویرایش</string>
+    <string name="discover_no_infinite_load">بخش کشف به صورت بی‌انتها بار نمی‌شود. برای تازه‌سازی و دریافت تصاویر دیگر، صفحه را به پایین بکشید.</string>
 </resources>
