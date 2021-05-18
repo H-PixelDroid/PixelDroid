@@ -179,8 +179,8 @@
 \nFollower</item>
     </plurals>
     <plurals name="shares">
-        <item quantity="one">%dx geteilt</item>
-        <item quantity="other">%dx geteilt</item>
+        <item quantity="one">Einmal geteilt</item>
+        <item quantity="other">%d mal geteilt</item>
     </plurals>
     <plurals name="likes">
         <item quantity="one">%d Like</item>
