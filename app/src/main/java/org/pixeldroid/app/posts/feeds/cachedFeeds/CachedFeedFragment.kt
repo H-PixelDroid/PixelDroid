@@ -76,6 +76,10 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
 
         return binding.root
     }
+
+    fun onTabReClicked() {
+        binding.list.scrollToPosition(0)
+    }
 }
 
 
