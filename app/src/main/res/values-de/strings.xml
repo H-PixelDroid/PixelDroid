@@ -127,7 +127,7 @@
     <string name="open_drawer_menu">Öffne Menü</string>
     <string name="profile_picture">Profilbild</string>
     <string name="toolbar_title_edit">Bearbeiten</string>
-    <string name="report_error">Meldung konnte nicht gesendet werden</string>
+    <string name="report_error">Konnte nicht gemeldet werden</string>
     <string name="reported">Gemeldet {gmd_check_circle}</string>
     <string name="report_target">Melde @%1$ss Beitrag</string>
     <string name="post_is_album">Dieser Beitrag ist ein Album</string>
@@ -146,7 +146,7 @@
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d Kommentar</item>
-        <item quantity="other">%d Kommentar</item>
+        <item quantity="other">%d Kommentare</item>
     </plurals>
     <string name="no_media_description">Ergänze hier eine Medienbeschreibung hier…</string>
     <string name="save_image_description">Bildbeschreibung speichern</string>
@@ -173,9 +173,9 @@
 \nFolgt</item>
     </plurals>
     <plurals name="nb_followers">
-        <item quantity="one">%1$s
+        <item quantity="one">%d
 \nFollower</item>
-        <item quantity="other">%1$s
+        <item quantity="other">%d
 \nFollower</item>
     </plurals>
     <plurals name="shares">
@@ -190,4 +190,7 @@
     <string name="size_exceeds_instance_limit">Die Größe von Bild %1$d im Album übersteigt mit %2$d kB die von deiner Instanz festgelegte Obergrenze von zulässige Obergrenze von %3$d kB je Bild.</string>
     <string name="total_exceeds_album_limit">Du hast mehr Bilder ausgewählt, als auf deinem Server zulässig sind (%1$s). Bilder jenseits des Limits wurden nicht berücksichtigt.</string>
     <string name="api_not_enabled_dialog">Die API ist auf deiner Instanz nicht aktiv. Bitte kontaktiere den Betreiber deiner Instanz, damit sie aktiviert werden kann.</string>
+    <string name="follow_requested">Followeranfrage</string>
+    <string name="delete_post_failed_io_except">Beitrag konnte nicht gelöscht werden. Internetverbindung unterbrochen\?</string>
+    <string name="edit_link_failed">Bearbeitung nicht verfügbar.</string>
 </resources>
