@@ -92,4 +92,104 @@
     <string name="busy_dialog_ok_button">Bien, espera.</string>
     <string name="busy_dialog_text">Procesando imagen, ¡Espera a que termine!</string>
     <string name="nothing_to_see_here">¡Nada que ver aquí!</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nSiguiendo</item>
+        <item quantity="other">%d
+\nSiguiendo</item>
+    </plurals>
+    <plurals name="description_max_characters">
+        <item quantity="one">La descripción debe contener por lo menos %d caracter.</item>
+        <item quantity="other">La descripción debe contener por lo menos %d caracteres.</item>
+    </plurals>
+    <string name="delete_post_failed_io_except">No se pudo borrar la publicación, quizás sea tu conexión\?</string>
+    <string name="delete_post_failed_error">No se pudo borrar la publicación, error %1$d</string>
+    <string name="mascot_description">Imagen mostrando un panda rojo, la mascota de Pixelfed, usando un móvil</string>
+    <string name="issues_contribute">Reporta problemas o contribuye a la aplicación:</string>
+    <string name="help_translate">Ayuda a traducir PixelDroid a tu lenguaje:</string>
+    <string name="language">Lenguaje</string>
+    <string name="delete_dialog">¿Borrar esta publicación\?</string>
+    <string name="delete">Borrar</string>
+    <string name="panda_pull_to_refresh_to_try_again">Este panda está triste. Desliza hacia abajo para intentarlo de nuevo.</string>
+    <string name="something_went_wrong">Algo fue mal…</string>
+    <string name="discover_no_infinite_load">\'Descubre\' no carga infinitamente. Desliza hacia abajo para cargar más imágenes.</string>
+    <string name="discover">DESCUBRE</string>
+    <string name="open_drawer_menu">Abrir el menú lateral</string>
+    <string name="profile_picture">Imagen de perfil</string>
+    <string name="toolbar_title_edit">Editar</string>
+    <string name="report_error">No se pudo enviar el reporte</string>
+    <string name="reported">Reportado {gmd_check_circle}</string>
+    <string name="report_target">Reportar la publicación de @%1$s</string>
+    <string name="optional_report_comment">Mensaje opcional para moderadores/administradores</string>
+    <string name="share_link">Compartir enlace</string>
+    <string name="report">Reportar</string>
+    <string name="status_more_options">Más opciones</string>
+    <string name="search_empty_error">La búsqueda no puede estar vacía</string>
+    <string name="follows_title">seguidos por %1$s</string>
+    <string name="followers_title">Seguidores de %1$s</string>
+    <string name="post_title">Publicación de %1$s</string>
+    <string name="about">Sobre</string>
+    <string name="license_info">PixelDroid es software libre y código abierto, licenciado bajo la GNU General Public License (versión 3 o posterior)</string>
+    <string name="project_website">Web del proyecto: https://pixeldroid.org</string>
+    <string name="dependencies_licenses">Dependencias y licencias</string>
+    <string name="about_pixeldroid">Sobre PixelDroid</string>
+    <string name="dialog_message_cancel_follow_request">¿Cancelar la petición de seguimiento\?</string>
+    <string name="follow_requested">Seguimiento pedido</string>
+    <string name="unfollow">Dejar de seguir</string>
+    <string name="empty_feed">Nada que ver aquí :(</string>
+    <string name="edit_link_failed">Falló al abrir la página de edición</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nSeguidor</item>
+        <item quantity="other">%d
+\nSeguidores</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\nPublicación</item>
+        <item quantity="other">%d
+\nPublicaciones</item>
+    </plurals>
+    <string name="post_is_album">Esta publicación es un album</string>
+    <string name="submit_comment">Enviar comentario</string>
+    <string name="add_comment">Añadir un comentario</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d comentario</item>
+        <item quantity="other">%d comentarios</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d Compartido</item>
+        <item quantity="other">%d Compartidos</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d Me gusta</item>
+        <item quantity="other">%d Me gustas</item>
+    </plurals>
+    <string name="no_cancel_edit">No, cancelar edición</string>
+    <string name="save_before_returning">¿Guardar tus ediciones\?</string>
+    <string name="crop_button">Botón para recortar o rotar la imagen</string>
+    <string name="image_preview">Previsualización de la imagen siendo editada</string>
+    <string name="filter_thumbnail">Previsualización del filtro</string>
+    <string name="upload_error">Código de error devuelto por el servidor: %1$d</string>
+    <string name="size_exceeds_instance_limit">El tamaño de la imagen número %1$d del álbum, supera el máximo permitido por esta instancia (%2$d kB, siendo el límite: %3$d kB). Podrías no subirla.</string>
+    <string name="total_exceeds_album_limit">Has escogido más imágenes que el máximo que tu servidor permite (%1$s). Las imágenes por encima de ese límite serán ignoradas.</string>
+    <string name="no_media_description">Añadir una descripción del medio aquí…</string>
+    <string name="save_image_description">Guardar descripción de la imagen</string>
+    <string name="switch_to_carousel">Cambiar a carrusel</string>
+    <string name="switch_to_grid">Cambiar a visión cuadrícula</string>
+    <string name="post_image">Una de las imágenes de la publicación</string>
+    <string name="add_photo">Añadir una foto</string>
+    <string name="api_not_enabled_dialog">La API no está activada en esta instancia. Contacta con tu administrador para pedirle que lo active.</string>
+    <string name="whats_an_instance_explanation">Quizás estés confundido/a por el campo de texto pidiendo el dominio de tu \'instancia\'.
+\n
+\nPixelfed es una plataforma descentralizada y forma parte del \'fediverso\', lo que significa que ambas plataformas tienen algo en común que las permite interconectarse, como por ejemplo con Mastodon (ver https://joinmastodon.org).
+\n
+\nEsto quiere decir que debes elegir que servidor o \'instancia\' de Pixelfed utilizar. Si no conoces ninguna de antemano, te recomendamos descubrir una aquí: https://pixelfed.org/join
+\n
+\nPara más información sobre Pixelfed, puedes ir a: https://pixelfed.org</string>
+    <string name="poll_notification">La votación de %1$s ha terminado</string>
+    <string name="instance_not_pixelfed_cancel">Cancelar iniciar sesión</string>
+    <string name="instance_not_pixelfed_continue">Vale, continuar de todas formas</string>
+    <string name="instance_not_pixelfed_warning">Eso no parece ser una instancia de Pixelfed, por lo que la App podría no funcionar adecuadamente.</string>
+    <string name="verify_credentials">No se pudo obtener la información del usuario</string>
 </resources>
