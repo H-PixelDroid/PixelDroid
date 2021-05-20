@@ -48,7 +48,7 @@
     <string name="picture_format_error">Upload-Fehler: falsches Bildformat.</string>
     <string name="upload_post_failed">Hochladen des Beitrags fehlgeschlagen</string>
     <string name="add_account_name">Konto hinzufügen</string>
-    <string name="add_account_description">Einen weiteren Pixelfed-Account hinzufügen</string>
+    <string name="add_account_description">Weiteres Pixelfed-Konto hinzufügen</string>
     <string name="light_theme">Hell</string>
     <string name="dark_theme">Dunkel</string>
     <string name="comment">Kommentieren</string>
@@ -193,4 +193,5 @@
     <string name="follow_requested">Followeranfrage</string>
     <string name="delete_post_failed_io_except">Beitrag konnte nicht gelöscht werden. Internetverbindung unterbrochen\?</string>
     <string name="edit_link_failed">Bearbeitung nicht verfügbar.</string>
+    <string name="discover_no_infinite_load">\"Entdecke\" lädt nicht endlos. Nach unten ziehen, um weitere Bilder zu laden.</string>
 </resources>
