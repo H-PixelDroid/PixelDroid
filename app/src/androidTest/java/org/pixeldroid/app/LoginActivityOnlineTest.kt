@@ -24,6 +24,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import org.pixeldroid.app.testUtility.PACKAGE_ID
 
 @RunWith(AndroidJUnit4::class)
 class LoginActivityOnlineTest {
@@ -39,7 +40,7 @@ class LoginActivityOnlineTest {
     fun setup() {
         context = ApplicationProvider.getApplicationContext()
         context = ApplicationProvider.getApplicationContext()
-        pref = context.getSharedPreferences("org.pixeldroid.app.pref", Context.MODE_PRIVATE)
+        pref = context.getSharedPreferences("${PACKAGE_ID}.pref", Context.MODE_PRIVATE)
         pref.edit().clear().apply()
         db = initDB(context)
         db.clearAllTables()
@@ -76,7 +77,7 @@ class LoginActivityOnlineTest {
             .putString("clientID", "iwndoiuqwnd")
             .putString("clientSecret", "wlifowed")
             .apply()
-        val uri = Uri.parse("oauth2redirect://org.pixeldroid.app?code=sdfdqsf")
+        val uri = Uri.parse("oauth2redirect://${PACKAGE_ID}?code=sdfdqsf")
         val intent = Intent(ACTION_VIEW, uri, context, LoginActivity::class.java)
         ActivityScenario.launch<LoginActivity>(intent)
         onView(withId(R.id.editText)).check(matches(
@@ -86,7 +87,7 @@ class LoginActivityOnlineTest {
 
     @Test
     fun incompleteIntentReturnInfoFailsTest() {
-        val uri = Uri.parse("oauth2redirect://org.pixeldroid.app?code=")
+        val uri = Uri.parse("oauth2redirect://${PACKAGE_ID}?code=")
         val intent = Intent(ACTION_VIEW, uri, context, LoginActivity::class.java)
         ActivityScenario.launch<LoginActivity>(intent)
         onView(withId(R.id.editText)).check(matches(

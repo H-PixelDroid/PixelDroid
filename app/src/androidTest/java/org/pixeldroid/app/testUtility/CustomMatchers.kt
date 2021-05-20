@@ -66,15 +66,15 @@ fun ViewInteraction.isDisplayed(): Boolean {
  * Doesn't work if the root changes (since it operates on the root!)
  * @param viewId The id of the view to wait for.
  */
-fun waitForView(viewId: Int) {
-    Espresso.onView(isRoot()).perform(waitForViewViewAction(viewId))
+fun waitForView(viewId: Int, viewMatcher: Matcher<View> = withId(viewId)) {
+    Espresso.onView(isRoot()).perform(waitForViewViewAction(viewId, viewMatcher))
 }
 
 /**
  * This ViewAction tells espresso to wait till a certain view is found in the view hierarchy.
  * @param viewId The id of the view to wait for.
  */
-private fun waitForViewViewAction(viewId: Int): ViewAction {
+private fun waitForViewViewAction(viewId: Int, viewMatcher: Matcher<View>): ViewAction {
     // The maximum time which espresso will wait for the view to show up (in milliseconds)
     val timeOut = 5000
     return object : ViewAction {
@@ -90,7 +90,6 @@ private fun waitForViewViewAction(viewId: Int): ViewAction {
             uiController.loopMainThreadUntilIdle()
             val startTime = System.currentTimeMillis()
             val endTime = startTime + timeOut
-            val viewMatcher = withId(viewId)
 
             do {
                 // Iterate through all views on the screen and see if the view we are looking for is there already
@@ -103,7 +102,7 @@ private fun waitForViewViewAction(viewId: Int): ViewAction {
                 // Loops the main thread for a specified period of time.
                 // Control may not return immediately, instead it'll return after the provided delay has passed and the queue is in an idle state again.
                 uiController.loopMainThreadForAtLeast(100)
-            } while (System.currentTimeMillis() < endTime) // in case of a timeout we throw an exception -&gt; test fails
+            } while (System.currentTimeMillis() < endTime) // in case of a timeout we throw an exception - test fails
             throw PerformException.Builder()
                     .withCause(TimeoutException())
                     .withActionDescription(this.description)

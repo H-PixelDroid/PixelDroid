@@ -12,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
+import org.hamcrest.Matchers.allOf
 import org.pixeldroid.app.testUtility.*
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.junit.After
@@ -107,8 +108,10 @@ class DrawerMenuTest {
         // Start the screen of your activity.
         onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
+        waitForView(R.id.editButton)
         onView(withId(R.id.editButton)).check(matches(isDisplayed()))
         val followersText = context.resources.getQuantityString(R.plurals.nb_followers, 2, 2)
+        waitForView(R.id.nbFollowingTextView, allOf(withId(R.id.nbFollowersTextView), withText(followersText)))
         onView(withText(followersText)).perform(click())
 
         waitForView(R.id.account_entry_avatar)
@@ -120,8 +123,10 @@ class DrawerMenuTest {
         // Start the screen of your activity.
         onView(withText(R.string.menu_account)).perform(click())
         // Check that profile activity was opened.
+        waitForView(R.id.editButton)
         onView(withId(R.id.editButton)).check(matches(isDisplayed()))
         val followingText = context.resources.getQuantityString(R.plurals.nb_following, 3, 3)
+        waitForView(R.id.nbFollowingTextView, allOf(withId(R.id.nbFollowingTextView), withText(followingText)))
         onView(withText(followingText)).perform(click())
 
         waitForView(R.id.account_entry_avatar)

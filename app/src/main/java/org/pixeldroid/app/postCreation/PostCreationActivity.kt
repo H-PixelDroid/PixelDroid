@@ -39,6 +39,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
 import retrofit2.HttpException
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.OutputStream
 import java.text.SimpleDateFormat
@@ -313,7 +314,16 @@ class PostCreationActivity : BaseActivity() {
 
         for (data: PhotoData in photoData) {
             val imageUri = data.imageUri
-            val imageInputStream = contentResolver.openInputStream(imageUri)!!
+            val imageInputStream = try {
+                contentResolver.openInputStream(imageUri)!!
+            } catch (e: FileNotFoundException){
+                AlertDialog.Builder(this).apply {
+                    setMessage(getString(R.string.file_not_found).format(imageUri))
+
+                    setNegativeButton(android.R.string.ok) { _, _ -> }
+                }.show()
+                return
+            }
 
             val imagePart = ProgressRequestBody(imageInputStream, data.size)
             val requestBody = MultipartBody.Builder()
