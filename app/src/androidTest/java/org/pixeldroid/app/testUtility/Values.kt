@@ -4,6 +4,10 @@ import org.pixeldroid.app.BuildConfig.*
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 
+
+const val PACKAGE_ID = APPLICATION_ID
+
+
 val testiTestoInstance = InstanceDatabaseEntity(
         uri = INSTANCE_URI,
         title = "PixelDroid CI instance",
