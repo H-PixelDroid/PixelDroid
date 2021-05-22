@@ -13,8 +13,8 @@
     <string name="theme_header">زمینه</string>
     <string name="followed_notification">‏%1$s شما را دنبال کرد</string>
     <string name="mention_notification">‏%1$s به شما اشاره کرد</string>
-    <string name="shared_notification">‏%1$s مطلب شما را هم‌رسانی کرد</string>
-    <string name="liked_notification">‏%1$s مطلب شما را پسندید</string>
+    <string name="shared_notification">‏%1$s فرستهٔ شما را هم‌رسانی کرد</string>
+    <string name="liked_notification">‏%1$s فرستهٔ شما را پسندید</string>
     <string name="description">توضیحات…</string>
     <string name="post">بفرست</string>
     <string name="whats_an_instance">نمونه چیست؟</string>
@@ -32,7 +32,7 @@
     <string name="switch_camera_button_alt">تغییر دوربین</string>
     <string name="gallery_button_alt">نگارخانه</string>
     <string name="share_picture">هم‌رسانی تصویر…</string>
-    <string name="NoCommentsToShow">نظری روی این مطلب نیست…</string>
+    <string name="NoCommentsToShow">نظری روی این فرسته نیست…</string>
     <string name="domain_of_your_instance">دامنهٔ نمونهٔ شما</string>
     <string name="connect_to_pixelfed">اتصال به پیکسل‌فد</string>
     <string name="app_name">پیکسل‌دروید</string>
@@ -51,8 +51,8 @@
     <string name="upload_picture_failed">خطا در بارگذاری تصویر!</string>
     <string name="picture_format_error">خطای بارگذاری: تصویر با قالب نادرست.</string>
     <string name="request_format_error">خطای بارگذاری: درخواست با قالب نادرست</string>
-    <string name="upload_post_failed">بارگذاری مطلب ناموفق بود</string>
-    <string name="upload_post_success">مطلب با موفقیت بارگذاری شد</string>
+    <string name="upload_post_failed">بارگذاری فرسته ناموفق بود</string>
+    <string name="upload_post_success">فرسته با موفقیت بارگذاری شد</string>
     <string name="normal_filter">عادی</string>
     <string name="loading_toast">مشکلی حین بارکردن رخ داد</string>
     <string name="feed_failed">نتوانستیم خوراک را دریافت کنیم</string>
@@ -74,7 +74,7 @@
     <string name="unfollow_error">نتوانستیم پی‌گیری را لغو کنیم</string>
     <string name="access_token_invalid">توکن دسترسی نامعتبر است</string>
     <string name="default_nposts">-
-\nمطلب</string>
+\nفرسته‌ها</string>
     <string name="default_nfollowers">-
 \nپی‌گیرنده</string>
     <string name="no_username">فاقد نام کاربری</string>
@@ -102,7 +102,7 @@
     <string name="about_pixeldroid">درباره پیکسل‌دروید</string>
     <string name="follows_title">پی‌گیری‌های %1$s</string>
     <string name="followers_title">پی‌گیرندگان %1$s</string>
-    <string name="post_title">مطلب %1$s</string>
+    <string name="post_title">فرستهٔ %1$s</string>
     <string name="unfollow">لغو پیگیری</string>
     <string name="discover">کشف</string>
     <string name="open_drawer_menu">گشودن فهرست کشویی</string>
@@ -192,4 +192,5 @@
     <string name="empty_feed">اینجا چیزی برای دیدن نیست :(</string>
     <string name="edit_link_failed">ناتوانی در باز کردن صفحه ویرایش</string>
     <string name="discover_no_infinite_load">بخش کشف به صورت بی‌انتها بار نمی‌شود. برای تازه‌سازی و دریافت تصاویر دیگر، صفحه را به پایین بکشید.</string>
+    <string name="file_not_found">پروندهٔ %1$s یافت نشد</string>
 </resources>
