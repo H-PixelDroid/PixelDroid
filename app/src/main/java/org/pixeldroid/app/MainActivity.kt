@@ -11,7 +11,6 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.core.view.NestedScrollingChild
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
@@ -19,9 +18,22 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
+import com.mikepenz.materialdrawer.iconics.iconicsIcon
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.*
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
+import com.mikepenz.materialdrawer.util.DrawerImageLoader
+import com.mikepenz.materialdrawer.widget.AccountHeaderView
+import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.databinding.ActivityMainBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment
+import org.pixeldroid.app.posts.NestedScrollableHost
+import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
 import org.pixeldroid.app.posts.feeds.cachedFeeds.notifications.NotificationsFragment
 import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
 import org.pixeldroid.app.profile.ProfileActivity
@@ -33,19 +45,9 @@ import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.hasInternet
-import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
-import com.mikepenz.materialdrawer.iconics.iconicsIcon
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.*
-import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
-import com.mikepenz.materialdrawer.util.DrawerImageLoader
-import com.mikepenz.materialdrawer.widget.AccountHeaderView
-import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
-import org.pixeldroid.app.posts.NestedScrollableHost
 import retrofit2.HttpException
 import java.io.IOException
+
 
 class MainActivity : BaseActivity() {
 
@@ -297,6 +299,20 @@ class MainActivity : BaseActivity() {
                 return tab_array.size
             }
         }
+        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?){}
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                tab?.position?.let { position ->
+                    val page =
+                        //No clue why this works but it does. F to pay respects
+                        supportFragmentManager.findFragmentByTag("f$position")
+                    (page as? CachedFeedFragment<*>)?.onTabReClicked()
+                }
+            }
+        })
 
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.icon = ContextCompat.getDrawable(applicationContext,

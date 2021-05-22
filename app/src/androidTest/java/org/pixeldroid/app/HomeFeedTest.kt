@@ -5,16 +5,21 @@ import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.posts.StatusViewHolder
 import org.pixeldroid.app.testUtility.*
 import org.hamcrest.CoreMatchers.not
+import org.hamcrest.CoreMatchers.sameInstance
+import org.hamcrest.core.IsInstanceOf
+import org.hamcrest.core.StringContains.containsString
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -74,6 +79,20 @@ class HomeFeedTest {
             }
         }
         onView(first(withId(R.id.postPager))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    @RepeatTest
+    fun tabReClickScrollUp() {
+        //Wait for the feed to load
+        waitForView(R.id.postPager)
+
+        onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(4))
+
+        onView(first(IsInstanceOf.instanceOf(TabLayout.TabView::class.java))).perform(ViewActions.click())
+
+
+        onView(first(withId(R.id.description))).check(matches(withText(containsString("@user2"))));
     }
 /*
     @Test

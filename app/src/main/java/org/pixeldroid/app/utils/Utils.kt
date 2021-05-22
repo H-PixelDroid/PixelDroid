@@ -15,6 +15,8 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.pixeldroid.app.R
 import okhttp3.HttpUrl
 import kotlin.properties.ReadWriteProperty
@@ -75,6 +77,29 @@ fun BaseActivity.openUrl(url: String): Boolean{
             true
         } catch(e: ActivityNotFoundException) {
             false
+        }
+    }
+}
+
+
+fun RecyclerView.limitedLengthSmoothScrollToPosition(targetItem: Int) {
+    layoutManager?.apply {
+        val maxScroll = 3
+        when (this) {
+            is LinearLayoutManager -> {
+                val topItem = findFirstVisibleItemPosition()
+                val distance = topItem - targetItem
+                val anchorItem = when {
+                    distance > maxScroll -> targetItem + maxScroll
+                    distance < -maxScroll -> targetItem - maxScroll
+                    else -> topItem
+                }
+                if (anchorItem != topItem) scrollToPosition(anchorItem)
+                post {
+                    smoothScrollToPosition(targetItem)
+                }
+            }
+            else -> smoothScrollToPosition(targetItem)
         }
     }
 }
