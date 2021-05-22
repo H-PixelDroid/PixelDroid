@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.*
 import androidx.paging.LoadState.*
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -18,6 +19,7 @@ import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
+import org.pixeldroid.app.utils.limitedLengthSmoothScrollToPosition
 
 /**
  * A fragment representing a list of [FeedContentDatabase] items that are cached by the database.
@@ -78,7 +80,7 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
     }
 
     fun onTabReClicked() {
-        binding.list.scrollToPosition(0)
+        binding.list.limitedLengthSmoothScrollToPosition(0)
     }
 }
 
