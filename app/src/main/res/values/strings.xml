@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Name of the app. In most languages you won't want to change this. -->
     <string name="app_name">PixelDroid</string>
+
+    <!-- Button to go to the user's profile -->
     <string name="menu_account">My Profile</string>
+
+    <!-- Button to go to the settings -->
     <string name="menu_settings">Settings</string>
     <string name="invalid_domain">"Invalid domain"</string>
     <string name="registration_failed">"Could not register the application with this server"</string>
@@ -14,16 +19,35 @@
     <string name="instance_not_pixelfed_continue">"OK, continue anyway"</string>
     <string name="instance_not_pixelfed_cancel">"Cancel logging in"</string>
     <string name="title_activity_settings2">Settings</string>
-    <!-- Theme Preferences -->
+
+    <!-- Theme Preferences: title of button -->
     <string name="theme_title">Application Theme</string>
+
+    <!-- Theme Preferences: title of the settings section dedicated to themes -->
     <string name="theme_header">Theme</string>
+
+    <!-- Theme Preferences: default option (follow the system theme) -->
     <string name="default_system">Default (Follows system)</string>
+
+    <!-- Theme Preferences: light theme option -->
     <string name="light_theme">Light</string>
+
+    <!-- Theme Preferences: dark theme option -->
     <string name="dark_theme">Dark</string>
+
+    <!-- Notifications: follow notification -->
     <string name="followed_notification">%1$s followed you</string>
+
+    <!-- Notifications: mention (@) notification -->
     <string name="mention_notification">%1$s mentioned you</string>
+
+    <!-- Notifications: share (boost) notification -->
     <string name="shared_notification">%1$s shared your post</string>
+
+    <!-- Notifications: like (favourite) notification -->
     <string name="liked_notification">%1$s liked your post</string>
+
+    <!-- Notifications: end of poll notification -->
     <string name="poll_notification">"%1$s's poll has ended"</string>
 
     <!-- Login page -->
@@ -201,4 +225,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
     <string name="delete_post_failed_error">Could not delete the post, error %1$d</string>
     <string name="delete_post_failed_io_except">Could not delete the post, check your connection?</string>
+
+    <!-- Error message when a selected file can not be found -->
+    <string name="file_not_found">File %1$s was not found</string>
 </resources>

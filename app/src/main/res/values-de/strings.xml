@@ -39,7 +39,7 @@
     <string name="switch_camera_button_alt">Kamera wechseln</string>
     <string name="registration_failed">Konnte die App nicht mit diesem Server verbinden</string>
     <string name="instance_error">Konnte die Informationen der Instanz nicht abrufen</string>
-    <string name="upload_picture_failed">Fehler beim Hochladen der Bilder!</string>
+    <string name="upload_picture_failed">Fehler beim Hochladen!</string>
     <string name="default_system">Standard (Systemeinstellung)</string>
     <string name="permission_denied">Berechtigung verweigert</string>
     <string name="save_image_failed">Bild kann nicht gespeichert werden</string>
@@ -48,7 +48,7 @@
     <string name="picture_format_error">Upload-Fehler: falsches Bildformat.</string>
     <string name="upload_post_failed">Hochladen des Beitrags fehlgeschlagen</string>
     <string name="add_account_name">Konto hinzufügen</string>
-    <string name="add_account_description">Ein weiteres Pixelfed-Konto hinzufügen</string>
+    <string name="add_account_description">Einen weiteren Pixelfed-Account hinzufügen</string>
     <string name="light_theme">Hell</string>
     <string name="dark_theme">Dunkel</string>
     <string name="comment">Kommentieren</string>
@@ -79,10 +79,10 @@
     <string name="accounts">KONTEN</string>
     <string name="posts">BEITRÄGE</string>
     <string name="posting_image_accessibility_hint">Hochzuladendes Bild</string>
-    <string name="media_upload_failed">{gmd_cloud_off} Hochladen der Medien fehlgeschlagen, versuche es nochmal oder überprüfe deine Netzwerkverbindung</string>
-    <string name="media_upload_completed">{gmd_cloud_done} Hochladen der Medien abgeschlossen</string>
+    <string name="media_upload_failed">Hochladen fehlgeschlagen, versuche es noch einmal oder überprüfe deine Verbindung</string>
+    <string name="media_upload_completed">Hochladen abgeschlossen</string>
     <string name="request_format_error">Fehler beim Hochladen: Falsches Request Format</string>
-    <string name="feed_failed">Konnte den Feed nicht laden</string>
+    <string name="feed_failed">Feed konnte nicht geladen werden</string>
     <string name="posted_on">Erstellt am %1$s</string>
     <string name="write_permission_download_pic">Für das Herunterladen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
     <string name="write_permission_share_pic">Für die Teilen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
@@ -127,7 +127,7 @@
     <string name="open_drawer_menu">Öffne Menü</string>
     <string name="profile_picture">Profilbild</string>
     <string name="toolbar_title_edit">Bearbeiten</string>
-    <string name="report_error">Meldung konnte nicht gesendet werden</string>
+    <string name="report_error">Konnte nicht gemeldet werden</string>
     <string name="reported">Gemeldet {gmd_check_circle}</string>
     <string name="report_target">Melde @%1$ss Beitrag</string>
     <string name="post_is_album">Dieser Beitrag ist ein Album</string>
@@ -139,12 +139,14 @@
     <string name="post_image">Eines der Bilder im Beitrag</string>
     <string name="verify_credentials">Benutzerdaten konnten nicht geladen werden</string>
     <plurals name="nb_posts">
-        <item quantity="one">%d Beitrag</item>
-        <item quantity="other">%d Beiträge</item>
+        <item quantity="one">%d
+\nBeitrag</item>
+        <item quantity="other">%d
+\nBeiträge</item>
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d Kommentar</item>
-        <item quantity="other">%d Kommentar</item>
+        <item quantity="other">%d Kommentare</item>
     </plurals>
     <string name="no_media_description">Ergänze hier eine Medienbeschreibung hier…</string>
     <string name="save_image_description">Bildbeschreibung speichern</string>
@@ -161,4 +163,34 @@
 \nWenn du keine kennst kannst u hier nachsehen: https://pixelfed.org/join
 \n
 \nMehr Informationen zu Pixelfed findest du hier: https://pixelfed.org</string>
+    <string name="delete_post_failed_error">Löschen fehlgeschlagen, Fehlermeldung %1$d</string>
+    <string name="dialog_message_cancel_follow_request">Followeranfrage zurückziehen\?</string>
+    <string name="empty_feed">Hier gibt es nichts zu sehen :(</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nFolgt</item>
+        <item quantity="other">%d
+\nFolgt</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nFollower</item>
+        <item quantity="other">%d
+\nFollower</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">Einmal geteilt</item>
+        <item quantity="other">%d mal geteilt</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d Like</item>
+        <item quantity="other">%d Likes</item>
+    </plurals>
+    <string name="upload_error">Serverfehler %1$d.</string>
+    <string name="size_exceeds_instance_limit">Die Größe von Bild %1$d im Album übersteigt mit %2$d kB die von deiner Instanz festgelegte Obergrenze von zulässige Obergrenze von %3$d kB je Bild.</string>
+    <string name="total_exceeds_album_limit">Du hast mehr Bilder ausgewählt, als auf deinem Server zulässig sind (%1$s). Bilder jenseits des Limits wurden nicht berücksichtigt.</string>
+    <string name="api_not_enabled_dialog">Die API ist auf deiner Instanz nicht aktiv. Bitte kontaktiere den Betreiber deiner Instanz, damit sie aktiviert werden kann.</string>
+    <string name="follow_requested">Followeranfrage</string>
+    <string name="delete_post_failed_io_except">Beitrag konnte nicht gelöscht werden. Internetverbindung unterbrochen\?</string>
+    <string name="edit_link_failed">Bearbeitung nicht verfügbar.</string>
 </resources>
