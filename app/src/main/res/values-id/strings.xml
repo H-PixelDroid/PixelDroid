@@ -1,2 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_settings">Pengaturan</string>
+    <string name="invalid_domain">Domain tidak valid</string>
+    <string name="registration_failed">Tidak dapat mendaftarkan aplikasi ini dengan server ini</string>
+    <string name="token_error">Gagal mendapatkan token</string>
+    <string name="instance_error">Tidak dapat mendapatkan informasi instansi</string>
+    <string name="title_activity_settings2">Pengaturan</string>
+    <string name="theme_title">Tema Aplikasi</string>
+    <string name="theme_header">Tema</string>
+    <string name="instance_not_pixelfed_cancel">Batal masuk</string>
+    <string name="light_theme">Terang</string>
+    <string name="dark_theme">Gelap</string>
+    <string name="followed_notification">%1$s mengikuti Anda</string>
+    <string name="shared_notification">%1$s membagikan postingan Anda</string>
+    <string name="liked_notification">%1$s menyukai postingan Anda</string>
+    <string name="whats_an_instance">Apa itu instansi\?</string>
+    <string name="logout">Keluar</string>
+    <string name="add_account_description">Tambahkan Akun Pixelfed lain</string>
+    <string name="permission_denied">Izin ditolak</string>
+    <string name="save_image_success">Gambar berhasil disimpan</string>
+    <string name="picture_format_error">Kesalahan pengunggahan: format gambar salah.</string>
+    <string name="request_format_error">Kesalahan pengunggahan: format permintaan buruk</string>
+    <string name="upload_post_success">Postingan berhasil diunggah</string>
+    <string name="post">postingan</string>
+    <string name="save_image_description">Simpan keterangan gambar</string>
+    <string name="upload_error">Kode kesalahan yang dikembalikan oleh server: %1$d</string>
+    <string name="lbl_brightness">KECERAHAN</string>
+    <string name="lbl_contrast">KONTRAS</string>
+    <string name="lbl_saturation">KEJENUHAN</string>
+    <string name="tab_filters">FILTER-FILTER</string>
+    <string name="edit">Sunting</string>
+    <string name="normal_filter">Normal</string>
+    <string name="busy_dialog_text">Masih memproses gambar, tunggu sampai itu selesai dahulu!</string>
+    <string name="busy_dialog_ok_button">Oke, tunggu itu.</string>
+    <string name="crop_result_error">Tidak dapat menerima gambar setelah pemotongan</string>
+    <string name="save_before_returning">Simpan suntingan-suntingan Anda\?</string>
+    <string name="no_cancel_edit">Tidak, batalkan suntingan</string>
+    <string name="capture_button_alt">Tangkap</string>
+    <string name="switch_camera_button_alt">Ubah kamera</string>
+    <string name="gallery_button_alt">Galeri</string>
+    <string name="loading_toast">Suatu kesalahan terjadi saat memuat</string>
+    <string name="share_picture">Bagikan gambar…</string>
+    <string name="save_to_gallery">Simpan ke Galeri…</string>
+    <string name="image_download_downloading">Mengunduh…</string>
+    <string name="image_download_success">Gambar berhasil diunduh</string>
+    <string name="posted_on">Diposting pada %1$s</string>
+    <string name="NoCommentsToShow">Tidak ada komentar di postingan ini…</string>
+    <string name="empty_comment">Komentar tidak boleh kosong!</string>
+    <string name="share_image">Bagikan Gambar</string>
+    <string name="comment_posted">Komentar: %1$s diposting!</string>
+    <string name="comment">Komentar</string>
+    <plurals name="number_comments">
+        <item quantity="other">%d komentar</item>
+    </plurals>
+    <string name="add_comment">Tambahkan sebuah komentar</string>
+    <string name="submit_comment">Kirim komentar</string>
+    <string name="post_is_album">Postingan ini adalah sebuah album</string>
+    <plurals name="nb_posts">
+        <item quantity="other">%d
+\nPostingan</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="other">%d
+\nPengikut</item>
+    </plurals>
+    <plurals name="nb_following">
+        <item quantity="other">%d
+\nDiikuti</item>
+    </plurals>
+    <string name="empty_feed">Tidak ada yang bisa dilihat di sini :(</string>
+    <string name="follow_button_failed">Tidak dapat menampilkan tombol ikuti</string>
+    <string name="edit_link_failed">Gagal membuka halaman penyuntingan</string>
+    <plurals name="likes">
+        <item quantity="other">%d Suka</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="other">%d Pembagian</item>
+    </plurals>
+    <string name="action_not_allowed">Tindakan ini tidak diperbolehkan</string>
+    <string name="unfollow_error">Tidak dapat berhenti mengikuti</string>
+    <string name="access_token_invalid">Token akses ini tidak valid</string>
+    <string name="default_nposts">-
+\nPostingan</string>
+    <string name="default_nfollowing">-
+\nDiikuti</string>
+    <string name="no_username">Tidak Ada Nama Pengguna</string>
+    <string name="follow">Ikuti</string>
+    <string name="unfollow">Berhenti Mengikuti</string>
+    <string name="edit_profile">Sunting profil</string>
+    <string name="search">Cari</string>
+    <string name="posts">POSTINGAN-POSTINGAN</string>
+    <string name="hashtags">TAGAR-TAGAR</string>
+    <string name="media_upload_completed">Pengunggahan media selesai</string>
+    <string name="posting_image_accessibility_hint">Gambar yang sedang diposting</string>
+    <string name="retry">Coba lagi</string>
+    <string name="nothing_to_see_here">Tidak ada yang dapat dilihat di sini!</string>
+    <string name="about_pixeldroid">Tentang PixelDroid</string>
+    <string name="about">Tentang</string>
+    <string name="post_title">Postingan %1$s</string>
+    <string name="followers_title">Pengikut-pengikut %1$s</string>
+    <string name="follows_title">%1$s mengikuti</string>
+    <string name="search_empty_error">Kata pencarian tidak dapat kosong</string>
+    <string name="status_more_options">Lebih banyak pilihan</string>
+    <string name="report">Laporkan</string>
+    <string name="share_link">Bagikan Tautan</string>
+    <string name="optional_report_comment">Pesan opsional untuk para mod/admin</string>
+    <string name="report_target">Laporkan postingan @%1$s</string>
+    <string name="report_error">Tidak dapat mengirim laporan</string>
+    <string name="toolbar_title_edit">Sunting</string>
+    <string name="profile_picture">Gambar profil</string>
+    <string name="discover">TEMUKAN</string>
+    <string name="discover_no_infinite_load">Temukan tidak memuat selamanya. Tarik untuk memuat ulang gambar lain.</string>
+    <string name="something_went_wrong">Suatu kesalahan terjadi…</string>
+    <string name="delete">Hapus</string>
+    <string name="delete_dialog">Hapus postingan ini\?</string>
+    <string name="language">Bahasa</string>
+    <string name="help_translate">Bantu terjemahkan PixelDroid ke bahasa Anda:</string>
+    <string name="issues_contribute">Laporkan masalah atau berkontribusi ke aplikasi ini:</string>
+    <string name="mascot_description">Gambar yang menunjukkan seekor panda merah, maskot dari Pixelfed, menggunakan sebuah ponsel</string>
+    <string name="delete_post_failed_error">Tidak dapat menghapus postingan, kesalahan %1$d</string>
+    <string name="delete_post_failed_io_except">Tidak dapat menghapus postingan, periksa koneksi Anda\?</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="menu_account">Profil Saya</string>
+    <string name="browser_launch_failed">Tidak dapat meluncurkan sebuah browser, apakah Anda memilikinya\?</string>
+    <string name="auth_failed">Tidak dapat mengautentikasi</string>
+    <string name="verify_credentials">Tidak dapat mendapatkan informasi pengguna</string>
+    <string name="instance_not_pixelfed_continue">Oke, tetap lanjutkan</string>
+    <string name="default_system">Default (Mengikuti sistem)</string>
+    <string name="instance_not_pixelfed_warning">Ini kelihatannya bukan sebuah instansi Pixelfed, sehingga aplikasi ini dapat rusak dengan cara yang tak terduga.</string>
+    <string name="domain_of_your_instance">Domain dari instansi Anda</string>
+    <string name="api_not_enabled_dialog">API tidak diaktivasi di instansi ini. Hubungi administrator Anda untuk meminta mereka mengaktivasikan API.</string>
+    <string name="add_account_name">Tambahkan Akun</string>
+    <string name="save_image_failed">Tidak dapat menyimpan gambar</string>
+    <plurals name="description_max_characters">
+        <item quantity="other">Keterangan harus mengandung paling banyak %d karakter.</item>
+    </plurals>
+    <string name="upload_post_failed">Pengunggahan postingan gagal</string>
+    <string name="description">Keterangan…</string>
+    <string name="add_photo">Tambahkan sebuah foto</string>
+    <string name="switch_to_carousel">Beralih ke karosel</string>
+    <string name="no_media_description">Tambahkan sebuah keterangan media di sini…</string>
+    <string name="size_exceeds_instance_limit">Ukuran gambar nomor %1$d di album melewati ukuran maksimum yang diperbolehkan oleh instansi ini (%2$d kB tetapi batasnya %3$d kB). Anda mungkin tidak dapat mengunggahnya.</string>
+    <string name="crop_button">Tombol untuk memotong atau memutar gambar</string>
+    <string name="image_download_failed">Pengunduhan gagal, mohon coba lagi</string>
+    <string name="no_description">Tidak ada keterangan</string>
+    <string name="write_permission_download_pic">Anda harus memberikan izin menulis untuk mengunduh gambar!</string>
+    <string name="follow_error">Tidak dapat mengikuti</string>
+    <string name="default_nfollowers">-
+\nPengikut</string>
+    <string name="accounts">AKUN-AKUN</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">Media CW / NSFW / Yang Disembunyikan
+\n(klik untuk menampilkan)</string>
+    <string name="media_upload_failed">Pengunggahan media gagal, coba lagi atau periksa kondisi jaringan</string>
+    <string name="dependencies_licenses">Dependensi dan lisensi</string>
+    <string name="project_website">Situs web proyek: https://pixeldroid.org</string>
+    <string name="license_info">PixelDroid adalah perangkat lunak yang gratis dan sumber terbuka, dilisensi dibawah GNU General Public License (versi 3 atau yang lebih baru)</string>
+    <string name="reported">Dilaporkan {gmd_check_circle}</string>
+    <string name="panda_pull_to_refresh_to_try_again">Panda ini tidak senang. Tarik untuk memuat ulang untuk mencoba lagi.</string>
+</resources>

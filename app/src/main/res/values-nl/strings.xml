@@ -60,8 +60,8 @@
     <string name="save_image_success">Beeld succesvol opgeslagen</string>
     <string name="upload_post_success">Post met succes geüpload</string>
     <string name="retry">Opnieuw proberen</string>
-    <string name="media_upload_failed">{gmd_cloud_off} Het uploaden van de mediabestanden is mislukt, probeer het opnieuw of controleer de netwerkverbinding</string>
-    <string name="media_upload_completed">{gmd_cloud_done} Media-upload voltooid</string>
+    <string name="media_upload_failed">Het uploaden van de mediabestanden is mislukt, probeer het opnieuw of controleer de netwerkverbinding</string>
+    <string name="media_upload_completed">Media-upload voltooid</string>
     <string name="default_nposts">-
 \nBerichten</string>
     <string name="upload_post_error">Post-upload mislukt</string>
@@ -126,4 +126,35 @@
     <string name="instance_not_pixelfed_warning">Dit is geen Pixelfed instantie, dus de app zou zich op onverwachte wijze kunnen gedragen.</string>
     <string name="report">Melden</string>
     <string name="poll_notification">De peiling van %1$s is beëindigd</string>
+    <string name="save_before_returning">Wijzigingen opslaan\?</string>
+    <string name="no_cancel_edit">Nee, bewerken annuleren</string>
+    <string name="delete_post_failed_error">Kon post niet verwijderen, error %1$d</string>
+    <string name="delete_post_failed_io_except">Kon post niet verwijderen, controleer je verbinding\?</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d commentaar</item>
+        <item quantity="other">%d commentaren</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\nPost</item>
+        <item quantity="other">%d
+\nPosts</item>
+    </plurals>
+    <string name="total_exceeds_album_limit">Je hebt meer afbeeldingen gekozen dan het maximum van jouw server (%1$s). Afbeeldingen die over dit maximum gingen zijn genegeerd.</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nVolgend</item>
+        <item quantity="other">%d
+\nVolgend</item>
+    </plurals>
+    <plurals name="description_max_characters">
+        <item quantity="one">De beschrijving mag maximaal %d tekens bevatten.</item>
+        <item quantity="other">De beschrijving mag maximaal %d tekens bevatten.</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nVolger</item>
+        <item quantity="other">%d
+\nVolgers</item>
+    </plurals>
 </resources>
