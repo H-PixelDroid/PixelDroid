@@ -182,4 +182,5 @@
     <plurals name="description_max_characters">
         <item quantity="other">描述必须最多包含 %d 个字符。</item>
     </plurals>
+    <string name="file_not_found">文件 %1$s 未找到</string>
 </resources>
