@@ -6,7 +6,6 @@
     <string name="invalid_domain">Dominio no válido</string>
     <string name="menu_settings">Ajustes</string>
     <string name="menu_account">Mi perfil</string>
-    <string name="app_name">PixelDroid</string>
     <string name="token_error">Error al obtener el token</string>
     <string name="title_activity_settings2">Ajustes</string>
     <string name="shared_notification">%1$s compartió tu publicación</string>

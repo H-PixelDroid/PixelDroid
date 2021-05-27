@@ -18,7 +18,6 @@
     <string name="mention_notification">%1$s heeft je genoemd</string>
     <string name="followed_notification">%1$s volgt jou</string>
     <string name="auth_failed">Kon niet authenticeren</string>
-    <string name="app_name">PixelDroid</string>
     <string name="save_to_gallery">Opslaan in gallerij…</string>
     <string name="image_download_failed">Download is mislukt, probeer het alstublieft opnieuw</string>
     <string name="image_download_downloading">Word gedownload…</string>

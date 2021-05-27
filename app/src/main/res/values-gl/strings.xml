@@ -36,7 +36,6 @@
     <string name="login_connection_required_once">Debes ter conexión a internet para poder engadir a conta e usar PixelDroid :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Agochado
 \n(preme para amosar)</string>
-    <string name="app_name">PixelDroid</string>
     <string name="registration_failed">Non puidemos rexistrar a aplicación neste servidor</string>
     <string name="add_account_description">Engadir outra conta Pixelfed</string>
     <string name="add_account_name">Engadir Conta</string>

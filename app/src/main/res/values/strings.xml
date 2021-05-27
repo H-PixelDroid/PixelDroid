@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Name of the app. In most languages you won't want to change this. -->
-    <string name="app_name">PixelDroid</string>
 
     <!-- Button to go to the user's profile -->
     <string name="menu_account">My Profile</string>

@@ -22,6 +22,7 @@ import org.pixeldroid.app.utils.ImageConverter
 import org.pixeldroid.app.utils.bindingLifecycleAware
 import retrofit2.HttpException
 import java.io.IOException
+import org.pixeldroid.app.utils.displayDimensionsInPx
 
 /**
  * This fragment lets you search and use Pixelfed's Discover feature
@@ -50,7 +51,7 @@ class SearchDiscoverFragment : BaseFragment() {
         // Set posts RecyclerView as a grid with 3 columns
         recycler = binding.discoverList
         recycler.layoutManager = GridLayoutManager(requireContext(), 3)
-        adapter = DiscoverRecyclerViewAdapter()
+        adapter = DiscoverRecyclerViewAdapter(requireContext().displayDimensionsInPx())
         recycler.adapter = adapter
 
         return binding.root
@@ -99,7 +100,7 @@ class SearchDiscoverFragment : BaseFragment() {
     /**
      * [RecyclerView.Adapter] that can display a list of [Status]s' thumbnails for the discover view
      */
-    class DiscoverRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolder>() {
+    class DiscoverRecyclerViewAdapter(private val displayDimensionsInPx: Pair<Int, Int>) : RecyclerView.Adapter<ProfilePostViewHolder>() {
         private val posts: ArrayList<Status> = ArrayList()
 
         fun addPosts(newPosts : List<Status>) {
@@ -121,7 +122,13 @@ class SearchDiscoverFragment : BaseFragment() {
             } else {
                 holder.albumIcon.visibility = View.GONE
             }
-            ImageConverter.setSquareImageFromURL(holder.postView, post.media_attachments?.firstOrNull()?.preview_url, holder.postPreview, post.media_attachments?.firstOrNull()?.blurhash)
+            ImageConverter.setSquareImageFromURL(
+                holder.postView,
+                post.getPostPreviewURL(),
+                holder.postPreview,
+                post.media_attachments?.firstOrNull()?.blurhash,
+                displayDimensionsInPx.first
+            )
             holder.postPreview.setOnClickListener {
                 val intent = Intent(holder.postView.context, PostActivity::class.java)
                 intent.putExtra(Status.POST_TAG, post)

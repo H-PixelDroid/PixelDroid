@@ -24,7 +24,6 @@
     <string name="NoCommentsToShow">Нет комментариев…</string>
     <string name="domain_of_your_instance">Домен вашего инстанса</string>
     <string name="connect_to_pixelfed">Подключение к Pixelfed</string>
-    <string name="app_name">PixelDroid</string>
     <string name="menu_account">Мой Профиль</string>
     <string name="menu_settings">Настройки</string>
     <string name="invalid_domain">Несуществующий домен</string>

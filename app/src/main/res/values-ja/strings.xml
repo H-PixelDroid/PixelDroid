@@ -30,7 +30,6 @@
     <string name="login_connection_required_once">PixelDroidを利用するにははじめにインターネットにアクセスする必要があります</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media
 \n (クリックで表示)</string>
-    <string name="app_name">PixelDroid</string>
     <string name="registration_failed">このサーバーにアプリケーションを登録することができませんでした</string>
     <string name="browser_launch_failed">ブラウザが起動できませんでした。インストールされているか確認してください。</string>
     <string name="mention_notification">%1$s さんがあなたにメンションしました</string>

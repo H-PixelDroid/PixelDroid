@@ -129,7 +129,10 @@ class LoginActivity : BaseActivity() {
                 val credentialsDeferred: Deferred<Application?> = async {
                     try {
                         pixelfedAPI.registerApplication(
-                                appName, "$oauthScheme://$PACKAGE_ID", SCOPE
+                                appName,
+                            "$oauthScheme://$PACKAGE_ID",
+                            SCOPE,
+                            "https://pixeldroid.org"
                         )
                     } catch (exception: IOException) {
                         return@async null

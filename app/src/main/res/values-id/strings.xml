@@ -120,7 +120,6 @@
     <string name="mascot_description">Gambar yang menunjukkan seekor panda merah, maskot dari Pixelfed, menggunakan sebuah ponsel</string>
     <string name="delete_post_failed_error">Tidak dapat menghapus postingan, kesalahan %1$d</string>
     <string name="delete_post_failed_io_except">Tidak dapat menghapus postingan, periksa koneksi Anda\?</string>
-    <string name="app_name">PixelDroid</string>
     <string name="menu_account">Profil Saya</string>
     <string name="browser_launch_failed">Tidak dapat meluncurkan sebuah browser, apakah Anda memilikinya\?</string>
     <string name="auth_failed">Tidak dapat mengautentikasi</string>

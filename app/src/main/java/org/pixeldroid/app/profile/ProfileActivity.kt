@@ -33,7 +33,6 @@ import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.ImageConverter
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
-import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.openUrl
@@ -41,6 +40,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import org.pixeldroid.app.utils.displayDimensionsInPx
+
 
 class ProfileActivity : BaseActivity() {
 
@@ -79,7 +80,7 @@ class ProfileActivity : BaseActivity() {
             )
         ).get(FeedViewModel::class.java) as FeedViewModel<Status>
 
-        profileAdapter = ProfilePostsAdapter()
+        profileAdapter = ProfilePostsAdapter(displayDimensionsInPx())
         initAdapter(binding.profileProgressBar, binding.profileRefreshLayout,
             binding.profilePostsRecyclerView, binding.motionLayout, binding.profileErrorLayout,
             profileAdapter)
@@ -348,7 +349,7 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
     private val postPreview: ImageView = binding.postPreview
     private val albumIcon: ImageView = binding.albumIcon
 
-    fun bind(post: Status) {
+    fun bind(post: Status, displayDimensionsInPx: Pair<Int, Int>) {
 
         if(post.sensitive!!) {
             ImageConverter.setSquareImageFromDrawable(
@@ -357,7 +358,10 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
                     postPreview
             )
         } else {
-            ImageConverter.setSquareImageFromURL(itemView, post.getPostPreviewURL(), postPreview)
+            ImageConverter.setSquareImageFromURL(
+                itemView, post.getPostPreviewURL(), postPreview,
+                post.media_attachments?.firstOrNull()?.blurhash, displayDimensionsInPx.first
+            )
         }
 
         if(post.media_attachments?.size ?: 0 > 1) {
@@ -384,7 +388,7 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
 }
 
 
-class ProfilePostsAdapter : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
+class ProfilePostsAdapter(private val displayDimensionsInPx: Pair<Int, Int>) : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
         UIMODEL_COMPARATOR
 ) {
 
@@ -396,7 +400,7 @@ class ProfilePostsAdapter : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
         val post = getItem(position)
 
         post?.let {
-            (holder as ProfilePostsViewHolder).bind(it)
+            (holder as ProfilePostsViewHolder).bind(it, displayDimensionsInPx)
         }
     }
 

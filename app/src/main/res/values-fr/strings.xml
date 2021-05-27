@@ -20,7 +20,6 @@
     <string name="image_download_failed">Le téléchargement a échoué, veuillez réessayer</string>
     <string name="browser_launch_failed">Impossible de lancer un navigateur web, en avez-vous un \?</string>
     <string name="mention_notification">%1$s vous a mentionné</string>
-    <string name="app_name">PixelDroid</string>
     <string name="token_error">Erreur lors de l\'obtention du token</string>
     <string name="connect_to_pixelfed">Se connecter à Pixelfed</string>
     <string name="theme_title">Thème de l’application</string>

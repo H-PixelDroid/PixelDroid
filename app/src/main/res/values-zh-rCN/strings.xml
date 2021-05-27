@@ -11,7 +11,6 @@
     <string name="theme_header">主题</string>
     <string name="post">发送</string>
     <string name="logout">注销</string>
-    <string name="app_name">PixelDroid</string>
     <string name="title_activity_settings2">配置</string>
     <string name="theme_title">应用主题</string>
     <string name="followed_notification">%1$s 关注了你</string>

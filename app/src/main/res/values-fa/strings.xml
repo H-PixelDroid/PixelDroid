@@ -35,7 +35,6 @@
     <string name="NoCommentsToShow">نظری روی این مطلب نیست…</string>
     <string name="domain_of_your_instance">دامنهٔ نمونهٔ شما</string>
     <string name="connect_to_pixelfed">اتصال به پیکسل‌فد</string>
-    <string name="app_name">پیکسل‌دروید</string>
     <string name="menu_account">نمایهٔ من</string>
     <string name="registration_failed">نتوانستیم برنامه را روی این کارساز ثبت کنیم</string>
     <string name="add_account_description">افزودن یک حساب دیگر پیکسل‌فد</string>

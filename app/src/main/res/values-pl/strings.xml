@@ -5,7 +5,6 @@
     <string name="browser_launch_failed">Nie udało się uruchomić przeglądarki, czy jest zainstalowana\?</string>
     <string name="auth_failed">Niewłaściwe dane logowania</string>
     <string name="token_error">Nie udało się pobrać tokena</string>
-    <string name="app_name">PixelDroid</string>
     <string name="instance_not_pixelfed_continue">Mimo to kontynuuj</string>
     <string name="instance_not_pixelfed_cancel">Przerwij logowanie</string>
     <string name="title_activity_settings2">Ustawienia</string>

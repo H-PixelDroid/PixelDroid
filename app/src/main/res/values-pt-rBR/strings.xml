@@ -40,7 +40,6 @@
     <string name="auth_failed">Falha na autenticação</string>
     <string name="menu_settings">Configurações</string>
     <string name="menu_account">Meu Perfil</string>
-    <string name="app_name">PixelDroid</string>
     <string name="no_cancel_edit">Não, cancelar edição</string>
     <string name="help_translate">Ajude a traduzir o PixelDroid para a sua língua:</string>
     <string name="delete">Apagar</string>

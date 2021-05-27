@@ -3,7 +3,6 @@
     <string name="title_activity_settings2">Impostazioni</string>
     <string name="menu_account">Profilo personale</string>
     <string name="menu_settings">Impostazioni</string>
-    <string name="app_name">PixelDroid</string>
     <string name="browser_launch_failed">Impossibile avviare un browser, ne hai uno\?</string>
     <string name="theme_title">Tema applicazione</string>
     <string name="auth_failed">Impossibile eseguire l\'autenticazione</string>

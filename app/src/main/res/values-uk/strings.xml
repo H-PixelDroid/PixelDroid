@@ -23,6 +23,5 @@
     <string name="logout">Вийти</string>
     <string name="NoCommentsToShow">Немає коментарів до цієї публікації…</string>
     <string name="edit">Редагувати</string>
-    <string name="app_name">PixelDroid</string>
     <string name="menu_settings">Налаштування</string>
 </resources>

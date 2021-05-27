@@ -8,7 +8,6 @@
     <string name="shared_notification">شارَك %1$s منشورك</string>
     <string name="registration_failed">لا يمكن تسجيل التطبيق على هذا الخادم</string>
     <string name="browser_launch_failed">تعذر إطلاق متصفح الويب. هل لديك واحد؟</string>
-    <string name="app_name">PixelDroid</string>
     <string name="menu_account">ملفي التعريفي</string>
     <string name="menu_settings">الإعدادات</string>
     <string name="invalid_domain">اسم النطاق غير صالح</string>

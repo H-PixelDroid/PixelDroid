@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="auth_scheme" translatable="false">oauth2redirect</string>
+    <string name="app_name" translatable="false">PixelDroid</string>
     <declare-styleable name="SparkButton">
         <attr format="dimension|reference" name="iconSize"/>
         <attr format="reference" name="activeImage"/>
