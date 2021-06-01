@@ -158,4 +158,17 @@
     <string name="comment_posted">Comentário: %1$s postado!</string>
     <string name="comment_error">Erro de comentário!</string>
     <string name="write_permission_share_pic">Você precisa de permissão de escrita para compartilhar imagens!</string>
+    <string name="language">Língua</string>
+    <string name="delete_dialog">Apagar este post\?</string>
+    <string name="something_went_wrong">Algo correu mal…</string>
+    <string name="profile_picture">Foto de perfil</string>
+    <string name="followers_title">Seguidores de %1$s</string>
+    <string name="posting_image_accessibility_hint">Imagem a ser postada</string>
+    <string name="hashtags">HASHTAGS</string>
+    <string name="accounts">CONTAS</string>
+    <string name="unfollow">Deixar de seguir</string>
+    <string name="unfollow_error">Não foi possível deixar de seguir</string>
+    <string name="action_not_allowed">Esta ação não é permitida</string>
+    <string name="follow_error">Não foi possível seguir</string>
+    <string name="comment">Comentar</string>
 </resources>
