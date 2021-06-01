@@ -70,12 +70,12 @@
     </plurals>
     <string name="share_image">Partilhar Imagem</string>
     <plurals name="shares">
-        <item quantity="one">%d Partilha</item>
-        <item quantity="other">%d Partilhas</item>
+        <item quantity="one">%d Compartilhamento</item>
+        <item quantity="other">%d Compartilhamentos</item>
     </plurals>
     <plurals name="likes">
-        <item quantity="one">%d Gosto</item>
-        <item quantity="other">%d Gostos</item>
+        <item quantity="one">%d Curtida</item>
+        <item quantity="other">%d Curtidas</item>
     </plurals>
     <string name="no_description">Sem descrição</string>
     <string name="feed_failed">Não foi possível obter feed</string>
@@ -99,4 +99,16 @@
     <string name="verify_credentials">Não foi possível obter informação do utilizador</string>
     <string name="write_permission_download_pic">Precisa de dar permissão para salvar imagens!</string>
     <string name="posted_on">Postado no %1$s</string>
+    <string name="empty_comment">O comentário não pode ser vazio!</string>
+    <string name="whats_an_instance_explanation">Você pode ficar confuso por um campo de texto perguntundo pelo domínio de sua \'instância\'.
+\n
+\nPixelfed é uma plataforma federada, e parte do \'fediverso\', significando que pode falar com outras plataformas que falam a mesma língua, como o Mastodon (veja https://joinmastodon.org).
+\n
+\nTambém significa que você deve escolher qual servidor, ou \'instância\' da Pixelfed usar. Se não conhece nenhuma, dê uma olhada aqui: https://pixelfed.org/join
+\n
+\nPara mais informações sobre a Pixelfed, você pode checar aqui: https://pixelfed.org</string>
+    <string name="poll_notification">A enquete de %1$s finalizou</string>
+    <string name="default_system">Padrão (Conforme sistema)</string>
+    <string name="instance_not_pixelfed_continue">OK, continuar mesmo assim</string>
+    <string name="instance_not_pixelfed_warning">Esta não parece ser uma instância Pixelfed, então o app pode quebrar de formas inesperadas.</string>
 </resources>
