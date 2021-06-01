@@ -171,4 +171,8 @@
     <string name="action_not_allowed">Esta ação não é permitida</string>
     <string name="follow_error">Não foi possível seguir</string>
     <string name="comment">Comentar</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Descrição precisa ter, pelo menos, %d carácter.</item>
+        <item quantity="other">Descrição precisa ter, pelo menos, %d carácteres.</item>
+    </plurals>
 </resources>
