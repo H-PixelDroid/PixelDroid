@@ -192,4 +192,5 @@
     <string name="discover_no_infinite_load">As descobertas não carregam infinitamente. Puxe para atualizar para outras imagens.</string>
     <string name="open_drawer_menu">Abrir o menu lateral</string>
     <string name="follows_title">%1$s está seguindo</string>
+    <string name="media_upload_failed">Envio de mídia falhou, tente novamente ou verifique as condições de conectividade</string>
 </resources>
