@@ -173,9 +173,10 @@
     <string name="comment">Comentar</string>
     <plurals name="description_max_characters">
         <item quantity="one">Descrição precisa ter, pelo menos, %d carácter.</item>
-        <item quantity="other">Descrição precisa ter, pelo menos, %d carácteres.</item>
+        <item quantity="other">Descrição precisa ter, pelo menos, %d caracteres.</item>
     </plurals>
     <string name="follow_status_failed">Não foi possível obter o status de seguimento</string>
     <string name="size_exceeds_instance_limit">O tamanho da imagem número %1$d no álbum excede o tamanho máximo permitido pela instância (%2$d kB mas o limite é %3$d kB). Você não poderá fazer o upload.</string>
     <string name="total_exceeds_album_limit">Você excedeu o limite máximo que seu servidor permite (%1$s) em número de imagens. Imagens além do limite foram ignoradas.</string>
+    <string name="request_format_error">Erro ao publicar: formato solicitado incorreto</string>
 </resources>
