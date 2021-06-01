@@ -179,7 +179,7 @@
     <string name="size_exceeds_instance_limit">O tamanho da imagem número %1$d no álbum excede o tamanho máximo permitido pela instância (%2$d kB, mas o limite é %3$d kB). Você não poderá realizar a publicação.</string>
     <string name="total_exceeds_album_limit">Você excedeu o limite máximo que seu servidor permite (%1$s) em número de imagens. Imagens além do limite foram ignoradas.</string>
     <string name="request_format_error">Erro ao publicar: formato solicitado incorreto</string>
-    <string name="filter_thumbnail">Thumbnail do filtro</string>
+    <string name="filter_thumbnail">Miniatura do filtro</string>
     <string name="crop_result_error">Não é possível retornar imagem após o recorte</string>
     <string name="busy_dialog_ok_button">OK, espere um momento.</string>
 </resources>
