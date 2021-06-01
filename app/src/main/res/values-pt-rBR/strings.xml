@@ -175,4 +175,5 @@
         <item quantity="one">Descrição precisa ter, pelo menos, %d carácter.</item>
         <item quantity="other">Descrição precisa ter, pelo menos, %d carácteres.</item>
     </plurals>
+    <string name="follow_status_failed">Não foi possível obter o status de seguimento</string>
 </resources>
