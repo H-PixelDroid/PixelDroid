@@ -51,7 +51,7 @@
     <string name="status_more_options">Mais opções</string>
     <string name="about">Sobre</string>
     <string name="project_website">Website do projeto: https://pixeldroid.org</string>
-    <string name="about_pixeldroid">Sobre PixelDroid</string>
+    <string name="about_pixeldroid">Sobre o PixelDroid</string>
     <string name="retry">Tentar novamente</string>
     <string name="search">Pesquisar</string>
     <string name="edit_profile">Editar perfil</string>
@@ -116,12 +116,12 @@
     <string name="api_not_enabled_dialog">A API não está ativada nesta instância. Contate o administrador para solicitar a ativação.</string>
     <string name="instance_not_pixelfed_cancel">Cancelar entrada</string>
     <string name="reported">Denunciado {gmd_check_circle}</string>
-    <string name="report_target">Denunciar postagem de @%1$s</string>
+    <string name="report_target">Denunciar publicação de @%1$s</string>
     <string name="report_error">Não foi possível enviar a denúncia</string>
     <string name="optional_report_comment">Mensagem opcional para moderadores/administradores</string>
-    <string name="search_empty_error">O campo de busca não pode estar vazio</string>
-    <string name="post_title">Postagem de %1$s</string>
-    <string name="license_info">PixelDroid é um software livre e de código aberto, licenciado sob o GNU General Public License (versão 3 ou posterior)</string>
+    <string name="search_empty_error">O campo de pesquisa não pode estar vazio</string>
+    <string name="post_title">Publicação de %1$s</string>
+    <string name="license_info">PixelDroid é um software livre e de código aberto, licenciado sob a GNU General Public License (versão 3 ou posterior)</string>
     <string name="dependencies_licenses">Dependências e licenças</string>
     <string name="nothing_to_see_here">Nada para ver aqui!</string>
     <string name="media_upload_completed">Envio de mídia completo</string>
@@ -159,11 +159,11 @@
     <string name="comment_error">Erro no comentário!</string>
     <string name="write_permission_share_pic">Você precisa conceder permissão de gravação para compartilhar imagens!</string>
     <string name="language">Idioma</string>
-    <string name="delete_dialog">Excluir este post\?</string>
+    <string name="delete_dialog">Excluir esta publicação\?</string>
     <string name="something_went_wrong">Algo deu errado…</string>
     <string name="profile_picture">Foto de perfil</string>
     <string name="followers_title">Seguidores de %1$s</string>
-    <string name="posting_image_accessibility_hint">Imagem a ser postada</string>
+    <string name="posting_image_accessibility_hint">Imagem a ser publicada</string>
     <string name="hashtags">TÓPICOS</string>
     <string name="accounts">CONTAS</string>
     <string name="unfollow">Deixar de seguir</string>
@@ -184,13 +184,13 @@
     <string name="busy_dialog_ok_button">OK, aguarde um momento.</string>
     <string name="save_before_returning">Salvar suas edições\?</string>
     <string name="file_not_found">Arquivo %1$s não encontrado</string>
-    <string name="delete_post_failed_io_except">Não foi possível excluir a postagem, verifique sua conexão\?</string>
-    <string name="delete_post_failed_error">Não foi possível excluir a postagem, erro %1$d</string>
+    <string name="delete_post_failed_io_except">Não foi possível excluir a publicação, verifique sua conexão\?</string>
+    <string name="delete_post_failed_error">Não foi possível excluir a publicação. Erro %1$d</string>
     <string name="mascot_description">Imagem mostrando um panda vermelho, mascote do Pixelfed, usando um telefone</string>
     <string name="issues_contribute">Relate problemas ou contribua com o aplicativo:</string>
-    <string name="panda_pull_to_refresh_to_try_again">O panda não está feliz. Puxe para atualizar e tente novamente.</string>
+    <string name="panda_pull_to_refresh_to_try_again">O panda não está feliz. Puxe para atualizar e tentar novamente.</string>
     <string name="discover_no_infinite_load">As descobertas não carregam infinitamente. Puxe para atualizar para outras imagens.</string>
     <string name="open_drawer_menu">Abrir o menu lateral</string>
     <string name="follows_title">%1$s está seguindo</string>
-    <string name="media_upload_failed">Envio de mídia falhou, tente novamente ou verifique as condições de conectividade</string>
+    <string name="media_upload_failed">Envio de mídia falhou. Tente novamente ou verifique as condições de conectividade</string>
 </resources>
