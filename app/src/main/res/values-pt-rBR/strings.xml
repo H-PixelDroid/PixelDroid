@@ -13,7 +13,7 @@
     <string name="add_account_description">Adicionar outra conta Pixelfed</string>
     <string name="add_account_name">Adicionar Conta</string>
     <string name="login_connection_required_once">Você precisa estar conectado para poder adicionar a primeira conta e usar o PixelDroid :(</string>
-    <string name="connect_to_pixelfed">Conectar-se à Pixelfed</string>
+    <string name="connect_to_pixelfed">Conectar-se ao Pixelfed</string>
     <string name="domain_of_your_instance">Domínio da sua instância</string>
     <string name="NoCommentsToShow">Nenhum comentário…</string>
     <string name="share_picture">Compartilhar imagem…</string>
@@ -111,4 +111,6 @@
     <string name="default_system">Padrão (Conforme sistema)</string>
     <string name="instance_not_pixelfed_continue">OK, continuar mesmo assim</string>
     <string name="instance_not_pixelfed_warning">Esta não parece ser uma instância Pixelfed, então o app pode quebrar de formas inesperadas.</string>
+    <string name="api_not_enabled_dialog">A API não está ativada nesta instância. Contate o administrador para solicitar a ativação.</string>
+    <string name="instance_not_pixelfed_cancel">Cancelar entrada</string>
 </resources>
