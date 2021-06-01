@@ -59,8 +59,10 @@
     <string name="default_nfollowers">-
 \nSeguidores</string>
     <plurals name="nb_followers">
-        <item quantity="one">%d Seguidor</item>
-        <item quantity="other">%d Seguidores</item>
+        <item quantity="one">%d
+\nSeguidor</item>
+        <item quantity="other">%d
+\nSeguidores</item>
     </plurals>
     <string name="submit_comment">Submeter comentário</string>
     <string name="add_comment">Adicionar comentário</string>
@@ -68,7 +70,7 @@
         <item quantity="one">%d comentário</item>
         <item quantity="other">%d comentários</item>
     </plurals>
-    <string name="share_image">Partilhar Imagem</string>
+    <string name="share_image">Compartilhar Imagem</string>
     <plurals name="shares">
         <item quantity="one">%d Compartilhamento</item>
         <item quantity="other">%d Compartilhamentos</item>
@@ -97,7 +99,7 @@
     <string name="dark_theme">Escuro</string>
     <string name="light_theme">Claro</string>
     <string name="verify_credentials">Não foi possível obter informação do utilizador</string>
-    <string name="write_permission_download_pic">Precisa de dar permissão para salvar imagens!</string>
+    <string name="write_permission_download_pic">Você precisa dar permissão de escrita para baixar imagens!</string>
     <string name="posted_on">Postado no %1$s</string>
     <string name="empty_comment">O comentário não pode ser vazio!</string>
     <string name="whats_an_instance_explanation">Você pode ficar confuso por um campo de texto perguntundo pelo domínio de sua \'instância\'.
@@ -113,4 +115,47 @@
     <string name="instance_not_pixelfed_warning">Esta não parece ser uma instância Pixelfed, então o app pode quebrar de formas inesperadas.</string>
     <string name="api_not_enabled_dialog">A API não está ativada nesta instância. Contate o administrador para solicitar a ativação.</string>
     <string name="instance_not_pixelfed_cancel">Cancelar entrada</string>
+    <string name="reported">Denunciado {gmd_check_circle}</string>
+    <string name="report_target">Denunciar postagem de @%1$s</string>
+    <string name="report_error">Não pôde enviar denúncia</string>
+    <string name="optional_report_comment">Mensagem opcional para moderadores/administradores</string>
+    <string name="search_empty_error">A busca não pode ser vazia</string>
+    <string name="post_title">Postagem de %1$s</string>
+    <string name="license_info">PixelDroid é um software livre e de código aberto, licenciado sob o GNU General Public License (versão 3 ou posterior)</string>
+    <string name="dependencies_licenses">Dependências e licenças</string>
+    <string name="nothing_to_see_here">Nada para ver aqui!</string>
+    <string name="media_upload_completed">Envio de mídia completado</string>
+    <string name="posts">POSTAGENS</string>
+    <string name="dialog_message_cancel_follow_request">Cancelar o pedido para seguir\?</string>
+    <string name="follow_requested">Solicitado para Seguir</string>
+    <string name="no_username">Sem nome de usuário</string>
+    <string name="default_nfollowing">-
+\nSeguindo</string>
+    <string name="default_nposts">-
+\nPostagens</string>
+    <string name="access_token_invalid">A chave de acesso é inválida</string>
+    <string name="follow_button_failed">Não é possível exibir o botão de seguir</string>
+    <string name="empty_feed">Nada para ver aqui :(</string>
+    <string name="edit_link_failed">Falhou em abrir página de edição</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nSeguindo</item>
+        <item quantity="other">%d
+\nSeguindo</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\nPostagem</item>
+        <item quantity="other">%d
+\nPostagens</item>
+    </plurals>
+    <string name="post_is_album">Esta postagem é um álbum</string>
+    <string name="loading_toast">Algo deu errado enquanto carregava</string>
+    <string name="upload_error">Código de erro retornado pelo servidor: %1$d</string>
+    <string name="no_media_description">Adicione uma descrição de mídia aqui…</string>
+    <string name="switch_to_carousel">Mudar para carrossel</string>
+    <string name="switch_to_grid">Mudar para visualização em grade</string>
+    <string name="comment_posted">Comentário: %1$s postado!</string>
+    <string name="comment_error">Erro de comentário!</string>
+    <string name="write_permission_share_pic">Você precisa de permissão de escrita para compartilhar imagens!</string>
 </resources>
