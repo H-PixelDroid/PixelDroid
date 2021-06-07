@@ -1,4 +1,4 @@
-package org.pixeldroid.app.posts.feeds.uncachedFeeds.search
+package org.pixeldroid.app.posts.feeds.uncachedFeeds
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,24 +12,31 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.StatusViewHolder
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.*
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.hashtags.HashTagContentRepository
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchContentRepository
 import org.pixeldroid.app.utils.api.objects.Results
 import org.pixeldroid.app.utils.api.objects.Status
+import org.pixeldroid.app.utils.api.objects.Tag.Companion.HASHTAG_TAG
 import org.pixeldroid.app.utils.displayDimensionsInPx
 
 /**
- * Fragment to show a list of [Status]es, as a result of a search.
+ * Fragment to show a list of [Status]es, as a result of a search or a hashtag.
  */
-class SearchPostsFragment : UncachedFeedFragment<Status>() {
+class UncachedPostsFragment : UncachedFeedFragment<Status>() {
 
-    private lateinit var query: String
+    private var hashtagOrQuery: String? = null
+    private var search: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = PostsAdapter(requireContext().displayDimensionsInPx())
 
-        query = arguments?.getSerializable("searchFeed") as String
+        hashtagOrQuery = arguments?.getString(HASHTAG_TAG)
 
+        if(hashtagOrQuery == null){
+            search = true
+            hashtagOrQuery = arguments?.getString("searchFeed")!!
+        }
     }
 
     @ExperimentalPagingApi
@@ -41,15 +48,27 @@ class SearchPostsFragment : UncachedFeedFragment<Status>() {
 
         // get the view model
         @Suppress("UNCHECKED_CAST")
-        viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(
-            SearchContentRepository<Status>(
-                apiHolder.setToCurrentUser(),
-                Results.SearchType.statuses,
-                query
+        viewModel = if(search) {
+            ViewModelProvider(
+                requireActivity(), ViewModelFactory(
+                    SearchContentRepository<Status>(
+                        apiHolder.setToCurrentUser(),
+                        Results.SearchType.statuses,
+                        hashtagOrQuery!!
+                    )
+                )
             )
-        )
-        )
-            .get("searchPosts", FeedViewModel::class.java) as FeedViewModel<Status>
+                .get("searchPosts", FeedViewModel::class.java) as FeedViewModel<Status>
+        } else {
+            ViewModelProvider(requireActivity(), ViewModelFactory(
+                HashTagContentRepository(
+                    apiHolder.setToCurrentUser(),
+                    hashtagOrQuery!!
+                )
+            )
+            )
+                .get(HASHTAG_TAG, FeedViewModel::class.java) as FeedViewModel<Status>
+        }
 
         launch()
         initSearch()

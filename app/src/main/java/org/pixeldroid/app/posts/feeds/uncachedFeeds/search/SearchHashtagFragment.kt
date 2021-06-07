@@ -18,6 +18,7 @@ import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedFeedFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.ViewModelFactory
 import org.pixeldroid.app.utils.api.objects.Results
 import org.pixeldroid.app.utils.api.objects.Tag
+import org.pixeldroid.app.utils.api.objects.Tag.Companion.openTag
 
 /**
  * Fragment to show a list of [hashtag][Tag]s, as a result of a search.
@@ -86,7 +87,7 @@ class HashTagAdapter : PagingDataAdapter<Tag, RecyclerView.ViewHolder>(
     companion object {
         private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<Tag>() {
             override fun areItemsTheSame(oldItem: Tag, newItem: Tag): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.name == newItem.name
             }
 
             override fun areContentsTheSame(oldItem: Tag, newItem: Tag): Boolean =
@@ -107,7 +108,9 @@ class HashTagViewHolder(binding: FragmentTagsBinding) : RecyclerView.ViewHolder(
 
     init {
         itemView.setOnClickListener {
-            //TODO
+            tag?.apply {
+                openTag(itemView.context, this.name)
+            }
         }
     }
 

@@ -153,6 +153,17 @@ interface PixelfedAPI {
         @Query("local") local: Boolean? = null
     ): List<Status>
 
+    @GET("/api/v1/timelines/tag/{hashtag}")
+    suspend fun hashtag(
+        @Path("hashtag") hashtag: String? = null,
+        @Query("local") local: Boolean? = null,
+        @Query("only_media") only_media: Boolean? = null,
+        @Query("max_id") max_id: String? = null,
+        @Query("since_id") since_id: String? = null,
+        @Query("min_id") min_id: String? = null,
+        @Query("limit") limit: Int? = null,
+    ): List<Status>
+
     @GET("/api/v2/search")
     suspend fun search(
         @Query("account_id") account_id: String? = null,

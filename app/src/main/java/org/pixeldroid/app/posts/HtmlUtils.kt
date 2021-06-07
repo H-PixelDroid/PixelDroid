@@ -17,6 +17,7 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account.Companion.openAccountFromId
 import org.pixeldroid.app.utils.api.objects.Mention
+import org.pixeldroid.app.utils.api.objects.Tag.Companion.openTag
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import java.net.URI
 import java.net.URISyntaxException
@@ -74,7 +75,7 @@ fun parseHTMLText(
             val tag = text.subSequence(1, text.length).toString()
             customSpan = object : ClickableSpanNoUnderline() {
                 override fun onClick(widget: View) {
-                    Toast.makeText(context, tag, Toast.LENGTH_SHORT).show()
+                    openTag(context, tag)
                 }
 
             }

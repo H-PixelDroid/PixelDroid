@@ -1,6 +1,7 @@
 package org.pixeldroid.app.utils.api.objects
 
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity.Companion.DEFAULT_MAX_TOOT_CHARS
+import java.io.Serializable
 
 data class Instance (
     val description: String?,
@@ -11,4 +12,4 @@ data class Instance (
     val title: String?,
     val uri: String?,
     val version: String?
-)
+): Serializable

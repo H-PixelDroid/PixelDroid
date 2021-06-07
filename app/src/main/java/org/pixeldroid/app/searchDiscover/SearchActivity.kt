@@ -9,9 +9,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.pixeldroid.app.R
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchAccountFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchHashtagFragment
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchPostsFragment
 import org.pixeldroid.app.utils.api.objects.Results
 import org.pixeldroid.app.utils.BaseActivity
 
@@ -47,14 +47,9 @@ class SearchActivity : BaseActivity() {
         setupTabs(tabs, searchType)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     private fun createSearchTabs(query: String): Array<Fragment>{
 
-        val searchFeedFragment = SearchPostsFragment()
+        val searchFeedFragment = UncachedPostsFragment()
         val searchAccountListFragment =
             SearchAccountFragment()
         val searchHashtagFragment: Fragment = SearchHashtagFragment()

@@ -31,11 +31,6 @@ class FollowsActivity : BaseActivity() {
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     private fun startFragment(id : String, displayName: String, followers : Boolean) {
         supportActionBar?.title =
             if (followers) {

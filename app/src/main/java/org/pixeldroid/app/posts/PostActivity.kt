@@ -72,11 +72,6 @@ class PostActivity : BaseActivity() {
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     private fun activateCommenter() {
         //Activate commenter
         binding.submitComment.setOnClickListener {
