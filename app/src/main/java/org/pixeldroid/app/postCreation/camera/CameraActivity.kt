@@ -20,9 +20,4 @@ class CameraActivity : BaseActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.camera_activity_fragment, cameraFragment).commit()
     }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
 }

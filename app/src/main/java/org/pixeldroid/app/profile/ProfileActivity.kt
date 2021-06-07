@@ -107,11 +107,6 @@ class ProfileActivity : BaseActivity() {
         binding.profileRefreshLayout.isRefreshing = false
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     private fun setContent(account: Account?) {
         if(account != null) {
             setViews(account)

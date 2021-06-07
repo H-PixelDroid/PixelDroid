@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.*
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
@@ -15,7 +16,6 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
-import org.pixeldroid.app.R
 import org.hamcrest.BaseMatcher
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Description
@@ -23,6 +23,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.junit.rules.TestRule
 import org.junit.runners.model.Statement
+import org.pixeldroid.app.R
 import java.util.concurrent.TimeoutException
 
 
@@ -297,6 +298,54 @@ fun clickChildViewWithId(id: Int) = object : ViewAction {
         v.performClick()
     }
 }
+
+fun clickClickableSpan(textToClick: CharSequence): ViewAction? {
+    return object : ViewAction {
+        override fun getConstraints(): Matcher<View> {
+            return Matchers.instanceOf(TextView::class.java)
+        }
+
+        override fun getDescription(): String {
+            return "clicking on a ClickableSpan"
+        }
+
+        override fun perform(uiController: UiController?, view: View) {
+            val textView = view as TextView
+            val spannableString = textView.text as SpannableString
+            if (spannableString.isEmpty()) {
+                // TextView is empty, nothing to do
+                throw NoMatchingViewException.Builder()
+                    .includeViewHierarchy(true)
+                    .withRootView(textView)
+                    .build()
+            }
+
+            // Get the links inside the TextView and check if we find textToClick
+            val spans = spannableString.getSpans(
+                0, spannableString.length,
+                ClickableSpan::class.java
+            )
+            if (spans.isNotEmpty()) {
+                var spanCandidate: ClickableSpan?
+                for (span in spans) {
+                    spanCandidate = span
+                    val start = spannableString.getSpanStart(spanCandidate)
+                    val end = spannableString.getSpanEnd(spanCandidate)
+                    val sequence = spannableString.subSequence(start, end)
+                    if (textToClick.toString() == sequence.toString()) {
+                        span.onClick(textView)
+                        return
+                    }
+                }
+            }
+            throw NoMatchingViewException.Builder()
+                .includeViewHierarchy(true)
+                .withRootView(textView)
+                .build()
+        }
+    }
+}
+
 
 fun typeTextInViewWithId(id: Int, text: String) = object : ViewAction {
 

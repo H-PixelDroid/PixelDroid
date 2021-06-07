@@ -6,6 +6,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.openLinkWithText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
@@ -13,11 +14,10 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import org.hamcrest.CoreMatchers.*
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.posts.StatusViewHolder
 import org.pixeldroid.app.testUtility.*
-import org.hamcrest.CoreMatchers.not
-import org.hamcrest.CoreMatchers.sameInstance
 import org.hamcrest.core.IsInstanceOf
 import org.hamcrest.core.StringContains.containsString
 import org.junit.After
@@ -40,8 +40,6 @@ class HomeFeedTest {
     @Rule @JvmField
     var repeatRule: RepeatRule = RepeatRule()
 
-    @get:Rule
-    var globalTimeout: Timeout = Timeout.seconds(100)
 
     @Before
     fun before(){
@@ -93,6 +91,26 @@ class HomeFeedTest {
 
 
         onView(first(withId(R.id.description))).check(matches(withText(containsString("@user2"))));
+    }
+
+    @Test
+    @RepeatTest
+    fun hashtag() {
+        //Wait for the feed to load
+        waitForView(R.id.postPager)
+
+        onView(allOf(withClassName(endsWith("RecyclerView")), not(withId(R.id.material_drawer_recycler_view))))
+            .perform(
+                scrollToPosition<StatusViewHolder>(3)
+            )
+
+        onView(allOf(withText(containsString("randomNoise"))))
+            .perform(clickClickableSpan("#randomNoise"))
+
+        waitForView(R.id.action_bar, allOf(withText("#randomNoise"), not(withId(R.id.description))))
+
+        onView(withId(R.id.action_bar)).check(matches(isDisplayed()));
+        onView(allOf(withText("#randomNoise"), not(withId(R.id.description)))).check(matches(withParent(withId(R.id.action_bar))));
     }
 /*
     @Test
@@ -187,13 +205,6 @@ class HomeFeedTest {
         onView(first(withId(R.id.username))).check(matches(isDisplayed()))
     }
 /*
-    @Test
-    fun clickingHashTagsWorks() {
-        onView(withId(R.id.list)).perform(
-            actionOnItemAtPosition<StatusViewHolder>(1, clickChildViewWithId(R.id.description))
-        )
-        onView(withId(R.id.list)).check(matches(isDisplayed()))
-    }
 
 
     @Test

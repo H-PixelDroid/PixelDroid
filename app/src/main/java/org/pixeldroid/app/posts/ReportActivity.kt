@@ -66,9 +66,4 @@ class ReportActivity : BaseActivity() {
             binding.reportProgressBar.visibility = View.GONE
         }
     }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
 }

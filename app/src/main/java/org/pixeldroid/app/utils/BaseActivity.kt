@@ -28,6 +28,11 @@ open class BaseActivity : AppCompatActivity() {
         super.attachBaseContext(updateBaseContextLocale(base))
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     private fun updateBaseContextLocale(context: Context): Context {
         val language = PreferenceManager.getDefaultSharedPreferences(context).getString("language", "default") ?: "default"
         if(language == "default"){
