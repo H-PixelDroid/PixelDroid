@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="capture_button_alt">Capturar</string>
-    <string name="switch_camera_button_alt">Mudar câmera</string>
+    <string name="switch_camera_button_alt">Trocar câmera</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Mídia oculta
-\n (clicar para visualizar)</string>
-    <string name="theme_title">Tema da Aplicação</string>
+\n(clique para visualizar)</string>
+    <string name="theme_title">Tema do Aplicativo</string>
     <string name="instance_error">Não foi possível obter informações sobre a instância</string>
-    <string name="token_error">Erro na obtenção do token</string>
+    <string name="token_error">Erro ao obter a chave de acesso</string>
     <string name="browser_launch_failed">Não foi possível abrir um navegador, você tem algum\?</string>
     <string name="registration_failed">Não foi possível registrar a aplicação com este servidor</string>
     <string name="invalid_domain">Domínio inválido</string>
     <string name="add_account_description">Adicionar outra conta Pixelfed</string>
     <string name="add_account_name">Adicionar Conta</string>
     <string name="login_connection_required_once">Você precisa estar conectado para poder adicionar a primeira conta e usar o PixelDroid :(</string>
-    <string name="connect_to_pixelfed">Conectar-se à Pixelfed</string>
+    <string name="connect_to_pixelfed">Conectar-se ao Pixelfed</string>
     <string name="domain_of_your_instance">Domínio da sua instância</string>
-    <string name="NoCommentsToShow">Nenhum comentário…</string>
+    <string name="NoCommentsToShow">Nenhum comentário nesta publicação…</string>
     <string name="share_picture">Compartilhar imagem…</string>
     <string name="gallery_button_alt">Galeria</string>
     <string name="image_download_success">A imagem foi transferida com sucesso</string>
-    <string name="image_download_downloading">Baixando o arquivo…</string>
-    <string name="image_download_failed">O download não deu certo, por favor, tente novamente</string>
+    <string name="image_download_downloading">Baixando…</string>
+    <string name="image_download_failed">O download falhou. Por favor, tente novamente</string>
     <string name="save_to_gallery">Salvar na Galeria…</string>
     <string name="edit">EDITAR</string>
     <string name="tab_filters">FILTROS</string>
@@ -29,12 +29,12 @@
     <string name="lbl_brightness">BRILHO</string>
     <string name="logout">Sair</string>
     <string name="whats_an_instance">O que é uma instância\?</string>
-    <string name="post">enviar</string>
+    <string name="post">publicar</string>
     <string name="description">Descrição…</string>
-    <string name="liked_notification">%1$s curtiu o seu post</string>
-    <string name="shared_notification">%1$s compartilhou o seu post</string>
+    <string name="liked_notification">%1$s curtiu sua postagem</string>
+    <string name="shared_notification">%1$s compartilhou sua postagem</string>
     <string name="mention_notification">%1$s mencionou você</string>
-    <string name="followed_notification">%1$s começou a te seguir</string>
+    <string name="followed_notification">%1$s seguiu você</string>
     <string name="theme_header">Tema</string>
     <string name="title_activity_settings2">Configurações</string>
     <string name="auth_failed">Falha na autenticação</string>
@@ -42,16 +42,16 @@
     <string name="menu_account">Meu Perfil</string>
     <string name="app_name">PixelDroid</string>
     <string name="no_cancel_edit">Não, cancelar edição</string>
-    <string name="help_translate">Ajude a traduzir o PixelDroid para a sua língua:</string>
-    <string name="delete">Apagar</string>
+    <string name="help_translate">Ajude a traduzir o PixelDroid para o seu idioma:</string>
+    <string name="delete">Excluir</string>
     <string name="discover">DESCOBRIR</string>
     <string name="toolbar_title_edit">Editar</string>
-    <string name="share_link">Partilhar Ligação</string>
-    <string name="report">Reportar</string>
+    <string name="share_link">Compartilhar link</string>
+    <string name="report">Denunciar</string>
     <string name="status_more_options">Mais opções</string>
     <string name="about">Sobre</string>
     <string name="project_website">Website do projeto: https://pixeldroid.org</string>
-    <string name="about_pixeldroid">Sobre PixelDroid</string>
+    <string name="about_pixeldroid">Sobre o PixelDroid</string>
     <string name="retry">Tentar novamente</string>
     <string name="search">Pesquisar</string>
     <string name="edit_profile">Editar perfil</string>
@@ -59,8 +59,10 @@
     <string name="default_nfollowers">-
 \nSeguidores</string>
     <plurals name="nb_followers">
-        <item quantity="one">%d Seguidor</item>
-        <item quantity="other">%d Seguidores</item>
+        <item quantity="one">%d
+\nSeguidor</item>
+        <item quantity="other">%d
+\nSeguidores</item>
     </plurals>
     <string name="submit_comment">Submeter comentário</string>
     <string name="add_comment">Adicionar comentário</string>
@@ -68,33 +70,127 @@
         <item quantity="one">%d comentário</item>
         <item quantity="other">%d comentários</item>
     </plurals>
-    <string name="share_image">Partilhar Imagem</string>
+    <string name="share_image">Compartilhar Imagem</string>
     <plurals name="shares">
-        <item quantity="one">%d Partilha</item>
-        <item quantity="other">%d Partilhas</item>
+        <item quantity="one">%d Compartilhamento</item>
+        <item quantity="other">%d Compartilhamentos</item>
     </plurals>
     <plurals name="likes">
-        <item quantity="one">%d Gosto</item>
-        <item quantity="other">%d Gostos</item>
+        <item quantity="one">%d Curtida</item>
+        <item quantity="other">%d Curtidas</item>
     </plurals>
     <string name="no_description">Sem descrição</string>
     <string name="feed_failed">Não foi possível obter feed</string>
-    <string name="crop_button">Botão para cortar ou rodar imagem</string>
-    <string name="image_preview">Pré-visualização da imagem editada</string>
-    <string name="busy_dialog_text">A processar imagem, espere que termine primeiro!</string>
+    <string name="crop_button">Botão para cortar ou girar a imagem</string>
+    <string name="image_preview">Pré-visualização da imagem a ser editada</string>
+    <string name="busy_dialog_text">Processando imagem, aguarde o término primeiro!</string>
     <string name="normal_filter">Normal</string>
-    <string name="save_image_description">Guardar descrição da imagem</string>
+    <string name="save_image_description">Salvar descrição da imagem</string>
     <string name="post_image">Uma das imagens na publicação</string>
     <string name="add_photo">Adicionar foto</string>
     <string name="upload_post_error">Erro ao publicar</string>
     <string name="upload_post_success">Publicado com sucesso</string>
     <string name="upload_post_failed">Falha ao publicar</string>
-    <string name="picture_format_error">Erro de publicação: formato errado de imagem.</string>
+    <string name="picture_format_error">Erro na publicação: formato de imagem incompatível.</string>
     <string name="upload_picture_failed">Erro ao publicar imagem!</string>
-    <string name="save_image_success">Imagem guardada com sucesso</string>
-    <string name="save_image_failed">Não foi possível guardar a imagem</string>
-    <string name="permission_denied">Permissão recusada</string>
+    <string name="save_image_success">Imagem salva com sucesso</string>
+    <string name="save_image_failed">Não foi possível salvar a imagem</string>
+    <string name="permission_denied">Permissão negada</string>
     <string name="dark_theme">Escuro</string>
     <string name="light_theme">Claro</string>
-    <string name="verify_credentials">Não foi possível obter informação do utilizador</string>
+    <string name="verify_credentials">Não foi possível obter informação do usuário</string>
+    <string name="write_permission_download_pic">Você precisa conceder permissão de gravação para baixar imagens!</string>
+    <string name="posted_on">Publicado no %1$s</string>
+    <string name="empty_comment">O campo de comentário não pode estar vazio!</string>
+    <string name="whats_an_instance_explanation">Você pode ficar confuso por um campo de texto perguntando pelo domínio de sua \'instância\'.
+\n
+\nPixelfed é uma plataforma federada e parte do \'fediverso\', o que significa que ele pode se comunicar com outras plataformas que falam a mesma língua, como o Mastodon (veja https://joinmastodon.org).
+\n
+\nTambém significa que você deve escolher qual servidor ou \'instância\' do Pixelfed usar. Se você não conhece nenhum, dê uma olhada aqui: https://pixelfed.org/join
+\n
+\nPara mais informações sobre o Pixelfed, você pode verificar aqui: https://pixelfed.org</string>
+    <string name="poll_notification">A enquete de %1$s finalizou</string>
+    <string name="default_system">Padrão (Conforme sistema)</string>
+    <string name="instance_not_pixelfed_continue">OK, continuar mesmo assim</string>
+    <string name="instance_not_pixelfed_warning">Esta não parece ser uma instância Pixelfed, então o aplicativo pode quebrar de forma inesperada.</string>
+    <string name="api_not_enabled_dialog">A API não está ativada nesta instância. Contate o administrador para solicitar a ativação.</string>
+    <string name="instance_not_pixelfed_cancel">Cancelar entrada</string>
+    <string name="reported">Denunciado {gmd_check_circle}</string>
+    <string name="report_target">Denunciar publicação de @%1$s</string>
+    <string name="report_error">Não foi possível enviar a denúncia</string>
+    <string name="optional_report_comment">Mensagem opcional para moderadores/administradores</string>
+    <string name="search_empty_error">O campo de pesquisa não pode estar vazio</string>
+    <string name="post_title">Publicação de %1$s</string>
+    <string name="license_info">PixelDroid é um software livre e de código aberto, licenciado sob a GNU General Public License (versão 3 ou posterior)</string>
+    <string name="dependencies_licenses">Dependências e licenças</string>
+    <string name="nothing_to_see_here">Nada para ver aqui!</string>
+    <string name="media_upload_completed">Envio de mídia completo</string>
+    <string name="posts">PUBLICAÇÕES</string>
+    <string name="dialog_message_cancel_follow_request">Cancelar a solicitação para seguir\?</string>
+    <string name="follow_requested">Solicitado para Seguir</string>
+    <string name="no_username">Sem nome de usuário</string>
+    <string name="default_nfollowing">-
+\nSeguindo</string>
+    <string name="default_nposts">-
+\nPublicações</string>
+    <string name="access_token_invalid">A chave de acesso é inválida</string>
+    <string name="follow_button_failed">Não é possível exibir o botão de seguir</string>
+    <string name="empty_feed">Nada para ver aqui :(</string>
+    <string name="edit_link_failed">Falhou ao abrir a página de edição</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nSeguindo</item>
+        <item quantity="other">%d
+\nSeguindo</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\nPostagem</item>
+        <item quantity="other">%d
+\nPostagens</item>
+    </plurals>
+    <string name="post_is_album">Esta publicação é um álbum</string>
+    <string name="loading_toast">Algo deu errado enquanto carregava</string>
+    <string name="upload_error">Código de erro retornado pelo servidor: %1$d</string>
+    <string name="no_media_description">Adicione a descrição da mídia aqui…</string>
+    <string name="switch_to_carousel">Mudar para carrossel</string>
+    <string name="switch_to_grid">Mudar para visualização em grade</string>
+    <string name="comment_posted">Comentário: %1$s publicado!</string>
+    <string name="comment_error">Erro no comentário!</string>
+    <string name="write_permission_share_pic">Você precisa conceder permissão de gravação para compartilhar imagens!</string>
+    <string name="language">Idioma</string>
+    <string name="delete_dialog">Excluir esta publicação\?</string>
+    <string name="something_went_wrong">Algo deu errado…</string>
+    <string name="profile_picture">Foto de perfil</string>
+    <string name="followers_title">Seguidores de %1$s</string>
+    <string name="posting_image_accessibility_hint">Imagem a ser publicada</string>
+    <string name="hashtags">TÓPICOS</string>
+    <string name="accounts">CONTAS</string>
+    <string name="unfollow">Deixar de seguir</string>
+    <string name="unfollow_error">Não foi possível deixar de seguir</string>
+    <string name="action_not_allowed">Esta ação não é permitida</string>
+    <string name="follow_error">Não foi possível seguir</string>
+    <string name="comment">Comentar</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">A descrição precisa ter pelo menos %d carácter.</item>
+        <item quantity="other">A descrição precisa ter pelo menos %d caracteres.</item>
+    </plurals>
+    <string name="follow_status_failed">Não foi possível obter o status de seguimento</string>
+    <string name="size_exceeds_instance_limit">O tamanho da imagem número %1$d no álbum excede o tamanho máximo permitido pela instância (%2$d kB, mas o limite é %3$d kB). Você não poderá realizar a publicação.</string>
+    <string name="total_exceeds_album_limit">Você excedeu o limite máximo que seu servidor permite (%1$s) em número de imagens. Imagens além do limite foram ignoradas.</string>
+    <string name="request_format_error">Erro ao publicar: formato incorreto</string>
+    <string name="filter_thumbnail">Miniatura do filtro</string>
+    <string name="crop_result_error">Não é possível recuperar imagem após o corte</string>
+    <string name="busy_dialog_ok_button">OK, aguarde um momento.</string>
+    <string name="save_before_returning">Salvar suas edições\?</string>
+    <string name="file_not_found">Arquivo %1$s não encontrado</string>
+    <string name="delete_post_failed_io_except">Não foi possível excluir a publicação, verifique sua conexão\?</string>
+    <string name="delete_post_failed_error">Não foi possível excluir a publicação. Erro %1$d</string>
+    <string name="mascot_description">Imagem mostrando um panda vermelho, mascote do Pixelfed, usando um telefone</string>
+    <string name="issues_contribute">Relate problemas ou contribua com o aplicativo:</string>
+    <string name="panda_pull_to_refresh_to_try_again">O panda não está feliz. Puxe para atualizar e tentar novamente.</string>
+    <string name="discover_no_infinite_load">As descobertas não carregam infinitamente. Puxe para atualizar para outras imagens.</string>
+    <string name="open_drawer_menu">Abrir o menu lateral</string>
+    <string name="follows_title">%1$s está seguindo</string>
+    <string name="media_upload_failed">Envio de mídia falhou. Tente novamente ou verifique as condições de conectividade</string>
 </resources>
