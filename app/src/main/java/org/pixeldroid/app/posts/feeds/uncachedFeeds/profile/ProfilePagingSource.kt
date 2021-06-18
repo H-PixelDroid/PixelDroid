@@ -20,10 +20,12 @@ class ProfilePagingSource(
                 limit = params.loadSize
             )
 
+            val nextKey = posts.lastOrNull()?.id
+
             LoadResult.Page(
                 data = posts,
                 prevKey = null,
-                nextKey = posts.lastOrNull()?.id
+                nextKey = if(nextKey == position) null else nextKey
             )
         } catch (exception: HttpException) {
             LoadResult.Error(exception)

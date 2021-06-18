@@ -34,10 +34,12 @@ class SearchPagingSource<T: FeedContent>(
                 Results.SearchType.statuses -> response.statuses
             } as List<T>
 
+            val nextKey = if (repos.isEmpty()) null else (position ?: 0) + repos.size
+
             LoadResult.Page(
                 data = repos,
                 prevKey = null,
-                nextKey = if (repos.isEmpty()) null else (position ?: 0) + repos.size
+                nextKey = if(nextKey == position) null else nextKey
             )
         } catch (exception: HttpException) {
             LoadResult.Error(exception)
