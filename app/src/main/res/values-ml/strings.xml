@@ -1,2 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="save_image_description">ഇമേജ് വിവരണം സംരക്ഷിക്കുക</string>
+    <string name="description">വിവരണം…</string>
+    <string name="permission_denied">അനുമതി നിഷേധിച്ചു</string>
+    <string name="instance_not_pixelfed_cancel">പ്രവേശിക്കുന്നത് റദ്ദാക്കുക</string>
+    <string name="instance_not_pixelfed_continue">ശരി, എന്തായാലും തുടരുക</string>
+    <string name="invalid_domain">അസാധുവായ മേഖല</string>
+    <string name="file_not_found">ഫയൽ %1$s കണ്ടെത്തിയില്ല</string>
+    <string name="discover">കണ്ടെത്തുക</string>
+    <string name="language">ഭാഷ</string>
+    <string name="delete_dialog">ഈ പോസ്റ്റ് ഇല്ലാതാക്കണോ\?</string>
+    <string name="delete">ഇല്ലാതാക്കൂ</string>
+    <string name="toolbar_title_edit">തിരുത്തുക</string>
+    <string name="about">കുറിച്ച്</string>
+    <string name="about_pixeldroid">PixelDroid-നെ കുറിച്ച്</string>
+    <string name="accounts">അക്കൗണ്ടുകൾ</string>
+    <string name="posts">പോസ്റ്റുകൾ</string>
+    <string name="search">തിരുത്തുക</string>
+    <string name="follow">പിന്തുടരുക</string>
+    <string name="default_nposts">-
+\nപോസ്റ്റുകൾ</string>
+    <string name="edit">തിരുത്തുക</string>
+    <string name="add_photo">ഒരു ഫോട്ടോ ചെർക്കൂ</string>
+    <string name="add_account_description">മറ്റൊരു Pixelfed അക്കൗണ്ട് ചേർക്കൂ</string>
+    <string name="add_account_name">അക്കൗണ്ട് ചേർക്കൂ</string>
+    <string name="connect_to_pixelfed">Pixelfed-ലേക്ക് കണക്റ്റുചെയ്യൂ</string>
+    <string name="domain_of_your_instance">നിങ്ങളുടെ ഇൻസ്റ്റ്ൻസിന്റെ മേഖല</string>
+    <string name="liked_notification">%1$s നിങ്ങളുടെ പോസ്റ്റ് ഇഷ്ട്ടപ്പെട്ടു</string>
+    <string name="shared_notification">%1$s നിങ്ങളുടെ പോസ്റ്റ് പങ്കിട്ടു</string>
+    <string name="mention_notification">%1$s നിങ്ങളെ സൂചിപ്പിച്ചു</string>
+    <string name="followed_notification">%1$s നിങ്ങളെ പിന്തുടർന്നു</string>
+    <string name="theme_header">തീം</string>
+    <string name="title_activity_settings2">ക്രമീകരണങ്ങൾ</string>
+</resources>
