@@ -1,0 +1,7 @@
+* Translation updates: new strings and updates to other strings. Thanks translators ❤️! Go to our weblate if you want to help with the translation into your language.
+
+* #️⃣ Hashtag support. You can now browse hashtags, instead of just showing a toast message 😜
+
+* Click tab to scroll to top. No more furious scrolling to get back to the top. Just click the tab you're in again and it will scroll up :)
+
+* Try to fix some bug that made the app crash. Thanks a lot everyone for your crash reports! ❤️
