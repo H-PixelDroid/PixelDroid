@@ -25,10 +25,12 @@ class HashTagPagingSource(
                 max_id = position,
             )
 
+            val nextKey = response.lastOrNull()?.id
+
             LoadResult.Page(
                 data = response,
                 prevKey = null,
-                nextKey = response.lastOrNull()?.id
+                nextKey = if(nextKey == position) null else nextKey
             )
         } catch (exception: HttpException) {
             LoadResult.Error(exception)

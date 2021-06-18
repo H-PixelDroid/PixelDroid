@@ -56,7 +56,7 @@ class FollowersPagingSource(
             LoadResult.Page(
                 data = accounts,
                 prevKey = null,
-                nextKey = if (accounts.isEmpty() or nextPosition.isEmpty()) null else nextPosition
+                nextKey = if (accounts.isEmpty() || nextPosition.isEmpty() || nextPosition == position) null else nextPosition
             )
         } catch (exception: IOException) {
             LoadResult.Error(exception)
