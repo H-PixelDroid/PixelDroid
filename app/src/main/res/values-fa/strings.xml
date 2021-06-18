@@ -193,4 +193,5 @@
     <string name="edit_link_failed">ناتوانی در باز کردن صفحه ویرایش</string>
     <string name="discover_no_infinite_load">بخش کشف به صورت بی‌انتها بار نمی‌شود. برای تازه‌سازی و دریافت تصاویر دیگر، صفحه را به پایین بکشید.</string>
     <string name="file_not_found">پروندهٔ %1$s یافت نشد</string>
+    <string name="hashtag_title">#%1$s</string>
 </resources>
