@@ -32,4 +32,7 @@
     <string name="followed_notification">%1$s നിങ്ങളെ പിന്തുടർന്നു</string>
     <string name="theme_header">തീം</string>
     <string name="title_activity_settings2">ക്രമീകരണങ്ങൾ</string>
+    <string name="normal_filter">സാധാരണ</string>
+    <string name="menu_settings">ക്രമീകരണ</string>
+    <string name="app_name">PixelDroid</string>
 </resources>
