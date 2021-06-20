@@ -93,4 +93,14 @@
     <string name="whats_an_instance">ഒരു ഇൻസ്റ്റൻസ് എന്താണ്\?</string>
     <string name="poll_notification">%1$s-ന്റെ(ടെ) പോൾ അവസാനിച്ചു</string>
     <string name="menu_account">എന്റെ പ്രൊഫൈൽ</string>
+    <string name="upload_post_error">പോസ്റ്റ് അപ്‌ലോഡ് പിശക്</string>
+    <string name="switch_to_carousel">കറൗസലിലേക്ക് മാറുക</string>
+    <string name="save_before_returning">നിങ്ങളുടെ മാറ്റങ്ങൾ സംരക്ഷിക്കണോ\?</string>
+    <string name="post_is_album">ഈ പോസ്റ്റ് ഒരു ആൽബമാണ്</string>
+    <string name="action_not_allowed">ഈ പ്രവർത്തനം അനുവദനീയമല്ല</string>
+    <string name="hashtags">ഹാഷ്‌ടാഗുകൾ</string>
+    <string name="busy_dialog_text">ഇപ്പോഴും ഇമേജ് പ്രോസസ്സ് ചെയ്യുന്നു, ആദ്യം അത് പൂർത്തിയാകാൻ കാത്തിരിക്കുക!</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="default_system">സ്ഥിരസ്ഥിതി (സിസ്റ്റം പിന്തുടരുന്നു)</string>
+    <string name="login_connection_required_once">PixelDroid ഉപയോഗിക്കാനും ഒരു അക്കൗണ്ട് ചേർക്കാനും നിങ്ങൾ ഓൺലൈനിൽ ആയിരിക്കണം :(</string>
 </resources>
