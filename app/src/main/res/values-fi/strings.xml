@@ -1,2 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="instance_not_pixelfed_warning">Tämä ei näytä olevan Pixelfed-instanssi, joten sovellus voi rikkoutua odottamattomasti.</string>
+    <string name="no_media_description">Lisää median kuvaus tähän…</string>
+    <string name="save_image_description">Tallenna kuvan kuvaus</string>
+    <string name="switch_to_carousel">Vaihda karuselliin</string>
+    <string name="upload_post_error">Julkaisun latausvirhe</string>
+    <string name="upload_post_success">Julkaisun lataus onnistui</string>
+    <string name="upload_post_failed">Julkaisun lataaminen epäonnistui</string>
+    <string name="picture_format_error">Latausvirhe: väärä kuvamuoto.</string>
+    <string name="upload_picture_failed">Virhe kuvan lataamisessa!</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Kuvaus saa sisältää enintään %d merkkiä.</item>
+        <item quantity="other">Kuvaus saa sisältää enintään %d merkkiä.</item>
+    </plurals>
+    <string name="save_image_failed">Kuvan tallentaminen epäonnistui</string>
+    <string name="permission_denied">Lupa evätty</string>
+    <string name="api_not_enabled_dialog">API ei ole käytössä tässä instansissa. Pyydä ylläpitäjää ottamaan se käyttöön.</string>
+    <string name="login_connection_required_once">Sinun on oltava verkossa, jotta voit lisätä ensimmäisen tilin ja käyttää PixelDroidia :(</string>
+    <string name="whats_an_instance_explanation">Saatat olla hämmentynyt tekstikentästä, jossa kysytään \'instanssisi\' verkkotunnusta.
+\n
+\nPixelfed on hajautettu alusta ja osa \'fediverseä\', mikä tarkoittaa että se voi puhua muiden alustojen kanssa, jotka puhuvat samaa kieltä, kuten Mastodon (katso https://joinmastodon.org).
+\n
+\nSe tarkoittaa myös, että sinun on valittava käytettävä palvelin eli \'instanssi\' käyttääksesi Pixelfediä. Jos et tiedä yhtään instanssia, voit katsoa täältä: https://pixelfed.org/join
+\n
+\nLisätietoja Pixelfedistä saat täältä: https://pixelfed.org</string>
+    <string name="browser_launch_failed">Selainta ei voitu käynnistää, onko sinulla sitä\?</string>
+    <string name="license_info">PixelDroid on vapaa ja avoimen lähdekoodin ohjelma, jonka lisenssi on GNU General Public License (versio 3 tai uudempi)</string>
+    <string name="help_translate">Auta kääntämään PixelDroid omalle kielellesi:</string>
+    <string name="NoCommentsToShow">Ei kommentteja tässä julkaisussa…</string>
+    <string name="dialog_message_cancel_follow_request">Peruuta seuraamispyyntö\?</string>
+    <string name="switch_to_grid">Vaihda ruudukkonäkymään</string>
+    <string name="add_account_description">Lisää toinen Pixelfed-tili</string>
+    <string name="domain_of_your_instance">Instanssisi verkkotunnus</string>
+    <string name="liked_notification">%1$s tykkäsi julkaisustasi</string>
+    <string name="shared_notification">%1$s jakoi julkaisusi</string>
+    <string name="delete_dialog">Poistetaanko tämä julkaisu\?</string>
+    <string name="project_website">Projektin verkkosivu: https://pixeldroid.org</string>
+    <string name="add_comment">Lisää kommentti</string>
+    <string name="save_to_gallery">Tallenna galleriaan…</string>
+    <string name="no_cancel_edit">Ei, peruuta muokkaukset</string>
+    <string name="save_before_returning">Tallennetaanko muokkaukset\?</string>
+    <string name="add_photo">Lisää kuva</string>
+    <string name="mention_notification">%1$s mainitsi sinut</string>
+    <string name="instance_not_pixelfed_cancel">Peruuta kirjautuminen</string>
+    <string name="instance_not_pixelfed_continue">OK, jatka jokatapauksessa</string>
+    <string name="no_username">Ei käyttäjänimeä</string>
+    <string name="retry">Yritä uudelleen</string>
+    <string name="accounts">TILIT</string>
+    <string name="save_image_success">Kuva tallennettu</string>
+    <string name="connect_to_pixelfed">Yhdistä Pixelfediin</string>
+    <string name="whats_an_instance">Mikä on instanssi\?</string>
+    <string name="followed_notification">%1$s seurasi sinua</string>
+    <string name="default_system">Seuraa laitteen teemaa</string>
+    <string name="profile_picture">Profiilikuva</string>
+    <string name="share_link">Jaa linkki</string>
+    <string name="post_title">%1$s julkaisi</string>
+    <string name="about_pixeldroid">Tietoja PixelDroid</string>
+    <string name="edit_profile">Muokkaa profiilia</string>
+    <string name="follow_requested">Seurauspyyntö</string>
+    <string name="default_nfollowing">-
+\nSeurataan</string>
+    <string name="default_nfollowers">-
+\nSeuraajat</string>
+    <string name="default_nposts">-
+\nJulkaisut</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nSeurataan</item>
+        <item quantity="other">%d
+\nSeurataan</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nSeuraaja</item>
+        <item quantity="other">%d
+\nSeuraajaa</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\nJulkaisu</item>
+        <item quantity="other">%d
+\nJulkaisua</item>
+    </plurals>
+    <plurals name="number_comments">
+        <item quantity="one">%d kommentti</item>
+        <item quantity="other">%d kommenttia</item>
+    </plurals>
+    <string name="share_image">Jaa Kuva</string>
+    <plurals name="shares">
+        <item quantity="one">%d Jako</item>
+        <item quantity="other">%d Jakoa</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d Tykkäys</item>
+        <item quantity="other">%d Tykkäystä</item>
+    </plurals>
+    <string name="no_description">Ei kuvausta</string>
+    <string name="share_picture">Jaa kuva…</string>
+    <string name="add_account_name">Lisää tili</string>
+    <string name="logout">Kirjaudu ulos</string>
+    <string name="theme_title">Sovelluksen teema</string>
+    <string name="invalid_domain">Virheellinen verkkotunnus</string>
+    <string name="language">Kieli</string>
+    <string name="delete">Poista</string>
+    <string name="toolbar_title_edit">Muokkaa</string>
+    <string name="report">Ilmianna</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="about">Tietoja</string>
+    <string name="hashtags">MERKINNÄT</string>
+    <string name="posts">JULKAISUT</string>
+    <string name="search">Hae</string>
+    <string name="unfollow">Seurataan</string>
+    <string name="follow">Seuraa</string>
+    <string name="comment">Kommentti</string>
+    <string name="image_download_downloading">Ladataan…</string>
+    <string name="gallery_button_alt">Galleria</string>
+    <string name="normal_filter">Normaali</string>
+    <string name="edit">Muokkaa</string>
+    <string name="tab_filters">SUODATIN</string>
+    <string name="lbl_saturation">VÄRIKYLLÄISYYS</string>
+    <string name="lbl_contrast">KONTRASTI</string>
+    <string name="lbl_brightness">KIRKKAUS</string>
+    <string name="post">julkaise</string>
+    <string name="description">Kuvaus…</string>
+    <string name="dark_theme">Tumma</string>
+    <string name="light_theme">Vaalea</string>
+    <string name="theme_header">Teema</string>
+    <string name="title_activity_settings2">Asetukset</string>
+    <string name="menu_settings">Asetukset</string>
+    <string name="menu_account">Profiili</string>
+    <string name="app_name">PixelDroid</string>
+</resources>
