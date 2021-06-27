@@ -100,7 +100,7 @@ class SearchDiscoverFragment : BaseFragment() {
      * [RecyclerView.Adapter] that can display a list of [Status]s' thumbnails for the discover view
      */
     class DiscoverRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolder>() {
-        private val posts: ArrayList<Status> = ArrayList()
+        private val posts: ArrayList<Status?> = ArrayList()
 
         fun addPosts(newPosts : List<Status>) {
             posts.clear()
@@ -116,12 +116,12 @@ class SearchDiscoverFragment : BaseFragment() {
 
         override fun onBindViewHolder(holder: ProfilePostViewHolder, position: Int) {
             val post = posts[position]
-            if(post.media_attachments?.size ?: 0 > 1) {
+            if(post?.media_attachments?.size ?: 0 > 1) {
                 holder.albumIcon.visibility = View.VISIBLE
             } else {
                 holder.albumIcon.visibility = View.GONE
             }
-            ImageConverter.setSquareImageFromURL(holder.postView, post.media_attachments?.firstOrNull()?.preview_url, holder.postPreview, post.media_attachments?.firstOrNull()?.blurhash)
+            ImageConverter.setSquareImageFromURL(holder.postView, post?.media_attachments?.firstOrNull()?.preview_url, holder.postPreview, post?.media_attachments?.firstOrNull()?.blurhash)
             holder.postPreview.setOnClickListener {
                 val intent = Intent(holder.postView.context, PostActivity::class.java)
                 intent.putExtra(Status.POST_TAG, post)
