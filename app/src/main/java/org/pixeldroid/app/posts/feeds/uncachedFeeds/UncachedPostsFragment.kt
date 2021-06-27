@@ -91,13 +91,10 @@ class UncachedPostsFragment : UncachedFeedFragment<Status>() {
             return StatusViewHolder.create(parent)
         }
 
-        override fun getItemViewType(position: Int): Int {
-            return R.layout.post_fragment
-        }
+        override fun getItemViewType(position: Int): Int = R.layout.post_fragment
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val uiModel = getItem(position) as Status
-            uiModel.let {
+            getItem(position)?.let {
                 (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
             }
         }
