@@ -7,6 +7,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 
+// Force latest version of Jacoco, initially done to resolve https://github.com/jacoco/jacoco/issues/1155
+jacoco.toolVersion = "0.8.7"
+
 
 android {
 
@@ -41,8 +44,6 @@ android {
     }
     testBuildType "staging"
 
-
-
     buildTypes {
         debug {
                 applicationIdSuffix '.debug'
@@ -76,6 +77,13 @@ android {
             proguardFiles 'proguard-rules.pro'
         }
     }
+    /**
+     * Make a string with the application_id (available in xml etc)
+     */
+    android.applicationVariants.all { variant ->
+        variant.resValue 'string', 'application_id', variant.applicationId
+    }
+
 
     testOptions {
         animationsDisabled true
@@ -87,15 +95,6 @@ android {
     }
 
     apply plugin: 'kotlin-kapt'
-}
-
-afterEvaluate {
-    /**
-     * Make a string with the application_id (available in xml etc)
-     */
-    android.applicationVariants.all { variant ->
-        variant.resValue 'string', 'application_id', variant.applicationId
-    }
 }
 
 dependencies {
@@ -149,13 +148,13 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
 
     //Dagger (dependency injection)
-    implementation 'com.google.dagger:dagger-android:2.35.1'
-    implementation 'com.google.dagger:dagger-android-support:2.35.1'
+    implementation 'com.google.dagger:dagger-android:2.37'
+    implementation 'com.google.dagger:dagger-android-support:2.37'
     // if you use the support libraries
-    kapt 'com.google.dagger:dagger-android-processor:2.35.1'
-    kapt 'com.google.dagger:dagger-compiler:2.35.1'
+    kapt 'com.google.dagger:dagger-android-processor:2.37'
+    kapt 'com.google.dagger:dagger-compiler:2.37'
 
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
@@ -180,13 +179,13 @@ dependencies {
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation 'com.mikepenz:materialdrawer:8.4.0'
+    implementation 'com.mikepenz:materialdrawer:8.4.1'
     // Add for NavController support
     implementation 'com.mikepenz:materialdrawer-nav:8.4.0'
 
     //iconics
     implementation "com.mikepenz:iconics-core:5.2.8"
-    implementation 'com.mikepenz:materialdrawer-iconics:8.4.0'
+    implementation 'com.mikepenz:materialdrawer-iconics:8.4.1'
     implementation "com.mikepenz:iconics-views:5.0.3"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
 
