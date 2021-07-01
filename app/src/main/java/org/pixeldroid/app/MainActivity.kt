@@ -41,6 +41,7 @@ import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.db.addUser
+import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
@@ -96,6 +97,7 @@ class MainActivity : BaseActivity() {
                 }
             )
             setupTabs(tabs)
+            enablePullNotifications(this)
         }
     }
 
