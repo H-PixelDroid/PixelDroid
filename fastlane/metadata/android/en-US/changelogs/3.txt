@@ -1,4 +1,4 @@
-* Add language
+* Add language (Malayalam)
 
 * Bug fix for some bad API responses
 
