@@ -65,7 +65,7 @@
     <string name="upload_post_error">Argitalpena igotzean errorea</string>
     <string name="comment_posted">Iruzkina: %1$s argitaratua!</string>
     <string name="upload_post_success">Argitalpena ongi kargatu da</string>
-    <string name="media_upload_failed">{gmd_cloud_off} Multimedia-kargak huts egin du, saiatu berriro edo egiaztatu sareko egoera</string>
+    <string name="media_upload_failed">Multimedia-igoerak huts egin du, saiatu berriro edo egiaztatu sareko egoera</string>
     <string name="request_format_error">Karga errorea: eskaera formatu txarra</string>
     <string name="picture_format_error">Karga errorea: irudi-formatu okerra.</string>
     <string name="posts">ARGITALPENAK</string>
@@ -86,7 +86,7 @@
     <string name="posted_on">%1$s(e)n argitaratua</string>
     <string name="hashtags">TRAOLAK</string>
     <string name="accounts">KONTUAK</string>
-    <string name="media_upload_completed">{gmd_cloud_done} Multimedia karga amaitu da</string>
+    <string name="media_upload_completed">Multimedia igoera amaitu da</string>
     <string name="upload_post_failed">Argitalpena igotzeak huts egin du</string>
     <string name="no_cancel_edit">Ez, utzi editatzeari</string>
     <string name="save_before_returning">Zure edizioak gorde\?</string>
@@ -121,16 +121,22 @@
     <string name="nothing_to_see_here">Hemen ez dago ezer!</string>
     <string name="unfollow">Utzi jarraitzeari</string>
     <plurals name="nb_following">
-        <item quantity="one">%d jarraitzen</item>
-        <item quantity="other">%d jarraitzen</item>
+        <item quantity="one">%d
+\njarraitzen</item>
+        <item quantity="other">%d
+\njarraitzen</item>
     </plurals>
     <plurals name="nb_followers">
-        <item quantity="one">Jarraitzaile %d</item>
-        <item quantity="other">%d jarraitzaile</item>
+        <item quantity="one">Jarraitzaile
+\n%d</item>
+        <item quantity="other">%d
+\njarraitzaile</item>
     </plurals>
     <plurals name="nb_posts">
-        <item quantity="one">Argitalpen %d</item>
-        <item quantity="other">%d argitalpen</item>
+        <item quantity="one">Argitalpen
+\n%d</item>
+        <item quantity="other">%d
+\nargitalpen</item>
     </plurals>
     <string name="post_is_album">Argitalpen hau album bat da</string>
     <string name="submit_comment">Bidali iruzkina</string>
@@ -181,4 +187,11 @@
     <string name="size_exceeds_instance_limit">Albumean %1$d zenbakia duen irudiaren tamainak instantziak onartutako gehienezko tamaina gainditzen du (%2$d kB ditu, eta muga %3$d kB da). Baliteke ezin igo ahal izatea.</string>
     <string name="total_exceeds_album_limit">Zerbitzariak onartutako kopurua (%1$s) baino irudi gehiago aukeratu dituzu. Mugatik gorako irudiei ez ikusia egin zaie.</string>
     <string name="api_not_enabled_dialog">APIa ez dago aktibo instantzia honetan. Jarri zure administratzailearekin kontaktuan aktibatzeko.</string>
+    <string name="discover_no_infinite_load">Aurkikuntza ez da infinituki kargatzen. Tira irudi gehiago kargatzeko.</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="file_not_found">%1$s fitxategia ez da aurkitu</string>
+    <string name="edit_link_failed">Huts egin du edizio orria irekitzean</string>
+    <string name="empty_feed">Ez dago ezer hemen :(</string>
+    <string name="follow_requested">Jarraitzeko eskaera</string>
+    <string name="dialog_message_cancel_follow_request">Jarraitzeko eskaera ezeztatu\?</string>
 </resources>

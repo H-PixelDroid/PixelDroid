@@ -13,8 +13,8 @@
     <string name="theme_header">زمینه</string>
     <string name="followed_notification">‏%1$s شما را دنبال کرد</string>
     <string name="mention_notification">‏%1$s به شما اشاره کرد</string>
-    <string name="shared_notification">‏%1$s مطلب شما را هم‌رسانی کرد</string>
-    <string name="liked_notification">‏%1$s مطلب شما را پسندید</string>
+    <string name="shared_notification">‏%1$s فرستهٔ شما را هم‌رسانی کرد</string>
+    <string name="liked_notification">‏%1$s فرستهٔ شما را پسندید</string>
     <string name="description">توضیحات…</string>
     <string name="post">بفرست</string>
     <string name="whats_an_instance">نمونه چیست؟</string>
@@ -32,7 +32,7 @@
     <string name="switch_camera_button_alt">تغییر دوربین</string>
     <string name="gallery_button_alt">نگارخانه</string>
     <string name="share_picture">هم‌رسانی تصویر…</string>
-    <string name="NoCommentsToShow">نظری روی این مطلب نیست…</string>
+    <string name="NoCommentsToShow">نظری روی این فرسته نیست…</string>
     <string name="domain_of_your_instance">دامنهٔ نمونهٔ شما</string>
     <string name="connect_to_pixelfed">اتصال به پیکسل‌فد</string>
     <string name="app_name">پیکسل‌دروید</string>
@@ -51,8 +51,8 @@
     <string name="upload_picture_failed">خطا در بارگذاری تصویر!</string>
     <string name="picture_format_error">خطای بارگذاری: تصویر با قالب نادرست.</string>
     <string name="request_format_error">خطای بارگذاری: درخواست با قالب نادرست</string>
-    <string name="upload_post_failed">بارگذاری مطلب ناموفق بود</string>
-    <string name="upload_post_success">مطلب با موفقیت بارگذاری شد</string>
+    <string name="upload_post_failed">بارگذاری فرسته ناموفق بود</string>
+    <string name="upload_post_success">فرسته با موفقیت بارگذاری شد</string>
     <string name="normal_filter">عادی</string>
     <string name="loading_toast">مشکلی حین بارکردن رخ داد</string>
     <string name="feed_failed">نتوانستیم خوراک را دریافت کنیم</string>
@@ -74,7 +74,7 @@
     <string name="unfollow_error">نتوانستیم پی‌گیری را لغو کنیم</string>
     <string name="access_token_invalid">توکن دسترسی نامعتبر است</string>
     <string name="default_nposts">-
-\nمطلب</string>
+\nفرسته‌ها</string>
     <string name="default_nfollowers">-
 \nپی‌گیرنده</string>
     <string name="no_username">فاقد نام کاربری</string>
@@ -82,12 +82,12 @@
     <string name="edit_profile">ویرایش نمایه</string>
     <string name="search">جستجو</string>
     <string name="posts">مطالب</string>
-    <string name="media_upload_completed">‏{gmd_cloud_done} بارگذاری رسانه کامل شد</string>
+    <string name="media_upload_completed">بارگذاری رسانه به پایان رسید</string>
     <string name="posting_image_accessibility_hint">تصویری که در حال فرستاده شدن است</string>
     <string name="retry">تلاش دوباره</string>
     <string name="default_nfollowing">-
 \nپی‌گیری</string>
-    <string name="media_upload_failed">‏{gmd_cloud_off} بارگذاری رسانه شکست خورد، وضعیت شبکه را بررسی کرده و دوباره تلاش کنید</string>
+    <string name="media_upload_failed">بارگذاری رسانه شکست خورد، وضعیت شبکه را بررسی کرده یا دوباره تلاش کنید</string>
     <string name="crop_result_error">تصویر برش یافته از دسترس خارج شده است</string>
     <string name="busy_dialog_ok_button">خوب، منتظر می‌مانم.</string>
     <string name="busy_dialog_text">منتظر بمانید تا پردازش تصویر پایان یابد!</string>
@@ -102,7 +102,7 @@
     <string name="about_pixeldroid">درباره پیکسل‌دروید</string>
     <string name="follows_title">پی‌گیری‌های %1$s</string>
     <string name="followers_title">پی‌گیرندگان %1$s</string>
-    <string name="post_title">مطلب %1$s</string>
+    <string name="post_title">فرستهٔ %1$s</string>
     <string name="unfollow">لغو پیگیری</string>
     <string name="discover">کشف</string>
     <string name="open_drawer_menu">گشودن فهرست کشویی</string>
@@ -135,8 +135,10 @@
     <string name="verify_credentials">ناتوانی در دریافت اطلاعات کاربر</string>
     <string name="mascot_description">تصویر، یک پاندای قرمز که شگونهٔ پیکسل‌فد است را گوشی به دست نشان می‌دهد</string>
     <plurals name="nb_posts">
-        <item quantity="one">%d فرسته</item>
-        <item quantity="other">%d فرسته</item>
+        <item quantity="one">%d
+\nفرسته</item>
+        <item quantity="other">%d
+\nفرسته</item>
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d نظر</item>
@@ -154,12 +156,16 @@
     <string name="no_cancel_edit">خیر، ویرایش لغو شود</string>
     <string name="save_before_returning">ویرایش‌ها ذخیره شوند؟</string>
     <plurals name="nb_followers">
-        <item quantity="one">%d پی‌گیر</item>
-        <item quantity="other">%d پی‌گیر</item>
+        <item quantity="one">%d
+\nپی‌گیر</item>
+        <item quantity="other">%d
+\nپی‌گیر</item>
     </plurals>
     <plurals name="nb_following">
-        <item quantity="one">%d پی‌گرفته</item>
-        <item quantity="other">%d پی‌گرفته</item>
+        <item quantity="one">%d
+\nپی‌گرفته</item>
+        <item quantity="other">%d
+\nپی‌گرفته</item>
     </plurals>
     <string name="no_media_description">این جا توضیحات رسانه را وارد کنید…</string>
     <string name="save_image_description">ذخیره توضیحات تصویر</string>
@@ -181,4 +187,11 @@
     <string name="api_not_enabled_dialog">روی این نمونه، API فعال نیست. با مدیر نمونه تماس گرفته و از او بخواهید آن را فعال کند.</string>
     <string name="delete_post_failed_io_except">نتوانستیم فرسته را پاک کنیم. به اینترنت وصل هستید؟</string>
     <string name="delete_post_failed_error">نتوانستیم این فرسته را پاک کنیم. خطا: %1$d</string>
+    <string name="dialog_message_cancel_follow_request">درخواست پیگیری لغو شود؟</string>
+    <string name="follow_requested">درخواست پیگیری فرستاده شد</string>
+    <string name="empty_feed">اینجا چیزی برای دیدن نیست :(</string>
+    <string name="edit_link_failed">ناتوانی در باز کردن صفحه ویرایش</string>
+    <string name="discover_no_infinite_load">بخش کشف به صورت بی‌انتها بار نمی‌شود. برای تازه‌سازی و دریافت تصاویر دیگر، صفحه را به پایین بکشید.</string>
+    <string name="file_not_found">پروندهٔ %1$s یافت نشد</string>
+    <string name="hashtag_title">#%1$s</string>
 </resources>

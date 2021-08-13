@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.h.pixeldroid">
+    package="org.pixeldroid.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name="com.h.pixeldroid.postCreation.camera.CameraActivity" />
+        <activity android:name=".postCreation.camera.CameraActivity" />
         <activity
             android:name=".posts.ReportActivity"
             android:screenOrientation="sensorPortrait"
@@ -33,9 +33,24 @@
             android:name=".postCreation.PostCreationActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".profile.FollowsActivity"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".posts.feeds.uncachedFeeds.hashtags.HashTagActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -66,7 +81,7 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".searchDiscover.SearchActivity" />
+                android:value="org.pixeldroid.app.searchDiscover.SearchActivity" />
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -116,7 +131,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.h.pixeldroid.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

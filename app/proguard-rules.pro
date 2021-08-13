@@ -37,9 +37,9 @@
 # APP SPECIFIC OPTIONS
 
 # keep members of our model classes, they are used in json de/serialization
--keepclassmembers class com.h.pixeldroid.utils.api.objects.* { *; }
+-keepclassmembers class org.pixeldroid.app.utils.api.objects.* { *; }
 
--keep public enum com.h.pixeldroid.utils.api.objects.*$** {
+-keep public enum org.pixeldroid.app.utils.api.objects.*$** {
     **[] $VALUES;
     public *;
 }

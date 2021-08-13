@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Name of the app. In most languages you won't want to change this. -->
     <string name="app_name">PixelDroid</string>
+
+    <!-- Button to go to the user's profile -->
     <string name="menu_account">My Profile</string>
+
+    <!-- Button to go to the settings -->
     <string name="menu_settings">Settings</string>
     <string name="invalid_domain">"Invalid domain"</string>
     <string name="registration_failed">"Could not register the application with this server"</string>
@@ -14,16 +19,35 @@
     <string name="instance_not_pixelfed_continue">"OK, continue anyway"</string>
     <string name="instance_not_pixelfed_cancel">"Cancel logging in"</string>
     <string name="title_activity_settings2">Settings</string>
-    <!-- Theme Preferences -->
+
+    <!-- Theme Preferences: title of button -->
     <string name="theme_title">Application Theme</string>
+
+    <!-- Theme Preferences: title of the settings section dedicated to themes -->
     <string name="theme_header">Theme</string>
+
+    <!-- Theme Preferences: default option (follow the system theme) -->
     <string name="default_system">Default (Follows system)</string>
+
+    <!-- Theme Preferences: light theme option -->
     <string name="light_theme">Light</string>
+
+    <!-- Theme Preferences: dark theme option -->
     <string name="dark_theme">Dark</string>
+
+    <!-- Notifications: follow notification -->
     <string name="followed_notification">%1$s followed you</string>
+
+    <!-- Notifications: mention (@) notification -->
     <string name="mention_notification">%1$s mentioned you</string>
+
+    <!-- Notifications: share (boost) notification -->
     <string name="shared_notification">%1$s shared your post</string>
+
+    <!-- Notifications: like (favourite) notification -->
     <string name="liked_notification">%1$s liked your post</string>
+
+    <!-- Notifications: end of poll notification -->
     <string name="poll_notification">"%1$s's poll has ended"</string>
 
     <!-- Login page -->
@@ -152,6 +176,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="no_username">No Username</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="follow_requested">Follow Requested</string>
+    <string name="dialog_message_cancel_follow_request">Cancel the follow request?</string>
     <string name="edit_profile">Edit profile</string>
     <!-- Search page -->
     <string name="search">Search</string>
@@ -161,9 +187,9 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <!-- Sensitive media -->
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media\n (click to show)</string>
     <!-- Shown when image has finished uploading. {gmd_cloud_done} is an icon, position it as is appropriate in target language -->
-    <string name="media_upload_completed">{gmd_cloud_done} Media upload completed</string>
+    <string name="media_upload_completed">Media upload completed</string>
     <!-- Shown when image uploading has failed. {gmd_cloud_off} is an icon, position it as is appropriate in target language -->
-    <string name="media_upload_failed">{gmd_cloud_off} Media upload failed, try again or check network conditions</string>
+    <string name="media_upload_failed">Media upload failed, try again or check network conditions</string>
     <string name="posting_image_accessibility_hint">Image that is being posted</string>
     <string name="retry">Retry</string>
     <string name="nothing_to_see_here">Nothing to see here!</string>
@@ -174,6 +200,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="about">About</string>
     <string name="post_title">%1$s\'s post</string>
     <string name="followers_title">%1$s\'s followers</string>
+    <string name="hashtag_title">#%1$s</string>
     <string name="follows_title">%1$s\'s follows</string>
     <string name="search_empty_error">Search query can\'t be empty</string>
     <string name="status_more_options">More options</string>
@@ -188,6 +215,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="profile_picture">Profile picture</string>
     <string name="open_drawer_menu">Open drawer menu</string>
     <string name="discover">DISCOVER</string>
+    <string name="discover_no_infinite_load">Discover doesn\'t load infinitely. Pull to refresh for other images.</string>
     <string name="something_went_wrong">Something went wrong…</string>
     <string name="panda_pull_to_refresh_to_try_again">This panda is not happy. Pull to refresh to try again.</string>
     <string name="delete">Delete</string>
@@ -198,4 +226,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
     <string name="delete_post_failed_error">Could not delete the post, error %1$d</string>
     <string name="delete_post_failed_io_except">Could not delete the post, check your connection?</string>
+
+    <!-- Error message when a selected file can not be found -->
+    <string name="file_not_found">File %1$s was not found</string>
 </resources>

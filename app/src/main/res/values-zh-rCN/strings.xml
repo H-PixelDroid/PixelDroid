@@ -43,8 +43,8 @@
     <string name="instance_error">无法获取实例信息</string>
     <string name="retry">重试</string>
     <string name="posting_image_accessibility_hint">待发布的图像</string>
-    <string name="media_upload_failed">{gmd_cloud_off} 媒体上传失败，请重试或检查网络状况</string>
-    <string name="media_upload_completed">{gmd_cloud_done} 媒体已上传</string>
+    <string name="media_upload_failed">媒体上传失败，请重试或检查网络状况</string>
+    <string name="media_upload_completed">已完成媒体上传</string>
     <string name="hashtags">标签</string>
     <string name="accounts">帐户</string>
     <string name="posts">帖文</string>
@@ -90,14 +90,14 @@
     <string name="dark_theme">深色</string>
     <string name="nothing_to_see_here">这里什么也没有！</string>
     <string name="crop_result_error">图像裁剪后无法恢复</string>
-    <string name="busy_dialog_ok_button">好的</string>
+    <string name="busy_dialog_ok_button">好的，等一下。</string>
     <string name="busy_dialog_text">图像仍在处理中，请先等待完成！</string>
     <string name="post_image">帖文中的一张图片</string>
     <string name="add_photo">添加照片</string>
     <string name="poll_notification">%1$s投票已经结束</string>
     <string name="instance_not_pixelfed_cancel">取消登录</string>
     <string name="instance_not_pixelfed_continue">了解，请继续</string>
-    <string name="instance_not_pixelfed_warning">这似乎不是一个 Pixelfed 实例，可能会导致应用意外退出</string>
+    <string name="instance_not_pixelfed_warning">这似乎不是一个 Pixelfed 实例，因此该应用可能以意想不到的方式崩溃。</string>
     <string name="verify_credentials">无法获得用户信息</string>
     <string name="about">关于</string>
     <string name="project_website">项目主页：https://pixeldroid.org</string>
@@ -105,4 +105,83 @@
     <string name="about_pixeldroid">关于 PixelDroid</string>
     <string name="share_link">分享链接</string>
     <string name="delete">删除</string>
+    <string name="whats_an_instance_explanation">请求你的 \'实例\' 域名的文本框可能让你觉得困惑。
+\n
+\nPixelfed是一个联合平台，是“fediverse”的一部分，这意味着它可以与其他使用相同语言的平台进行交流，就像 Mastodon (见 https://joinmastodon.org)
+\n
+\n这也意味着你必须选择 Pixelfed 使用哪个服务器或“实例”。如果你不清楚，你可以看这里：https://pixelfed.org/join
+\n
+\n关于 Pixelfed 的更多信息，请见此处：https://pixelfed.org</string>
+    <string name="api_not_enabled_dialog">此实例上未激活 API。联系管理员，请他们激活它。</string>
+    <string name="delete_post_failed_io_except">法删除帖子，请检查你的连接\?</string>
+    <string name="delete_post_failed_error">无法删除帖子，错误 %1$d</string>
+    <string name="mascot_description">图片显示的是一只小熊猫，Pixelfed的吉祥物，正在用手机</string>
+    <string name="issues_contribute">报告问题或为这个应用程序作贡献：</string>
+    <string name="help_translate">帮助将 PixelDroid 翻译到你的语言：</string>
+    <string name="language">语言</string>
+    <string name="delete_dialog">删除这则帖子？</string>
+    <string name="panda_pull_to_refresh_to_try_again">这只熊猫不高兴。下拉刷新以再次尝试。</string>
+    <string name="something_went_wrong">出错了…</string>
+    <string name="discover_no_infinite_load">Discover 不会无限加载。下拉来刷新获取其他图像。</string>
+    <string name="discover">发现</string>
+    <string name="open_drawer_menu">打开抽屉按钮</string>
+    <string name="profile_picture">个人资料图片</string>
+    <string name="toolbar_title_edit">编辑</string>
+    <string name="report_error">无法发送报告</string>
+    <string name="reported">已报告 {gmd_check_circle}</string>
+    <string name="report_target">报告 @%1$s 的帖子</string>
+    <string name="optional_report_comment">管理员的可选消息</string>
+    <string name="report">报告</string>
+    <string name="status_more_options">更多选项</string>
+    <string name="search_empty_error">搜索查询不能为空</string>
+    <string name="follows_title">%1$s 的关注</string>
+    <string name="followers_title">%1$s 的关注者</string>
+    <string name="post_title">%1$s 的帖子</string>
+    <string name="license_info">PixelDroid 是自由开源软件，使用 GNU 通用公共许可证 (版本3或更高版本)</string>
+    <string name="dependencies_licenses">依赖和许可证</string>
+    <string name="dialog_message_cancel_follow_request">取消这个关注请求？</string>
+    <string name="follow_requested">已请求关注</string>
+    <string name="empty_feed">这儿没什么可看的 :(</string>
+    <string name="edit_link_failed">未能打开编辑页面</string>
+    <string name="post_is_album">这个帖子是一个相册</string>
+    <string name="submit_comment">提交评论</string>
+    <string name="add_comment">添加一条评论</string>
+    <plurals name="number_comments">
+        <item quantity="other">%d 条评论</item>
+    </plurals>
+    <string name="no_cancel_edit">不，取消编辑</string>
+    <string name="save_before_returning">保存你的编辑？</string>
+    <string name="crop_button">裁剪或旋转图片的按钮</string>
+    <string name="image_preview">被编辑图片的预览</string>
+    <string name="filter_thumbnail">过滤器的缩略图</string>
+    <string name="upload_error">服务器返回了错误码：%1$d</string>
+    <string name="size_exceeds_instance_limit">相册中 %1$d 号图片的尺寸超出了实例允许的最大尺寸 (图片大小为 %2$d kb 而上限为 %3$d kb)。你可能无法上传这张图片。</string>
+    <string name="total_exceeds_album_limit">你选择的图片数超出了你服务器允许的最大数目 (%1$s)。超出上限的图像已被忽略。</string>
+    <string name="no_media_description">在此处添加一个媒体描述…</string>
+    <string name="save_image_description">保存图片描述</string>
+    <string name="switch_to_carousel">切换到旋转视图</string>
+    <string name="switch_to_grid">切换到网格视图</string>
+    <plurals name="nb_following">
+        <item quantity="other">%d
+\n关注账户</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="other">%d
+\n关注者</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="other">%d
+\n帖子</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="other">%d 次分享</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="other">%d 个赞</item>
+    </plurals>
+    <plurals name="description_max_characters">
+        <item quantity="other">描述必须最多包含 %d 个字符。</item>
+    </plurals>
+    <string name="file_not_found">文件 %1$s 未找到</string>
+    <string name="hashtag_title">#%1$s</string>
 </resources>

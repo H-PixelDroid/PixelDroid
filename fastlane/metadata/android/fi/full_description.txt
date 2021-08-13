@@ -1,0 +1,11 @@
+PixelDroid on vapaa ja avoimen lähdekoodin Android-asiakas Pixelfedille, hajautetulle kuvanjakoalustalle.
+
+Selaa feedejä ja profiileja, tee julkaisuja, löydä julkaisuja ja ole vuorovaikutuksessa muiden kanssa fediversessa.
+
+• Usean tilin tuki
+• Tumma ja vaalea teema
+• Lisää suodattimia, rajaa, muuta kirkkautta/kontrastia/värikylläisyyttä
+• Ottaa huomioon Pixelfed-instanssin määritykset
+• 100% vapaa ja avoimen lähdekoodin ohjelmisto. Ei suljettuja riippuvuuksia.
+
+Oppiaksesi lisää Pixelfedistä, katso https://pixelfed.org
