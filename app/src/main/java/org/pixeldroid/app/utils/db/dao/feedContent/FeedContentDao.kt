@@ -9,7 +9,7 @@ interface FeedContentDao<T: FeedContentDatabase>{
 
     fun feedContent(userId: String, instanceUri: String): PagingSource<Int, T>
 
-    suspend fun clearFeedContent()
+    suspend fun clearFeedContent(userId: String, instanceUri: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(feedContent: List<T>)

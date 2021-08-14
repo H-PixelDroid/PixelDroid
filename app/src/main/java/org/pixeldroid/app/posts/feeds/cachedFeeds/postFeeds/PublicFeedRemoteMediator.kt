@@ -74,7 +74,7 @@ class PublicFeedRemoteMediator @Inject constructor(
             db.withTransaction {
                 // clear table in the database
                 if (loadType == LoadType.REFRESH) {
-                    db.publicPostDao().clearFeedContent()
+                    db.publicPostDao().clearFeedContent(user.user_id, user.instance_uri)
                 }
                 db.publicPostDao().insertAll(dbObjects)
             }
