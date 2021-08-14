@@ -36,7 +36,7 @@ class ThumbnailAdapter (private val context: Context,
         holder.thumbnail.setImageBitmap(tbItem.image)
         holder.thumbnail.setOnClickListener {
             listener.onFilterSelected(tbItem.filter)
-            selectedIndex = position
+            selectedIndex = holder.bindingAdapterPosition
             notifyDataSetChanged()
         }
 
