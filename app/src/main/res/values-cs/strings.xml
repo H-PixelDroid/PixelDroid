@@ -1,2 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="help_translate">Pomozte přeložit PixelDroid do vašeho jazyka:</string>
+    <string name="language">Jazyk</string>
+    <string name="delete_dialog">Smazat tento příspěvek\?</string>
+    <string name="delete">Smazat</string>
+    <string name="something_went_wrong">Něco se pokazilo…</string>
+    <string name="profile_picture">Profilový obrázek</string>
+    <string name="toolbar_title_edit">Upravit</string>
+    <string name="report_error">Hlášení nelze odeslat</string>
+    <string name="reported">Nahlášeno {gmd_check_circle}</string>
+    <string name="report_target">Nahlásit příspěvek uživatele @%1$s</string>
+    <string name="optional_report_comment">Volitelná zpráva pro moderátory/správce</string>
+    <string name="share_link">Sdílet odkaz</string>
+    <string name="report">Nahlásit</string>
+    <string name="status_more_options">Více možností</string>
+    <string name="search_empty_error">Vyhledávací dotaz nemůže být prázdný</string>
+    <string name="follows_title">%1$s sleduje</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="followers_title">Sledují uživatele %1$s</string>
+    <string name="post_title">Příspěvek od %1$s</string>
+    <string name="license_info">PixelDroid je svobodný software s otevřeným zdrojovým kódem, licencovaný pod GNU General Public License (verze 3 nebo vyšší)</string>
+    <string name="project_website">Webové stránky projektu: https://pixeldroid.org</string>
+    <string name="dependencies_licenses">Závislosti a licence</string>
+    <string name="about_pixeldroid">O aplikaci PixelDroid</string>
+    <string name="about">O aplikaci</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="whats_an_instance">Co je to instance\?</string>
+    <string name="liked_notification">%1$s se líbí váš příspěvek</string>
+    <string name="theme_title">Motiv aplikace</string>
+    <string name="title_activity_settings2">Nastavení</string>
+    <string name="light_theme">Světlý</string>
+    <string name="mention_notification">%1$s se o vás zmínil/a</string>
+    <string name="shared_notification">%1$s sdílel/a váš příspěvek</string>
+    <string name="followed_notification">%1$s vás sleduje</string>
+    <string name="dark_theme">Tmavý</string>
+    <string name="add_account_description">Přidat další účet Pixelfed</string>
+    <string name="add_account_name">Přidat účet</string>
+    <string name="default_system">Výchozí (dle systému)</string>
+    <string name="theme_header">Motiv</string>
+    <string name="token_error">Chyba při získávání tokenu</string>
+    <string name="browser_launch_failed">Nelze spustit prohlížeč. Je některý instalovaný\?</string>
+    <string name="registration_failed">Na tomto serveru nelze aplikaci zaregistrovat</string>
+    <string name="invalid_domain">Neplatná doména</string>
+    <string name="menu_settings">Nastavení</string>
+    <string name="menu_account">Můj profil</string>
+</resources>
