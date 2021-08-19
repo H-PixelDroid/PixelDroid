@@ -1,14 +1,23 @@
 package org.pixeldroid.app.utils.api
 
+import com.google.gson.*
 import org.pixeldroid.app.utils.api.objects.*
 import io.reactivex.Observable
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import org.pixeldroid.app.utils.db.AppDatabase
+import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+import org.pixeldroid.app.utils.di.PixelfedAPIHolder
+import org.pixeldroid.app.utils.di.TokenAuthenticator
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
+
+import java.time.OffsetDateTime
+
 
 /*
     Implements the Pixelfed API
