@@ -16,6 +16,7 @@ android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -99,6 +100,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     /**
      * AndroidX dependencies:

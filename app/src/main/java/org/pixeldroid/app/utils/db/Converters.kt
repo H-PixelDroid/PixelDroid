@@ -1,26 +1,36 @@
 package org.pixeldroid.app.utils.db
 
+import android.os.Build
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.pixeldroid.app.utils.api.objects.*
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class Converters {
     private val gson = Gson()
-    
+    private val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+
+    @TypeConverter
+    fun toOffsetDateTime(value: String?): OffsetDateTime? {
+        return value?.let {
+            return formatter.parse(value, OffsetDateTime::from)
+        }
+    }
+
+    @TypeConverter
+    fun fromOffsetDateTime(date: OffsetDateTime?): String? {
+        return date?.format(formatter)
+    }
+
     @TypeConverter
     fun listToJson(list: List<String>): String = gson.toJson(list)
 
      @TypeConverter
      fun jsonToList(json: String): List<String> =
          gson.fromJson(json, Array<String>::class.java).toList()
-
-    @TypeConverter
-    fun dateToJson(date: Date): String = gson.toJson(date)
-
-    @TypeConverter
-    fun jsonToDate(json: String): Date = gson.fromJson(json, Date::class.java)
 
     @TypeConverter
     fun accountToJson(account: Account): String = gson.toJson(account)

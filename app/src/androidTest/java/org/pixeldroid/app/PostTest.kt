@@ -27,6 +27,7 @@ import org.junit.*
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
 
 
 @RunWith(AndroidJUnit4::class)
@@ -66,7 +67,8 @@ class PostTest {
                 username = "SQDFSQDF",
                 url = "$INSTANCE_URI/pixeldroid",
             ),
-            media_attachments = listOf(attachment)
+            media_attachments = listOf(attachment),
+            created_at = OffsetDateTime.now().minusHours(1)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -102,7 +104,8 @@ class PostTest {
                 username = "douze",
                     url = "$INSTANCE_URI/pixeldroid",
             ),
-            media_attachments = listOf(attachment1, attachment2)
+            media_attachments = listOf(attachment1, attachment2),
+            created_at = OffsetDateTime.now().minusHours(1)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -134,7 +137,8 @@ class PostTest {
                         username = "douze",
                         url = "$INSTANCE_URI/pixeldroid",
                 ),
-                media_attachments = listOf(attachment)
+                media_attachments = listOf(attachment),
+            created_at = OffsetDateTime.now().minusHours(1)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -165,7 +169,8 @@ class PostTest {
                         username = "douze",
                         url = "$INSTANCE_URI/pixeldroid",
                 ),
-                media_attachments = listOf(attachment1, attachment2)
+                media_attachments = listOf(attachment1, attachment2),
+            created_at = OffsetDateTime.now().minusHours(1)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -181,7 +186,7 @@ class PostTest {
     @Test
     fun getNLikesReturnsCorrectFormat() {
         val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
-            created_at= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'").parse("2020-03-03T08:00:16.000000Z"),
+            created_at= OffsetDateTime.parse("2020-03-03T08:00:16+00:00"),
             account= Account(id="115114166443970560", username="Miike", acct="Miike",
                 url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
                 avatar="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
@@ -208,7 +213,7 @@ class PostTest {
     @Test
     fun getNSharesReturnsCorrectFormat() {
         val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
-            created_at= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'").parse("2020-03-03T08:00:16.000000Z"),
+            created_at= OffsetDateTime.parse("2020-03-03T08:00:16+00:00"),
             account= Account(id="115114166443970560", username="Miike", acct="Miike",
                 url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
                 avatar="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",

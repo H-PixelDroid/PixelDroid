@@ -24,10 +24,44 @@ interface PixelfedAPI {
         fun createFromUrl(baseUrl: String): PixelfedAPI {
             return Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gSonInstance))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(PixelfedAPI::class.java)
         }
+
+        private var gSonInstance: Gson = GsonBuilder()
+            .registerTypeAdapter(
+                OffsetDateTime::class.java,
+                JsonDeserializer { json: JsonElement, _, _ ->
+                    OffsetDateTime.parse(
+                        json.asString
+                    )
+                } as JsonDeserializer<OffsetDateTime>)
+            .create()
+
+        private val intermediate: Retrofit.Builder = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create(gSonInstance))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+
+
+        fun apiForUser(
+            user: UserDatabaseEntity,
+            db: AppDatabase,
+            pixelfedAPIHolder: PixelfedAPIHolder
+        ): PixelfedAPI =
+            intermediate
+                .baseUrl(user.instance_uri)
+                .client(
+                    OkHttpClient().newBuilder().authenticator(TokenAuthenticator(user, db, pixelfedAPIHolder))
+                        .addInterceptor {
+                            it.request().newBuilder().run {
+                                header("Accept", "application/json")
+                                header("Authorization", "Bearer ${user.accessToken}")
+                                it.proceed(build())
+                            }
+                        }.build()
+                )
+                .build().create(PixelfedAPI::class.java)
     }
 
 

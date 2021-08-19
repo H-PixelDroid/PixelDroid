@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
 
 
 /**
@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
  */
 class APIUnitTest {
     private val referenceFirstStatus = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
-        created_at= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.Z").parse("2020-03-03T08:00:16.+0000"),
+        created_at= OffsetDateTime.parse("2020-03-03T08:00:16+00:00"),
         account=Account(id="115114166443970560", username="Miike", acct="Miike",
             url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
             avatar="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
@@ -36,14 +36,14 @@ class APIUnitTest {
         emojis= emptyList(), reblogs_count=0, favourites_count=0, replies_count=0, url="https://pixelfed.de/p/Miike/140364967936397312",
         in_reply_to_id=null, in_reply_to_account=null, reblog=null, poll=null, card=null, language=null, text=null, favourited=null, reblogged=null, muted=null, bookmarked=null, pinned=null)
     val sampleNotification = Notification("45723", Notification.NotificationType.favourite,
-        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+hh:mm").parse("2020-03-14T15:01:49+00:00")!!,
+        OffsetDateTime.parse("2020-03-14T15:01:49+00:00")!!,
         Account("79574199701737472", "Spaziergaenger",
             "Spaziergaenger", "https://pixelfed.de/Spaziergaenger",
             "anonymous", "", "https://pixelfed.de/storage/avatars/007/957/419/970/173/747/2/KEg4YgCgsmzdgyVztszz_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
             "https://pixelfed.de/storage/avatars/007/957/419/970/173/747/2/KEg4YgCgsmzdgyVztszz_avatar.jpeg?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
             locked=false, followers_count = 40, following_count = 0, statuses_count = 891, created_at = "1568728767", header = "", discoverable = true, emojis = emptyList(), header_static = ""),
         Status("144456497894658048","https://pixelfed.de/p/dante/144456497894658048",
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.hhmmss'Z'").parse("2020-03-03T08:00:16.000000Z"), in_reply_to_id = null,
+            OffsetDateTime.parse("2020-03-03T08:00:16+00:00"), in_reply_to_id = null,
             in_reply_to_account = null, reblog = null,content = "Saturn V launch", emojis = emptyList(), reblogs_count = 0,
             favourites_count = 1, reblogged = false, favourited = false, muted = false, sensitive = false,
             spoiler_text = "", visibility = Status.Visibility.public, application = Application("web", null),
@@ -163,7 +163,7 @@ fun assertStatusEqualsToReference(actual: Status){
     assert(
         ((actual.id=="140364967936397312"
                 && actual.uri=="https://pixelfed.de/p/Miike/140364967936397312"
-                && actual.created_at==SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.Z").parse("2020-03-03T08:00:16.+0000")
+                && actual.created_at == OffsetDateTime.parse("2020-03-03T08:00:16.+00:00")
                 && actual.account!!.id=="115114166443970560"&& actual.account!!.username=="Miike"&& actual.account!!.acct=="Miike" &&
                 actual.account!!.url=="https://pixelfed.de/Miike"&& actual.account!!.display_name=="Miike Duart"&& actual.account!!.note==""&&
                 actual.account!!.avatar=="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"&&

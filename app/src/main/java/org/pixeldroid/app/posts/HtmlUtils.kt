@@ -10,7 +10,6 @@ import android.text.style.URLSpan
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.text.toSpanned
 import androidx.lifecycle.LifecycleCoroutineScope
 import org.pixeldroid.app.R
@@ -22,6 +21,9 @@ import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import java.net.URI
 import java.net.URISyntaxException
 import java.text.ParseException
+import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.*
 
 fun fromHtml(html: String): Spanned {
@@ -128,18 +130,18 @@ fun parseHTMLText(
 }
 
 
-fun setTextViewFromISO8601(date: Date, textView: TextView, absoluteTime: Boolean, context: Context) {
-    val now = Date().time
+fun setTextViewFromISO8601(date: OffsetDateTime, textView: TextView, absoluteTime: Boolean, context: Context) {
+    val now = Date.from(OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).toInstant()).time
 
     try {
-        val then = date.time
-        val formattedDate = android.text.format.DateUtils
-                .getRelativeTimeSpanString(then, now,
-                        android.text.format.DateUtils.SECOND_IN_MILLIS,
-                        android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE)
+        val then = Date.from(date.toInstant()).time
+        val formattedDate: String = android.text.format.DateUtils
+            .getRelativeTimeSpanString(then, now,
+                android.text.format.DateUtils.SECOND_IN_MILLIS,
+                android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE).toString()
 
         textView.text = if(absoluteTime) context.getString(R.string.posted_on).format(date)
-        else "$formattedDate"
+        else formattedDate
 
     } catch (e: ParseException) {
         e.printStackTrace()
