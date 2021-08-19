@@ -50,6 +50,12 @@
     <!-- Notifications: end of poll notification -->
     <string name="poll_notification">"%1$s's poll has ended"</string>
 
+    <!-- Notifications: comment notification -->
+    <string name="comment_notification">%1$s commented on your post</string>
+
+    <!-- Notifications: other notification -->
+    <string name="other_notification">"Notification from %1$s"</string>
+
     <!-- Login page -->
     <string name="whats_an_instance">"What's an instance?"</string>
     <string name="whats_an_instance_explanation">"You might be confused by the text field asking for the domain of your 'instance'.

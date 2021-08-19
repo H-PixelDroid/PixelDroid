@@ -38,6 +38,6 @@ data class Notification(
     override var instance_uri: String,
     ): FeedContent, FeedContentDatabase {
     enum class NotificationType: Serializable {
-        follow, mention, reblog, favourite, poll
+        follow, mention, reblog, favourite, poll, comment
     }
 }
