@@ -15,6 +15,10 @@ interface NotificationDao: FeedContentDao<Notification> {
             ORDER BY datetime(created_at) DESC""")
     override fun feedContent(userId: String, instanceUri: String): PagingSource<Int, Notification>
 
+    @Query("""SELECT * FROM notifications WHERE user_id=:userId AND instance_uri=:instanceUri 
+            ORDER BY datetime(created_at) DESC LIMIT 1""")
+    fun latestNotification(userId: String, instanceUri: String): Notification?
+
     @Query("DELETE FROM notifications WHERE user_id=:userId AND instance_uri=:instanceUri AND id=:id")
     override suspend fun delete(id: String, userId: String, instanceUri: String)
 }

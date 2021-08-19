@@ -46,6 +46,7 @@ import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.hasInternet
+import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -97,6 +98,13 @@ class MainActivity : BaseActivity() {
                 }
             )
             setupTabs(tabs)
+
+            val showNotification: Boolean = intent.getBooleanExtra(SHOW_NOTIFICATION_TAG, false)
+
+            if(showNotification){
+                binding.viewPager.currentItem = 3
+            }
+
             enablePullNotifications(this)
         }
     }
