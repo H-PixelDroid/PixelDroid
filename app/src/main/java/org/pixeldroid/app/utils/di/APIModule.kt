@@ -8,9 +8,7 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import org.pixeldroid.app.utils.api.PixelfedAPI.Companion.apiForUser
 import javax.inject.Singleton
 
 @Module
@@ -78,9 +76,6 @@ class TokenAuthenticator(val user: UserDatabaseEntity, val db: AppDatabase, val 
 }
 
 class PixelfedAPIHolder(private val db: AppDatabase){
-    private val intermediate: Retrofit.Builder = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 
     var api: PixelfedAPI? =
         db.userDao().getActiveUser()?.let {
@@ -90,21 +85,8 @@ class PixelfedAPIHolder(private val db: AppDatabase){
     fun setToCurrentUser(
         user: UserDatabaseEntity = db.userDao().getActiveUser()!!
     ): PixelfedAPI {
-        val newAPI = intermediate
-            .baseUrl(user.instance_uri)
-            .client(
-                OkHttpClient().newBuilder().authenticator(TokenAuthenticator(user, db, this))
-                    .addInterceptor {
-                    it.request().newBuilder().run {
-                        header("Accept", "application/json")
-                        header("Authorization", "Bearer ${user.accessToken}")
-                        it.proceed(build())
-                    }
-                }.build()
-            )
-            .build().create(PixelfedAPI::class.java)
+        val newAPI = apiForUser(user, db, this)
         api = newAPI
         return newAPI
     }
-
 }
