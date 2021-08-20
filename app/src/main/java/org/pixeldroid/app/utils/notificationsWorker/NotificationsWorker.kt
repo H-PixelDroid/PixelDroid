@@ -24,9 +24,12 @@ import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import retrofit2.HttpException
 import java.io.IOException
-import java.time.OffsetDateTime
+import java.time.Instant
 import java.util.*
 import javax.inject.Inject
+
+
+
 
 class NotificationsWorker(
     context: Context,
@@ -64,12 +67,12 @@ class NotificationsWorker(
                 )
 
                 while (!newNotifications.isNullOrEmpty()
-                    && newNotifications.map { it.created_at ?: OffsetDateTime.MIN }
-                        .maxOrNull()!! > previouslyLatestNotification?.created_at ?: OffsetDateTime.MIN
+                    && newNotifications.map { it.created_at ?: Instant.MIN }
+                        .maxOrNull()!! > previouslyLatestNotification?.created_at ?: Instant.MIN
                 ) {
                     // Add to db
                     val filteredNewNotifications: List<Notification> = newNotifications.filter {
-                        it.created_at ?: OffsetDateTime.MIN > previouslyLatestNotification?.created_at ?: OffsetDateTime.MIN
+                        it.created_at ?: Instant.MIN > previouslyLatestNotification?.created_at ?: Instant.MIN
                     }.map {
                         it.copy(user_id = user.user_id, instance_uri = user.instance_uri)
                     }.sortedBy { it.created_at }
@@ -82,7 +85,7 @@ class NotificationsWorker(
                     }
 
                     previouslyLatestNotification =
-                        filteredNewNotifications.maxByOrNull { it.created_at ?: OffsetDateTime.MIN }
+                        filteredNewNotifications.maxByOrNull { it.created_at ?: Instant.MIN }
 
                     // Request again
                     newNotifications = api.notifications(
@@ -105,6 +108,25 @@ class NotificationsWorker(
         channelIdPrefix: String
     ) {
         val channelId = channelIdPrefix + (notification.type ?: "other").toString()
+
+        val intent: Intent = when (notification.type) {
+            mention -> notification.status?.let {
+                Intent(applicationContext, PostActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    putExtra(Status.POST_TAG, notification.status)
+                    putExtra(Status.VIEW_COMMENTS_TAG, true)
+                }
+            } ?: Intent(applicationContext, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra(SHOW_NOTIFICATION_TAG, true)
+            }
+            else -> Intent(applicationContext, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra(SHOW_NOTIFICATION_TAG, true)
+            }
+        }.putExtra(USER_NOTIFICATION_TAG, user.user_id)
+            .putExtra(INSTANCE_NOTIFICATION_TAG, user.instance_uri)
+
 
         val builder = NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(
@@ -136,28 +158,13 @@ class NotificationsWorker(
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(
-                PendingIntent.getActivity(applicationContext, 0, when (notification.type) {
-                    mention -> notification.status?.let {
-                        Intent(applicationContext, PostActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            putExtra(Status.POST_TAG, notification.status)
-                            putExtra(Status.VIEW_COMMENTS_TAG, true)
-                        }
-                    } ?: Intent(applicationContext, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        putExtra(SHOW_NOTIFICATION_TAG, true)
-                    }
-                    else -> Intent(applicationContext, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        putExtra(SHOW_NOTIFICATION_TAG, true)
-                    }
-                }, PendingIntent.FLAG_IMMUTABLE))
+                PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            )
             .setAutoCancel(true)
 
-        if (notification.type == mention || notification.type == comment){
+        if (notification.type == mention || notification.type == comment || notification.type == poll){
             builder.setContentText(notification.status?.content)
         }
-        //TODO poll -> TODO()
 
         with(NotificationManagerCompat.from(applicationContext)) {
             // notificationId is a unique int for each notification
@@ -196,7 +203,9 @@ class NotificationsWorker(
     }
 
     companion object {
-        const val SHOW_NOTIFICATION_TAG = "SHOW_NOTIFICATION"
+        const val SHOW_NOTIFICATION_TAG = "org.pixeldroid.app.SHOW_NOTIFICATION"
+        const val INSTANCE_NOTIFICATION_TAG = "org.pixeldroid.app.USER_NOTIFICATION"
+        const val USER_NOTIFICATION_TAG = "org.pixeldroid.app.INSTANCE_NOTIFICATION"
     }
 
 }

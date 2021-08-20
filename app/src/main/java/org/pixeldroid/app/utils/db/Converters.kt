@@ -1,10 +1,10 @@
 package org.pixeldroid.app.utils.db
 
-import android.os.Build
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.pixeldroid.app.utils.api.objects.*
+import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -13,10 +13,22 @@ class Converters {
     private val gson = Gson()
     private val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
+    private val instantFormatter = DateTimeFormatter.ISO_INSTANT
+
+    @TypeConverter
+    fun toInstant(timestamp: String?): Instant? =
+        timestamp?.let {
+            instantFormatter.parse(it, Instant::from)
+        }
+
+    @TypeConverter
+    fun fromInstant(time: Instant?): String? =
+        time?.let { instantFormatter.format(it) }
+
     @TypeConverter
     fun toOffsetDateTime(value: String?): OffsetDateTime? {
         return value?.let {
-            return formatter.parse(value, OffsetDateTime::from)
+            return formatter.parse(it, OffsetDateTime::from)
         }
     }
 

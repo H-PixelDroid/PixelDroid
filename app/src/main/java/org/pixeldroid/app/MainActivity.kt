@@ -46,7 +46,9 @@ import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.hasInternet
+import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
+import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -58,6 +60,7 @@ class MainActivity : BaseActivity() {
 
     companion object {
         const val ADD_ACCOUNT_IDENTIFIER: Long = -13
+        const val LOG_OUT_REQUESTED = "LOG_OUT_REQUESTED"
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -72,10 +75,12 @@ class MainActivity : BaseActivity() {
         //get the currently active user
         user = db.userDao().getActiveUser()
 
+        if (notificationFromOtherUser()) return
+
         //Check if we have logged in and gotten an access token
         if (user == null) {
-            launchActivity(LoginActivity(), firstTime = true)
             finish()
+            launchActivity(LoginActivity(), firstTime = true)
         } else {
             sendTraceDroidStackTracesIfExist("contact@pixeldroid.org", this)
 
@@ -107,6 +112,32 @@ class MainActivity : BaseActivity() {
 
             enablePullNotifications(this)
         }
+    }
+
+    //Checks if the activity was launched from a notification from another account than the
+    // current active one, and if so switches to that account
+    private fun notificationFromOtherUser(): Boolean {
+        val userOfNotification: String? = intent.extras?.getString(USER_NOTIFICATION_TAG)
+        val instanceOfNotification: String? = intent.extras?.getString(INSTANCE_NOTIFICATION_TAG)
+        if (userOfNotification != null && instanceOfNotification != null
+            && (userOfNotification != user?.user_id
+                    || instanceOfNotification != user?.instance_uri)
+        ) {
+
+            switchUser(userOfNotification)
+
+            val newIntent = Intent(this, MainActivity::class.java)
+            newIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            if (intent.getBooleanExtra(SHOW_NOTIFICATION_TAG, false)) {
+                newIntent.putExtra(SHOW_NOTIFICATION_TAG, true)
+            }
+
+            finish()
+            startActivity(newIntent)
+            return true
+        }
+        return false
     }
 
     private fun setupDrawer() {
@@ -182,6 +213,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun logOut(){
+        finish()
         db.runInTransaction {
             db.userDao().deleteActiveUsers()
 
@@ -234,14 +266,21 @@ class MainActivity : BaseActivity() {
             return false
         }
 
-        db.userDao().deActivateActiveUsers()
-        db.userDao().activateUser(profile.identifier.toString())
-        apiHolder.setToCurrentUser()
+        switchUser(profile.identifier.toString())
+
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        finish()
         startActivity(intent)
 
         return false
+    }
+
+    private fun switchUser(userId: String) {
+        db.userDao().deActivateActiveUsers()
+        db.userDao().activateUser(userId)
+        apiHolder.setToCurrentUser()
     }
 
     private inline fun primaryDrawerItem(block: PrimaryDrawerItem.() -> Unit): PrimaryDrawerItem {

@@ -25,9 +25,11 @@ class NotificationWorkerTest {
     @Test
     fun testNotificationWorker() {
         // Get the ListenableWorker
-        val worker =
-            TestListenableWorkerBuilder<NotificationsWorker>(context).build()        // Run the worker synchronously
-        val result = worker.startWork().get()
-        MatcherAssert.assertThat(result, CoreMatchers.`is`(ListenableWorker.Result.success()))
+        while (true) {
+            val worker =
+                TestListenableWorkerBuilder<NotificationsWorker>(context).build()        // Run the worker synchronously
+            val result = worker.startWork().get()
+            MatcherAssert.assertThat(result, CoreMatchers.`is`(ListenableWorker.Result.success()))
+        }
     }
 }

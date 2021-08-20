@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import java.io.Serializable
-import java.time.OffsetDateTime
+import java.time.Instant
 
 /*
 Represents a notification of an event relevant to the user.
@@ -27,7 +27,7 @@ data class Notification(
     //Required attributes
     override val id: String,
     val type: NotificationType?,
-    val created_at: OffsetDateTime?, //ISO 8601 Datetime
+    val created_at: Instant? = null, //ISO 8601 Datetime
     val account: Account?,
     //Optional attributes
     val status: Status? = null,

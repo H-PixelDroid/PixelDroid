@@ -72,8 +72,8 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
             putBoolean("restartMain", true)
         }
         intent.putExtras(savedInstanceState)
-        super.startActivity(intent)
         finish()
+        super.startActivity(intent)
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {

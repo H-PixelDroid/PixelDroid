@@ -9,6 +9,7 @@ import org.pixeldroid.app.utils.api.PixelfedAPI
 import retrofit2.HttpException
 import java.io.IOException
 import java.io.Serializable
+import java.time.Instant
 
 /*
 Represents a user and their associated profile.
@@ -32,7 +33,7 @@ data class Account(
     val emojis: List<Emoji>? = null,
     val discoverable: Boolean? = true,
     //Statistical attributes
-    val created_at: String? = "", //ISO 8601 Datetime (maybe can use a date type)
+    val created_at: Instant? = null, //ISO 8601 Datetime
     val statuses_count: Int? = 0,
     val followers_count: Int? = 0,
     val following_count: Int? = 0,

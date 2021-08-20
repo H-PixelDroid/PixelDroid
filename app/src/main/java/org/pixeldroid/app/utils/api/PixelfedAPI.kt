@@ -15,8 +15,9 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
-
+import java.time.Instant
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 
 /*
@@ -40,12 +41,16 @@ interface PixelfedAPI {
 
         private var gSonInstance: Gson = GsonBuilder()
             .registerTypeAdapter(
-                OffsetDateTime::class.java,
+                Instant::class.java,
                 JsonDeserializer { json: JsonElement, _, _ ->
-                    OffsetDateTime.parse(
-                        json.asString
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(
+                        json.asString, Instant::from
                     )
-                } as JsonDeserializer<OffsetDateTime>)
+                } as JsonDeserializer<Instant>).registerTypeAdapter(
+                Instant::class.java,
+            JsonSerializer { src: Instant, _,_ ->
+                JsonPrimitive(DateTimeFormatter.ISO_INSTANT.format(src));
+            })
             .create()
 
         private val intermediate: Retrofit.Builder = Retrofit.Builder()

@@ -22,7 +22,6 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.text.ParseException
 import java.time.Instant
-import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.*
 
@@ -130,11 +129,11 @@ fun parseHTMLText(
 }
 
 
-fun setTextViewFromISO8601(date: OffsetDateTime, textView: TextView, absoluteTime: Boolean, context: Context) {
-    val now = Date.from(OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).toInstant()).time
+fun setTextViewFromISO8601(date: Instant, textView: TextView, absoluteTime: Boolean, context: Context) {
+    val now = Date.from(Instant.now()).time
 
     try {
-        val then = Date.from(date.toInstant()).time
+        val then = Date.from(date).time
         val formattedDate: String = android.text.format.DateUtils
             .getRelativeTimeSpanString(then, now,
                 android.text.format.DateUtils.SECOND_IN_MILLIS,
