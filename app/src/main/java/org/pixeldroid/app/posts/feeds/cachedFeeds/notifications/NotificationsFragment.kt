@@ -169,7 +169,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
 
             this.notification = notification
 
-            Glide.with(itemView).load(notification?.account?.avatar_static).circleCrop()
+            Glide.with(itemView).load(notification?.account?.anyAvatar()).circleCrop()
                 .into(avatar)
 
             val previewUrl = notification?.status?.media_attachments?.getOrNull(0)?.preview_url
