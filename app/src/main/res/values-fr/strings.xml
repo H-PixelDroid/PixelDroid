@@ -187,4 +187,5 @@
     </plurals>
     <string name="delete_post_failed_error">Impossible de supprimer la publication, erreur %1$d</string>
     <string name="empty_feed">Rien à voir par ici :(</string>
+    <string name="delete_post_failed_io_except">Impossible de supprimer le message, vérifiez votre connexion \?</string>
 </resources>
