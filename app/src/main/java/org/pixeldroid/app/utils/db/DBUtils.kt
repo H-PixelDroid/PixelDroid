@@ -20,7 +20,7 @@ fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser:
                     instance_uri = normalizeDomain(instance_uri),
                     username = account.username!!,
                     display_name = account.getDisplayName(),
-                    avatar_static = account.avatar_static.orEmpty(),
+                    avatar_static = account.anyAvatar().orEmpty(),
                     isActive = activeUser,
                     accessToken = accessToken,
                     refreshToken = refreshToken,

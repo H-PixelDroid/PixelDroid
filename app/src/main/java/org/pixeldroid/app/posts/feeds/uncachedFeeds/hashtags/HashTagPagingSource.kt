@@ -3,8 +3,6 @@ package org.pixeldroid.app.posts.feeds.uncachedFeeds.hashtags
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import org.pixeldroid.app.utils.api.PixelfedAPI
-import org.pixeldroid.app.utils.api.objects.FeedContent
-import org.pixeldroid.app.utils.api.objects.Results
 import org.pixeldroid.app.utils.api.objects.Status
 import retrofit2.HttpException
 import java.io.IOException
