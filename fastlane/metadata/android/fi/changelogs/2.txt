@@ -1,0 +1,7 @@
+* Käännöspäivitykset: uusia tekstejä ja päivityksiä vanhoihin. Kiitos kääntäjille ❤️! Mene meidän weblateen, jos haluat auttaa kääntämisessä omalle kielellesi.
+
+* #️⃣ Hastag-tuki. Voit nyt selata hastageja, sen sijaan että näytetään vain toast-viesti 😜
+
+* Napauta välilehteä palataksesi ylös. Ei enään raivostuttavaa vierittämistä. Napauta vain uudelleen välilehteä, jossa olet, ja se vie sinut takaisin ylös :)
+
+* Korjattu sovelluksen kaatavia virheitä. Kiitos kaikille kaatumisraporteista! ❤️

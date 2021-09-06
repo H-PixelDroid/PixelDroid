@@ -16,12 +16,12 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/mikepenz/MaterialDrawer
-- artifact: org.jetbrains.kotlin:kotlin-android-extensions-runtime:+
-  name: kotlin-android-extensions-runtime
-  copyrightHolder: JetBrains s.r.o. and contributors
-  license: The Apache License, Version 2.0
+- artifact: androidx.startup:startup-runtime:+
+  name: startup-runtime
+  copyrightHolder: Google Inc.
+  license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://kotlinlang.org/
+  url: https://developer.android.com/jetpack/androidx/releases/startup#1.0.0
 - artifact: com.mikepenz:iconics-views:+
   name: iconics-views
   copyrightHolder: Mike Penz and contributors

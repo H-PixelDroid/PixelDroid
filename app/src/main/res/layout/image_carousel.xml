@@ -42,13 +42,14 @@
         android:id="@+id/editMediaDescriptionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:background="#4D000000"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/indicator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_goneMarginBottom="8dp">
+        app:layout_goneMarginBottom="8dp"
+        tools:visibility="visible">
 
         <EditText
             android:id="@+id/editTextMediaDescription"
@@ -140,7 +141,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/switch_to_grid"
         android:src="@drawable/grid_on_black_24dp"
-        android:tint="@color/white"
+        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/indicator"
         app:layout_constraintEnd_toStartOf="@+id/indicator"
         app:layout_constraintTop_toTopOf="@+id/indicator" />
@@ -153,7 +154,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/switch_to_carousel"
         android:src="@drawable/view_carousel_black_24dp"
-        android:tint="@color/white"
+        app:tint="@color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/indicator"
         app:layout_constraintEnd_toEndOf="parent"

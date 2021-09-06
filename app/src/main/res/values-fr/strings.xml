@@ -84,10 +84,10 @@
     <string name="posts">PUBLICATIONS</string>
     <string name="accounts">COMPTES</string>
     <string name="hashtags">HASHTAGS</string>
-    <string name="media_upload_completed">{gmd_cloud_done} Média téléversé avec succès</string>
+    <string name="media_upload_completed">Média téléversé avec succès</string>
     <string name="retry">Réessayez</string>
     <string name="posting_image_accessibility_hint">Image en cours de publication</string>
-    <string name="media_upload_failed">{gmd_cloud_off} Échec du téléversement du média, réessayez ou vérifiez l\'état du réseau</string>
+    <string name="media_upload_failed">Échec du téléversement du média, réessayez ou vérifiez l\'état du réseau</string>
     <string name="crop_result_error">Impossible de récupérer l\'image après le recadrage</string>
     <string name="busy_dialog_ok_button">D\'accord, attendez pour ça.</string>
     <string name="busy_dialog_text">Toujours en train de traiter l\'image, attendez tout d\'abord que cela se termine !</string>
@@ -152,16 +152,22 @@
 \n
 \nPour plus d\'informations sur Pixelfed, vous pouvez consulter le site suivant : https://pixelfed.org</string>
     <plurals name="nb_following">
-        <item quantity="one">%d Abonnement</item>
-        <item quantity="other">%d Abonnements</item>
+        <item quantity="one">%d
+\nAbonnement</item>
+        <item quantity="other">%d
+\nAbonnements</item>
     </plurals>
     <plurals name="nb_followers">
-        <item quantity="one">%d Abonné·e</item>
-        <item quantity="other">%d Abonné·e·s</item>
+        <item quantity="one">%d
+\nAbonné·e</item>
+        <item quantity="other">%d
+\nAbonné·e·s</item>
     </plurals>
     <plurals name="nb_posts">
-        <item quantity="one">%d Publication</item>
-        <item quantity="other">%d Publications</item>
+        <item quantity="one">%d
+\nPublication</item>
+        <item quantity="other">%d
+\nPublications</item>
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d commentaire</item>
@@ -179,4 +185,7 @@
         <item quantity="one">La description doit contenir au moins %d lettre.</item>
         <item quantity="other">La description doit contenir au moins %d lettres.</item>
     </plurals>
+    <string name="delete_post_failed_error">Impossible de supprimer la publication, erreur %1$d</string>
+    <string name="empty_feed">Rien à voir par ici :(</string>
+    <string name="delete_post_failed_io_except">Impossible de supprimer le message, vérifiez votre connexion \?</string>
 </resources>

@@ -7,6 +7,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 
+// Force latest version of Jacoco, initially done to resolve https://github.com/jacoco/jacoco/issues/1155
+jacoco.toolVersion = "0.8.7"
+
 
 android {
 
@@ -21,11 +24,11 @@ android {
         freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
     defaultConfig {
-        applicationId "com.h.pixeldroid"
+        applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 10
-        versionName "1.0.alpha9"
+        versionCode 3
+        versionName "1.0.beta3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -36,15 +39,15 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/java'
         test.java.srcDirs += 'src/test/java'
+        staging.res.srcDirs += 'src/debug/res'
         androidTest.java.srcDirs += 'src/androidTest/java'
     }
     testBuildType "staging"
 
-
-
     buildTypes {
         debug {
-
+                applicationIdSuffix '.debug'
+                versionNameSuffix "-debug"
         }
         staging {
             initWith debug
@@ -61,12 +64,12 @@ android {
                 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
             }
 
-            buildConfigField "String", "USER_ID", System.getenv("USER_ID") ?: localProperties['USER_ID']
-            buildConfigField "String", "INSTANCE_URI", System.getenv("INSTANCE_URI") ?: localProperties['INSTANCE_URI']
-            buildConfigField "String", "ACCESS_TOKEN", System.getenv("ACCESS_TOKEN") ?: localProperties['ACCESS_TOKEN']
-            buildConfigField "String", "REFRESH_TOKEN", System.getenv("REFRESH_TOKEN") ?: localProperties['REFRESH_TOKEN']
-            buildConfigField "String", "CLIENT_ID", System.getenv("CLIENT_ID") ?: localProperties['CLIENT_ID']
-            buildConfigField "String", "CLIENT_SECRET", System.getenv("CLIENT_SECRET") ?: localProperties['CLIENT_SECRET']
+            buildConfigField "String", "USER_ID", System.getenv("USER_ID") ?: localProperties['USER_ID'] ?: ""
+            buildConfigField "String", "INSTANCE_URI", System.getenv("INSTANCE_URI") ?: localProperties['INSTANCE_URI'] ?: ""
+            buildConfigField "String", "ACCESS_TOKEN", System.getenv("ACCESS_TOKEN") ?: localProperties['ACCESS_TOKEN'] ?: ""
+            buildConfigField "String", "REFRESH_TOKEN", System.getenv("REFRESH_TOKEN") ?: localProperties['REFRESH_TOKEN'] ?: ""
+            buildConfigField "String", "CLIENT_ID", System.getenv("CLIENT_ID") ?: localProperties['CLIENT_ID'] ?: ""
+            buildConfigField "String", "CLIENT_SECRET", System.getenv("CLIENT_SECRET") ?: localProperties['CLIENT_SECRET'] ?: ""
         }
         release {
             minifyEnabled true
@@ -74,6 +77,14 @@ android {
             proguardFiles 'proguard-rules.pro'
         }
     }
+    /**
+     * Make a string with the application_id (available in xml etc)
+     */
+    android.applicationVariants.all { variant ->
+        variant.resValue 'string', 'application_id', variant.applicationId
+    }
+
+
     testOptions {
         animationsDisabled true
 
@@ -92,37 +103,38 @@ dependencies {
     /**
      * AndroidX dependencies:
      */
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.core:core-ktx:1.5.0'
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation "androidx.browser:browser:1.3.0"
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
-    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-beta02'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0'
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.0"
-    implementation "androidx.annotation:annotation:1.1.0"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.paging:paging-runtime-ktx:3.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
+    implementation "androidx.annotation:annotation:1.2.0"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation "androidx.activity:activity-ktx:1.2.1"
+    implementation "androidx.activity:activity-ktx:1.2.3"
+    implementation 'androidx.fragment:fragment-ktx:1.3.5'
 
     // Use the most recent version of CameraX
-    def cameraX_version = '1.0.0-rc03'
+    def cameraX_version = '1.0.0'
     implementation "androidx.camera:camera-core:${cameraX_version}"
     implementation "androidx.camera:camera-camera2:${cameraX_version}"
     // CameraX Lifecycle library
     implementation "androidx.camera:camera-lifecycle:$cameraX_version"
 
     // CameraX View class
-    implementation 'androidx.camera:camera-view:1.0.0-alpha22'
+    implementation 'androidx.camera:camera-view:1.0.0-alpha25'
 
-    def room_version = "2.3.0-beta03"
+    def room_version = "2.3.0"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
@@ -136,17 +148,17 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
 
     //Dagger (dependency injection)
-    implementation 'com.google.dagger:dagger-android:2.30.1'
-    implementation 'com.google.dagger:dagger-android-support:2.30.1'
+    implementation 'com.google.dagger:dagger-android:2.37'
+    implementation 'com.google.dagger:dagger-android-support:2.37'
     // if you use the support libraries
-    kapt 'com.google.dagger:dagger-android-processor:2.30.1'
-    kapt 'com.google.dagger:dagger-compiler:2.30.1'
+    kapt 'com.google.dagger:dagger-android-processor:2.37'
+    kapt 'com.google.dagger:dagger-compiler:2.37'
 
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
@@ -154,26 +166,26 @@ dependencies {
     implementation 'info.androidhive:imagefilters:1.0.7'
     implementation 'com.github.yalantis:ucrop:2.2.6-native'
 
-    implementation("com.github.bumptech.glide:glide:4.11.0") {
+    implementation('com.github.bumptech.glide:glide:4.12.0') {
         exclude group: "com.android.support"
     }
 
-    implementation "com.github.bumptech.glide:okhttp-integration:4.11.0"
-    implementation("com.github.bumptech.glide:recyclerview-integration:4.11.0") {
+    implementation 'com.github.bumptech.glide:okhttp-integration:4.12.0'
+    implementation('com.github.bumptech.glide:recyclerview-integration:4.12.0') {
         // Excludes the support library because it's already included by Glide.
         transitive = false
     }
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation "com.mikepenz:materialdrawer:8.1.8"
+    implementation 'com.mikepenz:materialdrawer:8.4.1'
     // Add for NavController support
-    implementation "com.mikepenz:materialdrawer-nav:8.1.5"
+    implementation 'com.mikepenz:materialdrawer-nav:8.4.0'
 
     //iconics
-    implementation "com.mikepenz:iconics-core:5.0.3"
-    implementation "com.mikepenz:materialdrawer-iconics:8.1.8"
+    implementation "com.mikepenz:iconics-core:5.2.8"
+    implementation 'com.mikepenz:materialdrawer-iconics:8.4.1'
     implementation "com.mikepenz:iconics-views:5.0.3"
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
 
@@ -190,13 +202,15 @@ dependencies {
 
     // debugImplementation required vs testImplementation: https://issuetracker.google.com/issues/128612536
     //noinspection FragmentGradleConfiguration
-    stagingImplementation("androidx.fragment:fragment-testing:1.3.1") {
+    stagingImplementation("androidx.fragment:fragment-testing:1.3.5") {
         exclude group:'androidx.test', module:'monitor'
     }
 
+    //stagingImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
     testImplementation 'com.github.tomakehurst:wiremock-jre8:2.27.2'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$room_version"
 
 
@@ -227,10 +241,10 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedStagingAndroidTe
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def kotlinDebugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def kotlinTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/staging", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
     getSourceDirectories().from(files([mainSrc]))
-    getClassDirectories().from(files([kotlinDebugTree]))
+    getClassDirectories().from(files([kotlinTree]))
     getExecutionData().from(fileTree(dir: project.buildDir, includes: [
 
             'outputs/code_coverage/stagingAndroidTest/connected/*coverage.ec',

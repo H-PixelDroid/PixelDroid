@@ -7,6 +7,14 @@ variables:
   TARGET: "default"
 
 
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
 # Basic android and gradle stuff
 # Check linting
 lintDebug:
@@ -52,6 +60,62 @@ emulatorTest:
         - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
 
     artifacts:
+        when: always
         paths:
         - ./app/build/reports/jacoco/jacocoTestReport/
         expire_in: 1 week
+
+
+fdroid build:
+  image: registry.gitlab.com/fdroid/ci-images-client:latest
+  allow_failure: true
+  artifacts:
+    paths:
+      - unsigned/
+    when: always
+  only:
+    - tags
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - .gradle
+  script:
+    # Put the correct versionName and versionCode in the .fdroid.yml
+    - sed -e "s/\${versionName}/$(grep "versionName " app/build.gradle | awk '{print $2}')/" -e "s/\${versionCode}/$(grep "versionCode" app/build.gradle | awk '{print $2}')/" .fdroid.yml.template > .fdroid.yml
+    - rm .fdroid.yml.template
+    - test -d build || mkdir build
+    - test -d fdroidserver || mkdir fdroidserver
+    - git ls-remote https://gitlab.com/fdroid/fdroidserver.git master
+    - curl --silent https://gitlab.com/fdroid/fdroidserver/-/archive/master/fdroidserver-master.tar.gz
+      | tar -xz --directory=fdroidserver --strip-components=1
+    - export PATH="`pwd`/fdroidserver:$PATH"
+    - export PYTHONPATH="$CI_PROJECT_DIR/fdroidserver:$CI_PROJECT_DIR/fdroidserver/examples"
+    - export PYTHONUNBUFFERED=true
+
+    - bash fdroidserver/buildserver/setup-env-vars $ANDROID_HOME
+    - adduser --disabled-password --gecos "" vagrant
+    - ln -s $CI_PROJECT_DIR/fdroidserver /home/vagrant/fdroidserver
+    - mkdir -p /vagrant/cache
+    - wget -q https://services.gradle.org/distributions/gradle-5.6.2-bin.zip
+      --output-document=/vagrant/cache/gradle-5.6.2-bin.zip
+    - bash fdroidserver/buildserver/provision-gradle
+    - bash fdroidserver/buildserver/provision-apt-get-install http://deb.debian.org/debian
+    - source /etc/profile.d/bsenv.sh
+    - apt-get dist-upgrade
+
+    # install fdroidserver from git, with deps from Debian, until fdroidserver
+    # is stable enough to include all the things needed here
+    - apt-get install -t stretch-backports
+      fdroidserver
+      python3-asn1crypto
+      python3-ruamel.yaml
+      yamllint
+    - apt-get purge fdroidserver
+
+    - export GRADLE_USER_HOME=$PWD/.gradle
+    # each `fdroid build --on-server` run expects sudo, then uninstalls it
+    - set -x
+    - apt-get install sudo
+    - fdroid fetchsrclibs --verbose
+    # this builds the latest version of the app from its source dir, using the build recipe in .fdroid.yml
+    - fdroid build --verbose --on-server --no-tarball

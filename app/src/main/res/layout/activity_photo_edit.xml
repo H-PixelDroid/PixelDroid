@@ -26,7 +26,7 @@
             android:scaleType="centerInside"
             android:contentDescription="@string/image_preview" />
 
-        <com.h.pixeldroid.postCreation.photoEdit.NonSwipeableViewPager
+        <org.pixeldroid.app.postCreation.photoEdit.NonSwipeableViewPager
             android:id="@+id/viewPager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"

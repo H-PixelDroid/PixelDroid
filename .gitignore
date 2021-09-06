@@ -14,5 +14,6 @@
 .cxx
 .idea
 app/release
+app/debug
 app/lint
 lint
