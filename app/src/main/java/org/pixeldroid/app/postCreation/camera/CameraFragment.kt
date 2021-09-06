@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.Metadata
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -47,8 +48,14 @@ import kotlin.properties.Delegates
 // request. Where an app has multiple context for requesting permission,
 // this can help differentiate the different contexts.
 private const val REQUEST_CODE_PERMISSIONS = 10
+
 private const val ANIMATION_FAST_MILLIS = 50L
 private const val ANIMATION_SLOW_MILLIS = 100L
+
+private val REQUIRED_PERMISSIONS = arrayOf(
+    Manifest.permission.CAMERA,
+    Manifest.permission.READ_EXTERNAL_STORAGE
+)
 
 /**
  * Camera fragment
@@ -57,12 +64,8 @@ class CameraFragment : Fragment() {
 
     private lateinit var container: ConstraintLayout
     private lateinit var viewFinder: PreviewView
-    private val REQUIRED_PERMISSIONS = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
-    private val PICK_IMAGE_REQUEST = 1
-    private val CAPTURE_IMAGE_REQUEST = 2
+
+    private val cameraLifecycleOwner = CameraLifecycleOwner()
 
     private var displayId: Int = -1
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
@@ -86,12 +89,10 @@ class CameraFragment : Fragment() {
                 REQUEST_CODE_PERMISSIONS
             )
         } else {
-            //Bind the viewfinder here, since when leaving the fragment it gets unbound
-            bindCameraUseCases()
-
             // Build UI controls
             updateCameraUi()
         }
+        cameraLifecycleOwner.resume()
     }
     /**
      * Check if all permission specified in the manifest have been granted
@@ -145,6 +146,8 @@ class CameraFragment : Fragment() {
         // Initialize our background executor
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        bindCameraUseCases()
+
         // Every time the orientation of device changes, update rotation for use cases
 
         // Wait for the views to be properly laid out
@@ -169,14 +172,12 @@ class CameraFragment : Fragment() {
     }
 
     /** Declare and bind preview, capture and analysis use cases */
-    private fun bindCameraUseCases(forceRebind: Boolean = false) {
+    private fun bindCameraUseCases() {
 
         // Get screen metrics used to setup camera for full screen resolution
         val metrics = DisplayMetrics().also { viewFinder.display?.getRealMetrics(it) }
-        Log.d(TAG, "Screen metrics: ${metrics.widthPixels} x ${metrics.heightPixels}")
 
         val screenAspectRatio = aspectRatio(metrics.widthPixels, metrics.heightPixels)
-        Log.d(TAG, "Preview aspect ratio: $screenAspectRatio")
 
         val rotation = viewFinder.display?.rotation ?: 0
 
@@ -188,47 +189,64 @@ class CameraFragment : Fragment() {
             // CameraProvider
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            if (forceRebind || camera == null || preview == null || imageCapture == null || !cameraProvider.isBound(preview!!) || !cameraProvider.isBound(imageCapture!!)) {
 
+            // Preview
+            preview = Preview.Builder()
+                // We request aspect ratio but no resolution
+                .setTargetAspectRatio(screenAspectRatio)
+                // Set initial target rotation
+                .setTargetRotation(rotation)
+                .build()
 
-                // Preview
-                preview = Preview.Builder()
-                    // We request aspect ratio but no resolution
-                    .setTargetAspectRatio(screenAspectRatio)
-                    // Set initial target rotation
-                    .setTargetRotation(rotation)
-                    .build()
+            // ImageCapture
+            imageCapture = ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+                // We request aspect ratio but no resolution to match preview config, but letting
+                // CameraX optimize for whatever specific resolution best fits our use cases
+                .setTargetAspectRatio(screenAspectRatio)
+                // Set initial target rotation, we will have to call this again if rotation changes
+                // during the lifecycle of this use case
+                .setTargetRotation(rotation)
+                .build()
 
-                // ImageCapture
-                imageCapture = ImageCapture.Builder()
-                    .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
-                    // We request aspect ratio but no resolution to match preview config, but letting
-                    // CameraX optimize for whatever specific resolution best fits our use cases
-                    .setTargetAspectRatio(screenAspectRatio)
-                    // Set initial target rotation, we will have to call this again if rotation changes
-                    // during the lifecycle of this use case
-                    .setTargetRotation(rotation)
-                    .build()
+            // Must unbind the use-cases before rebinding them
+            cameraProvider.unbindAll()
 
-                // Must unbind the use-cases before rebinding them
-                cameraProvider.unbindAll()
+            try {
+                // A variable number of use-cases can be passed here -
+                // camera provides access to CameraControl & CameraInfo
+                camera = cameraProvider.bindToLifecycle(
+                    cameraLifecycleOwner, cameraSelector, preview, imageCapture
+                )
 
-                try {
-                    // A variable number of use-cases can be passed here -
-                    // camera provides access to CameraControl & CameraInfo
-                    camera = cameraProvider.bindToLifecycle(
-                        this, cameraSelector, preview, imageCapture
-                    )
-
-
-                    // Attach the viewfinder's surface provider to preview use case
-                    preview?.setSurfaceProvider(viewFinder.surfaceProvider)
-                } catch (exc: Exception) {
-                    Log.e(TAG, "Use case binding failed", exc)
-                }
+                // Attach the viewfinder's surface provider to preview use case
+                preview?.setSurfaceProvider(viewFinder.surfaceProvider)
+            } catch (exc: Exception) {
+                Log.e(TAG, "Use case binding failed", exc)
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
+
+    override fun onPause() {
+        super.onPause()
+        cameraLifecycleOwner.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraLifecycleOwner.destroy()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        cameraLifecycleOwner.stop()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        cameraLifecycleOwner.start()
+    }
+
 
     /**
      *  setTargetAspectRatio requires enum value of
@@ -292,6 +310,25 @@ class CameraFragment : Fragment() {
         setupUploadImage(controls)
     }
 
+    private val uploadImageResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val data: Intent? = result.data
+        if (result.resultCode == Activity.RESULT_OK && data != null) {
+            val images: ArrayList<String> = ArrayList()
+            val clipData = data.clipData
+            if (clipData != null) {
+                val count = clipData.itemCount
+                for (i in 0 until count) {
+                    val imageUri: String = clipData.getItemAt(i).uri.toString()
+                    images.add(imageUri)
+                }
+                startAlbumCreation(images)
+            } else if (data.data != null) {
+                images.add(data.data!!.toString())
+                startAlbumCreation(images)
+            }
+        }
+    }
+
     private fun setupUploadImage(controls: View) {
         // Listener for button used to view the most recent photo
         controls.findViewById<ImageButton>(R.id.photo_view_button)?.setOnClickListener {
@@ -301,8 +338,8 @@ class CameraFragment : Fragment() {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_LOCAL_ONLY, true)
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                startActivityForResult(
-                    Intent.createChooser(this, "Select a Picture"), PICK_IMAGE_REQUEST
+                uploadImageResultContract.launch(
+                    Intent.createChooser(this, null)
                 )
             }
         }
@@ -324,7 +361,7 @@ class CameraFragment : Fragment() {
                     REQUEST_CODE_PERMISSIONS
                 )
             } else {
-                bindCameraUseCases(forceRebind = true)
+                bindCameraUseCases()
             }
         }
     }
@@ -376,25 +413,6 @@ class CameraFragment : Fragment() {
                     )
                 }, ANIMATION_SLOW_MILLIS)
 
-            }
-        }
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && data != null
-            && (requestCode == PICK_IMAGE_REQUEST || requestCode == CAPTURE_IMAGE_REQUEST)) {
-
-            val images: ArrayList<String> = ArrayList()
-            if (data.clipData != null) {
-                val count = data.clipData!!.itemCount
-                for (i in 0 until count) {
-                    val imageUri: String = data.clipData!!.getItemAt(i).uri.toString()
-                    images.add(imageUri)
-                }
-                startAlbumCreation(images)
-            } else if (data.data != null) {
-                images.add(data.data!!.toString())
-                startAlbumCreation(images)
             }
         }
     }
