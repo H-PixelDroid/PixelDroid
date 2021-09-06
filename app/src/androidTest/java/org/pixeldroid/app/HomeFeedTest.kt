@@ -2,6 +2,7 @@ package org.pixeldroid.app
 
 
 import android.content.Context
+import androidx.appcompat.widget.Toolbar
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -180,7 +181,7 @@ class HomeFeedTest {
         onView(withId(R.id.list)).perform(
             actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.username))
         )
-        onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
+        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -191,7 +192,7 @@ class HomeFeedTest {
         onView(withId(R.id.list)).perform(
             actionOnItemAtPosition<StatusViewHolder>(0, clickChildViewWithId(R.id.profilePic))
         )
-        onView(withId(R.id.accountNameTextView)).check(matches(isDisplayed()))
+        onView(withId(R.id.profilePictureImageView)).check(matches(isDisplayed()))
     }
 
     @Test

@@ -1,6 +1,7 @@
 package org.pixeldroid.app
 
 import android.content.Context
+import androidx.appcompat.widget.Toolbar
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -21,6 +22,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import org.pixeldroid.app.testUtility.ToolbarMatchers.withToolbarSubtitle
+import org.pixeldroid.app.testUtility.ToolbarMatchers.withToolbarTitle
 
 @RunWith(AndroidJUnit4::class)
 class DrawerMenuTest {
@@ -158,7 +161,8 @@ class DrawerMenuTest {
 
         waitForView(R.id.profilePictureImageView)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("PixelDroid Developer")))
+        onView(isAssignableFrom(Toolbar::class.java)).check(matches(withToolbarTitle("PixelDroid Developer")))
+        onView(isAssignableFrom(Toolbar::class.java)).check(matches(withToolbarSubtitle("@pixeldroid")))
     }
 
     @Test
@@ -176,7 +180,8 @@ class DrawerMenuTest {
         onView(withText("@user2")).perform(click())
         waitForView(R.id.profilePictureImageView)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("User 2")))
+        onView(isAssignableFrom(Toolbar::class.java)).check(matches(withToolbarTitle("User 2")))
+        onView(isAssignableFrom(Toolbar::class.java)).check(matches(withToolbarSubtitle("@user2")))
     }
 
     @Test
