@@ -92,7 +92,7 @@ class AccountViewHolder(binding: AccountListEntryBinding) : RecyclerView.ViewHol
         this.account = account
 
         Glide.with(itemView)
-            .load(account?.avatar_static ?: account?.avatar)
+            .load(account?.anyAvatar())
             .circleCrop().placeholder(R.drawable.ic_default_user)
             .into(avatar)
 

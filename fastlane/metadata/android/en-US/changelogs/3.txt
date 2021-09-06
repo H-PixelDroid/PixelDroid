@@ -1,0 +1,7 @@
+* Add language (Malayalam)
+
+* Bug fix for some bad API responses
+
+* Update dependencies
+
+* Update translations

@@ -25,8 +25,8 @@ data class Account(
     //Display attributes
     val display_name: String? = "",
     val note: String? = "", //HTML
-    val avatar: String? = "", //URL
-    val avatar_static: String? = "", //URL
+    private val avatar: String? = "", //URL
+    private val avatar_static: String? = "", //URL
     val header: String? = "", //URL
     val header_static: String? = "", //URL
     val locked: Boolean? = false,
@@ -74,6 +74,7 @@ data class Account(
         else -> display_name.orEmpty()
     }
 
+    fun anyAvatar(): String? = avatar_static ?: avatar
     /**
      * @brief Open profile activity with given account
      */

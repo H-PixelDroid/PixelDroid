@@ -103,4 +103,22 @@
     <string name="hashtag_title">#%1$s</string>
     <string name="default_system">സ്ഥിരസ്ഥിതി (സിസ്റ്റം പിന്തുടരുന്നു)</string>
     <string name="login_connection_required_once">PixelDroid ഉപയോഗിക്കാനും ഒരു അക്കൗണ്ട് ചേർക്കാനും നിങ്ങൾ ഓൺലൈനിൽ ആയിരിക്കണം :(</string>
+    <string name="browser_launch_failed">ബ്രൗസർ തുറക്കാനായില്ല, നിങ്ങൾക്ക് ബ്രൗസർ ഉണ്ടോ\?</string>
+    <string name="auth_failed">ഉറപ്പാക്കാൻ സാധിച്ചില്ലാ</string>
+    <string name="theme_title">ആപ്ലിക്കേഷന്റെ തീം</string>
+    <string name="light_theme">ലൈറ്റ്</string>
+    <string name="dark_theme">ഡാർക്ക്</string>
+    <string name="api_not_enabled_dialog">എപിഐ ഈ ഇൻസ്റ്റൻസിൽ സജീവമല്ലാ.ഇത് സജീവമാക്കാൻ നിങ്ങളുടെ അഡ്മിനിസ്ട്രേറ്ററെ ബന്ധപ്പെടുക.</string>
+    <string name="feed_failed">ഫീഡ് ലഭ്യമാക്കാൻ സാധിച്ചില്ല</string>
+    <string name="write_permission_download_pic">ചിത്രങ്ങൾ ഡൗൺലോഡ് ചെയ്യാൻ നിങ്ങൾ എഴുത്ത് അനുമതി നൽകണം!</string>
+    <string name="write_permission_share_pic">ചിത്രങ്ങൾ പങ്കിടാൻ നിങ്ങൾ എഴുത്ത് അനുമതി നൽകണം!</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d</item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="registration_failed">ഈ സെർവറിൽ ആപ്ലിക്കേഷൻ രജിസ്റ്റർ ചെയ്യാനായില്ല</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">വിവരണത്തിൽ പരമാവധി %d പ്രതീകം അടങ്ങിയിരിക്കണം.</item>
+        <item quantity="other">വിവരണത്തിൽ പരമാവധി %d പ്രതീകങ്ങൾ അടങ്ങിയിരിക്കണം.</item>
+    </plurals>
 </resources>

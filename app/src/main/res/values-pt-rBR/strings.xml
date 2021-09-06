@@ -193,4 +193,5 @@
     <string name="open_drawer_menu">Abrir o menu lateral</string>
     <string name="follows_title">%1$s está seguindo</string>
     <string name="media_upload_failed">Envio de mídia falhou. Tente novamente ou verifique as condições de conectividade</string>
+    <string name="hashtag_title">#%1$s</string>
 </resources>
