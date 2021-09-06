@@ -156,9 +156,7 @@ class ProfileActivity : BaseActivity() {
                 lifecycleScope
         )
 
-        val displayName = account.getusername()
-
-        binding.accountNameTextView.text = displayName
+        val displayName = account.getDisplayName()
 
         supportActionBar?.title = displayName
         if(displayName != "@${account.acct}") {
