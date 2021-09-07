@@ -249,7 +249,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val uiModel = getItem(position)
-            uiModel.let {
+            uiModel?.let {
                 (holder as NotificationViewHolder).bind(
                         it,
                         apiHolder,
