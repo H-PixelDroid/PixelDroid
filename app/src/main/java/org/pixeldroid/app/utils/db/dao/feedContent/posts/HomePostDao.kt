@@ -12,8 +12,8 @@ interface HomePostDao: FeedContentDao<HomeStatusDatabaseEntity> {
             ORDER BY CAST(created_at AS FLOAT)""")
     override fun feedContent(userId: String, instanceUri: String): PagingSource<Int, HomeStatusDatabaseEntity>
 
-    @Query("DELETE FROM homePosts")
-    override suspend fun clearFeedContent()
+    @Query("DELETE FROM homePosts WHERE user_id=:userId AND instance_uri=:instanceUri")
+    override suspend fun clearFeedContent(userId: String, instanceUri: String)
 
     @Query("DELETE FROM homePosts WHERE user_id=:userId AND instance_uri=:instanceUri AND id=:id")
     override suspend fun delete(id: String, userId: String, instanceUri: String)

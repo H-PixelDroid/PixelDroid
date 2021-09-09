@@ -5,8 +5,21 @@ import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 
 @Dao
 interface UserDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: UserDatabaseEntity)
+    /**
+     * Insert a user, if it already exists return -1
+     */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertUser(user: UserDatabaseEntity): Long
+
+    @Transaction
+    fun insertOrUpdate(user: UserDatabaseEntity) {
+        if (insertUser(user) == -1L) {
+            updateUser(user)
+        }
+    }
+
+    @Update
+    fun updateUser(user: UserDatabaseEntity)
 
     @Query("UPDATE users SET accessToken = :accessToken, refreshToken = :refreshToken WHERE user_id = :id and instance_uri = :instance_uri")
     fun updateAccessToken(accessToken: String, refreshToken: String, id: String, instance_uri: String)

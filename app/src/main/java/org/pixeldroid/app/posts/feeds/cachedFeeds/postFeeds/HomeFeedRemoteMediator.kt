@@ -59,7 +59,7 @@ class HomeFeedRemoteMediator @Inject constructor(
             db.withTransaction {
                 // clear table in the database
                 if (loadType == LoadType.REFRESH) {
-                    db.homePostDao().clearFeedContent()
+                    db.homePostDao().clearFeedContent(user.user_id, user.instance_uri)
                 }
                 db.homePostDao().insertAll(dbObjects)
             }

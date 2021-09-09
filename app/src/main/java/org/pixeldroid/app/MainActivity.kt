@@ -72,8 +72,8 @@ class MainActivity : BaseActivity() {
 
         //Check if we have logged in and gotten an access token
         if (user == null) {
-            launchActivity(LoginActivity(), firstTime = true)
             finish()
+            launchActivity(LoginActivity(), firstTime = true)
         } else {
             sendTraceDroidStackTracesIfExist("contact@pixeldroid.org", this)
 
@@ -172,6 +172,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun logOut(){
+        finish()
         db.runInTransaction {
             db.userDao().deleteActiveUsers()
 
@@ -229,6 +230,8 @@ class MainActivity : BaseActivity() {
         apiHolder.setToCurrentUser()
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        finish()
         startActivity(intent)
 
         return false

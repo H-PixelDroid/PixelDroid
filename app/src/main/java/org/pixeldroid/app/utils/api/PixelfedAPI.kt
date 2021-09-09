@@ -3,6 +3,11 @@ package org.pixeldroid.app.utils.api
 import org.pixeldroid.app.utils.api.objects.*
 import io.reactivex.Observable
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import org.pixeldroid.app.utils.db.AppDatabase
+import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+import org.pixeldroid.app.utils.di.PixelfedAPIHolder
+import org.pixeldroid.app.utils.di.TokenAuthenticator
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -28,6 +33,30 @@ interface PixelfedAPI {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(PixelfedAPI::class.java)
         }
+
+        private val intermediate: Retrofit.Builder = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+
+
+        fun apiForUser(
+            user: UserDatabaseEntity,
+            db: AppDatabase,
+            pixelfedAPIHolder: PixelfedAPIHolder
+        ): PixelfedAPI =
+            intermediate
+                .baseUrl(user.instance_uri)
+                .client(
+                    OkHttpClient().newBuilder().authenticator(TokenAuthenticator(user, db, pixelfedAPIHolder))
+                        .addInterceptor {
+                            it.request().newBuilder().run {
+                                header("Accept", "application/json")
+                                header("Authorization", "Bearer ${user.accessToken}")
+                                it.proceed(build())
+                            }
+                        }.build()
+                )
+                .build().create(PixelfedAPI::class.java)
     }
 
 
