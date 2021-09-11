@@ -27,6 +27,7 @@ import org.junit.*
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.OffsetDateTime
 
 
@@ -68,7 +69,7 @@ class PostTest {
                 url = "$INSTANCE_URI/pixeldroid",
             ),
             media_attachments = listOf(attachment),
-            created_at = OffsetDateTime.now().minusHours(1)
+            created_at = Instant.now().minusSeconds(3600)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -105,7 +106,7 @@ class PostTest {
                     url = "$INSTANCE_URI/pixeldroid",
             ),
             media_attachments = listOf(attachment1, attachment2),
-            created_at = OffsetDateTime.now().minusHours(1)
+            created_at = Instant.now().minusSeconds(3600)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -138,7 +139,7 @@ class PostTest {
                         url = "$INSTANCE_URI/pixeldroid",
                 ),
                 media_attachments = listOf(attachment),
-            created_at = OffsetDateTime.now().minusHours(1)
+            created_at = Instant.now().minusSeconds(3600)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -170,7 +171,7 @@ class PostTest {
                         url = "$INSTANCE_URI/pixeldroid",
                 ),
                 media_attachments = listOf(attachment1, attachment2),
-            created_at = OffsetDateTime.now().minusHours(1)
+            created_at = Instant.now().minusSeconds(3600)
         )
         val intent = Intent(context, PostActivity::class.java)
         intent.putExtra(Status.POST_TAG, post)
@@ -186,13 +187,13 @@ class PostTest {
     @Test
     fun getNLikesReturnsCorrectFormat() {
         val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
-            created_at= OffsetDateTime.parse("2020-03-03T08:00:16+00:00"),
+            created_at= Instant.parse("2020-03-03T08:00:16+00:00"),
             account= Account(id="115114166443970560", username="Miike", acct="Miike",
                 url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
                 avatar="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
                 avatar_static="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
                 header="", header_static="", locked=false, emojis= emptyList(), discoverable=false,
-                created_at="2019-12-24T15:42:35.000000Z", statuses_count=71, followers_count=14,
+                created_at=Instant.parse("2019-12-24T15:42:35.000000Z"), statuses_count=71, followers_count=14,
                 following_count=0, moved=null, fields=null, bot=false, source=null),
             content="""Day 8 <a href="https://pixelfed.de/discover/tags/rotavicentina?src=hash" title="#rotavicentina" class="u-url hashtag" rel="external nofollow noopener">#rotavicentina</a> <a href="https://pixelfed.de/discover/tags/hiking?src=hash" title="#hiking" class="u-url hashtag" rel="external nofollow noopener">#hiking</a> <a href="https://pixelfed.de/discover/tags/nature?src=hash" title="#nature" class="u-url hashtag" rel="external nofollow noopener">#nature</a>""",
             visibility=Status.Visibility.public, sensitive=false, spoiler_text="",
@@ -213,13 +214,13 @@ class PostTest {
     @Test
     fun getNSharesReturnsCorrectFormat() {
         val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
-            created_at= OffsetDateTime.parse("2020-03-03T08:00:16+00:00"),
+            created_at= Instant.parse("2020-03-03T08:00:16+00:00"),
             account= Account(id="115114166443970560", username="Miike", acct="Miike",
                 url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
                 avatar="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
                 avatar_static="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
                 header="", header_static="", locked=false, emojis= emptyList(), discoverable=false,
-                created_at="2019-12-24T15:42:35.000000Z", statuses_count=71, followers_count=14,
+                created_at=Instant.parse("2019-12-24T15:42:35.000000Z"), statuses_count=71, followers_count=14,
                 following_count=0, moved=null, fields=null, bot=false, source=null),
             content="""Day 8 <a href="https://pixelfed.de/discover/tags/rotavicentina?src=hash" title="#rotavicentina" class="u-url hashtag" rel="external nofollow noopener">#rotavicentina</a> <a href="https://pixelfed.de/discover/tags/hiking?src=hash" title="#hiking" class="u-url hashtag" rel="external nofollow noopener">#hiking</a> <a href="https://pixelfed.de/discover/tags/nature?src=hash" title="#nature" class="u-url hashtag" rel="external nofollow noopener">#nature</a>""",
             visibility=Status.Visibility.public, sensitive=false, spoiler_text="",

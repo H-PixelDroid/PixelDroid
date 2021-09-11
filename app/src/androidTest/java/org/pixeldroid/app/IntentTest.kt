@@ -30,6 +30,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import java.time.Instant
 
 
 @RunWith(AndroidJUnit4::class)
@@ -73,12 +74,12 @@ class IntentTest {
             "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0",
             "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0",
             "", "", false, emptyList(), null,
-            "2021-02-11T23:44:03.000000Z", 0, 1, 2,
+            Instant.parse("2021-02-11T23:44:03.000000Z"), 0, 1, 2,
             null, null, false, null)
         val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
             IntentMatchers.hasExtra(ACCOUNT_TAG, account)
         )
-
+        "2021-02-11T23:44:03.000000Z"
         waitForView(R.id.description)
 
         //Click the mention

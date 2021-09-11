@@ -19,6 +19,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.Instant
 
 @RunWith(AndroidJUnit4::class)
 class ProfileTest {
@@ -37,7 +38,7 @@ class ProfileTest {
         db.close()
 
         val intent = Intent(context, ProfileActivity::class.java)
-        val account = Account(id = "265472486651596800", username = "pixeldroid", acct = "pixeldroid", url = "https://testing2.pixeldroid.org/pixeldroid", display_name = "PixelDroid Developer", avatar = "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0", avatar_static = "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0", locked = false, emojis = arrayListOf(), discoverable = null, created_at = "2021-02-11T13:32:53.000000Z", statuses_count = 1, followers_count = 1, following_count = 1, moved = null, fields = null, bot = false, source = null)
+        val account = Account(id = "265472486651596800", username = "pixeldroid", acct = "pixeldroid", url = "https://testing2.pixeldroid.org/pixeldroid", display_name = "PixelDroid Developer", avatar = "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0", avatar_static = "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0", locked = false, emojis = arrayListOf(), discoverable = null, created_at = Instant.parse("2021-02-11T13:32:53.000000Z"), statuses_count = 1, followers_count = 1, following_count = 1, moved = null, fields = null, bot = false, source = null)
         intent.putExtra(Account.ACCOUNT_TAG, account)
         activityScenario = ActivityScenario.launch(intent)
         onView(withId(R.id.profileRefreshLayout)).perform(swipeDown())
