@@ -1,6 +1,8 @@
 package org.pixeldroid.app.postCreation.photoEdit
 
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.TypedValue
@@ -54,17 +56,19 @@ class FilterListFragment : Fragment() {
     private fun displayImage(bitmap: Bitmap?) {
         val r = Runnable {
             val tbImage: Bitmap = (if (bitmap == null) {
-                // TODO: Shouldn't use deprecated API on newer versions of Android,
-                // but the proper way to do it seems to crash for OpenGL reasons
-                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                //        ImageDecoder.decodeBitmap(
-                //            ImageDecoder.createSource(requireActivity().contentResolver, PhotoEditActivity.imageUri!!))
-                //} else {
+                // TODO: Check that there is no crash for OpenGL reasons on newer versions of Android
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    // Honor EXIF orientation if API >= 28
+                    ImageDecoder.decodeBitmap(ImageDecoder
+                            .createSource(requireActivity().contentResolver, PhotoEditActivity.imageUri!!))
+                            .copy(Bitmap.Config.ARGB_8888,true)
+                } else {
+                    // Ignore EXIF orientation otherwise
                     MediaStore.Images.Media.getBitmap(
                         requireActivity().contentResolver,
                         PhotoEditActivity.imageUri
                     )
-               //}
+                }
             } else {
                 Bitmap.createScaledBitmap(bitmap, 100, 100, false)
             })

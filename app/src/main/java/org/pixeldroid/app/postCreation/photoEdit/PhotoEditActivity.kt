@@ -5,9 +5,12 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
@@ -116,7 +119,17 @@ class PhotoEditActivity : BaseActivity() {
 
 
     private fun loadImage() {
-        originalImage = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        // TODO: Check that there is no crash for OpenGL reasons on newer versions of Android
+        originalImage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // Honor EXIF orientation if API >= 28
+            ImageDecoder
+                .decodeBitmap(ImageDecoder.createSource(contentResolver, imageUri!!))
+                .copy(BITMAP_CONFIG,true)
+        } else {
+            // Ignore EXIF orientation otherwise
+            MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        }
+
         compressedImage = resizeImage(originalImage!!)
         compressedOriginalImage = compressedImage!!.copy(BITMAP_CONFIG, true)
         filteredImage = compressedImage!!.copy(BITMAP_CONFIG, true)
