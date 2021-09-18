@@ -18,7 +18,6 @@ import org.pixeldroid.app.utils.db.storeInstance
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.IllegalArgumentException
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -229,7 +228,7 @@ class LoginActivity : BaseActivity() {
                 "client_id" + "=" + client_id + "&" +
                 "redirect_uri" + "=" + "$oauthScheme://$PACKAGE_ID" + "&" +
                 "response_type=code" + "&" +
-                "scope=$SCOPE"
+                "scope=${SCOPE.replace(" ", "%20")}"
 
         if (!openUrl(url)) return failedRegistration(getString(R.string.browser_launch_failed))
     }
