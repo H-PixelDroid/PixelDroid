@@ -18,6 +18,7 @@ import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.utils.ThumbnailItem
 import com.zomato.photofilters.utils.ThumbnailsManager
+import org.pixeldroid.app.utils.bitmapFromUri
 
 class FilterListFragment : Fragment() {
 
@@ -56,19 +57,7 @@ class FilterListFragment : Fragment() {
     private fun displayImage(bitmap: Bitmap?) {
         val r = Runnable {
             val tbImage: Bitmap = (if (bitmap == null) {
-                // TODO: Check that there is no crash for OpenGL reasons on newer versions of Android
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    // Honor EXIF orientation if API >= 28
-                    ImageDecoder.decodeBitmap(ImageDecoder
-                            .createSource(requireActivity().contentResolver, PhotoEditActivity.imageUri!!))
-                            .copy(Bitmap.Config.ARGB_8888,true)
-                } else {
-                    // Ignore EXIF orientation otherwise
-                    MediaStore.Images.Media.getBitmap(
-                        requireActivity().contentResolver,
-                        PhotoEditActivity.imageUri
-                    )
-                }
+                bitmapFromUri(requireActivity().contentResolver, PhotoEditActivity.imageUri)
             } else {
                 Bitmap.createScaledBitmap(bitmap, 100, 100, false)
             })

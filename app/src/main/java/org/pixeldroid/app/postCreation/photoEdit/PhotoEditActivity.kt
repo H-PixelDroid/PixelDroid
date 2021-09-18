@@ -5,13 +5,10 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
@@ -30,6 +27,7 @@ import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
+import org.pixeldroid.app.utils.bitmapFromUri
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -116,18 +114,8 @@ class PhotoEditActivity : BaseActivity() {
         binding.tabs.setupWithViewPager(binding.viewPager)
     }
 
-
     private fun loadImage() {
-        // TODO: Check that there is no crash for OpenGL reasons on newer versions of Android
-        originalImage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            // Honor EXIF orientation if API >= 28
-            ImageDecoder
-                .decodeBitmap(ImageDecoder.createSource(contentResolver, imageUri!!))
-                .copy(BITMAP_CONFIG,true)
-        } else {
-            // Ignore EXIF orientation otherwise
-            MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-        }
+        originalImage = bitmapFromUri(contentResolver, imageUri)
 
         compressedImage = resizeImage(originalImage!!)
         compressedOriginalImage = compressedImage!!.copy(BITMAP_CONFIG, true)

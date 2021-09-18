@@ -1,13 +1,13 @@
 package org.pixeldroid.app.utils
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
@@ -62,6 +62,18 @@ fun normalizeDomain(domain: String): String {
             .replace("https://", "")
             .trim(Char::isWhitespace)
 }
+
+fun bitmapFromUri(contentResolver: ContentResolver, uri: Uri?): Bitmap =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        ImageDecoder
+            .decodeBitmap(
+                ImageDecoder.createSource(contentResolver, uri!!)
+            )
+            { decoder, _, _ -> decoder.isMutableRequired = true }
+    } else {
+        //FIXME EXIF orientation is ignored by getBitmap, respect it manually?
+        MediaStore.Images.Media.getBitmap(contentResolver, uri)
+    }
 
 fun BaseActivity.openUrl(url: String): Boolean{
 
