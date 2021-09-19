@@ -1,8 +1,8 @@
 package org.pixeldroid.app.utils.api
 
 import com.google.gson.*
+import io.reactivex.rxjava3.core.Observable
 import org.pixeldroid.app.utils.api.objects.*
-import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import org.pixeldroid.app.utils.db.AppDatabase
@@ -11,7 +11,7 @@ import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.di.TokenAuthenticator
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
@@ -34,7 +34,7 @@ interface PixelfedAPI {
             return Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gSonInstance))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build().create(PixelfedAPI::class.java)
         }
 
@@ -54,7 +54,7 @@ interface PixelfedAPI {
 
         private val intermediate: Retrofit.Builder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gSonInstance))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
 
 
         fun apiForUser(
