@@ -38,7 +38,7 @@ class ProfileTest {
         db.close()
 
         val intent = Intent(context, ProfileActivity::class.java)
-        val account = Account(id = "265472486651596800", username = "pixeldroid", acct = "pixeldroid", url = "https://testing2.pixeldroid.org/pixeldroid", display_name = "PixelDroid Developer", avatar = "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0", avatar_static = "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0", locked = false, emojis = arrayListOf(), discoverable = null, created_at = Instant.parse("2021-02-11T13:32:53.000000Z"), statuses_count = 1, followers_count = 1, following_count = 1, moved = null, fields = null, bot = false, source = null)
+        val account = Account(id="344399325768278017", username="pixeldroid", acct="pixeldroid", url="https://testing.pixeldroid.org/pixeldroid", display_name="PixelDroid Developer", note="", avatar="https://testing.pixeldroid.org/storage/avatars/default.jpg?v=0", avatar_static="https://testing.pixeldroid.org/storage/avatars/default.jpg?v=0", header="", header_static="", locked=false, emojis= emptyList(), discoverable=null, created_at=Instant.parse("2021-09-17T08:39:57Z"), statuses_count=0, followers_count=1, following_count=1, moved=null, fields=null, bot=false, source=null)
         intent.putExtra(Account.ACCOUNT_TAG, account)
         activityScenario = ActivityScenario.launch(intent)
         onView(withId(R.id.profileRefreshLayout)).perform(swipeDown())
@@ -87,7 +87,7 @@ class ProfileTest {
         waitForView(R.id.account_entry_username)
 
         // Open follower's profile
-        onView(ViewMatchers.withText("testi testo")).perform((ViewActions.click()))
+        onView(ViewMatchers.withText("Testi Testo")).perform((ViewActions.click()))
 
         waitForView(R.id.editButton)
 
