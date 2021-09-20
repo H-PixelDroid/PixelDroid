@@ -47,9 +47,9 @@ interface PixelfedAPI {
                     )
                 } as JsonDeserializer<Instant>).registerTypeAdapter(
                 Instant::class.java,
-            JsonSerializer { src: Instant, _,_ ->
-                JsonPrimitive(DateTimeFormatter.ISO_INSTANT.format(src));
-            })
+                JsonSerializer { src: Instant, _, _ ->
+                    JsonPrimitive(DateTimeFormatter.ISO_INSTANT.format(src))
+                })
             .create()
 
         private val intermediate: Retrofit.Builder = Retrofit.Builder()
