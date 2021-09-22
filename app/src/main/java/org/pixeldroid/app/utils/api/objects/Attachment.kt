@@ -38,4 +38,8 @@ data class Attachment(
                 val aspect: Double?
         ) : Serializable
     }
+
+    val previewNoPlaceholder: String?
+        get() = if (preview_url?.contains(Regex("public/no-preview\\.(png|jpg|webp)")) == true) url else preview_url
+
 }
