@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -25,7 +26,6 @@ import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.Instant
-import java.util.*
 import javax.inject.Inject
 
 
@@ -48,12 +48,15 @@ class NotificationsWorker(
         val users: List<UserDatabaseEntity> = db.userDao().getAll()
 
         for (user in users){
-            val channelId = user.instance_uri + user.user_id
+            val uniqueUserId = makeChannelGroupId(user)
 
-            createNotificationChannels(
+            val notificationsEnabledForUser = makeNotificationChannels(
                 "@${user.username}@${user.instance_uri.removePrefix("https://")}",
-                channelId
+                uniqueUserId
             )
+
+            //if notifications are disabled for this user, move on to next user
+            if(!notificationsEnabledForUser) continue
 
             // Get newest notification from database
             var previouslyLatestNotification: Notification? = db.notificationDao().latestNotification(user.user_id, user.instance_uri)
@@ -81,7 +84,7 @@ class NotificationsWorker(
 
                     // Launch new notifications
                     filteredNewNotifications.forEach {
-                        showNotification(it, user, channelId)
+                        showNotification(it, user, uniqueUserId)
                     }
 
                     previouslyLatestNotification =
@@ -105,10 +108,8 @@ class NotificationsWorker(
     private fun showNotification(
         notification: Notification,
         user: UserDatabaseEntity,
-        channelIdPrefix: String
+        uniqueUserId: String
     ) {
-        val channelId = channelIdPrefix + (notification.type ?: "other").toString()
-
         val intent: Intent = when (notification.type) {
             mention -> notification.status?.let {
                 Intent(applicationContext, PostActivity::class.java).apply {
@@ -128,7 +129,7 @@ class NotificationsWorker(
             .putExtra(INSTANCE_NOTIFICATION_TAG, user.instance_uri)
 
 
-        val builder = NotificationCompat.Builder(applicationContext, channelId)
+        val builder = NotificationCompat.Builder(applicationContext, makeChannelId(uniqueUserId, notification.type))
             .setSmallIcon(
                 when (notification.type) {
                     follow -> R.drawable.ic_follow
@@ -140,6 +141,7 @@ class NotificationsWorker(
                     null -> R.drawable.ic_comment_empty
                 }
             )
+            .setColor(Color.parseColor("#6200EE"))
             .setContentTitle(
                 notification.account?.username?.let { username ->
                     applicationContext.getString(
@@ -166,39 +168,59 @@ class NotificationsWorker(
             builder.setContentText(notification.status?.content)
         }
 
+        builder.setGroup(uniqueUserId)
+
         with(NotificationManagerCompat.from(applicationContext)) {
             // notificationId is a unique int for each notification
-            notify((user.instance_uri + user.user_id + notification.id).hashCode(), builder.build())
+            notify((uniqueUserId + notification.id).hashCode(), builder.build())
         }
     }
 
-    private fun createNotificationChannels(handle: String, channelId: String) {
+    private fun makeNotificationChannels(handle: String, channelGroupId: String): Boolean {
+        val notificationManager: NotificationManager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // The id of the group.
-            val notificationManager: NotificationManager =
-                applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannelGroup(NotificationChannelGroup(channelId, handle))
+            // The id of the group, hashed (since when creating the group, it may be truncated if too long)
+            val hashedGroupId = channelGroupId.hashCode().toString()
+            notificationManager.createNotificationChannelGroup(NotificationChannelGroup(hashedGroupId, handle))
 
             val importance = NotificationManager.IMPORTANCE_DEFAULT
 
-            val followsChannel = NotificationChannel(channelId + follow.toString(), "New followers", importance).apply { group = channelId }
-            val mentionChannel = NotificationChannel(channelId + mention.toString(), "Mentions", importance).apply { group = channelId }
-            val sharesChannel = NotificationChannel(channelId + reblog.toString(), "Shares", importance).apply { group = channelId }
-            val likesChannel = NotificationChannel(channelId + favourite.toString(), "Likes", importance).apply { group = channelId }
-            val commentsChannel = NotificationChannel(channelId + comment.toString(), "Comments", importance).apply { group = channelId }
-            val pollsChannel = NotificationChannel(channelId + poll.toString(), "Polls", importance).apply { group = channelId }
-            val othersChannel = NotificationChannel(channelId + "other", "Other", importance).apply { group = channelId }
+            val channels: List<NotificationChannel> = listOf(
+                NotificationChannel(makeChannelId(channelGroupId, follow), applicationContext.getString(R.string.followed_notification_channel), importance),
+                NotificationChannel(makeChannelId(channelGroupId, mention), applicationContext.getString(R.string.mention_notification_channel), importance),
+                NotificationChannel(makeChannelId(channelGroupId, reblog), applicationContext.getString(R.string.shared_notification_channel), importance),
+                NotificationChannel(makeChannelId(channelGroupId, favourite), applicationContext.getString(R.string.liked_notification_channel), importance),
+                NotificationChannel(makeChannelId(channelGroupId, comment), applicationContext.getString(R.string.comment_notification_channel), importance),
+                NotificationChannel(makeChannelId(channelGroupId, poll), applicationContext.getString(R.string.poll_notification_channel), importance),
+                NotificationChannel(makeChannelId(channelGroupId, null), applicationContext.getString(R.string.other_notification_channel), importance),
+            ).map {
+                it.apply { group = hashedGroupId }
+            }
 
             // Register the channels with the system
-            notificationManager.createNotificationChannel(followsChannel)
-            notificationManager.createNotificationChannel(mentionChannel)
-            notificationManager.createNotificationChannel(sharesChannel)
-            notificationManager.createNotificationChannel(likesChannel)
-            notificationManager.createNotificationChannel(commentsChannel)
-            notificationManager.createNotificationChannel(pollsChannel)
-            notificationManager.createNotificationChannel(othersChannel)
+            notificationManager.createNotificationChannels(channels)
+
+            //Return true if notifications are enabled, false if disabled
+            return notificationManager.areNotificationsEnabled() and
+                    (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        val channelGroup =
+                            notificationManager.getNotificationChannelGroup(hashedGroupId)
+                        !channelGroup.isBlocked
+                    } else true) and
+                    (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        !notificationManager.areNotificationsPaused()
+                    } else true) and
+                    !channels.all {
+                        notificationManager.getNotificationChannel(it.id).importance <= NotificationManager.IMPORTANCE_NONE
+                    }
+        }
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            notificationManager.areNotificationsEnabled()
+        } else {
+            true
         }
     }
 
@@ -206,6 +228,39 @@ class NotificationsWorker(
         const val SHOW_NOTIFICATION_TAG = "org.pixeldroid.app.SHOW_NOTIFICATION"
         const val INSTANCE_NOTIFICATION_TAG = "org.pixeldroid.app.USER_NOTIFICATION"
         const val USER_NOTIFICATION_TAG = "org.pixeldroid.app.INSTANCE_NOTIFICATION"
+
+        const val otherNotificationType = "other"
     }
 
+}
+
+/**
+ * [channelGroupId] is the id used to uniquely identify the group: for us it is a unique id
+ * identifying a user consisting of the concatenation of the instance uri and user id.
+ */
+private fun makeChannelId(channelGroupId: String, type: Notification.NotificationType?): String =
+    (channelGroupId + (type ?: NotificationsWorker.otherNotificationType)).hashCode().toString()
+
+private fun makeChannelGroupId(user: UserDatabaseEntity) = user.instance_uri + user.user_id
+
+
+fun removeNotificationChannelsFromAccount(context: Context, user: UserDatabaseEntity?) = user?.let {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val channelGroupId = makeChannelGroupId(user)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            notificationManager.deleteNotificationChannelGroup(channelGroupId.hashCode().toString())
+        } else {
+            val types: MutableList<Notification.NotificationType?> =
+                Notification.NotificationType.values().toMutableList()
+            types += null
+
+            types.forEach {
+                notificationManager.deleteNotificationChannel(makeChannelId(channelGroupId, it))
+            }
+        }
+    }
 }

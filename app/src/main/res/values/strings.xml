@@ -47,14 +47,24 @@
     <!-- Notifications: like (favourite) notification -->
     <string name="liked_notification">%1$s liked your post</string>
 
-    <!-- Notifications: end of poll notification -->
-    <string name="poll_notification">"%1$s's poll has ended"</string>
-
     <!-- Notifications: comment notification -->
     <string name="comment_notification">%1$s commented on your post</string>
 
+    <!-- Notifications: end of poll notification -->
+    <string name="poll_notification">"%1$s's poll has ended"</string>
+
     <!-- Notifications: other notification -->
     <string name="other_notification">"Notification from %1$s"</string>
+
+    <string name="followed_notification_channel">"New followers"</string>
+    <string name="mention_notification_channel">"Mentions"</string>
+    <string name="shared_notification_channel">"Shares"</string>
+    <string name="liked_notification_channel">"Likes"</string>
+    <string name="comment_notification_channel">"Comments"</string>
+    <string name="poll_notification_channel">"Polls"</string>
+    <string name="other_notification_channel">"Other"</string>
+
+
 
     <!-- Login page -->
     <string name="whats_an_instance">"What's an instance?"</string>

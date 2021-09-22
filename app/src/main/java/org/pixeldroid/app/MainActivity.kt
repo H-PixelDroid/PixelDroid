@@ -49,6 +49,7 @@ import org.pixeldroid.app.utils.hasInternet
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
+import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -114,7 +115,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    //Checks if the activity was launched from a notification from another account than the
+    // Checks if the activity was launched from a notification from another account than the
     // current active one, and if so switches to that account
     private fun notificationFromOtherUser(): Boolean {
         val userOfNotification: String? = intent.extras?.getString(USER_NOTIFICATION_TAG)
@@ -214,6 +215,9 @@ class MainActivity : BaseActivity() {
 
     private fun logOut(){
         finish()
+
+        removeNotificationChannelsFromAccount(applicationContext, user)
+
         db.runInTransaction {
             db.userDao().deleteActiveUsers()
 
