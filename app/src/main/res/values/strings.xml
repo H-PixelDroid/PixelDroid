@@ -235,4 +235,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
 
     <!-- Error message when a selected file can not be found -->
     <string name="file_not_found">File %1$s was not found</string>
+    <string name="notifications_settings">Notification settings</string>
+    <string name="notifications_settings_summary">Manage what notifications you want to receive</string>
+    <string name="login_notifications">Couldn\'t fetch latest notifications</string>
 </resources>
