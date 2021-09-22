@@ -65,7 +65,7 @@ open class Status(
 
     fun getPostUrl() : String? = media_attachments?.firstOrNull()?.url
     fun getProfilePicUrl() : String? = account?.anyAvatar()
-    fun getPostPreviewURL() : String? = media_attachments?.firstOrNull()?.preview_url
+    fun getPostPreviewURL() : String? = media_attachments?.firstOrNull()?.previewNoPlaceholder
 
 
     fun getNLikes(context: Context) : CharSequence {

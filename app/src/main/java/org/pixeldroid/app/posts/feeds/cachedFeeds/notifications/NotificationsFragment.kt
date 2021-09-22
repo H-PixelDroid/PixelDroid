@@ -172,7 +172,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             Glide.with(itemView).load(notification?.account?.anyAvatar()).circleCrop()
                 .into(avatar)
 
-            val previewUrl = notification?.status?.media_attachments?.getOrNull(0)?.preview_url
+            val previewUrl = notification?.status?.getPostPreviewURL()
             if (!previewUrl.isNullOrBlank()) {
                 Glide.with(itemView).load(previewUrl)
                     .placeholder(R.drawable.ic_picture_fallback).into(photoThumbnail)
