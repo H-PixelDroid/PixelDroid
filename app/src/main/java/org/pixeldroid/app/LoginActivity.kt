@@ -19,6 +19,7 @@ import kotlinx.coroutines.*
 import retrofit2.HttpException
 import java.io.IOException
 import java.lang.IllegalArgumentException
+import java.lang.NullPointerException
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -311,13 +312,33 @@ class LoginActivity : BaseActivity() {
                 clientSecret = clientSecret
             )
             apiHolder.setToCurrentUser()
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
         } catch (exception: IOException) {
             return failedRegistration(getString(R.string.verify_credentials))
         } catch (exception: HttpException) {
             return failedRegistration(getString(R.string.verify_credentials))
+        }
+
+        fetchNotifications()
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    // Fetch the latest notifications of this account, to avoid launching old notifications
+    private suspend fun fetchNotifications() {
+        val user = db.userDao().getActiveUser()!!
+        try {
+            val notifications = apiHolder.api!!.notifications()
+
+            notifications.forEach{it.user_id = user.user_id; it.instance_uri = user.instance_uri}
+
+            db.notificationDao().insertAll(notifications)
+        } catch (exception: IOException) {
+            return failedRegistration(getString(R.string.login_notifications))
+        } catch (exception: HttpException) {
+            return failedRegistration(getString(R.string.login_notifications))
+        } catch (exception: NullPointerException) {
+            return failedRegistration(getString(R.string.login_notifications))
         }
     }
 
