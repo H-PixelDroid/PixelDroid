@@ -9,7 +9,6 @@ import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
@@ -28,6 +27,7 @@ import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
+import org.pixeldroid.app.utils.bitmapFromUri
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -114,9 +114,9 @@ class PhotoEditActivity : BaseActivity() {
         binding.tabs.setupWithViewPager(binding.viewPager)
     }
 
-
     private fun loadImage() {
-        originalImage = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        originalImage = bitmapFromUri(contentResolver, imageUri)
+
         compressedImage = resizeImage(originalImage!!)
         compressedOriginalImage = compressedImage!!.copy(BITMAP_CONFIG, true)
         filteredImage = compressedImage!!.copy(BITMAP_CONFIG, true)
