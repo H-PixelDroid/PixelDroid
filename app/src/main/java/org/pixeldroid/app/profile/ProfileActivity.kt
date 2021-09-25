@@ -33,7 +33,6 @@ import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.ImageConverter
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
-import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.openUrl
@@ -146,7 +145,7 @@ class ProfileActivity : BaseActivity() {
         val profilePicture = binding.profilePictureImageView
         ImageConverter.setRoundImageFromURL(
             View(applicationContext),
-            account.avatar,
+            account.anyAvatar(),
             profilePicture
         )
 

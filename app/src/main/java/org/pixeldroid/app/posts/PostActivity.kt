@@ -38,8 +38,8 @@ class PostActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         status = intent.getSerializableExtra(POST_TAG) as Status
-        val viewComments: Boolean = (intent.getSerializableExtra(VIEW_COMMENTS_TAG) ?: false) as Boolean
-        val postComment: Boolean = (intent.getSerializableExtra(POST_COMMENT_TAG) ?: false) as Boolean
+        val viewComments: Boolean = intent.getBooleanExtra(VIEW_COMMENTS_TAG, false)
+        val postComment: Boolean = intent.getBooleanExtra(POST_COMMENT_TAG, false)
 
         val user = db.userDao().getActiveUser()
 

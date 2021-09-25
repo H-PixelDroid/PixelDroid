@@ -14,13 +14,13 @@ import java.lang.IllegalArgumentException
 
 fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true,
             accessToken: String, refreshToken: String?, clientId: String, clientSecret: String) {
-    db.userDao().insertUser(
+    db.userDao().insertOrUpdate(
             UserDatabaseEntity(
                     user_id = account.id!!,
                     instance_uri = normalizeDomain(instance_uri),
                     username = account.username!!,
                     display_name = account.getDisplayName(),
-                    avatar_static = account.avatar_static.orEmpty(),
+                    avatar_static = account.anyAvatar().orEmpty(),
                     isActive = activeUser,
                     accessToken = accessToken,
                     refreshToken = refreshToken,
