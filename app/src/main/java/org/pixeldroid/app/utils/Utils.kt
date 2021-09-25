@@ -1,24 +1,26 @@
 package org.pixeldroid.app.utils
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.graphics.Matrix
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.pixeldroid.app.R
 import okhttp3.HttpUrl
+import org.pixeldroid.app.R
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -61,6 +63,47 @@ fun normalizeDomain(domain: String): String {
             .replace("http://", "")
             .replace("https://", "")
             .trim(Char::isWhitespace)
+}
+
+fun bitmapFromUri(contentResolver: ContentResolver, uri: Uri?): Bitmap =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        ImageDecoder
+            .decodeBitmap(
+                ImageDecoder.createSource(contentResolver, uri!!)
+            )
+            { decoder, _, _ -> decoder.isMutableRequired = true }
+    } else {
+        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+        modifyOrientation(bitmap!!, contentResolver, uri!!)
+    }
+
+fun modifyOrientation(
+    bitmap: Bitmap,
+    contentResolver: ContentResolver,
+    uri: Uri
+): Bitmap {
+    val inputStream = contentResolver.openInputStream(uri)!!
+    val ei = ExifInterface(inputStream)
+    return when (ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)) {
+        ExifInterface.ORIENTATION_ROTATE_90 -> bitmap.rotate(90f)
+        ExifInterface.ORIENTATION_ROTATE_180 -> bitmap.rotate(180f)
+        ExifInterface.ORIENTATION_ROTATE_270 -> bitmap.rotate(270f)
+        ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> bitmap.flip(horizontal = true, vertical = false)
+        ExifInterface.ORIENTATION_FLIP_VERTICAL -> bitmap.flip(horizontal = false, vertical = true)
+        else -> bitmap
+    }
+}
+
+fun Bitmap.rotate(degrees: Float): Bitmap {
+    val matrix = Matrix()
+    matrix.postRotate(degrees)
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+}
+
+fun Bitmap.flip(horizontal: Boolean, vertical: Boolean): Bitmap {
+    val matrix = Matrix()
+    matrix.preScale(if (horizontal) -1f else 1f, if (vertical) -1f else 1f)
+    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }
 
 fun BaseActivity.openUrl(url: String): Boolean{

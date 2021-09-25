@@ -1,6 +1,8 @@
 package org.pixeldroid.app.postCreation.photoEdit
 
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.TypedValue
@@ -16,6 +18,7 @@ import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.utils.ThumbnailItem
 import com.zomato.photofilters.utils.ThumbnailsManager
+import org.pixeldroid.app.utils.bitmapFromUri
 
 class FilterListFragment : Fragment() {
 
@@ -54,17 +57,7 @@ class FilterListFragment : Fragment() {
     private fun displayImage(bitmap: Bitmap?) {
         val r = Runnable {
             val tbImage: Bitmap = (if (bitmap == null) {
-                // TODO: Shouldn't use deprecated API on newer versions of Android,
-                // but the proper way to do it seems to crash for OpenGL reasons
-                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                //        ImageDecoder.decodeBitmap(
-                //            ImageDecoder.createSource(requireActivity().contentResolver, PhotoEditActivity.imageUri!!))
-                //} else {
-                    MediaStore.Images.Media.getBitmap(
-                        requireActivity().contentResolver,
-                        PhotoEditActivity.imageUri
-                    )
-               //}
+                bitmapFromUri(requireActivity().contentResolver, PhotoEditActivity.imageUri)
             } else {
                 Bitmap.createScaledBitmap(bitmap, 100, 100, false)
             })
