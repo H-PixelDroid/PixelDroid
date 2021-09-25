@@ -9,7 +9,7 @@ import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 @Dao
 interface HomePostDao: FeedContentDao<HomeStatusDatabaseEntity> {
     @Query("""SELECT * FROM homePosts WHERE user_id=:userId AND instance_uri=:instanceUri 
-            ORDER BY CAST(created_at AS FLOAT)""")
+            ORDER BY datetime(created_at) DESC""")
     override fun feedContent(userId: String, instanceUri: String): PagingSource<Int, HomeStatusDatabaseEntity>
 
     @Query("DELETE FROM homePosts WHERE user_id=:userId AND instance_uri=:instanceUri")

@@ -21,6 +21,16 @@
         app:useSimpleSummaryProvider="true"
         app:icon="@drawable/translate_black_24dp" />
 
+    <Preference android:title="@string/notifications_settings"
+        android:key="notification"
+        android:summary="@string/notifications_settings_summary"
+        app:icon="@drawable/ic_baseline_notifications_active_24">
+        <intent android:action="android.settings.APP_NOTIFICATION_SETTINGS">
+            <extra android:name="android.provider.extra.APP_PACKAGE"
+                android:value="@string/application_id" />
+        </intent>
+    </Preference>
+
     <Preference android:title="@string/about"
         android:key="about"
         android:summary="@string/about_pixeldroid"
