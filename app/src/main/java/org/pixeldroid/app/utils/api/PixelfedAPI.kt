@@ -1,7 +1,8 @@
 package org.pixeldroid.app.utils.api
 
+import com.google.gson.*
+import io.reactivex.rxjava3.core.Observable
 import org.pixeldroid.app.utils.api.objects.*
-import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import org.pixeldroid.app.utils.db.AppDatabase
@@ -10,10 +11,13 @@ import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.di.TokenAuthenticator
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+
 
 /*
     Implements the Pixelfed API
@@ -29,14 +33,28 @@ interface PixelfedAPI {
         fun createFromUrl(baseUrl: String): PixelfedAPI {
             return Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gSonInstance))
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build().create(PixelfedAPI::class.java)
         }
 
+        private var gSonInstance: Gson = GsonBuilder()
+            .registerTypeAdapter(
+                Instant::class.java,
+                JsonDeserializer { json: JsonElement, _, _ ->
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(
+                        json.asString, Instant::from
+                    )
+                } as JsonDeserializer<Instant>).registerTypeAdapter(
+                Instant::class.java,
+                JsonSerializer { src: Instant, _, _ ->
+                    JsonPrimitive(DateTimeFormatter.ISO_INSTANT.format(src))
+                })
+            .create()
+
         private val intermediate: Retrofit.Builder = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gSonInstance))
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
 
 
         fun apiForUser(

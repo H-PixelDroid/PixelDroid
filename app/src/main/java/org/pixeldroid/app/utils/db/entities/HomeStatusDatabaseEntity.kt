@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import org.pixeldroid.app.utils.api.objects.*
-import java.util.*
+import java.time.Instant
 
 @Entity(
     tableName = "homePosts",
@@ -56,7 +56,7 @@ class HomeStatusDatabaseEntity(
     //Constructor to make Room happy. This sucks, and I know it.
     constructor(id: String,
                 uri: String? = "",
-                created_at: Date? = Date(0),
+                created_at: Instant?,
                 account: Account?,
                 content: String? = "",
                 visibility: Visibility? = Visibility.public,

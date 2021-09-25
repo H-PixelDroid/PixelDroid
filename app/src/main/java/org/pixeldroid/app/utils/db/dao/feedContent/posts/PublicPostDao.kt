@@ -9,7 +9,7 @@ import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 @Dao
 interface PublicPostDao: FeedContentDao<PublicFeedStatusDatabaseEntity> {
     @Query("""SELECT * FROM publicPosts WHERE user_id=:userId AND instance_uri=:instanceUri 
-            ORDER BY CAST(created_at AS FLOAT)""")
+            ORDER BY datetime(created_at) DESC""")
     override fun feedContent(userId: String, instanceUri: String): PagingSource<Int, PublicFeedStatusDatabaseEntity>
 
     @Query("DELETE FROM publicPosts WHERE user_id=:userId AND instance_uri=:instanceUri")
