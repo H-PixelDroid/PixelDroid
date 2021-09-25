@@ -33,14 +33,12 @@ interface UserDao {
     @Query("UPDATE users SET isActive=0")
     fun deActivateActiveUsers()
 
-    //TODO also check instance_uri
-    @Query("UPDATE users SET isActive=1 WHERE user_id=:id")
-    fun activateUser(id: String)
+    @Query("UPDATE users SET isActive=1 WHERE user_id=:id AND instance_uri=:instance_uri")
+    fun activateUser(id: String, instance_uri: String)
 
     @Query("DELETE FROM users WHERE isActive=1")
     fun deleteActiveUsers()
 
-    //TODO also check instance_uri
-    @Query("SELECT * FROM users WHERE user_id=:id LIMIT 1")
-    fun getUserWithId(id: String): UserDatabaseEntity
+    @Query("SELECT * FROM users WHERE user_id=:id AND instance_uri=:instance_uri LIMIT 1")
+    fun getUserWithId(id: String, instance_uri: String): UserDatabaseEntity
 }

@@ -125,7 +125,7 @@ class MainActivity : BaseActivity() {
                     || instanceOfNotification != user?.instance_uri)
         ) {
 
-            switchUser(userOfNotification)
+            switchUser(userOfNotification, instanceOfNotification)
 
             val newIntent = Intent(this, MainActivity::class.java)
             newIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -165,14 +165,14 @@ class MainActivity : BaseActivity() {
 
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable, tag: String?) {
-                    Glide.with(imageView.context)
+                    Glide.with(this@MainActivity)
                         .load(uri)
                         .placeholder(placeholder)
                         .into(imageView)
             }
 
             override fun cancel(imageView: ImageView) {
-                Glide.with(imageView.context).clear(imageView)
+                Glide.with(this@MainActivity).clear(imageView)
             }
 
             override fun placeholder(ctx: Context, tag: String?): Drawable {
@@ -227,7 +227,7 @@ class MainActivity : BaseActivity() {
                 launchActivity(LoginActivity(), firstTime = true)
             } else {
                 val newActive = remainingUsers.first()
-                db.userDao().activateUser(newActive.user_id)
+                db.userDao().activateUser(newActive.user_id, newActive.instance_uri)
                 apiHolder.setToCurrentUser()
                 //relaunch the app
                 launchActivity(MainActivity(), firstTime = true)
@@ -270,7 +270,7 @@ class MainActivity : BaseActivity() {
             return false
         }
 
-        switchUser(profile.identifier.toString())
+        switchUser(profile.identifier.toString(), profile.tag as String)
 
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -281,9 +281,9 @@ class MainActivity : BaseActivity() {
         return false
     }
 
-    private fun switchUser(userId: String) {
+    private fun switchUser(userId: String, instance_uri: String) {
         db.userDao().deActivateActiveUsers()
-        db.userDao().activateUser(userId)
+        db.userDao().activateUser(userId, instance_uri)
         apiHolder.setToCurrentUser()
     }
 
@@ -313,6 +313,7 @@ class MainActivity : BaseActivity() {
                 isNameShown = true
                 identifier = user.user_id.toLong()
                 descriptionText = user.fullHandle
+                tag = user.instance_uri
             }
         }.toMutableList()
 
