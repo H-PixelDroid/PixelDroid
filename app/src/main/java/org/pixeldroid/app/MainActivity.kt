@@ -312,7 +312,7 @@ class MainActivity : BaseActivity() {
                 iconUrl = user.avatar_static
                 isNameShown = true
                 identifier = user.user_id.toLong()
-                descriptionText = "@${user.username}@${user.instance_uri.removePrefix("https://")}"
+                descriptionText = user.fullHandle
             }
         }.toMutableList()
 

@@ -28,4 +28,7 @@ data class UserDatabaseEntity(
         val refreshToken: String?,
         val clientId: String,
         val clientSecret: String
-): Serializable
+): Serializable {
+    val fullHandle: String
+        get() = "@${username}@${instance_uri.removePrefix("https://")}"
+}

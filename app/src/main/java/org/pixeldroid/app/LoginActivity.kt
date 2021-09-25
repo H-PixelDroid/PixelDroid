@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import org.pixeldroid.app.databinding.ActivityLoginBinding
 import org.pixeldroid.app.utils.*
 import org.pixeldroid.app.utils.api.PixelfedAPI
@@ -16,6 +18,9 @@ import org.pixeldroid.app.utils.api.objects.*
 import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.storeInstance
 import kotlinx.coroutines.*
+import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker
+import org.pixeldroid.app.utils.notificationsWorker.makeChannelGroupId
+import org.pixeldroid.app.utils.notificationsWorker.makeNotificationChannels
 import retrofit2.HttpException
 import java.io.IOException
 import java.lang.IllegalArgumentException
@@ -340,6 +345,12 @@ class LoginActivity : BaseActivity() {
         } catch (exception: NullPointerException) {
             return failedRegistration(getString(R.string.login_notifications))
         }
+
+        makeNotificationChannels(
+            applicationContext,
+            user.fullHandle,
+            makeChannelGroupId(user)
+        )
     }
 
 }
