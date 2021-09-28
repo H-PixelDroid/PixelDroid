@@ -1,0 +1,7 @@
+* Přidání jazyka (Malayalam)
+
+* Oprava chyb některých špatných odpovědí z API
+
+* Aktualizace závislostí
+
+* Aktualizace překladů

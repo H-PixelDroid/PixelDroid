@@ -59,13 +59,13 @@
     <string name="no_description">Bez popisu</string>
     <plurals name="shares">
         <item quantity="one">%d sdílení</item>
-        <item quantity="few"></item>
-        <item quantity="other"></item>
+        <item quantity="few"/>
+        <item quantity="other"/>
     </plurals>
     <plurals name="likes">
         <item quantity="one">%d To se mi líbí</item>
-        <item quantity="few"></item>
-        <item quantity="other"></item>
+        <item quantity="few"/>
+        <item quantity="other"/>
     </plurals>
     <string name="posted_on">Zveřejněno na %1$s</string>
     <string name="NoCommentsToShow">U tohoto příspěvku nejsou žádné komentáře…</string>
@@ -168,7 +168,7 @@
     <string name="save_image_description">Uložit popis obrázku</string>
     <string name="no_media_description">Sem přidejte popis média…</string>
     <string name="total_exceeds_album_limit">Vybrali jste více obrázků než povoluje váš server (%1$s). Obrázky překračující limit budou ignorovány.</string>
-    <string name="switch_to_grid"></string>
+    <string name="switch_to_grid">Zobrazit v gridu</string>
     <string name="size_exceeds_instance_limit">Velikost obrázku číslo %1$d překračuje maximální povolenou velikost instance (%2$d kB, limit je %3$d kB). Je možné, že jej nebude možné nahrát.</string>
     <string name="upload_error">Chybový kód vrácený serverem: %1$d</string>
     <string name="lbl_brightness">JAS</string>
@@ -193,5 +193,15 @@
 \nsledující</string>
     <string name="file_not_found">Soubor %1$s nebyl nalezen</string>
     <string name="delete_post_failed_error">Příspěvek nelze smazat, chyba %1$d</string>
-    <string name="delete_post_failed_io_except">Příspěvek nelze smazat, zkontrolujte připojení</string>
+    <string name="delete_post_failed_io_except">Příspěvek nelze smazat, zkontrolujte připojení.</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Skrytá média
+\n (klikněte pro zobrazení)</string>
+    <string name="media_upload_completed">Nahrávání bylo dokončeno</string>
+    <string name="media_upload_failed">Nahrávání selhalo, zkuste znovu nebo zkontrolujte stav sítě</string>
+    <string name="posting_image_accessibility_hint">Obrázek se zveřejňuje</string>
+    <string name="switch_to_carousel">Zobrazit v karuselu</string>
+    <string name="discover_no_infinite_load">Načítá se pouze omezené množství obsahu. Pro zobrazení dalších obrázku zatáhněte dolů.</string>
+    <string name="panda_pull_to_refresh_to_try_again">Panda je smutná. Zatáhněte dolů a pro obnovení.</string>
+    <string name="issues_contribute">Nahlaste problémy nebo přispějte do aplikace:</string>
+    <string name="mascot_description">Obrázek zobrazuje červenou pandu. Maskota aplikace Pixelfed používající telefon</string>
 </resources>
