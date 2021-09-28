@@ -1,0 +1,9 @@
+- Podpora upozornění! Stále trochu jednoduché, ale pracujeme na vylepšení :)
+- Oprava chyby způsobující špatně otočené fotografie
+- Oprava chyby #300
+- Oprava webview zobrazující chybu při přihlašování
+- Oprava chyby způsobující, mimo jiné, výkonnostní problémy
+- Přidána podpora Češtiny, aktualizace dalších překladů
+- Oprava profilových obrázků
+- Oprava nefunkční kamery po přepnutí karet
+- Aktualizace závislostí
