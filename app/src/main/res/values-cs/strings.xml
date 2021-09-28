@@ -44,4 +44,164 @@
     <string name="invalid_domain">Neplatná doména</string>
     <string name="menu_settings">Nastavení</string>
     <string name="menu_account">Můj profil</string>
+    <string name="image_download_failed">Stahování se nezdařilo, zkuste to znovu</string>
+    <string name="write_permission_download_pic">Pro stahování obrázků musíte udělit práva k zápisu!</string>
+    <string name="post_is_album">Tento příspěvek je album</string>
+    <string name="action_not_allowed">Tato akce není povolena</string>
+    <string name="follow_requested">Požadavek na sledování odeslán</string>
+    <string name="gallery_button_alt">Galerie</string>
+    <string name="loading_toast">Při načítání se něco pokazilo</string>
+    <string name="feed_failed">Nepodařilo se získat feed</string>
+    <string name="share_picture">Sdílet obrázek…</string>
+    <string name="save_to_gallery">Uložit do galerie…</string>
+    <string name="image_download_downloading">Probíhá stahování…</string>
+    <string name="image_download_success">Obrázek úspěšně stažen</string>
+    <string name="no_description">Bez popisu</string>
+    <plurals name="shares">
+        <item quantity="one">%d sdílení</item>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d To se mi líbí</item>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
+    <string name="posted_on">Zveřejněno na %1$s</string>
+    <string name="NoCommentsToShow">U tohoto příspěvku nejsou žádné komentáře…</string>
+    <string name="empty_comment">Komentář nesmí být prázdný!</string>
+    <string name="write_permission_share_pic">Pro sdílení obrázků musíte udělit práva k zápisu!</string>
+    <string name="share_image">Sdílet obrázek</string>
+    <string name="comment_error">Chyba komentáře!</string>
+    <string name="comment_posted">Komentář: %1$s zveřejněn!</string>
+    <string name="comment">Komentář</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d komentář</item>
+        <item quantity="few">%d komentáře</item>
+        <item quantity="other">%d komentářů</item>
+    </plurals>
+    <string name="add_comment">Přidat komentář</string>
+    <string name="submit_comment">Odeslat komentář</string>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\npříspěvek</item>
+        <item quantity="few">%d
+\npříspěvky</item>
+        <item quantity="other">%d
+\npříspěvků</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nsledující</item>
+        <item quantity="few">%d
+\nsledující</item>
+        <item quantity="other">%d
+\nsledujících</item>
+    </plurals>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nsledovaný</item>
+        <item quantity="few">%d
+\nsledovaní</item>
+        <item quantity="other">%d
+\nsledovaných</item>
+    </plurals>
+    <string name="follow_status_failed">Nepodařilo se získat stav sledování</string>
+    <string name="edit_link_failed">Stránku pro úpravy se nepodařilo otevřít</string>
+    <string name="empty_feed">Tady není nic k vidění :(</string>
+    <string name="follow_button_failed">Nepodařilo se zobrazit tlačítko pro sledování</string>
+    <string name="follow_error">Nelze sledovat</string>
+    <string name="unfollow_error">Nepodařilo se zrušit sledování</string>
+    <string name="access_token_invalid">Přístupový token je neplatný</string>
+    <string name="default_nposts">-
+\npříspěvky</string>
+    <string name="default_nfollowing">-
+\nsledovaní</string>
+    <string name="no_username">Žádné uživatelské jméno</string>
+    <string name="follow">Sledovat</string>
+    <string name="unfollow">Přestat sledovat</string>
+    <string name="dialog_message_cancel_follow_request">Zrušit požadavek na sledování\?</string>
+    <string name="edit_profile">Upravit profil</string>
+    <string name="search">Hledat</string>
+    <string name="posts">PŘÍSPĚVKY</string>
+    <string name="accounts">ÚČTY</string>
+    <string name="hashtags">ŠTÍTKY</string>
+    <string name="retry">Opakovat</string>
+    <string name="nothing_to_see_here">Tady není nic k vidění!</string>
+    <string name="auth_failed">Nepodařilo se ověřit</string>
+    <string name="verify_credentials">Nepodařilo se získat informace o uživateli</string>
+    <string name="instance_error">Nepodařilo se získat informace o instanci</string>
+    <string name="instance_not_pixelfed_warning">Toto nevypadá jako instance Pixelfed, takže aplikace nemusí fungovat správně.</string>
+    <string name="instance_not_pixelfed_continue">Rozumím, přesto pokračovat</string>
+    <string name="instance_not_pixelfed_cancel">Přerušit přihlašování</string>
+    <string name="poll_notification">Anketa uživatele %1$s skončila</string>
+    <string name="whats_an_instance_explanation">Je možné, že jste zmateni z dotazu na doménu vaší \'instance\'.
+\n
+\nPixelfed je totiž federovaná platforma, která je součástí tzv. \'fediverse\', což znamená, že může komunikovat s ostatními platformami využívající stejné komunikační rozhraní. Mezi další platformy patří např. Mastodon (https://joinmastodon.org).
+\n
+\nMusíte si tedy vybrat, který server nebo kterou instanci Pixelfed budete využívat. Jestliže žádnou neznáte, podívejte se zde: https://pixelfed.org/join
+\n
+\nPro více informací o platformě Pixelfed navštivte https://pixelfed.org</string>
+    <string name="domain_of_your_instance">Doména vaší instance</string>
+    <string name="connect_to_pixelfed">Připojit k Pixelfed</string>
+    <string name="login_connection_required_once">Abyste mohli přidat první účet a používat PixelDroid, musíte být online :(</string>
+    <string name="api_not_enabled_dialog">API není na této instanci aktivováno. Kontaktujete správce instance a požádejte jej o aktivaci.</string>
+    <string name="logout">Odhlásit</string>
+    <string name="permission_denied">Přístup odepřen</string>
+    <string name="save_image_failed">Obrázek nelze uložit</string>
+    <string name="save_image_success">Obrázek úspěšně uložen</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Popis může obsahovat maximálně %d znak.</item>
+        <item quantity="few">Popis může obsahovat maximálně %d znaky.</item>
+        <item quantity="other">Popis může obsahovat maximálně %d znaků.</item>
+    </plurals>
+    <string name="upload_picture_failed">Chyba při nahrávání obrázku!</string>
+    <string name="picture_format_error">Chyba nahrávání: špatný formát obrázku.</string>
+    <string name="request_format_error">Chyba nahrávání: špatný formát požadavku</string>
+    <string name="upload_post_failed">Odeslání příspěvku se nezdařilo</string>
+    <string name="upload_post_success">Příspěvek byl úspěšně nahrán</string>
+    <string name="upload_post_error">Chyba při nahrávání příspěvku</string>
+    <string name="description">Popis…</string>
+    <string name="post">příspěvek</string>
+    <string name="add_photo">Přidat fotku</string>
+    <string name="post_image">Jeden z obrázků v příspěvku</string>
+    <string name="save_image_description">Uložit popis obrázku</string>
+    <string name="no_media_description">Sem přidejte popis média…</string>
+    <string name="total_exceeds_album_limit">Vybrali jste více obrázků než povoluje váš server (%1$s). Obrázky překračující limit budou ignorovány.</string>
+    <string name="switch_to_grid">Zobrazit v gridu</string>
+    <string name="size_exceeds_instance_limit">Velikost obrázku číslo %1$d překračuje maximální povolenou velikost instance (%2$d kB, limit je %3$d kB). Je možné, že jej nebude možné nahrát.</string>
+    <string name="upload_error">Chybový kód vrácený serverem: %1$d</string>
+    <string name="lbl_brightness">JAS</string>
+    <string name="lbl_contrast">KONTRAST</string>
+    <string name="lbl_saturation">NASYCENÍ</string>
+    <string name="tab_filters">FILTRY</string>
+    <string name="edit">Upravit</string>
+    <string name="filter_thumbnail">Náhled filtru</string>
+    <string name="busy_dialog_text">Obrázek se stále zpracovává, nejprve počkejte na dokončení!</string>
+    <string name="busy_dialog_ok_button">Rozumím, čekám.</string>
+    <string name="normal_filter">Žádný</string>
+    <string name="crop_result_error">Obrázek se po oříznutí nepodařilo načíst</string>
+    <string name="image_preview">Náhled upravovaného obrázku</string>
+    <string name="crop_button">Tlačítko k oříznutí nebo otočení obrázku</string>
+    <string name="save_before_returning">Uložit úpravy\?</string>
+    <string name="no_cancel_edit">Ne, zrušit úpravy</string>
+    <string name="capture_button_alt">Zachytit</string>
+    <string name="switch_camera_button_alt">Přepnout kameru</string>
+    <string name="open_drawer_menu">Otevřít nabídku</string>
+    <string name="discover">OBJEVOVAT</string>
+    <string name="default_nfollowers">-
+\nsledující</string>
+    <string name="file_not_found">Soubor %1$s nebyl nalezen</string>
+    <string name="delete_post_failed_error">Příspěvek nelze smazat, chyba %1$d</string>
+    <string name="delete_post_failed_io_except">Příspěvek nelze smazat, zkontrolujte připojení.</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Skrytá média
+\n (klikněte pro zobrazení)</string>
+    <string name="media_upload_completed">Nahrávání bylo dokončeno</string>
+    <string name="media_upload_failed">Nahrávání selhalo, zkuste znovu nebo zkontrolujte stav sítě</string>
+    <string name="posting_image_accessibility_hint">Obrázek se zveřejňuje</string>
+    <string name="switch_to_carousel">Zobrazit v karuselu</string>
+    <string name="discover_no_infinite_load">Načítá se pouze omezené množství obsahu. Pro zobrazení dalších obrázku zatáhněte dolů.</string>
+    <string name="panda_pull_to_refresh_to_try_again">Panda je smutná. Zatáhněte dolů a pro obnovení.</string>
+    <string name="issues_contribute">Nahlaste problémy nebo přispějte do aplikace:</string>
+    <string name="mascot_description">Obrázek zobrazuje červenou pandu. Maskota aplikace Pixelfed používající telefon</string>
 </resources>

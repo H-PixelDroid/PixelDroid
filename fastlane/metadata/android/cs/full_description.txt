@@ -1,0 +1,11 @@
+PixelDroid je aplikace s otevřeným zdrojovým kódem pro Android. Jedná se o klienta pro Pixelfed, federovanou platformu pro sdílení obrázků.
+
+Procházejte feedy a profily, nahrávejte nové příspěvky, objevujte příspěvky, komunikujte s ostatními ve fedivesmíru.
+
+• Podpora více účtů
+• Tmavý i světlý mód
+• Použití filtrů, ořezávání, změny jasu/kontrastu/nasycení
+• Respektujte nastavení vašeho Pixelfed serveru
+• 100% zdarma a s otevřeným zdrojovým kódem. Žádné proprietární závislosti.
+
+Mrkněte na https://pixelfed.org abyste se dozvěděli více o platformě Pixelfed.

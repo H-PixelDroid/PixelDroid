@@ -1,0 +1,1 @@
+Klient pro Pixelfed, federovanou platformu pro sdílení obrázků
