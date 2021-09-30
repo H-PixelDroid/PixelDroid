@@ -7,7 +7,7 @@
     <string name="something_went_wrong">Něco se pokazilo…</string>
     <string name="profile_picture">Profilový obrázek</string>
     <string name="toolbar_title_edit">Upravit</string>
-    <string name="report_error">Hlášení nelze odeslat</string>
+    <string name="report_error">Hlášení se nepodařilo odeslat</string>
     <string name="reported">Nahlášeno {gmd_check_circle}</string>
     <string name="report_target">Nahlásit příspěvek uživatele @%1$s</string>
     <string name="optional_report_comment">Volitelná zpráva pro moderátory/správce</string>
@@ -32,7 +32,7 @@
     <string name="light_theme">Světlý</string>
     <string name="mention_notification">%1$s se o vás zmínil/a</string>
     <string name="shared_notification">%1$s sdílel/a váš příspěvek</string>
-    <string name="followed_notification">%1$s vás sleduje</string>
+    <string name="followed_notification">%1$s vás začal/a sledovat</string>
     <string name="dark_theme">Tmavý</string>
     <string name="add_account_description">Přidat další účet Pixelfed</string>
     <string name="add_account_name">Přidat účet</string>
@@ -59,13 +59,13 @@
     <string name="no_description">Bez popisu</string>
     <plurals name="shares">
         <item quantity="one">%d sdílení</item>
-        <item quantity="few"/>
-        <item quantity="other"/>
+        <item quantity="few">%d sdílení</item>
+        <item quantity="other">%d sdílení</item>
     </plurals>
     <plurals name="likes">
         <item quantity="one">%d To se mi líbí</item>
-        <item quantity="few"/>
-        <item quantity="other"/>
+        <item quantity="few">%d To se mi líbí</item>
+        <item quantity="other">%d To se mi líbí</item>
     </plurals>
     <string name="posted_on">Zveřejněno na %1$s</string>
     <string name="NoCommentsToShow">U tohoto příspěvku nejsou žádné komentáře…</string>
@@ -158,7 +158,7 @@
     <string name="upload_picture_failed">Chyba při nahrávání obrázku!</string>
     <string name="picture_format_error">Chyba nahrávání: špatný formát obrázku.</string>
     <string name="request_format_error">Chyba nahrávání: špatný formát požadavku</string>
-    <string name="upload_post_failed">Odeslání příspěvku se nezdařilo</string>
+    <string name="upload_post_failed">Nahrávání příspěvku se nezdařilo</string>
     <string name="upload_post_success">Příspěvek byl úspěšně nahrán</string>
     <string name="upload_post_error">Chyba při nahrávání příspěvku</string>
     <string name="description">Popis…</string>
@@ -185,15 +185,15 @@
     <string name="crop_button">Tlačítko k oříznutí nebo otočení obrázku</string>
     <string name="save_before_returning">Uložit úpravy\?</string>
     <string name="no_cancel_edit">Ne, zrušit úpravy</string>
-    <string name="capture_button_alt">Zachytit</string>
+    <string name="capture_button_alt">Vyfotit</string>
     <string name="switch_camera_button_alt">Přepnout kameru</string>
     <string name="open_drawer_menu">Otevřít nabídku</string>
     <string name="discover">OBJEVOVAT</string>
     <string name="default_nfollowers">-
 \nsledující</string>
     <string name="file_not_found">Soubor %1$s nebyl nalezen</string>
-    <string name="delete_post_failed_error">Příspěvek nelze smazat, chyba %1$d</string>
-    <string name="delete_post_failed_io_except">Příspěvek nelze smazat, zkontrolujte připojení.</string>
+    <string name="delete_post_failed_error">Příspěvek se nepodařilo smazat, chyba %1$d</string>
+    <string name="delete_post_failed_io_except">Příspěvek se nepodařilo smazat. Zkontrolovali jste připojení\?</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Skrytá média
 \n (klikněte pro zobrazení)</string>
     <string name="media_upload_completed">Nahrávání bylo dokončeno</string>
@@ -203,5 +203,17 @@
     <string name="discover_no_infinite_load">Načítá se pouze omezené množství obsahu. Pro zobrazení dalších obrázku zatáhněte dolů.</string>
     <string name="panda_pull_to_refresh_to_try_again">Panda je smutná. Zatáhněte dolů a pro obnovení.</string>
     <string name="issues_contribute">Nahlaste problémy nebo přispějte do aplikace:</string>
-    <string name="mascot_description">Obrázek zobrazuje červenou pandu. Maskota aplikace Pixelfed používající telefon</string>
+    <string name="mascot_description">Obrázek zobrazuje červenou pandu, maskota aplikace Pixelfed používající telefon</string>
+    <string name="comment_notification">%1$s komentoval/a váš příspěvek</string>
+    <string name="login_notifications">Nepodařilo se načíst nejnovější upozornění</string>
+    <string name="other_notification">Upozornění od %1$s</string>
+    <string name="followed_notification_channel">Noví sledující</string>
+    <string name="mention_notification_channel">Zmínky</string>
+    <string name="shared_notification_channel">Sdílení</string>
+    <string name="liked_notification_channel">To se mi líbí</string>
+    <string name="comment_notification_channel">Komentáře</string>
+    <string name="poll_notification_channel">Ankety</string>
+    <string name="other_notification_channel">Další</string>
+    <string name="notifications_settings">Nastavení upozornění</string>
+    <string name="notifications_settings_summary">Spravovat, jaké upozornění chcete dostávat</string>
 </resources>
