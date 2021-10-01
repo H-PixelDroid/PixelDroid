@@ -194,8 +194,8 @@
     <string name="file_not_found">Soubor %1$s nebyl nalezen</string>
     <string name="delete_post_failed_error">Příspěvek se nepodařilo smazat, chyba %1$d</string>
     <string name="delete_post_failed_io_except">Příspěvek se nepodařilo smazat. Zkontrolovali jste připojení\?</string>
-    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Skrytá média
-\n (klikněte pro zobrazení)</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">Citlivý obsah
+\n(klikněte pro zobrazení)</string>
     <string name="media_upload_completed">Nahrávání bylo dokončeno</string>
     <string name="media_upload_failed">Nahrávání selhalo, zkuste znovu nebo zkontrolujte stav sítě</string>
     <string name="posting_image_accessibility_hint">Obrázek se zveřejňuje</string>
