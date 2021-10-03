@@ -194,4 +194,16 @@
     <string name="discover_no_infinite_load">بخش کشف به صورت بی‌انتها بار نمی‌شود. برای تازه‌سازی و دریافت تصاویر دیگر، صفحه را به پایین بکشید.</string>
     <string name="file_not_found">پروندهٔ %1$s یافت نشد</string>
     <string name="hashtag_title">#%1$s</string>
+    <string name="comment_notification">%1$s نظر درباره فرستهٔ شما</string>
+    <string name="liked_notification_channel">پسندها</string>
+    <string name="notifications_settings">تنظیمات اعلان</string>
+    <string name="notifications_settings_summary">تنظیم کنید که مایل به دریافت چه اعلاناتی هستید</string>
+    <string name="other_notification">اعلان از %1$s</string>
+    <string name="followed_notification_channel">پیگیران جدید</string>
+    <string name="mention_notification_channel">اشاره‌ها</string>
+    <string name="shared_notification_channel">هم‌رسانی‌ها</string>
+    <string name="comment_notification_channel">نظرات</string>
+    <string name="poll_notification_channel">نظرسنجی‌ها</string>
+    <string name="other_notification_channel">سایر</string>
+    <string name="login_notifications">ناتوانی در دریافت آخرین اعلانات</string>
 </resources>
