@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="registration_failed">无法在此服务器上注册应用程序</string>
-    <string name="browser_launch_failed">无法跳转至浏览器，请确认是否安装</string>
+    <string name="browser_launch_failed">无法启动浏览器，您安装了浏览器吗？</string>
     <string name="image_download_success">成功下载图像</string>
     <string name="menu_account">个人资料</string>
     <string name="menu_settings">设置</string>
@@ -184,4 +184,16 @@
     </plurals>
     <string name="file_not_found">文件 %1$s 未找到</string>
     <string name="hashtag_title">#%1$s</string>
+    <string name="comment_notification">%1$s 评论了你的帖子</string>
+    <string name="other_notification">来自 %1$s 的通知</string>
+    <string name="followed_notification_channel">新关注者</string>
+    <string name="mention_notification_channel">提及</string>
+    <string name="shared_notification_channel">分享</string>
+    <string name="liked_notification_channel">赞</string>
+    <string name="comment_notification_channel">评论</string>
+    <string name="poll_notification_channel">投票</string>
+    <string name="other_notification_channel">其他</string>
+    <string name="notifications_settings">通知设置</string>
+    <string name="notifications_settings_summary">管理你想接收的通知</string>
+    <string name="login_notifications">无法获取最新通知</string>
 </resources>

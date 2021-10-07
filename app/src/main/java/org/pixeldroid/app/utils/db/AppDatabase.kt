@@ -3,6 +3,8 @@ package org.pixeldroid.app.utils.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import org.pixeldroid.app.utils.db.dao.*
 import org.pixeldroid.app.utils.db.dao.feedContent.NotificationDao
 import org.pixeldroid.app.utils.db.dao.feedContent.posts.HomePostDao
@@ -20,7 +22,7 @@ import org.pixeldroid.app.utils.api.objects.Notification
         PublicFeedStatusDatabaseEntity::class,
         Notification::class
     ],
-    version = 3
+    version = 4
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -29,4 +31,12 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun homePostDao(): HomePostDao
     abstract fun publicPostDao(): PublicPostDao
     abstract fun notificationDao(): NotificationDao
+}
+
+val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("DELETE FROM homePosts")
+        database.execSQL("DELETE FROM publicPosts")
+        database.execSQL("DELETE FROM notifications")
+    }
 }

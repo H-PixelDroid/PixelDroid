@@ -3,6 +3,7 @@ package org.pixeldroid.app.utils.db.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import java.io.Serializable
 
 @Entity(
     tableName = "users",
@@ -27,4 +28,7 @@ data class UserDatabaseEntity(
         val refreshToken: String?,
         val clientId: String,
         val clientSecret: String
-)
+): Serializable {
+    val fullHandle: String
+        get() = "@${username}@${instance_uri.removePrefix("https://")}"
+}

@@ -1,0 +1,9 @@
+- Notification support! Still a bit rudimentary, some polish is incoming :)
+- Fix an issue causing the EXIF rotation to be ignored, making photos appear turned the wrong way
+- Fix #300
+- Fix webview browsers showing an error on login because the URL contained spaces that weren't URI-encoded
+- Fix issue causing caches to be flushed and making the feeds flash empty on every app launch, and causing performance problems
+- Add Czech, update other translations
+- Fix profile pictures
+- Fix camera not working after switching tabs
+- Update dependencies

@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import org.pixeldroid.app.databinding.ActivityLoginBinding
 import org.pixeldroid.app.utils.*
 import org.pixeldroid.app.utils.api.PixelfedAPI
@@ -16,9 +18,13 @@ import org.pixeldroid.app.utils.api.objects.*
 import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.storeInstance
 import kotlinx.coroutines.*
+import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker
+import org.pixeldroid.app.utils.notificationsWorker.makeChannelGroupId
+import org.pixeldroid.app.utils.notificationsWorker.makeNotificationChannels
 import retrofit2.HttpException
 import java.io.IOException
 import java.lang.IllegalArgumentException
+import java.lang.NullPointerException
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -229,7 +235,7 @@ class LoginActivity : BaseActivity() {
                 "client_id" + "=" + client_id + "&" +
                 "redirect_uri" + "=" + "$oauthScheme://$PACKAGE_ID" + "&" +
                 "response_type=code" + "&" +
-                "scope=$SCOPE"
+                "scope=${SCOPE.replace(" ", "%20")}"
 
         if (!openUrl(url)) return failedRegistration(getString(R.string.browser_launch_failed))
     }
@@ -311,14 +317,40 @@ class LoginActivity : BaseActivity() {
                 clientSecret = clientSecret
             )
             apiHolder.setToCurrentUser()
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
         } catch (exception: IOException) {
             return failedRegistration(getString(R.string.verify_credentials))
         } catch (exception: HttpException) {
             return failedRegistration(getString(R.string.verify_credentials))
         }
+
+        fetchNotifications()
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    // Fetch the latest notifications of this account, to avoid launching old notifications
+    private suspend fun fetchNotifications() {
+        val user = db.userDao().getActiveUser()!!
+        try {
+            val notifications = apiHolder.api!!.notifications()
+
+            notifications.forEach{it.user_id = user.user_id; it.instance_uri = user.instance_uri}
+
+            db.notificationDao().insertAll(notifications)
+        } catch (exception: IOException) {
+            return failedRegistration(getString(R.string.login_notifications))
+        } catch (exception: HttpException) {
+            return failedRegistration(getString(R.string.login_notifications))
+        } catch (exception: NullPointerException) {
+            return failedRegistration(getString(R.string.login_notifications))
+        }
+
+        makeNotificationChannels(
+            applicationContext,
+            user.fullHandle,
+            makeChannelGroupId(user)
+        )
     }
 
 }

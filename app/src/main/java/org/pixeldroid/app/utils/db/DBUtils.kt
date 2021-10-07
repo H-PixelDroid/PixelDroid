@@ -14,7 +14,7 @@ import java.lang.IllegalArgumentException
 
 fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true,
             accessToken: String, refreshToken: String?, clientId: String, clientSecret: String) {
-    db.userDao().insertUser(
+    db.userDao().insertOrUpdate(
             UserDatabaseEntity(
                     user_id = account.id!!,
                     instance_uri = normalizeDomain(instance_uri),
