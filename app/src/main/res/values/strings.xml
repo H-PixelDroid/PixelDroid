@@ -215,9 +215,9 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="license_info">PixelDroid is free and open source software, licensed under the GNU General Public License (version 3 or later)</string>
     <string name="about">About</string>
     <string name="post_title">%1$s\'s post</string>
-    <string name="followers_title">%1$s\'s followers</string>
+    <string name="followers_title">\@%1$s\'s followers</string>
     <string name="hashtag_title">#%1$s</string>
-    <string name="follows_title">%1$s\'s follows</string>
+    <string name="follows_title">\@%1$s\'s follows</string>
     <string name="search_empty_error">Search query can\'t be empty</string>
     <string name="status_more_options">More options</string>
     <string name="report">Report</string>

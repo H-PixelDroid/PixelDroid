@@ -157,9 +157,10 @@ class ProfileActivity : BaseActivity() {
 
         val displayName = account.getDisplayName()
 
-        supportActionBar?.title = displayName
+        supportActionBar?.title = "@${account.acct}"
+
         if(displayName != "@${account.acct}") {
-            supportActionBar?.subtitle = "@${account.acct}"
+            supportActionBar?.subtitle = displayName
         }
 
         binding.nbPostsTextView.text = resources.getQuantityString(

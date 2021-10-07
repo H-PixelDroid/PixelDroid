@@ -27,7 +27,7 @@ class FollowsActivity : BaseActivity() {
             val user = db.userDao().getActiveUser()!!
             startFragment(user.user_id, user.username, followers)
         } else {
-            startFragment(account.id!!, account.getusername(), followers)
+            startFragment(account.id!!, account.username.orEmpty(), followers)
         }
     }
 

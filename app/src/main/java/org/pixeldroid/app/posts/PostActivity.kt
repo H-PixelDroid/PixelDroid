@@ -46,7 +46,7 @@ class PostActivity : BaseActivity() {
         domain = user?.instance_uri.orEmpty()
 
 
-        supportActionBar?.title = getString(R.string.post_title).format(status.account?.getusername())
+        supportActionBar?.title = getString(R.string.post_title).format(status.account?.username)
 
         val holder = StatusViewHolder(binding.postFragmentSingle)
 
