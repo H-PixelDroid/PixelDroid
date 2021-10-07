@@ -11,6 +11,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.tabs.TabLayout
+import org.hamcrest.CoreMatchers.anyOf
 import org.pixeldroid.app.testUtility.*
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.junit.After
@@ -81,7 +82,11 @@ class MockedServerTest {
 
         waitForView(R.id.username)
 
-        onView(withId(R.id.username)).check(matches(withSubstring("User ")))
+        onView(withId(R.id.username)).check(matches(anyOf(
+            withSubstring("User "),
+            withSubstring("PixelDroid Developer"),
+            withSubstring("Testi Testo")
+        )))
     }
 
     @Test

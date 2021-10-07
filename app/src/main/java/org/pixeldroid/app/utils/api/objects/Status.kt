@@ -13,7 +13,7 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.getDomain
 import java.io.File
 import java.io.Serializable
-import java.util.*
+import java.time.Instant
 
 /**
     Represents a status posted by an account.
@@ -24,7 +24,7 @@ open class Status(
     //Base attributes
     override val id: String,
     val uri: String? = "",
-    val created_at: Date? = Date(0), //ISO 8601 Datetime
+    val created_at: Instant? = null, //ISO 8601 Datetime
     val account: Account?,
     val content: String? = "", //HTML
     val visibility: Visibility? = Visibility.public,
@@ -66,7 +66,7 @@ open class Status(
 
     fun getPostUrl() : String? = media_attachments?.firstOrNull()?.url
     fun getProfilePicUrl() : String? = account?.anyAvatar()
-    fun getPostPreviewURL() : String? = media_attachments?.firstOrNull()?.preview_url
+    fun getPostPreviewURL() : String? = media_attachments?.firstOrNull()?.previewNoPlaceholder
 
 
     fun getNLikes(context: Context) : CharSequence {

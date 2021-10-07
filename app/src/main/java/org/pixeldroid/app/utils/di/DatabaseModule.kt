@@ -5,6 +5,7 @@ import androidx.room.Room
 import org.pixeldroid.app.utils.db.AppDatabase
 import dagger.Module
 import dagger.Provides
+import org.pixeldroid.app.utils.db.MIGRATION_3_4
 import javax.inject.Singleton
 
 @Module
@@ -16,6 +17,6 @@ class DatabaseModule(private val context: Context) {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java, "pixeldroid"
-        ).allowMainThreadQueries().build()
+        ).addMigrations(MIGRATION_3_4).allowMainThreadQueries().build()
     }
 }

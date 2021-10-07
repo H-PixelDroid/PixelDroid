@@ -1,0 +1,7 @@
+* Aktualizace překladů: nové řetězce a aktualizace existujících. Díky překladatelům ❤️! Navštivte náš weblate, pokud chcete pomoc s překladem do vašeho jazyka.
+
+* #️⃣ Podpora štítků. Nyní můžete procházet štítky namísto pouhého jejich zobrazení 😜
+
+* Kliknutím na kartu přejdete nahoru. Už žádné zuřivé rolování, abyste se dostali zpět nahoru. Stačí znovu kliknout na kartu, na které se nacházíte a je to :)
+
+* Oprava chyba způsobující pád aplikace. Velké poděkování všem za vaše hlášení o pádech! ❤️

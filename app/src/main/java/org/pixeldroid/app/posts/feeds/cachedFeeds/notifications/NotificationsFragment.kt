@@ -91,7 +91,8 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             val intent: Intent =
                 when (type) {
                     Notification.NotificationType.mention, Notification.NotificationType.favourite,
-                    Notification.NotificationType.poll, Notification.NotificationType.reblog -> {
+                    Notification.NotificationType.poll, Notification.NotificationType.reblog,
+                    Notification.NotificationType.comment  -> {
                         openPostFromNotification()
                     }
                     Notification.NotificationType.follow -> {
@@ -120,39 +121,38 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         ) {
             val context = textView.context
             val (format: String, drawable: Drawable?) = when (type) {
-                Notification.NotificationType.follow -> {
+                Notification.NotificationType.follow ->
                     getStringAndDrawable(
                         context,
                         R.string.followed_notification,
                         R.drawable.ic_follow
                     )
-                }
-                Notification.NotificationType.mention -> {
+                Notification.NotificationType.mention ->
                     getStringAndDrawable(
                         context,
                         R.string.mention_notification,
                         R.drawable.mention_at_24dp
                     )
-                }
-
-                Notification.NotificationType.reblog -> {
+                Notification.NotificationType.comment ->
+                    getStringAndDrawable(
+                        context,
+                        R.string.comment_notification,
+                        R.drawable.ic_comment_empty
+                    )
+                Notification.NotificationType.reblog ->
                     getStringAndDrawable(
                         context,
                         R.string.shared_notification,
                         R.drawable.ic_reblog_blue
                     )
-                }
-
-                Notification.NotificationType.favourite -> {
+                Notification.NotificationType.favourite ->
                     getStringAndDrawable(
                         context,
                         R.string.liked_notification,
                         R.drawable.ic_like_full
                     )
-                }
-                Notification.NotificationType.poll -> {
+                Notification.NotificationType.poll ->
                     getStringAndDrawable(context, R.string.poll_notification, R.drawable.poll)
-                }
             }
             textView.text = format.format(username)
             textView.setCompoundDrawablesWithIntrinsicBounds(
@@ -179,7 +179,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             Glide.with(itemView).load(notification?.account?.anyAvatar()).circleCrop()
                 .into(avatar)
 
-            val previewUrl = notification?.status?.media_attachments?.getOrNull(0)?.preview_url
+            val previewUrl = notification?.status?.getPostPreviewURL()
             if (!previewUrl.isNullOrBlank()) {
                 Glide.with(itemView).load(previewUrl)
                     .placeholder(R.drawable.ic_picture_fallback).into(photoThumbnail)
@@ -256,7 +256,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val uiModel = getItem(position)
-            uiModel.let {
+            uiModel?.let {
                 (holder as NotificationViewHolder).bind(
                         it,
                         apiHolder,

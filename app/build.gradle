@@ -16,6 +16,7 @@ android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -27,8 +28,8 @@ android {
         applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 3
-        versionName "1.0.beta3"
+        versionCode 4
+        versionName "1.0.beta4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -100,13 +101,15 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
     /**
      * AndroidX dependencies:
      */
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.preference:preference-ktx:1.1.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation "androidx.browser:browser:1.3.0"
@@ -123,6 +126,8 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation "androidx.activity:activity-ktx:1.3.1"
     implementation 'androidx.fragment:fragment-ktx:1.3.6'
+    implementation "androidx.work:work-runtime-ktx:2.6.0"
+    implementation 'androidx.work:work-testing:2.6.0'
 
     // Use the most recent version of CameraX
     def cameraX_version = '1.0.1'
@@ -157,9 +162,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.1'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
 
@@ -179,15 +184,15 @@ dependencies {
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation 'com.mikepenz:materialdrawer:8.4.2'
+    implementation 'com.mikepenz:materialdrawer:8.4.3'
     // Add for NavController support
     implementation 'com.mikepenz:materialdrawer-nav:8.4.2'
 
     //iconics
-    implementation "com.mikepenz:iconics-core:5.3.0"
+    implementation 'com.mikepenz:iconics-core:5.3.1'
     implementation 'com.mikepenz:materialdrawer-iconics:8.4.2'
-    implementation "com.mikepenz:iconics-views:5.3.0"
-    implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
+    implementation 'com.mikepenz:iconics-views:5.3.1'
+    implementation 'com.mikepenz:google-material-typeface:4.0.0.1-kotlin@aar'
 
 
     implementation 'com.karumi:dexter:6.2.3'
