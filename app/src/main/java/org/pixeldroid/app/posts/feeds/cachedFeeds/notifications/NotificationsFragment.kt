@@ -81,23 +81,21 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             itemView.setOnClickListener {
                 notification?.openActivity()
             }
+            avatar.setOnClickListener {
+                val intent = notification?.openAccountFromNotification()
+                itemView.context.startActivity(intent)
+            }
         }
 
         private fun Notification.openActivity() {
             val intent: Intent =
                 when (type) {
-                    Notification.NotificationType.favourite,
+                    Notification.NotificationType.mention, Notification.NotificationType.favourite,
                     Notification.NotificationType.poll, Notification.NotificationType.reblog -> {
                         openPostFromNotification()
                     }
                     Notification.NotificationType.follow -> {
                         openAccountFromNotification()
-                    }
-                    Notification.NotificationType.mention -> {
-                        /*Intent(itemView.context, PostActivity::class.java).apply {
-                            putExtra(Status.POST_TAG, status?.in_reply_to_id)
-                        }*/ // TODO
-                        openPostFromNotification()
                     }
                     null -> return
                 }
@@ -216,11 +214,6 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                         itemView.context,
                         lifecycleScope
                 )
-
-            avatar.setOnClickListener {
-                val intent = notification?.openAccountFromNotification()
-                itemView.context.startActivity(intent)
-            }
         }
 
         companion object {
