@@ -59,7 +59,6 @@ open class Status(
 {
     companion object {
         const val POST_TAG = "postTag"
-        const val POST_ID_TAG = "post_id_tag"
         const val VIEW_COMMENTS_TAG = "view_comments_tag"
         const val POST_COMMENT_TAG = "post_comment_tag"
     }
