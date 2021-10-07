@@ -120,12 +120,12 @@ open class Status(
             while (downloading) {
                 val cursor: Cursor = downloadManager.query(query)
                 cursor.moveToFirst()
-                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                if (cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS))
                     == DownloadManager.STATUS_SUCCESSFUL
                 ) {
                     downloading = false
                 }
-                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                val status = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS))
                 if (!share) {
                     msg = when (status) {
                         DownloadManager.STATUS_FAILED ->
@@ -145,7 +145,7 @@ open class Status(
                     val ext = url.substringAfterLast(".", "*")
 
                     val path = cursor.getString(
-                        cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                        cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI)
                     )
                     val file = path.toUri()
 
