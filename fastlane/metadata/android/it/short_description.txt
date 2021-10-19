@@ -1,0 +1,1 @@
+Client per Pixelfed, la piattaforma di condivisione delle immagini federata

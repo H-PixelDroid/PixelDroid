@@ -83,8 +83,8 @@
     <string name="posting_image_accessibility_hint">Immagine in corso di pubblicazione</string>
     <string name="action_not_allowed">Questa azione non è consentita</string>
     <string name="upload_post_error">Errore di caricamento del post</string>
-    <string name="media_upload_completed">{gmd_cloud_done} Caricamento contenuti completato</string>
-    <string name="media_upload_failed">{gmd_cloud_off} Caricamento dei contenuti non riuscito, riprovare o verificare le condizioni della rete</string>
+    <string name="media_upload_completed">Caricamento contenuto completato</string>
+    <string name="media_upload_failed">Caricamento del contenuto non riuscito, riprovare o verificare le condizioni della rete</string>
     <string name="follow_button_failed">Impossibile visualizzare il tasto segui</string>
     <string name="follow_status_failed">Impossibile ottenere lo stato segui</string>
     <string name="default_system">Predefinito (Segue il sistema)</string>
@@ -146,12 +146,16 @@
 \n
 \nPer maggiori informazioni su Pixelfed, puoi controllare qui: https://pixelfed.org</string>
     <plurals name="nb_followers">
-        <item quantity="one">%d Seguace</item>
-        <item quantity="other">%d Seguaci</item>
+        <item quantity="one">%d
+\nSeguace</item>
+        <item quantity="other">%d
+\nSeguaci</item>
     </plurals>
     <plurals name="nb_posts">
-        <item quantity="one">%d Post</item>
-        <item quantity="other">%d Post</item>
+        <item quantity="one">%d
+\nPost</item>
+        <item quantity="other">%d
+\nPost</item>
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d commento</item>
@@ -178,7 +182,25 @@
     <string name="delete_post_failed_io_except">Impossibile eliminare il post, controlla la tua connesione\?</string>
     <string name="delete_post_failed_error">Impossibile eliminare il post, errore %1$d</string>
     <plurals name="nb_following">
-        <item quantity="one">%d Utente che stai seguendo</item>
-        <item quantity="other">%d Utenti che stai seguendo</item>
+        <item quantity="one">%d
+\nUtente che stai seguendo</item>
+        <item quantity="other">%d
+\nUtenti che stai seguendo</item>
     </plurals>
+    <string name="comment_notification">%1$s ha commentato al tuo post</string>
+    <string name="other_notification">Notifica da %1$s</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="edit_link_failed">Impossibile aprire la pagina di modifica</string>
+    <string name="empty_feed">Niente da vedere qui :(</string>
+    <string name="file_not_found">Il file %1$s non è stato trovato</string>
+    <string name="followed_notification_channel">Nuovi seguaci</string>
+    <string name="mention_notification_channel">Menzioni</string>
+    <string name="shared_notification_channel">Condivisioni</string>
+    <string name="liked_notification_channel">Mi piace</string>
+    <string name="comment_notification_channel">Commenti</string>
+    <string name="poll_notification_channel">Sondaggi</string>
+    <string name="other_notification_channel">Altro</string>
+    <string name="notifications_settings">Impostazioni di notifica</string>
+    <string name="notifications_settings_summary">Gestisci quali notifiche vuoi ricevere</string>
+    <string name="login_notifications">Impossibile recuperare le ultime notifiche</string>
 </resources>
