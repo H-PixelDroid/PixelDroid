@@ -81,6 +81,10 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
             itemView.setOnClickListener {
                 notification?.openActivity()
             }
+            avatar.setOnClickListener {
+                val intent = notification?.openAccountFromNotification()
+                itemView.context.startActivity(intent)
+            }
         }
 
         private fun Notification.openActivity() {
@@ -92,11 +96,9 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                         openPostFromNotification()
                     }
                     Notification.NotificationType.follow -> {
-                        Intent(itemView.context, ProfileActivity::class.java).apply {
-                            putExtra(Account.ACCOUNT_TAG, account)
-                        }
+                        openAccountFromNotification()
                     }
-                    null -> return //TODO show an error here?
+                    null -> return
                 }
             itemView.context.startActivity(intent)
         }
@@ -104,6 +106,11 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         private fun Notification.openPostFromNotification(): Intent =
             Intent(itemView.context, PostActivity::class.java).apply {
                 putExtra(Status.POST_TAG, status)
+            }
+
+        private fun Notification.openAccountFromNotification(): Intent =
+            Intent(itemView.context, ProfileActivity::class.java).apply {
+                putExtra(Account.ACCOUNT_TAG, account)
             }
 
 
