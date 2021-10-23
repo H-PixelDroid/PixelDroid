@@ -1,0 +1,7 @@
+* Novo idioma (Malayalam)
+
+* Arranxo de problemas coas respostas API
+
+* Actualizadas dependencias
+
+* Actualizadas as traducións
