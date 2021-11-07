@@ -1,0 +1,9 @@
+- Jakinarazpenen oinarrizko euskarria! Laster txukunago :)
+- EXIF biraketari ez ikusia egiteagatik argazkiak oker biratuta
+- #300 konpondu
+- Webview nabigatzaileetan errorea saioa hastean URLetako URI-kodetu gabeko zuriuneengatik
+- Cache-ak hustea eragiten zuen arazoa konpondu. Denbora-lerroak husten ziren aplikazioa abiaraztean. Errendimendu arazoak
+- Txekiera gehitu. Itzulpenak eguneratu
+- Profileko irudiak konpondu
+- Fitxaz aldatzean kamerak ez zuen funtzionatzen
+- Mendekotasunak eguneratu

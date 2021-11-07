@@ -194,4 +194,16 @@
     <string name="empty_feed">Ez dago ezer hemen :(</string>
     <string name="follow_requested">Jarraitzeko eskaera</string>
     <string name="dialog_message_cancel_follow_request">Jarraitzeko eskaera ezeztatu\?</string>
+    <string name="comment_notification">%1$s erabiltzaileak zure bidalketan iruzkin bat egin du</string>
+    <string name="other_notification">%1$s(e)n jakinarazpena</string>
+    <string name="followed_notification_channel">Jarraitzaile berriak</string>
+    <string name="mention_notification_channel">Aipamenak</string>
+    <string name="shared_notification_channel">Partekatzeak</string>
+    <string name="liked_notification_channel">Gogokoak</string>
+    <string name="comment_notification_channel">Iruzkinak</string>
+    <string name="poll_notification_channel">Inkestak</string>
+    <string name="other_notification_channel">Besteak</string>
+    <string name="notifications_settings">Jakinarazpenen ezarpenak</string>
+    <string name="notifications_settings_summary">Kudeatu ze jakinarazpen jaso nahi dituzun</string>
+    <string name="login_notifications">Ezin izan dira azken jakinarazpenak eskuratu</string>
 </resources>
