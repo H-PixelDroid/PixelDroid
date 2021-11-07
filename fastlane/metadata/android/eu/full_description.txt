@@ -1,0 +1,11 @@
+PixelDroid Pixelfed irudiak partekatzeko plataforma federatuaren Androiderako bezero librea da.
+
+Arakatu denbora-lerroak eta profilak, igo bidalketa berriak, aurkitu bidalketak, fedibertsoko gainerako kideekin elkarrekintzak izan.
+
+• Hainbat konturentzako euskarria
+• Itxura ilun eta argia
+• Aplikatu iragazkiak, moztu, aldatu distira/kontrastea/asetasuna
+• Zure Pixelfed zerbitzariaren konfigurazioa kontuan hartzen du
+• %100 librea. Jabedun mendekotasunik ez
+
+Ikusi https://pixelfed.org Pixelfedi buruz gehiago ikasteko.

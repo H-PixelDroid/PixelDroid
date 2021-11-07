@@ -1,0 +1,7 @@
+* Hizkuntza gehitu (malabarera)
+
+* API erantzun oker batzuk zuzendu
+
+* Mendekotasunak eguneratu
+
+* Itzulpenak eguneratu
