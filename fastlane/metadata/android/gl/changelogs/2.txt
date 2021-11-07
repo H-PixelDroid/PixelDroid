@@ -1,0 +1,7 @@
+* Actualización das traducións: novas cadeas e actualización das antigas. Grazas tradutoras ❤️! Vaite ao noso weblate se queres axudar coa tradución ao teu idioma.
+
+* #️⃣ Soporte para cancelos. Podes buscar cancelos, xa non aparecerá a mensaxe de brinde 😜
+
+* Preme na lapela para volver arriba. Non máis desprazamento ao tolo para volver arriba, tocando na lapela volverás arriba de todo :)
+
+* Arranxamos algúns problemas que estragaban a app. Grazas a todo o mundo por informar destos fallos! ❤️

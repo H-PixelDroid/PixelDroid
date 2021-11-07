@@ -193,4 +193,17 @@
     <string name="edit_link_failed">Non se puido abrir a páxina de edición</string>
     <string name="discover_no_infinite_load">Descubrimento non carga indefinidamente. Arrastra hacia abaixo para ter máis imaxes.</string>
     <string name="file_not_found">Non se atopou o ficheiro %1$s</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="comment_notification">%1$s comentou a túa publicación</string>
+    <string name="notifications_settings_summary">Xestionar que notificacións queres recibir</string>
+    <string name="other_notification">Notificación desde %1$s</string>
+    <string name="followed_notification_channel">Novas seguidoras</string>
+    <string name="mention_notification_channel">Mencións</string>
+    <string name="shared_notification_channel">Comparticións</string>
+    <string name="liked_notification_channel">Gústame</string>
+    <string name="comment_notification_channel">Comentarios</string>
+    <string name="poll_notification_channel">Enquisas</string>
+    <string name="other_notification_channel">Outro</string>
+    <string name="notifications_settings">Axustes das notificacións</string>
+    <string name="login_notifications">Non se obtiveron as últimas notificacións</string>
 </resources>
