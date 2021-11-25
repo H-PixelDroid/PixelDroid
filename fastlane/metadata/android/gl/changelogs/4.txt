@@ -1,0 +1,9 @@
+- Soporte para notificacións! Un pouco rudimentario, pero mellorará :)
+- Arranxo do problema coa rotación EXIF
+- Arranxo #300
+- Arranxo do problema de conexión con algúns navegadores se o URI non tiña os espazos codificados correctamente
+- Arranxo do problema de vaciado da fonte que causaba o peche da app e problemas de rendemento
+- Actualizadas as traducións e engadido o Checo
+- Arranxo das fotos de perfil
+- Arranxo da cámara ao cambiar de lapela
+- Actualizadas as dependencias
