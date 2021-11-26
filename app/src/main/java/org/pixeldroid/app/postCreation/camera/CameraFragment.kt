@@ -6,7 +6,6 @@ import android.content.ClipData
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -17,14 +16,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.Metadata
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.setPadding
@@ -32,10 +29,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import org.pixeldroid.app.R
-import org.pixeldroid.app.postCreation.PostCreationActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.databinding.FragmentCameraBinding
+import org.pixeldroid.app.postCreation.PostCreationActivity
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -43,19 +40,10 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
-
-// This is an arbitrary number we are using to keep track of the permission
-// request. Where an app has multiple context for requesting permission,
-// this can help differentiate the different contexts.
-private const val REQUEST_CODE_PERMISSIONS = 10
+import org.pixeldroid.app.R
 
 private const val ANIMATION_FAST_MILLIS = 50L
 private const val ANIMATION_SLOW_MILLIS = 100L
-
-private val REQUIRED_PERMISSIONS = arrayOf(
-    Manifest.permission.CAMERA,
-    Manifest.permission.READ_EXTERNAL_STORAGE
-)
 
 /**
  * Camera fragment
@@ -63,9 +51,10 @@ private val REQUIRED_PERMISSIONS = arrayOf(
 class CameraFragment : Fragment() {
 
     private lateinit var container: ConstraintLayout
-    private lateinit var viewFinder: PreviewView
 
     private val cameraLifecycleOwner = CameraLifecycleOwner()
+
+    private lateinit var binding: FragmentCameraBinding
 
     private var displayId: Int = -1
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
@@ -75,33 +64,10 @@ class CameraFragment : Fragment() {
 
     private var inActivity by Delegates.notNull<Boolean>()
 
+    private var filePermissionDialogLaunched: Boolean = false
+
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
-
-    override fun onResume() {
-        super.onResume()
-        // Make sure that all permissions are still present on resume,
-        // since they could have been removed while away.
-        if (!allPermissionsGranted()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                REQUIRED_PERMISSIONS,
-                REQUEST_CODE_PERMISSIONS
-            )
-        } else {
-            // Build UI controls
-            updateCameraUi()
-        }
-        cameraLifecycleOwner.resume()
-    }
-    /**
-     * Check if all permission specified in the manifest have been granted
-     */
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            requireContext(), it
-        ) == PackageManager.PERMISSION_GRANTED
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -114,15 +80,16 @@ class CameraFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         inActivity = arguments?.getBoolean("CameraActivity") ?: false
 
-        return inflater.inflate(R.layout.fragment_camera, container, false)
+        binding = FragmentCameraBinding.inflate(layoutInflater)
+
+        return binding.root
     }
 
     private fun setGalleryThumbnail(uri: Uri) {
-        // Reference of the view that holds the gallery thumbnail
-        val thumbnail = container.findViewById<ImageButton>(R.id.photo_view_button)
+        val thumbnail = binding.photoViewButton
 
         // Run the operations in the view's thread
         thumbnail.post {
@@ -141,45 +108,43 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         container = view as ConstraintLayout
-        viewFinder = container.findViewById(R.id.view_finder)
 
         // Initialize our background executor
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        bindCameraUseCases()
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            bindCameraUseCases()
+        }
+        else {
+            // Ask for Camera permission.
+            bindCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
 
-        // Every time the orientation of device changes, update rotation for use cases
+        setupUploadImage()
+        setupFlipCameras()
+        setupImageCapture()
 
         // Wait for the views to be properly laid out
-        viewFinder.post {
+        binding.viewFinder.post {
 
             // Keep track of the display in which this view is attached
-            displayId = viewFinder.display?.displayId ?: -1
+            displayId = binding.viewFinder.display?.displayId ?: -1
         }
     }
 
-    /**
-     * Inflate camera controls and update the UI manually upon config changes to avoid removing
-     * and re-adding the view finder from the view hierarchy; this provides a seamless rotation
-     * transition on devices that support it.
-     *
-     * NOTE: The flag is supported starting in Android 8 but there still is a small flash on the
-     * screen for devices that run Android 9 or below.
-     */
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        updateCameraUi()
-    }
-
-    /** Declare and bind preview, capture and analysis use cases */
+    /** Declare and bind preview and capture use cases */
     private fun bindCameraUseCases() {
 
         // Get screen metrics used to setup camera for full screen resolution
-        val metrics = DisplayMetrics().also { viewFinder.display?.getRealMetrics(it) }
+        val metrics = DisplayMetrics()
 
         val screenAspectRatio = aspectRatio(metrics.widthPixels, metrics.heightPixels)
 
-        val rotation = viewFinder.display?.rotation ?: 0
+        val rotation = binding.viewFinder.display?.rotation ?: 0
 
         // Bind the CameraProvider to the LifeCycleOwner
         val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
@@ -220,7 +185,7 @@ class CameraFragment : Fragment() {
                 )
 
                 // Attach the viewfinder's surface provider to preview use case
-                preview?.setSurfaceProvider(viewFinder.surfaceProvider)
+                preview?.setSurfaceProvider(binding.viewFinder.surfaceProvider)
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
@@ -230,6 +195,25 @@ class CameraFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         cameraLifecycleOwner.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Update gallery thumbnail
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            updateGalleryThumbnail()
+        }
+        else if (!filePermissionDialogLaunched) {
+            // Ask for external storage permission.
+            updateGalleryThumbnailPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        cameraLifecycleOwner.resume()
     }
 
     override fun onDestroy() {
@@ -267,16 +251,21 @@ class CameraFragment : Fragment() {
         return AspectRatio.RATIO_16_9
     }
 
-    /** Method used to re-draw the camera UI controls, called every time configuration changes. */
-    private fun updateCameraUi() {
-
-        // Remove previous UI if any
-        container.findViewById<ConstraintLayout>(R.id.camera_ui_container)?.let {
-            container.removeView(it)
+    private val updateGalleryThumbnailPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                updateGalleryThumbnail()
+            } else if(!filePermissionDialogLaunched){
+                AlertDialog.Builder(requireContext())
+                    .setMessage(getString(R.string.no_storage_permission))
+                    .setPositiveButton(android.R.string.ok) { _, _ ->}.show()
+                filePermissionDialogLaunched = true
+            }
         }
 
-        // Inflate a new view containing all UI for controlling the camera
-        val controls = View.inflate(requireContext(), R.layout.camera_ui_container, container)
+    /** Method used to re-draw the camera UI controls, called every time configuration changes. */
+    private fun updateGalleryThumbnail() {
 
         // In the background, load latest photo taken (if any) for gallery thumbnail
         lifecycleScope.launch(Dispatchers.IO) {
@@ -302,13 +291,8 @@ class CameraFragment : Fragment() {
                 cursor.close()
             }
         }
-
-        setupImageCapture(controls)
-
-        setupFlipCameras(controls)
-
-        setupUploadImage(controls)
     }
+
 
     private val uploadImageResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val data: Intent? = result.data
@@ -329,9 +313,9 @@ class CameraFragment : Fragment() {
         }
     }
 
-    private fun setupUploadImage(controls: View) {
+    private fun setupUploadImage() {
         // Listener for button used to view the most recent photo
-        controls.findViewById<ImageButton>(R.id.photo_view_button)?.setOnClickListener {
+        binding.photoViewButton.setOnClickListener {
             Intent().apply {
                 type = "image/*"
                 action = Intent.ACTION_GET_CONTENT
@@ -345,75 +329,105 @@ class CameraFragment : Fragment() {
         }
     }
 
-    private fun setupFlipCameras(controls: View) {
+
+    private val bindCameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            bindCameraUseCases()
+        } else {
+            AlertDialog.Builder(requireContext())
+                .setMessage(R.string.no_camera_permission)
+                .setPositiveButton(android.R.string.ok) { _, _ ->}.show()
+        }
+    }
+
+    private fun setupFlipCameras() {
         // Listener for button used to switch cameras
-        controls.findViewById<ImageButton>(R.id.camera_switch_button)?.setOnClickListener {
+        binding.cameraSwitchButton.setOnClickListener {
             lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
                 CameraSelector.LENS_FACING_BACK
             } else {
                 CameraSelector.LENS_FACING_FRONT
             }
             // Re-bind use cases to update selected camera, being careful about permissions.
-            if (!allPermissionsGranted()) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    REQUIRED_PERMISSIONS,
-                    REQUEST_CODE_PERMISSIONS
-                )
-            } else {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 bindCameraUseCases()
+            }
+            else {
+                // Ask for Camera permission.
+                bindCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
     }
 
-    private fun setupImageCapture(controls: View) {
+    private fun setupImageCapture() {
         // Listener for button used to capture photo
-        controls.findViewById<ImageButton>(R.id.camera_capture_button)?.setOnClickListener {
+        binding.cameraCaptureButton.setOnClickListener {
 
-            // Get a stable reference of the modifiable image capture use case
-            imageCapture?.let { imageCapture ->
-
-                // Create output file to hold the image
-                val photoFile = File.createTempFile(
-                    "cachedPhoto", ".png", context?.cacheDir
-                )
-
-                // Setup image capture metadata
-                val metadata = Metadata().apply {
-
-                    // Mirror image when using the front camera
-                    isReversedHorizontal = lensFacing == CameraSelector.LENS_FACING_FRONT
-                }
-
-                // Create output options object which contains file + metadata
-                val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile)
-                    .setMetadata(metadata)
-                    .build()
-
-                // Setup image capture listener which is triggered after photo has been taken
-                imageCapture.takePicture(
-                    outputOptions, cameraExecutor, object : ImageCapture.OnImageSavedCallback {
-                        override fun onError(exc: ImageCaptureException) {
-                            Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
-                        }
-
-                        override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                            val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
-                            val uri: ArrayList<String> = ArrayList()
-                            uri.add(savedUri.toString())
-                            startAlbumCreation(uri)
-                        }
-                    })
-
-                // Display flash animation to indicate that photo was captured
-                container.postDelayed({
-                    container.foreground = ColorDrawable(Color.WHITE)
-                    container.postDelayed(
-                        { container.foreground = null }, ANIMATION_FAST_MILLIS
-                    )
-                }, ANIMATION_SLOW_MILLIS)
-
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                takePhoto()
             }
+            else {
+                // Ask for Camera permission.
+                // Use the same permission launcher as bind camera
+                // (taking a photo after the permission prompt is going to be useless anyways)
+                bindCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
+    }
+
+    private fun takePhoto() {
+        // Get a stable reference of the modifiable image capture use case
+        imageCapture?.let { imageCapture ->
+
+            // Create output file to hold the image
+            val photoFile = File.createTempFile(
+                "cachedPhoto", ".png", context?.cacheDir
+            )
+
+            // Setup image capture metadata
+            val metadata = Metadata().apply {
+
+                // Mirror image when using the front camera
+                isReversedHorizontal = lensFacing == CameraSelector.LENS_FACING_FRONT
+            }
+
+            // Create output options object which contains file + metadata
+            val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile)
+                .setMetadata(metadata)
+                .build()
+
+            // Setup image capture listener which is triggered after photo has been taken
+            imageCapture.takePicture(
+                outputOptions, cameraExecutor, object : ImageCapture.OnImageSavedCallback {
+                    override fun onError(exc: ImageCaptureException) {
+                        Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                    }
+
+                    override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                        val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
+                        val uri: ArrayList<String> = ArrayList()
+                        uri.add(savedUri.toString())
+                        startAlbumCreation(uri)
+                    }
+                })
+
+            // Display flash animation to indicate that photo was captured
+            container.postDelayed({
+                container.foreground = ColorDrawable(Color.WHITE)
+                container.postDelayed(
+                    { container.foreground = null }, ANIMATION_FAST_MILLIS
+                )
+            }, ANIMATION_SLOW_MILLIS)
+
         }
     }
 
