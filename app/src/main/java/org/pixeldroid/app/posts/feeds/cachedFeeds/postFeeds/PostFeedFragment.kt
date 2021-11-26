@@ -53,7 +53,6 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
         }
     }
 
-    @ExperimentalPagingApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,8 +62,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
 
         // get the view model
         @Suppress("UNCHECKED_CAST")
-        viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(db, dao, mediator))
-            .get(if(home) "home" else "public", FeedViewModel::class.java) as FeedViewModel<T>
+        viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(db, dao, mediator))[if(home) "home" else "public", FeedViewModel::class.java] as FeedViewModel<T>
 
         launch()
         initSearch()

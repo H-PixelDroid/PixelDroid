@@ -26,7 +26,7 @@ class SearchAccountFragment : UncachedFeedFragment<Account>() {
         query = arguments?.getSerializable("searchFeed") as String
     }
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,13 +38,13 @@ class SearchAccountFragment : UncachedFeedFragment<Account>() {
         // get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(
-                SearchContentRepository<Account>(
-                    apiHolder.setToCurrentUser(),
-                    Results.SearchType.accounts,
-                    query
-                )
+            SearchContentRepository<Account>(
+                apiHolder.setToCurrentUser(),
+                Results.SearchType.accounts,
+                query
             )
-        ).get("searchAccounts", FeedViewModel::class.java) as FeedViewModel<Account>
+        )
+        )["searchAccounts", FeedViewModel::class.java] as FeedViewModel<Account>
 
         launch()
         initSearch()

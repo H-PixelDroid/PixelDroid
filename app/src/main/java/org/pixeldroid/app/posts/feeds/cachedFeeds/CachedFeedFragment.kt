@@ -96,7 +96,6 @@ class ViewModelFactory<U: FeedContentDatabase> @ExperimentalPagingApi constructo
                                                                                   private val feedContentRepository: FeedContentRepository<U> = FeedContentRepository(db!!, dao!!, remoteMediator!!)
 ) : ViewModelProvider.Factory {
 
-    @ExperimentalPagingApi
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FeedViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

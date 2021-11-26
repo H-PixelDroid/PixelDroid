@@ -76,7 +76,6 @@ class ViewModelFactory<U: FeedContent> @ExperimentalPagingApi constructor(
     private val searchContentRepository: UncachedContentRepository<U>
 ) : ViewModelProvider.Factory {
 
-    @ExperimentalPagingApi
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FeedViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

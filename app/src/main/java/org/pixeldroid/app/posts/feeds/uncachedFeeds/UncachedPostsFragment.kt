@@ -39,7 +39,7 @@ class UncachedPostsFragment : UncachedFeedFragment<Status>() {
         }
     }
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,8 +57,7 @@ class UncachedPostsFragment : UncachedFeedFragment<Status>() {
                         hashtagOrQuery!!
                     )
                 )
-            )
-                .get("searchPosts", FeedViewModel::class.java) as FeedViewModel<Status>
+            )["searchPosts", FeedViewModel::class.java] as FeedViewModel<Status>
         } else {
             ViewModelProvider(requireActivity(), ViewModelFactory(
                 HashTagContentRepository(
@@ -66,8 +65,7 @@ class UncachedPostsFragment : UncachedFeedFragment<Status>() {
                     hashtagOrQuery!!
                 )
             )
-            )
-                .get(HASHTAG_TAG, FeedViewModel::class.java) as FeedViewModel<Status>
+            )[HASHTAG_TAG, FeedViewModel::class.java] as FeedViewModel<Status>
         }
 
         launch()
