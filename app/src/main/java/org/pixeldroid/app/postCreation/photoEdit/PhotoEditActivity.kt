@@ -147,7 +147,7 @@ class PhotoEditActivity : BaseActivity() {
         viewPager!!.adapter = adapter
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.edit_photo_menu, menu)
         return true
     }

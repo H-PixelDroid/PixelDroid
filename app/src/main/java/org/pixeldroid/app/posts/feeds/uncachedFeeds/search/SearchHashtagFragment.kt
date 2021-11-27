@@ -36,7 +36,7 @@ class SearchHashtagFragment : UncachedFeedFragment<Tag>() {
 
     }
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,8 +52,7 @@ class SearchHashtagFragment : UncachedFeedFragment<Tag>() {
                 query
             )
         )
-        )
-            .get("searchHashtag", FeedViewModel::class.java) as FeedViewModel<Tag>
+        )["searchHashtag", FeedViewModel::class.java] as FeedViewModel<Tag>
 
         launch()
         initSearch()

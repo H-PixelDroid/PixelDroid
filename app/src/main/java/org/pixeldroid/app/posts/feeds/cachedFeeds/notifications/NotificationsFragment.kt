@@ -43,7 +43,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         adapter = NotificationsAdapter(apiHolder)
     }
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,8 +55,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         viewModel = ViewModelProvider(
             requireActivity(),
             ViewModelFactory(db, db.notificationDao(), NotificationsRemoteMediator(apiHolder, db))
-        )
-            .get("notifications", FeedViewModel::class.java) as FeedViewModel<Notification>
+        )["notifications", FeedViewModel::class.java] as FeedViewModel<Notification>
 
         launch()
         initSearch()

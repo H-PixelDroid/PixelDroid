@@ -52,7 +52,7 @@ class ProfileActivity : BaseActivity() {
     private var user: UserDatabaseEntity? = null
     private var job: Job? = null
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -327,7 +327,6 @@ class ProfileViewModelFactory @ExperimentalPagingApi constructor(
         private val searchContentRepository: UncachedContentRepository<Status>
 ) : ViewModelProvider.Factory {
 
-    @ExperimentalPagingApi
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FeedViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

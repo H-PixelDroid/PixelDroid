@@ -41,7 +41,7 @@ class AccountListFragment : UncachedFeedFragment<Account>() {
 
     }
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,8 +59,7 @@ class AccountListFragment : UncachedFeedFragment<Account>() {
                 following
             )
         )
-        )
-            .get("accountList", FeedViewModel::class.java) as FeedViewModel<Account>
+        )["accountList", FeedViewModel::class.java] as FeedViewModel<Account>
 
         launch()
         initSearch()

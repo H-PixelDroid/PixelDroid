@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import org.pixeldroid.app.databinding.ActivityLoginBinding
@@ -302,6 +303,7 @@ class LoginActivity : BaseActivity() {
         }
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     private suspend fun storeUser(accessToken: String, refreshToken: String?, clientId: String, clientSecret: String, instance: String) {
         try {
             val user = pixelfedAPI.verifyCredentials("Bearer $accessToken")
@@ -324,7 +326,7 @@ class LoginActivity : BaseActivity() {
         }
 
         fetchNotifications()
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this@LoginActivity,  MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
