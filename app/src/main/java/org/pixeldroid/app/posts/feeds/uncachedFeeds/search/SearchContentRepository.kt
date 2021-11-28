@@ -28,8 +28,7 @@ class SearchContentRepository<T: FeedContent> @ExperimentalPagingApi
         return Pager(
             config = PagingConfig(
                 initialLoadSize = NETWORK_PAGE_SIZE,
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false),
+                pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = {
                 SearchPagingSource<T>(api, query, type)
             }

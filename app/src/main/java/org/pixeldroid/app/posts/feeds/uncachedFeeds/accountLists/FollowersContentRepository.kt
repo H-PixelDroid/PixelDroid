@@ -21,8 +21,7 @@ class FollowersContentRepository @ExperimentalPagingApi
         return Pager(
             config = PagingConfig(
                 initialLoadSize = NETWORK_PAGE_SIZE,
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false),
+                pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = {
                 FollowersPagingSource(api, accountId, following)
             }
