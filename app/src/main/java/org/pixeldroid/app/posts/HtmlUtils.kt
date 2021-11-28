@@ -57,10 +57,10 @@ fun parseHTMLText(
     context: Context,
     lifecycleScope: LifecycleCoroutineScope,
 ) : Spanned {
-    //Convert text to spannable
+    // Convert text to spannable
     val content = fromHtml(text)
 
-    //Retrive all links that should be made clickable
+    // Retrieve all links that should be made clickable
     val builder = SpannableStringBuilder(content)
     val urlSpans = content.getSpans(0, content.length, URLSpan::class.java)
 
@@ -71,52 +71,55 @@ fun parseHTMLText(
         val text = builder.subSequence(start, end)
         var customSpan: ClickableSpan? = null
 
-        //Handle hashtags
+        // Handle hashtags
         if (text[0] == '#') {
             val tag = text.subSequence(1, text.length).toString()
             customSpan = object : ClickableSpanNoUnderline() {
                 override fun onClick(widget: View) {
                     openTag(context, tag)
                 }
-
             }
+            builder.removeSpan(span)
         }
 
-        //Handle mentions
-        if(text[0] == '@' && !mentions.isNullOrEmpty()) {
-            val accountUsername = text.subSequence(1, text.length).toString()
-            var id: String? = null
+        // Handle mentions
+        else if(text[0] == '@') {
+            if (!mentions.isNullOrEmpty()){
+                val accountUsername = text.subSequence(1, text.length).toString()
+                var id: String? = null
 
-            //Go through all mentions stored in the status
-            for (mention in mentions) {
-                if (mention.username.equals(accountUsername, ignoreCase = true)
-                ) {
-                    id = mention.id
+                // Go through all mentions stored in the status
+                for (mention in mentions) {
+                    if (mention.username.equals(accountUsername, ignoreCase = true)
+                    ) {
+                        id = mention.id
 
-                    //Mentions can be of users in other domains
-                    if (mention.url.contains(getDomain(span.url))) {
-                        break
+                        //Mentions can be of users in other domains
+                        if (mention.url.contains(getDomain(span.url))) {
+                            break
+                        }
                     }
                 }
-            }
 
-            //Check that we found a user for the given mention
-            if (id != null) {
-                val accountId: String = id
-                customSpan = object : ClickableSpanNoUnderline() {
-                    override fun onClick(widget: View) {
-                        Log.e("MENTION", "CLICKED")
-                        //Retrieve the account for the given profile
-                        lifecycleScope.launchWhenCreated {
-                            val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
-                            openAccountFromId(accountId, api, context)
+                // Check that we found a user for the given mention
+                if (id != null) {
+                    val accountId: String = id
+                    customSpan = object : ClickableSpanNoUnderline() {
+                        override fun onClick(widget: View) {
+
+                            // Retrieve the account for the given profile
+                            lifecycleScope.launchWhenCreated {
+                                val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
+                                openAccountFromId(accountId, api, context)
+                            }
                         }
                     }
                 }
             }
+            builder.removeSpan(span)
         }
 
-        builder.removeSpan(span)
+
         builder.setSpan(customSpan, start, end, flags)
 
         // Add zero-width space after links in end of line to fix its too large hitbox.
