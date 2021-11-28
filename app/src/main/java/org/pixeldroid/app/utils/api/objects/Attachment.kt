@@ -40,6 +40,6 @@ data class Attachment(
     }
 
     val previewNoPlaceholder: String?
-        get() = if (preview_url?.contains(Regex("public/no-preview\\.(png|jpg|webp)")) == true) url else preview_url
+        get() = if (preview_url?.contains(Regex("no-preview\\.(png|jpg|webp)$")) == true) url else preview_url
 
 }
