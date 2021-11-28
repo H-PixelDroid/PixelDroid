@@ -41,18 +41,14 @@ class PublicFeedRemoteMediator @Inject constructor(
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, PublicFeedStatusDatabaseEntity>): MediatorResult {
 
-        val (max_id, min_id) = when (loadType) {
-            LoadType.REFRESH -> {
-                Pair<String?, String?>(null, null)
-            }
+        val maxId = when (loadType) {
+            LoadType.REFRESH -> null
             LoadType.PREPEND -> {
                 //No prepend for the moment, might be nice to add later
                 return MediatorResult.Success(endOfPaginationReached = true)
             }
-            LoadType.APPEND -> {
-                Pair<String?, String?>(state.lastItemOrNull()?.id, null)
-            }
-
+            LoadType.APPEND -> state.lastItemOrNull()?.id
+                ?: return MediatorResult.Success(endOfPaginationReached = true)
         }
 
         try {
@@ -61,8 +57,7 @@ class PublicFeedRemoteMediator @Inject constructor(
             val api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
             val apiResponse = api.timelinePublic(
-                                                 max_id = max_id,
-                                                 min_id = min_id,
+                                                 max_id = maxId,
                                                  limit = state.config.pageSize.toString(),
                                                 )
 

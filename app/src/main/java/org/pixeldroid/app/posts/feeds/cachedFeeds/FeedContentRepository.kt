@@ -48,8 +48,7 @@ class FeedContentRepository<T: FeedContentDatabase> @ExperimentalPagingApi
         return Pager(
                 config = PagingConfig(initialLoadSize = NETWORK_PAGE_SIZE,
                     pageSize = NETWORK_PAGE_SIZE,
-                    enablePlaceholders = false,
-                    prefetchDistance = 50
+                    prefetchDistance = 20
                 ),
                 remoteMediator = mediator,
                 pagingSourceFactory = pagingSourceFactory
