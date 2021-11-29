@@ -8,6 +8,7 @@
     <dimen name="spacing_small">4dp</dimen>
     <dimen name="spacing_medium">8dp</dimen>
     <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_xlarge">24dp</dimen>
 
     <dimen name="stroke_small">4dp</dimen>
     <dimen name="stroke_medium">8dp</dimen>
