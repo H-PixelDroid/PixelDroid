@@ -291,7 +291,7 @@ interface PixelfedAPI {
     ): Observable<Attachment>
 
     // get discover
-    @GET("/api/v2/discover/posts")
+    @GET("/api/v1/discover/posts")
     suspend fun discover() : DiscoverPosts
 
     @FormUrlEncoded
