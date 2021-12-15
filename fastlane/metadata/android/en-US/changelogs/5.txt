@@ -1,0 +1,5 @@
+* Translation updates
+* Lighter way to see license information
+* Fix permission issues in camera tab
+* Fix link parsing
+* Fix discover view (might need instance updates)
