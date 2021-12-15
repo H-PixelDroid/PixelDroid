@@ -292,7 +292,7 @@ interface PixelfedAPI {
 
     // get discover
     @GET("/api/v1/discover/posts")
-    suspend fun discover() : DiscoverPosts
+    suspend fun discover() : List<Status>
 
     @FormUrlEncoded
     @POST("/api/v1/reports")
