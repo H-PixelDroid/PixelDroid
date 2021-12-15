@@ -29,7 +29,7 @@ class LicenseActivity: BaseActivity() {
 
     private fun setupRecyclerView() {
         val text: String = applicationContext.assets.open("licenses.json")
-            .bufferedReader().use { it.readText().replace("\r\n", "\n") }
+            .bufferedReader().use { it.readText() }
         val listObj: List<OpenSourceItem> = Gson().fromJson(text, Libraries::class.java).libraries
 
         val adapter = OpenSourceLicenseAdapter()
