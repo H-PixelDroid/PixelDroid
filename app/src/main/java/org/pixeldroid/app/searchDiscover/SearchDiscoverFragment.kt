@@ -85,7 +85,7 @@ class SearchDiscoverFragment : BaseFragment() {
         lifecycleScope.launchWhenCreated {
             try {
                 val discoverPosts = api.discover()
-                adapter.addPosts(discoverPosts)
+                adapter.addPosts(discoverPosts.posts)
                 binding.discoverNoInfiniteLoad.visibility = View.VISIBLE
                 showError(show = false)
             } catch (exception: IOException) {
