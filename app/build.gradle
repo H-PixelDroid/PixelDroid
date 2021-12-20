@@ -28,8 +28,8 @@ android {
         applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 5
-        versionName "1.0.beta5"
+        versionCode 6
+        versionName "1.0.beta6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -153,11 +153,11 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
 
     //Dagger (dependency injection)
-    implementation 'com.google.dagger:dagger-android:2.40.3'
-    implementation 'com.google.dagger:dagger-android-support:2.40.3'
+    implementation 'com.google.dagger:dagger-android:2.40.5'
+    implementation 'com.google.dagger:dagger-android-support:2.40.5'
     // if you use the support libraries
-    kapt 'com.google.dagger:dagger-android-processor:2.40.3'
-    kapt 'com.google.dagger:dagger-compiler:2.40.3'
+    kapt 'com.google.dagger:dagger-android-processor:2.40.5'
+    kapt 'com.google.dagger:dagger-compiler:2.40.5'
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -208,7 +208,7 @@ dependencies {
     //stagingImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     androidTestImplementation 'androidx.work:work-testing:2.7.1'
-    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.31.0'
+    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.32.0'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$room_version"
