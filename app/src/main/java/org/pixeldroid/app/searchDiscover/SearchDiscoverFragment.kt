@@ -22,6 +22,7 @@ import org.pixeldroid.app.utils.ImageConverter
 import org.pixeldroid.app.utils.bindingLifecycleAware
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.IllegalStateException
 
 /**
  * This fragment lets you search and use Pixelfed's Discover feature
@@ -85,7 +86,7 @@ class SearchDiscoverFragment : BaseFragment() {
         lifecycleScope.launchWhenCreated {
             try {
                 val discoverPosts = api.discover()
-                adapter.addPosts(discoverPosts)
+                adapter.addPosts(discoverPosts.posts)
                 binding.discoverNoInfiniteLoad.visibility = View.VISIBLE
                 showError(show = false)
             } catch (exception: IOException) {
