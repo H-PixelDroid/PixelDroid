@@ -1,0 +1,5 @@
+* Aktualizace překladů
+* Jednodušší způsob zobrazení informací týkající se licence
+* Oprava problému s právy na kartě s fotoaparátem
+* Oprava parserování odkazu
+* Oprava zobrazení "Objevovat" (může vyžadovat aktualizaci instance)

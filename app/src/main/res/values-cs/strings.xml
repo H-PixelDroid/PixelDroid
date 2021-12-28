@@ -216,4 +216,6 @@
     <string name="other_notification_channel">Další</string>
     <string name="notifications_settings">Nastavení upozornění</string>
     <string name="notifications_settings_summary">Spravovat, jaké upozornění chcete dostávat</string>
+    <string name="no_storage_permission">Oprávnění k úložišti nebylo uděleno, udělte oprávnění v nastavení, pokud chcete, aby PixelDroid zobrazoval náhledy</string>
+    <string name="no_camera_permission">Oprávnění k fotoaparátu nebylo uděleno, udělte oprávnění v nastavení, pokud chcete, aby PixelDroid mohl použít fotoaparát</string>
 </resources>
