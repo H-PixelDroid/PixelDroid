@@ -206,4 +206,6 @@
     <string name="poll_notification_channel">نظرسنجی‌ها</string>
     <string name="other_notification_channel">سایر</string>
     <string name="login_notifications">ناتوانی در دریافت آخرین اعلانات</string>
+    <string name="no_camera_permission">مجوز دسترسی به دوربین اعطا نشده است. اگر می‌خواهید که پیکسل‌دروید اجازه استفاده از دوربین را داشته باشد، این مجوز را از طریق تنظیمات اعطا کنید</string>
+    <string name="no_storage_permission">مجوز دسترسی به حافظه اعطا نشده است. اگر می‌خواهید که پیکسل‌دروید تصاویر بندانگشتی را نشان دهد این مجوز را از طریق تنظیمات اعطا کنید</string>
 </resources>
