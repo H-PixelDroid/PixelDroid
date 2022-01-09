@@ -72,7 +72,7 @@
     <string name="feed_failed">No s\'ha pogut obtenir el fil</string>
     <string name="loading_toast">Alguna cosa no ha funcionat correctament mentre es carregava</string>
     <string name="normal_filter">Normal</string>
-    <string name="upload_post_error">Ha fallat l\'enviament de la publicació</string>
+    <string name="upload_post_error">Error de pujada</string>
     <string name="upload_post_success">S\'ha publicat amb èxit la publicació</string>
     <string name="upload_post_failed">Ha fallat l\'enviament de la publicació</string>
     <string name="request_format_error">Error d\'enviament: format de sol·licitud dolent</string>
@@ -122,4 +122,15 @@
     <string name="report_target">Informar contingut de @%1$s</string>
     <string name="report_error">No es pot enviar l\'informe</string>
     <string name="discover">DESCOBRIR</string>
+    <string name="verify_credentials">No s\'ha pogut obtenir la informació de l\'usuari</string>
+    <string name="api_not_enabled_dialog">L\'API no està activada en aquesta instància. Posa\'t en contacte amb l\'administrador per demanar-li que l\'activi.</string>
+    <string name="post_image">Una de les imatges de l\'entrada</string>
+    <string name="comment_notification">%1$s ha comentat el vostre missatge</string>
+    <string name="other_notification">Notificació de %1$s</string>
+    <string name="followed_notification_channel">Nous seguidors</string>
+    <string name="mention_notification_channel">Mencions</string>
+    <string name="shared_notification_channel">Comparticions</string>
+    <string name="liked_notification_channel">Agradats</string>
+    <string name="comment_notification_channel">Comentaris</string>
+    <string name="other_notification_channel">Altres</string>
 </resources>
