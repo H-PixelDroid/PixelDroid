@@ -1,0 +1,5 @@
+* Aktualisierung von Übersetzungen
+* Besserer Weg zur Einsicht von Lizenzinformationen
+* Einwilligungsfehler im Kamera-Tab gefixt
+* Link-Parsing gefixt
+* Entdecken-Ansicht gefixt (könnte von Instanz-Updates abhängig sein)
