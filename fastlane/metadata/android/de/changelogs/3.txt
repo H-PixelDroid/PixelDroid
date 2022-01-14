@@ -1,0 +1,7 @@
+* Sprache hinzugefügt (Malayalam)
+
+* Übersetzungen aktualisiert
+
+* Bugfix für einige Fehler beim Aufrufen der API
+
+* Dependencies aktualisiert

@@ -1,0 +1,11 @@
+- Unterstützung von Benachrichtigungen eingeführt! (Noch in der Entwicklungsphase, wird zukünftig verbessert)
+- Dependencies aktualisiert
+- Neue Sprache: Tschechisch; weitere Übersetzungen aktualisiert
+
+Gefixt:
+- Fotos sollten jetzt in der richtigen Richtung erscheinen
+- Fix #300
+- Browserproblem beim Login bei URLs mit Leerzeichen
+- Der Cache sollte jetzt nicht mehr bei jedem Appstart neu gelöscht werden
+- Profilbilder
+- Kamera funktionierte nach dem Wechseln von Tabs nicht

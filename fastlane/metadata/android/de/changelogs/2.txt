@@ -1,0 +1,7 @@
+* Übersetzungen aktualisiert: Neue Übersetzungen hinzugefügt, bestehende Übersetzungen verbessert. Lieben Dank an alle Übersetzer*innen ❤️! Wenn du bei der Übersetzung von PixelDroid mithelfen willst, besuche unser weblate.
+
+* #️⃣ Hashtag-Support beim Browsen! 😜
+
+* Neuer Shortcut: Klicke auf den Tab in dem du bist einfach nochmal um ganz nach oben zu gelangen! :)
+
+* Versuch den Bug zu fixen, der die App zum Absturz brachte. Lieben Dank an alle für das fleißige Einreichen der Crash-Reports! ❤️

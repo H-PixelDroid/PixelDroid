@@ -6,13 +6,13 @@
     <string name="invalid_domain">Ungültige Domäne</string>
     <string name="browser_launch_failed">Der Browser konnte nicht gestartet werden, haben Sie einen\?</string>
     <string name="auth_failed">Authentifizierung fehlgeschlagen</string>
-    <string name="token_error">Fehler beim Erhalten des Token</string>
+    <string name="token_error">Beim Erhalten des Token ist ein Fehler aufgetreten</string>
     <string name="title_activity_settings2">Einstellungen</string>
     <string name="theme_header">Erscheinungsbild</string>
     <string name="followed_notification">%1$s folgt dir</string>
     <string name="mention_notification">%1$s hat dich erwähnt</string>
     <string name="shared_notification">%1$s hat deinen Beitrag geteilt</string>
-    <string name="liked_notification">%1$s hat deinen Beitrag favorisiert</string>
+    <string name="liked_notification">%1$s gefällt dein Beitrag</string>
     <string name="post">senden</string>
     <string name="whats_an_instance">Was ist eine Instanz\?</string>
     <string name="theme_title">Erscheinungsbild</string>
@@ -46,7 +46,7 @@
     <string name="normal_filter">Normal</string>
     <string name="save_image_success">Bild erfolgreich gespeichert</string>
     <string name="picture_format_error">Upload-Fehler: falsches Bildformat.</string>
-    <string name="upload_post_failed">Hochladen des Beitrags fehlgeschlagen</string>
+    <string name="upload_post_failed">Das Hochladen des Beitrags ist fehlgeschlagen</string>
     <string name="add_account_name">Konto hinzufügen</string>
     <string name="add_account_description">Weiteres Pixelfed-Konto hinzufügen</string>
     <string name="light_theme">Hell</string>
@@ -60,7 +60,7 @@
     <string name="follow">Folgen</string>
     <string name="edit_profile">Profil bearbeiten</string>
     <string name="upload_post_success">Erfolgreich hochgeladen</string>
-    <string name="upload_post_error">Fehler beim Senden des Beitrags</string>
+    <string name="upload_post_error">Beim Hochladen des Beitrags ist ein Fehler aufgetreten</string>
     <string name="comment_error">Kommentarfehler!</string>
     <string name="comment_posted">Kommentar: %1$s geschrieben!</string>
     <string name="follow_button_failed">Konnte Knopf zum Folgen nicht anzeigen</string>
@@ -91,7 +91,7 @@
     <string name="crop_result_error">Konnte das Bild nach dem Zuschneiden nicht verarbeiten</string>
     <string name="busy_dialog_ok_button">Ok, warten.</string>
     <string name="busy_dialog_text">Das Bild wird noch verarbeitet, warte bis es fertig ist!</string>
-    <string name="nothing_to_see_here">Hier gibt es nichts zu sehen!</string>
+    <string name="nothing_to_see_here">Hier gibt\'s nichts zu sehen!</string>
     <string name="optional_report_comment">Optionale Nachricht für mods/admins</string>
     <string name="share_link">Link teilen</string>
     <string name="report">Melden</string>
@@ -107,7 +107,7 @@
     <string name="about_pixeldroid">Über PixelDroid</string>
     <string name="unfollow">Nicht mehr folgen</string>
     <string name="add_photo">Ein Foto hinzufügen</string>
-    <string name="poll_notification">%1$s Umfrage ist beendet</string>
+    <string name="poll_notification">Die Umfrage von %1$s ist beendet</string>
     <string name="instance_not_pixelfed_cancel">Anmeldung abbrechen</string>
     <string name="instance_not_pixelfed_continue">Ok, trotzdem fortfahren</string>
     <string name="instance_not_pixelfed_warning">Dies scheint keine Pixelfed-Instanz zu sein. Die App könnte sich daher unerwartet verhalten.</string>
@@ -129,7 +129,7 @@
     <string name="toolbar_title_edit">Bearbeiten</string>
     <string name="report_error">Konnte nicht gemeldet werden</string>
     <string name="reported">Gemeldet {gmd_check_circle}</string>
-    <string name="report_target">Melde @%1$ss Beitrag</string>
+    <string name="report_target">Melde den Beitrag von @%1$s</string>
     <string name="post_is_album">Dieser Beitrag ist ein Album</string>
     <string name="submit_comment">Kommentar senden</string>
     <string name="add_comment">Erstelle einen Kommentar</string>
@@ -154,13 +154,11 @@
         <item quantity="one">Die Beschreibung muss mindestens %d Zeichen enthalten.</item>
         <item quantity="other">Die Beschreibung muss mindestens %d Zeichen enthalten.</item>
     </plurals>
-    <string name="whats_an_instance_explanation">Das Textfeld, mit der Frage nach der Domain deiner Instanz, hat dich vielleicht verwirrt.
+    <string name="whats_an_instance_explanation">Das Textfeld mit der Frage nach der Domain deiner Instanz hat dich vielleicht verwirrt.
 \n
+\nPixelfed ist eine föderierte Plattform und Teil des \"Fediverse\". Das bedeutet, dass es mit anderen Plattformen kommunizieren kann, z.B. mit Mastodon (https://joinmastodon.org).
 \n
-\nPixelfed ist eine Föderierte Platform und Teil des \"Fediverse\". Das bedeutet, dass es mit anderen Plattformen kommunizieren kann, wie Mastodon (https://joinmastodon.org).
-\n
-\nEs bedeutend auch, dass du wählen musst welchen Server, oder \"Pixelfed-Instanz\", du nutzen möchtest.
-\nWenn du keine kennst kannst u hier nachsehen: https://pixelfed.org/join
+\nEs bedeutet auch, dass du wählen musst, welchen Server (\"Pixelfed-Instanz\") du nutzen möchtest. Wenn du keine Server kennst, kannst du hier nachsehen: https://pixelfed.org/join
 \n
 \nMehr Informationen zu Pixelfed findest du hier: https://pixelfed.org</string>
     <string name="delete_post_failed_error">Löschen fehlgeschlagen, Fehlermeldung %1$d</string>
@@ -183,15 +181,31 @@
         <item quantity="other">%d mal geteilt</item>
     </plurals>
     <plurals name="likes">
-        <item quantity="one">%d Like</item>
-        <item quantity="other">%d Likes</item>
+        <item quantity="one">%d Gefällt-Mir</item>
+        <item quantity="other">%d Gefällt-Mirs</item>
     </plurals>
-    <string name="upload_error">Serverfehler %1$d.</string>
+    <string name="upload_error">Serverfehler: %1$d</string>
     <string name="size_exceeds_instance_limit">Die Größe von Bild %1$d im Album übersteigt mit %2$d kB die von deiner Instanz festgelegte Obergrenze von zulässige Obergrenze von %3$d kB je Bild.</string>
     <string name="total_exceeds_album_limit">Du hast mehr Bilder ausgewählt, als auf deinem Server zulässig sind (%1$s). Bilder jenseits des Limits wurden nicht berücksichtigt.</string>
     <string name="api_not_enabled_dialog">Die API ist auf deiner Instanz nicht aktiv. Bitte kontaktiere den Betreiber deiner Instanz, damit sie aktiviert werden kann.</string>
     <string name="follow_requested">Followeranfrage</string>
     <string name="delete_post_failed_io_except">Beitrag konnte nicht gelöscht werden. Internetverbindung unterbrochen\?</string>
-    <string name="edit_link_failed">Bearbeitung nicht verfügbar.</string>
+    <string name="edit_link_failed">Das Öffnen der Bearbeitungsseite ist gescheitert</string>
     <string name="discover_no_infinite_load">\"Entdecke\" lädt nicht endlos. Nach unten ziehen, um weitere Bilder zu laden.</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="no_camera_permission">Die Einwilligung die Kamera zu nutzen wurde nicht erteilt. Erlaube die Kameranutzung in den Einstellungen, wenn du die Kamera in PixelDroid verwenden willst</string>
+    <string name="no_storage_permission">Die Erlaubnis, auf die Dateien zuzugreifen wurde nicht erteilt. Erlaube den Zugriff auf Daten wenn du PixelDroid das Thumbnail anzeigen lassen willst</string>
+    <string name="file_not_found">Datei %1$s wurde nicht gefunden</string>
+    <string name="other_notification">Benachrichtigung von %1$s</string>
+    <string name="followed_notification_channel">Neue Follower</string>
+    <string name="mention_notification_channel">Erwähnungen</string>
+    <string name="shared_notification_channel">Geteilt</string>
+    <string name="comment_notification_channel">Kommentare</string>
+    <string name="poll_notification_channel">Umfragen</string>
+    <string name="other_notification_channel">Weitere(s)</string>
+    <string name="notifications_settings">Benachrichtigungseinstellungen</string>
+    <string name="notifications_settings_summary">Stelle ein, welche Benachrichtigungen du erhalten willst</string>
+    <string name="comment_notification">%1$s hat deinen Beitrag kommentiert</string>
+    <string name="liked_notification_channel">Gefällt Mir</string>
+    <string name="login_notifications">Konnte die neuesten Benachrichtigungen nicht abrufen</string>
 </resources>
