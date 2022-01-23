@@ -320,7 +320,6 @@ class CameraFragment : Fragment() {
                 type = "image/*"
                 action = Intent.ACTION_GET_CONTENT
                 addCategory(Intent.CATEGORY_OPENABLE)
-                putExtra(Intent.EXTRA_LOCAL_ONLY, true)
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 uploadImageResultContract.launch(
                     Intent.createChooser(this, null)
