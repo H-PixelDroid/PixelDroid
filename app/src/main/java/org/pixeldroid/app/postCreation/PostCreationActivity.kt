@@ -336,7 +336,7 @@ class PostCreationActivity : BaseActivity() {
                 .subscribe { percentage ->
                     data.progress = percentage.toInt()
                     binding.uploadProgressBar.progress =
-                        photoData.sumBy { it.progress ?: 0 } / photoData.size
+                        photoData.sumOf { it.progress ?: 0 } / photoData.size
                 }
 
             var postSub: Disposable? = null
