@@ -133,4 +133,11 @@
     <string name="liked_notification_channel">Agradats</string>
     <string name="comment_notification_channel">Comentaris</string>
     <string name="other_notification_channel">Altres</string>
+    <string name="whats_an_instance_explanation">El camp de text us pot confondre demanant el domini de la vostra «instància».
+\n
+\nPixelfed és una plataforma federada, i forma part del \'fediverse\', que significa que comunicar amb altres plataformes que parlen el mateix idioma, com Mastodon (vegeu https://joinmastodon.org).
+\n
+\nTambé significa que heu de triar quin servidor, o \'instància\' de Pixelfed voleu utilitzar. Si no en coneixeu cap, podeu buscar aquí: https://pixelfed.org/join
+\n
+\nPer a més informació sobre Pixelfed, podeu consultar aquí: https://pixelfed.org</string>
 </resources>
