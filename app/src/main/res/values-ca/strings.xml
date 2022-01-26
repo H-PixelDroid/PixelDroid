@@ -84,8 +84,8 @@
     <string name="dark_theme">Fosc</string>
     <string name="light_theme">Clar</string>
     <string name="default_system">Per defecte (seguint el sistema)</string>
-    <string name="media_upload_completed">{gmd_cloud_done} S\'ha completat l\'enviament multimèdia</string>
-    <string name="media_upload_failed">{gmd_cloud_off} L\'enviament multimèdia ha fallat, torna-ho a provar o comprova les condicions de la xarxa</string>
+    <string name="media_upload_completed">S\'ha completat la pujada del suport del contingut gràfic</string>
+    <string name="media_upload_failed">Ha fallat la pujada del contingut gràfic, torneu-ho a provar o reviseu les condicions de la xarxa</string>
     <string name="posting_image_accessibility_hint">Imatge que s\'està publicant</string>
     <string name="retry">Tornar a provar</string>
     <string name="crop_result_error">No s\'ha pogut recuperar la imatge després del tall</string>
@@ -140,4 +140,72 @@
 \nTambé significa que heu de triar quin servidor, o \'instància\' de Pixelfed voleu utilitzar. Si no en coneixeu cap, podeu buscar aquí: https://pixelfed.org/join
 \n
 \nPer a més informació sobre Pixelfed, podeu consultar aquí: https://pixelfed.org</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">La descripció ha de contenir %d caràcter com a màxim.</item>
+        <item quantity="other">La descripció ha de contenir %d caràcters com a màxim.</item>
+    </plurals>
+    <string name="issues_contribute">Informar de problemes o contribuir a l\'aplicació:</string>
+    <string name="switch_to_grid">Canvia a la vista de quadrícula</string>
+    <string name="no_cancel_edit">No, cancel·lar l\'edició</string>
+    <string name="add_comment">Afegir un comentari</string>
+    <string name="submit_comment">Enviar el comentari</string>
+    <string name="discover_no_infinite_load">El Discover no es carrega infinitament. Tireu per actualitzar altres imatges.</string>
+    <string name="save_before_returning">Voleu desar les vostres edicions\?</string>
+    <string name="switch_to_carousel">Canvia a carrusel</string>
+    <string name="save_image_description">Desar la descripció de la imatge</string>
+    <string name="no_media_description">Afegeix aquí una descripció del contingut gràfic…</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="mascot_description">Imatge que mostra un panda vermell, la mascota de Pixelfed, fent servir un telèfon</string>
+    <string name="file_not_found">No s\'ha trobat el fitxer %1$s</string>
+    <string name="total_exceeds_album_limit">Heu triat més imatges que el màxim que permet el vostre servidor (%1$s). S\'han ignorat imatges més enllà del límit.</string>
+    <string name="upload_error">Codi d\'error retornat pel servidor: %1$d</string>
+    <string name="edit_link_failed">No s\'ha pogut obrir la pàgina d\'edició</string>
+    <string name="empty_feed">Res a veure aquí :(</string>
+    <string name="follow_requested">Seguiment sol·licitat</string>
+    <string name="dialog_message_cancel_follow_request">Voleu cancel·lar la sol·licitud de seguiment\?</string>
+    <string name="delete_post_failed_io_except">No s\'ha pogut suprimir la publicació, comproveu la vostra connexió\?</string>
+    <string name="filter_thumbnail">Miniatura del filtre</string>
+    <string name="image_preview">Previsualització de la imatge que s\'està editant</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nSeguint</item>
+        <item quantity="other">%d
+\nSeguint</item>
+    </plurals>
+    <string name="no_camera_permission">No s\'ha concedit el permís de la càmera, concediu-lo a la configuració si voleu que PixelDroid utilitzi la càmera</string>
+    <string name="no_storage_permission">No s\'ha concedit el permís d\'emmagatzematge, concediu-lo a la configuració si voleu que PixelDroid mostri la miniatura</string>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\nPublicació</item>
+        <item quantity="other">%d
+\nPublicacions</item>
+    </plurals>
+    <plurals name="number_comments">
+        <item quantity="one">%d comentari</item>
+        <item quantity="other">%d comentaris</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nSeguidor</item>
+        <item quantity="other">%d
+\nSeguidors</item>
+    </plurals>
+    <string name="open_drawer_menu">Obre el menú del calaix</string>
+    <string name="panda_pull_to_refresh_to_try_again">Aquest panda no està content. Tireu per actualitzar per tornar-ho a provar.</string>
+    <plurals name="likes">
+        <item quantity="one">%d M\'agrada</item>
+        <item quantity="other">%d M\'agrades</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d Comparticions</item>
+        <item quantity="other">%d Comparticions</item>
+    </plurals>
+    <string name="poll_notification_channel">Enquestes</string>
+    <string name="size_exceeds_instance_limit">La mida del número d\'imatge %1$d a l\'àlbum supera la mida màxima permesa per la instància (%2$d kB però el límit és %3$d kB). És possible que no puguis pujar-ho.</string>
+    <string name="crop_button">Botó per escapçar o girar la imatge</string>
+    <string name="post_is_album">Aquesta entrada és un àlbum</string>
+    <string name="delete_post_failed_error">No s\'ha pogut suprimir la publicació, error %1$d</string>
+    <string name="notifications_settings">Configuració de notificacions</string>
+    <string name="notifications_settings_summary">Gestiona quines notificacions vols rebre</string>
+    <string name="login_notifications">No s\'han pogut obtenir les últimes notificacions</string>
 </resources>
