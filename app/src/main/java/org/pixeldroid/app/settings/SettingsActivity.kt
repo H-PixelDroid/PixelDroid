@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import org.pixeldroid.app.MainActivity
@@ -83,7 +84,9 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
 
             //Hide Notification setting for Android versions where it doesn't work
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                preferenceScreen.removePreference(preferenceManager.findPreference("notification"))
+                preferenceManager.findPreference<Preference?>("notification")?.let {
+                    preferenceScreen.removePreference(it)
+                }
             }
         }
     }
