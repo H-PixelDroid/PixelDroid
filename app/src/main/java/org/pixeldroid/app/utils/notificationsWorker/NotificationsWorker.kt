@@ -15,6 +15,7 @@ import androidx.work.WorkerParameters
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.PostActivity
+import org.pixeldroid.app.posts.fromHtml
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.PixelfedAPI.Companion.apiForUser
 import org.pixeldroid.app.utils.api.objects.Notification
@@ -166,7 +167,7 @@ class NotificationsWorker(
             .setAutoCancel(true)
 
         if (notification.type == mention || notification.type == comment || notification.type == poll){
-            builder.setContentText(notification.status?.content)
+            builder.setContentText(notification.status?.content?.let { fromHtml(it) })
         }
 
         builder.setGroup(uniqueUserId)
