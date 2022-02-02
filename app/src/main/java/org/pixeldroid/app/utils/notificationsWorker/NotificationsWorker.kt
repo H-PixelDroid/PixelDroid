@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import okhttp3.internal.format
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.PostActivity
@@ -72,8 +73,7 @@ class NotificationsWorker(
                 )
 
                 while (!newNotifications.isNullOrEmpty()
-                    && newNotifications.map { it.created_at ?: Instant.MIN }
-                        .maxOrNull()!! > previouslyLatestNotification?.created_at ?: Instant.MIN
+                    && newNotifications.maxOf { it.created_at ?: Instant.MIN } > previouslyLatestNotification?.created_at ?: Instant.MIN
                 ) {
                     // Add to db
                     val filteredNewNotifications: List<Notification> = newNotifications.filter {
@@ -83,6 +83,12 @@ class NotificationsWorker(
                     }.sortedBy { it.created_at }
 
                     db.notificationDao().insertAll(filteredNewNotifications)
+
+
+                    //If multiple notifications, show summary of them
+                    if(filteredNewNotifications.size > 1){
+                        showNotificationSummary(filteredNewNotifications, uniqueUserId)
+                    }
 
                     // Launch new notifications
                     filteredNewNotifications.forEach {
@@ -105,6 +111,39 @@ class NotificationsWorker(
         }
 
         return Result.success()
+    }
+
+    private fun showNotificationSummary(notifications: List<Notification>, uniqueUserId: String) {
+        val content = joinNames(
+            applicationContext,
+            notifications.mapNotNull { it.account?.getDisplayName() }
+        )
+
+        val title: String = applicationContext.resources.getQuantityString(
+            R.plurals.notification_title_summary,
+            notifications.size,
+            notifications.size
+        )
+
+        val groupBuilder = NotificationCompat.Builder(applicationContext, makeChannelId(uniqueUserId, null))
+            .setContentTitle(title)
+            .setContentText(content)
+            .setGroupSummary(true)
+            .setAutoCancel(true)
+            .setGroup(uniqueUserId)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(content))
+            .setContentIntent(
+                PendingIntent.getActivity(applicationContext, 0, Intent(applicationContext, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    putExtra(SHOW_NOTIFICATION_TAG, true)
+                }, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            )
+
+        with(NotificationManagerCompat.from(applicationContext)) {
+            notify(uniqueUserId.hashCode(), groupBuilder.build())
+        }
+
     }
 
     private fun showNotification(
@@ -238,7 +277,8 @@ fun makeNotificationChannels(context: Context, handle: String, channelGroupId: S
 
 /**
  * [channelGroupId] is the id used to uniquely identify the group: for us it is a unique id
- * identifying a user consisting of the concatenation of the instance uri and user id.
+ * identifying a user consisting of the concatenation of the instance uri and user id
+ * (see [makeChannelGroupId]).
  */
 private fun makeChannelId(channelGroupId: String, type: Notification.NotificationType?): String =
     (channelGroupId + (type ?: NotificationsWorker.otherNotificationType)).hashCode().toString()
@@ -264,5 +304,28 @@ fun removeNotificationChannelsFromAccount(context: Context, user: UserDatabaseEn
                 notificationManager.deleteNotificationChannel(makeChannelId(channelGroupId, it))
             }
         }
+    }
+}
+
+
+/**
+ * BidiFormatter.unicodeWrap is insufficient in some cases (see Tusky#1921)
+ * So we force isolation manually
+ * https://unicode.org/reports/tr9/#Explicit_Directional_Isolates
+ */
+fun CharSequence.unicodeWrap(): String = "\u2068${this}\u2069"
+
+private fun joinNames(context: Context, notifications: List<String>): String {
+    return when {
+        notifications.size > 3 -> {
+            context.getString(R.string.notification_summary_large).format(
+                *notifications.subList(0, 3).map { it.unicodeWrap() }.toTypedArray(),
+                notifications.size - 3
+            )
+        }
+        else -> context.getString( when(notifications.size) {
+            2 -> R.string.notification_summary_small
+            else /* ==3 */-> R.string.notification_summary_medium
+        }).format(*notifications.map { it.unicodeWrap() }.toTypedArray())
     }
 }

@@ -64,6 +64,15 @@
     <string name="poll_notification_channel">"Polls"</string>
     <string name="other_notification_channel">"Other"</string>
 
+    <plurals name="notification_title_summary" >
+        <item quantity="one">"%d new notification"</item>
+        <item quantity="other">"%d new notifications"</item>
+    </plurals>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s and %4$d others</string>
+    <string name="notification_summary_medium">%1$s, %2$s, and %3$s</string>
+    <string name="notification_summary_small">%1$s and %2$s</string>
+
+
 
 
     <!-- Login page -->
