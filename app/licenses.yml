@@ -853,3 +853,69 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://developer.android.com/jetpack/androidx/releases/room#2.4.1
+- artifact: androidx.window:window:+
+  name: window
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/window#1.0.0
+- artifact: com.android.support:animated-vector-drawable:+
+  name: animated-vector-drawable
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:appcompat-v7:+
+  name: appcompat-v7
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:support-annotations:+
+  name: support-annotations
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:support-compat:+
+  name: support-compat
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:support-core-ui:+
+  name: support-core-ui
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:support-core-utils:+
+  name: support-core-utils
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:support-fragment:+
+  name: support-fragment
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:support-media-compat:+
+  name: support-media-compat
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:support-v4:+
+  name: support-v4
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: com.android.support:support-vector-drawable:+
+  name: support-vector-drawable
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
