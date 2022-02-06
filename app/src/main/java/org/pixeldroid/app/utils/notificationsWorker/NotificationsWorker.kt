@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import okhttp3.internal.format
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.PostActivity
