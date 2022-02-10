@@ -22,6 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+        <activity
+            android:name=".posts.MediaViewerActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".postCreation.camera.CameraActivity" />
         <activity
             android:name=".posts.ReportActivity"
@@ -30,18 +34,22 @@
         <activity android:name=".postCreation.photoEdit.PhotoEditActivity" />
         <activity
             android:name=".postCreation.PostCreationActivity"
+            android:exported="true"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity"
-            android:exported="true">
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
@@ -83,11 +91,11 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan"
-            tools:ignore="LockedOrientationActivity"
-            android:exported="true">
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -100,11 +108,11 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:exported="true"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity"
-            android:exported="true">
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -118,16 +126,16 @@
         </activity>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
+            android:exported="true"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity"
-            android:exported="true"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".searchDiscover.SearchActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity"
-            android:exported="true">
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -156,7 +164,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

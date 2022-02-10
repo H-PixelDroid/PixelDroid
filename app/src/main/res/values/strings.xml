@@ -64,15 +64,13 @@
     <string name="poll_notification_channel">"Polls"</string>
     <string name="other_notification_channel">"Other"</string>
 
-    <plurals name="notification_title_summary" >
+    <plurals name="notification_title_summary">
         <item quantity="one">"%d new notification"</item>
         <item quantity="other">"%d new notifications"</item>
     </plurals>
     <string name="notification_summary_large">%1$s, %2$s, %3$s and %4$d others</string>
     <string name="notification_summary_medium">%1$s, %2$s, and %3$s</string>
     <string name="notification_summary_small">%1$s and %2$s</string>
-
-
 
 
     <!-- Login page -->
@@ -174,6 +172,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="add_comment">Add a comment</string>
     <string name="submit_comment">Submit comment</string>
     <string name="post_is_album">This post is an album</string>
+    <string name="post_is_video">This post is a video</string>
+
     <!-- Profile page -->
     <plurals name="nb_posts">
         <item quantity="one">"%d\nPost"</item>
@@ -259,4 +259,5 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="login_notifications">Couldn\'t fetch latest notifications</string>
     <string name="no_camera_permission">Camera permission not granted, grant the permission in settings if you want to let PixelDroid use the camera</string>
     <string name="no_storage_permission">Storage permission not granted, grant the permission in settings if you want to let PixelDroid show the thumbnail</string>
+    <string name="play_video">Play video</string>
 </resources>
