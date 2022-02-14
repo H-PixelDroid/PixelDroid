@@ -316,8 +316,9 @@ class CameraFragment : Fragment() {
     private fun setupUploadImage() {
         // Listener for button used to view the most recent photo
         binding.photoViewButton.setOnClickListener {
-            Intent().apply {
-                type = "image/*"
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
                 action = Intent.ACTION_GET_CONTENT
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
