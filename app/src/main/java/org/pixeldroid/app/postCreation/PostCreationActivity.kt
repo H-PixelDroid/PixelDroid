@@ -164,16 +164,17 @@ class PostCreationActivity : BaseActivity() {
         }
         for (i in 0 until count) {
             clipData.getItemAt(i).uri.let {
-                val size = it.getSize()
+                val size = it.getSizeAndValidate()
                 photoData.add(PhotoData(imageUri = it, size = size))
             }
         }
     }
 
     /**
-     * Returns the size of the file of the Uri, and opens a dialog in case it is too big.
+     * Returns the size of the file of the Uri, and opens a dialog in case it is too big or in case
+     * the file is unsupported.
      */
-    private fun Uri.getSize(): Long {
+    private fun Uri.getSizeAndValidate(): Long {
         val size: Long =
                 if (toString().startsWith("content")) {
                     contentResolver.query(this, null, null, null, null)
@@ -191,16 +192,18 @@ class PostCreationActivity : BaseActivity() {
                 }
 
         val sizeInkBytes = ceil(size.toDouble() / 1000).toLong()
+        val type = contentResolver.getType(this)
+        val isVideo = type?.startsWith("video/") == true
+
+        if(isVideo && !instance.videoEnabled){
+            AlertDialog.Builder(this@PostCreationActivity).apply {
+                setMessage(R.string.video_not_supported)
+                setNegativeButton(android.R.string.ok) { _, _ -> }
+            }.show()
+        }
+
         if (sizeInkBytes > instance.maxPhotoSize || sizeInkBytes > instance.maxVideoSize) {
-            val maxSize = when {
-                instance.maxPhotoSize != instance.maxVideoSize -> {
-                    val type = contentResolver.getType(this)
-                    if (type?.startsWith("video/") == true) {
-                        instance.maxVideoSize
-                    } else instance.maxPhotoSize
-                }
-                else -> instance.maxPhotoSize
-            }
+            val maxSize = if (isVideo) instance.maxVideoSize else instance.maxPhotoSize
             AlertDialog.Builder(this@PostCreationActivity).apply {
                 setMessage(getString(R.string.size_exceeds_instance_limit, photoData.size + 1, sizeInkBytes, maxSize))
                 setNegativeButton(android.R.string.ok) { _, _ -> }
@@ -429,7 +432,7 @@ class PostCreationActivity : BaseActivity() {
             val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
             photoData.getOrNull(position)?.apply {
                 imageUri = result.data!!.getStringExtra(PhotoEditActivity.PICTURE_URI)!!.toUri()
-                size = imageUri.getSize()
+                size = imageUri.getSizeAndValidate()
                 progress = null
                 uploadId = null
             } ?: Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()

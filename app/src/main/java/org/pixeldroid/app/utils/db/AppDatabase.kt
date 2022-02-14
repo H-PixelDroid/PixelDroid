@@ -22,7 +22,7 @@ import org.pixeldroid.app.utils.api.objects.Notification
         PublicFeedStatusDatabaseEntity::class,
         Notification::class
     ],
-    version = 4
+    version = 5
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -38,5 +38,10 @@ val MIGRATION_3_4 = object : Migration(3, 4) {
         database.execSQL("DELETE FROM homePosts")
         database.execSQL("DELETE FROM publicPosts")
         database.execSQL("DELETE FROM notifications")
+    }
+}
+val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE instances ADD COLUMN videoEnabled INTEGER NOT NULL DEFAULT 1")
     }
 }

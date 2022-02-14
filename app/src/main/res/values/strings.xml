@@ -114,6 +114,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="no_media_description">Add a media description here…</string>
     <string name="total_exceeds_album_limit">You chose more images than the maximum your server allows (%1$s). Images beyond the limit have been ignored.</string>
     <string name="size_exceeds_instance_limit">Size of image number %1$d in the album exceeds the maximum size allowed by the instance (%2$d kB but the limit is %3$d kB). You might not be able to upload it.</string>
+    <string name="video_not_supported">"The server you are using doesn't support video uploads, you might not be able to upload videos included in this post"</string>
     <string name="upload_error">Error code returned by server: %1$d</string>
 
 
