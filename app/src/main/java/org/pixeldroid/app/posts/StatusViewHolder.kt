@@ -39,6 +39,7 @@ import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.posts.MediaViewerActivity.Companion.VIDEO_DESCRIPTION_TAG
 import org.pixeldroid.app.posts.MediaViewerActivity.Companion.VIDEO_URL_TAG
+import org.pixeldroid.app.posts.MediaViewerActivity.Companion.openActivity
 import retrofit2.HttpException
 import java.io.IOException
 import kotlin.math.roundToInt
@@ -620,14 +621,12 @@ private class AlbumViewPagerAdapter(private val media_attachments: List<Attachme
             holder.videoPlayButton.visibility = if(video) View.VISIBLE else View.GONE
 
             if(video){
-                fun openActivity(){
-                    val intent = Intent(holder.binding.root.context, MediaViewerActivity::class.java)
-                    intent.putExtra(VIDEO_URL_TAG, url)
-                    intent.putExtra(VIDEO_DESCRIPTION_TAG, description)
-                    holder.binding.root.context.startActivity(intent)
+                holder.videoPlayButton.setOnClickListener {
+                    openActivity(holder.binding.root.context, url, description)
                 }
-                holder.videoPlayButton.setOnClickListener {openActivity()}
-                holder.image.setOnClickListener {openActivity()}
+                holder.image.setOnClickListener {
+                    openActivity(holder.binding.root.context, url, description)
+                }
             }
 
             val description = description

@@ -73,6 +73,7 @@ fun bitmapFromUri(contentResolver: ContentResolver, uri: Uri?): Bitmap =
             )
             { decoder, _, _ -> decoder.isMutableRequired = true }
     } else {
+        @Suppress("DEPRECATION")
         val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
         modifyOrientation(bitmap!!, contentResolver, uri!!)
     }

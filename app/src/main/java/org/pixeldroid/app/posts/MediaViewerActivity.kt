@@ -1,5 +1,7 @@
 package org.pixeldroid.app.posts
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.media2.common.MediaMetadata
@@ -15,6 +17,13 @@ class MediaViewerActivity : BaseActivity() {
     companion object {
         const val VIDEO_URL_TAG = "video_url_mediavieweractivity"
         const val VIDEO_DESCRIPTION_TAG = "video_description_mediavieweractivity"
+
+        fun openActivity(context: Context, url: String?, description: String?){
+            val intent = Intent(context, MediaViewerActivity::class.java)
+            intent.putExtra(VIDEO_URL_TAG, url)
+            intent.putExtra(VIDEO_DESCRIPTION_TAG, description)
+            context.startActivity(intent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
