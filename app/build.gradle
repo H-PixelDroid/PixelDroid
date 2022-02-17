@@ -28,8 +28,8 @@ android {
         applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 7
-        versionName "1.0.beta7"
+        versionCode 8
+        versionName "1.0.beta8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
