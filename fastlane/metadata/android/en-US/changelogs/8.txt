@@ -1,0 +1,4 @@
+* Add support for video playback and upload
+* Notification improvements
+* Translation updates
+* Update dependencies
