@@ -9,6 +9,7 @@ import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity.Companion.DEF
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity.Companion.DEFAULT_MAX_PHOTO_SIZE
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity.Companion.DEFAULT_MAX_TOOT_CHARS
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity.Companion.DEFAULT_MAX_VIDEO_SIZE
+import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity.Companion.DEFAULT_VIDEO_ENABLED
 import org.pixeldroid.app.utils.normalizeDomain
 import java.lang.IllegalArgumentException
 
@@ -33,13 +34,14 @@ fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser:
 fun storeInstance(db: AppDatabase, nodeInfo: NodeInfo?, instance: Instance? = null) {
     val dbInstance: InstanceDatabaseEntity = nodeInfo?.run {
         InstanceDatabaseEntity(
-                uri = normalizeDomain(metadata?.config?.site?.url!!),
-                title = metadata.config.site.name!!,
-                maxStatusChars = metadata.config.uploader?.max_caption_length!!.toInt(),
-                maxPhotoSize = metadata.config.uploader.max_photo_size?.toIntOrNull() ?: DEFAULT_MAX_PHOTO_SIZE,
-                //Pixelfed doesn't distinguish between max photo and video size
-                maxVideoSize = metadata.config.uploader.max_photo_size?.toIntOrNull() ?: DEFAULT_MAX_VIDEO_SIZE,
-                albumLimit = metadata.config.uploader.album_limit?.toIntOrNull() ?: DEFAULT_ALBUM_LIMIT
+            uri = normalizeDomain(metadata?.config?.site?.url!!),
+            title = metadata.config.site.name!!,
+            maxStatusChars = metadata.config.uploader?.max_caption_length!!.toInt(),
+            maxPhotoSize = metadata.config.uploader.max_photo_size?.toIntOrNull() ?: DEFAULT_MAX_PHOTO_SIZE,
+            // Pixelfed doesn't distinguish between max photo and video size
+            maxVideoSize = metadata.config.uploader.max_photo_size?.toIntOrNull() ?: DEFAULT_MAX_VIDEO_SIZE,
+            albumLimit = metadata.config.uploader.album_limit?.toIntOrNull() ?: DEFAULT_ALBUM_LIMIT,
+            videoEnabled = metadata.config.features?.video ?: DEFAULT_VIDEO_ENABLED
         )
     } ?: instance?.run {
         InstanceDatabaseEntity(

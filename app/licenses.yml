@@ -919,3 +919,39 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
+- artifact: androidx.media2:media2-widget:+
+  name: media2-widget
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/media2
+- artifact: androidx.palette:palette:+
+  name: palette
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+- artifact: androidx.media2:media2-player:+
+  name: media2-player
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/media2
+- artifact: androidx.media2:media2-session:+
+  name: media2-session
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/media2
+- artifact: androidx.media2:media2-common:+
+  name: media2-common
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/media2
+- artifact: androidx.media2:media2-exoplayer:+
+  name: media2-exoplayer
+  copyrightHolder: Google Inc
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/media2

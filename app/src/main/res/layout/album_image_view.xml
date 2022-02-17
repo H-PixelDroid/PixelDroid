@@ -14,4 +14,15 @@
         android:adjustViewBounds="true"
         tools:ignore="ContentDescription" />
 
+    <ImageButton
+        android:id="@+id/videoPlayButton"
+        android:visibility="gone"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:src="@drawable/play_circle_filled"
+        android:contentDescription="@string/play_video" />
+
 </FrameLayout>

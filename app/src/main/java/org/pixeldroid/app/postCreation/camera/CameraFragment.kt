@@ -41,6 +41,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
 import org.pixeldroid.app.R
+import org.pixeldroid.app.utils.BaseFragment
 
 private const val ANIMATION_FAST_MILLIS = 50L
 private const val ANIMATION_SLOW_MILLIS = 100L
@@ -48,7 +49,7 @@ private const val ANIMATION_SLOW_MILLIS = 100L
 /**
  * Camera fragment
  */
-class CameraFragment : Fragment() {
+class CameraFragment : BaseFragment() {
 
     private lateinit var container: ConstraintLayout
 
@@ -314,10 +315,15 @@ class CameraFragment : Fragment() {
     }
 
     private fun setupUploadImage() {
+        val videoEnabled: Boolean = db.instanceDao().getInstance(db.userDao().getActiveUser()!!.instance_uri).videoEnabled
+        var mimeTypes: Array<String> = arrayOf("image/*")
+        if(videoEnabled) mimeTypes += "video/*"
+
         // Listener for button used to view the most recent photo
         binding.photoViewButton.setOnClickListener {
-            Intent().apply {
-                type = "image/*"
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
                 action = Intent.ACTION_GET_CONTENT
                 addCategory(Intent.CATEGORY_OPENABLE)
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)

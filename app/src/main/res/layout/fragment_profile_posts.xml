@@ -38,8 +38,23 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:contentDescription="@string/post_is_album" />
+
+        <ImageView
+            android:id="@+id/videoIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:foreground="@drawable/play_circle_filled"
+            android:foregroundGravity="center"
+            android:foregroundTint="#FFFFFF"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible"
+            android:contentDescription="@string/post_is_video" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.gridlayout.widget.GridLayout>

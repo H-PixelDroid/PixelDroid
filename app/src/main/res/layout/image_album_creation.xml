@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.pixeldroid.app.postCreation.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:foreground="?selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:foreground="?selectableItemBackground">
+
         <ImageView
             android:id="@+id/galleryImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/post_image"
             android:padding="8dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/post_image" />
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/videoIndicator"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top"
+            android:layout_margin="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/play_video"
+            android:src="@drawable/play_circle_filled"
+            android:visibility="gone"
+            tools:visibility="visible" />
 </org.pixeldroid.app.postCreation.SquareLayout>

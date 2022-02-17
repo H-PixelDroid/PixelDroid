@@ -8,4 +8,5 @@ import org.pixeldroid.app.R
 class ProfilePostViewHolder(val postView: View) : RecyclerView.ViewHolder(postView) {
     val postPreview: ImageView = postView.findViewById(R.id.postPreview)
     val albumIcon: ImageView = postView.findViewById(R.id.albumIcon)
+    val videoIcon: ImageView = postView.findViewById(R.id.albumIcon)
 }

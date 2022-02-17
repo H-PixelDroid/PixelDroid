@@ -50,11 +50,12 @@ import kotlin.math.ceil
 private const val TAG = "Post Creation Activity"
 
 data class PhotoData(
-        var imageUri: Uri,
-        var size: Long,
-        var uploadId: String? = null,
-        var progress: Int? = null,
-        var imageDescription: String? = null,
+    var imageUri: Uri,
+    var size: Long,
+    var uploadId: String? = null,
+    var progress: Int? = null,
+    var imageDescription: String? = null,
+    var video: Boolean,
 )
 
 class PostCreationActivity : BaseActivity() {
@@ -85,7 +86,7 @@ class PostCreationActivity : BaseActivity() {
         intent.clipData?.let { addPossibleImages(it) }
 
         val carousel: ImageCarousel = binding.carousel
-        carousel.addData(photoData.map { CarouselItem(it.imageUri) })
+        carousel.addData(photoData.map { CarouselItem(it.imageUri, video = it.video) })
         carousel.layoutCarouselCallback = {
             if(it){
                 // Became a carousel
@@ -138,7 +139,7 @@ class PostCreationActivity : BaseActivity() {
         binding.removePhotoButton.setOnClickListener {
             carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
                 photoData.removeAt(currentPosition)
-                carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
+                carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video) })
                 binding.addPhotoButton.isEnabled = true
             }
         }
@@ -164,16 +165,17 @@ class PostCreationActivity : BaseActivity() {
         }
         for (i in 0 until count) {
             clipData.getItemAt(i).uri.let {
-                val size = it.getSize()
-                photoData.add(PhotoData(imageUri = it, size = size))
+                val sizeAndVideoPair: Pair<Long, Boolean> = it.getSizeAndVideoValidate()
+                photoData.add(PhotoData(imageUri = it, size = sizeAndVideoPair.first, video = sizeAndVideoPair.second))
             }
         }
     }
 
     /**
-     * Returns the size of the file of the Uri, and opens a dialog in case it is too big.
+     * Returns the size of the file of the Uri, and whether it is a video,
+     * and opens a dialog in case it is too big or in case the file is unsupported.
      */
-    private fun Uri.getSize(): Long {
+    private fun Uri.getSizeAndVideoValidate(): Pair<Long, Boolean> {
         val size: Long =
                 if (toString().startsWith("content")) {
                     contentResolver.query(this, null, null, null, null)
@@ -191,22 +193,24 @@ class PostCreationActivity : BaseActivity() {
                 }
 
         val sizeInkBytes = ceil(size.toDouble() / 1000).toLong()
+        val type = contentResolver.getType(this)
+        val isVideo = type?.startsWith("video/") == true
+
+        if(isVideo && !instance.videoEnabled){
+            AlertDialog.Builder(this@PostCreationActivity).apply {
+                setMessage(R.string.video_not_supported)
+                setNegativeButton(android.R.string.ok) { _, _ -> }
+            }.show()
+        }
+
         if (sizeInkBytes > instance.maxPhotoSize || sizeInkBytes > instance.maxVideoSize) {
-            val maxSize = when {
-                instance.maxPhotoSize != instance.maxVideoSize -> {
-                    val type = contentResolver.getType(this)
-                    if (type?.startsWith("video/") == true) {
-                        instance.maxVideoSize
-                    } else instance.maxPhotoSize
-                }
-                else -> instance.maxPhotoSize
-            }
+            val maxSize = if (isVideo) instance.maxVideoSize else instance.maxPhotoSize
             AlertDialog.Builder(this@PostCreationActivity).apply {
                 setMessage(getString(R.string.size_exceeds_instance_limit, photoData.size + 1, sizeInkBytes, maxSize))
                 setNegativeButton(android.R.string.ok) { _, _ -> }
             }.show()
         }
-        return size
+        return Pair(size, isVideo)
     }
 
     private val addPhotoResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -214,7 +218,7 @@ class PostCreationActivity : BaseActivity() {
             result.data?.clipData?.let {
                 addPossibleImages(it)
             }
-            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
+            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video) })
         } else if (result.resultCode != Activity.RESULT_CANCELED) {
             Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
         }
@@ -306,8 +310,8 @@ class PostCreationActivity : BaseActivity() {
      */
     private fun upload() {
         enableButton(false)
-        binding.uploadProgressBar.visibility = View.VISIBLE
-        binding.uploadCompletedTextview.visibility = View.INVISIBLE
+        binding.uploadProgressBar.visibility = VISIBLE
+        binding.uploadCompletedTextview.visibility = INVISIBLE
         binding.removePhotoButton.isEnabled = false
         binding.editPhotoButton.isEnabled = false
         binding.addPhotoButton.isEnabled = false
@@ -429,21 +433,30 @@ class PostCreationActivity : BaseActivity() {
             val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
             photoData.getOrNull(position)?.apply {
                 imageUri = result.data!!.getStringExtra(PhotoEditActivity.PICTURE_URI)!!.toUri()
-                size = imageUri.getSize()
+                val (imageSize, imageVideo) = imageUri.getSizeAndVideoValidate()
+                size = imageSize
+                video = imageVideo
                 progress = null
                 uploadId = null
             } ?: Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
 
-            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription) })
+            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video) })
         } else if(result?.resultCode != Activity.RESULT_CANCELED){
             Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun edit(position: Int) {
-        val intent = Intent(this, PhotoEditActivity::class.java)
-            .putExtra(PhotoEditActivity.PICTURE_URI, photoData[position].imageUri)
-            .putExtra(PhotoEditActivity.PICTURE_POSITION, position)
-        editResultContract.launch(intent)
+        if(photoData[position].video){
+            AlertDialog.Builder(this).apply {
+                setMessage(R.string.video_edit_not_yet_supported)
+                setNegativeButton(android.R.string.ok) { _, _ -> }
+            }.show()
+        } else {
+            val intent = Intent(this, PhotoEditActivity::class.java)
+                .putExtra(PhotoEditActivity.PICTURE_URI, photoData[position].imageUri)
+                .putExtra(PhotoEditActivity.PICTURE_POSITION, position)
+            editResultContract.launch(intent)
+        }
     }
 }
