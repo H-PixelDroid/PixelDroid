@@ -25,6 +25,7 @@
         <activity
             android:name=".posts.MediaViewerActivity"
             android:exported="false"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".postCreation.camera.CameraActivity" />
         <activity
