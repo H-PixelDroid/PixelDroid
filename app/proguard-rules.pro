@@ -44,6 +44,13 @@
     public *;
 }
 
+-keepclassmembers class org.pixeldroid.app.settings.licenseObjects.* { *; }
+
+-keep public enum org.pixeldroid.app.settings.licenseObjects.*$** {
+    **[] $VALUES;
+    public *;
+}
+
 # preserve line numbers for crash reporting
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
