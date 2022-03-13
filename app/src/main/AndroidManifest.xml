@@ -33,6 +33,7 @@
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity android:name=".postCreation.photoEdit.PhotoEditActivity" />
+        <activity android:name=".postCreation.photoEdit.VideoEditActivity" />
         <activity
             android:name=".postCreation.PostCreationActivity"
             android:exported="true"

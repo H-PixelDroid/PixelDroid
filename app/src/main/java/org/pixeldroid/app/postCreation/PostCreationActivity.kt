@@ -32,6 +32,7 @@ import org.pixeldroid.app.postCreation.camera.CameraActivity
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.postCreation.carousel.ImageCarousel
 import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
+import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
@@ -66,6 +67,11 @@ class PostCreationActivity : BaseActivity() {
     private val photoData: ArrayList<PhotoData> = ArrayList()
 
     private lateinit var binding: ActivityPostCreationBinding
+
+    companion object {
+        internal const val PICTURE_URI = "picture_uri"
+        internal const val PICTURE_POSITION = "picture_position"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -430,9 +436,9 @@ class PostCreationActivity : BaseActivity() {
     private val editResultContract: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         result: ActivityResult? ->
         if (result?.resultCode == Activity.RESULT_OK && result.data != null) {
-            val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
+            val position: Int = result.data!!.getIntExtra(PICTURE_POSITION, 0)
             photoData.getOrNull(position)?.apply {
-                imageUri = result.data!!.getStringExtra(PhotoEditActivity.PICTURE_URI)!!.toUri()
+                imageUri = result.data!!.getStringExtra(PICTURE_URI)!!.toUri()
                 val (imageSize, imageVideo) = imageUri.getSizeAndVideoValidate()
                 size = imageSize
                 video = imageVideo
@@ -447,15 +453,15 @@ class PostCreationActivity : BaseActivity() {
     }
 
     private fun edit(position: Int) {
-        if(photoData[position].video){
-            AlertDialog.Builder(this).apply {
-                setMessage(R.string.video_edit_not_yet_supported)
-                setNegativeButton(android.R.string.ok) { _, _ -> }
-            }.show()
+        if (photoData[position].video){
+            val intent = Intent(this, VideoEditActivity::class.java)
+                .putExtra(PICTURE_URI, photoData[position].imageUri)
+                .putExtra(PICTURE_POSITION, position)
+            editResultContract.launch(intent)
         } else {
             val intent = Intent(this, PhotoEditActivity::class.java)
-                .putExtra(PhotoEditActivity.PICTURE_URI, photoData[position].imageUri)
-                .putExtra(PhotoEditActivity.PICTURE_POSITION, position)
+                .putExtra(PICTURE_URI, photoData[position].imageUri)
+                .putExtra(PICTURE_POSITION, position)
             editResultContract.launch(intent)
         }
     }

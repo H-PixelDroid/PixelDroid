@@ -73,9 +73,6 @@ class PhotoEditActivity : BaseActivity() {
     }
 
     companion object{
-        internal const val PICTURE_URI = "picture_uri"
-        internal const val PICTURE_POSITION = "picture_position"
-
         private var executor: ExecutorService = newSingleThreadExecutor()
         private var future: Future<*>? = null
 
@@ -99,8 +96,8 @@ class PhotoEditActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-        initialUri = intent.getParcelableExtra(PICTURE_URI)
-        picturePosition = intent.getIntExtra(PICTURE_POSITION, 0)
+        initialUri = intent.getParcelableExtra(PostCreationActivity.PICTURE_URI)
+        picturePosition = intent.getIntExtra(PostCreationActivity.PICTURE_POSITION, 0)
         imageUri = initialUri
         
         // Crop button on-click listener
@@ -345,8 +342,8 @@ class PhotoEditActivity : BaseActivity() {
     private fun sendBackImage(file: String) {
         val intent = Intent(this, PostCreationActivity::class.java)
         .apply {
-            putExtra(PICTURE_URI, file)
-            putExtra(PICTURE_POSITION, picturePosition)
+            putExtra(PostCreationActivity.PICTURE_URI, file)
+            putExtra(PostCreationActivity.PICTURE_POSITION, picturePosition)
             addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         }
 
