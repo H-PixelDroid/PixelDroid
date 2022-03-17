@@ -72,12 +72,12 @@ class ProfileActivity : BaseActivity() {
         // get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(this, ProfileViewModelFactory(
-                ProfileContentRepository(
-                    apiHolder.setToCurrentUser(),
-                    accountId
-                )
+            ProfileContentRepository(
+                apiHolder.setToCurrentUser(),
+                accountId
             )
-        ).get(FeedViewModel::class.java) as FeedViewModel<Status>
+        )
+        )[FeedViewModel::class.java] as FeedViewModel<Status>
 
         profileAdapter = ProfilePostsAdapter()
         initAdapter(binding.profileProgressBar, binding.profileRefreshLayout,
