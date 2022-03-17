@@ -38,6 +38,7 @@ import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.openUrl
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.utils.api.objects.Attachment
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -340,6 +341,7 @@ class ProfileViewModelFactory @ExperimentalPagingApi constructor(
 class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerView.ViewHolder(binding.root) {
     private val postPreview: ImageView = binding.postPreview
     private val albumIcon: ImageView = binding.albumIcon
+    private val videoIcon: ImageView = binding.videoIcon
 
     fun bind(post: Status) {
 
@@ -352,11 +354,14 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
         } else {
             ImageConverter.setSquareImageFromURL(itemView, post.getPostPreviewURL(), postPreview)
         }
-
         if(post.media_attachments?.size ?: 0 > 1) {
             albumIcon.visibility = View.VISIBLE
         } else {
             albumIcon.visibility = View.GONE
+            if(post.media_attachments?.get(0)?.type == Attachment.AttachmentType.video) {
+                videoIcon.visibility = View.VISIBLE
+            } else videoIcon.visibility = View.GONE
+
         }
 
         postPreview.setOnClickListener {

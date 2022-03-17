@@ -28,8 +28,8 @@ android {
         applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 7
-        versionName "1.0.beta7"
+        versionCode 8
+        versionName "1.0.beta8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -128,6 +128,9 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.4.0"
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'androidx.media2:media2-widget:1.2.1'
+    implementation 'androidx.media2:media2-player:1.2.1'
+
 
     // Use the most recent version of CameraX
     def cameraX_version = '1.1.0-beta02'

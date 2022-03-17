@@ -4,7 +4,10 @@ import android.os.Bundle
 import com.google.gson.Gson
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.OpenSourceLicenseBinding
+import org.pixeldroid.app.settings.licenseObjects.Libraries
+import org.pixeldroid.app.settings.licenseObjects.OpenSourceItem
 import org.pixeldroid.app.utils.BaseActivity
+import java.io.FileNotFoundException
 
 /**
  * Displays licenses for all app dependencies. JSON is
@@ -30,13 +33,10 @@ class LicenseActivity: BaseActivity() {
     private fun setupRecyclerView() {
         val text: String = applicationContext.assets.open("licenses.json")
             .bufferedReader().use { it.readText() }
+
         val listObj: List<OpenSourceItem> = Gson().fromJson(text, Libraries::class.java).libraries
 
-        val adapter = OpenSourceLicenseAdapter()
+        val adapter = OpenSourceLicenseAdapter(listObj)
         binding.openSourceLicenseRecyclerView.adapter = adapter
-
-
-        adapter.updateList(listObj)
-
     }
 }

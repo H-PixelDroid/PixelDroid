@@ -49,7 +49,7 @@ class ImageCarousel(
     var indicator: CircleIndicator2? = null
         set(newIndicator) {
             indicator?.apply {
-                // if we remove it form the view, then the caption textView constraint won't work.
+                // if we remove it from the view, then the caption textView constraint won't work.
                 this.visibility = View.GONE
 
                 isBuiltInIndicator = false

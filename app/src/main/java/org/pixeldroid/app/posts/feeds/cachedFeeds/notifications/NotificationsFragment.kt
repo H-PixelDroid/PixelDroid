@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +32,7 @@ import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.Notification
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
+import org.pixeldroid.app.utils.notificationsWorker.makeChannelGroupId
 
 
 /**
@@ -63,6 +65,16 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
         return view
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        with(NotificationManagerCompat.from(requireContext())) {
+            // Cancel account notification group
+            db.userDao().getActiveUser()?.let {
+                cancel( makeChannelGroupId(it).hashCode())
+            }
+        }
+    }
 
     /**
      * View Holder for a [Notification] RecyclerView list item.

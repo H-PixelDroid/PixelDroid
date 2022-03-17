@@ -7,17 +7,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import org.pixeldroid.app.databinding.OpenSourceItemBinding
+import org.pixeldroid.app.settings.licenseObjects.OpenSourceItem
 
-class OpenSourceLicenseAdapter :
+class OpenSourceLicenseAdapter(private val openSourceItems: List<OpenSourceItem>) :
     RecyclerView.Adapter<OpenSourceLicenseAdapter.OpenSourceLicenceViewHolder>() {
-
-    private var openSourceItems: List<OpenSourceItem> = emptyList()
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateList(newOpenSourceItems: List<OpenSourceItem>) {
-        openSourceItems = newOpenSourceItems
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OpenSourceLicenceViewHolder
         {
@@ -68,14 +61,3 @@ class OpenSourceLicenseAdapter :
         }
     }
 }
-data class OpenSourceItem(
-    val libraryName: String?,
-    val copyrightHolder: String?,
-    val url: String?,
-    val license: String?,
-    val licenseUrl: String?,
-)
-
-data class Libraries(
-    val libraries: List<OpenSourceItem>
-)

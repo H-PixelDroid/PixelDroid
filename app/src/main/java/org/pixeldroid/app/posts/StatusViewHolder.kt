@@ -37,6 +37,9 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.posts.MediaViewerActivity.Companion.VIDEO_DESCRIPTION_TAG
+import org.pixeldroid.app.posts.MediaViewerActivity.Companion.VIDEO_URL_TAG
+import org.pixeldroid.app.posts.MediaViewerActivity.Companion.openActivity
 import retrofit2.HttpException
 import java.io.IOException
 import kotlin.math.roundToInt
@@ -594,6 +597,7 @@ private class AlbumViewPagerAdapter(private val media_attachments: List<Attachme
     override fun getItemCount() = media_attachments.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         media_attachments[position].apply {
+            val video = type == Attachment.AttachmentType.video
             val blurhashBitMap = blurhash?.let {
                 BlurHashDecoder.blurHashBitmap(
                         holder.binding.root.resources,
@@ -603,14 +607,26 @@ private class AlbumViewPagerAdapter(private val media_attachments: List<Attachme
                 )
             }
             if (sensitive == false) {
+                val imageUrl = if(video) preview_url else url
                 Glide.with(holder.binding.root)
                         .asDrawable().fitCenter()
                         .placeholder(blurhashBitMap)
-                        .load(url).into(holder.image)
+                        .load(imageUrl).into(holder.image)
             } else {
                 Glide.with(holder.binding.root)
                         .asDrawable().fitCenter()
                         .load(blurhashBitMap).into(holder.image)
+            }
+
+            holder.videoPlayButton.visibility = if(video) View.VISIBLE else View.GONE
+
+            if(video){
+                holder.videoPlayButton.setOnClickListener {
+                    openActivity(holder.binding.root.context, url, description)
+                }
+                holder.image.setOnClickListener {
+                    openActivity(holder.binding.root.context, url, description)
+                }
             }
 
             val description = description
@@ -633,5 +649,6 @@ private class AlbumViewPagerAdapter(private val media_attachments: List<Attachme
 
     class ViewHolder(val binding: AlbumImageViewBinding) : RecyclerView.ViewHolder(binding.root){
         val image: ImageView = binding.imageImageView
+        val videoPlayButton: ImageView = binding.videoPlayButton
     }
 }

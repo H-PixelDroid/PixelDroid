@@ -3,13 +3,17 @@ package org.pixeldroid.app.postCreation.carousel
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.pixeldroid.app.R
+import org.pixeldroid.app.posts.MediaViewerActivity
 
 
 class CarouselAdapter(
@@ -26,6 +30,8 @@ class CarouselAdapter(
 
     class MyViewHolder(itemView: View, imageViewId: Int) : RecyclerView.ViewHolder(itemView) {
         var img: ImageView = itemView.findViewById(imageViewId)
+        // Null if not relevant
+        val videoIndicator: ImageButton? = itemView.findViewById(R.id.videoIndicator)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -60,9 +66,20 @@ class CarouselAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        if(carousel) {
+        if (carousel) {
             holder.img.scaleType = imageScaleType
+            holder.videoIndicator?.setOnClickListener{
+                with(dataList[position]) {
+                    MediaViewerActivity.openActivity(
+                        holder.itemView.context,
+                        imageUrl.toString(),
+                        caption
+                    )
+                }
+            }
         }
+
+        holder.videoIndicator?.visibility = if (dataList[position].video) VISIBLE else GONE
 
         dataList.elementAtOrNull(position)?.let {
             Glide.with(holder.itemView.context)
@@ -83,7 +100,6 @@ class CarouselAdapter(
 
                 true
             }
-
         }
     }
 

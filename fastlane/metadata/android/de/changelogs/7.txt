@@ -1,0 +1,2 @@
+* Aktualisierung von Übersetzungen
+* Auswählen von nicht lokal gespeicherten Dateien (z.B. Nextcloud) beim Upload eingeführt
