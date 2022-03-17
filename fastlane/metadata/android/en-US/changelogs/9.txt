@@ -1,0 +1,3 @@
+* Fix crash when showing licenses list
+* Greatly improve performance in profile activity
+* Update dependencies
