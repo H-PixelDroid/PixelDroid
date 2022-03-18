@@ -29,7 +29,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 31
         versionCode 9
-        versionName "1.0.beta$versionCode"
+        versionName "1.0.beta" + versionCode
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
