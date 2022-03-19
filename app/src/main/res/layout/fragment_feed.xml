@@ -5,9 +5,6 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -30,7 +27,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-
         <androidx.constraintlayout.motion.widget.MotionLayout
             android:id="@+id/motionLayout"
             android:layout_width="match_parent"
@@ -40,8 +36,7 @@
             app:layoutDescription="@xml/error_layout_xml_error_scene"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/followButton"
-            tools:visibility="visible">
+            app:layout_constraintTop_toBottomOf="@id/followButton">
 
             <include
                 android:id="@id/errorLayout"
