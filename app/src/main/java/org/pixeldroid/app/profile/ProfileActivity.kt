@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -38,6 +39,7 @@ import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.openUrl
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.databinding.ErrorLayoutBinding
 import org.pixeldroid.app.utils.api.objects.Attachment
 import retrofit2.HttpException
 import java.io.IOException
@@ -81,12 +83,13 @@ class ProfileActivity : BaseActivity() {
 
         profileAdapter = ProfilePostsAdapter()
         initAdapter(binding.profileProgressBar, binding.profileRefreshLayout,
-            binding.profilePostsRecyclerView, binding.motionLayout, binding.profileErrorLayout,
+            binding.profilePostsRecyclerView, binding.motionLayout, binding.errorLayout,
             profileAdapter)
 
         binding.profilePostsRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
         binding.profileRefreshLayout.setOnRefreshListener {
+            setContent(account)
             profileAdapter.refresh()
         }
 
@@ -101,6 +104,7 @@ class ProfileActivity : BaseActivity() {
         if(show){
             binding.profileProgressBar.visibility = View.GONE
             binding.motionLayout.transitionToEnd()
+            binding.errorLayout.errorText.text = errorText
         } else if(binding.motionLayout.progress == 1F) {
             binding.motionLayout.transitionToStart()
         }

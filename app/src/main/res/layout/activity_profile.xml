@@ -129,8 +129,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
                     app:layout_constraintTop_toTopOf="@+id/profilePictureImageView" />
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -144,37 +142,36 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp" />
 
-
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/motionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:visibility="visible"
-        app:layoutDescription="@xml/error_layout_xml_error_scene"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nbFollowersTextView">
-
-    <include
-        android:id="@+id/profileErrorLayout"
-        layout="@layout/error_layout"
-        tools:layout_editor_absoluteX="50dp" />
-    </androidx.constraintlayout.motion.widget.MotionLayout>
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/profileRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/profilePostsRecyclerView"
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/motionLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/fragment_profile_posts" />
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:layoutDescription="@xml/error_layout_xml_error_scene">
+
+            <include
+                android:id="@+id/errorLayout"
+                layout="@layout/error_layout"
+                tools:layout_editor_absoluteX="50dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profilePostsRecyclerView"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/errorLayout"
+                tools:listitem="@layout/fragment_profile_posts" />
+
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
