@@ -198,4 +198,14 @@
     <string name="login_notifications">无法获取最新通知</string>
     <string name="no_camera_permission">未授予相机权限，如果你想让 PixelDroid 使用相机，请在设置中授予权限</string>
     <string name="no_storage_permission">未授予存储权限，如果你想让 PixelDroid 显示缩略图，请在设置中授予权限</string>
+    <plurals name="notification_title_summary">
+        <item quantity="other">%d 条新通知</item>
+    </plurals>
+    <string name="video_not_supported">你正使用的服务器不支持视频上传，你可能无法上传包含于该帖子内的视频</string>
+    <string name="video_edit_not_yet_supported">尚不支持视频编辑</string>
+    <string name="notification_summary_large">%1$s、%2$s、%3$s 和其他 %4$d</string>
+    <string name="notification_summary_medium">%1$s、%2$s, 和 %3$s</string>
+    <string name="notification_summary_small">%1$s 和 %2$s</string>
+    <string name="post_is_video">该帖子是一个视频</string>
+    <string name="play_video">播放视频</string>
 </resources>
