@@ -206,4 +206,17 @@
     <string name="other_notification_channel">Outro</string>
     <string name="notifications_settings">Axustes das notificacións</string>
     <string name="login_notifications">Non se obtiveron as últimas notificacións</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nova notificación</item>
+        <item quantity="other">%d novas notificacións</item>
+    </plurals>
+    <string name="video_not_supported">O servidor que estás a usar non soporta a subida de vídeos, non poderás subir os vídeos incluídos nesta publicación</string>
+    <string name="no_camera_permission">Non tes permiso para a cámara, concede o permiso nos axustes se queres que PixelDroid poida usar a cámara</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s e %4$d outras</string>
+    <string name="notification_summary_medium">%1$s, %2$s, e %3$s</string>
+    <string name="notification_summary_small">%1$s e %2$s</string>
+    <string name="post_is_video">Esta publicación é un vídeo</string>
+    <string name="no_storage_permission">Non tes permiso de almacenaxe, concede o permiso nos axustes se queres permitir que PixelDroid mostre a miniatura</string>
+    <string name="play_video">Reproducir vídeo</string>
+    <string name="video_edit_not_yet_supported">Aínda non hai soporte para edición de vídeo</string>
 </resources>

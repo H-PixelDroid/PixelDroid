@@ -1,0 +1,3 @@
+* Arranxo do fallo ao mostrar a listaxe de licenzas
+* Melloras importantes de rendemento na actividade do perfil
+* Dependencias actualizadas
