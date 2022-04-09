@@ -1,0 +1,2 @@
+* Actualización das traducións
+* Permitir subida de imaxes remotas (ex. Nextcloud)

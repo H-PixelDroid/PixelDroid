@@ -1,0 +1,5 @@
+* Actualización das traducións
+* Maior facilidade para ver información da licenza
+* Arranxo dos problemas de permisos na lapela da cámara
+* Arranxo da xestión das ligazóns
+* Arranxo da vista descubrimento (para instancias actualizadas)
