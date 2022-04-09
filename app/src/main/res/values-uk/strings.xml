@@ -3,26 +3,242 @@
     <string name="browser_launch_failed">Не вдалося відкрити браузер, він у вас є\?</string>
     <string name="image_download_failed">Не вдалося завантажити, спробуйте знову</string>
     <string name="menu_account">Мій профіль</string>
-    <string name="invalid_domain">Недоступний домен</string>
-    <string name="title_activity_settings2">Налаштування</string>
+    <string name="invalid_domain">Хибний домен</string>
+    <string name="title_activity_settings2">Параметри</string>
     <string name="theme_title">Тема застосунку</string>
     <string name="theme_header">Тема</string>
-    <string name="mention_notification">%1$s згадав(-ла) вас</string>
+    <string name="mention_notification">%1$s вас згадує</string>
     <string name="description">Опис…</string>
-    <string name="post">відправити</string>
-    <string name="lbl_brightness">Яскравість</string>
-    <string name="lbl_contrast">Контраст</string>
-    <string name="lbl_saturation">Насичення</string>
-    <string name="tab_filters">Фільтри</string>
+    <string name="post">надіслати</string>
+    <string name="lbl_brightness">ЯСКРАВІСТЬ</string>
+    <string name="lbl_contrast">КОНТРАСТ</string>
+    <string name="lbl_saturation">НАСИЧЕННЯ</string>
+    <string name="tab_filters">ФІЛЬТРИ</string>
     <string name="save_to_gallery">Зберегти до галереї…</string>
     <string name="image_download_downloading">Завантаження…</string>
     <string name="image_download_success">Зображення успішно завантажено</string>
     <string name="switch_camera_button_alt">Перемкнути камеру</string>
     <string name="gallery_button_alt">Галерея</string>
-    <string name="share_picture">Поділитися фотографією…</string>
+    <string name="share_picture">Поділитися…</string>
     <string name="logout">Вийти</string>
-    <string name="NoCommentsToShow">Немає коментарів до цієї публікації…</string>
+    <string name="NoCommentsToShow">Прокоментуйте допис першими…</string>
     <string name="edit">Редагувати</string>
     <string name="app_name">PixelDroid</string>
-    <string name="menu_settings">Налаштування</string>
+    <string name="menu_settings">Параметри</string>
+    <string name="delete_dialog">Видалити допис\?</string>
+    <string name="language">Мова</string>
+    <string name="help_translate">Допоможіть перекласти PixelDroid:</string>
+    <string name="default_system">Усталено (як у системі)</string>
+    <string name="delete">Видалити</string>
+    <string name="no_cancel_edit">Ні, знехтувати</string>
+    <string name="whats_an_instance_explanation">Можливо, вас дивує текстове поле з проханням зазначити домен вашого сервера.
+\n
+\nPixelfed — федерована платформа в складі федіверсу, тобто ви можете прямо в застосунку спілкуватися з авдиторією інших платформ, сервери яких втілюють домовлений стандарт, наприклад Mastodon (див. https://joinmastodon.org).
+\n
+\nОберіть сервер Pixelfed тої спільноти, чиї принципи вам найближчі. Перелік загальнодоступних серверів: https://pixelfed.org/join
+\n
+\nДокладніше про Pixelfed можете прочитати на сайті: https://pixelfed.org</string>
+    <string name="auth_failed">Не вдалося ввійти</string>
+    <string name="switch_to_grid">Режим сітки</string>
+    <string name="switch_to_carousel">Режим каруселі</string>
+    <string name="verify_credentials">Не вдалось отримати користувацькі дані</string>
+    <string name="discover_no_infinite_load">Потягніть для оновлення, щоб отримати нові цікаві зображення.</string>
+    <string name="instance_error">Не вдалось отримати дані про сервер</string>
+    <string name="save_image_description">Зберегти опис зображення</string>
+    <string name="no_media_description">Опишіть медіафайл…</string>
+    <string name="poll_notification">%1$s завершує опитування</string>
+    <string name="delete_post_failed_error">Не вдалося видалити допис, помилка %1$d</string>
+    <string name="delete_post_failed_io_except">Не вдалося видалити допис, перевірте з\'єднання\?</string>
+    <string name="api_not_enabled_dialog">API вимкнено на цьому сервері. Попрохайте адміністрацію сервера його ввімкнути.</string>
+    <string name="total_exceeds_album_limit">Ви обрали більше зображень, ніж дозволяє сервер (%1$s). Надлишкові зображення було пропущено.</string>
+    <string name="size_exceeds_instance_limit">Зображення %1$d в альбомі важить більше (%2$d кБ), ніж дозволяє сервер (%3$d кБ). Ймовірно, вивантажити його не вдасться.</string>
+    <string name="upload_error">Код помилки сервера: %1$d</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="save_before_returning">Зберегти зміни\?</string>
+    <string name="add_account_description">Кілька сторінок, один пристрій</string>
+    <string name="no_storage_permission">Бракує дозволу на доступ до пам\'яті. Надайте цей дозвіл у параметрах, якщо бажаєте бачити мініатюри в PixelDroid</string>
+    <string name="upload_post_success">Допис успішно вивантажено</string>
+    <string name="edit_link_failed">Не вдалось відкрити сторінку редагування</string>
+    <string name="empty_feed">Поки що тут порожньо :)</string>
+    <string name="issues_contribute">Опишіть вади чи зробіть внесок до застосунку:</string>
+    <string name="follow_requested">Запит на підписку</string>
+    <string name="dialog_message_cancel_follow_request">Відхилити запит на підписку\?</string>
+    <string name="permission_denied">Бракує дозволу</string>
+    <string name="upload_picture_failed">Помилка вивантаження зображення!</string>
+    <string name="post_image">Одне з зображень допису</string>
+    <string name="filter_thumbnail">Мініатюра фільтра</string>
+    <string name="image_preview">Попередній перегляд редагованого зображення</string>
+    <string name="crop_button">Кнопка зрізу чи оберту зображення</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d коментар</item>
+        <item quantity="few">%d коментарі</item>
+        <item quantity="many">%d коментарів</item>
+        <item quantity="other">%d коментарів</item>
+    </plurals>
+    <string name="add_comment">Додати коментар</string>
+    <string name="submit_comment">Надіслати коментар</string>
+    <string name="post_is_album">Це альбомний допис</string>
+    <string name="retry">Ще раз</string>
+    <string name="mascot_description">Руда панда — символ Pixelfed — використовує телефон</string>
+    <string name="save_image_failed">Не вдалося зберегти зображення</string>
+    <string name="light_theme">Світла</string>
+    <string name="save_image_success">Зображення успішно збережено</string>
+    <string name="upload_post_error">Помилка вивантаження допису</string>
+    <string name="domain_of_your_instance">Домен вашого сервера</string>
+    <string name="instance_not_pixelfed_warning">Це не схоже на сервер Pixelfed, тож у застосунку можуть виникати несподівані помилки.</string>
+    <string name="upload_post_failed">Не вдалося вивантажити допис</string>
+    <string name="instance_not_pixelfed_continue">Усе одно продовжити</string>
+    <string name="instance_not_pixelfed_cancel">Скасувати вхід</string>
+    <string name="request_format_error">Помилка вивантаження: хибний формат запиту</string>
+    <string name="connect_to_pixelfed">З\'єднатися з Pixelfed</string>
+    <string name="normal_filter">Оригінал</string>
+    <string name="comment">Коментар</string>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\nдопис</item>
+        <item quantity="few">%d
+\nдописи</item>
+        <item quantity="many">%d
+\nдописів</item>
+        <item quantity="other">%d
+\nдописів</item>
+    </plurals>
+    <string name="no_username">Псевдоніму нема</string>
+    <string name="follow">Стежити</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nстежить</item>
+        <item quantity="few">%d
+\nстежать</item>
+        <item quantity="many">%d
+\nстежать</item>
+        <item quantity="other">%d
+\nстежать</item>
+    </plurals>
+    <string name="no_camera_permission">Бракує дозволу на доступ до камери. Надайте цей дозвіл у параметрах, якщо бажаєте користуватись камерою в PixelDroid</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nпідписка</item>
+        <item quantity="few">%d
+\nпідписки</item>
+        <item quantity="many">%d
+\nпідписок</item>
+        <item quantity="other">%d
+\nпідписок</item>
+    </plurals>
+    <string name="follow_status_failed">Не вдалось отримати стан підписки</string>
+    <string name="media_upload_completed">Медіа успішно вивантажено</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Опис мусить містити не більше, ніж %d символ.</item>
+        <item quantity="few">Опис мусить містити не більше, ніж %d символи.</item>
+        <item quantity="many">Опис мусить містити не більше, ніж %d символів.</item>
+        <item quantity="other">Опис мусить містити не більше, ніж %d символів.</item>
+    </plurals>
+    <string name="registration_failed">Не вдалося зареєструвати застосунок на сервері</string>
+    <string name="token_error">Помилка отримання токену</string>
+    <string name="dark_theme">Тьмяна</string>
+    <string name="followed_notification">%1$s вас відстежує</string>
+    <string name="shared_notification">%1$s поширює ваш допис</string>
+    <string name="whats_an_instance">Що таке сервер\?</string>
+    <string name="login_connection_required_once">Слід бути в мережі, щоб додати перший обліковий запис та почати користуватись PixelDroid :(</string>
+    <string name="add_account_name">Додати обліковий запис</string>
+    <string name="crop_result_error">Не вдалося отримати зображення після зрізу</string>
+    <string name="capture_button_alt">Знімати</string>
+    <string name="comment_error">Помилка коментування!</string>
+    <string name="busy_dialog_ok_button">Гаразд, зачекаю.</string>
+    <string name="loading_toast">Щось пішло не так при завантаженні</string>
+    <string name="comment_posted">Коментар: %1$s надіслано!</string>
+    <string name="follow_button_failed">Не вдалось показати кнопку підписки</string>
+    <string name="follow_error">Не вдалося підписатись</string>
+    <string name="action_not_allowed">Дію заборонено</string>
+    <string name="unfollow_error">Не вдалося відписатись</string>
+    <string name="access_token_invalid">Токен доступу хибний</string>
+    <string name="default_nposts">-
+\nдописів</string>
+    <string name="default_nfollowers">-
+\nстежать</string>
+    <string name="default_nfollowing">-
+\nпідписок</string>
+    <string name="search">Пошук</string>
+    <string name="edit_profile">Редагувати</string>
+    <string name="posts">ДОПИСИ</string>
+    <string name="accounts">ОБЛІКОВІ ЗАПИСИ</string>
+    <string name="license_info">PixelDroid — вільне й відкрите програмне забезпечення, доступне на умовах Загальної громадської ліцензії GNU (версії 3 чи новішої)</string>
+    <string name="about">Про застосунок</string>
+    <string name="post_title">Допис %1$s</string>
+    <string name="toolbar_title_edit">Редагувати</string>
+    <string name="reported">Скаргу надіслано {gmd_check_circle}</string>
+    <string name="profile_picture">Зображення профілю</string>
+    <string name="open_drawer_menu">Відкрити висувне меню</string>
+    <string name="something_went_wrong">Щось пішло не так…</string>
+    <string name="hashtags">ХЕШТЕГИ</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">Чутливе приховане медіа
+\n (торкніть для показу)</string>
+    <string name="panda_pull_to_refresh_to_try_again">Оновіть рухом донизу, щоб панда не сумувала.</string>
+    <string name="add_photo">Додати фото</string>
+    <string name="no_description">Опису нема</string>
+    <string name="share_image">Поширити зображення</string>
+    <string name="liked_notification">%1$s хвалить ваш допис</string>
+    <string name="file_not_found">Файлу %1$s не знайдено</string>
+    <string name="write_permission_share_pic">Для поширення зображень потрібен дозвіл на запис!</string>
+    <string name="picture_format_error">Помилка вивантаження: хибний формат зображення.</string>
+    <string name="busy_dialog_text">Триває обробка зображення, дочекайтесь її завершення!</string>
+    <string name="unfollow">Відписатись</string>
+    <string name="media_upload_failed">Не вдалося вивантажити медіа, повторіть спробу чи перевірте мережне з\'єднання</string>
+    <string name="posting_image_accessibility_hint">Розміщуване зображення</string>
+    <string name="nothing_to_see_here">Тут поки порожньо!</string>
+    <string name="about_pixeldroid">Про PixelDroid</string>
+    <string name="dependencies_licenses">Залежності й ліцензії</string>
+    <string name="project_website">Вебсайт проєкту: https://pixeldroid.org</string>
+    <string name="follows_title">Підписки %1$s</string>
+    <string name="search_empty_error">Введіть пошуковий запит</string>
+    <string name="status_more_options">Більше варіантів</string>
+    <string name="report">Скарга</string>
+    <string name="optional_report_comment">Необов\'язкове повідомлення для адміністрації</string>
+    <string name="report_target">Скарга на допис @%1$s</string>
+    <string name="share_link">Посилання</string>
+    <string name="feed_failed">Не вдалось отримати стрічку</string>
+    <string name="report_error">Не вдалось надіслати скаргу</string>
+    <plurals name="likes">
+        <item quantity="one">%d схвалення</item>
+        <item quantity="few">%d схвалення</item>
+        <item quantity="many">%d схвалень</item>
+        <item quantity="other">%d схвалень</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d поширення</item>
+        <item quantity="few">%d поширення</item>
+        <item quantity="many">%d поширень</item>
+        <item quantity="other">%d поширень</item>
+    </plurals>
+    <string name="posted_on">Розміщено %1$s</string>
+    <string name="empty_comment">Просимо зазначити коментар!</string>
+    <string name="write_permission_download_pic">Для завантаження зображень потрібен дозвіл на запис!</string>
+    <string name="discover">ЦІКАВЕ</string>
+    <string name="comment_notification">%1$s коментує ваш допис</string>
+    <string name="other_notification">Сповіщення від %1$s</string>
+    <string name="followed_notification_channel">Нова авдиторія</string>
+    <string name="mention_notification_channel">Згадки</string>
+    <string name="shared_notification_channel">Поширення</string>
+    <string name="liked_notification_channel">Схвалення</string>
+    <string name="comment_notification_channel">Коментарі</string>
+    <string name="poll_notification_channel">Опитування</string>
+    <string name="other_notification_channel">Інше</string>
+    <string name="followers_title">Авдиторія %1$s</string>
+    <string name="notifications_settings">Параметри сповіщень</string>
+    <string name="login_notifications">Не вдалось отримати найновіші сповіщення</string>
+    <string name="notifications_settings_summary">Вимкніть небажані сповіщення</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d нове сповіщення</item>
+        <item quantity="few">%d нові сповіщення</item>
+        <item quantity="many">%d нових сповіщень</item>
+        <item quantity="other">%d нових сповіщень</item>
+    </plurals>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s та ще %4$d</string>
+    <string name="notification_summary_medium">%1$s, %2$s та %3$s</string>
+    <string name="notification_summary_small">%1$s та %2$s</string>
+    <string name="video_not_supported">Використовуваний сервер не підтримує вивантаження відео. Ймовірно, вивантажити відео цього допису не вдасться</string>
+    <string name="post_is_video">Це відеодопис</string>
+    <string name="play_video">Відтворити відео</string>
+    <string name="video_edit_not_yet_supported">Редагування відео ще не підтримується</string>
 </resources>
