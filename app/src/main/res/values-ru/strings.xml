@@ -116,7 +116,7 @@
     <string name="about_pixeldroid">О PixelDroid</string>
     <string name="unfollow">Отписаться</string>
     <string name="add_photo">Добавить фото</string>
-    <string name="poll_notification">%1$s опрос завершён</string>
+    <string name="poll_notification">Опрос %1$s завершён</string>
     <string name="instance_not_pixelfed_cancel">Отменить вход</string>
     <string name="instance_not_pixelfed_continue">OK, продолжить всё равно</string>
     <string name="instance_not_pixelfed_warning">Это не похоже на инстанс Pixelfed, приложение может работать с ошибками.</string>
@@ -214,4 +214,31 @@
     <string name="size_exceeds_instance_limit">Размер изображения в альбоме превышает максимальный размер в %1$d разрешённый инстансом (%2$d Кбайт, тогда как лимит установлен в %3$d Кбайт). По всей вероятности вы не сможете загрузить его.</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="file_not_found">Файл %1$s не найден</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d новое уведомление</item>
+        <item quantity="few">%d новых уведомления</item>
+        <item quantity="many">%d новых уведомлений</item>
+        <item quantity="other">%d новых уведомлений</item>
+    </plurals>
+    <string name="video_not_supported">Ваш сервер не поддерживает загрузку видео, возможно, вы не сможете загружать видео, включенные в этот пост</string>
+    <string name="comment_notification">%1$s прокомментировал ваш пост</string>
+    <string name="other_notification">Уведомление от %1$s</string>
+    <string name="followed_notification_channel">Новые подписчики</string>
+    <string name="mention_notification_channel">Упоминания</string>
+    <string name="shared_notification_channel">Поделились</string>
+    <string name="liked_notification_channel">Лайки</string>
+    <string name="comment_notification_channel">Комментарии</string>
+    <string name="poll_notification_channel">Голосования</string>
+    <string name="other_notification_channel">Другое</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s и %4$d других</string>
+    <string name="notification_summary_medium">%1$s, %2$s, и %3$s</string>
+    <string name="notification_summary_small">%1$s и %2$s</string>
+    <string name="post_is_video">Этот пост является видео</string>
+    <string name="notifications_settings">Настройки уведомлений</string>
+    <string name="notifications_settings_summary">Управляйте тем, какие уведомления вы хотите получать</string>
+    <string name="login_notifications">Не удалось получить последние уведомления</string>
+    <string name="no_camera_permission">Разрешение на использование камеры не предоставлено, выдайте разрешение в настройках, если хотите чтобы PixelDroid использовал камеру</string>
+    <string name="no_storage_permission">Разрешение на хранилище не предоставлено, дайте разрешение в настройках, если вы хотите, чтобы PixelDroid показывал миниатюры</string>
+    <string name="play_video">Воспроизвести видео</string>
+    <string name="video_edit_not_yet_supported">Редактирование видео ещё не поддерживается</string>
 </resources>
