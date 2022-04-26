@@ -32,7 +32,7 @@
     <string name="NoCommentsToShow">Sen comentarios na publicación…</string>
     <string name="image_download_failed">Fallou a descarga, inténtao outra vez</string>
     <string name="domain_of_your_instance">Dominio da túa instancia</string>
-    <string name="connect_to_pixelfed">Conectar con Pixelfed</string>
+    <string name="connect_to_pixelfed">Acceder a Pixelfed</string>
     <string name="login_connection_required_once">Debes ter conexión a internet para poder engadir a conta e usar PixelDroid :(</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Agochado
 \n(preme para amosar)</string>
