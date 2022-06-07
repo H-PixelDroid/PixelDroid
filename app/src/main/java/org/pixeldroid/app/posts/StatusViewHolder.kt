@@ -460,31 +460,21 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
 
         //Activate double tap liking
-        var clicked = false
         binding.postPagerHost.doubleTapCallback = {
-            if(!it) clicked = false
-            else lifecycleScope.launchWhenCreated {
+            lifecycleScope.launchWhenCreated {
                 //Check that the post isn't hidden
-                if(binding.sensitiveWarning.visibility == View.GONE) {
-                    //Check for double click
-                    if(clicked) {
-                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
-                        if (binding.liker.isChecked) {
-                            // Button is active, unlike
-                            binding.liker.isChecked = false
-                            unLikePostCall(api)
-                        } else {
-                            // Button is inactive, like
-                            binding.liker.playAnimation()
-                            binding.liker.isChecked = true
-                            binding.likeAnimation.animateView()
-                            likePostCall(api)
-                        }
+                if (binding.sensitiveWarning.visibility == View.GONE) {
+                    val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
+                    if (binding.liker.isChecked) {
+                        // Button is active, unlike
+                        binding.liker.isChecked = false
+                        unLikePostCall(api)
                     } else {
-                        clicked = true
-
-                        //Reset clicked to false after 500ms
-                        binding.postPager.handler.postDelayed(fun() { clicked = false }, 500)
+                        // Button is inactive, like
+                        binding.liker.playAnimation()
+                        binding.liker.isChecked = true
+                        binding.likeAnimation.animateView()
+                        likePostCall(api)
                     }
                 }
             }
