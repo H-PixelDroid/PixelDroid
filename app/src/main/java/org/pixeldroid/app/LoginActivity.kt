@@ -303,7 +303,6 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    @OptIn(ExperimentalPagingApi::class)
     private suspend fun storeUser(accessToken: String, refreshToken: String?, clientId: String, clientSecret: String, instance: String) {
         try {
             val user = pixelfedAPI.verifyCredentials("Bearer $accessToken")

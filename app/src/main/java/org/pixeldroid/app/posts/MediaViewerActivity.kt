@@ -10,16 +10,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media.AudioAttributesCompat
-import androidx.media2.common.MediaMetadata
-import androidx.media2.common.UriMediaItem
-import androidx.media2.player.MediaPlayer
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaSession
 import org.pixeldroid.app.databinding.ActivityMediaviewerBinding
 import org.pixeldroid.app.utils.BaseActivity
+import kotlin.random.Random
 
 class MediaViewerActivity : BaseActivity() {
 
-    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayer: ExoPlayer
+    private lateinit var session: MediaSession
     private lateinit var binding: ActivityMediaviewerBinding
+
 
     companion object {
         const val VIDEO_URL_TAG = "video_url_mediavieweractivity"
@@ -41,15 +45,14 @@ class MediaViewerActivity : BaseActivity() {
         val uri: String = intent.getStringExtra(VIDEO_URL_TAG).orEmpty()
         val description: String? = intent.getStringExtra(VIDEO_DESCRIPTION_TAG)
 
-        val mediaItem: UriMediaItem = UriMediaItem.Builder(uri.toUri()).build()
-        mediaItem.metadata = MediaMetadata.Builder()
-            .putString(MediaMetadata.METADATA_KEY_TITLE, description ?: "")
-            .build()
+        val mediaItem: MediaItem = MediaItem.Builder().setUri(uri)
+            .setMediaMetadata(MediaMetadata.Builder().setTitle(description).build()).build()
 
-        mediaPlayer = MediaPlayer(this)
+        mediaPlayer = ExoPlayer.Builder(this).build()
+
         mediaPlayer.setMediaItem(mediaItem)
 
-        binding.videoView.mediaControlView?.setOnFullScreenListener{ view, fullscreen ->
+        binding.videoView.setControllerOnFullScreenModeChangedListener { fullscreen ->
             val windowInsetsController = ViewCompat.getWindowInsetsController(window.decorView)
             if (!fullscreen) {
                 // Configure the behavior of the hidden system bars
@@ -74,17 +77,9 @@ class MediaViewerActivity : BaseActivity() {
             }
         }
 
-        // Configure audio
-        mediaPlayer.setAudioAttributes(AudioAttributesCompat.Builder()
-                    .setLegacyStreamType(STREAM_MUSIC)
-                    .setUsage(AudioAttributesCompat.USAGE_MEDIA)
-                    .setContentType(AudioAttributesCompat.CONTENT_TYPE_MOVIE)
-                    .build()
-        )
-
         mediaPlayer.prepare()
 
-        binding.videoView.setPlayer(mediaPlayer)
+        binding.videoView.player = mediaPlayer
 
         // Start actually playing the video
         mediaPlayer.play()
@@ -93,10 +88,21 @@ class MediaViewerActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         mediaPlayer.pause()
+        binding.videoView.onPause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayer.close()
+    override fun onResume() {
+        super.onResume()
+        binding.videoView.onResume()
+        mediaPlayer.play()
+    }
+    override fun onStop() {
+        super.onStop()
+        binding.videoView.player = null
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.videoView.player = mediaPlayer
     }
 }
