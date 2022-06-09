@@ -1,27 +1,46 @@
 package org.pixeldroid.app.posts
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.transition.Transition
+import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.snackbar.Snackbar
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.single.BasePermissionListener
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.AlbumImageViewBinding
+import org.pixeldroid.app.databinding.OpenedAlbumBinding
 import org.pixeldroid.app.databinding.PostFragmentBinding
+import org.pixeldroid.app.posts.MediaViewerActivity.Companion.openActivity
 import org.pixeldroid.app.utils.BlurHashDecoder
 import org.pixeldroid.app.utils.ImageConverter
 import org.pixeldroid.app.utils.api.PixelfedAPI
@@ -32,15 +51,8 @@ import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_TAG
 import org.pixeldroid.app.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.single.BasePermissionListener
-import kotlinx.coroutines.launch
-import org.pixeldroid.app.posts.MediaViewerActivity.Companion.VIDEO_DESCRIPTION_TAG
-import org.pixeldroid.app.posts.MediaViewerActivity.Companion.VIDEO_URL_TAG
-import org.pixeldroid.app.posts.MediaViewerActivity.Companion.openActivity
 import retrofit2.HttpException
+import java.io.File
 import java.io.IOException
 import kotlin.math.roundToInt
 
@@ -88,7 +100,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     private fun setupPost(
         request: RequestBuilder<Drawable>,
         domain: String,
-        isActivity: Boolean
+        isActivity: Boolean,
     ) {
         //Setup username as a button that opens the profile
         binding.username.apply {
@@ -148,9 +160,9 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         binding.postPager.visibility = View.VISIBLE
 
         //Attach the given tabs to the view pager
-        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList(), status?.sensitive)
+        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList(), status?.sensitive, false)
 
-        if(status?.media_attachments?.size ?: 0 > 1) {
+        if((status?.media_attachments?.size ?: 0) > 1) {
             binding.postIndicator.setViewPager(binding.postPager)
             binding.postIndicator.visibility = View.VISIBLE
         } else {
@@ -206,7 +218,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         apiHolder: PixelfedAPIHolder,
         db: AppDatabase,
         lifecycleScope: LifecycleCoroutineScope,
-        isActivity: Boolean
+        isActivity: Boolean,
     ){
         //Set the special HTML text
         setDescription(apiHolder, lifecycleScope)
@@ -459,36 +471,28 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             }
         }
 
-        //Activate double tap liking
-        var clicked = false
+        //Activate tap interactions (double and single)
         binding.postPagerHost.doubleTapCallback = {
-            if(!it) clicked = false
-            else lifecycleScope.launchWhenCreated {
+            lifecycleScope.launchWhenCreated {
                 //Check that the post isn't hidden
-                if(binding.sensitiveWarning.visibility == View.GONE) {
-                    //Check for double click
-                    if(clicked) {
-                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
-                        if (binding.liker.isChecked) {
-                            // Button is active, unlike
-                            binding.liker.isChecked = false
-                            unLikePostCall(api)
-                        } else {
-                            // Button is inactive, like
-                            binding.liker.playAnimation()
-                            binding.liker.isChecked = true
-                            binding.likeAnimation.animateView()
-                            likePostCall(api)
-                        }
+                if (binding.sensitiveWarning.visibility == View.GONE) {
+                    val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
+                    if (binding.liker.isChecked) {
+                        // Button is active, unlike
+                        binding.liker.isChecked = false
+                        unLikePostCall(api)
                     } else {
-                        clicked = true
-
-                        //Reset clicked to false after 500ms
-                        binding.postPager.handler.postDelayed(fun() { clicked = false }, 500)
+                        // Button is inactive, like
+                        binding.liker.playAnimation()
+                        binding.liker.isChecked = true
+                        binding.likeAnimation.animateView()
+                        likePostCall(api)
                     }
                 }
             }
         }
+        status?.media_attachments?.let { binding.postPagerHost.images = ArrayList(it) }
+
     }
     private fun ImageView.animateView() {
         visibility = View.VISIBLE
@@ -544,8 +548,8 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     //endregion
 
     private fun showComments(
-            lifecycleScope: LifecycleCoroutineScope,
-            isActivity: Boolean
+        lifecycleScope: LifecycleCoroutineScope,
+        isActivity: Boolean,
     ) {
         //Show number of comments on the post
         if (status?.replies_count == 0) {
@@ -584,14 +588,20 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     }
 }
 
-private class AlbumViewPagerAdapter(private val media_attachments: List<Attachment>, private var sensitive: Boolean?) :
+class AlbumViewPagerAdapter(
+    private val media_attachments: List<Attachment>, private var sensitive: Boolean?,
+    private val opened: Boolean, //TODO if opened don't open again, and use PhotoView instead of shite
+) :
     RecyclerView.Adapter<AlbumViewPagerAdapter.ViewHolder>() {
 
+    private var isActionBarHidden: Boolean = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemBinding = AlbumImageViewBinding.inflate(
+        return if(!opened) ViewHolderClosed(AlbumImageViewBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
-        )
-        return ViewHolder(itemBinding)
+        )) else ViewHolderOpen(OpenedAlbumBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        ))
     }
 
     override fun getItemCount() = media_attachments.size
@@ -608,19 +618,52 @@ private class AlbumViewPagerAdapter(private val media_attachments: List<Attachme
             }
             if (sensitive == false) {
                 val imageUrl = if(video) preview_url else url
-                Glide.with(holder.binding.root)
+                if(opened){
+                    Glide.with(holder.binding.root)
+                        .download(GlideUrl(imageUrl))
+                        .into(object : CustomViewTarget<SubsamplingScaleImageView, File>((holder.image as SubsamplingScaleImageView)) {
+                            override fun onResourceReady(resource: File, t: Transition<in File>?) =
+                                view.setImage(ImageSource.uri(Uri.fromFile(resource)))
+                            override fun onLoadFailed(errorDrawable: Drawable?) {}
+                            override fun onResourceCleared(placeholder: Drawable?) {}
+                        })
+                    (holder.image as SubsamplingScaleImageView).apply {
+                        setMinimumDpi(80)
+                        setDoubleTapZoomDpi(240)
+                        resetScaleAndCenter()
+                    }
+                    holder.image.setOnClickListener {
+                        val windowInsetsController = WindowCompat.getInsetsController((it.context as Activity).window, it)
+                        // Configure the behavior of the hidden system bars
+                        if (isActionBarHidden) {
+                            windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                            // Hide both the status bar and the navigation bar
+                            (it.context as AppCompatActivity).supportActionBar?.show()
+                            windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+                            isActionBarHidden = false
+                        } else {
+                            // Configure the behavior of the hidden system bars
+                            windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                            // Hide both the status bar and the navigation bar
+                            (it.context as AppCompatActivity).supportActionBar?.hide()
+                            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                            isActionBarHidden = true
+                        }
+                    }
+                }
+                else Glide.with(holder.binding.root)
                         .asDrawable().fitCenter()
                         .placeholder(blurhashBitMap)
-                        .load(imageUrl).into(holder.image)
-            } else {
+                        .load(imageUrl).into(holder.image as ImageView)
+            } else if(!opened){
                 Glide.with(holder.binding.root)
                         .asDrawable().fitCenter()
-                        .load(blurhashBitMap).into(holder.image)
+                        .load(blurhashBitMap).into(holder.image as ImageView)
             }
 
             holder.videoPlayButton.visibility = if(video) View.VISIBLE else View.GONE
 
-            if(video){
+            if(video && (opened || media_attachments.size == 1)){
                 holder.videoPlayButton.setOnClickListener {
                     openActivity(holder.binding.root.context, url, description)
                 }
@@ -646,9 +689,17 @@ private class AlbumViewPagerAdapter(private val media_attachments: List<Attachme
         sensitive = false
         notifyDataSetChanged()
     }
+    abstract class ViewHolder(open val binding: ViewBinding) : RecyclerView.ViewHolder(binding.root){
+        abstract val image: View
+        abstract val videoPlayButton: ImageView
+    }
 
-    class ViewHolder(val binding: AlbumImageViewBinding) : RecyclerView.ViewHolder(binding.root){
-        val image: ImageView = binding.imageImageView
-        val videoPlayButton: ImageView = binding.videoPlayButton
+    class ViewHolderOpen(override val binding: OpenedAlbumBinding) : ViewHolder(binding) {
+        override val image: SubsamplingScaleImageView = binding.imageImageView
+        override val videoPlayButton: ImageView = binding.videoPlayButton
+    }
+    class ViewHolderClosed(override val binding: AlbumImageViewBinding) : ViewHolder(binding) {
+        override val image: ImageView = binding.imageImageView
+        override val videoPlayButton: ImageView = binding.videoPlayButton
     }
 }

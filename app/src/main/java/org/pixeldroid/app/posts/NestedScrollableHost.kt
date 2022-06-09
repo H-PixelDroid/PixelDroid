@@ -1,29 +1,17 @@
-/*
- * Copyright 2019 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.pixeldroid.app.posts
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.GestureDetectorCompat
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL
+import org.pixeldroid.app.utils.api.objects.Attachment
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -35,13 +23,11 @@ import kotlin.math.sign
  * This solution has limitations when using multiple levels of nested scrollable elements
  * (e.g. a horizontal RecyclerView in a vertical RecyclerView in a horizontal ViewPager2).
  */
-class NestedScrollableHost : ConstraintLayout {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+class NestedScrollableHost(context: Context, attrs: AttributeSet? = null) :
+    ConstraintLayout(context, attrs) {
 
+    private var mDetector: GestureDetectorCompat
     private var touchSlop = 0
-    private var initialX = 0f
-    private var initialY = 0f
     private val parentViewPager: ViewPager2?
         get() {
             var v: View? = parent as? View
@@ -51,12 +37,15 @@ class NestedScrollableHost : ConstraintLayout {
             return v as? ViewPager2
         }
 
-    var doubleTapCallback: ((Boolean) -> Unit)? = null
+
+    var images: ArrayList<Attachment> = ArrayList();
+    var doubleTapCallback: (() -> Unit)? = null
 
     private val child: View? get() = if (childCount > 0) getChildAt(0) else null
 
     init {
         touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+        mDetector = GestureDetectorCompat(context, MyGestureListener())
     }
 
     private fun canChildScroll(orientation: Int, delta: Float): Boolean {
@@ -69,35 +58,58 @@ class NestedScrollableHost : ConstraintLayout {
     }
 
     override fun onInterceptTouchEvent(e: MotionEvent): Boolean {
-        handleInterceptTouchEvent(e)
+        mDetector.onTouchEvent(e)
         return super.onInterceptTouchEvent(e)
     }
 
-    private fun handleInterceptTouchEvent(e: MotionEvent) {
-        val orientation = parentViewPager?.orientation ?: return
+    private inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
 
-        if (e.action == MotionEvent.ACTION_DOWN) {
-            initialX = e.x
-            initialY = e.y
-            doubleTapCallback?.invoke(true)
-        }
-        // Early return if child can't scroll in same direction as parent
-        if (!canChildScroll(orientation, -1f) && !canChildScroll(orientation, 1f)) {
-            return
-        }
+        override fun onDown(e: MotionEvent): Boolean {
+            val orientation = parentViewPager?.orientation ?: return true
 
-        if (e.action == MotionEvent.ACTION_DOWN) {
+            if (!canChildScroll(orientation, -1f) && !canChildScroll(orientation, 1f)) {
+                return true
+            }
+
             parent.requestDisallowInterceptTouchEvent(true)
-        } else if (e.action == MotionEvent.ACTION_MOVE) {
-            val dx = e.x - initialX
-            val dy = e.y - initialY
+
+            return true
+        }
+
+        override fun onDoubleTap(e: MotionEvent?): Boolean {
+            doubleTapCallback?.invoke()
+            return super.onDoubleTap(e)
+        }
+
+        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+            // Disable opening AlbumActivity if the only image is a video (let the video open directly)
+            if(images.size == 1 && images.first().type == Attachment.AttachmentType.video){
+                return super.onSingleTapConfirmed(e)
+            }
+            val intent = Intent(context, AlbumActivity::class.java)
+
+            intent.putExtra("images", images)
+            intent.putExtra("index", (child as ViewPager2).currentItem)
+
+            context.startActivity(intent)
+
+            return super.onSingleTapConfirmed(e)
+        }
+        override fun onScroll(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            val orientation = parentViewPager?.orientation ?: return true
+
+            val dx = e2.x - e1.x
+            val dy = e2.y - e1.y
             val isVpHorizontal = orientation == ORIENTATION_HORIZONTAL
 
             // assuming ViewPager2 touch-slop is 2x touch-slop of child
-            val scaledDx = dx.absoluteValue * if (isVpHorizontal) .5f/ touchSlopModifier else 1f
-            val scaledDy = dy.absoluteValue * if (isVpHorizontal) 1f else .5f/touchSlopModifier
-
-            if(dx.absoluteValue * .5f > touchSlop || scaledDy > touchSlop) doubleTapCallback?.invoke(false)
+            val scaledDx = dx.absoluteValue * if (isVpHorizontal) .5f / touchSlopModifier else 1f
+            val scaledDy = dy.absoluteValue * if (isVpHorizontal) 1f else .5f / touchSlopModifier
 
             if (scaledDx > touchSlop || scaledDy > touchSlop) {
 
@@ -115,6 +127,7 @@ class NestedScrollableHost : ConstraintLayout {
                     }
                 }
             }
+            return super.onScroll(e1, e2, distanceX, distanceY)
         }
     }
 

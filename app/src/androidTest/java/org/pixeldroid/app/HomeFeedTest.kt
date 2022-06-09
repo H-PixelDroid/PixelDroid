@@ -6,7 +6,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.openLinkWithText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
@@ -24,9 +23,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
-import org.junit.rules.Timeout
-import org.junit.runner.Description
 import org.junit.runner.RunWith
 import org.junit.runners.model.Statement
 
@@ -68,22 +64,22 @@ class HomeFeedTest {
     @RepeatTest
     fun clickingTabOnAlbumShowsNextPhoto() {
         //Wait for the feed to load
-        waitForView(R.id.postPager)
+        waitForView(R.id.albumPager)
 
         activityScenario.onActivity {
             a -> run {
                 //Pick the second photo
-                a.findViewById<ViewPager2>(R.id.postPager).currentItem = 2
+                a.findViewById<ViewPager2>(R.id.albumPager).currentItem = 2
             }
         }
-        onView(first(withId(R.id.postPager))).check(matches(isDisplayed()))
+        onView(first(withId(R.id.albumPager))).check(matches(isDisplayed()))
     }
 
     @Test
     @RepeatTest
     fun tabReClickScrollUp() {
         //Wait for the feed to load
-        waitForView(R.id.postPager)
+        waitForView(R.id.albumPager)
 
         onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(4))
 
@@ -97,7 +93,7 @@ class HomeFeedTest {
     @RepeatTest
     fun hashtag() {
         //Wait for the feed to load
-        waitForView(R.id.postPager)
+        waitForView(R.id.albumPager)
 
         onView(allOf(withClassName(endsWith("RecyclerView")), not(withId(R.id.material_drawer_recycler_view))))
             .perform(
