@@ -14,9 +14,12 @@ class AlbumActivity : BaseActivity() {
 
         setContentView(binding.root)
         val mediaAttachments = intent.getSerializableExtra("images") as ArrayList<Attachment>
+        val index = intent.getIntExtra("index", 0)
         binding.albumPager.adapter = AlbumViewPagerAdapter(mediaAttachments,
             sensitive = false,
-            opened = true)
+            opened = true
+        )
+        binding.albumPager.currentItem = index
 
         if(mediaAttachments.size == 1){
             binding.albumPager.isUserInputEnabled = false
