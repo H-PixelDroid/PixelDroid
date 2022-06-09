@@ -23,9 +23,13 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".posts.MediaViewerActivity"
+            android:name=".posts.AlbumActivity"
             android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent"/>
+        <activity
+            android:name=".posts.MediaViewerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".postCreation.camera.CameraActivity" />
         <activity

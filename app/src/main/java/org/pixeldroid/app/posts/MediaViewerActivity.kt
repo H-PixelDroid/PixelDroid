@@ -7,6 +7,7 @@ import android.media.AudioManager.STREAM_MUSIC
 import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat.getInsetsController
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media.AudioAttributesCompat
@@ -50,19 +51,19 @@ class MediaViewerActivity : BaseActivity() {
         mediaPlayer.setMediaItem(mediaItem)
 
         binding.videoView.mediaControlView?.setOnFullScreenListener{ view, fullscreen ->
-            val windowInsetsController = ViewCompat.getWindowInsetsController(window.decorView)
+            val windowInsetsController = getInsetsController(window, window.decorView)
             if (!fullscreen) {
                 // Configure the behavior of the hidden system bars
-                windowInsetsController?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 // Hide both the status bar and the navigation bar
-                windowInsetsController?.show(WindowInsetsCompat.Type.systemBars())
+                windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
                 supportActionBar?.show()
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             } else {
                 // Configure the behavior of the hidden system bars
-                windowInsetsController?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 // Hide both the status bar and the navigation bar
-                windowInsetsController?.hide(WindowInsetsCompat.Type.systemBars())
+                windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
                 requestedOrientation =
                     if (mediaPlayer.videoSize.height < mediaPlayer.videoSize.width) {
