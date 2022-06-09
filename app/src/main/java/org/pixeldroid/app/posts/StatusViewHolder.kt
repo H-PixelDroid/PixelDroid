@@ -635,7 +635,6 @@ class AlbumViewPagerAdapter(
                     holder.image.setOnClickListener {
                         val windowInsetsController = WindowCompat.getInsetsController((it.context as Activity).window, it)
                         // Configure the behavior of the hidden system bars
-
                         if (isActionBarHidden) {
                             windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                             // Hide both the status bar and the navigation bar
