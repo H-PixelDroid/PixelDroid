@@ -21,6 +21,19 @@
         <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
     </style>
 
+    <style name="AppTheme.ActionBar.Transparent" parent="AppTheme">
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorPrimaryVariant">@android:color/transparent</item>
+        <item name="colorAccent">@android:color/transparent</item>
+        <item name="colorSecondary">@android:color/transparent</item>
+        <item name="statusBarForeground">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="statusBarBackground">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

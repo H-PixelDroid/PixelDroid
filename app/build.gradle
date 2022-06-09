@@ -142,6 +142,8 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:$cameraX_version"
 
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+
     def room_version = "2.4.2"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"

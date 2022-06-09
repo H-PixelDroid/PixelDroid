@@ -1,32 +1,17 @@
-/*
- * Copyright 2019 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.pixeldroid.app.posts
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GestureDetectorCompat
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL
+import org.pixeldroid.app.utils.api.objects.Attachment
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -53,6 +38,7 @@ class NestedScrollableHost(context: Context, attrs: AttributeSet? = null) :
         }
 
 
+    var images: ArrayList<Attachment> = ArrayList();
     var doubleTapCallback: (() -> Unit)? = null
 
     private val child: View? get() = if (childCount > 0) getChildAt(0) else null
@@ -96,8 +82,16 @@ class NestedScrollableHost(context: Context, attrs: AttributeSet? = null) :
         }
 
         override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-            //TODO open image full screen
-            Toast.makeText(this@NestedScrollableHost.context, "yay you did it", Toast.LENGTH_SHORT).show()
+            // Disable opening AlbumActivity if the only image is a video (let the video open directly)
+            if(images.size == 1 && images.first().type == Attachment.AttachmentType.video){
+                return super.onSingleTapConfirmed(e)
+            }
+            val intent = Intent(context, AlbumActivity::class.java)
+
+            intent.putExtra("images", images)
+
+            context.startActivity(intent)
+
             return super.onSingleTapConfirmed(e)
         }
         override fun onScroll(
