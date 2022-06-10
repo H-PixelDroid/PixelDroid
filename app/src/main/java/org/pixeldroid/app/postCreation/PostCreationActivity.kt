@@ -37,6 +37,9 @@ import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import okhttp3.MultipartBody
+import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
+import org.pixeldroid.app.posts.PostActivity
+import org.pixeldroid.app.utils.api.objects.Status
 import retrofit2.HttpException
 import java.io.File
 import java.io.FileNotFoundException
@@ -447,16 +450,14 @@ class PostCreationActivity : BaseActivity() {
     }
 
     private fun edit(position: Int) {
-        if(photoData[position].video){
-            AlertDialog.Builder(this).apply {
-                setMessage(R.string.video_edit_not_yet_supported)
-                setNegativeButton(android.R.string.ok) { _, _ -> }
-            }.show()
-        } else {
-            val intent = Intent(this, PhotoEditActivity::class.java)
-                .putExtra(PhotoEditActivity.PICTURE_URI, photoData[position].imageUri)
-                .putExtra(PhotoEditActivity.PICTURE_POSITION, position)
-            editResultContract.launch(intent)
-        }
+        val intent = Intent(
+            this,
+            if(photoData[position].video) VideoEditActivity::class.java else PhotoEditActivity::class.java
+        )
+            .putExtra(PhotoEditActivity.PICTURE_URI, photoData[position].imageUri)
+            .putExtra(PhotoEditActivity.PICTURE_POSITION, position)
+
+        editResultContract.launch(intent)
+
     }
 }

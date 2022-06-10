@@ -262,4 +262,5 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="no_storage_permission">Storage permission not granted, grant the permission in settings if you want to let PixelDroid show the thumbnail</string>
     <string name="play_video">Play video</string>
     <string name="video_edit_not_yet_supported">Video editing is not yet supported</string>
+    <string name="thumbnail_reel_video_edit">Reel showing thumbnails of the video you are editing</string>
 </resources>

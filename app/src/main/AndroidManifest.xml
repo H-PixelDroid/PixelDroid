@@ -27,6 +27,11 @@
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent"/>
         <activity
+            android:name=".postCreation.photoEdit.VideoEditActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent"/>
+
+        <activity
             android:name=".posts.MediaViewerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
