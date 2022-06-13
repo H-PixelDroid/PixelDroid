@@ -28,7 +28,7 @@ android {
         applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 32
-        versionCode 10
+        versionCode 11
         versionName "1.0.beta" + versionCode
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
