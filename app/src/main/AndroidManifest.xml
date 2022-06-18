@@ -28,8 +28,7 @@
             android:theme="@style/AppTheme.ActionBar.Transparent"/>
         <activity
             android:name=".postCreation.photoEdit.VideoEditActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme.ActionBar.Transparent"/>
+            android:exported="false"/>
 
         <activity
             android:name=".posts.MediaViewerActivity"

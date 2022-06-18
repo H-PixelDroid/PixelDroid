@@ -148,7 +148,7 @@ class PhotoEditActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.edit_photo_menu, menu)
+        menuInflater.inflate(R.menu.edit_menu, menu)
         return true
     }
 
@@ -191,8 +191,8 @@ class PhotoEditActivity : BaseActivity() {
             }
         }
 
-    return super.onOptionsItemSelected(item)
-}
+        return super.onOptionsItemSelected(item)
+    }
 
     fun onFilterSelected(filter: Filter) {
         filteredImage = compressedOriginalImage!!.copy(BITMAP_CONFIG, true)

@@ -19,6 +19,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.arthenica.ffmpegkit.FFmpegKitConfig
 import okhttp3.HttpUrl
 import org.pixeldroid.app.R
 import kotlin.properties.ReadWriteProperty
@@ -65,6 +66,12 @@ fun normalizeDomain(domain: String): String {
             .trim(Char::isWhitespace)
 }
 
+fun Context.ffmpegSafeUri(inputUri: Uri?): String =
+    if (inputUri?.scheme == "content")
+        FFmpegKitConfig.getSafParameterForRead(this, inputUri)
+    else inputUri.toString()
+
+
 fun bitmapFromUri(contentResolver: ContentResolver, uri: Uri?): Bitmap =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         ImageDecoder
@@ -107,7 +114,7 @@ fun Bitmap.flip(horizontal: Boolean, vertical: Boolean): Bitmap {
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }
 
-fun BaseActivity.openUrl(url: String): Boolean{
+fun BaseActivity.openUrl(url: String): Boolean {
 
     val intent = CustomTabsIntent.Builder().build()
 

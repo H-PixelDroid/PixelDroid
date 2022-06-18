@@ -5,5 +5,6 @@ import android.net.Uri
 data class CarouselItem constructor(
         val imageUrl: Uri,
         val caption: String? = null,
-        val video: Boolean
+        val video: Boolean,
+        var encodeProgress: Int?
 )

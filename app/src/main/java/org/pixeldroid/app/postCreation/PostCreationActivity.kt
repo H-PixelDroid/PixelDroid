@@ -5,9 +5,7 @@ import android.app.AlertDialog
 import android.content.*
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
@@ -18,13 +16,19 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.core.os.HandlerCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
+import com.arthenica.ffmpegkit.*
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import okhttp3.MultipartBody
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostCreationBinding
@@ -32,23 +36,26 @@ import org.pixeldroid.app.postCreation.camera.CameraActivity
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.postCreation.carousel.ImageCarousel
 import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
+import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
-import okhttp3.MultipartBody
-import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
-import org.pixeldroid.app.posts.PostActivity
-import org.pixeldroid.app.utils.api.objects.Status
+import org.pixeldroid.app.utils.ffmpegSafeUri
 import retrofit2.HttpException
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.OutputStream
 import java.text.SimpleDateFormat
+
+import kotlin.math.ceil
+import com.arthenica.ffmpegkit.FFprobeKit
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.ceil
+
+import kotlin.math.roundToInt
+
 
 private const val TAG = "Post Creation Activity"
 
@@ -59,6 +66,7 @@ data class PhotoData(
     var progress: Int? = null,
     var imageDescription: String? = null,
     var video: Boolean,
+    var videoEncodeProgress: Int? = null,
 )
 
 class PostCreationActivity : BaseActivity() {
@@ -70,10 +78,21 @@ class PostCreationActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPostCreationBinding
 
+    private val resultHandler: Handler = HandlerCompat.createAsync(Looper.getMainLooper())
+
+    // Map photoData indexes to FFmpeg Session IDs
+    private val sessionMap: MutableMap<Int, Long> = mutableMapOf()
+    // Keep track of temporary files to delete them (avoids filling cache super fast with videos)
+    private val tempFiles: ArrayList<File> = ArrayList()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+
 
         user = db.userDao().getActiveUser()
 
@@ -89,7 +108,7 @@ class PostCreationActivity : BaseActivity() {
         intent.clipData?.let { addPossibleImages(it) }
 
         val carousel: ImageCarousel = binding.carousel
-        carousel.addData(photoData.map { CarouselItem(it.imageUri, video = it.video) })
+        carousel.addData(photoData.map { CarouselItem(it.imageUri, video = it.video, encodeProgress = null) })
         carousel.layoutCarouselCallback = {
             if(it){
                 // Became a carousel
@@ -109,7 +128,7 @@ class PostCreationActivity : BaseActivity() {
 
         // get the description and send the post
         binding.postCreationSendButton.setOnClickListener {
-            if (validateDescription() && photoData.isNotEmpty()) upload()
+            if (validatePost() && photoData.isNotEmpty()) upload()
         }
 
         // Button to retry image upload when it fails
@@ -123,7 +142,7 @@ class PostCreationActivity : BaseActivity() {
         }
 
         binding.editPhotoButton.setOnClickListener {
-            carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
+            carousel.currentPosition.takeIf { it != RecyclerView.NO_POSITION }?.let { currentPosition ->
                 edit(currentPosition)
             }
         }
@@ -133,27 +152,36 @@ class PostCreationActivity : BaseActivity() {
         }
 
         binding.savePhotoButton.setOnClickListener {
-            carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
+            carousel.currentPosition.takeIf { it != RecyclerView.NO_POSITION }?.let { currentPosition ->
                 savePicture(it, currentPosition)
             }
         }
 
 
         binding.removePhotoButton.setOnClickListener {
-            carousel.currentPosition.takeIf { it != -1 }?.let { currentPosition ->
+            carousel.currentPosition.takeIf { it != RecyclerView.NO_POSITION }?.let { currentPosition ->
                 photoData.removeAt(currentPosition)
-                carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video) })
+                sessionMap[currentPosition]?.let { FFmpegKit.cancel(it) }
+                carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video, it.videoEncodeProgress) })
                 binding.addPhotoButton.isEnabled = true
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        FFmpegKit.cancel()
+        tempFiles.forEach {
+            it.delete()
+        }
+    }
+
     /**
      * Will add as many images as possible to [photoData], from the [clipData], and if
-     * ([photoData].size + [clipData].itemCount) > [albumLimit] then it will only add as many images
+     * ([photoData].size + [clipData].itemCount) > [InstanceDatabaseEntity.albumLimit] then it will only add as many images
      * as are legal (if any) and a dialog will be shown to the user alerting them of this fact.
      */
-    private fun addPossibleImages(clipData: ClipData){
+    private fun addPossibleImages(clipData: ClipData) {
         var count = clipData.itemCount
         if(count + photoData.size > instance.albumLimit){
             AlertDialog.Builder(this).apply {
@@ -168,7 +196,7 @@ class PostCreationActivity : BaseActivity() {
         }
         for (i in 0 until count) {
             clipData.getItemAt(i).uri.let {
-                val sizeAndVideoPair: Pair<Long, Boolean> = it.getSizeAndVideoValidate()
+                val sizeAndVideoPair: Pair<Long, Boolean> = it.getSizeAndVideoValidate(photoData.size + 1)
                 photoData.add(PhotoData(imageUri = it, size = sizeAndVideoPair.first, video = sizeAndVideoPair.second))
             }
         }
@@ -178,7 +206,7 @@ class PostCreationActivity : BaseActivity() {
      * Returns the size of the file of the Uri, and whether it is a video,
      * and opens a dialog in case it is too big or in case the file is unsupported.
      */
-    private fun Uri.getSizeAndVideoValidate(): Pair<Long, Boolean> {
+    private fun Uri.getSizeAndVideoValidate(editPosition: Int): Pair<Long, Boolean> {
         val size: Long =
                 if (toString().startsWith("content")) {
                     contentResolver.query(this, null, null, null, null)
@@ -209,7 +237,7 @@ class PostCreationActivity : BaseActivity() {
         if (sizeInkBytes > instance.maxPhotoSize || sizeInkBytes > instance.maxVideoSize) {
             val maxSize = if (isVideo) instance.maxVideoSize else instance.maxPhotoSize
             AlertDialog.Builder(this@PostCreationActivity).apply {
-                setMessage(getString(R.string.size_exceeds_instance_limit, photoData.size + 1, sizeInkBytes, maxSize))
+                setMessage(getString(R.string.size_exceeds_instance_limit, editPosition, sizeInkBytes, maxSize))
                 setNegativeButton(android.R.string.ok) { _, _ -> }
             }.show()
         }
@@ -221,7 +249,7 @@ class PostCreationActivity : BaseActivity() {
             result.data?.clipData?.let {
                 addPossibleImages(it)
             }
-            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video) })
+            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video, it.videoEncodeProgress) })
         } else if (result.resultCode != Activity.RESULT_CANCELED) {
             Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
         }
@@ -294,7 +322,7 @@ class PostCreationActivity : BaseActivity() {
     }
 
 
-    private fun validateDescription(): Boolean {
+    private fun validatePost(): Boolean {
         binding.postTextInputLayout.run {
             val content = editText?.length() ?: 0
             if (content > counterMaxLength) {
@@ -302,6 +330,13 @@ class PostCreationActivity : BaseActivity() {
                 error = resources.getQuantityString(R.plurals.description_max_characters, counterMaxLength, counterMaxLength)
                 return false
             }
+        }
+        if(!photoData.all { it.videoEncodeProgress == null }){
+            AlertDialog.Builder(this).apply {
+                setMessage(R.string.still_encoding)
+                setNegativeButton(android.R.string.ok) { _, _ -> }
+            }.show()
+            return false
         }
         return true
     }
@@ -435,18 +470,130 @@ class PostCreationActivity : BaseActivity() {
         if (result?.resultCode == Activity.RESULT_OK && result.data != null) {
             val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
             photoData.getOrNull(position)?.apply {
-                imageUri = result.data!!.getStringExtra(PhotoEditActivity.PICTURE_URI)!!.toUri()
-                val (imageSize, imageVideo) = imageUri.getSizeAndVideoValidate()
-                size = imageSize
-                video = imageVideo
+                if (video) {
+                    val muted: Boolean = result.data!!.getBooleanExtra(VideoEditActivity.MUTED, false)
+                    val videoStart: Float? = result.data!!.getFloatExtra(VideoEditActivity.VIDEO_START, -1f).let {
+                        if(it == -1f) null else it
+                    }
+                    val modified: Boolean = result.data!!.getBooleanExtra(VideoEditActivity.MODIFIED, false)
+                    val videoEnd: Float? = result.data!!.getFloatExtra(VideoEditActivity.VIDEO_END, -1f).let {
+                        if(it == -1f) null else it
+                    }
+                    if(modified){
+                        videoEncodeProgress = 0
+                        sessionMap[position]?.let { FFmpegKit.cancel(it) }
+                        startEncoding(position, muted, videoStart, videoEnd)
+                    }
+                } else {
+                    imageUri = result.data!!.getStringExtra(PhotoEditActivity.PICTURE_URI)!!.toUri()
+                    val (imageSize, imageVideo) = imageUri.getSizeAndVideoValidate(position)
+                    size = imageSize
+                    video = imageVideo
+                }
                 progress = null
                 uploadId = null
             } ?: Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
 
-            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video) })
+            binding.carousel.addData(photoData.map { CarouselItem(it.imageUri, it.imageDescription, it.video, it.videoEncodeProgress) })
         } else if(result?.resultCode != Activity.RESULT_CANCELED){
             Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * @param muted should audio tracks be removed in the output
+     * @param videoStart when we want to start the video, in seconds, or null if we
+     * don't want to remove the start
+     * @param videoEnd when we want to end the video, in seconds, or null if we
+     * don't want to remove the end
+     */
+    private fun startEncoding(position: Int, muted: Boolean, videoStart: Float?, videoEnd: Float?) {
+        val originalUri = photoData[position].imageUri
+
+        // Having a meaningful suffix is necessary so that ffmpeg knows what to put in output
+        val suffix = if(originalUri.scheme == "content") {
+            contentResolver.getType(photoData[position].imageUri)?.takeLastWhile { it != '/' }
+        } else {
+            originalUri.toString().takeLastWhile { it != '/' }
+        }
+        val file = File.createTempFile("temp_video", ".$suffix")
+        //val file = File.createTempFile("temp_video", ".webm")
+        tempFiles.add(file)
+        val fileUri = file.toUri()
+        val outputVideoPath = ffmpegSafeUri(fileUri)
+
+        val inputUri = photoData[position].imageUri
+
+        val inputSafePath = ffmpegSafeUri(inputUri)
+
+        val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(ffmpegSafeUri(inputUri)).mediaInformation
+        val totalVideoDuration = mediaInformation?.duration?.toFloatOrNull()
+
+        val mutedString = if(muted) "-an" else ""
+        val startString = if(videoStart != null) "-ss $videoStart" else ""
+
+        val endString = if(videoEnd != null) "-to ${videoEnd - (videoStart ?: 0f)}" else ""
+
+        val session: FFmpegSession = FFmpegKit.executeAsync("$startString -i $inputSafePath $endString -c copy $mutedString -y $outputVideoPath",
+        //val session: FFmpegSession = FFmpegKit.executeAsync("$startString -i $inputSafePath $endString -c:v libvpx-vp9 -c:a copy -an -y $outputVideoPath",
+            { session ->
+                val returnCode = session.returnCode
+                if (ReturnCode.isSuccess(returnCode)) {
+                    fun successResult() {
+                        // Hide progress indicator in carousel
+                        binding.carousel.updateProgress(null, position, false)
+                        val (imageSize, imageVideo) = outputVideoPath.toUri().let {
+                            photoData[position].imageUri = it
+                            it.getSizeAndVideoValidate(position)
+                        }
+                        photoData[position].videoEncodeProgress = null
+                        photoData[position].size = imageSize
+                        binding.carousel.addData(photoData.map {
+                            CarouselItem(it.imageUri,
+                                it.imageDescription,
+                                it.video,
+                                it.videoEncodeProgress)
+                        })
+                    }
+
+                    val post = resultHandler.post {
+                        successResult()
+                    }
+                    if(!post) {
+                        Log.e(TAG, "Failed to post changes, trying to recover in 100ms")
+                        resultHandler.postDelayed({successResult()}, 100)
+                    }
+                    Log.d(TAG, "Encode completed successfully in ${session.duration} milliseconds")
+                } else {
+                    resultHandler.post {
+                        binding.carousel.updateProgress(null, position, error = true)
+                        photoData[position].videoEncodeProgress = null
+                    }
+                    Log.e(TAG, "Encode failed with state ${session.state} and rc $returnCode.${session.failStackTrace}")
+                }
+            },
+            { log -> Log.d("PostCreationActivityEncoding", log.message) }
+        ) { statistics: Statistics? ->
+
+            val timeInMilliseconds: Int? = statistics?.time
+            timeInMilliseconds?.let {
+                if (timeInMilliseconds > 0) {
+                    val completePercentage = totalVideoDuration?.let {
+                        val newTotalDuration = it - (videoStart ?: 0f) - (it - (videoEnd ?: it))
+                        timeInMilliseconds / (10*newTotalDuration)
+                    }
+                    resultHandler.post {
+                        completePercentage?.let {
+                            val rounded = it.roundToInt()
+                            photoData[position].videoEncodeProgress = rounded
+                            binding.carousel.updateProgress(rounded, position, false)
+                        }
+                    }
+                    Log.d(TAG, "Encoding video: %$completePercentage.")
+                }
+            }
+        }
+        sessionMap[position] = session.sessionId
     }
 
     private fun edit(position: Int) {

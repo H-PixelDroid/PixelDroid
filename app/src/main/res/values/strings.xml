@@ -263,4 +263,11 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="play_video">Play video</string>
     <string name="video_edit_not_yet_supported">Video editing is not yet supported</string>
     <string name="thumbnail_reel_video_edit">Reel showing thumbnails of the video you are editing</string>
+    <string name="reset_edit_menu">RESET</string>
+    <string name="save_edit_menu">SAVE</string>
+    <string name="encode_error">Error encoding</string>
+    <string name="encode_success">Encode success!</string>
+    <string name="encode_progress">Encode %1$d%%</string>
+    <string name="select_video_range">Select what to keep of the video</string>
+    <string name="still_encoding">One or more videos are still encoding. Wait for them to finish before uploading</string>
 </resources>
