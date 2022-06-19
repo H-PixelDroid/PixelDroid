@@ -59,15 +59,7 @@ class ImageCarousel(
 
             initIndicator()
         }
-
-
-    private var btnPrevious: View? = null
-    private var btnNext: View? = null
-
-    private var btnGrid: View? = null
-    private var btnCarousel: View? = null
-
-
+    
     private var isBuiltInIndicator = false
     private var data: MutableList<CarouselItem>? = null
 
@@ -231,27 +223,24 @@ class ImageCarousel(
         set(value) {
             field = value
 
-            btnGrid = binding.switchToGridButton
-            btnCarousel = binding.switchToCarouselButton
-
-            btnGrid?.setOnClickListener {
+            binding.switchToGridButton.setOnClickListener {
                 layoutCarousel = false
             }
-            btnCarousel?.setOnClickListener {
+            binding.switchToCarouselButton.setOnClickListener {
                 layoutCarousel = true
             }
 
             if(value){
                 if(layoutCarousel){
-                    btnGrid?.visibility = VISIBLE
-                    btnCarousel?.visibility = GONE
+                    binding.switchToGridButton.visibility = VISIBLE
+                    binding.switchToCarouselButton.visibility = GONE
                 } else {
-                    btnGrid?.visibility = GONE
-                    btnCarousel?.visibility = VISIBLE
+                    binding.switchToGridButton.visibility = GONE
+                    binding.switchToCarouselButton.visibility = VISIBLE
                 }
             } else {
-                btnGrid?.visibility = GONE
-                btnCarousel?.visibility = GONE
+                binding.switchToGridButton.visibility = GONE
+                binding.switchToCarouselButton.visibility = GONE
             }
         }
 
@@ -267,15 +256,15 @@ class ImageCarousel(
             if(value){
                 recyclerView.layoutManager = CarouselLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-                btnNext?.visibility = VISIBLE
-                btnPrevious?.visibility = VISIBLE
+                binding.btnNext.visibility = VISIBLE
+                binding.btnPrevious.visibility = VISIBLE
 
                 binding.editMediaDescriptionLayout.visibility = if(editingMediaDescription) VISIBLE else INVISIBLE
                 tvCaption.visibility = if(editingMediaDescription) INVISIBLE else VISIBLE
             } else {
                 recyclerView.layoutManager = GridLayoutManager(context, 3)
-                btnNext?.visibility = GONE
-                btnPrevious?.visibility = GONE
+                binding.btnNext.visibility = GONE
+                binding.btnPrevious.visibility = GONE
 
                 binding.editMediaDescriptionLayout.visibility = INVISIBLE
                 tvCaption.visibility = INVISIBLE

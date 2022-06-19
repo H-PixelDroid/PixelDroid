@@ -15,8 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.net.toUri
 import androidx.core.os.HandlerCompat
 import androidx.media.AudioAttributesCompat
@@ -33,10 +31,6 @@ import org.pixeldroid.app.postCreation.carousel.dpToPx
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.ffmpegSafeUri
 import java.io.File
-import java.text.NumberFormat
-import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class VideoEditActivity : BaseActivity() {
