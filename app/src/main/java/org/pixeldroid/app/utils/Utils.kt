@@ -45,6 +45,13 @@ fun validDomain(domain: String?): Boolean {
     return true
 }
 
+fun Uri.fileExtension(contentResolver: ContentResolver): String? {
+    return if (scheme == "content") {
+        contentResolver.getType(this)?.takeLastWhile { it != '/' }
+    } else {
+        toString().takeLastWhile { it != '/' }
+    }
+}
 
 fun Context.displayDimensionsInPx(): Pair<Int, Int> {
     val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager

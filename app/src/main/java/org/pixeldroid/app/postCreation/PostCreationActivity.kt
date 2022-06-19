@@ -19,7 +19,6 @@ import androidx.activity.viewModels
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.core.os.HandlerCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -27,29 +26,20 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.arthenica.ffmpegkit.*
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostCreationBinding
 import org.pixeldroid.app.postCreation.camera.CameraActivity
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
-import org.pixeldroid.app.postCreation.carousel.ImageCarousel
 import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
 import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
 import org.pixeldroid.app.utils.BaseActivity
-import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.ffmpegSafeUri
-import retrofit2.HttpException
+import org.pixeldroid.app.utils.fileExtension
 import java.io.File
-import java.io.FileNotFoundException
-import java.io.IOException
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
@@ -214,13 +204,13 @@ class PostCreationActivity : BaseActivity() {
     }
 
     private fun savePicture(button: View, currentPosition: Int) {
-        val name = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
-            .format(System.currentTimeMillis()) + ".png"
-        val pair = getOutputFile(name)
+        val originalUri = model.getPhotoData().value!![currentPosition].imageUri
+
+        val pair = getOutputFile(originalUri)
         val outputStream: OutputStream = pair.first
         val path: String = pair.second
 
-        contentResolver.openInputStream(model.getPhotoData().value!![currentPosition].imageUri)!!.use { input ->
+        contentResolver.openInputStream(originalUri)!!.use { input ->
             outputStream.use { output ->
                 input.copyTo(output)
             }
@@ -246,20 +236,28 @@ class PostCreationActivity : BaseActivity() {
         ).show()
     }
 
-    private fun getOutputFile(name: String): Pair<OutputStream, String> {
+    private fun getOutputFile(uri: Uri): Pair<OutputStream, String> {
+        val extension = uri.fileExtension(contentResolver)
+
+        val name = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
+            .format(System.currentTimeMillis()) + ".$extension"
+
         val outputStream: OutputStream
         val path: String
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val resolver: ContentResolver = contentResolver
+            val type = resolver.getType(uri)
             val contentValues = ContentValues()
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, type)
             contentValues.put(
                     MediaStore.MediaColumns.RELATIVE_PATH,
                     Environment.DIRECTORY_PICTURES
             )
-            val imageUri: Uri =
-                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
+            val imageUri: Uri = resolver.insert(
+                if (type?.startsWith("image") == true) MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                else MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                contentValues)!!
             path = imageUri.toString()
             outputStream = resolver.openOutputStream(Objects.requireNonNull(imageUri))!!
         } else {
@@ -327,11 +325,7 @@ class PostCreationActivity : BaseActivity() {
         val originalUri = model.getPhotoData().value!![position].imageUri
 
         // Having a meaningful suffix is necessary so that ffmpeg knows what to put in output
-        val suffix = if(originalUri.scheme == "content") {
-            contentResolver.getType(model.getPhotoData().value!![position].imageUri)?.takeLastWhile { it != '/' }
-        } else {
-            originalUri.toString().takeLastWhile { it != '/' }
-        }
+        val suffix = originalUri.fileExtension(contentResolver)
         val file = File.createTempFile("temp_video", ".$suffix")
         //val file = File.createTempFile("temp_video", ".webm")
         model.trackTempFile(file)
