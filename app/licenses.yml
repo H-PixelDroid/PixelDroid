@@ -526,12 +526,6 @@
   copyrightHolder: Google Inc.
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-- artifact: androidx.lifecycle:lifecycle-extensions:+
-  name: lifecycle-extensions
-  copyrightHolder: Google Inc.
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://developer.android.com/topic/libraries/architecture/index.html
 - artifact: androidx.lifecycle:lifecycle-process:+
   name: lifecycle-process
   copyrightHolder: Google Inc.
@@ -955,3 +949,27 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://developer.android.com/jetpack/androidx/releases/media2
+- artifact: com.davemorrissey.labs:subsampling-scale-image-view-androidx:+
+  name: subsampling-scale-image-view-androidx
+  copyrightHolder: David Morrissey and contributors
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/davemorrissey/subsampling-scale-image-view
+- artifact: com.arthenica:ffmpeg-kit-min:+
+  name: ffmpeg-kit-min
+  copyrightHolder:  Taner Şener
+  license: GNU Lesser General Public License, Version 3
+  licenseUrl: https://www.gnu.org/licenses/lgpl-3.0.txt
+  url: https://github.com/tanersener/ffmpeg-kit
+- artifact: com.arthenica:smart-exception-java:+
+  name: smart-exception-java
+  copyrightHolder: Taner Şener
+  license: The 3-Clause BSD License
+  licenseUrl: https://opensource.org/licenses/BSD-3-Clause
+  url: https://github.com/tanersener/smart-exception
+- artifact: com.arthenica:smart-exception-common:+
+  name: smart-exception-common
+  copyrightHolder: Taner Şener
+  license: The 3-Clause BSD License
+  licenseUrl: https://opensource.org/licenses/BSD-3-Clause
+  url: https://github.com/tanersener/smart-exception
