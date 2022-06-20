@@ -7,13 +7,13 @@
     <item
         android:id="@+id/action_reset"
         android:orderInCategory="100"
-        android:title="RESET"
+        android:title="@string/reset_edit_menu"
         android:icon="@drawable/restore_24dp"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_save"
         android:orderInCategory="101"
-        android:title="SAVE"
+        android:title="@string/save_edit_menu"
         android:icon="@drawable/ic_save_24dp"
         app:showAsAction="ifRoom"/>
 

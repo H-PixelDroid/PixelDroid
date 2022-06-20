@@ -133,7 +133,7 @@ dependencies {
 
 
     // Use the most recent version of CameraX
-    def cameraX_version = '1.1.0-rc01'
+    def cameraX_version = '1.1.0-rc02'
     implementation "androidx.camera:camera-core:$cameraX_version"
     implementation "androidx.camera:camera-camera2:$cameraX_version"
     // CameraX Lifecycle library
@@ -141,8 +141,6 @@ dependencies {
 
     // CameraX View class
     implementation "androidx.camera:camera-view:$cameraX_version"
-
-    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 
     def room_version = "2.4.2"
     implementation "androidx.room:room-runtime:$room_version"
@@ -155,6 +153,8 @@ dependencies {
      * ----------------------------------------------------------
      */
 
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+    implementation 'com.arthenica:ffmpeg-kit-min:4.5.1-1.LTS'
 
     implementation 'com.google.android.material:material:1.6.1'
 

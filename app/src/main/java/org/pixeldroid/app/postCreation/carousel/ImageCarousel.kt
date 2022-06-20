@@ -59,17 +59,9 @@ class ImageCarousel(
 
             initIndicator()
         }
-
-
-    private var btnPrevious: View? = null
-    private var btnNext: View? = null
-
-    private var btnGrid: View? = null
-    private var btnCarousel: View? = null
-
-
+    
     private var isBuiltInIndicator = false
-    private var data: List<CarouselItem>? = null
+    private var data: MutableList<CarouselItem>? = null
 
     var onItemClickListener: OnItemClickListener? = this
         set(value) {
@@ -88,28 +80,34 @@ class ImageCarousel(
     /**
      * Get or set current item position
      */
-    var currentPosition = -1
+    var currentPosition = RecyclerView.NO_POSITION
         get() {
             return snapHelper.getSnapPosition(recyclerView.layoutManager)
         }
         set(value) {
-            val position = when {
-                value >= data?.size ?: 0 -> {
-                    -1
-                }
-                value < 0 -> {
-                    -1
-                }
-                else -> {
-                    value
-                }
+            val position = when (value) {
+                !in 0..((data?.size?.minus(1)) ?: 0) -> RecyclerView.NO_POSITION
+                else -> value
             }
 
-            field = position
+            if (position != RecyclerView.NO_POSITION && field != position) {
+                val thisProgress = data?.get(position)?.encodeProgress
+                if (thisProgress != null) {
+                    binding.encodeProgress.visibility = VISIBLE
+                    binding.encodeInfoText.visibility = VISIBLE
+                    binding.encodeInfoText.text =
+                        context.getString(R.string.encode_progress).format(thisProgress)
+                    binding.encodeProgress.progress = thisProgress
+                } else {
+                    binding.encodeProgress.visibility = INVISIBLE
+                    binding.encodeInfoText.visibility = INVISIBLE
+                }
+            } else binding.encodeProgress.visibility = INVISIBLE
 
-            if (position != -1) {
+            if (position != RecyclerView.NO_POSITION && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
                 recyclerView.smoothScrollToPosition(position)
             }
+            field = position
         }
 
     /**
@@ -225,27 +223,24 @@ class ImageCarousel(
         set(value) {
             field = value
 
-            btnGrid = binding.switchToGridButton
-            btnCarousel = binding.switchToCarouselButton
-
-            btnGrid?.setOnClickListener {
+            binding.switchToGridButton.setOnClickListener {
                 layoutCarousel = false
             }
-            btnCarousel?.setOnClickListener {
+            binding.switchToCarouselButton.setOnClickListener {
                 layoutCarousel = true
             }
 
             if(value){
                 if(layoutCarousel){
-                    btnGrid?.visibility = VISIBLE
-                    btnCarousel?.visibility = GONE
+                    binding.switchToGridButton.visibility = VISIBLE
+                    binding.switchToCarouselButton.visibility = GONE
                 } else {
-                    btnGrid?.visibility = GONE
-                    btnCarousel?.visibility = VISIBLE
+                    binding.switchToGridButton.visibility = GONE
+                    binding.switchToCarouselButton.visibility = VISIBLE
                 }
             } else {
-                btnGrid?.visibility = GONE
-                btnCarousel?.visibility = GONE
+                binding.switchToGridButton.visibility = GONE
+                binding.switchToCarouselButton.visibility = GONE
             }
         }
 
@@ -261,15 +256,15 @@ class ImageCarousel(
             if(value){
                 recyclerView.layoutManager = CarouselLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-                btnNext?.visibility = VISIBLE
-                btnPrevious?.visibility = VISIBLE
+                binding.btnNext.visibility = VISIBLE
+                binding.btnPrevious.visibility = VISIBLE
 
                 binding.editMediaDescriptionLayout.visibility = if(editingMediaDescription) VISIBLE else INVISIBLE
                 tvCaption.visibility = if(editingMediaDescription) INVISIBLE else VISIBLE
             } else {
                 recyclerView.layoutManager = GridLayoutManager(context, 3)
-                btnNext?.visibility = GONE
-                btnPrevious?.visibility = GONE
+                binding.btnNext.visibility = GONE
+                binding.btnPrevious.visibility = GONE
 
                 binding.editMediaDescriptionLayout.visibility = INVISIBLE
                 tvCaption.visibility = INVISIBLE
@@ -450,10 +445,9 @@ class ImageCarousel(
     private fun initListeners() {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val position = currentPosition
 
                 if (showCaption) {
-                    val position = snapHelper.getSnapPosition(recyclerView.layoutManager)
-
                     if (position >= 0) {
                         val dataItem = adapter?.getItem(position)
 
@@ -468,6 +462,8 @@ class ImageCarousel(
                         }
                     }
                 }
+
+                if(dx !=0 || dy != 0) currentPosition = position
 
                 onScrollListener?.onScrolled(recyclerView, dx, dy)
 
@@ -561,9 +557,34 @@ class ImageCarousel(
         adapter?.apply {
             addAll(data)
 
-            this@ImageCarousel.data = data
+            this@ImageCarousel.data = data.toMutableList()
 
             initOnScrollStateChange()
+        }
+    }
+
+    fun updateProgress(progress: Int?, position: Int, error: Boolean){
+        data?.get(position)?.encodeProgress = progress
+        if(currentPosition == position) {
+            if (progress == null) {
+                binding.encodeProgress.visibility = INVISIBLE
+                binding.encodeInfoText.visibility = VISIBLE
+                if(error){
+                    binding.encodeInfoText.setText(R.string.encode_error)
+                    binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.error),
+                        null, null, null)
+
+                } else {
+                    binding.encodeInfoText.setText(R.string.encode_success)
+                    binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.check_circle_24),
+                    null, null, null)
+                }
+            } else {
+                binding.encodeProgress.visibility = VISIBLE
+                binding.encodeProgress.progress = progress
+                binding.encodeInfoText.visibility = VISIBLE
+                binding.encodeInfoText.text = context.getString(R.string.encode_progress).format(progress)
+            }
         }
     }
 

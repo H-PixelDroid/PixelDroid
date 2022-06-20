@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:scrollbarThumbHorizontal="@drawable/thumb_left">
+
+
+
+    <androidx.media2.widget.VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/thumbnail4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/muter"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="@string/add_comment"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        android:src="@drawable/selector_mute"
+        app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/videoRangeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:contentDescription="@string/select_video_range"
+        android:elevation="5dp"
+        android:layout_marginStart="-15dp"
+        android:layout_marginEnd="-15dp"
+        android:valueFrom="0.0"
+        android:valueTo="100.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/thumbnail1" />
+
+    <ImageView
+        android:id="@+id/thumbnail1"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/thumbnail_reel_video_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/thumbnail2" />
+
+    <ImageView
+        android:id="@+id/thumbnail2"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/thumbnail_reel_video_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/thumbnail1"
+        app:layout_constraintRight_toLeftOf="@+id/thumbnail3" />
+
+    <ImageView
+        android:id="@+id/thumbnail3"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/thumbnail_reel_video_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/thumbnail2"
+        app:layout_constraintRight_toLeftOf="@+id/thumbnail4" />
+
+    <ImageView
+        android:id="@+id/thumbnail4"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/thumbnail_reel_video_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/thumbnail3"
+        app:layout_constraintRight_toLeftOf="@+id/thumbnail5" />
+
+    <ImageView
+        android:id="@+id/thumbnail5"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/thumbnail_reel_video_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/thumbnail4"
+        app:layout_constraintRight_toLeftOf="@+id/thumbnail6" />
+
+    <ImageView
+        android:id="@+id/thumbnail6"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/thumbnail_reel_video_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/thumbnail5"
+        app:layout_constraintRight_toLeftOf="@+id/thumbnail7" />
+
+    <ImageView
+        android:id="@+id/thumbnail7"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/thumbnail_reel_video_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/thumbnail6"
+        app:layout_constraintRight_toRightOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
