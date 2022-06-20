@@ -1,0 +1,3 @@
+* Video editing! Mute, trim videos
+* Open images in the full screen and zoom and pan on them :)
+* Translation updates
