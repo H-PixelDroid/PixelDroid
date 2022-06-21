@@ -270,4 +270,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="encode_progress">Encode %1$d%%</string>
     <string name="select_video_range">Select what to keep of the video</string>
     <string name="still_encoding">One or more videos are still encoding. Wait for them to finish before uploading</string>
+    <string name="new_post_shortcut_long">Create new post</string>
+    <string name="new_post_shortcut_short">New post</string>
+    <string name="follow_request">%1$s requests to follow you</string>
+    <string name="status_notification">%1$s created a post</string>
 </resources>

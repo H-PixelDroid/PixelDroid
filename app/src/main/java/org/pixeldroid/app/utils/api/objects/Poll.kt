@@ -18,5 +18,5 @@ data class Poll (
         data class Option(
             val title: String?,
             val votes_count: Int? //null if result not published yet
-        )
+        ): Serializable
     }

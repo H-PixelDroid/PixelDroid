@@ -10,14 +10,16 @@ data class Attachment(
     val preview_url: String? = "", //URL
     //Optional attributes
     val remote_url: String? = null, //URL
-    val text_url: String? = null, //URL
 
     val meta: Meta?,
 
     val description: String? = null,
-    val blurhash: String? = null
+    val blurhash: String? = null,
+
+    //Deprecated attributes
+    val text_url: String? = null, //URL
 ) : Serializable {
-    enum class AttachmentType {
+    enum class AttachmentType: Serializable {
         unknown, image, gifv, video, audio
     }
 

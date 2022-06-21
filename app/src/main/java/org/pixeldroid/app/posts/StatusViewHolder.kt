@@ -356,7 +356,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                     override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
                                         status?.downloadImage(
                                             binding.root.context,
-                                            status?.media_attachments?.get(binding.postPager.currentItem)?.url
+                                            status?.media_attachments?.getOrNull(binding.postPager.currentItem)?.url
                                                 ?: "",
                                             binding.root
                                         )
@@ -379,7 +379,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                     override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
                                         status?.downloadImage(
                                             binding.root.context,
-                                            status?.media_attachments?.get(binding.postPager.currentItem)?.url
+                                            status?.media_attachments?.getOrNull(binding.postPager.currentItem)?.url
                                                 ?: "",
                                             binding.root,
                                             share = true,
@@ -590,7 +590,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
 class AlbumViewPagerAdapter(
     private val media_attachments: List<Attachment>, private var sensitive: Boolean?,
-    private val opened: Boolean, //TODO if opened don't open again, and use PhotoView instead of shite
+    private val opened: Boolean,
 ) :
     RecyclerView.Adapter<AlbumViewPagerAdapter.ViewHolder>() {
 
