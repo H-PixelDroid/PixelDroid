@@ -35,7 +35,17 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".postCreation.camera.CameraActivity" />
+        <activity android:name=".postCreation.camera.CameraActivity"/>
+        <activity android:name=".postCreation.camera.CameraActivityShortcut"
+            android:exported = "true"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity    " />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".posts.ReportActivity"
             android:screenOrientation="sensorPortrait"
@@ -46,31 +56,12 @@
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="video/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="video/*" />
             </intent-filter>
         </activity>
@@ -112,6 +103,8 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="org.pixeldroid.app.searchDiscover.SearchActivity" />
+            <meta-data android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".LoginActivity"

@@ -17,7 +17,8 @@ data class Card(
     val width: Int? = null,
     val height: Int? = null,
     val image: String? = null, //URL
-    val embed_url: String? = null //URL
+    val embed_url: String? = null, //URL
+    val blurhash: String? = null,
 ) : Serializable {
     enum class CardType {
         link, photo, video, rich

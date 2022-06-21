@@ -117,11 +117,11 @@ class SearchDiscoverFragment : BaseFragment() {
 
         override fun onBindViewHolder(holder: ProfilePostViewHolder, position: Int) {
             val post = posts[position]
-            if(post?.media_attachments?.size ?: 0 > 1) {
+            if((post?.media_attachments?.size ?: 0) > 1) {
                 holder.albumIcon.visibility = View.VISIBLE
             } else {
                 holder.albumIcon.visibility = View.GONE
-                if(post?.media_attachments?.get(0)?.type == Attachment.AttachmentType.video) {
+                if(post?.media_attachments?.getOrNull(0)?.type == Attachment.AttachmentType.video) {
                     holder.videoIcon.visibility = View.VISIBLE
                 } else holder.videoIcon.visibility = View.GONE
 

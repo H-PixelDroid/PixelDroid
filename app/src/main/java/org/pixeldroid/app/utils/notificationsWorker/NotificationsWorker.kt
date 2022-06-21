@@ -172,11 +172,11 @@ class NotificationsWorker(
         val builder = NotificationCompat.Builder(applicationContext, makeChannelId(uniqueUserId, notification.type))
             .setSmallIcon(
                 when (notification.type) {
-                    follow -> R.drawable.ic_follow
+                    follow, follow_request -> R.drawable.ic_follow
                     mention -> R.drawable.mention_at_24dp
                     reblog -> R.drawable.ic_reblog
                     favourite -> R.drawable.ic_like_full
-                    comment -> R.drawable.ic_comment_empty
+                    comment, status -> R.drawable.ic_comment_empty
                     poll -> R.drawable.poll
                     null -> R.drawable.ic_comment_empty
                 }
@@ -193,6 +193,8 @@ class NotificationsWorker(
                             favourite -> R.string.liked_notification
                             poll -> R.string.poll_notification
                             null -> R.string.other_notification
+                            follow_request -> R.string.follow_request
+                            status -> R.string.status_notification
                         }
                     ).format(username)
                 }

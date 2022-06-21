@@ -36,8 +36,8 @@ data class Notification(
     //TODO do we find this approach acceptable? Preferable to a semi-duplicate NotificationDataBaseEntity?
     override var user_id: String,
     override var instance_uri: String,
-    ): FeedContent, FeedContentDatabase {
+    ): FeedContent, FeedContentDatabase, Serializable {
     enum class NotificationType: Serializable {
-        follow, mention, reblog, favourite, poll, comment
+        follow, follow_request, mention, reblog, favourite, poll, status, comment //comment is Pixelfed-specific?
     }
 }

@@ -19,6 +19,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
@@ -40,6 +42,8 @@ import org.pixeldroid.app.utils.openUrl
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.ErrorLayoutBinding
+import org.pixeldroid.app.postCreation.carousel.dpToPx
+import org.pixeldroid.app.utils.BlurHashDecoder
 import org.pixeldroid.app.utils.api.objects.Attachment
 import retrofit2.HttpException
 import java.io.IOException
@@ -349,23 +353,39 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
 
     fun bind(post: Status) {
 
-        if(post.sensitive!!) {
-            ImageConverter.setSquareImageFromDrawable(
-                    itemView,
-                    AppCompatResources.getDrawable(itemView.context, R.drawable.ic_sensitive),
-                    postPreview
-            )
-        } else {
-            ImageConverter.setSquareImageFromURL(itemView, post.getPostPreviewURL(), postPreview)
-        }
-        if(post.media_attachments?.size ?: 0 > 1) {
-            albumIcon.visibility = View.VISIBLE
-        } else {
+        if ((post.media_attachments?.size ?: 0) == 0){
+            //No media in this post, so put a little icon there
+            postPreview.scaleX = 0.3f
+            postPreview.scaleY = 0.3f
+            Glide.with(postPreview).load(R.drawable.ic_comment_empty).into(postPreview)
             albumIcon.visibility = View.GONE
-            if(post.media_attachments?.get(0)?.type == Attachment.AttachmentType.video) {
-                videoIcon.visibility = View.VISIBLE
-            } else videoIcon.visibility = View.GONE
+            videoIcon.visibility = View.GONE
+        } else {
+            postPreview.scaleX = 1f
+            postPreview.scaleY = 1f
+            if (post.sensitive != false) {
+                Glide.with(postPreview)
+                    .load(post.media_attachments?.firstOrNull()?.blurhash?.let {
+                        BlurHashDecoder.blurHashBitmap(itemView.resources, it, 32, 32)
+                    }
+                    ).placeholder(R.drawable.ic_sensitive).apply(RequestOptions().centerCrop())
+                    .into(postPreview)
+            } else {
+                ImageConverter.setSquareImageFromURL(postPreview,
+                    post.getPostPreviewURL(),
+                    postPreview,
+                    post.media_attachments?.firstOrNull()?.blurhash)
+            }
+            if ((post.media_attachments?.size ?: 0) > 1) {
+                albumIcon.visibility = View.VISIBLE
+                videoIcon.visibility = View.GONE
+            } else {
+                albumIcon.visibility = View.GONE
+                if (post.media_attachments?.getOrNull(0)?.type == Attachment.AttachmentType.video) {
+                    videoIcon.visibility = View.VISIBLE
+                } else videoIcon.visibility = View.GONE
 
+            }
         }
 
         postPreview.setOnClickListener {

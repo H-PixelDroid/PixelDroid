@@ -103,10 +103,10 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                 when (type) {
                     Notification.NotificationType.mention, Notification.NotificationType.favourite,
                     Notification.NotificationType.poll, Notification.NotificationType.reblog,
-                    Notification.NotificationType.comment  -> {
+                    Notification.NotificationType.comment, Notification.NotificationType.status  -> {
                         openPostFromNotification()
                     }
-                    Notification.NotificationType.follow -> {
+                    Notification.NotificationType.follow, Notification.NotificationType.follow_request  -> {
                         openAccountFromNotification()
                     }
                     null -> return
@@ -164,6 +164,16 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                     )
                 Notification.NotificationType.poll ->
                     getStringAndDrawable(context, R.string.poll_notification, R.drawable.poll)
+                Notification.NotificationType.follow_request -> getStringAndDrawable(
+                    context,
+                    R.string.follow_request,
+                    R.drawable.ic_follow
+                )
+                Notification.NotificationType.status -> getStringAndDrawable(
+                    context,
+                    R.string.status_notification,
+                    R.drawable.ic_comment_empty
+                )
             }
             textView.text = format.format(username)
             textView.setCompoundDrawablesWithIntrinsicBounds(

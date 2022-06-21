@@ -1,6 +1,7 @@
 package org.pixeldroid.app.utils.api.objects
 
 import org.pixeldroid.app.utils.validDomain
+import java.io.Serializable
 
 /*
     See https://nodeinfo.diaspora.software/schema.html and https://pixelfed.social/api/nodeinfo/2.0.json
@@ -14,7 +15,7 @@ data class NodeInfo (
     val protocols: List<String>?,
     val openRegistrations: Boolean?,
     val metadata: PixelfedMetadata?,
-){
+): Serializable {
     /**
      * Check if this NodeInfo has the fields we need or if we also need to look into the
      * /api/v1/instance endpoint
@@ -31,16 +32,16 @@ data class NodeInfo (
     data class Software(
         val name: String?,
         val version: String?
-    )
+    ): Serializable
     data class PixelfedMetadata(
         val nodeName: String?,
         val software: Software?,
         val config: PixelfedConfig
-    ){
+    ): Serializable {
         data class Software(
             val homepage: String?,
             val repo: String?
-        )
+        ): Serializable
     }
     data class PixelfedConfig(
         val open_registration: Boolean?,
@@ -48,8 +49,8 @@ data class NodeInfo (
         val activitypub: ActivityPub?,
         val features: Features?,
         val site: Site?
-    ){
-        data class Uploader(
+    ): Serializable {
+        data class Uploader (
             val max_photo_size: String?,
             val max_caption_length: String?,
             val album_limit: String?,
@@ -58,35 +59,34 @@ data class NodeInfo (
             val optimize_video: Boolean?,
             val media_types: String?,
             val enforce_account_limit: Boolean?
-        )
+        ): Serializable
 
         data class ActivityPub(
             val enabled: Boolean?,
             val remote_follow: Boolean?
-        )
+        ): Serializable
 
         data class Features(
             val mobile_apis: Boolean?,
             val circles: Boolean?,
             val stories: Boolean?,
             val video: Boolean?
-        )
+        ): Serializable
 
         data class Site(
                 val name: String?,
                 val domain: String?,
                 val url: String?,
                 val description: String?
-        )
+        ): Serializable
     }
 }
 
 data class NodeInfoJRD(
     val links: List<Link>
-){
+): Serializable {
     data class Link(
         val rel: String?,
         val href: String?
-    )
-
+    ): Serializable
 }

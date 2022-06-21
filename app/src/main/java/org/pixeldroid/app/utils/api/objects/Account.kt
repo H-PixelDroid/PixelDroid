@@ -42,6 +42,8 @@ data class Account(
     val fields: List<Field>? = emptyList(),
     val bot: Boolean? =  false,
     val source: Source? = null,
+    val suspended: Boolean? = null,
+    val mute_expires_at: Instant? = null, //ISO 8601 Datetime
 ) : Serializable, FeedContent {
     companion object {
         const val ACCOUNT_TAG = "AccountTag"

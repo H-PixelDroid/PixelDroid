@@ -1,0 +1,15 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="new_post"
+        android:enabled="true"
+        android:icon="@drawable/photo_camera"
+        android:shortcutShortLabel="@string/new_post_shortcut_short"
+        android:shortcutLongLabel="@string/new_post_shortcut_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="org.pixeldroid.app"
+            android:targetClass="org.pixeldroid.app.postCreation.camera.CameraActivityShortcut" />
+        <categories android:name="android.shortcut.conversation" />
+        <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
+    </shortcut>
+</shortcuts>

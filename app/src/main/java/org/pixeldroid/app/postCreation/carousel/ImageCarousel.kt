@@ -91,7 +91,7 @@ class ImageCarousel(
             }
 
             if (position != RecyclerView.NO_POSITION && field != position) {
-                val thisProgress = data?.get(position)?.encodeProgress
+                val thisProgress = data?.getOrNull(position)?.encodeProgress
                 if (thisProgress != null) {
                     binding.encodeProgress.visibility = VISIBLE
                     binding.encodeInfoText.visibility = VISIBLE
@@ -473,7 +473,7 @@ class ImageCarousel(
 
                 onScrollListener?.apply {
                     val position = snapHelper.getSnapPosition(recyclerView.layoutManager)
-                    val carouselItem = data?.get(position)
+                    val carouselItem = data?.getOrNull(position)
 
                     onScrollStateChanged(
                             recyclerView,
@@ -564,7 +564,7 @@ class ImageCarousel(
     }
 
     fun updateProgress(progress: Int?, position: Int, error: Boolean){
-        data?.get(position)?.encodeProgress = progress
+        data?.getOrNull(position)?.encodeProgress = progress
         if(currentPosition == position) {
             if (progress == null) {
                 binding.encodeProgress.visibility = INVISIBLE

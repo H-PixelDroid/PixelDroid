@@ -442,7 +442,7 @@ class CameraFragment : BaseFragment() {
             .apply {
                 uris.forEach{
                     //Why are we using ClipData here? Because the FLAG_GRANT_READ_URI_PERMISSION
-                    //needs to be applied to the URIs, and this flag flag only applies to the
+                    //needs to be applied to the URIs, and this flag only applies to the
                     //Intent's data and any URIs specified in its ClipData.
                     if(clipData == null){
                         clipData = ClipData("", emptyArray(), ClipData.Item(it.toUri()))

@@ -355,7 +355,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
     }
 
     fun modifyAt(position: Int, data: Intent): Unit? {
-       val result: PhotoData = photoData.value?.get(position)?.run {
+       val result: PhotoData = photoData.value?.getOrNull(position)?.run {
             if (video) {
                 val muted: Boolean = data.getBooleanExtra(VideoEditActivity.MUTED, false)
                 val videoStart: Float? = data.getFloatExtra(VideoEditActivity.VIDEO_START, -1f).let {

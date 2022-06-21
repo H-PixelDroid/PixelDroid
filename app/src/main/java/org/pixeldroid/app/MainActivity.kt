@@ -373,7 +373,7 @@ class MainActivity : BaseActivity() {
                     when(position){
                         0 -> R.drawable.ic_home_white_24dp
                         1 -> R.drawable.ic_search_white_24dp
-                        2 -> R.drawable.ic_photo_camera_white_24dp
+                        2 -> R.drawable.photo_camera
                         3 -> R.drawable.ic_heart
                         4 -> R.drawable.ic_filter_black_24dp
                         else -> throw IllegalArgumentException()
