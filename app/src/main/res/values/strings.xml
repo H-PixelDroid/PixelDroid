@@ -309,4 +309,5 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
         <item quantity="one">%d reply</item>
         <item quantity="other">%d replies</item>
     </plurals>
+    <string name="save">Save</string>
 </resources>

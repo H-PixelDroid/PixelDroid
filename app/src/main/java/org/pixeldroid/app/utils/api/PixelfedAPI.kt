@@ -295,6 +295,14 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String? = null
     ): Account
 
+    @Multipart
+    @PATCH("/api/v1/accounts/update_credentials")
+    suspend fun updateCredentials(
+        @Part(value = "display_name") displayName: String?,
+        @Part(value = "note") note: String?,
+        @Part(value = "locked") locked: Boolean?,
+      //  @Part avatar: MultipartBody.Part?,
+    ): Account
 
     @GET("/api/v1/accounts/{id}/statuses")
     suspend fun accountPosts(

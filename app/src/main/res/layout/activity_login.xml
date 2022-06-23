@@ -33,8 +33,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:hint="@string/domain_of_your_instance"
+                android:visibility="gone"
                 app:errorEnabled="true"
-                android:visibility="gone">
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editText"

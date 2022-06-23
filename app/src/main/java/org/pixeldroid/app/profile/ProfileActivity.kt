@@ -228,12 +228,8 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     }
 
     private fun onClickEditButton() {
-        val url = "$domain/settings/home"
-
-        if(!openUrl(url)) {
-            Snackbar.make(binding.root, getString(R.string.edit_link_failed),
-                    Snackbar.LENGTH_LONG).show()
-        }
+        val intent = Intent(this, EditProfileActivity::class.java)
+        ContextCompat.startActivity(this, intent, null)
     }
 
     private fun onClickFollowers(account: Account?) {
