@@ -5,16 +5,23 @@
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
 -optimizationpasses 6
 -allowaccessmodification
--dontpreverify
+
+# Don't obfuscate because it makes traces useless
+-dontobfuscate
 
 -dontusemixedcaseclassnames
--dontskipnonpubliclibraryclasses
 -keepattributes *Annotation*
 
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
 -keepclasseswithmembernames class * {
     native <methods>;
 }
+
+# keep ViewModel constructors to make ViewModelFactories work
+-keepclassmembers public class * extends androidx.lifecycle.ViewModel {
+    public <init>(...);
+}
+
 # keep setters in Views so that animations can still work.
 # see http://proguard.sourceforge.net/manual/examples.html#beans
 -keepclassmembers public class * extends android.view.View {
@@ -69,7 +76,14 @@
 
 # remove some kotlin overhead
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    static void checkNotNull(java.lang.Object);
+    static void checkNotNull(java.lang.Object, java.lang.String);
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+    static void checkNotNullParameter(java.lang.Object, java.lang.String);
     static void checkExpressionValueIsNotNull(java.lang.Object, java.lang.String);
+    static void checkNotNullExpressionValue(java.lang.Object, java.lang.String);
+    static void checkReturnedValueIsNotNull(java.lang.Object, java.lang.String);
+    static void checkReturnedValueIsNotNull(java.lang.Object, java.lang.String, java.lang.String);
     static void throwUninitializedPropertyAccessException(java.lang.String);
 }

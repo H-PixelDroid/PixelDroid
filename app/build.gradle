@@ -22,13 +22,13 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
+        freeCompilerArgs += ["-opt-in=kotlin.RequiresOptIn"]
     }
     defaultConfig {
         applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 32
-        versionCode 13
+        versionCode 14
         versionName "1.0.beta" + versionCode
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
