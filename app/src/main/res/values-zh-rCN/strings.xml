@@ -208,4 +208,16 @@
     <string name="notification_summary_small">%1$s 和 %2$s</string>
     <string name="post_is_video">该帖子是一个视频</string>
     <string name="play_video">播放视频</string>
+    <string name="thumbnail_reel_video_edit">滚动显示你正编辑的视频的缩略图</string>
+    <string name="reset_edit_menu">重置</string>
+    <string name="save_edit_menu">保存</string>
+    <string name="encode_error">编码出错</string>
+    <string name="encode_success">编码成功！</string>
+    <string name="encode_progress">编码 %1$d%%</string>
+    <string name="select_video_range">选择要保留的视频内容</string>
+    <string name="still_encoding">一个或多个视频仍在编码中。请等编码完成后再上传</string>
+    <string name="new_post_shortcut_long">新建帖子</string>
+    <string name="new_post_shortcut_short">新帖子</string>
+    <string name="follow_request">%1$s 请求关注你</string>
+    <string name="status_notification">%1$s 创建了一个帖子</string>
 </resources>
