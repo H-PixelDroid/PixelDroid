@@ -1,0 +1,1 @@
+Hotfix for crashes in edit activity that only happened in release mode
