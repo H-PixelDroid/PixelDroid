@@ -1,0 +1,1 @@
+Add Hungarian (Magyar) translation to the app. Thanks to Balázs :)
