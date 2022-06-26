@@ -1,0 +1,3 @@
+* A licenclista megjelenítésekor tapasztalt összeomlás javítása
+* Nagy teljesítménynövekedés a profil tevékenységben
+* Függőségek frissítése

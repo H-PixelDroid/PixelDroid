@@ -1,0 +1,11 @@
+A PixelDroid egy szabad és nyílt forráskód androidos kliens a Pixelfedhez, a föderált képmegosztó plarformhoz.
+
+Böngésszen listákat és profilokat, töltsön fel és fedezzen fel bejegyzéseket, lépjen kapcsolatba másokkal a födiverzumban.
+
+• Több fiók támogatása
+• Sötét és világos témák
+• Szűrők alkalmazása, vágás, fényerő/kontraszt/telítettség módosítása
+• Figyelembe veszi a Pixelfed-kiszolgáló beállításait
+• 100%-ban szabad és nyílt forráskódú szoftver. Nincsenek zárt függőségek.
+
+Nézze meg a https://pixelfed.org weboldalt, hogy többet tudjon meg a Pixelfedről.

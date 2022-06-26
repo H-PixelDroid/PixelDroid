@@ -1,0 +1,2 @@
+* Fordítások frissítése
+* Távoli képek feltöltésének lehetővé tétele (például a Nextcloudból)

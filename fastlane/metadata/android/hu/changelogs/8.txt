@@ -1,0 +1,4 @@
+* Videók lejátszásának és feltöltésének támogatásának hozzáadása
+* Értesítési fejlesztések
+* Fordítási frissítések
+* Függőségek frissítése

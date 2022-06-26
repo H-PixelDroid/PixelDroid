@@ -1,0 +1,3 @@
+* Videószerkesztés! Videók némítása, vágása
+* Képek megnyitása teljes képernyőn, szabad nagyítással és mozgatással :)
+* Fordítási frissítések

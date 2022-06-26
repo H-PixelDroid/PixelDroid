@@ -1,2 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="encode_progress">Kódolás %1$d%%</string>
+    <string name="license_info">A PixelDroid szabad és nyílt forráskódú szoftver, amely a GNU General Public License (3-as vagy későbbi verziója) alatt lett közzétéve</string>
+    <string name="status_notification">%1$s létrehozott egy bejegyzést</string>
+    <string name="follow_request">%1$s azt kéri, hogy követhesse Önt</string>
+    <string name="new_post_shortcut_short">Új bejegyzés</string>
+    <string name="new_post_shortcut_long">Új bejegyzés létrehozása</string>
+    <string name="still_encoding">Egy vagy több videó még kódolás alatt áll. A feltöltés előtt várjon a befejeződésükre.</string>
+    <string name="select_video_range">Válassza ki, hogy mit tart meg a videóból</string>
+    <string name="encode_success">A kódolás sikeres!</string>
+    <string name="encode_error">Hiba a kódoláskor</string>
+    <string name="save_edit_menu">MENTÉS</string>
+    <string name="reset_edit_menu">VISSZAÁLLÍTÁS</string>
+    <string name="thumbnail_reel_video_edit">A szerkesztett videó bélyegképeit tartalmazó filmtekercs</string>
+    <string name="video_edit_not_yet_supported">A videószerkesztés még nem támogatott</string>
+    <string name="play_video">Videó lejátszása</string>
+    <string name="no_storage_permission">A tároló engedély nincs megadva, adja meg a beállításokban, ha szeretné, hogy a PixelDroid megjelenítse a bélyegképet</string>
+    <string name="no_camera_permission">A kamera engedély nincs megadva, adja meg a beállításokban, ha szeretné, hogy a PixelDroid használhassa a kamerát</string>
+    <string name="login_notifications">A legfrissebb értesítések lekérése sikertelen</string>
+    <string name="notifications_settings_summary">A kapott értesítések kezelése</string>
+    <string name="notifications_settings">Értesítési beállítások</string>
+    <string name="file_not_found">A(z) %1$s fájl nem található</string>
+    <string name="delete_post_failed_io_except">A bejegyzés törlése sikertelen, ellenőrizze a kapcsolatot.</string>
+    <string name="delete_post_failed_error">A bejegyzés törlése sikertelen, hibakód: %1$d</string>
+    <string name="mascot_description">A kép egy vörös pandát ábrázol, a Pixelfed kabalaállatát, amely telefont használ</string>
+    <string name="issues_contribute">Jelentse a problémákat, vagy működjön közre az alkalmazásban:</string>
+    <string name="help_translate">Segítsen lefordítani a PixelDroidot a saját nyelvére:</string>
+    <string name="language">Nyelv</string>
+    <string name="delete_dialog">Törli ezt a bejegyzést\?</string>
+    <string name="delete">Törlés</string>
+    <string name="panda_pull_to_refresh_to_try_again">Ez a panda nem boldog. Húzza le a frissítéshez.</string>
+    <string name="something_went_wrong">Valami hiba történt…</string>
+    <string name="discover_no_infinite_load">A felfedezés nem tölt be a végtelenségig. Húzza le a frissítéshez, hogy több képet lásson.</string>
+    <string name="discover">FELFEDEZÉS</string>
+    <string name="open_drawer_menu">Fiókmenü megnyitása</string>
+    <string name="profile_picture">Profilkép</string>
+    <string name="toolbar_title_edit">Szerkesztés</string>
+    <string name="report_error">A jelentés elküldése sikertelen</string>
+    <string name="reported">Jelentve {gmd_check_circle}</string>
+    <string name="report_target">\@%1$s bejegyzésének jelentése</string>
+    <string name="optional_report_comment">Nem kötelező üzenet a moderátoroknak/adminisztrátoroknak</string>
+    <string name="share_link">Megosztási hivatkozás</string>
+    <string name="report">Jelentés</string>
+    <string name="status_more_options">További lehetőségek</string>
+    <string name="search_empty_error">A keresési kifejezés nem lehet üres</string>
+    <string name="follows_title">%1$s követései</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="followers_title">%1$s követői</string>
+    <string name="post_title">%1$s bejegyzése</string>
+    <string name="about">Névjegy</string>
+    <string name="project_website">Projektweboldal: https://pixeldroid.org</string>
+    <string name="dependencies_licenses">Függőségek és licencek</string>
+    <string name="about_pixeldroid">A PixelDroid névjegye</string>
+    <string name="nothing_to_see_here">Nincs itt semmi!</string>
+    <string name="retry">Újra</string>
+    <string name="posting_image_accessibility_hint">A közzétett kép</string>
+    <string name="media_upload_failed">A média feltöltése sikertelen, próbálja újra vagy ellenőrizze a hálózati feltételeket</string>
+    <string name="media_upload_completed">A média feltöltése befejeződött</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Rejtett média
+\n (kattintson a megjelenítéshez)</string>
+    <string name="hashtags">HASHTAGEK</string>
+    <string name="accounts">FIÓKOK</string>
+    <string name="posts">BEJEGYZÉSEK</string>
+    <string name="search">Keresés</string>
+    <string name="edit_profile">Profil szerkesztése</string>
+    <string name="dialog_message_cancel_follow_request">Megszakítja a követési kérést\?</string>
+    <string name="follow_requested">Követés kérve</string>
+    <string name="unfollow">Követés megszüntetése</string>
+    <string name="follow">Követés</string>
+    <string name="no_username">Nincs felhasználónév</string>
+    <string name="default_nfollowing">-
+\nkövetés</string>
+    <string name="default_nfollowers">-
+\nkövető</string>
+    <string name="default_nposts">-
+\nbejegyzés</string>
+    <string name="access_token_invalid">A hozzáférési token érvénytelen</string>
+    <string name="unfollow_error">A követés megszüntetése sikertelen</string>
+    <string name="action_not_allowed">Ez a művelet nem engedélyezett</string>
+    <string name="follow_error">A követés nem sikerült</string>
+    <string name="follow_button_failed">A követési gomb megjelenítése sikertelen</string>
+    <string name="empty_feed">Nincs itt semmi :(</string>
+    <string name="edit_link_failed">A szerkesztési oldal megnyitása sikertelen</string>
+    <string name="follow_status_failed">A követési állapot lekérése sikertelen</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nkövetés</item>
+        <item quantity="other">%d
+\nkövetés</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nkövető</item>
+        <item quantity="other">%d
+\nkövető</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\nbejegyzés</item>
+        <item quantity="other">%d
+\nbejegyzés</item>
+    </plurals>
+    <string name="post_is_video">Ez a bejegyzés egy videó</string>
+    <string name="post_is_album">Ez a bejegyzés egy album</string>
+    <string name="submit_comment">Hozzászólás beküldése</string>
+    <string name="add_comment">Hozzászólás hozzáadása</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d hozzászólás</item>
+        <item quantity="other">%d hozzászólás</item>
+    </plurals>
+    <string name="comment">Hozzászólás</string>
+    <string name="comment_posted">Hozzászólás: %1$s közzétéve!</string>
+    <string name="comment_error">Hozzászólási hiba!</string>
+    <string name="share_image">Kép megosztása</string>
+    <string name="write_permission_share_pic">Írási engedélyt kell adnia a képek megosztásához!</string>
+    <string name="write_permission_download_pic">Írási engedélyt kell adnia a képek letöltéséhez!</string>
+    <string name="empty_comment">A hozzászólás nem lehet üres!</string>
+    <string name="NoCommentsToShow">Nincsenek hozzászólások a bejegyzésnél…</string>
+    <string name="posted_on">Közzétéve itt: %1$s</string>
+    <plurals name="shares">
+        <item quantity="one">%d megosztás</item>
+        <item quantity="other">%d megosztás</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d kedvelés</item>
+        <item quantity="other">%d kedvelés</item>
+    </plurals>
+    <string name="no_description">Nincs leírás</string>
+    <string name="image_download_success">A kép letöltése sikeres</string>
+    <string name="image_download_downloading">Letöltés…</string>
+    <string name="image_download_failed">A letöltés sikertelen, próbálja újra</string>
+    <string name="save_to_gallery">Mentés a galériába…</string>
+    <string name="share_picture">Kép megosztása…</string>
+    <string name="feed_failed">A lista lekérése sikertelen</string>
+    <string name="loading_toast">Hiba történt a betöltés során</string>
+    <string name="gallery_button_alt">Galéria</string>
+    <string name="switch_camera_button_alt">Kamera váltása</string>
+    <string name="capture_button_alt">Rögzítés</string>
+    <string name="no_cancel_edit">Nem, a szerkesztés megszakítása</string>
+    <string name="save_before_returning">Menti a szerkesztéseit\?</string>
+    <string name="crop_button">Gomb a kép levágásához vagy forgatásához</string>
+    <string name="image_preview">A szerkesztett kép előnézete</string>
+    <string name="crop_result_error">A kép lekérése a vágás után sikertelen</string>
+    <string name="busy_dialog_ok_button">Rendben, megvárom.</string>
+    <string name="busy_dialog_text">A kép még feldolgozás alatt van, várjon, hogy befejeződjön!</string>
+    <string name="normal_filter">Normál</string>
+    <string name="filter_thumbnail">A szűrő bélyegképe</string>
+    <string name="edit">Szerkesztés</string>
+    <string name="tab_filters">SZŰRŐK</string>
+    <string name="lbl_saturation">TELÍTETTSÉG</string>
+    <string name="lbl_contrast">KONTRASZT</string>
+    <string name="lbl_brightness">FÉNYERŐ</string>
+    <string name="upload_error">A kiszolgáló által visszaadott hibakód: %1$d</string>
+    <string name="video_not_supported">A használt kiszolgáló nem támogatja a videók feltöltését, lehet hogy nem fogja tudni feltölteni a bejegyzésben szereplő videókat</string>
+    <string name="size_exceeds_instance_limit">Az album %1$d. képének mérete túllépi a példány által megengedett legnagyobb méretet (%2$d kB a méret, de a korlát %3$d kB-os). Lehet, hogy nem fogja tudni feltölteni.</string>
+    <string name="total_exceeds_album_limit">Több képet választott, mint amennyit a kiszolgáló megenged (%1$s). A korlát feletti képek figyelmen kívül lesznek hagyva.</string>
+    <string name="no_media_description">Itt adja hozzá a média leírását…</string>
+    <string name="save_image_description">Képleírás mentése</string>
+    <string name="switch_to_carousel">Átváltás körhintanézetre</string>
+    <string name="switch_to_grid">Átváltás rácsnézetre</string>
+    <string name="post_image">A bejegyzés képeinek egyike</string>
+    <string name="add_photo">Fénykép hozzáadása</string>
+    <string name="post">bejegyzés</string>
+    <string name="description">Leírás…</string>
+    <string name="upload_post_error">Bejegyzésfeltöltési hiba</string>
+    <string name="upload_post_success">A bejegyzés feltöltése sikeres</string>
+    <string name="upload_post_failed">A bejegyzés feltöltése sikertelen</string>
+    <string name="request_format_error">Feltöltési hiba: hibás kérési formátum</string>
+    <string name="picture_format_error">Feltöltési hiba: hibás képformátum.</string>
+    <string name="upload_picture_failed">Képfeltöltési hiba!</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">A leírás legfeljebb %d karakteres lehet.</item>
+        <item quantity="other">A leírás legfeljebb %d karakteres lehet.</item>
+    </plurals>
+    <string name="save_image_success">A kép mentése sikeres</string>
+    <string name="save_image_failed">A kép nem menthető</string>
+    <string name="permission_denied">Hozzáférés megtagadva</string>
+    <string name="add_account_description">Másik Pixelfed-fiók hozzáadása</string>
+    <string name="add_account_name">Fiók hozzáadása</string>
+    <string name="logout">Kijelentkezés</string>
+    <string name="api_not_enabled_dialog">Az API nincs aktiválva ezen a példányon. Lépjen kapcsolatba a rendszergazdával, és kérje meg, hogy aktiválja.</string>
+    <string name="login_connection_required_once">Online kell lennie, hogy hozzáadja az első fiókját, és használhassa a PixelDroidot :(</string>
+    <string name="connect_to_pixelfed">Kapcsolódás a Pixelfedhez</string>
+    <string name="domain_of_your_instance">A példánya domainje</string>
+    <string name="whats_an_instance_explanation">Zavarban lehet, hogy mit kellene írnia a „példány” domainjét tartalmazó mezőbe.
+\n
+\nA Pixelfed egy föderált platform, és a „födiverzum” része, amely azt jelenti, hogy beszélhet az ugyanazt a nyelvet beszélő egyéb platformokkal, például a Mastodonnal (lásd https://joinmastodon.org).
+\n
+\nEz azt is jeletni, hogy választania kell egy használandó kiszolgálót, avagy Pixelfed-példányt. Ha nem ismer egyet sem, akkor nézzen szét a https://pixelfed.org/join weboldalon.
+\n
+\nHogy többet tudjon meg a Pixelfedről, nézze meg a https://pixelfed.org weboldalt.</string>
+    <string name="whats_an_instance">Mi egy példány\?</string>
+    <string name="notification_summary_small">%1$s és %2$s</string>
+    <string name="notification_summary_medium">%1$s, %2$s és %3$s</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s és még %4$d felhasználó</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d új értesítés</item>
+        <item quantity="other">%d új értesítés</item>
+    </plurals>
+    <string name="other_notification_channel">Egyéb</string>
+    <string name="poll_notification_channel">Szavazások</string>
+    <string name="comment_notification_channel">Hozzászólások</string>
+    <string name="liked_notification_channel">Kedvelések</string>
+    <string name="shared_notification_channel">Megosztások</string>
+    <string name="mention_notification_channel">Megemlítések</string>
+    <string name="followed_notification_channel">Új követők</string>
+    <string name="other_notification">Értesítés a következőtől: %1$s</string>
+    <string name="poll_notification">%1$s szavazása véget ért</string>
+    <string name="comment_notification">%1$s hozzászólt a bejegyzéséhez</string>
+    <string name="liked_notification">%1$s kedvelte a bejegyzését</string>
+    <string name="shared_notification">%1$s megosztotta a bejegyzését</string>
+    <string name="mention_notification">%1$s megemlítette Önt</string>
+    <string name="followed_notification">%1$s követi Önt</string>
+    <string name="dark_theme">Sötét</string>
+    <string name="light_theme">Világos</string>
+    <string name="default_system">Alapértelmezett (a rendszert követi)</string>
+    <string name="theme_header">Téma</string>
+    <string name="theme_title">Alkalmazástéma</string>
+    <string name="title_activity_settings2">Beállítások</string>
+    <string name="instance_not_pixelfed_cancel">Kijelentkezés megszakítása</string>
+    <string name="instance_not_pixelfed_continue">Oké, folytatás mindenképp</string>
+    <string name="instance_not_pixelfed_warning">Ez nem tűnik Pixelfed-példánynak, így alkalmazás működése váratlan módon elromolhat.</string>
+    <string name="instance_error">A példány információinak lekérése nem sikerült</string>
+    <string name="token_error">Hiba történt a token lekérése során</string>
+    <string name="verify_credentials">A felhasználói információk lekérése nem sikerült</string>
+    <string name="auth_failed">A hitelesítés nem sikerült</string>
+    <string name="browser_launch_failed">Nem sikerült böngészőt indítani, van Önnek egy telepítve\?</string>
+    <string name="registration_failed">Az alkalmazás regisztrációja nem sikerült ezzel a kiszolgálóval</string>
+    <string name="invalid_domain">Érvénytelen domain</string>
+    <string name="menu_settings">Beállítások</string>
+    <string name="menu_account">Saját profil</string>
+    <string name="app_name">PixelDroid</string>
+</resources>

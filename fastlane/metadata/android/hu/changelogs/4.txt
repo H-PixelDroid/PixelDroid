@@ -1,0 +1,9 @@
+- Értesítések támogatása! Még kezdetleges, némi csiszolás várható :)
+- A rossz irányban megjelentő képek javítása
+- #300-as jegy javítása
+- Az egyes böngészők bejelentkezési hibájának javítása, mert a webcím nem URI kódolású szóközöket tartalmazott
+- Hiba javítása, amely a listák törlését okozta az alkalmazás indításakor
+- Cseh nyelv hozzáadása, más fordítások frissítése
+- Profilképek javítása
+- A lapváltás után nem működő kamera javítása
+- Függőségek frissítése
