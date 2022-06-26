@@ -1,0 +1,7 @@
+* Nyelv hozzáadása (malajálam)
+
+* Egyes hibás API-válaszok kezelését érintő hibajavítások
+
+* Függőségek frissítése
+
+* Fordítások frissítése

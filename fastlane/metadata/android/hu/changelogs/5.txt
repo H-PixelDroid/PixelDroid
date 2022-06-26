@@ -1,0 +1,5 @@
+* Fordítások frissítése
+* A licencinformációk megtekintésének egyszerűbb módja
+* Engedélyproblémák megoldása a kamera lapon
+* Hivatkozások feldolgozásának javítása
+* Felfedezés nézet javítása (lehet, hogy példányfrissítés szükséges)

@@ -1,0 +1,7 @@
+* Fordítási frissítések: új karakterláncok, és a meglévők frissítése. Köszönet a fordítóknak ❤️! Keresse fel a Weblate oldalunkat, ha segítene az alkalmazás lefordításában.
+
+* #️⃣ Hashtag támogatás. Most már böngészheti a hashtageket, ahelyett hogy csak a felugró üzenetet látná 😜
+
+* Kattintson a lapra a tetejére görgetéshez. Nincs több felesleges görgetés :)
+
+* Néhány összeomlást okozó hiba javítási kísérlete. Köszönöm mindenkinek, aki összeomlási jelentést küldött! ❤️
