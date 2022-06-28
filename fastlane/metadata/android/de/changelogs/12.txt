@@ -1,0 +1,3 @@
+* Videobearbeitung! Stumm schalten, zuschneiden von Videos
+* Bilder im Vollbildmodus öffnen, zoomen und schwenken :)
+* Übersetzungs-Updates
