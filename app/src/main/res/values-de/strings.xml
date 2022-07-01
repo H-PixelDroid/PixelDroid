@@ -208,4 +208,20 @@
     <string name="comment_notification">%1$s hat deinen Beitrag kommentiert</string>
     <string name="liked_notification_channel">Gefällt Mir</string>
     <string name="login_notifications">Konnte die neuesten Benachrichtigungen nicht abrufen</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s und %4$d weitere</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d neue Benachrichtigung</item>
+        <item quantity="other">%d neue Benachrichtigungen</item>
+    </plurals>
+    <string name="notification_summary_medium">%1$s, %2$s und %3$s</string>
+    <string name="notification_summary_small">%1$s und %2$s</string>
+    <string name="video_not_supported">Der von dir verwendete Server unterstützt keine Video-Uploads, daher wirst du die in diesem Beitrag enthaltende Videos möglicherweise nicht hochladen können</string>
+    <string name="post_is_video">Dieser Beitrag ist ein Video</string>
+    <string name="play_video">Video abspielen</string>
+    <string name="video_edit_not_yet_supported">Das Bearbeiten von Videos wird noch nicht unterstützt</string>
+    <string name="reset_edit_menu">ZURÜCKSETZEN</string>
+    <string name="save_edit_menu">SPEICHERN</string>
+    <string name="new_post_shortcut_long">Neuen Beitrag erstellen</string>
+    <string name="new_post_shortcut_short">Neuer Beitrag</string>
+    <string name="status_notification">%1$s hat einen Beitrag erstellt</string>
 </resources>

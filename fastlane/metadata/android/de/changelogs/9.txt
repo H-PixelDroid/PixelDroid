@@ -1,0 +1,3 @@
+* Behebung des Absturzes beim Anzeigen der Lizenzliste
+* Starke Verbesserung der Leistung bei der Profilaktivität
+* Aktualisierung der Abhängigkeiten

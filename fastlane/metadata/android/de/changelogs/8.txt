@@ -1,0 +1,4 @@
+* Unterstützung für die Wiedergabe und das Hochladen von Videos hinzugefügt
+* Verbesserungen der Benachrichtigung
+* Aktualisierte Übersetzungen
+* Aktualisierung der Abhängigkeiten
