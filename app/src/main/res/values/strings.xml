@@ -212,9 +212,9 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="hashtags">HASHTAGS</string>
     <!-- Sensitive media -->
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Hidden Media\n (click to show)</string>
-    <!-- Shown when image has finished uploading. {gmd_cloud_done} is an icon, position it as is appropriate in target language -->
+    <!-- Shown when image has finished uploading.-->
     <string name="media_upload_completed">Media upload completed</string>
-    <!-- Shown when image uploading has failed. {gmd_cloud_off} is an icon, position it as is appropriate in target language -->
+    <!-- Shown when image uploading has failed.-->
     <string name="media_upload_failed">Media upload failed, try again or check network conditions</string>
     <string name="posting_image_accessibility_hint">Image that is being posted</string>
     <string name="retry">Retry</string>
@@ -234,8 +234,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="share_link">Share Link</string>
     <string name="optional_report_comment">Optional message for mods/admins</string>
     <string name="report_target">Report @%1$s\'s post</string>
-    <!-- Text on button, shown when report was successful. {gmd_check_circle} is an icon, position it as is appropriate in target language -->
-    <string name="reported">Reported {gmd_check_circle}</string>
+    <string name="reported">Post reported</string>
     <string name="report_error">Could not send report</string>
     <string name="toolbar_title_edit">Edit</string>
     <string name="profile_picture">Profile picture</string>
@@ -274,4 +273,9 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="new_post_shortcut_short">New post</string>
     <string name="follow_request">%1$s requests to follow you</string>
     <string name="status_notification">%1$s created a post</string>
+    <string name="home_feed">Home</string>
+    <string name="search_discover_feed">Search</string>
+    <string name="create_feed">Create</string>
+    <string name="notifications_feed">Updates</string>
+    <string name="public_feed">Public</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
@@ -79,6 +80,19 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
+        override fun onDisplayPreferenceDialog(preference: Preference) {
+            var dialogFragment: DialogFragment? = null
+            if (preference is ColorPreference) {
+                dialogFragment = ColorPreferenceDialog((preference as ColorPreference?)!!)
+            }
+            if (dialogFragment != null) {
+                dialogFragment.setTargetFragment(this, 0)
+                dialogFragment.show(parentFragmentManager, "settings_fragment")
+            } else {
+                super.onDisplayPreferenceDialog(preference)
+            }
+        }
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
