@@ -3,13 +3,12 @@ package org.pixeldroid.app.postCreation.camera
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 
 
-class CameraActivity : BaseActivity() {
+class CameraActivity : BaseThemedWithBarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
@@ -32,7 +31,7 @@ class CameraActivity : BaseActivity() {
  * [org.pixeldroid.app.postCreation.PostCreationActivity] instead of "returning" to a non-existent
  * [org.pixeldroid.app.postCreation.PostCreationActivity]
  */
-class CameraActivityShortcut : AppCompatActivity() {
+class CameraActivityShortcut : BaseThemedWithBarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)

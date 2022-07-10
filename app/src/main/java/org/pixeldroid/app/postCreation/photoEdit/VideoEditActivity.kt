@@ -28,12 +28,12 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityVideoEditBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
 import org.pixeldroid.app.postCreation.carousel.dpToPx
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.ffmpegSafeUri
 import java.io.File
 
 
-class VideoEditActivity : BaseActivity() {
+class VideoEditActivity : BaseThemedWithBarActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private var videoPosition: Int = -1

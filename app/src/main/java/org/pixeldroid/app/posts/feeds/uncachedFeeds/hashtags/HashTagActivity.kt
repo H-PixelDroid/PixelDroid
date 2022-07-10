@@ -3,11 +3,11 @@ package org.pixeldroid.app.posts.feeds.uncachedFeeds.hashtags
 import android.os.Bundle
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.objects.Tag.Companion.HASHTAG_TAG
 
 
-class HashTagActivity : BaseActivity() {
+class HashTagActivity : BaseThemedWithBarActivity() {
     private var tagFragment = UncachedPostsFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {

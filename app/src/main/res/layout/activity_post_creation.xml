@@ -22,24 +22,24 @@
             android:id="@+id/upload_error_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#90000000"
+            android:background="?attr/colorError"
             android:text="@string/media_upload_failed"
-            android:textColor="@color/colorPrimaryError"
+            android:textColor="?attr/colorOnError"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:drawableStartCompat="@drawable/cloud_off_24"
-            app:drawableTint="@color/colorPrimaryError" />
+            app:drawableTint="?attr/colorOnError" />
 
         <TextView
             android:id="@+id/upload_error_text_explanation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#90000000"
+            android:background="?attr/colorError"
             tools:text="Error code returned by server: 413"
-            android:textColor="@color/colorPrimaryError"
+            android:textColor="?attr/colorOnError"
             android:textSize="20sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -96,10 +96,8 @@
             android:id="@+id/post_creation_send_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="@color/colorButtonBg"
             android:enabled="true"
             android:text="@string/post"
-            android:textColor="@color/colorButtonText"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -136,9 +134,7 @@
         app:counterEnabled="true"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:textColorHint="@color/colorPrimaryTab"
         app:errorEnabled="true"
-        app:errorTextColor="@color/colorPrimaryError"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonConstraints"
         app:layout_constraintStart_toStartOf="parent">
@@ -148,8 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="10"
-            android:inputType="textMultiLine"
-            android:textColor="@color/colorPrimary" />
+            android:inputType="textMultiLine" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

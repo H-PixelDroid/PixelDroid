@@ -5,10 +5,12 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
@@ -17,17 +19,19 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
-import org.pixeldroid.app.R
-import org.pixeldroid.app.databinding.ActivityPhotoEditBinding
-import org.pixeldroid.app.postCreation.PostCreationActivity
-import org.pixeldroid.app.utils.BaseActivity
 import com.yalantis.ucrop.UCrop
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
+import org.pixeldroid.app.R
+import org.pixeldroid.app.databinding.ActivityPhotoEditBinding
+import org.pixeldroid.app.postCreation.PostCreationActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.bitmapFromUri
+import org.pixeldroid.app.utils.getColorFromAttr
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -44,7 +48,7 @@ private val REQUIRED_PERMISSIONS = arrayOf(
     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 )
 
-class PhotoEditActivity : BaseActivity() {
+class PhotoEditActivity : BaseThemedWithBarActivity() {
 
     var saving: Boolean = false
     private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
@@ -265,8 +269,10 @@ class PhotoEditActivity : BaseActivity() {
         val file = File.createTempFile("temp_crop_img", ".png", cacheDir)
 
         val options: UCrop.Options = UCrop.Options().apply {
-            setStatusBarColor(resources.getColor(R.color.colorPrimaryDark, theme))
-            setActiveControlsWidgetColor(resources.getColor(R.color.colorButtonBg, theme))
+            setStatusBarColor(this@PhotoEditActivity.getColorFromAttr(R.attr.colorPrimaryDark))
+            setToolbarWidgetColor(this@PhotoEditActivity.getColorFromAttr(R.attr.colorOnSurface))
+            setToolbarColor(this@PhotoEditActivity.getColorFromAttr(R.attr.colorSurface))
+            setActiveControlsWidgetColor(this@PhotoEditActivity.getColorFromAttr(R.attr.colorPrimary))
         }
         val uCrop: UCrop = UCrop.of(initialUri!!, Uri.fromFile(file)).withOptions(options)
         uCrop.start(this)

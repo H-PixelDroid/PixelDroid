@@ -6,10 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
 import org.pixeldroid.app.databinding.FragmentProfilePostsBinding
@@ -32,23 +33,19 @@ import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedContentRepository
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
 import org.pixeldroid.app.posts.parseHTMLText
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BlurHashDecoder
 import org.pixeldroid.app.utils.ImageConverter
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
+import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.openUrl
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import org.pixeldroid.app.databinding.ErrorLayoutBinding
-import org.pixeldroid.app.postCreation.carousel.dpToPx
-import org.pixeldroid.app.utils.BlurHashDecoder
-import org.pixeldroid.app.utils.api.objects.Attachment
 import retrofit2.HttpException
 import java.io.IOException
 
-class ProfileActivity : BaseActivity() {
+class ProfileActivity : BaseThemedWithBarActivity() {
 
     private lateinit var domain : String
     private lateinit var accountId : String

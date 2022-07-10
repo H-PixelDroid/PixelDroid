@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ThumbnailListItemBinding
 import com.zomato.photofilters.utils.ThumbnailItem
+import org.pixeldroid.app.utils.getColorFromAttr
 
 class ThumbnailAdapter (private val context: Context,
                         private val tbItemList: List<ThumbnailItem>,
@@ -43,9 +44,9 @@ class ThumbnailAdapter (private val context: Context,
         holder.filterName.text = tbItem.filterName
 
         if(selectedIndex == position)
-            holder.filterName.setTextColor(ContextCompat.getColor(context, R.color.filterLabelSelected))
+            holder.filterName.setTextColor(context.getColorFromAttr(R.attr.colorPrimary))
         else
-            holder.filterName.setTextColor(ContextCompat.getColor(context, R.color.filterLabelNormal))
+            holder.filterName.setTextColor(context.getColorFromAttr(R.attr.colorOnBackground))
     }
 
     class MyViewHolder(itemBinding: ThumbnailListItemBinding): RecyclerView.ViewHolder(itemBinding.root) {

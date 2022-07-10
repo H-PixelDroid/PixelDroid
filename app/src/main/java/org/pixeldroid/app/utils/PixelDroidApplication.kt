@@ -2,6 +2,7 @@ package org.pixeldroid.app.utils
 
 import android.app.Application
 import androidx.preference.PreferenceManager
+import com.google.android.material.color.DynamicColors
 import org.pixeldroid.app.utils.di.*
 import com.mikepenz.iconics.Iconics
 import org.ligi.tracedroid.TraceDroid
@@ -26,6 +27,9 @@ class PixelDroidApplication: Application() {
             .aPIModule(APIModule())
             .build()
         mApplicationComponent.inject(this)
+
+        //TODO put condition depending on setting to apply dynamic colours (android 12+)
+        if(false) DynamicColors.applyToActivitiesIfAvailable(this)
     }
 
     fun getAppComponent(): ApplicationComponent {

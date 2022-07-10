@@ -2,7 +2,9 @@ package org.pixeldroid.app.postCreation
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.*
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.*
@@ -26,7 +28,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.arthenica.ffmpegkit.*
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostCreationBinding
@@ -34,7 +35,7 @@ import org.pixeldroid.app.postCreation.camera.CameraActivity
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
 import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.ffmpegSafeUri
@@ -58,7 +59,7 @@ data class PhotoData(
     var videoEncodeProgress: Int? = null,
 )
 
-class PostCreationActivity : BaseActivity() {
+class PostCreationActivity : BaseThemedWithoutBarActivity() {
 
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity

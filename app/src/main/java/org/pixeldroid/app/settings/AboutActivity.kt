@@ -5,9 +5,9 @@ import android.os.Bundle
 import org.pixeldroid.app.BuildConfig
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityAboutBinding
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 
-class AboutActivity : BaseActivity() {
+class AboutActivity : BaseThemedWithBarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityAboutBinding.inflate(layoutInflater)

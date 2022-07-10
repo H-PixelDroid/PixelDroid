@@ -17,6 +17,7 @@
             android:id="@+id/main_activity_main_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,27 +28,23 @@
                 android:id="@+id/main_drawer_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimaryTab"
+                android:background="?attr/colorSurface"
                 android:contentDescription="@string/open_drawer_menu"
                 android:padding="12dp"
                 android:src="@drawable/ic_baseline_menu_24" />
 
-            <com.google.android.material.tabs.TabLayout
+            <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/tabs"
+                app:elevation="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabBackground="@color/colorPrimaryTab"
-                app:tabGravity="fill"
-                app:tabMaxWidth="0dp"
-                app:tabMode="fixed"
-                app:tabUnboundedRipple="false" />
+                app:menu="@menu/bottom_navigation_main" />
         </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:layout_constraintBottom_toTopOf="@+id/main_activity_main_linear_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

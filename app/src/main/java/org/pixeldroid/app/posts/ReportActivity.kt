@@ -5,12 +5,12 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityReportBinding
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.objects.Status
 import retrofit2.HttpException
 import java.io.IOException
 
-class ReportActivity : BaseActivity() {
+class ReportActivity : BaseThemedWithBarActivity() {
 
     private lateinit var binding: ActivityReportBinding
 
@@ -56,14 +56,14 @@ class ReportActivity : BaseActivity() {
     private fun reportStatus(success: Boolean){
         if(success){
             binding.reportProgressBar.visibility = View.GONE
-            binding.reportButton.isEnabled = false
-            binding.reportButton.text = getString(R.string.reported)
-            binding.reportButton.visibility = View.VISIBLE
+            binding.reportButton.visibility = View.INVISIBLE
+            binding.reportSuccess.visibility = View.VISIBLE
         } else {
             binding.textInputLayout.error = getString(R.string.report_error)
             binding.reportButton.visibility = View.VISIBLE
             binding.textInputLayout.editText?.isEnabled = true
             binding.reportProgressBar.visibility = View.GONE
+            binding.reportSuccess.visibility = View.GONE
         }
     }
 }

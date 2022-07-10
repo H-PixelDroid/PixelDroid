@@ -10,6 +10,12 @@
             app:title="@string/theme_title"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/palette_black_24dp"/>
+
+        <org.pixeldroid.app.settings.ColorPreference
+            android:title="@string/accentColorTitle"
+            android:key="themeColor"
+            android:defaultValue="0"
+            android:summary="@string/accentColorSummary" />
     </PreferenceCategory>
 
     <ListPreference

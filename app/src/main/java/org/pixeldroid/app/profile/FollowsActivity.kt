@@ -3,14 +3,14 @@ package org.pixeldroid.app.profile
 import android.os.Bundle
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.accountLists.AccountListFragment
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.Account.Companion.ACCOUNT_ID_TAG
 import org.pixeldroid.app.utils.api.objects.Account.Companion.ACCOUNT_TAG
 import org.pixeldroid.app.utils.api.objects.Account.Companion.FOLLOWERS_TAG
-import org.pixeldroid.app.utils.BaseActivity
 
 
-class FollowsActivity : BaseActivity() {
+class FollowsActivity : BaseThemedWithBarActivity() {
     private var followsFragment = AccountListFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {

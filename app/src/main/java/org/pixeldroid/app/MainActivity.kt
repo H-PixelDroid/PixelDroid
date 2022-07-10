@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +18,9 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.materialdrawer.iconics.iconicsIcon
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
@@ -39,9 +40,8 @@ import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
 import org.pixeldroid.app.utils.db.addUser
-import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
@@ -49,12 +49,13 @@ import org.pixeldroid.app.utils.hasInternet
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
+import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
 import retrofit2.HttpException
 import java.io.IOException
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseThemedWithoutBarActivity() {
 
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
@@ -68,7 +69,6 @@ class MainActivity : BaseActivity() {
 
     @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -142,11 +142,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupDrawer() {
-        binding.mainDrawerButton.setOnClickListener{
-            binding.drawerLayout.open()
+       binding.mainDrawerButton.setOnClickListener{
+            binding.drawerLayout.openDrawer(binding.drawer)
         }
 
         header = AccountHeaderView(this).apply {
+            attachToSliderView(binding.drawer)
             headerBackgroundScaleType = ImageView.ScaleType.CENTER_CROP
             currentHiddenInList = true
             onAccountHeaderListener = { _: View?, profile: IProfile, current: Boolean ->
@@ -158,7 +159,6 @@ class MainActivity : BaseActivity() {
                 descriptionRes = R.string.add_account_description
                 iconicsIcon = GoogleMaterial.Icon.gmd_add
             }, 0)
-            attachToSliderView(binding.drawer)
             dividerBelowHeader = false
             closeDrawerOnProfileListClick = true
         }
@@ -294,7 +294,7 @@ class MainActivity : BaseActivity() {
             isIconTinted = true
         }
         .apply(block)
-}
+    }
 
     private fun fillDrawerAccountInfo(account: String) {
         val users = db.userDao().getAll().toMutableList()
@@ -353,32 +353,57 @@ class MainActivity : BaseActivity() {
                 return tab_array.size
             }
         }
-        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?){}
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                tab?.position?.let { position ->
-                    val page =
-                        //No clue why this works but it does. F to pay respects
-                        supportFragmentManager.findFragmentByTag("f$position")
-                    (page as? CachedFeedFragment<*>)?.onTabReClicked()
+        binding.viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                val selected = when(position){
+                    0 -> R.id.page_1
+                    1 -> R.id.page_2
+                    2 -> R.id.page_3
+                    3 -> R.id.page_4
+                    4 -> R.id.page_5
+                    else -> null
                 }
+                if (selected != null) {
+                    binding.tabs.selectedItemId = selected
+                }
+                super.onPageSelected(position)
             }
         })
 
-        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
-            tab.icon = ContextCompat.getDrawable(applicationContext,
-                    when(position){
-                        0 -> R.drawable.ic_home_white_24dp
-                        1 -> R.drawable.ic_search_white_24dp
-                        2 -> R.drawable.photo_camera
-                        3 -> R.drawable.ic_heart
-                        4 -> R.drawable.ic_filter_black_24dp
-                        else -> throw IllegalArgumentException()
-                    })
-        }.attach()
+        fun MenuItem.itemPos(): Int? {
+            return when(itemId){
+                R.id.page_1 -> 0
+                R.id.page_2 -> 1
+                R.id.page_3 -> 2
+                R.id.page_4 -> 3
+                R.id.page_5 -> 4
+                else -> null
+            }
+        }
+
+        binding.tabs.setOnItemSelectedListener {item ->
+            item.itemPos()?.let {
+                binding.viewPager.currentItem = it
+                true
+            } ?: false
+        }
+        binding.tabs.setOnItemReselectedListener { item ->
+            item.itemPos()?.let { position ->
+                val page =
+                    //No clue why this works but it does. F to pay respects
+                    supportFragmentManager.findFragmentByTag("f$position")
+                (page as? CachedFeedFragment<*>)?.onTabReClicked()
+            }
+        }
+    }
+
+    fun BottomNavigationView.uncheckAllItems() {
+        menu.setGroupCheckable(0, true, false)
+        for (i in 0 until menu.size()) {
+            menu.getItem(i).isChecked = false
+        }
+        menu.setGroupCheckable(0, true, true)
     }
 
     /**

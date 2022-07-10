@@ -12,10 +12,10 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchAccountFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchHashtagFragment
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.objects.Results
-import org.pixeldroid.app.utils.BaseActivity
 
-class SearchActivity : BaseActivity() {
+class SearchActivity : BaseThemedWithBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

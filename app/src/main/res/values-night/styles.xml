@@ -1,0 +1,121 @@
+
+<resources>
+    <style name="AppTheme" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/md_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_dark_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
+        <item name="elevationOverlayColor">@color/md_theme_dark_surfaceTint</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
+    </style>
+    <style name="AppTheme2" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/md_theme_dark_primary2</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimary2</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer2</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer2</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary2</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_onSecondary2</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer2</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer2</item>
+        <item name="colorTertiary">@color/md_theme_dark_tertiary2</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_onTertiary2</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_tertiaryContainer2</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_onTertiaryContainer2</item>
+        <item name="colorError">@color/md_theme_dark_error2</item>
+        <item name="colorOnError">@color/md_theme_dark_onError2</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_errorContainer2</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer2</item>
+        <item name="android:colorBackground">@color/md_theme_dark_background2</item>
+        <item name="colorOnBackground">@color/md_theme_dark_onBackground2</item>
+        <item name="colorSurface">@color/md_theme_dark_surface2</item>
+        <item name="colorOnSurface">@color/md_theme_dark_onSurface2</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surfaceVariant2</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant2</item>
+        <item name="colorOutline">@color/md_theme_dark_outline2</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface2</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface2</item>
+        <item name="elevationOverlayColor">@color/md_theme_dark_surfaceTint2</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary2</item>
+    </style>
+
+    <style name="AppTheme3" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/md_theme_dark_primary3</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimary3</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer3</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer3</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary3</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_onSecondary3</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer3</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer3</item>
+        <item name="colorTertiary">@color/md_theme_dark_tertiary3</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_onTertiary3</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_tertiaryContainer3</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_onTertiaryContainer3</item>
+        <item name="colorError">@color/md_theme_dark_error3</item>
+        <item name="colorOnError">@color/md_theme_dark_onError3</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_errorContainer3</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer3</item>
+        <item name="android:colorBackground">@color/md_theme_dark_background3</item>
+        <item name="colorOnBackground">@color/md_theme_dark_onBackground3</item>
+        <item name="colorSurface">@color/md_theme_dark_surface3</item>
+        <item name="colorOnSurface">@color/md_theme_dark_onSurface3</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surfaceVariant3</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant3</item>
+        <item name="colorOutline">@color/md_theme_dark_outline3</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface3</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface3</item>
+        <item name="elevationOverlayColor">@color/md_theme_dark_surfaceTint3</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary3</item>
+    </style>
+
+    <style name="AppTheme4" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/md_theme_dark_primary4</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimary4</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer4</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer4</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary4</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_onSecondary4</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer4</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer4</item>
+        <item name="colorTertiary">@color/md_theme_dark_tertiary4</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_onTertiary4</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_tertiaryContainer4</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_onTertiaryContainer4</item>
+        <item name="colorError">@color/md_theme_dark_error4</item>
+        <item name="colorOnError">@color/md_theme_dark_onError4</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_errorContainer4</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer4</item>
+        <item name="android:colorBackground">@color/md_theme_dark_background4</item>
+        <item name="colorOnBackground">@color/md_theme_dark_onBackground4</item>
+        <item name="colorSurface">@color/md_theme_dark_surface4</item>
+        <item name="colorOnSurface">@color/md_theme_dark_onSurface4</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surfaceVariant4</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant4</item>
+        <item name="colorOutline">@color/md_theme_dark_outline4</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface4</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface4</item>
+        <item name="elevationOverlayColor">@color/md_theme_dark_surfaceTint4</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary4</item>
+    </style>
+</resources>

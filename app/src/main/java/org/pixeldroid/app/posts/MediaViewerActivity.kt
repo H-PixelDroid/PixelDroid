@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo
 import android.media.AudioManager.STREAM_MUSIC
 import android.os.Bundle
 import androidx.core.net.toUri
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat.getInsetsController
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -15,9 +14,9 @@ import androidx.media2.common.MediaMetadata
 import androidx.media2.common.UriMediaItem
 import androidx.media2.player.MediaPlayer
 import org.pixeldroid.app.databinding.ActivityMediaviewerBinding
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
 
-class MediaViewerActivity : BaseActivity() {
+class MediaViewerActivity : BaseThemedWithoutBarActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var binding: ActivityMediaviewerBinding

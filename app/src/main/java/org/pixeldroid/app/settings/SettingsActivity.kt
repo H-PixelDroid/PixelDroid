@@ -4,15 +4,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.setThemeFromPreferences
 
-class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var restartMainOnExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +63,9 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
             "language" -> {
                 recreateWithRestartStatus()
             }
+            "themeColor" -> {
+                recreateWithRestartStatus()
+            }
         }
     }
 
@@ -79,6 +83,19 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
+        override fun onDisplayPreferenceDialog(preference: Preference) {
+            var dialogFragment: DialogFragment? = null
+            if (preference is ColorPreference) {
+                dialogFragment = ColorPreferenceDialog((preference as ColorPreference?)!!)
+            }
+            if (dialogFragment != null) {
+                dialogFragment.setTargetFragment(this, 0)
+                dialogFragment.show(parentFragmentManager, "settings_fragment")
+            } else {
+                super.onDisplayPreferenceDialog(preference)
+            }
+        }
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 

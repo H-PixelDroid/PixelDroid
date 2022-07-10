@@ -10,22 +10,22 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.ActivityLoginBinding
 import org.pixeldroid.app.utils.*
 import org.pixeldroid.app.utils.api.PixelfedAPI
-import org.pixeldroid.app.utils.api.objects.*
+import org.pixeldroid.app.utils.api.objects.Application
+import org.pixeldroid.app.utils.api.objects.Instance
+import org.pixeldroid.app.utils.api.objects.NodeInfo
 import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.storeInstance
-import kotlinx.coroutines.*
-import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker
 import org.pixeldroid.app.utils.notificationsWorker.makeChannelGroupId
 import org.pixeldroid.app.utils.notificationsWorker.makeNotificationChannels
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.IllegalArgumentException
-import java.lang.NullPointerException
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -42,7 +42,7 @@ since they do not depend on each other)
 
  */
 
-class LoginActivity : BaseActivity() {
+class LoginActivity : BaseThemedWithoutBarActivity() {
 
     companion object {
         private const val PACKAGE_ID = BuildConfig.APPLICATION_ID

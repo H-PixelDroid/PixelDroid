@@ -256,8 +256,7 @@ class ImageCarousel(
             if(value){
                 recyclerView.layoutManager = CarouselLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-                binding.btnNext.visibility = VISIBLE
-                binding.btnPrevious.visibility = VISIBLE
+                showNavigationButtons = showNavigationButtons
 
                 binding.editMediaDescriptionLayout.visibility = if(editingMediaDescription) VISIBLE else INVISIBLE
                 tvCaption.visibility = if(editingMediaDescription) INVISIBLE else VISIBLE
@@ -395,7 +394,7 @@ class ImageCarousel(
 
                 showNavigationButtons = getBoolean(
                         R.styleable.ImageCarousel_showNavigationButtons,
-                        true
+                        false
                 )
 
                 layoutCarousel = getBoolean(
@@ -561,6 +560,7 @@ class ImageCarousel(
 
             initOnScrollStateChange()
         }
+        showNavigationButtons = data.size != 1
     }
 
     fun updateProgress(progress: Int?, position: Int, error: Boolean){

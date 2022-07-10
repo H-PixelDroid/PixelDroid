@@ -48,8 +48,6 @@
                     android:id="@+id/connect_instance_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorButtonBg"
-                    android:textColor="@color/colorButtonText"
                     android:text="@string/connect_to_pixelfed" />
 
                 <TextView
