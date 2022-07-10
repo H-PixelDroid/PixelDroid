@@ -1,0 +1,4 @@
+* Add gson proguard rules to fix crashes on Mastodon instances
+* Add color theming with 4 different themes
+* Move to Material 3
+* Improve consistency of the UI
