@@ -219,4 +219,16 @@
     <string name="no_storage_permission">Non tes permiso de almacenaxe, concede o permiso nos axustes se queres permitir que PixelDroid mostre a miniatura</string>
     <string name="play_video">Reproducir vídeo</string>
     <string name="video_edit_not_yet_supported">Aínda non hai soporte para edición de vídeo</string>
+    <string name="reset_edit_menu">RESTABLECER</string>
+    <string name="save_edit_menu">GARDAR</string>
+    <string name="encode_error">Erro ao codificar</string>
+    <string name="encode_success">Codificación correcta!</string>
+    <string name="encode_progress">Codificar %1$d%%</string>
+    <string name="still_encoding">Aínda se están codificando un ou máis vídeos. Agarda a que rematen antes de subilos</string>
+    <string name="new_post_shortcut_long">Crear nova publicación</string>
+    <string name="new_post_shortcut_short">Nova publicación</string>
+    <string name="follow_request">%1$s solicitou seguirte</string>
+    <string name="status_notification">%1$s creou unha publicación</string>
+    <string name="thumbnail_reel_video_edit">Fila mostrando as miniaturas do vídeo que estás editando</string>
+    <string name="select_video_range">Elixe a parte a conservar do vídeo</string>
 </resources>
