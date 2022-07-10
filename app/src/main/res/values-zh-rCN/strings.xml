@@ -9,7 +9,7 @@
     <string name="auth_failed">无法验证</string>
     <string name="token_error">获取验证令牌时出错</string>
     <string name="theme_header">主题</string>
-    <string name="post">发送</string>
+    <string name="post">帖文</string>
     <string name="logout">注销</string>
     <string name="app_name">PixelDroid</string>
     <string name="title_activity_settings2">配置</string>
@@ -128,7 +128,7 @@
     <string name="profile_picture">个人资料图片</string>
     <string name="toolbar_title_edit">编辑</string>
     <string name="report_error">无法发送报告</string>
-    <string name="reported">已报告 {gmd_check_circle}</string>
+    <string name="reported">已报告该帖文</string>
     <string name="report_target">报告 @%1$s 的帖子</string>
     <string name="optional_report_comment">管理员的可选消息</string>
     <string name="report">报告</string>
@@ -220,4 +220,13 @@
     <string name="new_post_shortcut_short">新帖子</string>
     <string name="follow_request">%1$s 请求关注你</string>
     <string name="status_notification">%1$s 创建了一个帖子</string>
+    <string name="home_feed">主页</string>
+    <string name="search_discover_feed">搜索</string>
+    <string name="create_feed">创建</string>
+    <string name="notifications_feed">更新</string>
+    <string name="public_feed">公开</string>
+    <string name="accentColorSummary">选择强调色</string>
+    <string name="color_choice_button">选择这个强调色</string>
+    <string name="color_chosen">已选择强调色</string>
+    <string name="accentColorTitle">强调色</string>
 </resources>
