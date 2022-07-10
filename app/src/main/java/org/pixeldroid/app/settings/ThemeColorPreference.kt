@@ -1,9 +1,8 @@
 package org.pixeldroid.app.settings
 
 import android.content.Context
-import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.content.res.TypedArray
-import android.graphics.Color
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -12,17 +11,20 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
+import androidx.annotation.ColorRes
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.preference.DialogPreference
 import androidx.preference.PreferenceDialogFragmentCompat
 import androidx.preference.PreferenceViewHolder
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ColorDialogBinding
-import org.pixeldroid.app.databinding.ImageCarouselBinding
 
 
-/** AndroidX version created by yvolk@yurivolkov.com
+/** Inspired by https://github.com/andstatus/todoagenda's color chooser.
+ * AndroidX version created by yvolk@yurivolkov.com
  * based on this answer: https://stackoverflow.com/a/53290775/297710
  * and on the code of https://github.com/koji-1009/ChronoDialogPreference
  */
@@ -40,19 +42,11 @@ class ColorPreferenceDialog(preference: ColorPreference) :
 
     override fun onCreateDialogView(context: Context): View? {
         val picker = ColorPickerView(context)
+        preference.color?.let {
+            picker.color = it
+        }
         mPicker = picker
         return mPicker
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val dialog: AlertDialog? = dialog as AlertDialog?
-        if (preference.selectNoneButtonText != null && preference.defaultColor != null && mPicker != null && dialog != null) {
-            // In order to prevent dialog from closing we setup its onLickListener this late
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE)?.setOnClickListener{
-                        mPicker?.setCurrentColor(preference.defaultColor!!)
-            }
-        }
     }
 
     override fun onPrepareDialogBuilder(builder: AlertDialog.Builder) {
@@ -71,18 +65,10 @@ class ColorPreferenceDialog(preference: ColorPreference) :
     }
 }
 
-class ColorPreference constructor(context: Context, attrs: AttributeSet? = null) :
-    DialogPreference(context, attrs) {
+class ColorPreference constructor(context: Context, attrs: AttributeSet? = null) : DialogPreference(context, attrs) {
     var selectNoneButtonText: String? = null
     var defaultColor: Int? = null
-    private var noneSelectedSummaryText: String? = null
-    private val summaryText: CharSequence = super.getSummary()!!
     private var thumbnail: View? = null
-    private val mPicker: ColorPickerView? = null
-
-    init {
-
-    }
 
     override fun onBindViewHolder(viewHolder: PreferenceViewHolder) {
         thumbnail = addThumbnail(viewHolder.itemView)
@@ -117,15 +103,21 @@ class ColorPreference constructor(context: Context, attrs: AttributeSet? = null)
 
     private val persistedIntDefaultOrNull: Int
         get() = if (shouldPersist() && sharedPreferences?.contains(key) == true)
-            Integer.valueOf(getPersistedInt(Color.GRAY)) else defaultColor!!
+            Integer.valueOf(getPersistedInt(0)) else defaultColor!!
 
     private fun showColor(color: Int?) {
         val thumbColor = color ?: defaultColor
         thumbnail?.visibility = if (thumbColor == null) View.GONE else View.VISIBLE
-        thumbnail?.findViewById<ImageView>(R.id.colorPreview)?.setBackgroundColor(thumbColor ?: 0)
-        if (noneSelectedSummaryText != null) {
-            summary = if (thumbColor == null) noneSelectedSummaryText else summaryText
+        @ColorRes
+        val colorCode: Int = when(thumbColor){
+            1 -> R.color.seed2
+            2 -> R.color.seed3
+            3 -> R.color.seed4
+            else -> R.color.seed
         }
+        thumbnail?.findViewById<ImageView>(R.id.colorPreview)?.imageTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(context, colorCode)
+        )
     }
 
     private fun removeSetting() {
@@ -153,13 +145,8 @@ class ColorPreference constructor(context: Context, attrs: AttributeSet? = null)
         private fun readDefaultValue(a: TypedArray, index: Int): Int? {
             if (a.peekValue(index) != null) {
                 val type = a.peekValue(index).type
-                if (type == TypedValue.TYPE_STRING) {
-                    return when(a.getString(index)){
-                        "default" -> 0
-                        "second" -> 1
-                        "third" -> 2
-                        else -> null
-                    }
+                if (TypedValue.TYPE_FIRST_INT <= type && type <= TypedValue.TYPE_LAST_INT) {
+                    return a.getInt(index, 0)
                 }
             }
             return null
@@ -170,17 +157,36 @@ class ColorPreference constructor(context: Context, attrs: AttributeSet? = null)
         }
     }
 }
-class ColorPickerView @JvmOverloads constructor(context: Context?, attrs: AttributeSet? = null) : FrameLayout(context!!, attrs) {
+class ColorPickerView(context: Context?, attrs: AttributeSet? = null) : FrameLayout(context!!, attrs) {
     var binding: ColorDialogBinding
-
-    fun setCurrentColor(defaultColor: Int) {
-        Toast.makeText(context, "test $defaultColor", Toast.LENGTH_LONG).show()
-    }
 
     init {
         binding = ColorDialogBinding.inflate(LayoutInflater.from(context),this,  true)
+        binding.theme1.setOnClickListener { color = 0 }
+        binding.theme2.setOnClickListener { color = 1 }
+        binding.theme3.setOnClickListener { color = 2 }
+        binding.theme4.setOnClickListener { color = 3 }
+    }
+
+    private fun changeConstraint(button2: View) {
+        binding.chosenTheme.isVisible = true
+        val params = binding.chosenTheme.layoutParams as ConstraintLayout.LayoutParams
+        params.endToEnd = button2.id
+        params.startToStart = button2.id
+        binding.chosenTheme.layoutParams = params
+        binding.chosenTheme.requestLayout()
     }
     /** Returns the color selected by the user  */
     /** Sets the original color swatch and the current color to the specified value.  */
-    var color: Int = 1
+    var color: Int = 0
+        set(value) {
+            field = value
+            when(value) {
+                0 -> binding.theme1
+                1 -> binding.theme2
+                2 -> binding.theme3
+                3 -> binding.theme4
+                else -> null
+            }?.let { changeConstraint(it) }
+        }
 }

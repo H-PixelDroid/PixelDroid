@@ -10,10 +10,10 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.setThemeFromPreferences
 
-class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var restartMainOnExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +61,9 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
                 recreateWithRestartStatus()
             }
             "language" -> {
+                recreateWithRestartStatus()
+            }
+            "themeColor" -> {
                 recreateWithRestartStatus()
             }
         }

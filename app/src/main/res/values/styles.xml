@@ -24,7 +24,20 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="AppTheme2.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
+    <style name="AppTheme3.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme4.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
     <style name="AppTheme" parent="Theme.Material3.Light">
         <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
@@ -58,7 +71,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
 
-    <style name="AppTheme2" parent="Theme.Material3.Light.NoActionBar">
+    <style name="AppTheme2" parent="Theme.Material3.Light">
         <item name="colorPrimary">@color/md_theme_light_primary2</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary2</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer2</item>
@@ -86,5 +99,65 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface2</item>
         <item name="elevationOverlayColor">@color/md_theme_light_surfaceTint2</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary2</item>
+    </style>
+
+    <style name="AppTheme3" parent="Theme.Material3.Light">
+        <item name="colorPrimary">@color/md_theme_light_primary3</item>
+        <item name="colorOnPrimary">@color/md_theme_light_onPrimary3</item>
+        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer3</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer3</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary3</item>
+        <item name="colorOnSecondary">@color/md_theme_light_onSecondary3</item>
+        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer3</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer3</item>
+        <item name="colorTertiary">@color/md_theme_light_tertiary3</item>
+        <item name="colorOnTertiary">@color/md_theme_light_onTertiary3</item>
+        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer3</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer3</item>
+        <item name="colorError">@color/md_theme_light_error3</item>
+        <item name="colorOnError">@color/md_theme_light_onError3</item>
+        <item name="colorErrorContainer">@color/md_theme_light_errorContainer3</item>
+        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer3</item>
+        <item name="android:colorBackground">@color/md_theme_light_background3</item>
+        <item name="colorOnBackground">@color/md_theme_light_onBackground3</item>
+        <item name="colorSurface">@color/md_theme_light_surface3</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface3</item>
+        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant3</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant3</item>
+        <item name="colorOutline">@color/md_theme_light_outline3</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface3</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface3</item>
+        <item name="elevationOverlayColor">@color/md_theme_light_surfaceTint3</item>
+        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary3</item>
+    </style>
+
+    <style name="AppTheme4" parent="Theme.Material3.Light">
+        <item name="colorPrimary">@color/md_theme_light_primary4</item>
+        <item name="colorOnPrimary">@color/md_theme_light_onPrimary4</item>
+        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer4</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer4</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary4</item>
+        <item name="colorOnSecondary">@color/md_theme_light_onSecondary4</item>
+        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer4</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer4</item>
+        <item name="colorTertiary">@color/md_theme_light_tertiary4</item>
+        <item name="colorOnTertiary">@color/md_theme_light_onTertiary4</item>
+        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer4</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer4</item>
+        <item name="colorError">@color/md_theme_light_error4</item>
+        <item name="colorOnError">@color/md_theme_light_onError4</item>
+        <item name="colorErrorContainer">@color/md_theme_light_errorContainer4</item>
+        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer4</item>
+        <item name="android:colorBackground">@color/md_theme_light_background4</item>
+        <item name="colorOnBackground">@color/md_theme_light_onBackground4</item>
+        <item name="colorSurface">@color/md_theme_light_surface4</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface4</item>
+        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant4</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant4</item>
+        <item name="colorOutline">@color/md_theme_light_outline4</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface4</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface4</item>
+        <item name="elevationOverlayColor">@color/md_theme_light_surfaceTint4</item>
+        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary4</item>
     </style>
 </resources>

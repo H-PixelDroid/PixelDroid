@@ -105,7 +105,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="upload_post_success">Post uploaded successfully</string>
     <string name="upload_post_error">Post upload error</string>
     <string name="description">Description…</string>
-    <string name="post">post</string>
+    <string name="post">Post</string>
     <string name="add_photo">Add a photo</string>
     <string name="post_image">One of the images in the post</string>
     <string name="switch_to_grid">Switch to grid view</string>
@@ -278,4 +278,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="create_feed">Create</string>
     <string name="notifications_feed">Updates</string>
     <string name="public_feed">Public</string>
+    <string name="accentColorTitle">Color accent</string>
+    <string name="accentColorSummary">Choose a color accent</string>
+    <string name="color_choice_button">Choose this color accent</string>
+    <string name="color_chosen">Chosen color accent</string>
 </resources>

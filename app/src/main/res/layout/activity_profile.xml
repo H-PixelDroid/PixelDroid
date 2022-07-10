@@ -15,7 +15,6 @@
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -107,9 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:backgroundTint="@color/colorButtonBg"
                     android:text="@string/follow"
-                    android:textColor="@color/colorButtonText"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/profilePictureImageView"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -119,12 +116,9 @@
                     android:id="@+id/editButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorButtonBg"
                     android:text="@string/edit_profile"
-                    android:textColor="@color/colorButtonText"
                     android:visibility="gone"
                     app:icon="@drawable/ic_baseline_open_in_browser_24"
-                    app:iconTint="@color/colorButtonText"
                     app:layout_constraintBottom_toBottomOf="@+id/profilePictureImageView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"

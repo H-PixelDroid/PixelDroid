@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostBinding
 import org.pixeldroid.app.databinding.CommentBinding
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Mention
 import org.pixeldroid.app.utils.api.objects.Status
@@ -23,7 +23,7 @@ import org.pixeldroid.app.utils.displayDimensionsInPx
 import retrofit2.HttpException
 import java.io.IOException
 
-class PostActivity : BaseActivity() {
+class PostActivity : BaseThemedWithBarActivity() {
     lateinit var domain : String
 
     private lateinit var binding: ActivityPostBinding

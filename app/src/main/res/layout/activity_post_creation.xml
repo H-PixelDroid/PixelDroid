@@ -134,9 +134,7 @@
         app:counterEnabled="true"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:textColorHint="@color/colorPrimaryTab"
         app:errorEnabled="true"
-        app:errorTextColor="?attr/colorOnError"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonConstraints"
         app:layout_constraintStart_toStartOf="parent">
@@ -146,8 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="10"
-            android:inputType="textMultiLine"
-            android:textColor="@color/colorPrimary" />
+            android:inputType="textMultiLine" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
