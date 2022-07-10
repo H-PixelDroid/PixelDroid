@@ -25,6 +25,7 @@ class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnShared
             .replace(R.id.settings, SettingsFragment())
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setTitle(R.string.menu_settings)
 
         restartMainOnExit = intent.getBooleanExtra("restartMain", false)
     }
