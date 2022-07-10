@@ -218,4 +218,12 @@
     <string name="notifications_settings_summary">Spravovat, jaké upozornění chcete dostávat</string>
     <string name="no_storage_permission">Oprávnění k úložišti nebylo uděleno, udělte oprávnění v nastavení, pokud chcete, aby PixelDroid zobrazoval náhledy</string>
     <string name="no_camera_permission">Oprávnění k fotoaparátu nebylo uděleno, udělte oprávnění v nastavení, pokud chcete, aby PixelDroid mohl použít fotoaparát</string>
+    <string name="play_video">Přehrát video</string>
+    <string name="video_edit_not_yet_supported">Úprava videa zatím není podporována</string>
+    <string name="save_edit_menu">ULOŽIT</string>
+    <string name="new_post_shortcut_long">Vytvořit nový příspěvek</string>
+    <string name="new_post_shortcut_short">Nový příspěvek</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s a %4$d dalších</string>
+    <string name="notification_summary_medium">%1$s, %2$s, a %3$s</string>
+    <string name="notification_summary_small">%1$s a %2$s</string>
 </resources>
