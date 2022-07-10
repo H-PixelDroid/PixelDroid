@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme.Launcher">
         <item name="android:windowBackground">@drawable/theme</item>
+        <item name="colorPrimaryDark">?android:attr/colorBackground</item>
+
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="Theme.Material3.Light" />
