@@ -1,11 +1,4 @@
-image: reactivecircus/android-emulator-23:latest
-
-
-variables:
-  API_LEVEL: "23"
-  ARCH: "x86"
-  TARGET: "default"
-
+image: registry.gitlab.com/fdroid/ci-images-client
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -21,6 +14,9 @@ lintDebug:
   interruptible: true
   stage: build
   script:
+    - apt-get update || apt-get update
+    - apt-get install -y openjdk-11-jdk-headless
+    - update-alternatives --auto java
     - ./gradlew checkLicenses
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
 
@@ -28,47 +24,53 @@ lintDebug:
 assembleDebug:
   interruptible: true
   stage: build
+  tags:
+    - server_artectrex
   script:
+    - apt-get update || apt-get update
+    - apt-get install -y openjdk-11-jdk-headless
+    - update-alternatives --auto java
     - ./gradlew assembleDebug
   artifacts:
     paths:
       - app/build/outputs/
 
-# Run all tests, if any fails, interrupt the pipeline(fail it)
+# Run all tests, if any fails, interrupt the pipeline (fail it)
 debugTests:
   interruptible: true
   stage: test
   script:
+    - apt-get update || apt-get update
+    - apt-get install -y openjdk-11-jdk-headless
+    - update-alternatives --auto java
     - ./gradlew -Pci --console=plain :app:testDebug -x lint
 
+.connected-template: &connected-template
+  stage: test
+  image: registry.gitlab.com/fdroid/ci-images-client
+  script:
+    - start-emulator
+    - wait-for-emulator
+    - adb devices
+    - adb shell input keyevent 82 &
+    # Switch to right java version for building the app
+    - apt-get update || apt-get update
+    - apt-get install -y openjdk-11-jdk-headless
+    - update-alternatives --auto java
+    - ./gradlew connectedStagingAndroidTest || (adb -e logcat -d > logcat.txt; exit 1)
+  artifacts:
+    paths:
+      - logcat.txt
 
-emulatorTest:
-    interruptible: true
-    stage: test
-    script:
-        - echo no | avdmanager create avd --force --name "api-${API_LEVEL}" --abi "${TARGET}/${ARCH}" --package "system-images;android-${API_LEVEL};${TARGET};${ARCH}"
-        - $ANDROID_SDK_ROOT/emulator/emulator -avd "api-${API_LEVEL}" -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none &
-        - chmod +x android-wait-for-emulator.sh
-        - ./gradlew build -x lint
-        - ./android-wait-for-emulator.sh
-        - adb shell settings put global window_animation_scale 0.0
-        - adb shell settings put global transition_animation_scale 0.0
-        - adb shell settings put global animator_duration_scale 0.0
-
-        - ./gradlew build connectedCheck connectedStagingAndroidTest jacocoTestReport -x lint
-
-        - cat app/build/reports/jacoco/jacocoTestReport/html/index.html | grep -o 'Total[^%]*%'
-
-    artifacts:
-        when: always
-        paths:
-        - ./app/build/reports/jacoco/jacocoTestReport/
-        expire_in: 1 week
-
+connected 24 default x86_64:
+  <<: *connected-template
 
 fdroid build:
+  stage: build
   image: registry.gitlab.com/fdroid/ci-images-client:latest
   allow_failure: true
+  tags:
+    - server_artectrex
   artifacts:
     paths:
       - signed/
@@ -98,6 +100,7 @@ fdroid build:
     - ln -s $CI_PROJECT_DIR/fdroidserver /home/vagrant/fdroidserver
     - mkdir -p /vagrant/cache
     - wget -q https://services.gradle.org/distributions/gradle-5.6.2-bin.zip --output-document=/vagrant/cache/gradle-5.6.2-bin.zip
+    # Check sha256 of the gralde build
     - echo '32fce6628848f799b0ad3205ae8db67d0d828c10ffe62b748a7c0d9f4a5d9ee0 /vagrant/cache/gradle-5.6.2-bin.zip' | sha256sum -c
     - bash fdroidserver/buildserver/provision-gradle
     - bash fdroidserver/buildserver/provision-apt-get-install https://deb.debian.org/debian
