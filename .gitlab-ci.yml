@@ -71,7 +71,7 @@ fdroid build:
   allow_failure: true
   artifacts:
     paths:
-      - unsigned/
+      - signed/
     when: always
   only:
     - tags
@@ -79,6 +79,7 @@ fdroid build:
     key: "$CI_JOB_NAME"
     paths:
       - .gradle
+      - .android
   script:
     # Put the correct versionName and versionCode in the .fdroid.yml
     - sed -e "s/\${versionName}/$(grep "versionName " app/build.gradle | awk '{print $2}')/" -e "s/\${versionCode}/$(grep "versionCode" app/build.gradle | awk '{print $2}')/" .fdroid.yml.template > .fdroid.yml
@@ -96,10 +97,10 @@ fdroid build:
     - adduser --disabled-password --gecos "" vagrant
     - ln -s $CI_PROJECT_DIR/fdroidserver /home/vagrant/fdroidserver
     - mkdir -p /vagrant/cache
-    - wget -q https://services.gradle.org/distributions/gradle-5.6.2-bin.zip
-      --output-document=/vagrant/cache/gradle-5.6.2-bin.zip
+    - wget -q https://services.gradle.org/distributions/gradle-5.6.2-bin.zip --output-document=/vagrant/cache/gradle-5.6.2-bin.zip
+    - echo '32fce6628848f799b0ad3205ae8db67d0d828c10ffe62b748a7c0d9f4a5d9ee0 /vagrant/cache/gradle-5.6.2-bin.zip' | sha256sum -c
     - bash fdroidserver/buildserver/provision-gradle
-    - bash fdroidserver/buildserver/provision-apt-get-install http://deb.debian.org/debian
+    - bash fdroidserver/buildserver/provision-apt-get-install https://deb.debian.org/debian
     - source /etc/profile.d/bsenv.sh
     - apt-get dist-upgrade
 
@@ -111,11 +112,16 @@ fdroid build:
       python3-ruamel.yaml
       yamllint
     - apt-get purge fdroidserver
-
     - export GRADLE_USER_HOME=$PWD/.gradle
-    # each `fdroid build --on-server` run expects sudo, then uninstalls it
+    # each fdroid build --on-server run expects sudo, then uninstalls it
     - set -x
     - apt-get install sudo
     - fdroid fetchsrclibs --verbose
     # this builds the latest version of the app from its source dir, using the build recipe in .fdroid.yml
     - fdroid build --verbose --on-server --no-tarball
+    # create a keystore if we don’t have one
+    - ls .android || mkdir .android
+    - ls .android/debug.keystore || keytool -genkey -v -keystore .android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname 'C=US, O=Android, CN=Android Debug'
+    # sign the apk
+    - cp -R unsigned signed
+    - jarsigner -verbose -keystore .android/debug.keystore -storepass android -keypass android signed/*.apk androiddebugkey

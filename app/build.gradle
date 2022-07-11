@@ -94,7 +94,12 @@ android {
 
     apply plugin: 'kotlin-kapt'
     lint {
+        //We can't expect translators to always keep up immediately:
+        // don't fail if a a string is untranslated
         disable 'MissingTranslation'
+        // This lint indicates a wrong translation:
+        // Remove this exception once https://github.com/WeblateOrg/weblate/issues/7520 is solved
+        disable 'MissingQuantity'
     }
 }
 
