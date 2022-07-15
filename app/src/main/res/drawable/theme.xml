@@ -3,6 +3,6 @@
     <!-- The background color -->
     <item android:drawable="@android:color/white"/>
     <!-- The drawable (mascot) -->
-    <item android:drawable="@drawable/ic_fred_phone"
+    <item android:drawable="@drawable/mascot"
         android:gravity="center"/>
 </layer-list>
