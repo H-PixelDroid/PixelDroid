@@ -194,4 +194,18 @@
     <string name="follows_title">%1$s está seguindo</string>
     <string name="media_upload_failed">Envio de mídia falhou. Tente novamente ou verifique as condições de conectividade</string>
     <string name="hashtag_title">#%1$s</string>
+    <string name="new_post_shortcut_short">Nova publicação</string>
+    <string name="new_post_shortcut_long">Criar nova publicação</string>
+    <string name="select_video_range">Escolha o que manter do vídeo</string>
+    <string name="color_choice_button">Escolher esta cor</string>
+    <string name="accentColorSummary">Escolha uma cor</string>
+    <string name="accentColorTitle">Cor</string>
+    <string name="public_feed">Público</string>
+    <string name="notifications_feed">Atualizações</string>
+    <string name="create_feed">Criar</string>
+    <string name="home_feed">Início</string>
+    <string name="color_chosen">Cor escolhida</string>
+    <string name="search_discover_feed">Buscar</string>
+    <string name="status_notification">%1$s criou uma publicação</string>
+    <string name="follow_request">%1$s pediu para te seguir</string>
 </resources>
