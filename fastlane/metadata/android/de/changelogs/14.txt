@@ -1,0 +1,1 @@
+Hotfix für Abstürze in der Bearbeitungsaktivität, die nur im Release-Modus auftraten
