@@ -224,4 +224,10 @@
     <string name="new_post_shortcut_long">Neuen Beitrag erstellen</string>
     <string name="new_post_shortcut_short">Neuer Beitrag</string>
     <string name="status_notification">%1$s hat einen Beitrag erstellt</string>
+    <string name="thumbnail_reel_video_edit">Vorschaubilder des Videos, das Sie bearbeiten</string>
+    <string name="encode_error">Fehler-Kodierung</string>
+    <string name="encode_success">Kodierung war erfolgreich!</string>
+    <string name="encode_progress">Kodierung %1$d%%</string>
+    <string name="select_video_range">Wählen Sie aus was sie vom Video behalten möchten</string>
+    <string name="still_encoding">Mindestens ein Video wird noch kodiert. Bitte warten bis alle fertig sind, bevor sie die Videos hochladen</string>
 </resources>
