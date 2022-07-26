@@ -72,11 +72,14 @@ class NotificationsWorker(
                 )
 
                 while (!newNotifications.isNullOrEmpty()
-                    && newNotifications.maxOf { it.created_at ?: Instant.MIN } > previouslyLatestNotification?.created_at ?: Instant.MIN
+                    && newNotifications.maxOf {
+                        it.created_at ?: Instant.MIN
+                    } > (previouslyLatestNotification?.created_at ?: Instant.MIN)
                 ) {
                     // Add to db
                     val filteredNewNotifications: List<Notification> = newNotifications.filter {
-                        it.created_at ?: Instant.MIN > previouslyLatestNotification?.created_at ?: Instant.MIN
+                        (it.created_at ?: Instant.MIN) > (previouslyLatestNotification?.created_at
+                            ?: Instant.MIN)
                     }.map {
                         it.copy(user_id = user.user_id, instance_uri = user.instance_uri)
                     }.sortedBy { it.created_at }

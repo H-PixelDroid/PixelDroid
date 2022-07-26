@@ -120,7 +120,7 @@ fun assertStatusEqualsToReference(actual: Status){
     assert(
         ((actual.id=="140364967936397312"
                 && actual.uri=="https://pixelfed.de/p/Miike/140364967936397312"
-                && actual.created_at == Instant.parse("2020-03-03T08:00:16.+00:00")
+                && actual.created_at == Instant.parse("2020-03-03T08:00:16Z")
                 && actual.account!!.id=="115114166443970560"&& actual.account!!.username=="Miike"&& actual.account!!.acct=="Miike" &&
                 actual.account!!.url=="https://pixelfed.de/Miike"&& actual.account!!.display_name=="Miike Duart"&& actual.account!!.note==""&&
                 //actual.account!!.avatar=="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"&&

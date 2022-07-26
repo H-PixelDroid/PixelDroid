@@ -7,7 +7,7 @@ import java.time.Instant
 
 class PostUnitTest {
     private val status = Status(id="140364967936397312", uri="https://pixelfed.de/p/Miike/140364967936397312",
-        created_at= Instant.parse("2020-03-03T08:00:16+00:00"),
+        created_at= Instant.parse("2022-07-25T14:57:40.000Z"),
         account= Account(id="115114166443970560", username="Miike", acct="Miike",
             url="https://pixelfed.de/Miike", display_name="Miike Duart", note="",
             avatar="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",

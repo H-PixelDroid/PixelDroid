@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeLeft
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -16,6 +17,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import org.pixeldroid.app.testUtility.*
 import org.pixeldroid.app.utils.db.AppDatabase
@@ -34,26 +36,35 @@ class PostCreationFragmentTest {
     var globalTimeout: Timeout = Timeout.seconds(30)
     @get:Rule
     var runtimePermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)
     @get:Rule
     var intentsTestRule: IntentsTestRule<MainActivity> =
         IntentsTestRule(MainActivity::class.java)
 
+    private lateinit var viewPager2IdlingResource: ViewPager2IdlingResource
+
+
     @Before
-    fun setup() {
-        onView(withId(R.id.drawer_layout))
-            .perform(swipeLeft())
-            .perform(swipeLeft())
-        waitForView(R.id.photo_view_button)
+    fun setUp() {
+        ActivityScenario.launch(MainActivity::class.java).onActivity {
+            it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId = R.id.page_3
+            viewPager2IdlingResource = ViewPager2IdlingResource(it.findViewById(R.id.view_pager))
+            IdlingRegistry.getInstance().register(viewPager2IdlingResource)
+        }
+    }
+
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(viewPager2IdlingResource)
     }
 
     // image choosing intent
     @Test
     fun galleryButtonLaunchesGalleryIntent() {
+        waitForView(R.id.photo_view_button)
+
         val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
-        intending(expectedIntent)
         onView(withId(R.id.photo_view_button)).perform(click())
-        Thread.sleep(1000)
         intended(expectedIntent)
     }
 }
@@ -61,6 +72,10 @@ class PostCreationFragmentTest {
 @RunWith(AndroidJUnit4::class)
 class PostFragmentUITests {
     private lateinit var context: Context
+
+    @get:Rule
+    var runtimePermissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)
 
     @get:Rule
     var globalTimeout: Timeout = Timeout.seconds(30)
@@ -90,7 +105,7 @@ class PostFragmentUITests {
     @Test
     fun newPostUiTest() {
         ActivityScenario.launch(MainActivity::class.java).onActivity {
-                it.findViewById<TabLayout>(R.id.tabs).getTabAt(2)!!.select()
+                it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId = R.id.page_3
         }
 
         waitForView(R.id.photo_view_button)

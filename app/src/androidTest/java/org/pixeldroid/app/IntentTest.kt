@@ -30,6 +30,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
+import org.pixeldroid.app.posts.PostActivity
+import org.pixeldroid.app.utils.api.objects.Attachment
+import org.pixeldroid.app.utils.api.objects.Mention
+import org.pixeldroid.app.utils.api.objects.Status
 import java.time.Instant
 
 
@@ -66,26 +70,40 @@ class IntentTest {
 
     @Test
     fun clickingMentionOpensProfile() {
-        ActivityScenario.launch(MainActivity::class.java)
-
-        val account = Account("265626292148375552", "user2", "user2",
-            "https://testing2.pixeldroid.org/user2", "User 2",
-            "",
-            "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0",
-            "https://testing2.pixeldroid.org/storage/avatars/default.jpg?v=0",
-            "", "", false, emptyList(), null,
-            Instant.parse("2021-02-11T23:44:03.000000Z"), 0, 1, 2,
-            null, null, false, null)
+        val accountExpected = Account(id="448137467259420673", username="ros_testing", acct="ros_testing", url="https://testing.pixeldroid.org/ros_testing", display_name="ros_testing", note="", avatar="https://testing.pixeldroid.org/storage/avatars/default.jpg?v=0", avatar_static="https://testing.pixeldroid.org/storage/avatars/default.jpg?v=0", header="https://testing.pixeldroid.org/storage/headers/missing.png", header_static="https://testing.pixeldroid.org/storage/headers/missing.png", locked=false, emojis=emptyList(), discoverable=true, created_at=Instant.parse("2022-06-30T14:58:18Z"), statuses_count=1, followers_count=2, following_count=0, moved=null, fields=emptyList(), bot=false, source=null, suspended=null, mute_expires_at=null)
+        val accountPoster = Account(id="457218336143343773", username="pixeldroid", acct="pixeldroid", url="https://testing.pixeldroid.org/pixeldroid", display_name="PixelDroid Developer", note="", avatar="https://testing.pixeldroid.org/storage/avatars/default.jpg?v=0", avatar_static="https://testing.pixeldroid.org/storage/avatars/default.jpg?v=0", header="https://testing.pixeldroid.org/storage/headers/missing.png", header_static="https://testing.pixeldroid.org/storage/headers/missing.png", locked=false, emojis=emptyList(), discoverable=true, created_at=Instant.parse("2022-07-25T16:22:26Z"), statuses_count=3, followers_count=1, following_count=2, moved=null, fields=emptyList(), bot=false, source=null, suspended=null, mute_expires_at=null)
         val expectedIntent: Matcher<Intent> = CoreMatchers.allOf(
-            IntentMatchers.hasExtra(ACCOUNT_TAG, account)
+            IntentMatchers.hasExtra(ACCOUNT_TAG, accountExpected)
         )
-        "2021-02-11T23:44:03.000000Z"
+
+
+        val attachment = Attachment(id="31", type=Attachment.AttachmentType.image, url="https://testing.pixeldroid.org/storage/m/_v2/457218336143343773/7a6475c83-a44db4/RcuV81RiDorC/RCtbr01ttKfqATIA9TYL7MOatlYuxdkm3CsNYydB.jpg", preview_url="https://testing.pixeldroid.org/storage/m/_v2/457218336143343773/7a6475c83-a44db4/RcuV81RiDorC/RCtbr01ttKfqATIA9TYL7MOatlYuxdkm3CsNYydB_thumb.jpg", remote_url=null, meta= Attachment.Meta(
+            focus = Attachment.Meta.Focus(x = 0.0, y = 0.0),
+            original = Attachment.Meta.Image(width = 720,
+                height = 576,
+                size = "720x576",
+                aspect = 1.25)), description=null, blurhash="U4HoQs014-~UyD4rRit200~mIe034s-*srIZ", text_url=null)
+        val post = Status(
+            id = "457277566298267808",
+            content = "<a class=\"u-url mention\" href=\"https://testing.pixeldroid.org/ros_testing\" rel=\"external nofollow noopener\" target=\"_blank\">@ros_testing</a> nice I have this too",
+            account = accountPoster,
+            media_attachments = listOf(attachment),
+            created_at = Instant.parse("2022-07-25T20:17:47Z"),
+            mentions = listOf(Mention(id="448137467259420673", username="ros_testing", acct="ros_testing", url="https://testing.pixeldroid.org/ros_testing")),
+            uri = "https://testing.pixeldroid.org/p/pixeldroid/457277566298267808",
+            url = "https://testing.pixeldroid.org/p/pixeldroid/457277566298267808",
+        )
+
+
+        val intent = Intent(context, PostActivity::class.java)
+        intent.putExtra(Status.POST_TAG, post)
+        ActivityScenario.launch<PostActivity>(intent)
+
         waitForView(R.id.description)
 
         //Click the mention
-        Espresso.onView(ViewMatchers.withId(R.id.list))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<StatusViewHolder>
-                (0, clickClickableSpanInDescription("@user2")))
+        Espresso.onView(ViewMatchers.withId(R.id.description))
+            .perform(clickClickableSpanInDescription("@ros_testing"))
 
         //Wait a bit
         Thread.sleep(1000)
