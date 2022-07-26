@@ -1,5 +1,13 @@
 image: registry.gitlab.com/fdroid/ci-images-client
 
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
 # Basic android and gradle stuff
 # Check linting
 lintDebug:
@@ -48,12 +56,12 @@ debugTests:
     - apt-get update || apt-get update
     - apt-get install -y openjdk-11-jdk-headless
     - update-alternatives --auto java
-    - ./gradlew connectedStagingAndroidTest || (adb -e logcat -d > logcat.txt; exit 1)
+    - ./gradlew connectedStagingAndroidTest --info || (adb -e logcat -d > logcat.txt; exit 1)
   artifacts:
     paths:
       - logcat.txt
 
-connected 23 default x86_64:
+connected 27 default x86_64:
   <<: *connected-template
 
 fdroid build:

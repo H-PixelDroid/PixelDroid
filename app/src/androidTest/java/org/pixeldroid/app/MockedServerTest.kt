@@ -33,7 +33,6 @@ class MockedServerTest {
         db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(testiTestoInstance)
-
         db.userDao().insertUser(testiTesto)
         db.close()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)

@@ -33,7 +33,7 @@ android {
         versionCode 16
         versionName "1.0.beta" + versionCode
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "org.pixeldroid.app.testUtility.TestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
     sourceSets {
@@ -234,6 +234,10 @@ dependencies {
      */
 
     //stagingImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.2'
+
+    androidTestImplementation 'com.linkedin.testbutler:test-butler-library:2.2.1'
+    androidTestUtil 'com.linkedin.testbutler:test-butler-app:2.2.1'
 
     androidTestImplementation 'androidx.work:work-testing:2.7.1'
     testImplementation 'com.github.tomakehurst:wiremock-jre8:2.33.2'

@@ -58,13 +58,15 @@ class PostCreationFragmentTest {
         IdlingRegistry.getInstance().unregister(viewPager2IdlingResource)
     }
 
+    private val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
+
     // image choosing intent
     @Test
     fun galleryButtonLaunchesGalleryIntent() {
         waitForView(R.id.photo_view_button)
 
-        val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
         onView(withId(R.id.photo_view_button)).perform(click())
+        Thread.sleep(300)
         intended(expectedIntent)
     }
 }
