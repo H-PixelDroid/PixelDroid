@@ -1,13 +1,5 @@
 image: registry.gitlab.com/fdroid/ci-images-client
 
-before_script:
-  - export GRADLE_USER_HOME=`pwd`/.gradle
-
-cache:
-  paths:
-    - .gradle/wrapper
-    - .gradle/caches
-
 # Basic android and gradle stuff
 # Check linting
 lintDebug:
@@ -47,17 +39,10 @@ debugTests:
 
 .connected-template: &connected-template
   stage: test
-  image: registry.gitlab.com/fdroid/ci-images-client
+  image: cimg/android:2022.06
   script:
-    - start-emulator
-    - wait-for-emulator
-    - adb devices
-    - adb shell input keyevent 82 &
     # Switch to right java version for building the app
-    - apt-get update || apt-get update
-    - apt-get install -y openjdk-11-jdk-headless
-    - update-alternatives --auto java
-    - ./gradlew connectedStagingAndroidTest || (adb -e logcat -d > logcat.txt; exit 1)
+    - ./gradlew pixel2api30stagingAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
   artifacts:
     paths:
       - logcat.txt

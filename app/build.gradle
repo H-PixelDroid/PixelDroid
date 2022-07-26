@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 plugins {
     id "com.cookpad.android.plugin.license-tools" version "1.2.2"
 }
@@ -82,9 +84,24 @@ android {
         variant.resValue 'string', 'application_id', variant.applicationId
     }
 
-
     testOptions {
         animationsDisabled true
+        managedDevices {
+            devices {
+                pixel2api30 (ManagedVirtualDevice) {
+                    // Use device profiles you typically see in Android Studio.
+                    device = "Pixel 2"
+                    // Use only API levels 27 and higher.
+                    apiLevel = 30
+                    // To include Google services, use "google".
+                    systemImageSource = "aosp"
+                    // Whether the image must be a 64 bit image. Defaults to false,
+                    // in which case the managed device will use a 32 bit image.
+                    // Not applicable to arm64 machines.
+                    require64Bit = false
+                }
+            }
+        }
 
     }
     buildFeatures {
