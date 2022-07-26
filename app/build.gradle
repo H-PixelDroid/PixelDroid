@@ -94,7 +94,7 @@ android {
                     // Use only API levels 27 and higher.
                     apiLevel = 30
                     // To include Google services, use "google".
-                    systemImageSource = "aosp"
+                    systemImageSource = "aosp-atd"
                     // Whether the image must be a 64 bit image. Defaults to false,
                     // in which case the managed device will use a 32 bit image.
                     // Not applicable to arm64 machines.
