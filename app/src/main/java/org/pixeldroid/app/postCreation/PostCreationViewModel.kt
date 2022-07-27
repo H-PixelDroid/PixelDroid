@@ -28,6 +28,7 @@ import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
+import org.pixeldroid.app.utils.getMimeType
 import retrofit2.HttpException
 import java.io.File
 import java.io.FileNotFoundException
@@ -159,8 +160,8 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
             }
 
         val sizeInkBytes = ceil(size.toDouble() / 1000).toLong()
-        val type = getApplication<PixelDroidApplication>().contentResolver.getType(uri)
-        val isVideo = type?.startsWith("video/") == true
+        val type = uri.getMimeType(getApplication<PixelDroidApplication>().contentResolver)
+        val isVideo = type.startsWith("video/")
 
         if(isVideo && !instance!!.videoEnabled){
             _uiState.update { currentUiState ->
