@@ -1,0 +1,4 @@
+* Hinzufügen von gson proguard-Regeln zur Behebung von Abstürzen bei Mastodon-Instanzen
+* Hinzufügen von Farbthemen mit 4 verschiedenen Themen
+* Umstellung auf Material 3
+* Verbesserung der Konsistenz der Benutzeroberfläche

@@ -128,7 +128,7 @@
     <string name="profile_picture">Profilbild</string>
     <string name="toolbar_title_edit">Bearbeiten</string>
     <string name="report_error">Konnte nicht gemeldet werden</string>
-    <string name="reported">Gemeldet {gmd_check_circle}</string>
+    <string name="reported">Post wurde gemeldet</string>
     <string name="report_target">Melde den Beitrag von @%1$s</string>
     <string name="post_is_album">Dieser Beitrag ist ein Album</string>
     <string name="submit_comment">Kommentar senden</string>
@@ -165,10 +165,8 @@
     <string name="dialog_message_cancel_follow_request">Followeranfrage zurückziehen\?</string>
     <string name="empty_feed">Hier gibt es nichts zu sehen :(</string>
     <plurals name="nb_following">
-        <item quantity="one">%d
-\nFolgt</item>
-        <item quantity="other">%d
-\nFolgt</item>
+        <item quantity="one">Folgt %d</item>
+        <item quantity="other">Folgt %d</item>
     </plurals>
     <plurals name="nb_followers">
         <item quantity="one">%d
@@ -231,4 +229,13 @@
     <string name="select_video_range">Wählen Sie aus was sie vom Video behalten möchten</string>
     <string name="still_encoding">Mindestens ein Video wird noch kodiert. Bitte warten bis alle fertig sind, bevor sie die Videos hochladen</string>
     <string name="follow_request">%1$s möchte dir folgen</string>
+    <string name="home_feed">Start</string>
+    <string name="search_discover_feed">Suche</string>
+    <string name="notifications_feed">Neuigkeiten</string>
+    <string name="public_feed">Öffentlich</string>
+    <string name="accentColorTitle">Farbakzent</string>
+    <string name="accentColorSummary">Farbakzent auswählen</string>
+    <string name="color_chosen">Auswählter Farbakzent</string>
+    <string name="create_feed">Erstellen</string>
+    <string name="color_choice_button">Diesen Farbakzent auswählen</string>
 </resources>
