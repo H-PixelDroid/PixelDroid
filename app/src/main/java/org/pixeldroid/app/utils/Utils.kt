@@ -11,8 +11,8 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.WindowManager
+import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.StyleRes
@@ -56,8 +56,17 @@ fun Uri.fileExtension(contentResolver: ContentResolver): String? {
     return if (scheme == "content") {
         contentResolver.getType(this)?.takeLastWhile { it != '/' }
     } else {
-        toString().takeLastWhile { it != '/' }
+        MimeTypeMap.getFileExtensionFromUrl(toString()).ifEmpty { null }
     }
+}
+
+fun Uri.getMimeType(contentResolver: ContentResolver, fallback: String = "image/*"): String {
+    return if (scheme == "content") {
+        contentResolver.getType(this)
+    } else {
+        MimeTypeMap.getFileExtensionFromUrl(toString())
+            ?.run { MimeTypeMap.getSingleton().getMimeTypeFromExtension(toLowerCase()) }
+    } ?: fallback
 }
 
 fun Context.displayDimensionsInPx(): Pair<Int, Int> {

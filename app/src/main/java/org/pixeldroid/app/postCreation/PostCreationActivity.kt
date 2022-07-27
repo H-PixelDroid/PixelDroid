@@ -40,6 +40,7 @@ import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.ffmpegSafeUri
 import org.pixeldroid.app.utils.fileExtension
+import org.pixeldroid.app.utils.getMimeType
 import java.io.File
 import java.io.OutputStream
 import java.text.SimpleDateFormat
@@ -247,7 +248,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         val path: String
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val resolver: ContentResolver = contentResolver
-            val type = resolver.getType(uri)
+            val type = uri.getMimeType(contentResolver)
             val contentValues = ContentValues()
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             contentValues.put(MediaStore.MediaColumns.MIME_TYPE, type)
@@ -255,10 +256,10 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                     MediaStore.MediaColumns.RELATIVE_PATH,
                     Environment.DIRECTORY_PICTURES
             )
-            val imageUri: Uri = resolver.insert(
-                if (type?.startsWith("image") == true) MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                else MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                contentValues)!!
+            val store =
+                if (type.startsWith("video")) MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                else MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            val imageUri: Uri = resolver.insert(store, contentValues)!!
             path = imageUri.toString()
             outputStream = resolver.openOutputStream(Objects.requireNonNull(imageUri))!!
         } else {
