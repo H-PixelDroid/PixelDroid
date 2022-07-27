@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 plugins {
     id "com.cookpad.android.plugin.license-tools" version "1.2.2"
 }
@@ -31,7 +33,7 @@ android {
         versionCode 16
         versionName "1.0.beta" + versionCode
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "org.pixeldroid.app.testUtility.TestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
     sourceSets {
@@ -43,10 +45,6 @@ android {
     testBuildType "staging"
 
     buildTypes {
-        debug {
-                applicationIdSuffix '.debug'
-                versionNameSuffix "-debug"
-        }
         staging {
             initWith debug
             testCoverageEnabled true
@@ -69,6 +67,10 @@ android {
             buildConfigField "String", "CLIENT_ID", System.getenv("CLIENT_ID") ?: localProperties['CLIENT_ID'] ?: '""'
             buildConfigField "String", "CLIENT_SECRET", System.getenv("CLIENT_SECRET") ?: localProperties['CLIENT_SECRET'] ?: '""'
         }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix "-debug"
+        }
         release {
             minifyEnabled true
             shrinkResources true
@@ -82,9 +84,24 @@ android {
         variant.resValue 'string', 'application_id', variant.applicationId
     }
 
-
     testOptions {
         animationsDisabled true
+        managedDevices {
+            devices {
+                pixel2api30 (ManagedVirtualDevice) {
+                    // Use device profiles you typically see in Android Studio.
+                    device = "Pixel 2"
+                    // Use only API levels 27 and higher.
+                    apiLevel = 30
+                    // To include Google services, use "google".
+                    systemImageSource = "aosp-atd"
+                    // Whether the image must be a 64 bit image. Defaults to false,
+                    // in which case the managed device will use a 32 bit image.
+                    // Not applicable to arm64 machines.
+                    require64Bit = false
+                }
+            }
+        }
 
     }
     buildFeatures {
@@ -217,6 +234,10 @@ dependencies {
      */
 
     //stagingImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.2'
+
+    androidTestImplementation 'com.linkedin.testbutler:test-butler-library:2.2.1'
+    androidTestUtil 'com.linkedin.testbutler:test-butler-app:2.2.1'
 
     androidTestImplementation 'androidx.work:work-testing:2.7.1'
     testImplementation 'com.github.tomakehurst:wiremock-jre8:2.33.2'

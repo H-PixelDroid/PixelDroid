@@ -108,12 +108,12 @@ class DrawerMenuTest {
         // Check that profile activity was opened.
         waitForView(R.id.editButton)
         onView(withId(R.id.editButton)).check(matches(isDisplayed()))
-        val followersText = context.resources.getQuantityString(R.plurals.nb_followers, 2, 2)
+        val followersText = context.resources.getQuantityString(R.plurals.nb_followers, 1, 1)
         waitForView(R.id.nbFollowingTextView, allOf(withId(R.id.nbFollowersTextView), withText(followersText)))
         onView(withText(followersText)).perform(click())
 
         waitForView(R.id.account_entry_avatar)
-        onView(withText("PixelDroid Developer")).check(matches(isDisplayed()))
+        onView(withText("admin")).check(matches(isDisplayed()))
     }
 
     @Test
@@ -123,12 +123,12 @@ class DrawerMenuTest {
         // Check that profile activity was opened.
         waitForView(R.id.editButton)
         onView(withId(R.id.editButton)).check(matches(isDisplayed()))
-        val followingText = context.resources.getQuantityString(R.plurals.nb_following, 3, 3)
+        val followingText = context.resources.getQuantityString(R.plurals.nb_following, 2, 2)
         waitForView(R.id.nbFollowingTextView, allOf(withId(R.id.nbFollowingTextView), withText(followingText)))
         onView(withText(followingText)).perform(click())
 
         waitForView(R.id.account_entry_avatar)
-        onView(withText("User 2")).check(matches(isDisplayed()))
+        onView(withText("ros_testing")).check(matches(isDisplayed()))
     }
 
     /*@Test
@@ -152,11 +152,11 @@ class DrawerMenuTest {
         waitForView(R.id.account_entry_avatar)
 
         // Open follower's profile
-        onView(withText("@pixeldroid")).perform(click())
+        onView(withText("@admin")).perform(click())
 
         waitForView(R.id.profilePictureImageView)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("PixelDroid Developer")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("admin")))
     }
 
     @Test
@@ -171,10 +171,10 @@ class DrawerMenuTest {
         waitForView(R.id.account_entry_avatar)
 
         // Open following's profile
-        onView(withText("@user2")).perform(click())
+        onView(withText("@ros_testing")).perform(click())
         waitForView(R.id.profilePictureImageView)
 
-        onView(withId(R.id.accountNameTextView)).check(matches(withText("User 2")))
+        onView(withId(R.id.accountNameTextView)).check(matches(withText("ros_testing")))
     }
 
     @Test

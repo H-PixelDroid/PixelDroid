@@ -47,7 +47,6 @@ debugTests:
 
 .connected-template: &connected-template
   stage: test
-  image: registry.gitlab.com/fdroid/ci-images-client
   script:
     - start-emulator
     - wait-for-emulator
@@ -57,12 +56,12 @@ debugTests:
     - apt-get update || apt-get update
     - apt-get install -y openjdk-11-jdk-headless
     - update-alternatives --auto java
-    - ./gradlew connectedStagingAndroidTest || (adb -e logcat -d > logcat.txt; exit 1)
+    - ./gradlew connectedStagingAndroidTest --info || (adb -e logcat -d > logcat.txt; exit 1)
   artifacts:
     paths:
       - logcat.txt
 
-connected 24 default x86_64:
+connected 27 default x86_64:
   <<: *connected-template
 
 fdroid build:

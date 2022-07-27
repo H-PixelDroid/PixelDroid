@@ -25,6 +25,7 @@ import org.junit.Test
 import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import org.pixeldroid.app.testUtility.PACKAGE_ID
+import org.pixeldroid.app.testUtility.waitForView
 
 @RunWith(AndroidJUnit4::class)
 class LoginActivityOnlineTest {
@@ -73,13 +74,15 @@ class LoginActivityOnlineTest {
     @Test
     fun wrongIntentReturnInfoFailsTest() {
         pref.edit()
-            .putString("domain", "https://dhbfnhgbdbbet")
+            .putString("domain", "https://invalid.pixeldroid.org")
             .putString("clientID", "iwndoiuqwnd")
             .putString("clientSecret", "wlifowed")
             .apply()
         val uri = Uri.parse("oauth2redirect://${PACKAGE_ID}?code=sdfdqsf")
         val intent = Intent(ACTION_VIEW, uri, context, LoginActivity::class.java)
         ActivityScenario.launch<LoginActivity>(intent)
+        waitForView(R.id.editText)
+        Thread.sleep(100)
         onView(withId(R.id.editText)).check(matches(
             hasErrorText(context.getString(R.string.token_error))
         ))

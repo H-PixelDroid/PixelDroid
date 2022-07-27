@@ -10,6 +10,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import org.hamcrest.CoreMatchers.anyOf
 import org.pixeldroid.app.testUtility.*
@@ -32,7 +33,6 @@ class MockedServerTest {
         db = initDB(context)
         db.clearAllTables()
         db.instanceDao().insertInstance(testiTestoInstance)
-
         db.userDao().insertUser(testiTesto)
         db.close()
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
@@ -58,22 +58,22 @@ class MockedServerTest {
 */
     @Test
     fun searchHashtags() {
-        activityScenario.onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
-        }
+    activityScenario.onActivity {
+        it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId = R.id.page_2
+    }
 
-        onView(withId(R.id.search)).perform(typeSearchViewText("#randomNoise"))
+        onView(withId(R.id.search)).perform(typeSearchViewText("#randomnoise"))
 
         waitForView(R.id.tag_name)
 
-        onView(first(withId(R.id.tag_name))).check(matches(withText("#randomNoise")))
+        onView(first(withId(R.id.tag_name))).check(matches(withText("#randomnoise")))
 
     }
 
     @Test
     fun openDiscoverPost(){
-        activityScenario.onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
+        activityScenario.onActivity {
+            it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId = R.id.page_2
         }
 
         waitForView(R.id.postPreview)
@@ -83,25 +83,25 @@ class MockedServerTest {
         waitForView(R.id.username)
 
         onView(withId(R.id.username)).check(matches(anyOf(
-            withSubstring("User "),
+            withSubstring("ros_testing"),
             withSubstring("PixelDroid Developer"),
-            withSubstring("Testi Testo")
+            withSubstring("admin")
         )))
     }
 
     @Test
     fun searchAccounts() {
-        activityScenario.onActivity{
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(1)?.select()
+        activityScenario.onActivity {
+            it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId = R.id.page_2
         }
 
         waitForView(R.id.search)
 
-        onView(withId(R.id.search)).perform(typeSearchViewText("@user3"))
+        onView(withId(R.id.search)).perform(typeSearchViewText("@pixeldroid"))
 
         waitForView(R.id.account_entry_username)
 
-        onView(first(withId(R.id.account_entry_username))).check(matches(withText("User 3")))
+        onView(first(withId(R.id.account_entry_username))).check(matches(withText("PixelDroid Developer")))
 
     }
 
@@ -187,44 +187,30 @@ class MockedServerTest {
         onView(first(withText("Andrea"))).check(matches(withId(R.id.username)))
     }*/
 
-    @Test
-    fun swipingRightStopsAtHomepage() {
-        activityScenario.onActivity {
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
-        } // go to the last tab
-
-        waitForView(R.id.main_activity_main_linear_layout)
-
-        onView(withId(R.id.main_activity_main_linear_layout))
-            .perform(ViewActions.swipeRight()) // notifications
-            .perform(ViewActions.swipeRight()) // camera
-            .perform(ViewActions.swipeRight()) // search
-            .perform(ViewActions.swipeRight()) // homepage
-            .perform(ViewActions.swipeRight()) // should stop at homepage
-        onView(withId(R.id.list)).check(matches(isDisplayed()))
-    }
 
     @Test
     fun swipingLeftStopsAtPublicTimeline() {
         activityScenario.onActivity {
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(0)?.select()
+            it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId = R.id.page_1
         }
 
-        waitForView(R.id.main_activity_main_linear_layout)
+        waitForView(R.id.view_pager)
 
-        onView(withId(R.id.main_activity_main_linear_layout))
+        onView(withId(R.id.view_pager))
             .perform(ViewActions.swipeLeft()) // notifications
             .perform(ViewActions.swipeLeft()) // camera
             .perform(ViewActions.swipeLeft()) // search
             .perform(ViewActions.swipeLeft()) // homepage
             .perform(ViewActions.swipeLeft()) // should stop at homepage
-        onView(withId(R.id.list)).check(matches(isDisplayed()))
+        activityScenario.onActivity {
+            assert(it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId == R.id.page_5)
+        }
     }
 
     @Test
     fun swipingPublicTimelineWorks() {
         activityScenario.onActivity {
-                a -> a.findViewById<TabLayout>(R.id.tabs).getTabAt(4)?.select()
+            it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId = R.id.page_5
         } // go to the last tab
 
         waitForView(R.id.view_pager)
@@ -236,10 +222,8 @@ class MockedServerTest {
             .perform(ViewActions.swipeRight()) // homepage
             .perform(ViewActions.swipeRight()) // should stop at homepage
 
-        onView(withId(R.id.list)).check(matches(isDisplayed()))
-
         activityScenario.onActivity {
-                a -> assert(a.findViewById<TabLayout>(R.id.tabs).getTabAt(0)?.isSelected ?: false)
+            assert(it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId == R.id.page_1)
         }
     }
 /*

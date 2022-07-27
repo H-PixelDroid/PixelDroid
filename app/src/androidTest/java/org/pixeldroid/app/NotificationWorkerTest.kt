@@ -36,17 +36,17 @@ class NotificationWorkerTest {
 
     private val secondToLatestNotification: Notification =
         Notification(
-            id = "1",
+            id = "78",
             type = Notification.NotificationType.follow,
-            created_at = Instant.parse("2021-09-19T19:23:30Z"),
+            created_at = Instant.parse("2022-07-25T16:23:45Z"),
             account = Account(
                 id = "344399325768278017",
                 username = "pixeldroid",
                 acct = "pixeldroid",
-                url = "https://testing.pixeldroid.org/pixeldroid",
+                url = "${testiTesto.instance_uri}/pixeldroid",
                 display_name = "PixelDroid",
                 note = "",
-                avatar = "https://testing.pixeldroid.org/storage/avatars/default.jpg?v=0",
+                avatar = "${testiTesto.instance_uri}/storage/avatars/default.jpg?v=0",
                 avatar_static = null,
                 header = null,
                 header_static = null,
@@ -63,8 +63,8 @@ class NotificationWorkerTest {
                 source = null
             ),
             status = null,
-            user_id = "344399082242686977",
-            instance_uri = "https://testing.pixeldroid.org"
+            user_id = testiTesto.user_id,
+            instance_uri = testiTesto.instance_uri
         )
     @Before
     fun setup() {
@@ -92,7 +92,7 @@ class NotificationWorkerTest {
     @Test
     fun testNotificationWorker() {
         val expectedAppName = context.getString(R.string.app_name)
-        val expectedText = "user1 followed you"
+        val expectedText = "admin liked your post"
 
         // Run the worker synchronously
         val worker = TestListenableWorkerBuilder<NotificationsWorker>(context).build()

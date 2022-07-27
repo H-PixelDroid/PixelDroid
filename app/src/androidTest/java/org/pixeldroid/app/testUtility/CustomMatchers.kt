@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.*
 import androidx.test.espresso.NoMatchingViewException
@@ -16,6 +17,8 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import org.hamcrest.BaseMatcher
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Description
@@ -96,7 +99,7 @@ private fun waitForViewViewAction(viewId: Int, viewMatcher: Matcher<View>): View
                 // Iterate through all views on the screen and see if the view we are looking for is there already
                 for (child in TreeIterables.breadthFirstViewTraversal(rootView)) {
                     // found view with required ID
-                    if (viewMatcher.matches(child)) {
+                    if (viewMatcher.matches(child) && child.isVisible) {
                         return
                     }
                 }
@@ -356,5 +359,36 @@ fun typeTextInViewWithId(id: Int, text: String) = object : ViewAction {
     override fun perform(uiController: UiController, view: View) {
         val v = view.findViewById<EditText>(id)
         v.text.append(text)
+    }
+}
+
+class ViewPager2IdlingResource(viewPager: ViewPager2) : IdlingResource {
+
+    companion object {
+        private const val NAME = "viewPagerIdlingResource"
+    }
+
+    private var isIdle = true // Default to idle since we can't query the scroll state.
+    private var resourceCallback: IdlingResource.ResourceCallback? = null
+
+    init {
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                // Treat dragging as idle, or Espresso will block itself when swiping
+                isIdle = (state == ViewPager2.SCROLL_STATE_IDLE || state == ViewPager2.SCROLL_STATE_DRAGGING)
+
+                if (isIdle && resourceCallback != null) {
+                    resourceCallback!!.onTransitionToIdle()
+                }
+            }
+        })
+    }
+
+    override fun getName() = NAME
+
+    override fun isIdleNow() = isIdle
+
+    override fun registerIdleTransitionCallback(resourceCallback: IdlingResource.ResourceCallback) {
+        this.resourceCallback = resourceCallback
     }
 }

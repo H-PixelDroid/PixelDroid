@@ -69,13 +69,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         this.itemView.visibility = View.VISIBLE
         this.status = status
 
-        val maxImageRatio: Float = status?.media_attachments?.map {
+        val maxImageRatio: Float = status?.media_attachments?.maxOfOrNull {
             if (it.meta?.original?.width == null || it.meta.original.height == null) {
                 1f
             } else {
                 it.meta.original.width.toFloat() / it.meta.original.height.toFloat()
             }
-        }?.maxOrNull() ?: 1f
+        } ?: 1f
 
         val (displayWidth, displayHeight) = displayDimensionsInPx
         if (displayWidth / maxImageRatio > displayHeight * 3/4f) {

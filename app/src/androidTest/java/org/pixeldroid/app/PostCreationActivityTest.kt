@@ -40,7 +40,7 @@ class PostCreationActivityTest {
 
     @get:Rule
     val mRuntimePermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
 
     private fun File.writeBitmap(bitmap: Bitmap) {
         outputStream().use { out ->
