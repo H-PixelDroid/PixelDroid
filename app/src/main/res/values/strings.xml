@@ -289,4 +289,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="from_other_domain">from %1$s</string>
 
     <string name="add_images_error">Error while adding images</string>
+    <string name="notification_thumbnail">"Thumbnail of image in this notification's post"</string>
+    <string name="post_preview">Preview of a post</string>
 </resources>

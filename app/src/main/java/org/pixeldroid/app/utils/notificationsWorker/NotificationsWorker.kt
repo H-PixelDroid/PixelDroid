@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -24,6 +23,7 @@ import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
+import org.pixeldroid.app.utils.getColorFromAttr
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.Instant
@@ -171,7 +171,6 @@ class NotificationsWorker(
         }.putExtra(USER_NOTIFICATION_TAG, user.user_id)
             .putExtra(INSTANCE_NOTIFICATION_TAG, user.instance_uri)
 
-
         val builder = NotificationCompat.Builder(applicationContext, makeChannelId(uniqueUserId, notification.type))
             .setSmallIcon(
                 when (notification.type) {
@@ -184,7 +183,7 @@ class NotificationsWorker(
                     null -> R.drawable.ic_comment_empty
                 }
             )
-            .setColor(Color.parseColor("#6200EE"))
+            .setColor(applicationContext.getColorFromAttr(R.attr.colorPrimary))
             .setContentTitle(
                 notification.account?.username?.let { username ->
                     applicationContext.getString(
