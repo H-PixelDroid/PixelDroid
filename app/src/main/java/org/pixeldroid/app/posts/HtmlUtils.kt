@@ -7,7 +7,6 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.core.text.toSpanned
@@ -22,7 +21,6 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.text.ParseException
 import java.time.Instant
-import java.time.ZoneOffset
 import java.util.*
 
 fun fromHtml(html: String): Spanned {

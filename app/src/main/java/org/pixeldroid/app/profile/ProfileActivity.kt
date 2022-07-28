@@ -33,15 +33,12 @@ import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedContentRepository
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
 import org.pixeldroid.app.posts.parseHTMLText
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
-import org.pixeldroid.app.utils.BlurHashDecoder
-import org.pixeldroid.app.utils.ImageConverter
+import org.pixeldroid.app.utils.*
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
-import org.pixeldroid.app.utils.openUrl
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -99,9 +96,9 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     }
 
     /**
-     * Shows or hides the error in the different FeedFragments
+     * Shows or hides the error in the profile
      */
-    private fun showError(errorText: String = "Something went wrong while loading", show: Boolean = true){
+    private fun showError(errorText: String = getString(R.string.profile_error), show: Boolean = true){
         if(show){
             binding.profileProgressBar.visibility = View.GONE
             binding.motionLayout.transitionToEnd()
@@ -116,6 +113,7 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         if(account != null) {
             setViews(account)
         } else {
+            supportActionBar?.setTitle(R.string.menu_account)
             lifecycleScope.launchWhenResumed {
                 val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                 val myAccount: Account = try {
@@ -149,7 +147,7 @@ class ProfileActivity : BaseThemedWithBarActivity() {
      */
     private fun setViews(account: Account) {
         val profilePicture = binding.profilePictureImageView
-        ImageConverter.setRoundImageFromURL(
+        setProfileImageFromURL(
             View(applicationContext),
             account.anyAvatar(),
             profilePicture
@@ -368,7 +366,7 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
                     ).placeholder(R.drawable.ic_sensitive).apply(RequestOptions().centerCrop())
                     .into(postPreview)
             } else {
-                ImageConverter.setSquareImageFromURL(postPreview,
+                setSquareImageFromURL(postPreview,
                     post.getPostPreviewURL(),
                     postPreview,
                     post.media_attachments?.firstOrNull()?.blurhash)

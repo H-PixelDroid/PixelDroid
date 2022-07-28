@@ -248,7 +248,8 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                 return
             }
 
-            val imagePart = ProgressRequestBody(imageInputStream, data.size)
+            val type = imageUri.getMimeType(getApplication<PixelDroidApplication>().contentResolver)
+            val imagePart = ProgressRequestBody(imageInputStream, data.size, type)
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", System.currentTimeMillis().toString(), imagePart)

@@ -3,7 +3,6 @@ package org.pixeldroid.app.postCreation
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 
 internal class SquareLayout(context: Context, attrs: AttributeSet) :
     FrameLayout(context, attrs) {

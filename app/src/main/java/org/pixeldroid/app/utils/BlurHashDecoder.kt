@@ -29,7 +29,7 @@ object BlurHashDecoder {
         )
     }
 
-    fun decode(blurHash: String?, width: Int?, height: Int?, punch: Float = 1f): Bitmap? {
+    private fun decode(blurHash: String?, width: Int?, height: Int?, punch: Float = 1f): Bitmap? {
         if (blurHash == null || width == null || height == null || blurHash.length < 6) {
             return null
         }

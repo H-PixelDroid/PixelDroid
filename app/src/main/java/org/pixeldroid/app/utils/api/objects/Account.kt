@@ -73,7 +73,7 @@ data class Account(
     fun getDisplayName() : String = when {
         username.isNullOrBlank() && display_name.isNullOrBlank() -> ""
         display_name.isNullOrBlank() -> "@$username"
-        else -> display_name.orEmpty()
+        else -> display_name
     }
 
     fun anyAvatar(): String? = avatar_static ?: avatar

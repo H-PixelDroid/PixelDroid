@@ -36,6 +36,6 @@ class AlbumActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setBackgroundDrawable(null)
-        window.statusBarColor = ContextCompat.getColor(this,android.R.color.transparent);
+        window.statusBarColor = ContextCompat.getColor(this,android.R.color.transparent)
     }
 }

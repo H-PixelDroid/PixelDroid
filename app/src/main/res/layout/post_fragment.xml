@@ -42,11 +42,12 @@
                 android:id="@+id/postDomain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:textColor="#b3b3b3"
                 app:layout_constraintBottom_toBottomOf="@+id/profilePic"
                 app:layout_constraintStart_toEndOf="@+id/username"
                 app:layout_constraintTop_toTopOf="@+id/profilePic"
-                tools:text=" from domain.tld" />
+                tools:text="from domain.tld" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/postConstraint"

@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -195,7 +196,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                 model.setImages(model.addPossibleImages(it))
             }
         } else if (result.resultCode != Activity.RESULT_CANCELED) {
-            Toast.makeText(applicationContext, "Error while adding images", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, R.string.add_images_error, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -296,11 +297,11 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
     private fun enableButton(enable: Boolean = true){
         binding.postCreationSendButton.isEnabled = enable
         if(enable){
-            binding.postingProgressBar.visibility = View.GONE
-            binding.postCreationSendButton.visibility = View.VISIBLE
+            binding.postingProgressBar.visibility = GONE
+            binding.postCreationSendButton.visibility = VISIBLE
         } else {
-            binding.postingProgressBar.visibility = View.VISIBLE
-            binding.postCreationSendButton.visibility = View.GONE
+            binding.postingProgressBar.visibility = VISIBLE
+            binding.postCreationSendButton.visibility = GONE
         }
 
     }
@@ -310,9 +311,9 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         if (result?.resultCode == Activity.RESULT_OK && result.data != null) {
             val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
             model.modifyAt(position, result.data!!)
-                ?: Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
+                ?: Toast.makeText(applicationContext, R.string.error_editing, Toast.LENGTH_SHORT).show()
         } else if(result?.resultCode != Activity.RESULT_CANCELED){
-            Toast.makeText(applicationContext, "Error while editing", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, R.string.error_editing, Toast.LENGTH_SHORT).show()
         }
     }
 

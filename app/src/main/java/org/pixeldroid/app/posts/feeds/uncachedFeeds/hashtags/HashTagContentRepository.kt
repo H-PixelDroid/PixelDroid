@@ -4,11 +4,9 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import org.pixeldroid.app.utils.api.PixelfedAPI
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedContentRepository
-import org.pixeldroid.app.utils.api.objects.FeedContent
-import org.pixeldroid.app.utils.api.objects.Results
 import kotlinx.coroutines.flow.Flow
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedContentRepository
+import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Status
 import javax.inject.Inject
 

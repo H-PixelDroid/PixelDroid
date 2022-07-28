@@ -1,75 +1,64 @@
 package org.pixeldroid.app.postCreation.photoEdit
 
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import org.pixeldroid.app.R
 import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.utils.ThumbnailItem
 import com.zomato.photofilters.utils.ThumbnailsManager
+import kotlinx.coroutines.launch
+import org.pixeldroid.app.R
+import org.pixeldroid.app.databinding.FragmentFilterListBinding
 import org.pixeldroid.app.utils.bitmapFromUri
 
 class FilterListFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
-    private var listener : PhotoEditActivity? = null
+    private lateinit var binding: FragmentFilterListBinding
+
+    private var listener : ((Filter) -> Unit)? = null
     internal lateinit var adapter: ThumbnailAdapter
     private lateinit var tbItemList: MutableList<ThumbnailItem>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_filter_list, container, false)
+        binding = FragmentFilterListBinding.inflate(inflater, container, false)
 
         tbItemList = ArrayList()
 
-        recyclerView = view.findViewById(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.itemAnimator = DefaultItemAnimator()
-
-        val space = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics).toInt()
-        recyclerView.addItemDecoration(SpaceItemDecoration(space))
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
         adapter = ThumbnailAdapter(requireActivity(), tbItemList, this)
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
-        return view
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        displayImage(null)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        displayImage()
     }
 
-    private fun displayImage(bitmap: Bitmap?) {
-        val r = Runnable {
-            val tbImage: Bitmap = (if (bitmap == null) {
-                bitmapFromUri(requireActivity().contentResolver, PhotoEditActivity.imageUri)
-            } else {
-                Bitmap.createScaledBitmap(bitmap, 100, 100, false)
-            })
-                ?: return@Runnable
+    private fun displayImage() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                val tbImage: Bitmap = bitmapFromUri(requireActivity().contentResolver, PhotoEditActivity.imageUri)
+                setupFilter(tbImage)
 
-            if(activity != null) setupFilter(tbImage)
-
-            if(context != null) tbItemList.addAll(ThumbnailsManager.processThumbs(context))
-            activity?.runOnUiThread{ adapter.notifyDataSetChanged() }
+                tbItemList.addAll(ThumbnailsManager.processThumbs(context))
+                adapter.notifyDataSetChanged()
+            }
         }
-
-        Thread(r).start()
     }
 
     private fun setupFilter(tbImage: Bitmap?) {
@@ -95,14 +84,13 @@ class FilterListFragment : Fragment() {
 
     fun resetSelectedFilter(){
         adapter.resetSelected()
-        displayImage(null)
     }
 
     fun onFilterSelected(filter: Filter) {
-        listener?.onFilterSelected(filter)
+        listener?.invoke(filter)
     }
 
-    fun setListener(listFragmentListener: PhotoEditActivity) {
+    fun setListener(listFragmentListener: (filter: Filter) -> Unit) {
         this.listener = listFragmentListener
     }
 }

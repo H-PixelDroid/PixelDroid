@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
-import androidx.core.view.size
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
@@ -14,14 +13,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.gson.Gson
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ErrorLayoutBinding
 import org.pixeldroid.app.databinding.LoadStateFooterViewItemBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
 import org.pixeldroid.app.utils.api.objects.FeedContent
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 /**
