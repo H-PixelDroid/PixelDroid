@@ -29,6 +29,7 @@ import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.google.android.material.color.MaterialColors
 import okhttp3.HttpUrl
 import org.pixeldroid.app.R
+import java.util.*
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -65,7 +66,7 @@ fun Uri.getMimeType(contentResolver: ContentResolver, fallback: String = "image/
         contentResolver.getType(this)
     } else {
         MimeTypeMap.getFileExtensionFromUrl(toString())
-            ?.run { MimeTypeMap.getSingleton().getMimeTypeFromExtension(toLowerCase()) }
+            ?.run { MimeTypeMap.getSingleton().getMimeTypeFromExtension(lowercase(Locale.getDefault())) }
     } ?: fallback
 }
 

@@ -62,7 +62,6 @@ class MainActivity : BaseThemedWithoutBarActivity() {
 
     companion object {
         const val ADD_ACCOUNT_IDENTIFIER: Long = -13
-        const val LOG_OUT_REQUESTED = "LOG_OUT_REQUESTED"
     }
 
     private lateinit var binding: ActivityMainBinding

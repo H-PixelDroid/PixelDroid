@@ -8,7 +8,7 @@ import okhttp3.RequestBody
 import okio.BufferedSink
 import java.io.*
 
-class ProgressRequestBody(private val mFile: InputStream, private val length: Long) : RequestBody() {
+class ProgressRequestBody(private val mFile: InputStream, private val length: Long, private val type: String) : RequestBody() {
 
     private val getProgressSubject: PublishSubject<Float> = PublishSubject.create()
 
@@ -18,7 +18,7 @@ class ProgressRequestBody(private val mFile: InputStream, private val length: Lo
         }
 
     override fun contentType(): MediaType? {
-        return "image/png".toMediaTypeOrNull()
+        return type.toMediaTypeOrNull()
     }
 
     @Throws(IOException::class)

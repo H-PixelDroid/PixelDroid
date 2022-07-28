@@ -119,10 +119,10 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
 
 
     <!-- Post editing -->
-    <string name="lbl_brightness">BRIGHTNESS</string>
-    <string name="lbl_contrast">CONTRAST</string>
-    <string name="lbl_saturation">SATURATION</string>
-    <string name="tab_filters">FILTERS</string>
+    <string name="lbl_brightness">Brightness</string>
+    <string name="lbl_contrast">Contrast</string>
+    <string name="lbl_saturation">Saturation</string>
+    <string name="tab_filters">Filters</string>
     <string name="edit">Edit</string>
     <string name="filter_thumbnail">Thumbnail of filter</string>
     <string name="normal_filter">Normal</string>
@@ -133,6 +133,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="crop_button">Button to crop or rotate the image</string>
     <string name="save_before_returning">Save your edits?</string>
     <string name="no_cancel_edit">No, cancel edit</string>
+    <string name="error_editing">Error while editing</string>
 
     <!-- Camera -->
     <string name="capture_button_alt">Capture</string>
@@ -282,4 +283,12 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="accentColorSummary">Choose a color accent</string>
     <string name="color_choice_button">Choose this color accent</string>
     <string name="color_chosen">Chosen color accent</string>
+    <string name="profile_error">Could not load profile</string>
+
+    <!-- Tells user what domain this user is from -->
+    <string name="from_other_domain">from %1$s</string>
+
+    <string name="add_images_error">Error while adding images</string>
+    <string name="notification_thumbnail">"Thumbnail of image in this notification's post"</string>
+    <string name="post_preview">Preview of a post</string>
 </resources>

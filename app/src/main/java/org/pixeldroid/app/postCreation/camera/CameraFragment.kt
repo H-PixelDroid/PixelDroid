@@ -25,14 +25,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.setPadding
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentCameraBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
+import org.pixeldroid.app.utils.BaseFragment
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -40,8 +41,6 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
-import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.BaseFragment
 
 private const val ANIMATION_FAST_MILLIS = 50L
 private const val ANIMATION_SLOW_MILLIS = 100L

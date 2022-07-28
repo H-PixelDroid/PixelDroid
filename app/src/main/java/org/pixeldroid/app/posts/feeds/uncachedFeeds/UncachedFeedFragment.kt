@@ -7,18 +7,18 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadState
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.pixeldroid.app.posts.feeds.launch
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-
 import org.pixeldroid.app.databinding.FragmentFeedBinding
-import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.posts.feeds.initAdapter
+import org.pixeldroid.app.posts.feeds.launch
+import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.api.objects.FeedContent
 
 

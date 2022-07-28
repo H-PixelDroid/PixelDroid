@@ -42,7 +42,6 @@ import org.pixeldroid.app.databinding.OpenedAlbumBinding
 import org.pixeldroid.app.databinding.PostFragmentBinding
 import org.pixeldroid.app.posts.MediaViewerActivity.Companion.openActivity
 import org.pixeldroid.app.utils.BlurHashDecoder
-import org.pixeldroid.app.utils.ImageConverter
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.api.objects.Status
@@ -51,6 +50,7 @@ import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_TAG
 import org.pixeldroid.app.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
+import org.pixeldroid.app.utils.setProfileImageFromURL
 import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
@@ -132,10 +132,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             binding.root.context
         )
 
-        binding.postDomain.text = status?.getStatusDomain(domain)
+        binding.postDomain.text = status?.getStatusDomain(domain, binding.postDomain.context)
 
         //Setup images
-        ImageConverter.setRoundImageFromURL(
+        setProfileImageFromURL(
             binding.root,
             status?.getProfilePicUrl(),
             binding.profilePic

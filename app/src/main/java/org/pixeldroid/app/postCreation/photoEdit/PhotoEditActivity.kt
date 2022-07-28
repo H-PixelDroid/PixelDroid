@@ -5,12 +5,10 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
@@ -18,9 +16,12 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 import com.yalantis.ucrop.UCrop
 import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
@@ -115,7 +116,6 @@ class PhotoEditActivity : BaseThemedWithBarActivity() {
         loadImage()
 
         setupViewPager(binding.viewPager)
-        binding.tabs.setupWithViewPager(binding.viewPager)
     }
 
     private fun loadImage() {
@@ -137,18 +137,36 @@ class PhotoEditActivity : BaseThemedWithBarActivity() {
         return Bitmap.createScaledBitmap(image, (image.width * scale).toInt(), newY.toInt(), true)
     }
 
-    private fun setupViewPager(viewPager: NonSwipeableViewPager?) {
-        val adapter = EditPhotoViewPagerAdapter(supportFragmentManager)
-
+    private fun setupViewPager(viewPager: ViewPager2) {
         filterListFragment = FilterListFragment()
-        filterListFragment.setListener(this)
+        filterListFragment.setListener(::onFilterSelected)
 
         editImageFragment = EditImageFragment()
         editImageFragment.setListener(this)
-        adapter.addFragment(filterListFragment, "FILTERS")
-        adapter.addFragment(editImageFragment, "EDIT")
 
-        viewPager!!.adapter = adapter
+        val tabs: List<() -> Fragment> = listOf({ filterListFragment }, { editImageFragment })
+
+        // Keep both tabs loaded at all times because values are needed there
+        viewPager.offscreenPageLimit = 1
+
+        //Disable swiping in viewpager
+        viewPager.isUserInputEnabled = false
+
+        viewPager.adapter = object : FragmentStateAdapter(this) {
+            override fun createFragment(position: Int): Fragment {
+                return tabs[position]()
+            }
+
+            override fun getItemCount(): Int {
+                return tabs.size
+            }
+        }
+        TabLayoutMediator(binding.tabs, viewPager) { tab, position ->
+            tab.setText(when(position) {
+                0 -> R.string.tab_filters
+                else -> R.string.edit
+            })
+        }.attach()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

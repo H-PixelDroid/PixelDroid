@@ -1,70 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     tools:context=".postCreation.photoEdit.EditImageFragment">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:paddingBottom="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
-        <TextView
-            android:text="@string/lbl_brightness"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        
-        <SeekBar
-            android:id="@+id/seekbar_brightness"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/label_brightness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center_horizontal"
+        android:text="@string/lbl_brightness"
+        app:layout_constraintBottom_toTopOf="@+id/label_contrast"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
 
-        <TextView
-            android:text="@string/lbl_contrast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/label_contrast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center_horizontal"
+        android:text="@string/lbl_contrast"
+        app:layout_constraintBottom_toTopOf="@+id/label_saturation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_brightness" />
 
-        <SeekBar
-            android:id="@+id/seekbar_contrast"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/label_saturation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center_horizontal"
+        android:text="@string/lbl_saturation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_contrast" />
 
-    </LinearLayout>
+    <SeekBar
+        android:id="@+id/seekbar_brightness"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/label_brightness"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/label_barrier"
+        app:layout_constraintTop_toTopOf="@+id/label_brightness" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <SeekBar
+        android:id="@+id/seekbar_saturation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/label_saturation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/seekbar_contrast"
+        app:layout_constraintTop_toTopOf="@+id/label_saturation" />
 
-        <TextView
-            android:text="@string/lbl_saturation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <SeekBar
+        android:id="@+id/seekbar_contrast"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/label_contrast"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/seekbar_brightness"
+        app:layout_constraintTop_toTopOf="@+id/label_contrast" />
 
-        <SeekBar
-            android:id="@+id/seekbar_saturation"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/label_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="label_brightness,label_contrast,label_saturation" />
 
-    </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

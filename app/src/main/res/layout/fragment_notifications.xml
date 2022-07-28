@@ -58,7 +58,7 @@
             app:layout_constraintTop_toBottomOf="@id/notification_type"
             tools:src="@drawable/ic_default_user"
             tools:srcCompat="@tools:sample/backgrounds/scenic"
-            android:contentDescription="TODO" />
+            android:contentDescription="@string/notification_thumbnail" />
 
         <TextView
             android:id="@+id/notification_post_description"

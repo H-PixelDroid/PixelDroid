@@ -84,10 +84,10 @@ open class Status(
         )
     }
 
-    fun getStatusDomain(domain: String) : String {
+    fun getStatusDomain(domain: String, context: Context) : String {
         val accountDomain = getDomain(account!!.url)
         return if(getDomain(domain) == accountDomain) ""
-        else " from $accountDomain"
+        else context.getString(R.string.from_other_domain).format(accountDomain)
 
     }
 

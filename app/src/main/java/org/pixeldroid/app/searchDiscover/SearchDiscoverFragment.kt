@@ -18,9 +18,9 @@ import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.posts.PostActivity
 import org.pixeldroid.app.utils.BaseFragment
-import org.pixeldroid.app.utils.ImageConverter
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.bindingLifecycleAware
+import org.pixeldroid.app.utils.setSquareImageFromURL
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -69,7 +69,7 @@ class SearchDiscoverFragment : BaseFragment() {
         }
     }
 
-    fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
+    private fun showError(@StringRes errorText: Int = R.string.loading_toast, show: Boolean = true){
         binding.motionLayout.apply {
             if(show){
                 transitionToEnd()
@@ -126,7 +126,7 @@ class SearchDiscoverFragment : BaseFragment() {
                 } else holder.videoIcon.visibility = View.GONE
 
             }
-            ImageConverter.setSquareImageFromURL(holder.postView, post?.getPostPreviewURL(), holder.postPreview, post?.media_attachments?.firstOrNull()?.blurhash)
+            setSquareImageFromURL(holder.postView, post?.getPostPreviewURL(), holder.postPreview, post?.media_attachments?.firstOrNull()?.blurhash)
             holder.postPreview.setOnClickListener {
                 val intent = Intent(holder.postView.context, PostActivity::class.java)
                 intent.putExtra(Status.POST_TAG, post)

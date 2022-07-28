@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.zomato.photofilters.utils.ThumbnailItem
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ThumbnailListItemBinding
-import com.zomato.photofilters.utils.ThumbnailItem
 import org.pixeldroid.app.utils.getColorFromAttr
 
 class ThumbnailAdapter (private val context: Context,

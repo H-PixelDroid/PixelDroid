@@ -3,9 +3,8 @@ package org.pixeldroid.app.utils
 import android.app.Application
 import androidx.preference.PreferenceManager
 import com.google.android.material.color.DynamicColors
-import org.pixeldroid.app.utils.di.*
-import com.mikepenz.iconics.Iconics
 import org.ligi.tracedroid.TraceDroid
+import org.pixeldroid.app.utils.di.*
 
 
 class PixelDroidApplication: Application() {

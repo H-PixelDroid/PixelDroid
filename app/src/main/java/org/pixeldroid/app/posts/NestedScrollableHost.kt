@@ -38,7 +38,7 @@ class NestedScrollableHost(context: Context, attrs: AttributeSet? = null) :
         }
 
 
-    var images: ArrayList<Attachment> = ArrayList();
+    var images: ArrayList<Attachment> = ArrayList()
     var doubleTapCallback: (() -> Unit)? = null
 
     private val child: View? get() = if (childCount > 0) getChildAt(0) else null
