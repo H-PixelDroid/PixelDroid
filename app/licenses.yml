@@ -245,12 +245,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://developer.android.com/jetpack/androidx
-- artifact: com.github.bumptech.glide:okhttp-integration:+
-  name: okhttp-integration
-  copyrightHolder: Google Inc.
-  license: Simplified BSD License
-  licenseUrl: http://www.opensource.org/licenses/bsd-license
-  url: https://github.com/bumptech/glide
 - artifact: com.github.bumptech.glide:glide:+
   name: glide
   copyrightHolder: Google Inc.
@@ -687,10 +681,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/Kotlin/kotlinx.coroutines
-- artifact: com.squareup.okhttp:okhttp:+
-  name: okhttp
-  copyrightHolder: Square, Inc.
-  license: The Apache Software License, Version 2.0
 - artifact: com.squareup.okio:okio:+
   name: okio
   copyrightHolder: Square, Inc.
@@ -973,3 +963,9 @@
   license: The 3-Clause BSD License
   licenseUrl: https://opensource.org/licenses/BSD-3-Clause
   url: https://github.com/tanersener/smart-exception
+- artifact: com.github.bumptech.glide:okhttp3-integration:+
+  name: okhttp3-integration
+  copyrightHolder: Google Inc.
+  license: Simplified BSD License
+  licenseUrl: http://www.opensource.org/licenses/bsd-license
+  url: https://github.com/bumptech/glide

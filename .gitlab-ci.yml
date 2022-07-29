@@ -99,7 +99,7 @@ fdroid build:
     - ln -s $CI_PROJECT_DIR/fdroidserver /home/vagrant/fdroidserver
     - mkdir -p /vagrant/cache
     - wget -q https://services.gradle.org/distributions/gradle-5.6.2-bin.zip --output-document=/vagrant/cache/gradle-5.6.2-bin.zip
-    # Check sha256 of the gralde build
+    # Check sha256 of the gradle build
     - echo '32fce6628848f799b0ad3205ae8db67d0d828c10ffe62b748a7c0d9f4a5d9ee0 /vagrant/cache/gradle-5.6.2-bin.zip' | sha256sum -c
     - bash fdroidserver/buildserver/provision-gradle
     - bash fdroidserver/buildserver/provision-apt-get-install https://deb.debian.org/debian

@@ -2,6 +2,8 @@ package org.pixeldroid.app.utils.api
 
 import com.google.gson.*
 import io.reactivex.rxjava3.core.Observable
+import okhttp3.ConnectionSpec
+import okhttp3.Interceptor
 import org.pixeldroid.app.utils.api.objects.*
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -9,6 +11,8 @@ import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.di.TokenAuthenticator
+import org.pixeldroid.app.utils.typeAdapterInstantDeserializer
+import org.pixeldroid.app.utils.typeAdapterInstantSerializer
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
@@ -30,42 +34,45 @@ interface PixelfedAPI {
 
 
     companion object {
+        val headerInterceptor = Interceptor { chain ->
+            val requestBuilder = chain.request().newBuilder()
+                .removeHeader("User-Agent")
+                .addHeader("User-Agent", "PixelDroid") //TODO check if okay?
+            chain.proceed(requestBuilder.build())
+        }
+
         fun createFromUrl(baseUrl: String): PixelfedAPI {
             return Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gSonInstance))
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                .client(
+                    OkHttpClient().newBuilder().addNetworkInterceptor(headerInterceptor)
+                        // Only do secure-ish TLS connections (no HTTP or very old SSL/TLS)
+                        .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS)).build()
+                )
                 .build().create(PixelfedAPI::class.java)
         }
 
-        private var gSonInstance: Gson = GsonBuilder()
-            .registerTypeAdapter(
-                Instant::class.java,
-                JsonDeserializer { json: JsonElement, _, _ ->
-                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(
-                        json.asString, Instant::from
-                    )
-                } as JsonDeserializer<Instant>).registerTypeAdapter(
-                Instant::class.java,
-                JsonSerializer { src: Instant, _, _ ->
-                    JsonPrimitive(DateTimeFormatter.ISO_INSTANT.format(src))
-                })
+        private val gSonInstance: Gson = GsonBuilder()
+            .registerTypeAdapter(Instant::class.java, typeAdapterInstantDeserializer)
+            .registerTypeAdapter(Instant::class.java, typeAdapterInstantSerializer)
             .create()
-
-        private val intermediate: Retrofit.Builder = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create(gSonInstance))
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-
 
         fun apiForUser(
             user: UserDatabaseEntity,
             db: AppDatabase,
             pixelfedAPIHolder: PixelfedAPIHolder
         ): PixelfedAPI =
-            intermediate
+            Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gSonInstance))
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .baseUrl(user.instance_uri)
                 .client(
-                    OkHttpClient().newBuilder().authenticator(TokenAuthenticator(user, db, pixelfedAPIHolder))
+                    OkHttpClient().newBuilder().addNetworkInterceptor(headerInterceptor)
+                            // Only do secure-ish TLS connections (no HTTP or very old SSL/TLS)
+                        .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS))
+                        .authenticator(TokenAuthenticator(user, db, pixelfedAPIHolder))
                         .addInterceptor {
                             it.request().newBuilder().run {
                                 header("Accept", "application/json")
