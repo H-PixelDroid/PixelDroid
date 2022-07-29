@@ -2,6 +2,8 @@ package org.pixeldroid.app.utils.api
 
 import com.google.gson.*
 import io.reactivex.rxjava3.core.Observable
+import okhttp3.ConnectionSpec
+import okhttp3.Interceptor
 import org.pixeldroid.app.utils.api.objects.*
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -30,8 +32,19 @@ interface PixelfedAPI {
 
 
     companion object {
+        val headerInterceptor = Interceptor { chain ->
+            val requestBuilder = chain.request().newBuilder()
+                .removeHeader("User-Agent")
+                .addHeader("User-Agent", "PixelDroid") //TODO check if okay?
+            chain.proceed(requestBuilder.build())
+        }
+
         fun createFromUrl(baseUrl: String): PixelfedAPI {
-            return Retrofit.Builder()
+            return Retrofit.Builder().client(
+                OkHttpClient().newBuilder().addNetworkInterceptor(headerInterceptor)
+                    // Only do secure-ish TLS connections (no HTTP or very old SSL/TLS)
+                    .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS)).build()
+            )
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gSonInstance))
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
@@ -65,7 +78,10 @@ interface PixelfedAPI {
             intermediate
                 .baseUrl(user.instance_uri)
                 .client(
-                    OkHttpClient().newBuilder().authenticator(TokenAuthenticator(user, db, pixelfedAPIHolder))
+                    OkHttpClient().newBuilder().addNetworkInterceptor(headerInterceptor)
+                            // Only do secure-ish TLS connections (no HTTP or very old SSL/TLS)
+                        .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS))
+                        .authenticator(TokenAuthenticator(user, db, pixelfedAPIHolder))
                         .addInterceptor {
                             it.request().newBuilder().run {
                                 header("Accept", "application/json")
