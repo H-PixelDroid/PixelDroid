@@ -229,4 +229,10 @@
     <string name="color_choice_button">选择这个强调色</string>
     <string name="color_chosen">已选择强调色</string>
     <string name="accentColorTitle">强调色</string>
+    <string name="error_editing">编辑时出错</string>
+    <string name="profile_error">无法加载个人资料</string>
+    <string name="from_other_domain">来自 %1$s</string>
+    <string name="add_images_error">添加图片时出错</string>
+    <string name="notification_thumbnail">此通知帖文中图片的缩略图</string>
+    <string name="post_preview">帖文预览</string>
 </resources>
