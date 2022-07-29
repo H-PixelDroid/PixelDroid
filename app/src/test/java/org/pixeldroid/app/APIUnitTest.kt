@@ -2,13 +2,26 @@ package org.pixeldroid.app
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializer
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.*
 import kotlinx.coroutines.runBlocking
+import okhttp3.ConnectionSpec
+import okhttp3.OkHttpClient
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.pixeldroid.app.utils.typeAdapterInstantDeserializer
+import org.pixeldroid.app.utils.typeAdapterInstantSerializer
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 
 /**
@@ -19,6 +32,23 @@ import java.time.Instant
 class APIUnitTest {
     @get:Rule
     var wireMockRule = WireMockRule(8089)
+
+
+    // Same as in PixelfedAPI but allow cleartext
+    private val api: PixelfedAPI = Retrofit.Builder()
+        .baseUrl("http://localhost:8089")
+        .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
+            .registerTypeAdapter(Instant::class.java, typeAdapterInstantDeserializer)
+            .registerTypeAdapter(Instant::class.java, typeAdapterInstantSerializer)
+            .create())
+        )
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        .client(
+            OkHttpClient().newBuilder().addNetworkInterceptor(PixelfedAPI.headerInterceptor)
+                // Allow cleartext
+                .connectionSpecs(listOf(ConnectionSpec.CLEARTEXT)).build()
+        )
+        .build().create(PixelfedAPI::class.java)
 
     @Test
     fun api_correctly_translated_data_class() {
@@ -44,9 +74,10 @@ class APIUnitTest {
         val statusesHome: List<Status>
 
         runBlocking {
-            statuses = PixelfedAPI.createFromUrl("http://localhost:8089")
+
+            statuses = api
                     .timelinePublic(null, null, null, null, null)
-            statusesHome = PixelfedAPI.createFromUrl("http://localhost:8089")
+            statusesHome = api
                 .timelineHome(null, null, null, null, null)
         }
 
@@ -69,8 +100,7 @@ class APIUnitTest {
                         .withBody(""" {"id":3197,"name":"Pixeldroid","website":null,"redirect_uri":"urn:ietf:wg:oauth:2.0:oob","client_id":3197,"client_secret":"hhRwLupqUJPghKsZzpZtxNV67g5DBdPYCqW6XE3m","vapid_key":null}"""
                         )))
         val application: Application = runBlocking {
-            PixelfedAPI.createFromUrl("http://localhost:8089")
-                .registerApplication("Pixeldroid", "urn:ietf:wg:oauth:2.0:oob", "read write follow")
+            api.registerApplication("Pixeldroid", "urn:ietf:wg:oauth:2.0:oob", "read write follow")
         }
 
         assertEquals("3197", application.client_id)
@@ -100,8 +130,7 @@ class APIUnitTest {
         val PACKAGE_ID = "org.pixeldroid.app"
 
         val token: Token =  runBlocking {
-            PixelfedAPI.createFromUrl("http://localhost:8089")
-                .obtainToken(
+            api.obtainToken(
                     "123", "ssqdfqsdfqds", "$OAUTH_SCHEME://$PACKAGE_ID", SCOPE, "abc",
                     "authorization_code"
                 )
