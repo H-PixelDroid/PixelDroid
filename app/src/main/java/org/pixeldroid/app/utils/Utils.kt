@@ -27,8 +27,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.google.android.material.color.MaterialColors
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializer
 import okhttp3.HttpUrl
 import org.pixeldroid.app.R
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -226,6 +232,17 @@ fun Context.themeActionBar(): Int {
 
 @ColorInt
 fun Context.getColorFromAttr(@AttrRes attrColor: Int): Int = MaterialColors.getColor(this, attrColor, Color.BLACK)
+
+
+val typeAdapterInstantDeserializer: JsonDeserializer<Instant> = JsonDeserializer { json: JsonElement, _, _ ->
+    DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(
+        json.asString, Instant::from
+    )
+}
+
+val typeAdapterInstantSerializer: JsonSerializer<Instant> = JsonSerializer { src: Instant, _, _ ->
+    JsonPrimitive(DateTimeFormatter.ISO_INSTANT.format(src))
+}
 
 /**
  * Delegated property to use in fragments to prevent memory leaks of bindings.
