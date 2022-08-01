@@ -14,13 +14,13 @@
     <string name="liked_notification">a %1$s gustoulle a publicación</string>
     <string name="shared_notification">%1$s comparteu a publicación</string>
     <string name="description">Descrición…</string>
-    <string name="post">enviar</string>
+    <string name="post">Publicar</string>
     <string name="whats_an_instance">Que é unha instancia\?</string>
     <string name="logout">Saír</string>
-    <string name="lbl_brightness">BRILLO</string>
-    <string name="lbl_contrast">CONTRASTE</string>
-    <string name="lbl_saturation">SATURACIÓN</string>
-    <string name="tab_filters">FILTROS</string>
+    <string name="lbl_brightness">Brillo</string>
+    <string name="lbl_contrast">Contraste</string>
+    <string name="lbl_saturation">Saturación</string>
+    <string name="tab_filters">Filtros</string>
     <string name="edit">EDITAR</string>
     <string name="save_to_gallery">Gardar na Galería…</string>
     <string name="image_download_downloading">Descargando…</string>
@@ -94,7 +94,7 @@
     <string name="busy_dialog_text">Estase procesando a imaxe, agarda a que remate!</string>
     <string name="instance_not_pixelfed_warning">Non semella ser unha instancia Pixelfed, polo que a app podería non funcionar correctamente.</string>
     <string name="instance_not_pixelfed_continue">Ok, adiante igualmente</string>
-    <string name="instance_not_pixelfed_cancel">Cancelar a conexión</string>
+    <string name="instance_not_pixelfed_cancel">Cancelar o acceso</string>
     <string name="about_pixeldroid">Acerca de PixelDroid</string>
     <string name="dependencies_licenses">Dependencias e licenzas</string>
     <string name="project_website">Web do proxecto: https://pixeldroid.org</string>
@@ -110,7 +110,7 @@
     <string name="share_link">Comparte ligazón</string>
     <string name="optional_report_comment">Mensaxe optativo para mods/admins</string>
     <string name="report_target">Denuncia a publicación de %1$s</string>
-    <string name="reported">Denunciado {gmd_check_circle}</string>
+    <string name="reported">Publicación denunciada</string>
     <string name="report_error">Non se puido enviar a denuncia</string>
     <string name="toolbar_title_edit">Editar</string>
     <string name="profile_picture">Imaxe de perfil</string>
@@ -231,4 +231,19 @@
     <string name="status_notification">%1$s creou unha publicación</string>
     <string name="thumbnail_reel_video_edit">Fila mostrando as miniaturas do vídeo que estás editando</string>
     <string name="select_video_range">Elixe a parte a conservar do vídeo</string>
+    <string name="error_editing">Erro ao editar</string>
+    <string name="color_choice_button">Elixe esta cor</string>
+    <string name="notification_thumbnail">Miniatura da imaxe na notificación desta publicación</string>
+    <string name="home_feed">Inicio</string>
+    <string name="search_discover_feed">Buscar</string>
+    <string name="create_feed">Crear</string>
+    <string name="notifications_feed">Novidades</string>
+    <string name="public_feed">Público</string>
+    <string name="accentColorTitle">Cor activa</string>
+    <string name="accentColorSummary">Elixe a cor a usar na interface</string>
+    <string name="color_chosen">Cor elexida para a interface</string>
+    <string name="profile_error">Non se cargou o perfil</string>
+    <string name="from_other_domain">desde %1$s</string>
+    <string name="add_images_error">Erro ao engadir as imaxes</string>
+    <string name="post_preview">Vista previa da publicación</string>
 </resources>
