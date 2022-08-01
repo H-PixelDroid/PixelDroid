@@ -226,4 +226,22 @@
     <string name="notification_summary_large">%1$s, %2$s, %3$s a %4$d dalších</string>
     <string name="notification_summary_medium">%1$s, %2$s, a %3$s</string>
     <string name="notification_summary_small">%1$s a %2$s</string>
+    <string name="public_feed">Veřejné</string>
+    <string name="error_editing">Chyba při úpravě</string>
+    <string name="post_is_video">Tento příspěvek je video</string>
+    <string name="select_video_range">Vyberte, co z videa zachovat</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nové upozornění</item>
+        <item quantity="few">%d nové upozornění</item>
+        <item quantity="other">%d nových upozornění</item>
+    </plurals>
+    <string name="video_not_supported">Server, který používáte, nepodporuje nahrávání videí, možná nebudete moci vložit videa obsažená v tomto příspěvku</string>
+    <string name="home_feed">Domů</string>
+    <string name="search_discover_feed">Hledat</string>
+    <string name="create_feed">Vytvořit</string>
+    <string name="notifications_feed">Aktualizace</string>
+    <string name="profile_error">Profil nelze načíst</string>
+    <string name="from_other_domain">z %1$s</string>
+    <string name="add_images_error">Chyba při přidávání obrázků</string>
+    <string name="post_preview">Náhled příspěvku</string>
 </resources>
