@@ -55,6 +55,10 @@ internal fun <T: Any> initAdapter(
         footer = ReposLoadStateAdapter { adapter.retry() }
     )
 
+    swipeRefreshLayout.setOnRefreshListener {
+        adapter.refresh()
+    }
+
     adapter.addLoadStateListener { loadState ->
 
         if(!progressBar.isVisible && swipeRefreshLayout.isRefreshing) {

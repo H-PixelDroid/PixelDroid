@@ -64,10 +64,6 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
         initAdapter(binding.progressBar, binding.swipeRefreshLayout, binding.list,
             binding.motionLayout, binding.errorLayout, adapter)
 
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            adapter.refresh()
-        }
-
         return binding.root
     }
 }

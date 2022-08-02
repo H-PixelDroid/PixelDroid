@@ -39,7 +39,7 @@ class PostActivity : BaseThemedWithBarActivity() {
 
     private lateinit var binding: ActivityPostBinding
     private lateinit var profileAdapter: PagingDataAdapter<Status, RecyclerView.ViewHolder>
-    private lateinit var viewModel: FeedViewModel<Status>
+    private lateinit var commentViewModel: FeedViewModel<Status>
     private var job: Job? = null
 
 
@@ -105,7 +105,7 @@ class PostActivity : BaseThemedWithBarActivity() {
     private fun retrieveComments() {
             // get the view model
             @Suppress("UNCHECKED_CAST")
-            viewModel = ViewModelProvider(this@PostActivity, ProfileViewModelFactory(
+            commentViewModel = ViewModelProvider(this@PostActivity, ProfileViewModelFactory(
                 CommentContentRepository(
                     apiHolder.setToCurrentUser(),
                     status.id
@@ -118,7 +118,7 @@ class PostActivity : BaseThemedWithBarActivity() {
                 binding.commentRecyclerView, binding.motionLayout, binding.errorLayout,
                 profileAdapter)
 
-            job = launch(job, lifecycleScope, viewModel, profileAdapter)
+            job = launch(job, lifecycleScope, commentViewModel, profileAdapter)
     }
 
     private suspend fun postComment(
