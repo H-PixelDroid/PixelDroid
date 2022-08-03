@@ -69,43 +69,11 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/motionLayout"
+    <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        app:layoutDescription="@xml/error_layout_xml_error_scene"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/commentFragment"
+        />
 
-        <include
-            android:id="@+id/errorLayout"
-            layout="@layout/error_layout"
-            tools:layout_editor_absoluteX="50dp" />
-
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/postRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/errorLayout">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/commentRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/comment" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </androidx.constraintlayout.motion.widget.MotionLayout>
-
-    <ProgressBar
-        android:id="@+id/postCommentsProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        app:layout_anchor="@id/motionLayout" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
