@@ -99,15 +99,13 @@
             tools:listitem="@layout/comment" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <ProgressBar
-            android:id="@+id/postCommentsProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/errorLayout" />
-
     </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <ProgressBar
+        android:id="@+id/postCommentsProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        app:layout_anchor="@id/motionLayout" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

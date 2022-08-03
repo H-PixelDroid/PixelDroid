@@ -6,6 +6,8 @@
 
     <color name="white">#FFFFFF</color>
 
+    <color name="domainGray">#b3b3b3</color>
+
     <!-- > Following are theme color values </-->
     <color name="seed">#f4a261</color>
     <color name="md_theme_light_primary">#924C00</color>

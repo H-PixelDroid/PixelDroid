@@ -173,6 +173,8 @@ class PostActivity : BaseThemedWithBarActivity() {
                 lifecycleScope
             )
 
+            binding.postDomain.text = comment.getStatusDomain(domain, binding.postDomain.context)
+
             if(comment.replies_count == 0 || comment.replies_count == null){
                 binding.replies.visibility = View.GONE
             } else {

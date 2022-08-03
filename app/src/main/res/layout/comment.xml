@@ -35,6 +35,17 @@
                 tools:text="username" />
 
             <TextView
+                android:id="@+id/postDomain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/domainGray"
+                app:layout_constraintBottom_toBottomOf="@+id/user"
+                app:layout_constraintStart_toEndOf="@+id/user"
+                app:layout_constraintTop_toTopOf="@+id/user"
+                tools:text="from domain.tld" />
+
+            <TextView
                 android:id="@+id/commentText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
