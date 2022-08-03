@@ -45,6 +45,10 @@ android {
     testBuildType "staging"
 
     buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix "-debug"
+        }
         staging {
             initWith debug
             testCoverageEnabled true
@@ -66,10 +70,6 @@ android {
             buildConfigField "String", "REFRESH_TOKEN", System.getenv("REFRESH_TOKEN") ?: localProperties['REFRESH_TOKEN'] ?: '""'
             buildConfigField "String", "CLIENT_ID", System.getenv("CLIENT_ID") ?: localProperties['CLIENT_ID'] ?: '""'
             buildConfigField "String", "CLIENT_SECRET", System.getenv("CLIENT_SECRET") ?: localProperties['CLIENT_SECRET'] ?: '""'
-        }
-        debug {
-            applicationIdSuffix '.debug'
-            versionNameSuffix "-debug"
         }
         release {
             minifyEnabled true

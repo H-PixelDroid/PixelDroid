@@ -1,20 +1,18 @@
 package org.pixeldroid.app.posts
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostBinding
-import org.pixeldroid.app.databinding.CommentBinding
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment.Companion.COMMENT_DOMAIN
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment.Companion.COMMENT_STATUS_ID
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
-import org.pixeldroid.app.utils.api.objects.Mention
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_COMMENT_TAG
 import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_TAG
@@ -24,9 +22,9 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class PostActivity : BaseThemedWithBarActivity() {
-    lateinit var domain : String
-
     private lateinit var binding: ActivityPostBinding
+
+    private var commentFragment = CommentFragment()
 
     private lateinit var status: Status
 
@@ -43,9 +41,6 @@ class PostActivity : BaseThemedWithBarActivity() {
 
         val user = db.userDao().getActiveUser()
 
-        domain = user?.instance_uri.orEmpty()
-
-
         supportActionBar?.title = getString(R.string.post_title).format(status.account?.getDisplayName())
 
         val holder = StatusViewHolder(binding.postFragmentSingle)
@@ -53,6 +48,7 @@ class PostActivity : BaseThemedWithBarActivity() {
         holder.bind(status, apiHolder, db, lifecycleScope, displayDimensionsInPx(), isActivity = true)
 
         activateCommenter()
+        initCommentsFragment(domain = user?.instance_uri.orEmpty())
 
         if(viewComments || postComment){
             //Scroll already down as much as possible (since comments are not loaded yet)
@@ -63,12 +59,6 @@ class PostActivity : BaseThemedWithBarActivity() {
                 window.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
                 binding.editComment.requestFocus()
             }
-
-            // also retrieve comments if we're not posting the comment
-            if(!postComment) retrieveComments(apiHolder.api!!)
-        }
-        binding.postFragmentSingle.viewComments.setOnClickListener {
-            retrieveComments(apiHolder.api!!)
         }
     }
 
@@ -92,53 +82,15 @@ class PostActivity : BaseThemedWithBarActivity() {
         }
     }
 
-    private fun addComment(context: Context, commentContainer: LinearLayout,
-                           commentUsername: String, commentContent: String, mentions: List<Mention>) {
+    private fun initCommentsFragment(domain: String) {
 
+        val arguments = Bundle()
+        arguments.putSerializable(COMMENT_STATUS_ID, status.id)
+        arguments.putSerializable(COMMENT_DOMAIN, domain)
+        commentFragment.arguments = arguments
 
-        val itemBinding = CommentBinding.inflate(
-            LayoutInflater.from(context), commentContainer, true
-        )
-
-        itemBinding.user.text = commentUsername
-        itemBinding.commentText.text = parseHTMLText(
-                commentContent,
-                mentions,
-                apiHolder,
-                context,
-                lifecycleScope
-        )
-    }
-
-    private fun retrieveComments(api: PixelfedAPI) {
-        lifecycleScope.launchWhenCreated {
-            status.id.let {
-                try {
-                    val statuses = api.statusComments(it).descendants
-
-                    binding.commentContainer.removeAllViews()
-
-                    //Create the new views for each comment
-                    for (status in statuses) {
-                        addComment(
-                            binding.root.context,
-                            binding.commentContainer,
-                            status.account!!.username!!,
-                            status.content!!,
-                            status.mentions.orEmpty()
-                        )
-                    }
-                    binding.commentContainer.visibility = View.VISIBLE
-
-                    //Focus the comments
-                    binding.scrollview.requestChildFocus(binding.commentContainer, binding.commentContainer)
-                } catch (exception: IOException) {
-                    Log.e("COMMENT FETCH ERROR", exception.toString())
-                } catch (exception: HttpException) {
-                    Log.e("COMMENT ERROR", "${exception.code()} with body ${exception.response()?.errorBody()}")
-                }
-            }
-        }
+        supportFragmentManager.beginTransaction()
+            .add(R.id.commentFragment, commentFragment).commit()
     }
 
     private suspend fun postComment(
@@ -151,11 +103,8 @@ class PostActivity : BaseThemedWithBarActivity() {
                 val response = api.postStatus(nonNullText, it)
                 binding.commentIn.visibility = View.GONE
 
-                //Add the comment to the comment section
-                addComment(
-                    binding.root.context, binding.commentContainer, response.account!!.username!!,
-                    response.content!!, response.mentions.orEmpty()
-                )
+                //Reload to add the comment to the comment section
+                commentFragment.adapter.refresh()
 
                 Toast.makeText(
                     binding.root.context,
@@ -177,5 +126,4 @@ class PostActivity : BaseThemedWithBarActivity() {
             }
         }
     }
-
 }
