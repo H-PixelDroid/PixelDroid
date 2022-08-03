@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -32,6 +35,7 @@ import com.mikepenz.materialdrawer.model.interfaces.*
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
+import kotlinx.coroutines.launch
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.databinding.ActivityMainBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment
@@ -43,6 +47,7 @@ import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.api.objects.Notification
 import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
@@ -240,6 +245,7 @@ class MainActivity : BaseThemedWithoutBarActivity() {
             }
         }
     }
+
     private fun getUpdatedAccount() {
         if (hasInternet(applicationContext)) {
 
@@ -400,6 +406,29 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                     //No clue why this works but it does. F to pay respects
                     supportFragmentManager.findFragmentByTag("f$position")
                 (page as? CachedFeedFragment<*>)?.onTabReClicked()
+            }
+        }
+
+        // Fetch one notification to show a badge if there are new notifications
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                user?.let {
+                    val maxId = db.notificationDao().latestNotification(it.user_id, it.instance_uri)?.id
+                    try {
+                        val notification: List<Notification>? = apiHolder.api?.notifications(
+                            limit = "1",
+                            max_id = maxId
+                        )
+                        if(notification?.isNotEmpty() == true) binding.tabs.getOrCreateBadge(R.id.page_4)
+                    } catch (exception: IOException) {
+                        return@repeatOnLifecycle
+                    } catch (exception: HttpException) {
+                        return@repeatOnLifecycle
+                    }
+
+
+
+                }
             }
         }
     }
