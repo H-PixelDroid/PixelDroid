@@ -1,0 +1,8 @@
+* comment improvements: You can now open a comment to see replies, like it, the comments show its author's avatar, etc.
+* Translation updates. Thank you translators :). Help translate PixelDroid to your language on weblate.pixeldroid.org
+* Security: dependency verification ensures the dependencies included in the app have not been tampered with, PixelDroid will now refuse any non-HTTPS connection
+* PixelDroid now uses a custom "PixelDroid" User Agent instead of the OkHttp library one.
+* All hardcoded strings were removed from the app, normally now everything is translateable.
+* Some improvements to code
+* Fix saving images coming from library or shared to the app
+* Fix another crash when using Mastodon instances
