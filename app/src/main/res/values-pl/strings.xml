@@ -70,4 +70,19 @@
     <string name="image_download_failed">Błąd pobierania, spróbuj ponownie</string>
     <string name="NoCommentsToShow">Brak komentarzy…</string>
     <string name="write_permission_download_pic">Musisz nadać uprawnienia do zapisu, aby móc pobierać obrazki!</string>
+    <string name="verify_credentials">Nie udało się uzyskać informacji o użytkowniku</string>
+    <string name="poll_notification">Ankieta użytkownika %1$s zakończyła się</string>
+    <string name="comment_notification">%1$s skomentował Twój post</string>
+    <string name="other_notification">Powiadomienie od %1$s</string>
+    <string name="followed_notification_channel">Nowi obserwujący</string>
+    <string name="liked_notification_channel">Polubienia</string>
+    <string name="comment_notification_channel">Komentarze</string>
+    <string name="poll_notification_channel">Ankiety</string>
+    <string name="other_notification_channel">Inne</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nowe powiadomienie</item>
+        <item quantity="few">%d nowych powiadomień</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
 </resources>
