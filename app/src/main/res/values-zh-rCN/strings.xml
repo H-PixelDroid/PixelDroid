@@ -235,4 +235,7 @@
     <string name="add_images_error">添加图片时出错</string>
     <string name="notification_thumbnail">此通知帖文中图片的缩略图</string>
     <string name="post_preview">帖文预览</string>
+    <plurals name="replies_count">
+        <item quantity="other">%d 条回复</item>
+    </plurals>
 </resources>
