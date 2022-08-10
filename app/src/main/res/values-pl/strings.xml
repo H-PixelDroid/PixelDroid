@@ -27,12 +27,12 @@
     <string name="upload_post_failed">Nie udało się opublikować posta</string>
     <string name="upload_post_success">Post opublikowany</string>
     <string name="description">Opis…</string>
-    <string name="post">post</string>
+    <string name="post">Post</string>
     <string name="add_photo">Dodaj zdjęcie</string>
-    <string name="lbl_brightness">JASNOŚĆ</string>
-    <string name="lbl_contrast">KONTRAST</string>
-    <string name="lbl_saturation">NASYCENIE</string>
-    <string name="tab_filters">FILTRY</string>
+    <string name="lbl_brightness">Jasność</string>
+    <string name="lbl_contrast">Kontrast</string>
+    <string name="lbl_saturation">Nasycenie</string>
+    <string name="tab_filters">Filtry</string>
     <string name="edit">EDYCJA</string>
     <string name="normal_filter">Zwykły</string>
     <string name="busy_dialog_ok_button">OK, zaczekam.</string>
@@ -63,11 +63,215 @@
     <string name="login_connection_required_once">Musisz być online, aby dodać konto i korzystać z PixelDroida :(</string>
     <string name="permission_denied">Brak dostępu</string>
     <string name="picture_format_error">Błąd wgrywania na serwer: niewłaściwy format pliku.</string>
-    <string name="upload_post_error">Nie udało się opublikować posta</string>
+    <string name="upload_post_error">Błąd podczas publikacji posta</string>
     <string name="busy_dialog_text">Przetwarzam obrazek, zaczekaj aż skończę!</string>
     <string name="loading_toast">Coś poszło nie tak podczas ładowania</string>
     <string name="save_to_gallery">Zapisz w galerii…</string>
     <string name="image_download_failed">Błąd pobierania, spróbuj ponownie</string>
     <string name="NoCommentsToShow">Brak komentarzy…</string>
     <string name="write_permission_download_pic">Musisz nadać uprawnienia do zapisu, aby móc pobierać obrazki!</string>
+    <string name="verify_credentials">Nie udało się uzyskać informacji o użytkowniku</string>
+    <string name="poll_notification">Ankieta użytkownika %1$s zakończyła się</string>
+    <string name="comment_notification">%1$s skomentował Twój post</string>
+    <string name="other_notification">Powiadomienie od %1$s</string>
+    <string name="followed_notification_channel">Nowi obserwujący</string>
+    <string name="liked_notification_channel">Polubienia</string>
+    <string name="comment_notification_channel">Komentarze</string>
+    <string name="poll_notification_channel">Ankiety</string>
+    <string name="other_notification_channel">Inne</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nowe powiadomienie</item>
+        <item quantity="few">%d nowych powiadomień</item>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <string name="delete">Usuń</string>
+    <string name="delete_dialog">Czy usunąć ten post\?</string>
+    <string name="no_cancel_edit">Nie, odrzuć edycję</string>
+    <string name="discover_no_infinite_load">Sekcja Odkryj nie wczytuje się bez końca. Pociągnij, aby odświeżyć dla innych obrazów.</string>
+    <string name="switch_to_carousel">Przełącz na karuzelę</string>
+    <plurals name="replies_count">
+        <item quantity="one">%d odpowiedź</item>
+        <item quantity="few">%d odpowiedzi</item>
+        <item quantity="many">%d odpowiedzi</item>
+        <item quantity="other">%d odpowiedzi</item>
+    </plurals>
+    <string name="save_image_description">Zapisz opis zdjęcia</string>
+    <string name="no_media_description">Dodaj opis obiektu tutaj…</string>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nobserwuje</item>
+        <item quantity="few">%d
+\nobserwuje</item>
+        <item quantity="many">%d
+\nobserwuje</item>
+        <item quantity="other">%d
+\nobserwuje</item>
+    </plurals>
+    <string name="delete_post_failed_error">Nie udało się usunąć posta, błąd %1$d</string>
+    <string name="api_not_enabled_dialog">API nie zostało aktywowane na tej instancji. Skontaktuj się z administratorem i poproś o aktywację.</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="retry">Ponów</string>
+    <string name="about">O</string>
+    <string name="edit_link_failed">Nie udało się otworzyć ekranu edycji</string>
+    <string name="empty_feed">Nic tu nie ma :(</string>
+    <string name="follow_requested">Prośba obserwacji</string>
+    <string name="dialog_message_cancel_follow_request">Anulować prośbę obserwacji\?</string>
+    <string name="delete_post_failed_io_except">Nie udało się usunąć posta, sprawdź swoje połączenie internetowe\?</string>
+    <string name="filter_thumbnail">Miniaturka filtra</string>
+    <string name="post_image">Jedno ze zdjęć w tym poście</string>
+    <string name="crop_button">Przycisk do przycinania lub obracania zdjęcia</string>
+    <string name="image_preview">Podgląd edytowanego zdjęcia</string>
+    <string name="no_camera_permission">Dostęp do aparatu nie został przyznany, przyznaj dostęp w ustawieniach jeśli chcesz, aby PixelDroid korzystał z kamery</string>
+    <string name="no_storage_permission">Dostęp do pamięci nie został przyznany, przyznaj dostęp w ustawieniach, jeśli chcesz, aby PixelDroid wyświetlał miniatury</string>
+    <plurals name="nb_posts">
+        <item quantity="one">%d
+\npost</item>
+        <item quantity="few">%d
+\nposty</item>
+        <item quantity="many">%d
+\npostów</item>
+        <item quantity="other">%d
+\npostów</item>
+    </plurals>
+    <string name="no_username">Brak nazwy użytkownika</string>
+    <string name="follow">Obserwuj</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Opis może zawierać najwyżej %d znak.</item>
+        <item quantity="few">Opis może zawierać najwyżej %d znaków.</item>
+        <item quantity="many">Opis może zawierać najwyżej %d znaków.</item>
+        <item quantity="other">Opis może zawierać najwyżej %d znaków.</item>
+    </plurals>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nobserwujący</item>
+        <item quantity="few">%d
+\nobserwujących</item>
+        <item quantity="many">%d
+\nobserwujących</item>
+        <item quantity="other">%d
+\nobserwujących</item>
+    </plurals>
+    <string name="follow_button_failed">Nie udało się wyświetlić przycisku Obserwuj</string>
+    <string name="follow_error">Nie udało się zaobserwować</string>
+    <string name="action_not_allowed">To działanie jest niedozwolone</string>
+    <string name="unfollow_error">Nie udało się anulować obserwowania</string>
+    <string name="access_token_invalid">Token dostępu jest nieprawidłowy</string>
+    <string name="default_nposts">-
+\nposty</string>
+    <string name="default_nfollowers">-
+\nObserwujący</string>
+    <string name="default_nfollowing">-
+\nObserwowane</string>
+    <string name="posts">POSTY</string>
+    <string name="edit_profile">Edytuj profil</string>
+    <string name="search">Szukaj</string>
+    <string name="post_title">post %1$s</string>
+    <string name="reported">Post zgłoszony</string>
+    <string name="toolbar_title_edit">Edytuj</string>
+    <string name="open_drawer_menu">Otwórz menu szuflady</string>
+    <string name="something_went_wrong">Coś poszło nie tak…</string>
+    <string name="profile_picture">Zdjęcie profilowe</string>
+    <string name="hashtags">HASHTAGI</string>
+    <string name="panda_pull_to_refresh_to_try_again">Ta panda nie jest zadowolona. Pociągnij, aby odświeżyć i spróbować ponownie.</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Ukryte multimedia
+\n (naciśnij, aby zobaczyć)</string>
+    <string name="file_not_found">Plik %1$s nie został odnaleziony</string>
+    <string name="switch_to_grid">Zmień na widok siatki</string>
+    <string name="unfollow">Anuluj obserwowanie</string>
+    <string name="save_before_returning">Zapisać edycję\?</string>
+    <string name="media_upload_failed">Wysyłanie multimediów nie udało się, spróbuj ponownie lub sprawdź swoje połączenie sieciowe</string>
+    <string name="posting_image_accessibility_hint">Zdjęcie, które jest publikowane</string>
+    <string name="error_editing">Błąd podczas edycji</string>
+    <string name="nothing_to_see_here">Nic tu nie ma!</string>
+    <string name="about_pixeldroid">O PixelDroid</string>
+    <string name="accounts">KONTA</string>
+    <string name="dependencies_licenses">Zależności i licencje</string>
+    <string name="project_website">Strona domowa: https://pixeldroid.org</string>
+    <string name="license_info">PixelDroid to wolne i darmowe oprogramowanie, udostępnione na licencji GNU General Public License (wersja 3 lub późniejsza)</string>
+    <string name="follows_title">obserwują %1$s</string>
+    <string name="followers_title">obserwujący %1$s</string>
+    <string name="search_empty_error">Fraza wyszukiwania nie może być pusta</string>
+    <string name="status_more_options">Więcej opcji</string>
+    <string name="report">Zgłoś</string>
+    <string name="share_link">Udostępnij link</string>
+    <string name="optional_report_comment">Dodatkowe komunikaty dla moderatorów/administratorów</string>
+    <string name="report_target">Zgłoś post użytkownika @%1$s</string>
+    <string name="issues_contribute">Zgłoś błąd lub wspomóż rozwój aplikacji:</string>
+    <string name="report_error">Nie udało się wysłać zgłoszenia</string>
+    <string name="notifications_settings_summary">Zarządzaj powiadomieniami, które chcesz otrzymywać</string>
+    <plurals name="shares">
+        <item quantity="one">%d udostępnienie</item>
+        <item quantity="few">%d udostępnienia</item>
+        <item quantity="many">%d udostępnień</item>
+        <item quantity="other">%d udostępnień</item>
+    </plurals>
+    <plurals name="likes">
+        <item quantity="one">%d polubienie</item>
+        <item quantity="few">%d polubienia</item>
+        <item quantity="many">%d polubień</item>
+        <item quantity="other">%d polubień</item>
+    </plurals>
+    <string name="status_notification">%1$s udostępnił post</string>
+    <string name="notification_thumbnail">Miniatura zdjęcia w powiadomieniu o tym poście</string>
+    <string name="discover">ODKRYJ</string>
+    <string name="whats_an_instance_explanation">Możesz być zdezorientowany polem tekstowym pytającym o domenę twojej „instancji”.
+\n
+\nPixelfed to sfederowana platforma będąca częścią „Fediwersum”, co oznacza, że może ona komunikować się z innymi platformami tego „świata”, na przykład z Mastodonem (zobacz https://joinmastodon.org).
+\n
+\nTo też oznacza, że powinieneś wybrać serwer lub „instancję” Pixelfeda, z której chcesz korzystać. Jeśli nie znasz żadnej, to poszukaj tutaj: https://pixelfed.org/join
+\n
+\nAby uzyskać więcej informacji na temat Pixelfeda, wejdź tutaj: https://pixelfed.org</string>
+    <string name="thumbnail_reel_video_edit">Rolka pokazująca miniaturę edytowanego filmu</string>
+    <string name="reset_edit_menu">ZRESETUJ</string>
+    <string name="save_edit_menu">ZAPISZ</string>
+    <string name="encode_success">Sukces kodowania!</string>
+    <string name="encode_progress">Kodowanie %1$d%%</string>
+    <string name="select_video_range">Wybierz fragment filmu, który chcesz zachować</string>
+    <string name="still_encoding">Jeden lub więcej filmów jest właśnie kodowany. Poczekaj z publikacją do zakończenia tego procesu</string>
+    <string name="new_post_shortcut_long">Stwórz nowy post</string>
+    <string name="new_post_shortcut_short">Nowy post</string>
+    <string name="encode_error">Błąd kodowania</string>
+    <string name="mascot_description">Zdjęcie przedstawiające czerwoną pandę korzystającą z telefonu, maskotkę projektu PixelDroid</string>
+    <string name="mention_notification_channel">Wspomnienia</string>
+    <string name="shared_notification_channel">Udostępnienia</string>
+    <string name="follow_status_failed">Nie udało się pobrać statusu obserwowania</string>
+    <string name="notifications_settings">Ustawienia powiadomień</string>
+    <string name="notification_summary_small">%1$s i %2$s</string>
+    <string name="video_not_supported">Wykorzystywany przez Ciebie serwer nie obsługuje materiałów wideo, co sprawia, że udostępnienie filmu w tym poście może się nie udać</string>
+    <string name="upload_error">Kod błędu zwrócony przez serwer: %1$d</string>
+    <string name="add_comment">Dodaj komentarz</string>
+    <string name="submit_comment">Zatwierdź komentarz</string>
+    <string name="post_is_album">Ten post to album</string>
+    <string name="post_is_video">Ten post to film</string>
+    <string name="media_upload_completed">Wysyłanie multimediów zakończone</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s, oraz %4$d innych</string>
+    <string name="notification_summary_medium">%1$s, %2$s oraz %3$s</string>
+    <string name="total_exceeds_album_limit">Wybrałeś więcej zdjęć niż pozwala na to serwer (%1$s). Zdjęcia powyżej tego limitu zostaną zignorowane.</string>
+    <string name="size_exceeds_instance_limit">Rozmiar zdjęcia %1$d w albumie wynosi więcej niż pozwala na to instancja (%2$d kB a limit to %3$d kB). Możesz nie być w stanie dodać to zdjęcie.</string>
+    <string name="create_feed">Stwórz</string>
+    <string name="notifications_feed">Aktualizacje</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d komentarz</item>
+        <item quantity="few">%d komentarze</item>
+        <item quantity="many">%d komentarzy</item>
+        <item quantity="other">%d komentarzy</item>
+    </plurals>
+    <string name="home_feed">Strona główna</string>
+    <string name="search_discover_feed">Szukaj</string>
+    <string name="public_feed">Publiczny</string>
+    <string name="accentColorTitle">Akcent kolorystyczny</string>
+    <string name="accentColorSummary">Wybierz akcent kolorystyczny</string>
+    <string name="color_choice_button">Wybierz ten akcent kolorystyczny</string>
+    <string name="color_chosen">Wybrany akcent kolorystyczny</string>
+    <string name="language">Język</string>
+    <string name="help_translate">Pomóż przetłumaczyć PixelDroid na Twój język:</string>
+    <string name="login_notifications">Nie udało się uzyskać najnowszych powiadomień</string>
+    <string name="play_video">Odtwórz wideo</string>
+    <string name="video_edit_not_yet_supported">Edytowanie filmów nie jest wspierane</string>
+    <string name="follow_request">%1$s poprosił Cię o obserwowanie</string>
+    <string name="profile_error">Niepowodzenie podczas ładowania profilu</string>
+    <string name="from_other_domain">Z %1$s</string>
+    <string name="add_images_error">Błąd podczas dodawania zdjęcia</string>
+    <string name="post_preview">Podgląd posta</string>
 </resources>
