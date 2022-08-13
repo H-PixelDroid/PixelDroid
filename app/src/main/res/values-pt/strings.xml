@@ -1,2 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_account">Meu Perfil</string>
+    <string name="menu_settings">Definições</string>
+    <string name="invalid_domain">Domínio inválido</string>
+    <string name="registration_failed">Não foi possível registar a aplicação neste servidor</string>
+    <string name="browser_launch_failed">Não foi possível iniciar um navegador. Você tem algum\?</string>
+    <string name="auth_failed">Não foi possível autenticar</string>
+    <string name="token_error">Erro ao obter chave de acesso</string>
+    <string name="instance_error">Não foi possível obter informação da instância</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="instance_not_pixelfed_continue">OK, continuar mesmo assim</string>
+    <string name="instance_not_pixelfed_cancel">Cancelar a entrada</string>
+    <string name="title_activity_settings2">Definições</string>
+    <string name="theme_title">Tema da aplicação</string>
+    <string name="theme_header">Tema</string>
+    <string name="default_system">Predefinido (segue o sistema)</string>
+    <string name="light_theme">Claro</string>
+    <string name="dark_theme">Escuro</string>
+    <string name="mention_notification">%1$s mencionou-te</string>
+    <string name="shared_notification">%1$s partilhou a sua publicação</string>
+    <string name="liked_notification">%1$s gostou da sua publicação</string>
+    <string name="other_notification">Notificação de %1$s</string>
+    <string name="followed_notification_channel">Novos seguidores</string>
+    <string name="mention_notification_channel">Menções</string>
+    <string name="shared_notification_channel">Partilhas</string>
+    <string name="poll_notification">a votação de %1$s terminou</string>
+    <string name="liked_notification_channel">Gostos</string>
+    <string name="comment_notification_channel">Comentários</string>
+    <string name="poll_notification_channel">Votações</string>
+    <string name="other_notification_channel">Outras</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nova notificação</item>
+        <item quantity="other">%d novas notificações</item>
+    </plurals>
+    <string name="notification_summary_medium">%1$s,%2$s e %3$s</string>
+    <string name="notification_summary_large">%1$s,%2$s,%3$s e %4$d outras</string>
+    <string name="notification_summary_small">%1$s e %2$s</string>
+    <string name="whats_an_instance">O que é uma instância\?</string>
+    <string name="domain_of_your_instance">Domínio da sua instância</string>
+    <string name="connect_to_pixelfed">Ligar a Pixelfed</string>
+    <string name="login_connection_required_once">Precisa de estar online para poder adicionar a primeira conta e usar PixelDroid :(</string>
+    <string name="api_not_enabled_dialog">A API não está ativada nesta instância. Contacte o seu administrador e peça para ativá-la.</string>
+    <string name="logout">Sair</string>
+    <string name="add_account_name">Adicionar conta</string>
+    <string name="add_account_description">Adicionar outra conta Pixelfed</string>
+    <string name="save_image_failed">Não foi possível guardar imagem</string>
+    <string name="save_image_success">Imagem guardada com sucesso</string>
+    <string name="upload_picture_failed">Erro ao enviar imagem!</string>
+    <string name="picture_format_error">Erro de envio: formato de imagem inválido.</string>
+    <string name="upload_post_failed">Publicação falhou</string>
+    <string name="upload_post_error">Erro no envio da publicação</string>
+    <string name="description">Descrição…</string>
+    <string name="post">Publicação</string>
+    <string name="add_photo">Adicionar foto</string>
+    <string name="post_image">Uma das imagens da publicação</string>
+    <string name="switch_to_grid">Mudar para vista em grelha</string>
+    <string name="request_format_error">Erro de envio: formato inválido</string>
+    <string name="no_media_description">Adicionar descrição aqui…</string>
+    <string name="upload_error">Código de erro enviado pelo servidor: %1$d</string>
+    <string name="lbl_brightness">Brilho</string>
+    <string name="lbl_contrast">Contraste</string>
+    <string name="lbl_saturation">Saturação</string>
+    <string name="tab_filters">Filtros</string>
+    <string name="edit">Editar</string>
+    <string name="busy_dialog_text">Espere que acabe de processar a imagem!</string>
+    <string name="busy_dialog_ok_button">Ok, espere que acabe.</string>
+    <string name="save_before_returning">Guardar as edições\?</string>
+    <string name="no_cancel_edit">Não, cancelar edição</string>
+    <string name="image_preview">Pré-visualização da imagem a ser editada</string>
+    <string name="size_exceeds_instance_limit">O tamanho da imagem núm. %1$d no álbum ultrapassa o limite de tamanho permitido pela instância (%2$d kB mas o limte é %3$d kB). Poderá não ser possível o envio.</string>
+    <string name="filter_thumbnail">Miniaturas dos filtros</string>
+    <string name="crop_result_error">Não foi possível buscar a imagem após redimensionar</string>
+    <string name="capture_button_alt">Capturar</string>
+    <string name="switch_camera_button_alt">Mudar câmara</string>
+    <string name="gallery_button_alt">Galeria</string>
+    <string name="share_picture">Partilhar imagem…</string>
+    <string name="save_to_gallery">Guardar na galeria…</string>
+    <string name="image_download_downloading">Transferindo…</string>
+    <string name="image_download_success">A imagem foi transferida com sucesso</string>
+    <string name="no_description">Sem descrição</string>
+    <string name="loading_toast">Algo correu mal durante o carregamento</string>
+    <string name="feed_failed">Não foi possível buscar o feed</string>
+    <plurals name="likes">
+        <item quantity="one">%d gostou</item>
+        <item quantity="other">%d gostaram</item>
+    </plurals>
+    <plurals name="shares">
+        <item quantity="one">%d partilhou</item>
+        <item quantity="other">%d partilharam</item>
+    </plurals>
+    <string name="posted_on">Publicou em %1$s</string>
+    <string name="NoCommentsToShow">Nenhum comentário nesta publicação…</string>
+    <string name="empty_comment">O comentário não pode estar vazio!</string>
+    <string name="share_image">Partilhar imagem</string>
+    <string name="comment_error">Erro ao comentar!</string>
+    <string name="write_permission_download_pic">Precisa adicionar a permissão para transferir imagens!</string>
+    <string name="write_permission_share_pic">Precisa adicionar permissão para partilhar imagens!</string>
+    <string name="comment_posted">Comentário: %1$s publicou!</string>
+    <string name="comment">Comentário</string>
+    <string name="add_comment">Adicionar um comentário</string>
+    <string name="submit_comment">Submeter comentário</string>
+    <string name="post_is_album">Esta publicação é um álbum</string>
+    <string name="post_is_video">Esta publicação é um vídeo</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d
+\nSeguidor</item>
+        <item quantity="other">%d
+\nSeguidores</item>
+    </plurals>
+    <plurals name="nb_following">
+        <item quantity="one">%d
+\nSeguindo</item>
+        <item quantity="other">%d
+\nSeguindo</item>
+    </plurals>
+    <string name="empty_feed">Nada para ver aqui :(</string>
+    <string name="edit_link_failed">Falha em abrir a pagina de edições</string>
+    <string name="follow_error">Não foi possível seguir</string>
+    <string name="action_not_allowed">Esta ação não é permitida</string>
+    <string name="unfollow_error">Não foi possível deixar de seguir</string>
+    <string name="default_nposts">-
+\nPublicações</string>
+    <string name="default_nfollowers">-
+\nSeguidores</string>
+    <string name="default_nfollowing">-
+\nSeguindo</string>
+    <string name="access_token_invalid">A chave de acesso não é válida</string>
+    <string name="no_username">Sem nome de utilizador</string>
+    <string name="follow">Seguir</string>
+    <string name="unfollow">Deixar de seguir</string>
+    <string name="follow_requested">Pedido para seguir enviado</string>
+    <string name="dialog_message_cancel_follow_request">Cancelar o pedido para seguir\?</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="search">Procurar</string>
+    <string name="posts">PUBLICAÇÕES</string>
+    <string name="accounts">CONTAS</string>
+    <string name="hashtags">HASHTAGS</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Media escondida
+\n(clique para mostrar)</string>
+    <string name="retry">Tentar de novo</string>
+    <string name="nothing_to_see_here">Nada para ver aqui!</string>
+    <string name="about_pixeldroid">Sobre PixelDroid</string>
+    <string name="dependencies_licenses">Dependências e licenças</string>
+    <string name="project_website">Site do projeto: https://pixeldroid.org</string>
+    <string name="license_info">Pixelfed é software livre, com a licença GNU GPL (versão 3 ou mais recente)</string>
+    <string name="about">Sobre</string>
+    <string name="post_title">Publicação de %1$s</string>
+    <string name="followers_title">Seguidores de %1$s</string>
+    <string name="hashtag_title">#%1$s</string>
+    <string name="follows_title">%1$s segue</string>
+    <string name="search_empty_error">O campo da busca não pode estar vazio</string>
+    <string name="status_more_options">Mais opções</string>
+    <string name="report">Denunciar</string>
+    <string name="share_link">Partilhar Link</string>
+    <string name="reported">Publicação denunciada</string>
+    <string name="toolbar_title_edit">Editar</string>
+    <string name="profile_picture">Imagem de perfil</string>
+    <string name="discover">DESCOBRIR</string>
+    <string name="something_went_wrong">Algo correu mal…</string>
+    <string name="panda_pull_to_refresh_to_try_again">Este panda não está contente. Puxe para atualizar para tentar novamente.</string>
+    <string name="delete_dialog">Eliminar esta publicação\?</string>
+    <string name="delete">Eliminar</string>
+    <string name="language">Língua</string>
+    <string name="help_translate">Ajude a traduzir PixelDroid para a sua língua:</string>
+    <string name="issues_contribute">Reportar problemas ou contribuir para a aplicação:</string>
+    <string name="notifications_settings">Definições das notificações</string>
+    <string name="notifications_settings_summary">Definir que notificações quer receber</string>
+    <string name="optional_report_comment">Mensagem opcional para os mod/admin</string>
+    <string name="report_error">Não foi possível enviar a denúncia</string>
+    <string name="file_not_found">O ficheiro %1$s não foi encontrado</string>
+    <string name="login_notifications">Não foi possível buscar as últimas notificações</string>
+    <string name="no_camera_permission">Permissão para usar a câmara não permitida. Se quer que PixelDroid use a câmara, adicione a permissão nas definições</string>
+    <string name="play_video">Reproduzir vídeo</string>
+    <string name="save_edit_menu">GUARDAR</string>
+    <string name="new_post_shortcut_long">Criar nova publicação</string>
+    <string name="new_post_shortcut_short">Nova publicação</string>
+    <string name="follow_request">%1$s pediu para o seguir</string>
+    <string name="status_notification">%1$s criou uma publicação</string>
+    <string name="home_feed">Início</string>
+    <string name="search_discover_feed">Procurar</string>
+    <string name="create_feed">Criar</string>
+    <string name="notifications_feed">Atualizações</string>
+    <string name="public_feed">Público</string>
+    <string name="accentColorTitle">Cor</string>
+    <string name="accentColorSummary">Escolha uma cor</string>
+    <string name="color_choice_button">Escolher esta cor</string>
+    <string name="color_chosen">Cor escolhida</string>
+    <string name="profile_error">Não foi possível carregar o perfil</string>
+    <string name="from_other_domain">de %1$s</string>
+    <string name="add_images_error">Erro ao adicionar imagens</string>
+    <string name="post_preview">Pré-visualização da publicação</string>
+    <plurals name="replies_count">
+        <item quantity="one">%d resposta</item>
+        <item quantity="other">%d respostas</item>
+    </plurals>
+    <string name="video_edit_not_yet_supported">Edição de vídeo ainda não suportada</string>
+    <string name="reset_edit_menu">RESET</string>
+    <string name="encode_error">Erro ao codificar</string>
+    <string name="encode_success">Codificação com sucesso!</string>
+    <string name="encode_progress">Codificação %1$d%%</string>
+    <string name="select_video_range">Selecione o que manter do video</string>
+    <string name="still_encoding">Um ou mais vídeos ainda estão a ser codificados. Espere que termine ante do envio</string>
+    <string name="verify_credentials">Não foi possível obter informação do utilizador</string>
+    <string name="instance_not_pixelfed_warning">Não parece ser uma instância Pixelfed, por isso a aplicação pode terminar de forma inesperada.</string>
+    <string name="followed_notification">%1$s seguiu-te</string>
+    <string name="comment_notification">%1$s comentou na sua publicação</string>
+    <string name="whats_an_instance_explanation">Pode estar confuso com o pedido do domínio da sua \"instância\".
+\n
+\nPixelfed é uma plataforma federada que faz parte do \"Fediverso\", o que significa que pode comunicar com outras plataformas que falam a mesma linguagem, como por exemplo Mastodon (ver https://joinmastodon.org).
+\n
+\nTambém significa que tem de escolher um servidor, ou \"instância\" de Pixelfed a usar. Se não sabe qual usar, veja aqui: https://pixelfed.org/join
+\n
+\nPara mais informação sobre Pixelfed, veja aqui: https://pixelfed.org</string>
+    <string name="permission_denied">Permissão negada</string>
+    <string name="upload_post_success">Publicação enviada com sucesso</string>
+    <string name="switch_to_carousel">Mudar para vista em carrossel</string>
+    <string name="save_image_description">Guardar descrição da imagem</string>
+    <string name="normal_filter">Normal</string>
+    <string name="error_editing">Erro ao editar</string>
+    <string name="image_download_failed">A transferência falhou, por favor tente novamente</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d comentário</item>
+        <item quantity="other">%d comentários</item>
+    </plurals>
+    <plurals name="nb_posts">
+        <item quantity="one">%d 
+\nPublicação</item>
+        <item quantity="other">%d 
+\nPublicações</item>
+    </plurals>
+    <string name="media_upload_completed">Envio de media terminado</string>
+    <string name="report_target">Denunciar a publicação de @%1$s</string>
+    <string name="discover_no_infinite_load">Descobrir não carrega infinitamente. Puxe para atualizar para outras imagens.</string>
+    <string name="delete_post_failed_error">Não foi possível eliminar a publicação, erro %1$d</string>
+    <string name="video_not_supported">O servidor que está a usar não permite o envio de vídeos</string>
+    <string name="media_upload_failed">Falhou o envio da media, tente novamente ou verifique a sua conectividade</string>
+    <string name="delete_post_failed_io_except">Não foi possível eliminar a publicação, verifique a conectividade\?</string>
+    <string name="total_exceeds_album_limit">Ultrapassou o limite de imagens que o seu servidor permite (%1$s). As imagens para além do limite serão ignoradas.</string>
+</resources>
