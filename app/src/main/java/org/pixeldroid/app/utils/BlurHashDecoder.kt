@@ -19,8 +19,13 @@ import kotlin.math.withSign
 object BlurHashDecoder {
 
     fun blurHashBitmap(resources: Resources, blurHash: String, width: Int?, height: Int?): BitmapDrawable {
-        val ratioOr0 = (width?.toFloat() ?: 1f) / (height?.toFloat() ?: 1f)
 
+        // The call to `decode` is expensive (costs scale linearly on ratio or 1/ratio), so
+        // the ratio should be contained within 1/100 and 100 (which seem reasonable)
+        val ratioOr0 = ((width?.toFloat() ?: 1f) / (height?.toFloat() ?: 1f)).coerceIn(1/100f, 100f)
+
+        // Width and/or height may be 0 here (bad information sent by server).
+        // In that case, we make a square 32x32
         val ratio = if (ratioOr0 == 0f) 1f else ratioOr0
         return BitmapDrawable(resources,
                 decode(blurHash,
@@ -51,7 +56,7 @@ object BlurHashDecoder {
             } else {
                 val from = 4 + i * 2
                 val colorEnc = decode83(blurHash, from, from + 2)
-                decodeAc(colorEnc, maxAc * punch)
+                decodeAc(colorEnc, maxAc *punch)
             }
         }
         return composeBitmap(width, height, numCompX, numCompY, colors)
