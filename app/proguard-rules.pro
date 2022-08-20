@@ -66,6 +66,8 @@
 -assumenosideeffects class android.util.Log {
     public static *** getStackTraceString(...);
     public static *** d(...);
+    public static *** e(...);
+    public static *** println(...);
     public static *** w(...);
     public static *** v(...);
     public static *** i(...);
