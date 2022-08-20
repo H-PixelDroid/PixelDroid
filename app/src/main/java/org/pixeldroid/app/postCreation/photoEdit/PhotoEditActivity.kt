@@ -291,6 +291,7 @@ class PhotoEditActivity : BaseThemedWithBarActivity() {
             setToolbarWidgetColor(this@PhotoEditActivity.getColorFromAttr(R.attr.colorOnSurface))
             setToolbarColor(this@PhotoEditActivity.getColorFromAttr(R.attr.colorSurface))
             setActiveControlsWidgetColor(this@PhotoEditActivity.getColorFromAttr(R.attr.colorPrimary))
+            setFreeStyleCropEnabled(true)
         }
         val uCrop: UCrop = UCrop.of(initialUri!!, Uri.fromFile(file)).withOptions(options)
         uCrop.start(this)
