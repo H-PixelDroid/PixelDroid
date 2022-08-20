@@ -60,7 +60,7 @@ class PostCreationFragmentTest {
 
     private val expectedIntent: Matcher<Intent> = hasAction(Intent.ACTION_CHOOSER)
 
-    // image choosing intent
+    // Image choosing intent
     @Test
     fun galleryButtonLaunchesGalleryIntent() {
         waitForView(R.id.photo_view_button)

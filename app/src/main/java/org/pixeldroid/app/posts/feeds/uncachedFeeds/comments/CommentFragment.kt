@@ -48,7 +48,7 @@ class CommentFragment : UncachedFeedFragment<Status>() {
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        // get the view model
+        // Get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(
             requireActivity(), ViewModelFactory(

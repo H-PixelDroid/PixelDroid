@@ -96,7 +96,7 @@ class PostCreationActivityTest {
     @Ignore("Annoying to deal with and also sometimes the intent is not working as it should")
     fun createPost() {
         onView(withId(R.id.post_creation_send_button)).perform(click())
-        // should send on main activity
+        // Should send on main activity
         Thread.sleep(3000)
         onView(withId(R.id.list)).check(matches(isDisplayed()))
     }
@@ -105,7 +105,7 @@ class PostCreationActivityTest {
     fun errorShown() {
         testScenario!!.onActivity { a -> a.upload_error.visibility = VISIBLE }
         onView(withId(R.id.retry_upload_button)).perform(click())
-        // should send on main activity
+        // Should send on main activity
         onView(withId(R.id.retry_upload_button)).check(matches(not(isDisplayed())))
     }
 */

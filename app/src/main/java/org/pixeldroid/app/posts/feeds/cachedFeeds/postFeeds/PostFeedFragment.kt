@@ -60,7 +60,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        // get the view model
+        // Get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(db, dao, mediator))[if(home) "home" else "public", FeedViewModel::class.java] as FeedViewModel<T>
 

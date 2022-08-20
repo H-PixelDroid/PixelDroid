@@ -68,19 +68,19 @@ class DrawerMenuTest {
         // Start the screen of your activity.
         onView(withText(R.string.menu_settings)).perform(click())
         val themes = getInstrumentation().targetContext.resources.getStringArray(R.array.theme_entries)
-        //select theme modes
+        // Select theme modes
         onView(withText(R.string.theme_title)).perform(click())
         onView(withText(themes[2])).perform(click())
 
-        //Select an other theme
+        // Select an other theme
         onView(withText(R.string.theme_title)).perform(click())
         onView(withText(themes[0])).perform(click())
 
-        //Select the last theme
+        // Select the last theme
         onView(withText(R.string.theme_title)).perform(click())
         onView(withText(themes[1])).perform(click())
 
-        //Check that we are back in the settings page
+        // Check that we are back in the settings page
         onView(withText(R.string.theme_header)).check(matches(isDisplayed()))
     }
 

@@ -29,7 +29,7 @@ class HomeFeedRemoteMediator @Inject constructor(
         val maxId = when (loadType) {
             LoadType.REFRESH -> null
             LoadType.PREPEND -> {
-                //No prepend for the moment, might be nice to add later
+                // No prepend for the moment, might be nice to add later
                 return MediatorResult.Success(endOfPaginationReached = true)
             }
             LoadType.APPEND -> state.lastItemOrNull()?.id
@@ -52,7 +52,7 @@ class HomeFeedRemoteMediator @Inject constructor(
             val endOfPaginationReached = apiResponse.isEmpty()
 
             db.withTransaction {
-                // clear table in the database
+                // Clear table in the database
                 if (loadType == LoadType.REFRESH) {
                     db.homePostDao().clearFeedContent(user.user_id, user.instance_uri)
                 }
