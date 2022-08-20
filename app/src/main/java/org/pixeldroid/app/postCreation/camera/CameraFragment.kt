@@ -392,14 +392,14 @@ class CameraFragment : BaseFragment() {
         // Get a stable reference of the modifiable image capture use case
         imageCapture?.let { imageCapture ->
 
-            // Create output file to hold the image
+            // Create output file to hold the image. CameraX saves a JPEG image to this file,
+            // so it makes no sense to use another extension here
             val photoFile = File.createTempFile(
-                "cachedPhoto", ".png", context?.cacheDir
+                "cachedPhoto", ".jpg", context?.cacheDir
             )
 
             // Setup image capture metadata
             val metadata = Metadata().apply {
-
                 // Mirror image when using the front camera
                 isReversedHorizontal = lensFacing == CameraSelector.LENS_FACING_FRONT
             }
