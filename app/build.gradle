@@ -15,6 +15,7 @@ jacoco.toolVersion = "0.8.7"
 
 android {
 
+    namespace 'org.pixeldroid.app'
     compileSdkVersion 32
     buildToolsVersion '31.0.0'
     compileOptions {
@@ -27,7 +28,6 @@ android {
         freeCompilerArgs += ["-opt-in=kotlin.RequiresOptIn"]
     }
     defaultConfig {
-        applicationId "org.pixeldroid.app"
         minSdkVersion 23
         targetSdkVersion 32
         versionCode 17

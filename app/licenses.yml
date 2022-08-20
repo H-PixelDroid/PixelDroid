@@ -515,11 +515,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://tools.android.com
-- artifact: androidx.databinding:databinding-ktx:+
-  name: databinding-ktx
-  copyrightHolder: Google Inc.
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
 - artifact: androidx.lifecycle:lifecycle-process:+
   name: lifecycle-process
   copyrightHolder: Google Inc.
@@ -670,11 +665,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/Kotlin/kotlinx.coroutines
-- artifact: androidx.databinding:viewbinding:+
-  name: viewbinding
-  copyrightHolder: Google Inc.
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
 - artifact: org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:+
   name: kotlinx-coroutines-core-jvm
   copyrightHolder: JetBrains s.r.o. and contributors
@@ -767,16 +757,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://developer.android.com/jetpack/androidx
-- artifact: androidx.databinding:databinding-adapters:+
-  name: databinding-adapters
-  copyrightHolder: Google Inc
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-- artifact: androidx.databinding:databinding-runtime:+
-  name: databinding-runtime
-  copyrightHolder: Google Inc
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
 - artifact: androidx.databinding:databinding-common:+
   name: databinding-common
   copyrightHolder: Google Inc
