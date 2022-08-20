@@ -229,7 +229,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         thumbnail: ImageView,
         thumbTime: Float,
     ) {
-        val file = File.createTempFile("temp_img", ".bmp")
+        val file = File.createTempFile("temp_img", ".bmp", cacheDir)
         tempFiles.add(file)
         val fileUri = file.toUri()
         val ffmpegCompliantUri = ffmpegCompliantUri(inputUri)

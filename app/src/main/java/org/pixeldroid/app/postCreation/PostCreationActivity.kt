@@ -329,8 +329,8 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
 
         // Having a meaningful suffix is necessary so that ffmpeg knows what to put in output
         val suffix = originalUri.fileExtension(contentResolver)
-        val file = File.createTempFile("temp_video", ".$suffix")
-        //val file = File.createTempFile("temp_video", ".webm")
+        val file = File.createTempFile("temp_video", ".$suffix", cacheDir)
+        //val file = File.createTempFile("temp_video", ".webm", cacheDir)
         model.trackTempFile(file)
         val fileUri = file.toUri()
         val outputVideoPath = ffmpegCompliantUri(fileUri)
