@@ -96,7 +96,7 @@ fun normalizeDomain(domain: String): String {
             .trim(Char::isWhitespace)
 }
 
-fun Context.ffmpegSafeUri(inputUri: Uri?): String =
+fun Context.ffmpegCompliantUri(inputUri: Uri?): String =
     if (inputUri?.scheme == "content")
         FFmpegKitConfig.getSafParameterForRead(this, inputUri)
     else inputUri.toString()

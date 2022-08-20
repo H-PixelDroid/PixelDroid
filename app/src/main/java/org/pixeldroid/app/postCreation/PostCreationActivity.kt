@@ -39,7 +39,7 @@ import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
-import org.pixeldroid.app.utils.ffmpegSafeUri
+import org.pixeldroid.app.utils.ffmpegCompliantUri
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
 import java.io.File
@@ -333,21 +333,22 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         //val file = File.createTempFile("temp_video", ".webm")
         model.trackTempFile(file)
         val fileUri = file.toUri()
-        val outputVideoPath = ffmpegSafeUri(fileUri)
+        val outputVideoPath = ffmpegCompliantUri(fileUri)
 
         val inputUri = model.getPhotoData().value!![position].imageUri
 
-        val inputSafePath = ffmpegSafeUri(inputUri)
+        val ffmpegCompliantUri: String = ffmpegCompliantUri(inputUri)
 
-        val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(ffmpegSafeUri(inputUri)).mediaInformation
+        val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(ffmpegCompliantUri(inputUri)).mediaInformation
         val totalVideoDuration = mediaInformation?.duration?.toFloatOrNull()
 
-        val mutedString = if(muted) "-an" else ""
-        val startString = if(videoStart != null) "-ss $videoStart" else ""
+        val mutedString = if(muted) "-an" else null
+        val startString: List<String?> = if(videoStart != null) listOf("-ss", "$videoStart") else listOf(null, null)
 
-        val endString = if(videoEnd != null) "-to ${videoEnd - (videoStart ?: 0f)}" else ""
+        val endString: List<String?> = if(videoEnd != null) listOf("-to", "${videoEnd - (videoStart ?: 0f)}") else listOf(null, null)
 
-        val session: FFmpegSession = FFmpegKit.executeAsync("$startString -i $inputSafePath $endString -c copy $mutedString -y $outputVideoPath",
+        val session: FFmpegSession =
+            FFmpegKit.executeWithArgumentsAsync(listOfNotNull(startString[0], startString[1], "-i", ffmpegCompliantUri, endString[0], endString[1], "-c", "copy", mutedString, "-y", outputVideoPath).toTypedArray(),
         //val session: FFmpegSession = FFmpegKit.executeAsync("$startString -i $inputSafePath $endString -c:v libvpx-vp9 -c:a copy -an -y $outputVideoPath",
             { session ->
                 val returnCode = session.returnCode

@@ -29,7 +29,7 @@ import org.pixeldroid.app.databinding.ActivityVideoEditBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
 import org.pixeldroid.app.postCreation.carousel.dpToPx
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
-import org.pixeldroid.app.utils.ffmpegSafeUri
+import org.pixeldroid.app.utils.ffmpegCompliantUri
 import java.io.File
 
 
@@ -61,7 +61,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         val uri = intent.getParcelableExtra<Uri>(PhotoEditActivity.PICTURE_URI)!!
         videoPosition = intent.getIntExtra(PhotoEditActivity.PICTURE_POSITION, -1)
 
-        val inputVideoPath = ffmpegSafeUri(uri)
+        val inputVideoPath = ffmpegCompliantUri(uri)
         val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(inputVideoPath).mediaInformation
 
         binding.muter.setOnClickListener {
@@ -232,15 +232,16 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         val file = File.createTempFile("temp_img", ".bmp")
         tempFiles.add(file)
         val fileUri = file.toUri()
-        val inputSafePath = ffmpegSafeUri(inputUri)
+        val ffmpegCompliantUri = ffmpegCompliantUri(inputUri)
 
         val outputImagePath =
             if(fileUri.toString().startsWith("content://"))
                 FFmpegKitConfig.getSafParameterForWrite(this, fileUri)
             else fileUri.toString()
-        val session = FFmpegKit.executeAsync(
-            "-noaccurate_seek -ss $thumbTime -i $inputSafePath -vf scale=${thumbnail.width}:${thumbnail.height} -frames:v 1 -f image2 -y $outputImagePath",
-            { session ->
+        val session = FFmpegKit.executeWithArgumentsAsync(arrayOf(
+            "-noaccurate_seek", "-ss", "$thumbTime", "-i", ffmpegCompliantUri, "-vf",
+            "scale=${thumbnail.width}:${thumbnail.height}",
+            "-frames:v", "1", "-f", "image2", "-y", outputImagePath), { session ->
                 val state = session.state
                 val returnCode = session.returnCode
 
@@ -254,7 +255,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
                 // CALLED WHEN SESSION IS EXECUTED
                 Log.d("VideoEditActivity", "FFmpeg process exited with state $state and rc $returnCode.${session.failStackTrace}")
             },
-            {/* CALLED WHEN SESSION PRINTS LOGS */ }) { /*CALLED WHEN SESSION GENERATES STATISTICS*/ }
+            {/* CALLED WHEN SESSION PRINTS LOGS */ }, { /*CALLED WHEN SESSION GENERATES STATISTICS*/ })
         sessionList.add(session.sessionId)
     }
 
