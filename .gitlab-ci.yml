@@ -3,11 +3,6 @@ image: registry.gitlab.com/fdroid/ci-images-client
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
-cache:
-  paths:
-    - .gradle/wrapper
-    - .gradle/caches
-
 # Basic android and gradle stuff
 # Check linting
 lintDebug:
@@ -18,7 +13,13 @@ lintDebug:
     - apt-get install -y openjdk-11-jdk-headless
     - update-alternatives --auto java
     - ./gradlew checkLicenses
-    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint --write-verification-metadata sha256
+    - git diff --quiet gradle/verification-metadata.xml || (echo 'Verification of dependencies failed!' && exit 1)
+  artifacts:
+    when: on_failure
+    paths:
+      - gradle/verification-metadata.xml
+
 
 # Make Project
 assembleDebug:

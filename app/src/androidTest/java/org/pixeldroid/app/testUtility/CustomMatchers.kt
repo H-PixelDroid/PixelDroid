@@ -106,7 +106,7 @@ private fun waitForViewViewAction(viewId: Int, viewMatcher: Matcher<View>): View
                 // Loops the main thread for a specified period of time.
                 // Control may not return immediately, instead it'll return after the provided delay has passed and the queue is in an idle state again.
                 uiController.loopMainThreadForAtLeast(100)
-            } while (System.currentTimeMillis() < endTime) // in case of a timeout we throw an exception - test fails
+            } while (System.currentTimeMillis() < endTime) // In case of a timeout we throw an exception - test fails
             throw PerformException.Builder()
                     .withCause(TimeoutException())
                     .withActionDescription(this.description)
@@ -228,7 +228,7 @@ fun atPosition(position: Int, itemMatcher: Matcher<View?>): Matcher<View?> {
 
         override fun matchesSafely(view: RecyclerView): Boolean {
             val viewHolder = view.findViewHolderForAdapterPosition(position)
-                    ?: // has no item on such position
+                    ?: // Has no item on such position
                     return false
             return itemMatcher.matches(viewHolder.itemView)
         }

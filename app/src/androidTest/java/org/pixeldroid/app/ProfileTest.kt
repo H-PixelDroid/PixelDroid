@@ -51,7 +51,7 @@ class ProfileTest {
     @Test
     fun clickFollowButton() {
         if (onView(ViewMatchers.withText("Unfollow")).isDisplayed()) {
-            //Currently following
+            // Currently following
 
             // Unfollow
             follow("Follow")
@@ -59,7 +59,7 @@ class ProfileTest {
             // Follow
             follow("Unfollow")
         } else if (onView(ViewMatchers.withText("Follow")).isDisplayed()){
-            //Currently not following
+            // Currently not following
 
             // Follow
             follow("Unfollow")
@@ -89,7 +89,7 @@ class ProfileTest {
 
         waitForView(R.id.editButton)
 
-        //Check that our own profile opened
+        // Check that our own profile opened
         onView(withId(R.id.editButton)).isDisplayed()
     }
 

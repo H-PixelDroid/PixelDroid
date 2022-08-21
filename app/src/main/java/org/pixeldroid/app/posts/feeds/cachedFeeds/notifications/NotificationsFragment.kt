@@ -226,7 +226,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                 )
             }
 
-            //Convert HTML to clickable text
+            // Convert HTML to clickable text
             postDescription.text =
                 parseHTMLText(
                         notification?.status?.content ?: "",

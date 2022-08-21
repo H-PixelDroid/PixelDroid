@@ -8,7 +8,7 @@ interface InstanceDao {
     @Query("SELECT * FROM instances")
     fun getAll(): List<InstanceDatabaseEntity>
 
-    @Query("SELECT * FROM instances WHERE uri=:instanceUri LIMIT 1")
+    @Query("SELECT * FROM instances WHERE uri=:instanceUri")
     fun getInstance(instanceUri: String): InstanceDatabaseEntity
 
     /**

@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter
 
 /*
     Implements the Pixelfed API
-    https://docs.pixelfed.org/technical-documentation/api-v1.html
+    https://docs.pixelfed.org/technical-documentation/api-v1
     However, since this is mostly based on the Mastodon API, the documentation there
     will be more useful: https://docs.joinmastodon.org/
  */

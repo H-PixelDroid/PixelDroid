@@ -101,7 +101,7 @@ class NotificationWorkerTest {
         // Check worker returns success (which doesn't mean much, but is a good start)
         MatcherAssert.assertThat(result, CoreMatchers.`is`(ListenableWorker.Result.success()))
 
-        //Open notification shade
+        // Open notification shade
         uiDevice.openNotification()
         uiDevice.wait(Until.hasObject(By.textStartsWith(expectedAppName)), 5000)
 

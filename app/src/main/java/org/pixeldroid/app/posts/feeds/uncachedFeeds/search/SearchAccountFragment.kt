@@ -35,7 +35,7 @@ class SearchAccountFragment : UncachedFeedFragment<Account>() {
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        // get the view model
+        // Get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(
             SearchContentRepository<Account>(

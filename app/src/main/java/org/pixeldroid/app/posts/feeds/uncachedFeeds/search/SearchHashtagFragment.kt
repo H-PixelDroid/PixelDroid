@@ -43,7 +43,7 @@ class SearchHashtagFragment : UncachedFeedFragment<Tag>() {
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        // get the view model
+        // Get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(requireActivity(), ViewModelFactory(
             SearchContentRepository<Tag>(

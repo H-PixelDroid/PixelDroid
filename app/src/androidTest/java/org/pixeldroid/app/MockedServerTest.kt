@@ -197,11 +197,11 @@ class MockedServerTest {
         waitForView(R.id.view_pager)
 
         onView(withId(R.id.view_pager))
-            .perform(ViewActions.swipeLeft()) // notifications
-            .perform(ViewActions.swipeLeft()) // camera
-            .perform(ViewActions.swipeLeft()) // search
-            .perform(ViewActions.swipeLeft()) // homepage
-            .perform(ViewActions.swipeLeft()) // should stop at homepage
+            .perform(ViewActions.swipeLeft()) // Notifications
+            .perform(ViewActions.swipeLeft()) // Camera
+            .perform(ViewActions.swipeLeft()) // Search
+            .perform(ViewActions.swipeLeft()) // Homepage
+            .perform(ViewActions.swipeLeft()) // Should stop at homepage
         activityScenario.onActivity {
             assert(it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId == R.id.page_5)
         }
@@ -211,16 +211,16 @@ class MockedServerTest {
     fun swipingPublicTimelineWorks() {
         activityScenario.onActivity {
             it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId = R.id.page_5
-        } // go to the last tab
+        } // Go to the last tab
 
         waitForView(R.id.view_pager)
 
         onView(withId(R.id.view_pager))
-            .perform(ViewActions.swipeRight()) // notifications
-            .perform(ViewActions.swipeRight()) // camera
-            .perform(ViewActions.swipeRight()) // search
-            .perform(ViewActions.swipeRight()) // homepage
-            .perform(ViewActions.swipeRight()) // should stop at homepage
+            .perform(ViewActions.swipeRight()) // Notifications
+            .perform(ViewActions.swipeRight()) // Camera
+            .perform(ViewActions.swipeRight()) // Search
+            .perform(ViewActions.swipeRight()) // Homepage
+            .perform(ViewActions.swipeRight()) // Should stop at homepage
 
         activityScenario.onActivity {
             assert(it.findViewById<BottomNavigationView>(R.id.tabs).selectedItemId == R.id.page_1)

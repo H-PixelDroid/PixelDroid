@@ -65,12 +65,12 @@ class HomeFeedTest {
     @Test
     @RepeatTest
     fun clickingTabOnAlbumShowsNextPhoto() {
-        //Wait for the feed to load
+        // Wait for the feed to load
         waitForView(R.id.albumPager)
 
         activityScenario.onActivity {
             a -> run {
-                //Pick the second photo
+                // Pick the second photo
                 a.findViewById<ViewPager2>(R.id.albumPager).currentItem = 2
             }
         }
@@ -80,7 +80,7 @@ class HomeFeedTest {
     @Test
     @RepeatTest
     fun tabReClickScrollUp() {
-        //Wait for the feed to load
+        // Wait for the feed to load
         waitForView(R.id.albumPager)
 
         onView(withId(R.id.list)).perform(scrollToPosition<StatusViewHolder>(2))
@@ -94,7 +94,7 @@ class HomeFeedTest {
     @Test
     @RepeatTest
     fun hashtag() {
-        //Wait for the feed to load
+        // Wait for the feed to load
         waitForView(R.id.albumPager)
 
         onView(allOf(withClassName(endsWith("RecyclerView")), not(withId(R.id.material_drawer_recycler_view))))
@@ -126,27 +126,27 @@ class HomeFeedTest {
     @Test
     fun doubleTapLikerWorks() {
         Thread.sleep(1000)
-        //Get initial like count
+        // Get initial like count
         val likes = getText(first(withId(R.id.nlikes)))
         val nLikes = likes!!.split(" ")[0].toInt()
 
-        //Remove sensitive media warning
+        // Remove sensitive media warning
         onView(withId(R.id.list))
                 .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.sensitiveWarning)))
         Thread.sleep(100)
 
-        //Like the post
+        // Like the post
         onView(withId(R.id.list))
                 .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.postPicture)))
         onView(withId(R.id.list))
                 .perform(actionOnItemAtPosition<StatusViewHolder >
                 (0, clickChildViewWithId(R.id.postPicture)))
-        //...
+        // ...
         Thread.sleep(100)
 
-        //Profit
+        // Profit
         onView(first(withId(R.id.nlikes))).check(matches((withText("${nLikes + 1} Likes"))))
     }
 
@@ -216,7 +216,7 @@ class HomeFeedTest {
 
     @Test
     fun clickingViewCommentShowsTheComments() {
-        //Open the comment section
+        // Open the comment section
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<StatusViewHolder>
                 (0, clickChildViewWithId(R.id.viewComments)))
@@ -227,7 +227,7 @@ class HomeFeedTest {
 
     @Test
     fun clickingViewCommentFails() {
-        //Open the comment section
+        // Open the comment section
         onView(withId(R.id.list))
             .perform(actionOnItemAtPosition<StatusViewHolder>
                 (2, clickChildViewWithId(R.id.viewComments)))

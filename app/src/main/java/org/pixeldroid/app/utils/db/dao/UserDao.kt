@@ -27,7 +27,7 @@ interface UserDao {
     @Query("SELECT * FROM users")
     fun getAll(): List<UserDatabaseEntity>
 
-    @Query("SELECT * FROM users WHERE isActive=1 LIMIT 1")
+    @Query("SELECT * FROM users WHERE isActive=1")
     fun getActiveUser(): UserDatabaseEntity?
 
     @Query("UPDATE users SET isActive=0")
@@ -39,6 +39,6 @@ interface UserDao {
     @Query("DELETE FROM users WHERE isActive=1")
     fun deleteActiveUsers()
 
-    @Query("SELECT * FROM users WHERE user_id=:id AND instance_uri=:instance_uri LIMIT 1")
+    @Query("SELECT * FROM users WHERE user_id=:id AND instance_uri=:instance_uri")
     fun getUserWithId(id: String, instance_uri: String): UserDatabaseEntity
 }
