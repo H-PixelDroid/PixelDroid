@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ExperimentalPagingApi
+import com.google.gson.Gson
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -46,6 +46,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
 
     companion object {
         private const val PACKAGE_ID = BuildConfig.APPLICATION_ID
+        private const val PREFERENCE_NAME = "$PACKAGE_ID.loginPref"
         private const val SCOPE = "read write follow"
     }
 
@@ -66,7 +67,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
         loadingAnimation(true)
         appName = getString(R.string.app_name)
         oauthScheme = getString(R.string.auth_scheme)
-        preferences = getSharedPreferences("$PACKAGE_ID.pref", Context.MODE_PRIVATE)
+        preferences = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 
         if (hasInternet(applicationContext)) {
             binding.connectInstanceButton.setOnClickListener {
@@ -186,7 +187,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
 
         val domain: String = try {
             if (nodeInfo.hasInstanceEndpointInfo()) {
-                storeInstance(db, nodeInfo)
+                preferences.edit().putString("nodeInfo", Gson().toJson(nodeInfo)).remove("instance").apply()
                 nodeInfo.metadata?.config?.site?.url
             } else {
                 val instance: Instance = try {
@@ -196,13 +197,15 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
                 } catch (exception: HttpException) {
                     return@coroutineScope failedRegistration(getString(R.string.instance_error))
                 }
-                storeInstance(db, nodeInfo = null, instance = instance)
+                preferences.edit().putString("instance", Gson().toJson(instance)).remove("nodeInfo").apply()
                 instance.uri
             }
         } catch (e: IllegalArgumentException){ null }
                 ?: return@coroutineScope failedRegistration(getString(R.string.instance_error))
 
-        preferences.edit().putString("domain", normalizeDomain(domain)).apply()
+        preferences.edit()
+            .putString("domain", normalizeDomain(domain))
+            .apply()
 
 
         if (!nodeInfo.software?.name.orEmpty().contains("pixelfed")) {
@@ -254,6 +257,8 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
 
         //Successful authorization
         pixelfedAPI = PixelfedAPI.createFromUrl(domain)
+        val nodeInfo: NodeInfo? = Gson().fromJson(preferences.getString("nodeInfo", null), NodeInfo::class.java)
+        val instance: Instance? = Gson().fromJson(preferences.getString("instance", null), Instance::class.java)
 
         lifecycleScope.launch {
             try {
@@ -264,6 +269,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
                 if (token.access_token == null) {
                     return@launch failedRegistration(getString(R.string.token_error))
                 }
+                storeInstance(db, nodeInfo, instance)
                 storeUser(
                     token.access_token,
                     token.refresh_token,
@@ -288,8 +294,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
     }
 
     private fun wipeSharedSettings(){
-        preferences.edit().remove("domain").remove("clientId").remove("clientSecret")
-            .apply()
+        preferences.edit().clear().apply()
     }
 
     private fun loadingAnimation(on: Boolean){
