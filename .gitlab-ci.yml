@@ -14,7 +14,9 @@ lintDebug:
     - update-alternatives --auto java
     - ./gradlew checkLicenses
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint --write-verification-metadata sha256
+    - git diff --quiet gradle/verification-metadata.xml || (echo 'Verification of dependencies failed!' && exit 1)
   artifacts:
+    when: on_failure
     paths:
       - gradle/verification-metadata.xml
 
