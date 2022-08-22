@@ -15,14 +15,13 @@
 
     <ImageView
         android:id="@+id/imageView4"
+        android:layout_width="150dp"
+        android:layout_height="162dp"
         android:importantForAccessibility="no"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/red_panda"
-        app:tint="?attr/colorOnBackground" />
+        app:srcCompat="@drawable/red_panda_emotions_broken_cable" />
 
     <TextView
         android:id="@+id/error_text"
