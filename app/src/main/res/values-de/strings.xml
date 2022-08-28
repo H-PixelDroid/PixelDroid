@@ -238,4 +238,14 @@
     <string name="color_chosen">Auswählter Farbakzent</string>
     <string name="create_feed">Erstellen</string>
     <string name="color_choice_button">Diesen Farbakzent auswählen</string>
+    <plurals name="replies_count">
+        <item quantity="one">%d Antwort</item>
+        <item quantity="other">%d Antworten</item>
+    </plurals>
+    <string name="error_editing">Fehler beim Bearbeiten</string>
+    <string name="profile_error">Profil konnte nicht geladen werden</string>
+    <string name="from_other_domain">von %1$s</string>
+    <string name="add_images_error">Fehler beim Hinzufügen der Bilder</string>
+    <string name="notification_thumbnail">Vorschaubild dieser Benachrichtigung</string>
+    <string name="post_preview">Vorschau eines Betrags</string>
 </resources>
