@@ -1,0 +1,11 @@
+PixelDroid er en Fri og Open Source Android klient for Pixelfed, den forbundne platform til deling af billeder.
+
+Bladr igennem feeds og profiler, upload nye posts, opdag posts, interagér med andre på fediverset.
+
+• Multi-Account understøttelse
+• Mørke og lyse temaér
+• Anvend filtre, beskær, tilpas lysstyrke/kontrast/mætning
+• Tager hensyn til opsætningen af din Pixelfed server
+• 100% Fri og Open Source software. Ingen proprietære afhængigheder.
+
+Tjek https://pixelfed.org for at læse mere om Pixelfed.
