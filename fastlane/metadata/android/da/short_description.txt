@@ -1,0 +1,1 @@
+Klient for Pixelfed, den forbundne platform til deling af billeder

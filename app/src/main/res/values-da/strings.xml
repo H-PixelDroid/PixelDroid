@@ -1,2 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d ny notifikation</item>
+        <item quantity="other">%d nye notifikationer</item>
+    </plurals>
+    <string name="other_notification_channel">Andre</string>
+    <string name="poll_notification_channel">Meningsmålinger</string>
+    <string name="comment_notification_channel">Kommentarer</string>
+    <string name="liked_notification_channel">Likes</string>
+    <string name="shared_notification_channel">Delinger</string>
+    <string name="mention_notification_channel">Nævnelser</string>
+    <string name="followed_notification_channel">Nye følgere</string>
+    <string name="invalid_domain">Ugyldig domain</string>
+    <string name="menu_settings">Indstillinger</string>
+    <string name="menu_account">Min profil</string>
+    <string name="other_notification">Notifikation fra %1$s</string>
+    <string name="poll_notification">%1$ss meningsmåling er afsluttet</string>
+    <string name="comment_notification">%1$s kommenterede dit opslag</string>
+    <string name="liked_notification">%1$s likede dit opslag</string>
+    <string name="shared_notification">%1$s delte dit opslag</string>
+    <string name="mention_notification">%1$s nævnte dig</string>
+    <string name="followed_notification">%1$s følger dig</string>
+    <string name="dark_theme">Mørk</string>
+    <string name="light_theme">Lys</string>
+    <string name="default_system">Default (jf. systemets indstillinger)</string>
+    <string name="theme_header">Tema</string>
+    <string name="theme_title">Application tema</string>
+    <string name="title_activity_settings2">Indstillinger</string>
+    <string name="instance_not_pixelfed_cancel">Afbryd login</string>
+    <string name="instance_not_pixelfed_continue">OK, fortsat alligevel</string>
+    <string name="instance_not_pixelfed_warning">Det ser ikke ud til at være en Pixelfed instans, så appen vil muligvis standse uforventet.</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="instance_error">Kunne ikke hente instans information</string>
+    <string name="token_error">Fejl ved hentning af token</string>
+    <string name="verify_credentials">Kunne ikke hente bruger info</string>
+    <string name="auth_failed">Kunne ikke autentificere</string>
+    <string name="browser_launch_failed">Kunne ikke starte en browser, har du en installeret\?</string>
+    <string name="registration_failed">Kunne ikke registrere applikationen ved denne server</string>
+</resources>
