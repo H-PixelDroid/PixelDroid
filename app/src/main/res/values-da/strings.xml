@@ -37,4 +37,43 @@
     <string name="auth_failed">Kunne ikke autentificere</string>
     <string name="browser_launch_failed">Kunne ikke starte en browser, har du en installeret\?</string>
     <string name="registration_failed">Kunne ikke registrere applikationen ved denne server</string>
+    <string name="no_media_description">Tilføj en mediebeskrivelse her…</string>
+    <string name="save_image_description">Gem billedets beskrivelse</string>
+    <string name="switch_to_carousel">Skift til carousel view</string>
+    <string name="switch_to_grid">Skift til grid view</string>
+    <string name="post_image">Et af billederne fra denne posting</string>
+    <string name="add_photo">Tilføj et foto</string>
+    <string name="post">Post</string>
+    <string name="description">Beskrivelse…</string>
+    <string name="upload_post_error">Post upload fejl</string>
+    <string name="upload_post_success">Post upload gennemført</string>
+    <string name="upload_post_failed">Post upload fejlslagen</string>
+    <string name="request_format_error">Upload fejl: forkert format forespurgt</string>
+    <string name="picture_format_error">Upload fejl: forkert billedformat.</string>
+    <string name="upload_picture_failed">Fejl under upload af billedet!</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Beskrivelsen må højst indeholde %d tegn.</item>
+        <item quantity="other">Beskrivelsen må højst indeholde %d tegn.</item>
+    </plurals>
+    <string name="save_image_success">Billedet gemt</string>
+    <string name="save_image_failed">Kunne i gemme billedet</string>
+    <string name="permission_denied">Adgang nægtet</string>
+    <string name="add_account_description">Tilføj endnu en Pixelfed konto</string>
+    <string name="add_account_name">Tilføj konto</string>
+    <string name="logout">Log ud</string>
+    <string name="api_not_enabled_dialog">API\'en er ikke aktiveret på denne instans. Kontakt venligst din administrator og bed om at aktivere den.</string>
+    <string name="login_connection_required_once">Du er nødt til at være online for at kunne tilføje det første konto og bruge PixelDroid :(</string>
+    <string name="connect_to_pixelfed">Forbind til Pixelfed</string>
+    <string name="domain_of_your_instance">Domænenavn af din instans</string>
+    <string name="whats_an_instance_explanation">Måske er du forvirret over, at et tekstfelt beder om domænenavnet af din \'instans\'.
+\n
+\nPixelfed er en fødereret platform og del af \'fediverset\', hvilket betyder, at det kan tale med andre platforme, som bruger det samme \'sprog\', som f.eks. Mastodon (se https://joinmastodon.org).
+\n
+\nDet betyder, at du skal vælge hvilken server, eller \'instans\' af Pixelfed du agter at bruge. Hvis ikke du kender nogen, her kan du finde et udvalg: https://pixelfed.org/join
+\n
+\nHar du brug for mere info, se her: https://pixelfed.org</string>
+    <string name="whats_an_instance">Hvad er en instans\?</string>
+    <string name="notification_summary_small">%1$s og %2$s</string>
+    <string name="notification_summary_medium">%1$s, %2$s og %3$s</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s og %4$d andre</string>
 </resources>
