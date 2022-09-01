@@ -1,0 +1,2 @@
+* Aktualizace překladů
+* Povoleno vzdálené nahrávání obrázků (např. Nextcloud)

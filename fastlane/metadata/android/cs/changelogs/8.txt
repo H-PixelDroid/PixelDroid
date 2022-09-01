@@ -1,0 +1,4 @@
+* Přidána podpora pro přehrávání a nahrávání videa
+* Vylepšení oznámení
+* Aktualizace překladů
+* Aktualizace závislostí

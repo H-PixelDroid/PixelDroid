@@ -1,0 +1,4 @@
+* Přidání gson proguard pravidel k opravě pádu na instancích Mastodon
+* Přidání barevných motivů se 4 různými odstíny
+* Přechod k Material 3
+* Zlepšení konzistence uživatelského rozhraní

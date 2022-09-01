@@ -1,0 +1,3 @@
+* Opraven pád při zobrazování seznamu licencí
+* Výrazně vylepšen výkon v aktivitě profilu
+* Aktualizace závislostí

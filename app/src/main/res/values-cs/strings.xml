@@ -8,7 +8,7 @@
     <string name="profile_picture">Profilový obrázek</string>
     <string name="toolbar_title_edit">Upravit</string>
     <string name="report_error">Hlášení se nepodařilo odeslat</string>
-    <string name="reported">Nahlášeno {gmd_check_circle}</string>
+    <string name="reported">Příspěvek nahlášen</string>
     <string name="report_target">Nahlásit příspěvek uživatele @%1$s</string>
     <string name="optional_report_comment">Volitelná zpráva pro moderátory/správce</string>
     <string name="share_link">Sdílet odkaz</string>
@@ -162,7 +162,7 @@
     <string name="upload_post_success">Příspěvek byl úspěšně nahrán</string>
     <string name="upload_post_error">Chyba při nahrávání příspěvku</string>
     <string name="description">Popis…</string>
-    <string name="post">příspěvek</string>
+    <string name="post">Příspěvek</string>
     <string name="add_photo">Přidat fotku</string>
     <string name="post_image">Jeden z obrázků v příspěvku</string>
     <string name="save_image_description">Uložit popis obrázku</string>
@@ -171,10 +171,10 @@
     <string name="switch_to_grid">Zobrazit v gridu</string>
     <string name="size_exceeds_instance_limit">Velikost obrázku číslo %1$d překračuje maximální povolenou velikost instance (%2$d kB, limit je %3$d kB). Je možné, že jej nebude možné nahrát.</string>
     <string name="upload_error">Chybový kód vrácený serverem: %1$d</string>
-    <string name="lbl_brightness">JAS</string>
-    <string name="lbl_contrast">KONTRAST</string>
-    <string name="lbl_saturation">NASYCENÍ</string>
-    <string name="tab_filters">FILTRY</string>
+    <string name="lbl_brightness">Jas</string>
+    <string name="lbl_contrast">Kontrast</string>
+    <string name="lbl_saturation">Nasycení</string>
+    <string name="tab_filters">Filtry</string>
     <string name="edit">Upravit</string>
     <string name="filter_thumbnail">Náhled filtru</string>
     <string name="busy_dialog_text">Obrázek se stále zpracovává, nejprve počkejte na dokončení!</string>
@@ -244,4 +244,22 @@
     <string name="from_other_domain">z %1$s</string>
     <string name="add_images_error">Chyba při přidávání obrázků</string>
     <string name="post_preview">Náhled příspěvku</string>
+    <plurals name="replies_count">
+        <item quantity="one">%d odpověď</item>
+        <item quantity="few">%d odpovědi</item>
+        <item quantity="other">%d odpovědí</item>
+    </plurals>
+    <string name="reset_edit_menu">RESETOVAT</string>
+    <string name="encode_error">Chyba při kódování</string>
+    <string name="encode_success">Kódování bylo úspěšné!</string>
+    <string name="encode_progress">Kódování %1$d%%</string>
+    <string name="still_encoding">Jedno nebo více videí se stále kóduje. Před nahráním počkejte, na dokončení</string>
+    <string name="thumbnail_reel_video_edit">Reel zobrazuje náhledy videa, které upravujete</string>
+    <string name="color_choice_button">Vybrat tento barevný odstín</string>
+    <string name="color_chosen">Zvolený barevný odstín</string>
+    <string name="follow_request">%1$s vás chce sledovat</string>
+    <string name="status_notification">%1$s vytvořil/a příspěvek</string>
+    <string name="notification_thumbnail">Náhled obrázku v příspěvku tohoto upozornění</string>
+    <string name="accentColorTitle">Barevný odstín</string>
+    <string name="accentColorSummary">Vyberte barevný odstín</string>
 </resources>
