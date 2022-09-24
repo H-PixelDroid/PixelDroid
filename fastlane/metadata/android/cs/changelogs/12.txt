@@ -1,0 +1,3 @@
+* Editace videa! Ztlumení, oříznutí videa
+* Otevírejte obrázky na celé obrazovce a přibližujte a posouvejte je :)
+* Aktualizace překladu

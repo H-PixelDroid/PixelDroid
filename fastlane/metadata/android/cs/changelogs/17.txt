@@ -1,0 +1,8 @@
+* Vylepšení komentářů: Můžete otevřít komentář, vidět odpovědi, lajkovat, zobrazit avatara, autora, atd.
+* Aktualizace překladů. Děkuji překladatelům :). Pomozte přeložit PixelDroid na weblate.pixeldroid.org
+* Zabezpečení: ověření, že se závislostmi v aplikaci nebylo manipulováno, odmítnutí jakékoli připojení bez HTTPS
+* Vlastní agent „PixelDroid“ namísto OkHttp
+* Řetězce v kódu byly odstraněny, nyní je vše přeložitelné
+* Drobná vylepšení
+* Opraveno ukládání obrázků z knihovny nebo sdílených do aplikace
+* Opraven další pád při používání instancí Mastodon
