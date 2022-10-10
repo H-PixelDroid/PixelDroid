@@ -30,7 +30,7 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 32
-        versionCode 17
+        versionCode 18
         versionName "1.0.beta" + versionCode
 
         testInstrumentationRunner "org.pixeldroid.app.testUtility.TestRunner"
