@@ -232,6 +232,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="search_empty_error">Search query can\'t be empty</string>
     <string name="status_more_options">More options</string>
     <string name="report">Report</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="unbookmark">Unbookmark</string>
     <string name="share_link">Share Link</string>
     <string name="optional_report_comment">Optional message for mods/admins</string>
     <string name="report_target">Report @%1$s\'s post</string>

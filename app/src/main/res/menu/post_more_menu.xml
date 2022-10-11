@@ -9,6 +9,16 @@
     <item android:id="@+id/post_more_menu_share_link"
         android:title="@string/share_link" />
 
+    <group android:id="@+id/post_more_menu_group_bookmark">
+        <item android:id="@+id/post_more_menu_bookmark"
+            android:title="@string/bookmark" />
+    </group>
+
+    <group android:id="@+id/post_more_menu_group_unbookmark">
+        <item android:id="@+id/post_more_menu_unbookmark"
+            android:title="@string/unbookmark" />
+    </group>
+
 
     <!-- Group that should only be shown if there are pictures in the post -->
     <group android:id="@+id/post_more_group_picture">
