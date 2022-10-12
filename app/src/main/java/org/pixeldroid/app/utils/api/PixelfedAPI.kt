@@ -183,6 +183,17 @@ interface PixelfedAPI {
         @Path("id") statusId: String,
     ) : Status
 
+    @POST("/api/v1/statuses/{id}/bookmark")
+    suspend fun bookmarkStatus(
+        @Path("id") statusId: String
+    ) : Status
+
+    @POST("/api/v1/statuses/{id}/undobookmark")
+    suspend fun undoBookmarkStatus(
+        @Path("id") statusId: String
+    ) : Status
+
+
     //Used in our case to retrieve comments for a given status
     @GET("/api/v1/statuses/{id}/context")
     suspend fun statusComments(
