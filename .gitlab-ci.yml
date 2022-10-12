@@ -47,6 +47,7 @@ debugTests:
     - ./gradlew -Pci --console=plain :app:testDebug -x lint
 
 .connected-template: &connected-template
+  allow_failure: true
   stage: test
   script:
     - start-emulator
@@ -68,7 +69,6 @@ connected 27 default x86_64:
 fdroid build:
   stage: build
   image: registry.gitlab.com/fdroid/ci-images-client:latest
-  allow_failure: true
   tags:
     - server_artectrex
   artifacts:
