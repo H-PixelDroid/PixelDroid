@@ -76,12 +76,12 @@ class NestedScrollableHost(context: Context, attrs: AttributeSet? = null) :
             return true
         }
 
-        override fun onDoubleTap(e: MotionEvent?): Boolean {
+        override fun onDoubleTap(e: MotionEvent): Boolean {
             doubleTapCallback?.invoke()
             return super.onDoubleTap(e)
         }
 
-        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
             // Disable opening AlbumActivity if the only image is a video (let the video open directly)
             if(images.size == 1 && images.first().type == Attachment.AttachmentType.video){
                 return super.onSingleTapConfirmed(e)

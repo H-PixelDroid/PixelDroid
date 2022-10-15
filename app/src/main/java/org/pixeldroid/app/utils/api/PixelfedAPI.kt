@@ -37,7 +37,7 @@ interface PixelfedAPI {
         val headerInterceptor = Interceptor { chain ->
             val requestBuilder = chain.request().newBuilder()
                 .removeHeader("User-Agent")
-                .addHeader("User-Agent", "PixelDroid") //TODO check if okay?
+                .addHeader("User-Agent", "PixelDroid")
             chain.proceed(requestBuilder.build())
         }
 

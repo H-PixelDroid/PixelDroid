@@ -4,7 +4,8 @@ import android.os.Bundle
 
 open class BaseThemedWithBarActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(themeActionBar())
+        // Set theme when we chose one
+        themeActionBar()?.let { setTheme(it) }
         super.onCreate(savedInstanceState)
     }
 }

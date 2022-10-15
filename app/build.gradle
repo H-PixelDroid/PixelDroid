@@ -16,21 +16,21 @@ jacoco.toolVersion = "0.8.7"
 android {
 
     namespace 'org.pixeldroid.app'
-    compileSdkVersion 32
-    buildToolsVersion '31.0.0'
+    compileSdkVersion 33
+    buildToolsVersion '33.0.0'
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8
         freeCompilerArgs += ["-opt-in=kotlin.RequiresOptIn"]
     }
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 32
-        versionCode 18
+        targetSdkVersion 33
+        versionCode 19
         versionName "1.0.beta" + versionCode
 
         testInstrumentationRunner "org.pixeldroid.app.testUtility.TestRunner"
@@ -123,32 +123,33 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.0'
 
     /**
      * AndroidX dependencies:
      */
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.core:core-splashscreen:1.0.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     implementation "androidx.browser:browser:1.4.0"
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.0'
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.5.0"
-    implementation "androidx.annotation:annotation:1.4.0"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.5.1"
+    implementation "androidx.annotation:annotation:1.5.0"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation "androidx.activity:activity-ktx:1.5.0"
-    implementation 'androidx.fragment:fragment-ktx:1.5.0'
+    implementation "androidx.activity:activity-ktx:1.6.0"
+    implementation 'androidx.fragment:fragment-ktx:1.5.3'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
     implementation 'androidx.media2:media2-widget:1.2.1'
     implementation 'androidx.media2:media2-player:1.2.1'
@@ -164,7 +165,7 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:$cameraX_version"
 
-    def room_version = "2.4.2"
+    def room_version = "2.4.3"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
@@ -176,16 +177,17 @@ dependencies {
      */
 
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
-    implementation 'com.arthenica:ffmpeg-kit-min:4.5.1-1.LTS'
+    implementation 'com.arthenica:ffmpeg-kit-min-gpl:5.1.LTS'
 
-    implementation 'com.google.android.material:material:1.6.1'
+
+    implementation 'com.google.android.material:material:1.7.0-rc01'
 
     //Dagger (dependency injection)
-    implementation 'com.google.dagger:dagger-android:2.42'
-    implementation 'com.google.dagger:dagger-android-support:2.42'
+    implementation 'com.google.dagger:dagger-android:2.44'
+    implementation 'com.google.dagger:dagger-android-support:2.44'
     // if you use the support libraries
-    kapt 'com.google.dagger:dagger-android-processor:2.42'
-    kapt 'com.google.dagger:dagger-compiler:2.42'
+    kapt 'com.google.dagger:dagger-android-processor:2.44'
+    kapt 'com.google.dagger:dagger-compiler:2.44'
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -199,18 +201,18 @@ dependencies {
     implementation 'info.androidhive:imagefilters:1.0.7'
     implementation 'com.github.yalantis:ucrop:2.2.8-native'
 
-    implementation('com.github.bumptech.glide:glide:4.13.2') {
+    implementation('com.github.bumptech.glide:glide:4.14.2') {
         exclude group: "com.android.support"
     }
 
-    implementation 'com.github.bumptech.glide:okhttp3-integration:4.13.2'
-    implementation('com.github.bumptech.glide:recyclerview-integration:4.13.2') {
+    implementation 'com.github.bumptech.glide:okhttp3-integration:4.14.2'
+    implementation('com.github.bumptech.glide:recyclerview-integration:4.14.2') {
         // Excludes the support library because it's already included by Glide.
         transitive = false
     }
-    implementation 'com.github.bumptech.glide:annotations:4.13.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
-    kapt 'com.github.bumptech.glide:compiler:4.13.2'
+    implementation 'com.github.bumptech.glide:annotations:4.14.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+    kapt 'com.github.bumptech.glide:compiler:4.14.2'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
@@ -219,9 +221,9 @@ dependencies {
     implementation 'com.mikepenz:materialdrawer-nav:9.0.1'
 
     //iconics
-    implementation 'com.mikepenz:iconics-core:5.3.4'
+    implementation 'com.mikepenz:iconics-core:5.4.0'
     implementation 'com.mikepenz:materialdrawer-iconics:9.0.1'
-    implementation 'com.mikepenz:iconics-views:5.3.4'
+    implementation 'com.mikepenz:iconics-views:5.4.0'
     implementation 'com.mikepenz:google-material-typeface:4.0.0.2-kotlin@aar'
 
 
@@ -242,7 +244,7 @@ dependencies {
     androidTestUtil 'com.linkedin.testbutler:test-butler-app:2.2.1'
 
     androidTestImplementation 'androidx.work:work-testing:2.7.1'
-    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.33.2'
+    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.34.0'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$room_version"

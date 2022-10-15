@@ -3,6 +3,7 @@ package org.pixeldroid.app.settings
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.TypedArray
+import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -110,6 +111,7 @@ class ColorPreference constructor(context: Context, attrs: AttributeSet? = null)
         thumbnail?.visibility = if (thumbColor == null) View.GONE else View.VISIBLE
         @ColorRes
         val colorCode: Int = when(thumbColor){
+            -1 -> android.R.color.transparent
             1 -> R.color.seed2
             2 -> R.color.seed3
             3 -> R.color.seed4
@@ -162,6 +164,13 @@ class ColorPickerView(context: Context?, attrs: AttributeSet? = null) : FrameLay
 
     init {
         binding = ColorDialogBinding.inflate(LayoutInflater.from(context),this,  true)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            binding.dynamicColorSwitch.isVisible = true
+            binding.dynamicColorSwitch.setOnCheckedChangeListener{ _, isChecked ->
+                binding.themeChooser.isVisible = !isChecked
+                color = if(isChecked) -1 else 0
+            }
+        }
         binding.theme1.setOnClickListener { color = 0 }
         binding.theme2.setOnClickListener { color = 1 }
         binding.theme3.setOnClickListener { color = 2 }
@@ -188,5 +197,8 @@ class ColorPickerView(context: Context?, attrs: AttributeSet? = null) : FrameLay
                 3 -> binding.theme4
                 else -> null
             }?.let { changeConstraint(it) }
+
+            // Check switch if set to dynamic
+            binding.dynamicColorSwitch.isChecked = value == -1
         }
 }

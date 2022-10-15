@@ -151,7 +151,6 @@ open class Status(
                     val shareIntent: Intent = Intent.createChooser(Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(Intent.EXTRA_STREAM, file)
-                        data = file
                         flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                         type = "image/$ext"
                     }, null)

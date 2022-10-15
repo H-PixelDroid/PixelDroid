@@ -11,6 +11,12 @@
         android:name="android.hardware.camera.any"
         android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <application
         android:name=".utils.PixelDroidApplication"
@@ -89,8 +95,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.App.Starting"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>

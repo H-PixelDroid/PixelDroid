@@ -27,8 +27,7 @@ class PixelDroidApplication: Application() {
             .build()
         mApplicationComponent.inject(this)
 
-        //TODO put condition depending on setting to apply dynamic colours (android 12+)
-        if(false) DynamicColors.applyToActivitiesIfAvailable(this)
+        DynamicColors.applyToActivitiesIfAvailable(this)
     }
 
     fun getAppComponent(): ApplicationComponent {

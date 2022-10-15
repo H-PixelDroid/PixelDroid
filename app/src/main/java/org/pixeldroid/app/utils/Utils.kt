@@ -211,22 +211,26 @@ fun setThemeFromPreferences(preferences: SharedPreferences, resources: Resources
 }
 
 @StyleRes
-fun Context.themeNoActionBar(): Int {
+fun Context.themeNoActionBar(): Int? {
     return when(PreferenceManager.getDefaultSharedPreferences(this).getInt("themeColor", 0)) {
+        // No theme was chosen: the user wants to use the system dynamic color (from wallpaper for example)
+        -1 -> null
         1 -> R.style.AppTheme2_NoActionBar
         2 -> R.style.AppTheme3_NoActionBar
         3 -> R.style.AppTheme4_NoActionBar
-        else -> R.style.AppTheme_NoActionBar
+        else -> R.style.AppTheme5_NoActionBar
     }
 }
 
 @StyleRes
-fun Context.themeActionBar(): Int {
+fun Context.themeActionBar(): Int? {
     return when(PreferenceManager.getDefaultSharedPreferences(this).getInt("themeColor", 0)) {
+        // No theme was chosen: the user wants to use the system dynamic color (from wallpaper for example)
+        -1 -> null
         1 -> R.style.AppTheme2
         2 -> R.style.AppTheme3
         3 -> R.style.AppTheme4
-        else -> R.style.AppTheme
+        else -> R.style.AppTheme5
     }
 }
 
