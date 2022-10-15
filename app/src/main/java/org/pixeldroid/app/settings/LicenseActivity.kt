@@ -7,7 +7,6 @@ import org.pixeldroid.app.databinding.OpenSourceLicenseBinding
 import org.pixeldroid.app.settings.licenseObjects.Libraries
 import org.pixeldroid.app.settings.licenseObjects.OpenSourceItem
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
-import org.pixeldroid.app.utils.themeActionBar
 
 /**
  * Displays licenses for all app dependencies. JSON is
@@ -18,7 +17,6 @@ class LicenseActivity: BaseThemedWithBarActivity() {
     private lateinit var binding: OpenSourceLicenseBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(themeActionBar())
         super.onCreate(savedInstanceState)
         binding = OpenSourceLicenseBinding.inflate(layoutInflater)
 

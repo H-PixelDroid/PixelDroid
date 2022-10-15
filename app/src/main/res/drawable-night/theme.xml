@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
-    <!-- The background color -->
-    <item android:drawable="@android:color/black"/>
-    <!-- The drawable (mascot) -->
-    <item android:drawable="@drawable/mascot"
-        android:gravity="center"/>
-</layer-list>

@@ -5,89 +5,108 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-    <ImageButton
-        android:id="@+id/theme1"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/color_choice_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/theme2"
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/dynamicColorSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="8sp"
+        android:text="Use dynamic color from your system"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_black_24dp"
-        app:tint="@color/seed" />
-
-    <ImageButton
-        android:id="@+id/theme2"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/color_choice_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/theme3"
-        app:layout_constraintStart_toEndOf="@+id/theme1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_black_24dp"
-        app:tint="@color/seed2" />
-
-    <ImageButton
-        android:id="@+id/theme3"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/color_choice_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/theme4"
-        app:layout_constraintStart_toEndOf="@+id/theme2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_black_24dp"
-        app:tint="@color/seed3" />
-
-    <ImageButton
-        android:id="@+id/theme4"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/color_choice_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/theme3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_black_24dp"
-        app:tint="@color/seed4" />
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/chosenTheme"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/theme1"
-        app:layout_constraintStart_toStartOf="@id/theme1"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        android:id="@+id/themeChooser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/dynamicColorSwitch">
 
-        <ImageView
-            android:id="@+id/chosenThemeOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/color_chosen"
+        <ImageButton
+            android:id="@+id/theme1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/color_choice_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/theme2"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/circle_black_24dp"
-            app:tint="#4D000000" />
+            app:tint="@color/seed" />
 
-        <ImageView
-            android:id="@+id/chosenThemeCheckMark"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="@string/color_chosen"
+        <ImageButton
+            android:id="@+id/theme2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/color_choice_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/theme3"
+            app:layout_constraintStart_toEndOf="@+id/theme1"
+            app:layout_constraintTop_toTopOf="@+id/theme1"
+            app:srcCompat="@drawable/circle_black_24dp"
+            app:tint="@color/seed2" />
+
+        <ImageButton
+            android:id="@+id/theme3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/color_choice_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/theme4"
+            app:layout_constraintStart_toEndOf="@+id/theme2"
+            app:layout_constraintTop_toTopOf="@+id/theme2"
+            app:srcCompat="@drawable/circle_black_24dp"
+            app:tint="@color/seed3" />
+
+        <ImageButton
+            android:id="@+id/theme4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/color_choice_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_check_24" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toEndOf="@+id/theme3"
+            app:layout_constraintTop_toTopOf="@+id/theme3"
+            app:srcCompat="@drawable/circle_black_24dp"
+            app:tint="@color/seed4" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/chosenTheme"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/theme1"
+            app:layout_constraintStart_toStartOf="@id/theme1"
+            app:layout_constraintTop_toTopOf="@+id/theme1"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/chosenThemeOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/color_chosen"
+                app:srcCompat="@drawable/circle_black_24dp"
+                app:tint="#4D000000" />
+
+            <ImageView
+                android:id="@+id/chosenThemeCheckMark"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/color_chosen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_check_24" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

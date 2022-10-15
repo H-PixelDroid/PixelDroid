@@ -21,6 +21,6 @@ class PixelDroidGlideModule : AppGlideModule() {
             .addNetworkInterceptor(PixelfedAPI.headerInterceptor)
             .build()
         val factory = OkHttpUrlLoader.Factory(client)
-        glide.registry.replace(GlideUrl::class.java, InputStream::class.java, factory)
+        registry.replace(GlideUrl::class.java, InputStream::class.java, factory)
     }
 }

@@ -57,11 +57,11 @@ class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnShared
     }
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            "theme" -> {
-                setThemeFromPreferences(sharedPreferences, resources)
+            "language" -> {
                 recreateWithRestartStatus()
             }
-            "language" -> {
+            "theme" -> {
+                setThemeFromPreferences(sharedPreferences, resources)
                 recreateWithRestartStatus()
             }
             "themeColor" -> {
