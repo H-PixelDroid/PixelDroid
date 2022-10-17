@@ -2,6 +2,7 @@ package org.pixeldroid.app.postCreation.photoEdit
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentUris
 import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.text.format.DateUtils
 import android.util.Log
 import android.view.Menu
@@ -72,6 +74,9 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         val resultHandler: Handler = HandlerCompat.createAsync(Looper.getMainLooper())
 
         val uri = intent.getParcelableExtra<Uri>(PhotoEditActivity.PICTURE_URI)!!
+
+        binding.cropImageView.setImageUriAsync(uri)
+
         videoPosition = intent.getIntExtra(PhotoEditActivity.PICTURE_POSITION, -1)
 
         val inputVideoPath = ffmpegCompliantUri(uri)
