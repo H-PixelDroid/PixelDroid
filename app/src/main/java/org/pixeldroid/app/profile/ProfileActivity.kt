@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -18,9 +19,13 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
@@ -37,6 +42,7 @@ import org.pixeldroid.app.utils.*
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.Attachment
+import org.pixeldroid.app.utils.api.objects.Results
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import retrofit2.HttpException
@@ -47,11 +53,9 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     private lateinit var domain : String
     private lateinit var accountId : String
     private lateinit var binding: ActivityProfileBinding
-    private lateinit var profileAdapter: PagingDataAdapter<Status, RecyclerView.ViewHolder>
     private lateinit var viewModel: FeedViewModel<Status>
 
     private var user: UserDatabaseEntity? = null
-    private var job: Job? = null
 
     @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,35 +83,59 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         )
         )[FeedViewModel::class.java] as FeedViewModel<Status>
 
-        profileAdapter = ProfilePostsAdapter()
-        initAdapter(binding.profileProgressBar, binding.profileRefreshLayout,
-            binding.profilePostsRecyclerView, binding.motionLayout, binding.errorLayout,
-            profileAdapter)
-
-        binding.profilePostsRecyclerView.layoutManager = GridLayoutManager(this, 3)
-
-        binding.profileRefreshLayout.setOnRefreshListener {
-            setContent(account)
-            profileAdapter.refresh()
-        }
-
+        val tabs = createSearchTabs(account)
+        setupTabs(tabs)
         setContent(account)
-        job = launch(job, lifecycleScope, viewModel, profileAdapter)
     }
 
-    /**
-     * Shows or hides the error in the profile
-     */
-    private fun showError(errorText: String = getString(R.string.profile_error), show: Boolean = true){
-        if(show){
-            binding.profileProgressBar.visibility = View.GONE
-            binding.motionLayout.transitionToEnd()
-            binding.errorLayout.errorText.text = errorText
-        } else if(binding.motionLayout.progress == 1F) {
-            binding.motionLayout.transitionToStart()
-        }
-        binding.profileRefreshLayout.isRefreshing = false
+    private fun createSearchTabs(account: Account?): Array<Fragment>{
+
+        val profileGridFragment = ProfileFeedFragment()
+        val profileFeedFragment = ProfileFeedFragment()
+        val profileBookmarksFragment = ProfileFeedFragment() // TODO: bookmark fragment
+        val arguments = Bundle()
+        arguments.putSerializable(Account.ACCOUNT_TAG, account)
+        profileGridFragment.arguments = arguments
+        profileFeedFragment.arguments = arguments
+        profileBookmarksFragment.arguments = arguments
+        return arrayOf(
+            profileGridFragment,
+            profileFeedFragment,
+            profileBookmarksFragment
+        )
     }
+
+    private fun setupTabs(
+        tabs: Array<Fragment>
+    ){
+        binding.viewPager.adapter = object : FragmentStateAdapter(this) {
+            override fun createFragment(position: Int): Fragment {
+                return tabs[position]
+            }
+
+            override fun getItemCount(): Int {
+                return 3
+            }
+        }
+        TabLayoutMediator(binding.profileTabs, binding.viewPager) { tab, position ->
+            tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
+            when (position) {
+                0 -> {
+                    tab.setText("Grid view")
+                    tab.setIcon(R.drawable.grid_on_black_24dp)
+                }
+                1 -> {
+                    tab.setText("Feed view")
+                    tab.setIcon(R.drawable.feed_view)
+                }
+                2 -> {
+                    tab.setText("Bookmarks")
+                    tab.setIcon(R.drawable.bookmark)
+                }
+            }
+        }.attach()
+    }
+
 
     private fun setContent(account: Account?) {
         if(account != null) {
@@ -120,9 +148,17 @@ class ProfileActivity : BaseThemedWithBarActivity() {
                     api.verifyCredentials()
                 } catch (exception: IOException) {
                     Log.e("ProfileActivity:", exception.toString())
-                    return@launchWhenResumed showError()
+                    Toast.makeText(
+                        applicationContext, "Could not get your profile",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launchWhenResumed
                 } catch (exception: HttpException) {
-                    return@launchWhenResumed showError()
+                    Toast.makeText(
+                        applicationContext, "Could not get your profile",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launchWhenResumed
                 }
                 setViews(myAccount)
             }
