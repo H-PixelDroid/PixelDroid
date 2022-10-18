@@ -47,7 +47,7 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
-
+import kotlin.collections.flatten
 
 const val TAG = "Post Creation Activity"
 
@@ -130,8 +130,10 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                         uiState.newEncodingJobMuted?.let { muted ->
                             uiState.newEncodingJobVideoStart?.let { videoStart ->
                                 uiState.newEncodingJobVideoEnd?.let { videoEnd ->
-                                    startEncoding(position, muted, videoStart, videoEnd)
-                                    model.encodingStarted()
+                                    uiState.newEncodingJobSpeedIndex?.let { speedIndex ->
+                                        startEncoding(position, muted, videoStart, videoEnd, speedIndex)
+                                        model.encodingStarted()
+                                    }
                                 }
                             }
                         }
@@ -324,7 +326,13 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
      * @param videoEnd when we want to end the video, in seconds, or null if we
      * don't want to remove the end
      */
-    private fun startEncoding(position: Int, muted: Boolean, videoStart: Float?, videoEnd: Float?) {
+    private fun startEncoding(
+        position: Int,
+        muted: Boolean,
+        videoStart: Float?,
+        videoEnd: Float?,
+        speedIndex: Int
+    ) {
         val originalUri = model.getPhotoData().value!![position].imageUri
 
         // Having a meaningful suffix is necessary so that ffmpeg knows what to put in output
@@ -342,13 +350,32 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(ffmpegCompliantUri(inputUri)).mediaInformation
         val totalVideoDuration = mediaInformation?.duration?.toFloatOrNull()
 
-        val mutedString = if(muted) "-an" else null
-        val startString: List<String?> = if(videoStart != null) listOf("-ss", "$videoStart") else listOf(null, null)
+        val speed = VideoEditActivity.speedChoices[speedIndex]
 
-        val endString: List<String?> = if(videoEnd != null) listOf("-to", "${videoEnd - (videoStart ?: 0f)}") else listOf(null, null)
+        //TODO also have audio when speed is changed?
+        val mutedString = if(muted || speedIndex != 1) "-an" else null
+        val startString: List<String?> = if(videoStart != null) listOf("-ss", "${videoStart/speed.toFloat()}") else listOf(null, null)
+
+        val endString: List<String?> = if(videoEnd != null) listOf("-to", "${videoEnd/speed.toFloat() - (videoStart ?: 0f)/speed.toFloat()}") else listOf(null, null)
+
+        val speedString: List<String?> = if(speedIndex!= 1)
+            listOf("-filter:v", "setpts=PTS/${speed}")
+            // Stream copy is not compatible with filter, but when not filtering we can copy the stream without re-encoding
+            else listOf("-c", "copy")
+
+        // This should be set when re-encoding is required (otherwise it defaults to mpeg which then doesn't play)
+        val encodePreset: List<String?> = if(speedIndex != 1) listOf("-c:v", "libx264", "-preset", "ultrafast") else listOf(null, null, null, null)
 
         val session: FFmpegSession =
-            FFmpegKit.executeWithArgumentsAsync(listOfNotNull(startString[0], startString[1], "-i", ffmpegCompliantUri, endString[0], endString[1], "-c", "copy", mutedString, "-y", outputVideoPath).toTypedArray(),
+            FFmpegKit.executeWithArgumentsAsync(listOfNotNull(
+                startString[0], startString[1],
+                "-i", ffmpegCompliantUri,
+                speedString[0], speedString[1],
+                endString[0], endString[1],
+                mutedString, "-y",
+                encodePreset[0], encodePreset[1], encodePreset[2], encodePreset[3],
+                outputVideoPath
+            ).toTypedArray(),
         //val session: FFmpegSession = FFmpegKit.executeAsync("$startString -i $inputSafePath $endString -c:v libvpx-vp9 -c:a copy -an -y $outputVideoPath",
             { session ->
                 val returnCode = session.returnCode
@@ -387,7 +414,9 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             timeInMilliseconds?.let {
                 if (timeInMilliseconds > 0) {
                     val completePercentage = totalVideoDuration?.let {
-                        val newTotalDuration = it - (videoStart ?: 0f) - (it - (videoEnd ?: it))
+                        val speedupDurationModifier = VideoEditActivity.speedChoices[speedIndex].toFloat()
+
+                        val newTotalDuration = (it - (videoStart ?: 0f) - (it - (videoEnd ?: it)))/speedupDurationModifier
                         timeInMilliseconds / (10*newTotalDuration)
                     }
                     resultHandler.post {

@@ -163,30 +163,44 @@
         app:layout_constraintTop_toTopOf="@+id/indicator"
         tools:visibility="visible" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
+    <com.google.android.material.card.MaterialCardView
         android:visibility="invisible"
         tools:visibility="visible"
-        tools:progress="30"
-        android:id="@+id/encodeProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="64dp"
-        android:layout_marginEnd="24dp"
-        android:indeterminate="false"
-        android:max="100"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/encodeInfoCard"
+        android:layout_marginEnd="24dp">
 
-    <TextView
-        android:id="@+id/encodeInfoText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:drawableStartCompat="@drawable/ic_heart"
-        android:drawablePadding="6dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/encodeProgress"
-        tools:text="Encoding..." />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            tools:progress="30"
+            android:id="@+id/encodeProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:max="100"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/encodeInfoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="6dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/encodeProgress"
+            tools:text="Encoding..." />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
