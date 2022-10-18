@@ -236,7 +236,7 @@ final class CropWindowMoveHandler {
    * and the image's bounding box and snap radius.
    *
    * @param left the position that the left edge is dragged to
-   * @param bounds the bounding box of the image that is being cropped
+   * @param bounds the bounding box of the image that is being notCropped
    * @param snapMargin the snap distance to the image edge (in pixels)
    */
   private void adjustLeft(
@@ -282,7 +282,7 @@ final class CropWindowMoveHandler {
    * and the image's bounding box and snap radius.
    *
    * @param right the position that the right edge is dragged to
-   * @param bounds the bounding box of the image that is being cropped
+   * @param bounds the bounding box of the image that is being notCropped
    * @param viewWidth
    * @param snapMargin the snap distance to the image edge (in pixels)
    */
@@ -332,7 +332,7 @@ final class CropWindowMoveHandler {
    * the image's bounding box and snap radius.
    *
    * @param top the x-position that the top edge is dragged to
-   * @param bounds the bounding box of the image that is being cropped
+   * @param bounds the bounding box of the image that is being notCropped
    * @param snapMargin the snap distance to the image edge (in pixels)
    */
   private void adjustTop(
@@ -378,7 +378,7 @@ final class CropWindowMoveHandler {
    * and the image's bounding box and snap radius.
    *
    * @param bottom     the position that the bottom edge is dragged to
-   * @param bounds     the bounding box of the image that is being cropped
+   * @param bounds     the bounding box of the image that is being notCropped
    * @param viewHeight
    * @param snapMargin the snap distance to the image edge (in pixels)
    */

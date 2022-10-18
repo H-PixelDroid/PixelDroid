@@ -13,6 +13,10 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
+import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity;
+
 /** A custom View representing the crop window and the shaded background outside the crop window. */
 public class CropOverlayView extends View {
 
@@ -30,9 +34,6 @@ public class CropOverlayView extends View {
   /** The Paint used to draw the guidelines within the crop area when pressed. */
   private Paint mGuidelinePaint;
 
-  /** The Paint used to darken the surrounding areas outside the crop area. */
-  private final Paint mBackgroundPaint = getNewPaint(Color.argb(119, 0, 0, 0));
-
   /** The bounding box around the Bitmap that we are cropping. */
   private final RectF mCalcBounds = new RectF();
 
@@ -42,17 +43,8 @@ public class CropOverlayView extends View {
   /** The bounding image view height used to know the crop overlay is at view edges. */
   private int mViewHeight;
 
-  /** The initial crop window padding from image borders */
-  private float mInitialCropWindowPaddingRatio;
-
   /** The Handle that is currently pressed; null if no Handle is pressed. */
   private CropWindowMoveHandler mMoveHandler;
-
-  /** save the current aspect ratio of the image */
-  private int mAspectRatioX;
-
-  /** save the current aspect ratio of the image */
-  private int mAspectRatioY;
 
   /** the initial crop window rectangle to set */
   private final Rect mInitialCropWindowRect = new Rect();
@@ -113,55 +105,30 @@ public class CropOverlayView extends View {
     }
   }
 
-  /** the X value of the aspect ratio; */
-  public int getAspectRatioX() {
-    return mAspectRatioX;
-  }
-
-  /** Sets the X value of the aspect ratio to 1. */
-  public void setAspectRatioX() {
-    if (mAspectRatioX != 1) {
-      mAspectRatioX = 1;
-
-      if (initializedCropWindow) {
-        initCropWindow();
-        invalidate();
-      }
-    }
-  }
-
-  /** the Y value of the aspect ratio; */
-  public int getAspectRatioY() {
-    return mAspectRatioY;
-  }
-
   /**
-   * Sets the Y value of the aspect ratio to 1.
-   *
-   */
-  public void setAspectRatioY() {
-    if (mAspectRatioY != 1) {
-      mAspectRatioY = 1;
-
-      if (initializedCropWindow) {
-        initCropWindow();
-        invalidate();
-      }
-    }
-  }
-  /**
-   * set the max width/height and scale factor of the shown image to original image to scale the
+   * Set the max width/height and scale factor of the shown image to original image to scale the
    * limits appropriately.
    */
-  public void setCropWindowLimits(
-      float maxWidth, float maxHeight, float scaleFactorWidth, float scaleFactorHeight) {
-    mCropWindowHandler.setCropWindowLimits(
-        maxWidth, maxHeight, scaleFactorWidth, scaleFactorHeight);
+  public void setCropWindowLimits(float maxWidth, float maxHeight) {
+    mCropWindowHandler.setCropWindowLimits(maxWidth, maxHeight);
   }
 
   /** Get crop window initial rectangle. */
   public Rect getInitialCropWindowRect() {
     return mInitialCropWindowRect;
+  }
+
+  public void setRecordedCropWindowRect(@NonNull VideoEditActivity.RelativeCropPosition relativeCropPosition) {
+    Rect rect = new Rect(
+            (int) (mInitialCropWindowRect.left + relativeCropPosition.getRelativeX() * mInitialCropWindowRect.width()),
+            (int) (mInitialCropWindowRect.top + relativeCropPosition.getRelativeY() * mInitialCropWindowRect.height()),
+            (int) (relativeCropPosition.getRelativeWidth() * mInitialCropWindowRect.width()
+                    + mInitialCropWindowRect.left + relativeCropPosition.getRelativeX() * mInitialCropWindowRect.width()),
+            (int) (relativeCropPosition.getRelativeHeight() * mInitialCropWindowRect.height()
+                    + mInitialCropWindowRect.top + relativeCropPosition.getRelativeY() * mInitialCropWindowRect.width())
+    );
+    //TODO call correct thing instead of initial (which sets the limits...)
+    setInitialCropWindowRect(rect);
   }
 
   /** Set crop window initial rectangle to be used instead of default. */
@@ -188,25 +155,21 @@ public class CropOverlayView extends View {
   public void setInitialAttributeValues() {
     DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
 
-    setAspectRatioX();
-
-    setAspectRatioY();
-
-    mInitialCropWindowPaddingRatio = 0.1f;
-
-    mBorderPaint = getNewPaintOrNull(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, dm), Color.argb(170, 255, 255, 255));
+    mBorderPaint =
+            getNewPaintOfThickness(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, dm), Color.argb(170, 255, 255, 255));
 
     mBorderCornerPaint =
-        getNewPaintOrNull(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, dm), Color.WHITE);
+        getNewPaintOfThickness(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, dm), Color.WHITE);
 
-    mGuidelinePaint = getNewPaintOrNull(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, dm), Color.argb(170, 255, 255, 255));
+    mGuidelinePaint =
+            getNewPaintOfThickness(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, dm), Color.argb(170, 255, 255, 255));
   }
 
   // region: Private methods
 
   /**
    * Set the initial crop window size and position. This is dependent on the size and position of
-   * the image being cropped.
+   * the image being notCropped.
    */
   private void initCropWindow() {
 
@@ -281,7 +244,7 @@ public class CropOverlayView extends View {
 
     super.onDraw(canvas);
 
-    // Draw translucent background for the cropped area.
+    // Draw translucent background for the notCropped area.
     drawBackground(canvas);
 
     if (mCropWindowHandler.showGuidelines()) {
@@ -302,7 +265,7 @@ public class CropOverlayView extends View {
 
     RectF rect = mCropWindowHandler.getRect();
 
-    canvas.drawRect(rect.left, rect.top, rect.right, rect.bottom, mBackgroundPaint);
+    canvas.drawRect(rect.left, rect.top, rect.right, rect.bottom, getNewPaint(Color.argb(119, 0, 0, 0)));
   }
 
   /**
@@ -433,18 +396,14 @@ public class CropOverlayView extends View {
     return paint;
   }
 
-  /** Creates the Paint object for given thickness and color, if thickness < 0 return null. */
-  private static Paint getNewPaintOrNull(float thickness, int color) {
-    if (thickness > 0) {
-      Paint borderPaint = new Paint();
-      borderPaint.setColor(color);
-      borderPaint.setStrokeWidth(thickness);
-      borderPaint.setStyle(Paint.Style.STROKE);
-      borderPaint.setAntiAlias(true);
-      return borderPaint;
-    } else {
-      return null;
-    }
+  /** Creates the Paint object for given thickness and color */
+  private static Paint getNewPaintOfThickness(float thickness, int color) {
+    Paint borderPaint = new Paint();
+    borderPaint.setColor(color);
+    borderPaint.setStrokeWidth(thickness);
+    borderPaint.setStyle(Paint.Style.STROKE);
+    borderPaint.setAntiAlias(true);
+    return borderPaint;
   }
 
   @Override
@@ -523,8 +482,6 @@ public class CropOverlayView extends View {
   /**
    * Calculate the bounding rectangle for current crop window
    * The bounds rectangle is the bitmap rectangle
-   *
-   * @param rect the crop window rectangle to start finding bounded rectangle from
    */
   private void calculateBounds(RectF rect) {
     mCalcBounds.set(mInitialCropWindowRect);

@@ -22,12 +22,26 @@
     <org.pixeldroid.app.postCreation.photoEdit.cropper.CropImageView
         android:id="@+id/cropImageView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/videoView"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/save_crop_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:text="@string/save_crop"
+        android:contentDescription="@string/save_crop"
+        app:icon="@drawable/ic_crop_black_24dp"/>
+
 
     <ImageView
         android:id="@+id/muter"
@@ -42,7 +56,6 @@
         app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <ImageView
         android:id="@+id/speeder"
         android:layout_width="60dp"
@@ -55,6 +68,20 @@
         android:src="@drawable/speed"
         app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
         app:layout_constraintStart_toEndOf="@+id/muter" />
+
+    <ImageView
+        android:id="@+id/cropper"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="@string/video_crop"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        app:tint="@android:color/white"
+        android:src="@drawable/ic_crop_black_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
+        app:layout_constraintStart_toEndOf="@+id/speeder" />
 
     <com.google.android.material.slider.RangeSlider
         android:id="@+id/videoRangeSeekBar"

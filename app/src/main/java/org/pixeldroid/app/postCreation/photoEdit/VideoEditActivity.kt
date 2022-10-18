@@ -2,15 +2,13 @@ package org.pixeldroid.app.postCreation.photoEdit
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentUris
 import android.content.Intent
+import android.graphics.Rect
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
 import android.text.format.DateUtils
 import android.util.Log
 import android.view.Menu
@@ -24,8 +22,11 @@ import androidx.media.AudioAttributesCompat
 import androidx.media2.common.MediaMetadata
 import androidx.media2.common.UriMediaItem
 import androidx.media2.player.MediaPlayer
-import androidx.media2.player.MediaPlayer.PlayerCallback
-import com.arthenica.ffmpegkit.*
+import com.arthenica.ffmpegkit.FFmpegKit
+import com.arthenica.ffmpegkit.FFmpegKitConfig
+import com.arthenica.ffmpegkit.FFprobeKit
+import com.arthenica.ffmpegkit.MediaInformation
+import com.arthenica.ffmpegkit.ReturnCode
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.RangeSlider
 import org.pixeldroid.app.R
@@ -35,14 +36,31 @@ import org.pixeldroid.app.postCreation.carousel.dpToPx
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.ffmpegCompliantUri
 import java.io.File
+import java.io.Serializable
+import kotlin.math.absoluteValue
 
 
 class VideoEditActivity : BaseThemedWithBarActivity() {
 
+    data class RelativeCropPosition(
+        val relativeWidth: Float,
+        val relativeHeight: Float,
+        val relativeX: Float,
+        val relativeY: Float,
+    ): Serializable {
+        fun notCropped(): Boolean =
+            (relativeX - 1f).absoluteValue < 0.001f
+                    && (relativeY - 1f).absoluteValue < 0.001f
+                    && relativeX.absoluteValue < 0.001f
+                    && relativeWidth.absoluteValue < 0.001f
+
+    }
+
     private lateinit var mediaPlayer: MediaPlayer
     private var videoPosition: Int = -1
 
-    //TODO react to change of playbackSpeed (when changed in the player itself)
+    private var cropRelativeDimensions: RelativeCropPosition = RelativeCropPosition(1f,1f,0f,0f)
+
     private var speed: Int = 1
         set(value) {
             field = value
@@ -75,16 +93,10 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
         val uri = intent.getParcelableExtra<Uri>(PhotoEditActivity.PICTURE_URI)!!
 
-        binding.cropImageView.setImageUriAsync(uri)
-
         videoPosition = intent.getIntExtra(PhotoEditActivity.PICTURE_POSITION, -1)
 
         val inputVideoPath = ffmpegCompliantUri(uri)
         val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(inputVideoPath).mediaInformation
-
-        binding.muter.setOnClickListener {
-            binding.muter.isSelected = !binding.muter.isSelected
-        }
 
         //Duration in seconds, or null
         val duration: Float? = mediaInformation?.duration?.toFloatOrNull()
@@ -124,6 +136,38 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
                 speed = 1
             }
             binding.muter.isSelected = !binding.muter.isSelected
+        }
+
+        binding.cropper.setOnClickListener {
+            //TODO set crop from saved value
+            showCropInterface(show = true, uri = uri)
+        }
+
+        binding.saveCropButton.setOnClickListener {
+            // This is the rectangle selected by the crop
+            val cropRect = binding.cropImageView.cropWindowRect ?: return@setOnClickListener
+
+            // This is the rectangle of the whole image
+            val fullImageRect: Rect = binding.cropImageView.getInitialCropWindowRect()
+
+            // x, y are coordinates of top left, in the ImageView
+            val x = cropRect.left - fullImageRect.left
+            val y = cropRect.top - fullImageRect.top
+
+            // width and height selected by the crop
+            val width = cropRect.width()
+            val height = cropRect.height()
+
+            // To avoid having to calculate the dimensions of the video here, we pass
+            // relative width, height and x, y back to be treated in FFmpeg
+            cropRelativeDimensions = RelativeCropPosition(
+                relativeWidth = width/fullImageRect.width(),
+                relativeHeight = height/fullImageRect.height(),
+                relativeX = x/fullImageRect.width(),
+                relativeY = y/fullImageRect.height()
+            )
+
+            showCropInterface(show = false)
         }
 
         binding.videoView.setPlayer(mediaPlayer)
@@ -230,9 +274,33 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         val muted = binding.muter.isSelected
         val speedUnchanged = speed == 1
 
-        return !muted && videoPositions && speedUnchanged
+        return !muted && videoPositions && speedUnchanged && cropRelativeDimensions.notCropped()
     }
 
+    private fun showCropInterface(show: Boolean, uri: Uri? = null){
+        val visibilityOfOthers = if(show) View.GONE else View.VISIBLE
+        val visibilityOfCrop = if(show) View.VISIBLE else View.GONE
+
+        if(show) mediaPlayer.pause()
+
+        binding.muter.visibility = visibilityOfOthers
+        binding.speeder.visibility = visibilityOfOthers
+        binding.cropper.visibility = visibilityOfOthers
+        binding.videoRangeSeekBar.visibility = visibilityOfOthers
+        binding.videoView.visibility = visibilityOfOthers
+        binding.thumbnail1.visibility = visibilityOfOthers
+        binding.thumbnail2.visibility = visibilityOfOthers
+        binding.thumbnail3.visibility = visibilityOfOthers
+        binding.thumbnail4.visibility = visibilityOfOthers
+        binding.thumbnail5.visibility = visibilityOfOthers
+        binding.thumbnail6.visibility = visibilityOfOthers
+        binding.thumbnail7.visibility = visibilityOfOthers
+
+        binding.cropImageView.visibility = visibilityOfCrop
+        binding.saveCropButton.visibility = visibilityOfCrop
+
+        if(show && uri != null) binding.cropImageView.setImageUriAsync(uri, cropRelativeDimensions)
+    }
 
     private fun returnWithValues() {
         val intent = Intent(this, PostCreationActivity::class.java)
@@ -243,6 +311,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
                 putExtra(MODIFIED, !noEdits())
                 putExtra(VIDEO_START, binding.videoRangeSeekBar.values.first())
                 putExtra(VIDEO_END, binding.videoRangeSeekBar.values[2])
+                putExtra(VIDEO_CROP, cropRelativeDimensions)
                 addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
 
@@ -253,6 +322,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
     private fun resetControls() {
         binding.videoRangeSeekBar.values = listOf(0f, binding.videoRangeSeekBar.valueTo/2, binding.videoRangeSeekBar.valueTo)
         binding.muter.isSelected = false
+        binding.cropImageView.resetCropRect()
     }
 
     override fun onDestroy() {
@@ -315,6 +385,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         val speedChoices: List<Number> = listOf(0.5, 1, 2, 4, 8)
         const val VIDEO_START = "VideoEditVideoStartTag"
         const val VIDEO_END = "VideoEditVideoEndTag"
+        const val VIDEO_CROP = "VideoEditVideoCropTag"
         const val MODIFIED = "VideoEditModifiedTag"
     }
 }

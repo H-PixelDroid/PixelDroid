@@ -24,6 +24,7 @@ import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
 import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
+import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity.RelativeCropPosition
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
@@ -61,6 +62,8 @@ data class PostCreationActivityUiState(
     val newEncodingJobSpeedIndex: Int? = null,
     val newEncodingJobVideoStart: Float? = null,
     val newEncodingJobVideoEnd: Float? = null,
+    val newEncodingJobVideoCrop: RelativeCropPosition? = null,
+
 )
 
 class PostCreationViewModel(application: Application, clipdata: ClipData? = null, val instance: InstanceDatabaseEntity? = null) : AndroidViewModel(application) {
@@ -372,6 +375,8 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                         if(it == -1f) null else it
                     }
 
+                    val videoCrop: RelativeCropPosition = data.getSerializableExtra(VideoEditActivity.VIDEO_CROP) as RelativeCropPosition
+
                     videoEncodeProgress = 0
                     sessionMap[position]?.let { FFmpegKit.cancel(it) }
                     _uiState.update { currentUiState ->
@@ -380,7 +385,8 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                             newEncodingJobMuted = muted,
                             newEncodingJobSpeedIndex = speedIndex,
                             newEncodingJobVideoStart = videoStart,
-                            newEncodingJobVideoEnd = videoEnd
+                            newEncodingJobVideoEnd = videoEnd,
+                            newEncodingJobVideoCrop = videoCrop
                         )
                     }
                 }

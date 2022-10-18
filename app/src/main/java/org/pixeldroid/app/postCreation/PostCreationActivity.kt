@@ -47,7 +47,6 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
-import kotlin.collections.flatten
 
 const val TAG = "Post Creation Activity"
 
@@ -131,8 +130,13 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                             uiState.newEncodingJobVideoStart?.let { videoStart ->
                                 uiState.newEncodingJobVideoEnd?.let { videoEnd ->
                                     uiState.newEncodingJobSpeedIndex?.let { speedIndex ->
-                                        startEncoding(position, muted, videoStart, videoEnd, speedIndex)
-                                        model.encodingStarted()
+                                        uiState.newEncodingJobVideoCrop?.let { crop ->
+                                            startEncoding(position, muted,
+                                                videoStart, videoEnd,
+                                                speedIndex, crop
+                                            )
+                                            model.encodingStarted()
+                                        }
                                     }
                                 }
                             }
@@ -331,7 +335,8 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         muted: Boolean,
         videoStart: Float?,
         videoEnd: Float?,
-        speedIndex: Int
+        speedIndex: Int,
+        crop: VideoEditActivity.RelativeCropPosition
     ) {
         val originalUri = model.getPhotoData().value!![position].imageUri
 
@@ -352,29 +357,33 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
 
         val speed = VideoEditActivity.speedChoices[speedIndex]
 
-        //TODO also have audio when speed is changed?
         val mutedString = if(muted || speedIndex != 1) "-an" else null
         val startString: List<String?> = if(videoStart != null) listOf("-ss", "${videoStart/speed.toFloat()}") else listOf(null, null)
 
         val endString: List<String?> = if(videoEnd != null) listOf("-to", "${videoEnd/speed.toFloat() - (videoStart ?: 0f)/speed.toFloat()}") else listOf(null, null)
 
-        val speedString: List<String?> = if(speedIndex!= 1)
-            listOf("-filter:v", "setpts=PTS/${speed}")
+        // iw and ih are variables for the original width and height values, FFmpeg will know them
+        val cropString = if(crop.notCropped()) "" else "crop=${crop.relativeWidth}*iw:${crop.relativeHeight}*ih:${crop.relativeX}*iw:${crop.relativeY}*ih"
+        val separator = if(speedIndex != 1 && !crop.notCropped()) "," else ""
+        val speedString = if(speedIndex != 1) "setpts=PTS/${speed}" else ""
+
+        val speedAndCropString: List<String?> = if(speedIndex!= 1 || !crop.notCropped())
+            listOf("-filter:v", speedString + separator + cropString)
             // Stream copy is not compatible with filter, but when not filtering we can copy the stream without re-encoding
             else listOf("-c", "copy")
 
         // This should be set when re-encoding is required (otherwise it defaults to mpeg which then doesn't play)
-        val encodePreset: List<String?> = if(speedIndex != 1) listOf("-c:v", "libx264", "-preset", "ultrafast") else listOf(null, null, null, null)
+        val encodePreset: List<String?> = if(speedIndex != 1 && !crop.notCropped()) listOf("-c:v", "libx264", "-preset", "ultrafast") else listOf(null, null, null, null)
 
         val session: FFmpegSession =
             FFmpegKit.executeWithArgumentsAsync(listOfNotNull(
                 startString[0], startString[1],
                 "-i", ffmpegCompliantUri,
-                speedString[0], speedString[1],
+                speedAndCropString[0], speedAndCropString[1],
                 endString[0], endString[1],
                 mutedString, "-y",
                 encodePreset[0], encodePreset[1], encodePreset[2], encodePreset[3],
-                outputVideoPath
+                outputVideoPath,
             ).toTypedArray(),
         //val session: FFmpegSession = FFmpegKit.executeAsync("$startString -i $inputSafePath $endString -c:v libvpx-vp9 -c:a copy -an -y $outputVideoPath",
             { session ->
