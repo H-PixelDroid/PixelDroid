@@ -58,6 +58,7 @@ data class PostCreationActivityUiState(
 
     val newEncodingJobPosition: Int? = null,
     val newEncodingJobMuted: Boolean? = null,
+    val newEncodingJobSpeedIndex: Int? = null,
     val newEncodingJobVideoStart: Float? = null,
     val newEncodingJobVideoEnd: Float? = null,
 )
@@ -96,6 +97,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
             currentUiState.copy(
                 newEncodingJobPosition = null,
                 newEncodingJobMuted = null,
+                newEncodingJobSpeedIndex = null,
                 newEncodingJobVideoStart = null,
                 newEncodingJobVideoEnd = null,
             )
@@ -332,7 +334,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                     Toast.LENGTH_SHORT).show()
                 val intent = Intent(getApplication(), MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                //TODO make the activity launch this instead (and surrounding toasts too)L
+                //TODO make the activity launch this instead (and surrounding toasts too)
                 getApplication<PixelDroidApplication>().startActivity(intent)
             } catch (exception: IOException) {
                 Toast.makeText(getApplication(), getApplication<PixelDroidApplication>().getString(R.string.upload_post_error),
@@ -359,21 +361,24 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
     fun modifyAt(position: Int, data: Intent): Unit? {
        val result: PhotoData = photoData.value?.getOrNull(position)?.run {
             if (video) {
-                val muted: Boolean = data.getBooleanExtra(VideoEditActivity.MUTED, false)
-                val videoStart: Float? = data.getFloatExtra(VideoEditActivity.VIDEO_START, -1f).let {
-                    if(it == -1f) null else it
-                }
                 val modified: Boolean = data.getBooleanExtra(VideoEditActivity.MODIFIED, false)
-                val videoEnd: Float? = data.getFloatExtra(VideoEditActivity.VIDEO_END, -1f).let {
-                    if(it == -1f) null else it
-                }
                 if(modified){
+                    val muted: Boolean = data.getBooleanExtra(VideoEditActivity.MUTED, false)
+                    val speedIndex: Int = data.getIntExtra(VideoEditActivity.SPEED, 1)
+                    val videoStart: Float? = data.getFloatExtra(VideoEditActivity.VIDEO_START, -1f).let {
+                        if(it == -1f) null else it
+                    }
+                    val videoEnd: Float? = data.getFloatExtra(VideoEditActivity.VIDEO_END, -1f).let {
+                        if(it == -1f) null else it
+                    }
+
                     videoEncodeProgress = 0
                     sessionMap[position]?.let { FFmpegKit.cancel(it) }
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             newEncodingJobPosition = position,
                             newEncodingJobMuted = muted,
+                            newEncodingJobSpeedIndex = speedIndex,
                             newEncodingJobVideoStart = videoStart,
                             newEncodingJobVideoEnd = videoEnd
                         )

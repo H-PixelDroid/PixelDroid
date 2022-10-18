@@ -6,6 +6,7 @@ import android.content.ContentUris
 import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,6 +24,7 @@ import androidx.media.AudioAttributesCompat
 import androidx.media2.common.MediaMetadata
 import androidx.media2.common.UriMediaItem
 import androidx.media2.player.MediaPlayer
+import androidx.media2.player.MediaPlayer.PlayerCallback
 import com.arthenica.ffmpegkit.*
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.RangeSlider
@@ -39,6 +41,17 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private var videoPosition: Int = -1
+
+    //TODO react to change of playbackSpeed (when changed in the player itself)
+    private var speed: Int = 1
+        set(value) {
+            field = value
+
+            mediaPlayer.playbackSpeed = speedChoices[value].toFloat()
+
+            if(speed != 1) binding.muter.callOnClick()
+        }
+
     private lateinit var binding: ActivityVideoEditBinding
     // Map photoData indexes to FFmpeg Session IDs
     private val sessionList: ArrayList<Long> = arrayListOf()
@@ -103,9 +116,13 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
         mediaPlayer.prepare()
 
+
         binding.muter.setOnClickListener {
             if(!binding.muter.isSelected) mediaPlayer.playerVolume = 0f
-            else mediaPlayer.playerVolume = 1f
+            else {
+                mediaPlayer.playerVolume = 1f
+                speed = 1
+            }
             binding.muter.isSelected = !binding.muter.isSelected
         }
 
@@ -132,6 +149,24 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
         binding.videoRangeSeekBar.setLabelFormatter { value: Float ->
             DateUtils.formatElapsedTime(value.toLong())
+        }
+
+
+
+        binding.speeder.setOnClickListener {
+            AlertDialog.Builder(this).apply {
+                setIcon(R.drawable.speed)
+                setTitle(R.string.video_speed)
+                setSingleChoiceItems(speedChoices.map { it.toString() + "x" }.toTypedArray(), speed) { dialog, which ->
+                    // update the selected item which is selected by the user so that it should be selected
+                    // when user opens the dialog next time and pass the instance to setSingleChoiceItems method
+                    speed = which
+
+                    // when selected an item the dialog should be closed with the dismiss method
+                    dialog.dismiss()
+                }
+                setNegativeButton(android.R.string.cancel) { _, _ -> }
+            }.show()
         }
 
 
@@ -193,7 +228,9 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
             it[0] == 0f && it[2] == binding.videoRangeSeekBar.valueTo
         }
         val muted = binding.muter.isSelected
-        return !muted && videoPositions
+        val speedUnchanged = speed == 1
+
+        return !muted && videoPositions && speedUnchanged
     }
 
 
@@ -202,6 +239,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
             .apply {
                 putExtra(PhotoEditActivity.PICTURE_POSITION, videoPosition)
                 putExtra(MUTED, binding.muter.isSelected)
+                putExtra(SPEED, speed)
                 putExtra(MODIFIED, !noEdits())
                 putExtra(VIDEO_START, binding.videoRangeSeekBar.values.first())
                 putExtra(VIDEO_END, binding.videoRangeSeekBar.values[2])
@@ -272,6 +310,9 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
     companion object {
         const val VIDEO_TAG = "VideoEditTag"
         const val MUTED = "VideoEditMutedTag"
+        const val SPEED = "VideoEditSpeedTag"
+        // List of choices of speeds
+        val speedChoices: List<Number> = listOf(0.5, 1, 2, 4, 8)
         const val VIDEO_START = "VideoEditVideoStartTag"
         const val VIDEO_END = "VideoEditVideoEndTag"
         const val MODIFIED = "VideoEditModifiedTag"

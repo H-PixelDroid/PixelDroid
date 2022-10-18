@@ -1,7 +1,7 @@
 import com.android.build.api.dsl.ManagedVirtualDevice
 
 plugins {
-    id "com.cookpad.android.plugin.license-tools" version "1.2.2"
+    id "com.cookpad.android.plugin.license-tools" version "1.2.8"
 }
 
 apply plugin: 'com.android.application'

@@ -93,16 +93,15 @@ class ImageCarousel(
             if (position != RecyclerView.NO_POSITION && field != position) {
                 val thisProgress = data?.getOrNull(position)?.encodeProgress
                 if (thisProgress != null) {
+                    binding.encodeInfoCard.visibility = VISIBLE
                     binding.encodeProgress.visibility = VISIBLE
-                    binding.encodeInfoText.visibility = VISIBLE
                     binding.encodeInfoText.text =
                         context.getString(R.string.encode_progress).format(thisProgress)
                     binding.encodeProgress.progress = thisProgress
                 } else {
-                    binding.encodeProgress.visibility = INVISIBLE
-                    binding.encodeInfoText.visibility = INVISIBLE
+                    binding.encodeInfoCard.visibility = GONE
                 }
-            } else binding.encodeProgress.visibility = INVISIBLE
+            } else if(position == RecyclerView.NO_POSITION) binding.encodeInfoCard.visibility = GONE
 
             if (position != RecyclerView.NO_POSITION && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
                 recyclerView.smoothScrollToPosition(position)
@@ -567,8 +566,7 @@ class ImageCarousel(
         data?.getOrNull(position)?.encodeProgress = progress
         if(currentPosition == position) {
             if (progress == null) {
-                binding.encodeProgress.visibility = INVISIBLE
-                binding.encodeInfoText.visibility = VISIBLE
+                binding.encodeProgress.visibility = GONE
                 if(error){
                     binding.encodeInfoText.setText(R.string.encode_error)
                     binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.error),
@@ -581,8 +579,8 @@ class ImageCarousel(
                 }
             } else {
                 binding.encodeProgress.visibility = VISIBLE
+                binding.encodeInfoCard.visibility = VISIBLE
                 binding.encodeProgress.progress = progress
-                binding.encodeInfoText.visibility = VISIBLE
                 binding.encodeInfoText.text = context.getString(R.string.encode_progress).format(progress)
             }
         }
