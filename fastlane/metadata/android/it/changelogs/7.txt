@@ -1,0 +1,2 @@
+* Traduzione aggiornata
+* Consenti il caricamento di immagini da remoto (e.g. Nextcloud)
