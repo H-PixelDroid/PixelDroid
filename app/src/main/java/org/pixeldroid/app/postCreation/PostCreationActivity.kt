@@ -87,7 +87,13 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             }
         } ?: InstanceDatabaseEntity("", "")
 
-        val _model: PostCreationViewModel by viewModels { PostCreationViewModelFactory(application, intent.clipData!!, instance) }
+        val _model: PostCreationViewModel by viewModels {
+            PostCreationViewModelFactory(
+                application,
+                intent.clipData!!,
+                instance
+            )
+        }
         model = _model
 
         model.getPhotoData().observe(this) { newPhotoData ->
@@ -116,15 +122,20 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                     }
                     binding.addPhotoButton.isEnabled = uiState.addPhotoButtonEnabled
                     enableButton(uiState.postCreationSendButtonEnabled)
-                    binding.uploadProgressBar.visibility = if(uiState.uploadProgressBarVisible) VISIBLE else INVISIBLE
+                    binding.uploadProgressBar.visibility =
+                        if (uiState.uploadProgressBarVisible) VISIBLE else INVISIBLE
                     binding.uploadProgressBar.progress = uiState.uploadProgress
-                    binding.uploadCompletedTextview.visibility = if(uiState.uploadCompletedTextviewVisible) VISIBLE else INVISIBLE
+                    binding.uploadCompletedTextview.visibility =
+                        if (uiState.uploadCompletedTextviewVisible) VISIBLE else INVISIBLE
                     binding.removePhotoButton.isEnabled = uiState.removePhotoButtonEnabled
                     binding.editPhotoButton.isEnabled = uiState.editPhotoButtonEnabled
-                    binding.uploadError.visibility = if(uiState.uploadErrorVisible) VISIBLE else INVISIBLE
-                    binding.uploadErrorTextExplanation.visibility = if(uiState.uploadErrorExplanationVisible) VISIBLE else INVISIBLE
+                    binding.uploadError.visibility =
+                        if (uiState.uploadErrorVisible) VISIBLE else INVISIBLE
+                    binding.uploadErrorTextExplanation.visibility =
+                        if (uiState.uploadErrorExplanationVisible) VISIBLE else INVISIBLE
 
-                    binding.toolbarPostCreation.visibility = if(uiState.isCarousel) VISIBLE else INVISIBLE
+                    binding.toolbarPostCreation.visibility =
+                        if (uiState.isCarousel) VISIBLE else INVISIBLE
                     binding.carousel.layoutCarousel = uiState.isCarousel
 
 
@@ -155,6 +166,11 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         binding.newPostDescriptionInputField.doAfterTextChanged {
             model.newPostDescriptionChanged(binding.newPostDescriptionInputField.text)
         }
+
+        // Fetch existing description passed through putExtra (if any)
+        val existingDescription = intent.getStringExtra(PhotoEditActivity.PICTURE_DESCRIPTION)
+        binding.newPostDescriptionInputField.setText(existingDescription)
+
         binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
 
         binding.carousel.apply {

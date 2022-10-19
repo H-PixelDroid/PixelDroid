@@ -80,6 +80,7 @@ class PhotoEditActivity : BaseThemedWithBarActivity() {
     companion object{
         internal const val PICTURE_URI = "picture_uri"
         internal const val PICTURE_POSITION = "picture_position"
+        internal const val PICTURE_DESCRIPTION = "picture_description"
 
         private var executor: ExecutorService = newSingleThreadExecutor()
         private var future: Future<*>? = null
