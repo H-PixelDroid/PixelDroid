@@ -119,16 +119,16 @@ public class CropOverlayView extends View {
   }
 
   public void setRecordedCropWindowRect(@NonNull VideoEditActivity.RelativeCropPosition relativeCropPosition) {
-    Rect rect = new Rect(
-            (int) (mInitialCropWindowRect.left + relativeCropPosition.getRelativeX() * mInitialCropWindowRect.width()),
-            (int) (mInitialCropWindowRect.top + relativeCropPosition.getRelativeY() * mInitialCropWindowRect.height()),
-            (int) (relativeCropPosition.getRelativeWidth() * mInitialCropWindowRect.width()
-                    + mInitialCropWindowRect.left + relativeCropPosition.getRelativeX() * mInitialCropWindowRect.width()),
-            (int) (relativeCropPosition.getRelativeHeight() * mInitialCropWindowRect.height()
-                    + mInitialCropWindowRect.top + relativeCropPosition.getRelativeY() * mInitialCropWindowRect.width())
+    RectF rect = new RectF(
+            mInitialCropWindowRect.left + relativeCropPosition.getRelativeX() * mInitialCropWindowRect.width(),
+            mInitialCropWindowRect.top + relativeCropPosition.getRelativeY() * mInitialCropWindowRect.height(),
+            relativeCropPosition.getRelativeWidth() * mInitialCropWindowRect.width()
+                    + mInitialCropWindowRect.left + relativeCropPosition.getRelativeX() * mInitialCropWindowRect.width(),
+            relativeCropPosition.getRelativeHeight() * mInitialCropWindowRect.height()
+                    + mInitialCropWindowRect.top + relativeCropPosition.getRelativeY() * mInitialCropWindowRect.height()
     );
-    //TODO call correct thing instead of initial (which sets the limits...)
-    setInitialCropWindowRect(rect);
+
+    mCropWindowHandler.setRect(rect);
   }
 
   /** Set crop window initial rectangle to be used instead of default. */
@@ -169,7 +169,7 @@ public class CropOverlayView extends View {
 
   /**
    * Set the initial crop window size and position. This is dependent on the size and position of
-   * the image being notCropped.
+   * the image being cropped.
    */
   private void initCropWindow() {
 

@@ -3,6 +3,7 @@ package org.pixeldroid.app.postCreation.photoEdit
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Rect
 import android.media.AudioManager
 import android.net.Uri
@@ -11,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.format.DateUtils
 import android.util.Log
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,6 +20,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.core.os.HandlerCompat
+import androidx.core.view.isVisible
 import androidx.media.AudioAttributesCompat
 import androidx.media2.common.MediaMetadata
 import androidx.media2.common.UriMediaItem
@@ -43,23 +46,27 @@ import kotlin.math.absoluteValue
 class VideoEditActivity : BaseThemedWithBarActivity() {
 
     data class RelativeCropPosition(
-        val relativeWidth: Float,
-        val relativeHeight: Float,
-        val relativeX: Float,
-        val relativeY: Float,
+        // Width of the selected part of the video, relative to the width of the video
+        val relativeWidth: Float = 1f,
+        // Height of the selected part of the video, relative to the height of the video
+        val relativeHeight: Float = 1f,
+        // Distance of left corner of selected part, relative to the width of the video
+        val relativeX: Float = 0f,
+        // Distance of top of selected part, relative to the height of the video
+        val relativeY: Float = 0f,
     ): Serializable {
         fun notCropped(): Boolean =
-            (relativeX - 1f).absoluteValue < 0.001f
-                    && (relativeY - 1f).absoluteValue < 0.001f
+            (relativeWidth - 1f).absoluteValue < 0.001f
+                    && (relativeHeight - 1f).absoluteValue < 0.001f
                     && relativeX.absoluteValue < 0.001f
-                    && relativeWidth.absoluteValue < 0.001f
+                    && relativeY.absoluteValue < 0.001f
 
     }
 
     private lateinit var mediaPlayer: MediaPlayer
     private var videoPosition: Int = -1
 
-    private var cropRelativeDimensions: RelativeCropPosition = RelativeCropPosition(1f,1f,0f,0f)
+    private var cropRelativeDimensions: RelativeCropPosition = RelativeCropPosition()
 
     private var speed: Int = 1
         set(value) {
@@ -139,7 +146,6 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         }
 
         binding.cropper.setOnClickListener {
-            //TODO set crop from saved value
             showCropInterface(show = true, uri = uri)
         }
 
@@ -166,6 +172,21 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
                 relativeX = x/fullImageRect.width(),
                 relativeY = y/fullImageRect.height()
             )
+
+            binding.cropSavedCard.isVisible = !cropRelativeDimensions.notCropped()
+
+            // If a crop was saved, change the color of the crop button to give a visual indication
+            if(!cropRelativeDimensions.notCropped()){
+                val typedValue = TypedValue()
+                val color: Int = if (binding.checkMarkCropped.context.theme
+                        .resolveAttribute(R.attr.colorOnPrimaryContainer, typedValue, true)
+                ) typedValue.data else Color.TRANSPARENT
+
+                binding.cropper.drawable.setTint(color)
+            } else {
+                // Else reset the tint
+                binding.cropper.drawable.setTintList(null)
+            }
 
             showCropInterface(show = false)
         }
@@ -283,6 +304,9 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
         if(show) mediaPlayer.pause()
 
+        // Only hide: showing happens on save only if necessary
+        if(show) binding.cropSavedCard.visibility = View.GONE
+
         binding.muter.visibility = visibilityOfOthers
         binding.speeder.visibility = visibilityOfOthers
         binding.cropper.visibility = visibilityOfOthers
@@ -295,6 +319,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         binding.thumbnail5.visibility = visibilityOfOthers
         binding.thumbnail6.visibility = visibilityOfOthers
         binding.thumbnail7.visibility = visibilityOfOthers
+
 
         binding.cropImageView.visibility = visibilityOfCrop
         binding.saveCropButton.visibility = visibilityOfCrop
@@ -322,7 +347,11 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
     private fun resetControls() {
         binding.videoRangeSeekBar.values = listOf(0f, binding.videoRangeSeekBar.valueTo/2, binding.videoRangeSeekBar.valueTo)
         binding.muter.isSelected = false
+
         binding.cropImageView.resetCropRect()
+        cropRelativeDimensions = RelativeCropPosition()
+        binding.cropper.drawable.setTintList(null)
+        binding.cropSavedCard.visibility = View.GONE
     }
 
     override fun onDestroy() {
