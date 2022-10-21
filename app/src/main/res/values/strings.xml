@@ -271,6 +271,9 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="select_video_range">Select what to keep of the video</string>
     <string name="mute_video">Mute video</string>
     <string name="video_speed">Change video speed</string>
+    <string name="video_crop">Crop video</string>
+    <string name="save_crop">Save crop</string>
+    <string name="crop_saved">Crop saved</string>
     <string name="still_encoding">One or more videos are still encoding. Wait for them to finish before uploading</string>
     <string name="new_post_shortcut_long">Create new post</string>
     <string name="new_post_shortcut_short">New post</string>

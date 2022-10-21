@@ -578,6 +578,7 @@ class ImageCarousel(
                     null, null, null)
                 }
             } else {
+                binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
                 binding.encodeProgress.visibility = VISIBLE
                 binding.encodeInfoCard.visibility = VISIBLE
                 binding.encodeProgress.progress = progress

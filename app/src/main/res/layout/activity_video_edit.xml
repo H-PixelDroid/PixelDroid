@@ -19,6 +19,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <org.pixeldroid.app.postCreation.photoEdit.cropper.CropImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"/>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/save_crop_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        android:text="@string/save_crop"
+        android:contentDescription="@string/save_crop"
+        app:icon="@drawable/ic_crop_black_24dp"/>
+
+
     <ImageView
         android:id="@+id/muter"
         android:layout_width="60dp"
@@ -32,7 +56,6 @@
         app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <ImageView
         android:id="@+id/speeder"
         android:layout_width="60dp"
@@ -45,6 +68,58 @@
         android:src="@drawable/speed"
         app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
         app:layout_constraintStart_toEndOf="@+id/muter" />
+
+    <ImageButton
+        android:id="@+id/cropper"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="@string/video_crop"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        android:src="@drawable/ic_crop_black_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
+        app:layout_constraintStart_toEndOf="@+id/speeder" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/cropper"
+        app:layout_constraintEnd_toEndOf="@+id/cropper"
+        app:layout_constraintBottom_toTopOf="@+id/cropper"
+        android:id="@+id/cropSavedCard"
+        android:layout_marginBottom="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp">
+
+            <ImageView
+                android:id="@+id/checkMarkCropped"
+                android:importantForAccessibility="no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/check_circle_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/encodeInfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/checkMarkCropped"
+                app:layout_constraintTop_toTopOf="@id/checkMarkCropped"
+                app:layout_constraintStart_toEndOf="@id/checkMarkCropped"
+                android:layout_marginEnd="8dp"
+                android:text="@string/crop_saved" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.slider.RangeSlider
         android:id="@+id/videoRangeSeekBar"
