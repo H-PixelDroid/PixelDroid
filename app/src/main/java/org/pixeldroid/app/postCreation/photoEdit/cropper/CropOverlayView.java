@@ -264,8 +264,36 @@ public class CropOverlayView extends View {
   private void drawBackground(Canvas canvas) {
 
     RectF rect = mCropWindowHandler.getRect();
+    Paint background = getNewPaint(Color.argb(119, 0, 0, 0));
 
-    canvas.drawRect(rect.left, rect.top, rect.right, rect.bottom, getNewPaint(Color.argb(119, 0, 0, 0)));
+    canvas.drawRect(
+            mInitialCropWindowRect.left,
+            mInitialCropWindowRect.top,
+            rect.left,
+            mInitialCropWindowRect.bottom,
+            background
+    );
+    canvas.drawRect(
+            rect.left,
+            rect.bottom,
+            mInitialCropWindowRect.right,
+            mInitialCropWindowRect.bottom,
+            background
+    );
+    canvas.drawRect(
+            rect.right,
+            mInitialCropWindowRect.top,
+            mInitialCropWindowRect.right,
+            rect.bottom,
+            background
+    );
+    canvas.drawRect(
+            rect.left,
+            mInitialCropWindowRect.top,
+            rect.right,
+            rect.top,
+            background
+    );
   }
 
   /**

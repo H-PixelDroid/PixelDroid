@@ -78,7 +78,6 @@
         android:contentDescription="@string/video_crop"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="4dp"
-        app:tint="@android:color/white"
         android:src="@drawable/ic_crop_black_24dp"
         app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
         app:layout_constraintStart_toEndOf="@+id/speeder" />

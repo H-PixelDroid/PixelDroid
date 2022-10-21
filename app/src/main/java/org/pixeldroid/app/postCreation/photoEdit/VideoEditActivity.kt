@@ -173,8 +173,6 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
                 relativeY = y/fullImageRect.height()
             )
 
-            binding.cropSavedCard.isVisible = !cropRelativeDimensions.notCropped()
-
             // If a crop was saved, change the color of the crop button to give a visual indication
             if(!cropRelativeDimensions.notCropped()){
                 val typedValue = TypedValue()
@@ -258,7 +256,6 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId) {
-            android.R.id.home -> onBackPressed()
             R.id.action_save -> {
                returnWithValues()
             }
@@ -271,7 +268,9 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
     }
 
     override fun onBackPressed() {
-        if (noEdits()) super.onBackPressed()
+        if(binding.cropImageView.isVisible) {
+            showCropInterface(false)
+        } else if (noEdits()) super.onBackPressed()
         else {
             val builder = AlertDialog.Builder(this)
             builder.apply {
@@ -304,8 +303,8 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
         if(show) mediaPlayer.pause()
 
-        // Only hide: showing happens on save only if necessary
         if(show) binding.cropSavedCard.visibility = View.GONE
+        else if(!cropRelativeDimensions.notCropped()) binding.cropSavedCard.visibility = View.VISIBLE
 
         binding.muter.visibility = visibilityOfOthers
         binding.speeder.visibility = visibilityOfOthers
