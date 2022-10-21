@@ -151,7 +151,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
         binding.saveCropButton.setOnClickListener {
             // This is the rectangle selected by the crop
-            val cropRect = binding.cropImageView.cropWindowRect ?: return@setOnClickListener
+            val cropRect = binding.cropImageView.cropWindowRect
 
             // This is the rectangle of the whole image
             val fullImageRect: Rect = binding.cropImageView.getInitialCropWindowRect()

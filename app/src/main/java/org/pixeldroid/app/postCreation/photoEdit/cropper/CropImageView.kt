@@ -1,5 +1,9 @@
 package org.pixeldroid.app.postCreation.photoEdit.cropper
 
+// Simplified version of https://github.com/ArthurHub/Android-Image-Cropper , which is
+// licensed under the Apache License, Version 2.0. The modifications made to it for PixelDroid
+// are under licensed under the GPLv3 or later, just like the rest of the PixelDroid project
+
 import android.content.Context
 import android.graphics.Rect
 import android.graphics.RectF
@@ -35,7 +39,7 @@ class CropImageView @JvmOverloads constructor(context: Context?, attrs: Attribut
      *
      * @return a Rect instance containing notCropped area boundaries of the source Bitmap
      */
-    val cropWindowRect: RectF?
+    val cropWindowRect: RectF
         get() = binding.CropOverlayView.cropWindowRect
 
 
@@ -53,7 +57,7 @@ class CropImageView @JvmOverloads constructor(context: Context?, attrs: Attribut
      */
     fun setImageUriAsync(uri: Uri, cropRelativeDimensions: VideoEditActivity.RelativeCropPosition) {
         // either no existing task is working or we canceled it, need to load new URI
-        binding.CropOverlayView.initialCropWindowRect = null
+        binding.CropOverlayView.initialCropWindowRect = Rect()
 
         Glide.with(this).load(uri).fitCenter().listener(object : RequestListener<Drawable> {
             override fun onLoadFailed(
