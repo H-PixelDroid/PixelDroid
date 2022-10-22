@@ -32,6 +32,7 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
 import org.pixeldroid.app.databinding.FragmentProfilePostsBinding
 import org.pixeldroid.app.posts.PostActivity
+import org.pixeldroid.app.posts.StatusViewHolder
 import org.pixeldroid.app.posts.feeds.initAdapter
 import org.pixeldroid.app.posts.feeds.launch
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
@@ -73,16 +74,6 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
         accountId = account?.id ?: user!!.user_id
 
-        // get the view model
-        @Suppress("UNCHECKED_CAST")
-        viewModel = ViewModelProvider(this, ProfileViewModelFactory(
-            ProfileContentRepository(
-                apiHolder.setToCurrentUser(),
-                accountId
-            )
-        )
-        )[FeedViewModel::class.java] as FeedViewModel<Status>
-
         val tabs = createSearchTabs(account)
         setupTabs(tabs)
         setContent(account)
@@ -93,11 +84,15 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         val profileGridFragment = ProfileFeedFragment()
         val profileFeedFragment = ProfileFeedFragment()
         val profileBookmarksFragment = ProfileFeedFragment() // TODO: bookmark fragment
-        val arguments = Bundle()
-        arguments.putSerializable(Account.ACCOUNT_TAG, account)
-        profileGridFragment.arguments = arguments
-        profileFeedFragment.arguments = arguments
-        profileBookmarksFragment.arguments = arguments
+        val argumentsGrid = Bundle()
+        val argumentsFeed = Bundle()
+        argumentsGrid.putSerializable(Account.ACCOUNT_TAG, account)
+        argumentsFeed.putSerializable(Account.ACCOUNT_TAG, account)
+        argumentsGrid.putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
+        argumentsFeed.putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
+        profileGridFragment.arguments = argumentsGrid
+        profileFeedFragment.arguments = argumentsFeed
+        profileBookmarksFragment.arguments = argumentsGrid
         return arrayOf(
             profileGridFragment,
             profileFeedFragment,
@@ -363,20 +358,6 @@ class ProfileActivity : BaseThemedWithBarActivity() {
 }
 
 
-class ProfileViewModelFactory @ExperimentalPagingApi constructor(
-        private val searchContentRepository: UncachedContentRepository<Status>
-) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(FeedViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return FeedViewModel(searchContentRepository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
-
 class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerView.ViewHolder(binding.root) {
     private val postPreview: ImageView = binding.postPreview
     private val albumIcon: ImageView = binding.albumIcon
@@ -434,34 +415,4 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
             return ProfilePostsViewHolder(itemBinding)
         }
     }
-}
-
-
-class ProfilePostsAdapter : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
-        UIMODEL_COMPARATOR
-) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ProfilePostsViewHolder.create(parent)
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val post = getItem(position)
-
-        post?.let {
-            (holder as ProfilePostsViewHolder).bind(it)
-        }
-    }
-
-    companion object {
-        private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<Status>() {
-            override fun areItemsTheSame(oldItem: Status, newItem: Status): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Status, newItem: Status): Boolean =
-                    oldItem.content == newItem.content
-        }
-    }
-
 }
