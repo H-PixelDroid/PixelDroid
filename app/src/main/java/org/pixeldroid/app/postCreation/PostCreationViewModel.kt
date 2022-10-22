@@ -63,7 +63,7 @@ data class PostCreationActivityUiState(
     val newEncodingJobVideoStart: Float? = null,
     val newEncodingJobVideoEnd: Float? = null,
     val newEncodingJobVideoCrop: RelativeCropPosition? = null,
-
+    val newEncodingJobStabilize: Float? = null,
 )
 
 class PostCreationViewModel(application: Application, clipdata: ClipData? = null, val instance: InstanceDatabaseEntity? = null) : AndroidViewModel(application) {
@@ -377,6 +377,8 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
 
                     val videoCrop: RelativeCropPosition = data.getSerializableExtra(VideoEditActivity.VIDEO_CROP) as RelativeCropPosition
 
+                    val videoStabilize: Float = data.getFloatExtra(VideoEditActivity.VIDEO_STABILIZE, 1f)
+
                     videoEncodeProgress = 0
                     sessionMap[position]?.let { FFmpegKit.cancel(it) }
                     _uiState.update { currentUiState ->
@@ -386,7 +388,8 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                             newEncodingJobSpeedIndex = speedIndex,
                             newEncodingJobVideoStart = videoStart,
                             newEncodingJobVideoEnd = videoEnd,
-                            newEncodingJobVideoCrop = videoCrop
+                            newEncodingJobVideoCrop = videoCrop,
+                            newEncodingJobStabilize = videoStabilize
                         )
                     }
                 }

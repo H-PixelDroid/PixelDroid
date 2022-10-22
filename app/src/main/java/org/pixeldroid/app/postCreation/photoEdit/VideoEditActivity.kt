@@ -32,6 +32,7 @@ import com.arthenica.ffmpegkit.MediaInformation
 import com.arthenica.ffmpegkit.ReturnCode
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.RangeSlider
+import com.google.android.material.slider.Slider
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityVideoEditBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
@@ -41,7 +42,6 @@ import org.pixeldroid.app.utils.ffmpegCompliantUri
 import java.io.File
 import java.io.Serializable
 import kotlin.math.absoluteValue
-
 
 class VideoEditActivity : BaseThemedWithBarActivity() {
 
@@ -67,6 +67,25 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
     private var videoPosition: Int = -1
 
     private var cropRelativeDimensions: RelativeCropPosition = RelativeCropPosition()
+
+    private var stabilization: Float = 0f
+        set(value){
+            field = value
+            if(value > 0.01f && value <= 100f){
+                // Stabilization requested, show UI
+                binding.stabilisationSaved.isVisible = true
+                val typedValue = TypedValue()
+                val color: Int = if (binding.stabilizer.context.theme
+                        .resolveAttribute(R.attr.colorOnPrimaryContainer, typedValue, true)
+                ) typedValue.data else Color.TRANSPARENT
+
+                binding.stabilizer.drawable.setTint(color)
+            }
+            else {
+                binding.stabilisationSaved.isVisible = false
+                binding.stabilizer.drawable.setTintList(null)
+            }
+        }
 
     private var speed: Int = 1
         set(value) {
@@ -232,6 +251,21 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
             }.show()
         }
 
+        binding.stabilizer.setOnClickListener {
+            AlertDialog.Builder(this).apply {
+                setIcon(R.drawable.video_stable)
+                setTitle(R.string.stabilize_video_intensity)
+                val slider = Slider(context).apply {
+                    valueFrom = 0f
+                    valueTo = 100f
+                    value = stabilization
+                }
+                setView(slider)
+                setNegativeButton(android.R.string.cancel) { _, _ -> }
+                setPositiveButton(android.R.string.ok) { _, _ -> stabilization = slider.value}
+            }.show()
+        }
+
 
         val thumbInterval: Float? = duration?.div(7)
 
@@ -306,9 +340,14 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         if(show) binding.cropSavedCard.visibility = View.GONE
         else if(!cropRelativeDimensions.notCropped()) binding.cropSavedCard.visibility = View.VISIBLE
 
+        binding.stabilisationSaved.visibility =
+            if(!show && stabilization > 0.01f && stabilization <= 100f) View.VISIBLE
+            else View.GONE
+
         binding.muter.visibility = visibilityOfOthers
         binding.speeder.visibility = visibilityOfOthers
         binding.cropper.visibility = visibilityOfOthers
+        binding.stabilizer.visibility = visibilityOfOthers
         binding.videoRangeSeekBar.visibility = visibilityOfOthers
         binding.videoView.visibility = visibilityOfOthers
         binding.thumbnail1.visibility = visibilityOfOthers
@@ -327,6 +366,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
     }
 
     private fun returnWithValues() {
+        //TODO Check if some of these should be null to indicate no changes in that category? Ex start/end
         val intent = Intent(this, PostCreationActivity::class.java)
             .apply {
                 putExtra(PhotoEditActivity.PICTURE_POSITION, videoPosition)
@@ -336,6 +376,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
                 putExtra(VIDEO_START, binding.videoRangeSeekBar.values.first())
                 putExtra(VIDEO_END, binding.videoRangeSeekBar.values[2])
                 putExtra(VIDEO_CROP, cropRelativeDimensions)
+                putExtra(VIDEO_STABILIZE, stabilization)
                 addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
 
@@ -350,7 +391,9 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         binding.cropImageView.resetCropRect()
         cropRelativeDimensions = RelativeCropPosition()
         binding.cropper.drawable.setTintList(null)
+        binding.stabilizer.drawable.setTintList(null)
         binding.cropSavedCard.visibility = View.GONE
+        stabilization = 0f
     }
 
     override fun onDestroy() {
@@ -414,6 +457,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         const val VIDEO_START = "VideoEditVideoStartTag"
         const val VIDEO_END = "VideoEditVideoEndTag"
         const val VIDEO_CROP = "VideoEditVideoCropTag"
+        const val VIDEO_STABILIZE = "VideoEditVideoStabilizeTag"
         const val MODIFIED = "VideoEditModifiedTag"
     }
 }

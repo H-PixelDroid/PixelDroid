@@ -296,6 +296,9 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="add_images_error">Error while adding images</string>
     <string name="notification_thumbnail">"Thumbnail of image in this notification's post"</string>
     <string name="post_preview">Preview of a post</string>
+    <string name="stabilize_video">Stabilize video</string>
+    <string name="stabilize_video_intensity">Change intensity of stabilization</string>
+    <string name="stabilization_saved">Stabilization saved</string>
     <plurals name="replies_count">
         <item quantity="one">%d reply</item>
         <item quantity="other">%d replies</item>

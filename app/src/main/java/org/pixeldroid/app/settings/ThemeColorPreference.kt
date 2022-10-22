@@ -177,7 +177,7 @@ class ColorPickerView(context: Context?, attrs: AttributeSet? = null) : FrameLay
         binding.theme4.setOnClickListener { color = 3 }
     }
 
-    private fun changeConstraint(button2: View) {
+    private fun moveChoiceIndicator(button2: View) {
         binding.chosenTheme.isVisible = true
         val params = binding.chosenTheme.layoutParams as ConstraintLayout.LayoutParams
         params.endToEnd = button2.id
@@ -185,8 +185,7 @@ class ColorPickerView(context: Context?, attrs: AttributeSet? = null) : FrameLay
         binding.chosenTheme.layoutParams = params
         binding.chosenTheme.requestLayout()
     }
-    /** Returns the color selected by the user  */
-    /** Sets the original color swatch and the current color to the specified value.  */
+    /** Color selected by the user  */
     var color: Int = 0
         set(value) {
             field = value
@@ -196,7 +195,7 @@ class ColorPickerView(context: Context?, attrs: AttributeSet? = null) : FrameLay
                 2 -> binding.theme3
                 3 -> binding.theme4
                 else -> null
-            }?.let { changeConstraint(it) }
+            }?.let { moveChoiceIndicator(it) }
 
             // Check switch if set to dynamic
             binding.dynamicColorSwitch.isChecked = value == -1
