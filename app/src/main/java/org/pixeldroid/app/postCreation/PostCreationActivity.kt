@@ -99,6 +99,9 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             )
         }
 
+        //Get initial text value from model (for template)
+        binding.newPostDescriptionInputField.setText(model.uiState.value.newPostDescriptionText)
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.uiState.collect { uiState ->

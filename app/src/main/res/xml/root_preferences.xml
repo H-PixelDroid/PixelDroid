@@ -37,6 +37,12 @@
         </intent>
     </Preference>
 
+    <EditTextPreference android:title="@string/description_template"
+        android:key="prefill_description"
+        android:summary="@string/description_template_summary"
+        app:icon="@drawable/note"
+        />
+
     <Preference android:title="@string/about"
         android:key="about"
         android:summary="@string/about_pixeldroid"
