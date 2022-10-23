@@ -15,6 +15,7 @@ import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
+import androidx.annotation.FloatRange
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
@@ -232,6 +233,12 @@ fun Context.themeActionBar(): Int? {
         3 -> R.style.AppTheme4
         else -> R.style.AppTheme5
     }
+}
+
+/** Maps a Float from this range to target range */
+fun ClosedRange<Float>.convert(number: Float, target: ClosedRange<Float>): Float {
+    val ratio = number / (endInclusive - start)
+    return (ratio * (target.endInclusive - target.start))
 }
 
 @ColorInt

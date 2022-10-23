@@ -95,8 +95,9 @@ class ImageCarousel(
                 if (thisProgress != null) {
                     binding.encodeInfoCard.visibility = VISIBLE
                     binding.encodeProgress.visibility = VISIBLE
-                    binding.encodeInfoText.text =
-                        context.getString(R.string.encode_progress).format(thisProgress)
+                    binding.encodeInfoText.text = (if(data?.getOrNull(position)?.stabilizationFirstPass == true){
+                        context.getString(R.string.analyzing_stabilization)
+                    } else context.getString(R.string.encode_progress)).format(thisProgress)
                     binding.encodeProgress.progress = thisProgress
                 } else {
                     binding.encodeInfoCard.visibility = GONE
@@ -582,7 +583,9 @@ class ImageCarousel(
                 binding.encodeProgress.visibility = VISIBLE
                 binding.encodeInfoCard.visibility = VISIBLE
                 binding.encodeProgress.progress = progress
-                binding.encodeInfoText.text = context.getString(R.string.encode_progress).format(progress)
+                binding.encodeInfoText.text = (if(data?.getOrNull(position)?.stabilizationFirstPass == true){
+                    context.getString(R.string.analyzing_stabilization)
+                } else context.getString(R.string.encode_progress)).format(progress)
             }
         }
     }

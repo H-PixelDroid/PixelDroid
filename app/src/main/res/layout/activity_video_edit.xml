@@ -42,7 +42,6 @@
         android:contentDescription="@string/save_crop"
         app:icon="@drawable/ic_crop_black_24dp"/>
 
-
     <ImageView
         android:id="@+id/muter"
         android:layout_width="60dp"
@@ -54,22 +53,9 @@
         android:padding="4dp"
         android:src="@drawable/selector_mute"
         app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
-        android:id="@+id/speeder"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="48dp"
-        android:contentDescription="@string/video_speed"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="4dp"
-        android:src="@drawable/speed"
-        app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
-        app:layout_constraintStart_toEndOf="@+id/muter" />
-
-    <ImageButton
         android:id="@+id/cropper"
         android:layout_width="60dp"
         android:layout_height="40dp"
@@ -80,7 +66,7 @@
         android:padding="4dp"
         android:src="@drawable/ic_crop_black_24dp"
         app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
-        app:layout_constraintStart_toEndOf="@+id/speeder" />
+        app:layout_constraintStart_toEndOf="@+id/muter"/>
 
     <com.google.android.material.card.MaterialCardView
         android:visibility="invisible"
@@ -109,7 +95,6 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/encodeInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -120,6 +105,71 @@
                 android:text="@string/crop_saved" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <ImageView
+        android:id="@+id/speeder"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="@string/video_speed"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        android:src="@drawable/speed"
+        app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
+        app:layout_constraintStart_toEndOf="@+id/cropper" />
+
+    <ImageView
+        android:id="@+id/stabilizer"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="@string/stabilize_video"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"
+        android:src="@drawable/video_stable"
+        app:layout_constraintBottom_toTopOf="@+id/thumbnail1"
+        app:layout_constraintStart_toEndOf="@+id/speeder" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/stabilizer"
+        app:layout_constraintEnd_toEndOf="@+id/stabilizer"
+        app:layout_constraintBottom_toTopOf="@+id/stabilizer"
+        android:id="@+id/stabilisation_saved"
+        android:layout_marginBottom="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp">
+
+            <ImageView
+                android:id="@+id/checkMarkStabilize"
+                android:importantForAccessibility="no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/check_circle_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/checkMarkStabilize"
+                app:layout_constraintTop_toTopOf="@id/checkMarkStabilize"
+                app:layout_constraintStart_toEndOf="@id/checkMarkStabilize"
+                android:layout_marginEnd="8dp"
+                android:text="@string/stabilization_saved" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
 
     <com.google.android.material.slider.RangeSlider
         android:id="@+id/videoRangeSeekBar"
