@@ -70,7 +70,7 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
                 bookmarks
             )
         )
-        )["Profile", FeedViewModel::class.java] as FeedViewModel<Status>
+        )[if(bookmarks) "Bookmarks" else "Profile", FeedViewModel::class.java] as FeedViewModel<Status>
 
         launch()
         initSearch()

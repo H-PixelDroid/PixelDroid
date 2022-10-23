@@ -196,7 +196,7 @@ interface PixelfedAPI {
         @Path("id") statusId: String
     ) : Status
 
-    @POST("/api/v1/statuses/{id}/undobookmark")
+    @POST("/api/v1/statuses/{id}/unbookmark")
     suspend fun undoBookmarkStatus(
         @Path("id") statusId: String
     ) : Status
