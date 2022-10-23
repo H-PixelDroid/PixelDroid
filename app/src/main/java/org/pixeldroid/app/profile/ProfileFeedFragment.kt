@@ -36,7 +36,7 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        grid = arguments?.getSerializable(PROFILE_GRID) as Boolean
+        grid = arguments?.getSerializable(PROFILE_GRID) as Boolean? ?: true
         adapter = ProfilePostsAdapter(grid)
 
         //get the currently active user

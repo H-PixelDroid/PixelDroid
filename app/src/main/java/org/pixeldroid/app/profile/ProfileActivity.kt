@@ -11,39 +11,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
 import org.pixeldroid.app.databinding.FragmentProfilePostsBinding
 import org.pixeldroid.app.posts.PostActivity
-import org.pixeldroid.app.posts.StatusViewHolder
-import org.pixeldroid.app.posts.feeds.initAdapter
-import org.pixeldroid.app.posts.feeds.launch
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedContentRepository
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
 import org.pixeldroid.app.posts.parseHTMLText
 import org.pixeldroid.app.utils.*
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.Attachment
-import org.pixeldroid.app.utils.api.objects.Results
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import retrofit2.HttpException
@@ -58,7 +44,6 @@ class ProfileActivity : BaseThemedWithBarActivity() {
 
     private var user: UserDatabaseEntity? = null
 
-    @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -83,7 +68,6 @@ class ProfileActivity : BaseThemedWithBarActivity() {
 
         val profileGridFragment = ProfileFeedFragment()
         val profileFeedFragment = ProfileFeedFragment()
-        val profileBookmarksFragment = ProfileFeedFragment() // TODO: bookmark fragment
         val argumentsGrid = Bundle()
         val argumentsFeed = Bundle()
         argumentsGrid.putSerializable(Account.ACCOUNT_TAG, account)
@@ -92,11 +76,23 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         argumentsFeed.putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
         profileGridFragment.arguments = argumentsGrid
         profileFeedFragment.arguments = argumentsFeed
-        profileBookmarksFragment.arguments = argumentsGrid
+
+        // If we are viewing our own account
+        if(account == null || account.id == user?.user_id) {
+            val profileBookmarksFragment = ProfileFeedFragment() // TODO: bookmark fragment
+            val arguments = Bundle()
+            arguments.putSerializable(Account.ACCOUNT_TAG, account)
+            argumentsFeed.putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
+            profileBookmarksFragment.arguments = arguments
+            return arrayOf(
+                profileGridFragment,
+                profileFeedFragment,
+                profileBookmarksFragment
+            )
+        }
         return arrayOf(
             profileGridFragment,
-            profileFeedFragment,
-            profileBookmarksFragment
+            profileFeedFragment
         )
     }
 
@@ -109,7 +105,7 @@ class ProfileActivity : BaseThemedWithBarActivity() {
             }
 
             override fun getItemCount(): Int {
-                return 3
+                return tabs.size
             }
         }
         TabLayoutMediator(binding.profileTabs, binding.viewPager) { tab, position ->
