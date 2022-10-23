@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.*
+import androidx.preference.PreferenceManager
 import com.arthenica.ffmpegkit.FFmpegKit
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
@@ -76,18 +77,24 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
 
+    private val _uiState: MutableStateFlow<PostCreationActivityUiState>
+
     init {
         (application as PixelDroidApplication).getAppComponent().inject(this)
+        val sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(application)
+        val initialDescription = sharedPreferences.getString("prefill_description", "") ?: ""
+
+        _uiState = MutableStateFlow(PostCreationActivityUiState(newPostDescriptionText = initialDescription))
     }
+
+    val uiState: StateFlow<PostCreationActivityUiState> = _uiState
+
 
     // Map photoData indexes to FFmpeg Session IDs
     private val sessionMap: MutableMap<Int, Long> = mutableMapOf()
     // Keep track of temporary files to delete them (avoids filling cache super fast with videos)
     private val tempFiles: java.util.ArrayList<File> = java.util.ArrayList()
-
-
-    private val _uiState = MutableStateFlow(PostCreationActivityUiState())
-    val uiState: StateFlow<PostCreationActivityUiState> = _uiState
 
     fun userMessageShown() {
         _uiState.update { currentUiState ->
