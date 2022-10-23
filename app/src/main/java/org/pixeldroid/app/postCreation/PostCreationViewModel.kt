@@ -196,8 +196,8 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         photoData.value = photoData.value?.map { it.copy(uploadId = null, progress = null) }?.toMutableList()
     }
 
-    fun setVideoEncodeAtPosition(position: Int, progress: Int?) {
-        photoData.value?.set(position, photoData.value!![position].copy(videoEncodeProgress = progress))
+    fun setVideoEncodeAtPosition(position: Int, progress: Int?, stabilizationFirstPass: Boolean = false) {
+        photoData.value?.set(position, photoData.value!![position].copy(videoEncodeProgress = progress, videoEncodeStabilizationFirstPass = stabilizationFirstPass))
         photoData.value = photoData.value
     }
 
@@ -377,9 +377,11 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
 
                     val videoCrop: RelativeCropPosition = data.getSerializableExtra(VideoEditActivity.VIDEO_CROP) as RelativeCropPosition
 
-                    val videoStabilize: Float = data.getFloatExtra(VideoEditActivity.VIDEO_STABILIZE, 1f)
+                    val videoStabilize: Float = data.getFloatExtra(VideoEditActivity.VIDEO_STABILIZE, 0f)
 
+                    videoEncodeStabilizationFirstPass = videoStabilize > 0.01f
                     videoEncodeProgress = 0
+
                     sessionMap[position]?.let { FFmpegKit.cancel(it) }
                     _uiState.update { currentUiState ->
                         currentUiState.copy(

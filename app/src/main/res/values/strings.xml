@@ -268,6 +268,10 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="encode_error">Error encoding</string>
     <string name="encode_success">Encode success!</string>
     <string name="encode_progress">Encode %1$d%%</string>
+    <string name="stabilize_video">Stabilize video</string>
+    <string name="stabilize_video_intensity">Change intensity of stabilization</string>
+    <string name="stabilization_saved">Stabilization saved</string>
+    <string name="analyzing_stabilization">Analysis for stabilization %1$d%%</string>
     <string name="select_video_range">Select what to keep of the video</string>
     <string name="mute_video">Mute video</string>
     <string name="video_speed">Change video speed</string>
@@ -296,9 +300,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="add_images_error">Error while adding images</string>
     <string name="notification_thumbnail">"Thumbnail of image in this notification's post"</string>
     <string name="post_preview">Preview of a post</string>
-    <string name="stabilize_video">Stabilize video</string>
-    <string name="stabilize_video_intensity">Change intensity of stabilization</string>
-    <string name="stabilization_saved">Stabilization saved</string>
     <plurals name="replies_count">
         <item quantity="one">%d reply</item>
         <item quantity="other">%d replies</item>

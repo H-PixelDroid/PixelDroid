@@ -37,6 +37,7 @@ import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
 import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.convert
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.ffmpegCompliantUri
@@ -58,6 +59,7 @@ data class PhotoData(
     var imageDescription: String? = null,
     var video: Boolean,
     var videoEncodeProgress: Int? = null,
+    var videoEncodeStabilizationFirstPass: Boolean? = null,
 )
 
 class PostCreationActivity : BaseThemedWithoutBarActivity() {
@@ -92,7 +94,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             // update UI
             binding.carousel.addData(
                 newPhotoData.map {
-                    CarouselItem(it.imageUri, it.imageDescription, it.video, it.videoEncodeProgress)
+                    CarouselItem(it.imageUri, it.imageDescription, it.video, it.videoEncodeProgress, it.videoEncodeStabilizationFirstPass)
                 }
             )
         }
@@ -358,7 +360,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(ffmpegCompliantUri(inputUri)).mediaInformation
         val totalVideoDuration = mediaInformation?.duration?.toFloatOrNull()
 
-        fun secondPass(){
+        fun secondPass(stabilizeString: String = ""){
             val speed = VideoEditActivity.speedChoices[speedIndex]
 
             val mutedString = if(muted || speedIndex != 1) "-an" else null
@@ -371,8 +373,10 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             val separator = if(speedIndex != 1 && !crop.notCropped()) "," else ""
             val speedString = if(speedIndex != 1) "setpts=PTS/${speed}" else ""
 
-            val speedAndCropString: List<String?> = if(speedIndex!= 1 || !crop.notCropped())
-                listOf("-filter:v", speedString + separator + cropString)
+            val separatorStabilize = if(stabilizeString == "" || (speedString == "" && cropString == "")) "" else ","
+
+            val speedAndCropString: List<String?> = if(speedIndex!= 1 || !crop.notCropped() || stabilizeString.isNotEmpty())
+                listOf("-filter:v", stabilizeString + separatorStabilize + speedString + separator + cropString)
             // Stream copy is not compatible with filter, but when not filtering we can copy the stream without re-encoding
             else listOf("-c", "copy")
 
@@ -447,8 +451,64 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         }
 
         fun stabilizationFirstPass(){
-//TODO FFmpeg
-            secondPass()
+
+            val shakeResultsFile = File.createTempFile("temp_shake_results", ".trf", cacheDir)
+            model.trackTempFile(shakeResultsFile)
+            val shakeResultsFileUri = shakeResultsFile.toUri()
+            val shakeResultsFileSafeUri = ffmpegCompliantUri(shakeResultsFileUri).removePrefix("file://")
+
+            val inputSafeUri: String = ffmpegCompliantUri(inputUri)
+
+            // Map chosen "stabilization force" to shakiness, from 3 to 10
+            val shakiness = (0f..100f).convert(stabilize, 3f..10f).roundToInt()
+
+            val analyzeVideoCommandList = listOf(
+                "-y", "-i", inputSafeUri,
+                "-vf", "vidstabdetect=shakiness=$shakiness:accuracy=15:result=$shakeResultsFileSafeUri",
+                "-f", "null", "-"
+            ).toTypedArray()
+
+            FFmpegKit.executeWithArgumentsAsync(analyzeVideoCommandList,
+                { firstPass ->
+                    if (ReturnCode.isSuccess(firstPass.returnCode)) {
+                        // Map chosen "stabilization force" to shakiness, from 8 to 40
+                        val smoothing = (0f..100f).convert(stabilize, 8f..40f).roundToInt()
+
+                        val stabilizeVideoCommand =
+                            "vidstabtransform=smoothing=$smoothing:input=${ffmpegCompliantUri(shakeResultsFileUri).removePrefix("file://")}"
+                        secondPass(stabilizeVideoCommand)
+                    } else {
+                        Log.e(
+                            "PostCreationActivityEncoding",
+                            "Video stabilization first pass failed!"
+                        )
+                    }
+                },
+                { log -> Log.d("PostCreationActivityEncoding", log.message) },
+                { statistics: Statistics? ->
+
+                    val timeInMilliseconds: Int? = statistics?.time
+                    timeInMilliseconds?.let {
+                        if (timeInMilliseconds > 0) {
+                            val completePercentage = totalVideoDuration?.let {
+                                val speedupDurationModifier =
+                                    VideoEditActivity.speedChoices[speedIndex].toFloat()
+
+                                val newTotalDuration = (it - (videoStart ?: 0f) - (it - (videoEnd
+                                    ?: it))) / speedupDurationModifier
+                                timeInMilliseconds / (10 * newTotalDuration)
+                            }
+                            resultHandler.post {
+                                completePercentage?.let {
+                                    val rounded: Int = it.roundToInt()
+                                    model.setVideoEncodeAtPosition(position, rounded, true)
+                                    binding.carousel.updateProgress(rounded, position, false)
+                                }
+                            }
+                            Log.d(TAG, "Stabilization pass: %$completePercentage.")
+                        }
+                    }
+                })
         }
 
         if(stabilize > 0.01f) {

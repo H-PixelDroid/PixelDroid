@@ -76,7 +76,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
                 binding.stabilisationSaved.isVisible = true
                 val typedValue = TypedValue()
                 val color: Int = if (binding.stabilizer.context.theme
-                        .resolveAttribute(R.attr.colorOnPrimaryContainer, typedValue, true)
+                        .resolveAttribute(R.attr.colorSecondary, typedValue, true)
                 ) typedValue.data else Color.TRANSPARENT
 
                 binding.stabilizer.drawable.setTint(color)
@@ -196,7 +196,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
             if(!cropRelativeDimensions.notCropped()){
                 val typedValue = TypedValue()
                 val color: Int = if (binding.checkMarkCropped.context.theme
-                        .resolveAttribute(R.attr.colorOnPrimaryContainer, typedValue, true)
+                        .resolveAttribute(R.attr.colorSecondary, typedValue, true)
                 ) typedValue.data else Color.TRANSPARENT
 
                 binding.cropper.drawable.setTint(color)
@@ -279,7 +279,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
             thumbnail(uri, resultHandler, binding.thumbnail7, it.times(7))
         }
 
-
+        resetControls()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -328,7 +328,9 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         val muted = binding.muter.isSelected
         val speedUnchanged = speed == 1
 
-        return !muted && videoPositions && speedUnchanged && cropRelativeDimensions.notCropped()
+        val stabilizationUnchanged = stabilization <= 0.01f || stabilization > 100.5f
+
+        return !muted && videoPositions && speedUnchanged && cropRelativeDimensions.notCropped() && stabilizationUnchanged
     }
 
     private fun showCropInterface(show: Boolean, uri: Uri? = null){
