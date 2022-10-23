@@ -14,7 +14,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -32,6 +34,7 @@ import com.mikepenz.materialdrawer.model.interfaces.*
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
+import kotlinx.coroutines.launch
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.databinding.ActivityMainBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment
@@ -43,6 +46,7 @@ import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.api.objects.Notification
 import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
@@ -55,6 +59,7 @@ import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.Instant
 
 
 class MainActivity : BaseThemedWithoutBarActivity() {
@@ -240,6 +245,7 @@ class MainActivity : BaseThemedWithoutBarActivity() {
             }
         }
     }
+
     private fun getUpdatedAccount() {
         if (hasInternet(applicationContext)) {
 
@@ -366,7 +372,10 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                     0 -> R.id.page_1
                     1 -> R.id.page_2
                     2 -> R.id.page_3
-                    3 -> R.id.page_4
+                    3 -> {
+                        setNotificationBadge(false)
+                        R.id.page_4
+                    }
                     4 -> R.id.page_5
                     else -> null
                 }
@@ -394,6 +403,7 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                 true
             } ?: false
         }
+
         binding.tabs.setOnItemReselectedListener { item ->
             item.itemPos()?.let { position ->
                 val page =
@@ -402,6 +412,42 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                 (page as? CachedFeedFragment<*>)?.onTabReClicked()
             }
         }
+
+        // Fetch one notification to show a badge if there are new notifications
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                user?.let {
+                    val lastNotification = db.notificationDao().latestNotification(it.user_id, it.instance_uri)
+                    try {
+                        val notification: List<Notification>? = apiHolder.api?.notifications(
+                            min_id = lastNotification?.id,
+                            limit = "20"
+                        )
+                            val filtered = notification?.filter { notification ->
+                            lastNotification == null || (notification.created_at
+                                ?: Instant.MIN) > (lastNotification.created_at ?: Instant.MIN)
+                        }
+                        val numberOfNewNotifications = if((filtered?.size ?: 20) >= 20) null else filtered?.size
+                        if(filtered?.isNotEmpty() == true ) setNotificationBadge(true, numberOfNewNotifications)
+                    } catch (exception: IOException) {
+                        return@repeatOnLifecycle
+                    } catch (exception: HttpException) {
+                        return@repeatOnLifecycle
+                    }
+
+
+
+                }
+            }
+        }
+    }
+
+    private fun setNotificationBadge(show: Boolean, count: Int? = null){
+        if(show){
+            val badge = binding.tabs.getOrCreateBadge(R.id.page_4)
+            if (count != null) badge.number = count
+        }
+        else binding.tabs.removeBadge(R.id.page_4)
     }
 
     fun BottomNavigationView.uncheckAllItems() {
