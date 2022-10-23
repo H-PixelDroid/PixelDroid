@@ -24,7 +24,6 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
 import org.pixeldroid.app.databinding.FragmentProfilePostsBinding
 import org.pixeldroid.app.posts.PostActivity
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.parseHTMLText
 import org.pixeldroid.app.utils.*
 import org.pixeldroid.app.utils.api.PixelfedAPI
@@ -40,7 +39,6 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     private lateinit var domain : String
     private lateinit var accountId : String
     private lateinit var binding: ActivityProfileBinding
-    private lateinit var viewModel: FeedViewModel<Status>
 
     private var user: UserDatabaseEntity? = null
 
@@ -66,24 +64,23 @@ class ProfileActivity : BaseThemedWithBarActivity() {
 
     private fun createSearchTabs(account: Account?): Array<Fragment>{
 
-        val profileGridFragment = ProfileFeedFragment()
+        val arguments = Bundle().apply {
+            putSerializable(Account.ACCOUNT_TAG, account)
+            putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
+            putSerializable(ProfileFeedFragment.BOOKMARKS, false)
+        }
         val profileFeedFragment = ProfileFeedFragment()
-        val argumentsGrid = Bundle()
-        val argumentsFeed = Bundle()
-        argumentsGrid.putSerializable(Account.ACCOUNT_TAG, account)
-        argumentsFeed.putSerializable(Account.ACCOUNT_TAG, account)
-        argumentsGrid.putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
-        argumentsFeed.putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
-        profileGridFragment.arguments = argumentsGrid
-        profileFeedFragment.arguments = argumentsFeed
+        profileFeedFragment.arguments = arguments.deepCopy()
 
-        // If we are viewing our own account
+        arguments.putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
+        val profileGridFragment = ProfileFeedFragment()
+        profileGridFragment.arguments = arguments.deepCopy()
+
+        // If we are viewing our own account, show bookmarks
         if(account == null || account.id == user?.user_id) {
-            val profileBookmarksFragment = ProfileFeedFragment() // TODO: bookmark fragment
-            val arguments = Bundle()
-            arguments.putSerializable(Account.ACCOUNT_TAG, account)
-            argumentsFeed.putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
-            profileBookmarksFragment.arguments = arguments
+            val profileBookmarksFragment = ProfileFeedFragment()
+            arguments.putSerializable(ProfileFeedFragment.BOOKMARKS, true)
+            profileBookmarksFragment.arguments = arguments.deepCopy()
             return arrayOf(
                 profileGridFragment,
                 profileFeedFragment,

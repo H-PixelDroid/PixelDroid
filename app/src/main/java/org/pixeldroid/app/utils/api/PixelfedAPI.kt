@@ -183,6 +183,14 @@ interface PixelfedAPI {
         @Path("id") statusId: String,
     ) : Status
 
+    @GET("/api/v1/bookmarks")
+    suspend fun bookmarks(
+        @Query("limit") limit: Number? = null,
+        @Query("max_id") max_id: String? = null,
+        @Query("since_id") since_id: String? = null,
+        @Query("min_id") min_id: String? = null
+    ) : List<Status>
+
     @POST("/api/v1/statuses/{id}/bookmark")
     suspend fun bookmarkStatus(
         @Path("id") statusId: String

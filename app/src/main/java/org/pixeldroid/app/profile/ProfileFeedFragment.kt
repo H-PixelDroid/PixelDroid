@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.pixeldroid.app.posts.StatusViewHolder
+import org.pixeldroid.app.posts.feeds.UIMODEL_STATUS_COMPARATOR
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.*
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
 import org.pixeldroid.app.utils.api.objects.Account
@@ -27,17 +27,20 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
 
     companion object {
         const val PROFILE_GRID = "ProfileGrid"
+        const val BOOKMARKS = "Bookmarks"
     }
 
     private lateinit var accountId : String
     private var user: UserDatabaseEntity? = null
-    private var grid: Boolean = false
+    private var grid: Boolean = true
+    private var bookmarks: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        grid = arguments?.getSerializable(PROFILE_GRID) as Boolean? ?: true
-        adapter = ProfilePostsAdapter(grid)
+        grid = arguments?.getSerializable(PROFILE_GRID) as Boolean
+        bookmarks = arguments?.getSerializable(BOOKMARKS) as Boolean
+        adapter = ProfilePostsAdapter()
 
         //get the currently active user
         user = db.userDao().getActiveUser()
@@ -54,7 +57,7 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        if(grid) {
+        if(grid || bookmarks) {
             binding.list.layoutManager = GridLayoutManager(context, 3)
         }
 
@@ -63,7 +66,8 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
         viewModel = ViewModelProvider(requireActivity(), ProfileViewModelFactory(
             ProfileContentRepository(
                 apiHolder.setToCurrentUser(),
-                accountId
+                accountId,
+                bookmarks
             )
         )
         )["Profile", FeedViewModel::class.java] as FeedViewModel<Status>
@@ -74,23 +78,12 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
         return view
     }
 
-    private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<Status>() {
-        override fun areItemsTheSame(oldItem: Status, newItem: Status): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Status, newItem: Status): Boolean =
-            oldItem.content == newItem.content
-    }
-
-    inner class ProfilePostsAdapter(
-        private val grid: Boolean
-    ) : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
-        UIMODEL_COMPARATOR
+    inner class ProfilePostsAdapter() : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
+        UIMODEL_STATUS_COMPARATOR
     ) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return if(grid) {
+            return if(grid || bookmarks) {
                 ProfilePostsViewHolder.create(parent)
             } else {
                 StatusViewHolder.create(parent)
@@ -101,7 +94,7 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
             val post = getItem(position)
 
             post?.let {
-                if(grid) {
+                if(grid || bookmarks) {
                     (holder as ProfilePostsViewHolder).bind(it)
                 } else {
                     (holder as StatusViewHolder).bind(it, apiHolder, db,
