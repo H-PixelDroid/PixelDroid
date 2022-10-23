@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -60,6 +59,7 @@ import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.Instant
 
 
 class MainActivity : BaseThemedWithoutBarActivity() {
@@ -372,7 +372,10 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                     0 -> R.id.page_1
                     1 -> R.id.page_2
                     2 -> R.id.page_3
-                    3 -> R.id.page_4
+                    3 -> {
+                        setNotificationBadge(false)
+                        R.id.page_4
+                    }
                     4 -> R.id.page_5
                     else -> null
                 }
@@ -400,6 +403,7 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                 true
             } ?: false
         }
+
         binding.tabs.setOnItemReselectedListener { item ->
             item.itemPos()?.let { position ->
                 val page =
@@ -413,13 +417,18 @@ class MainActivity : BaseThemedWithoutBarActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 user?.let {
-                    val maxId = db.notificationDao().latestNotification(it.user_id, it.instance_uri)?.id
+                    val lastNotification = db.notificationDao().latestNotification(it.user_id, it.instance_uri)
                     try {
                         val notification: List<Notification>? = apiHolder.api?.notifications(
-                            limit = "1",
-                            max_id = maxId
+                            min_id = lastNotification?.id,
+                            limit = "20"
                         )
-                        if(notification?.isNotEmpty() == true) binding.tabs.getOrCreateBadge(R.id.page_4)
+                            val filtered = notification?.filter { notification ->
+                            lastNotification == null || (notification.created_at
+                                ?: Instant.MIN) > (lastNotification.created_at ?: Instant.MIN)
+                        }
+                        val numberOfNewNotifications = if((filtered?.size ?: 20) >= 20) null else filtered?.size
+                        if(filtered?.isNotEmpty() == true ) setNotificationBadge(true, numberOfNewNotifications)
                     } catch (exception: IOException) {
                         return@repeatOnLifecycle
                     } catch (exception: HttpException) {
@@ -431,6 +440,14 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                 }
             }
         }
+    }
+
+    private fun setNotificationBadge(show: Boolean, count: Int? = null){
+        if(show){
+            val badge = binding.tabs.getOrCreateBadge(R.id.page_4)
+            if (count != null) badge.number = count
+        }
+        else binding.tabs.removeBadge(R.id.page_4)
     }
 
     fun BottomNavigationView.uncheckAllItems() {
