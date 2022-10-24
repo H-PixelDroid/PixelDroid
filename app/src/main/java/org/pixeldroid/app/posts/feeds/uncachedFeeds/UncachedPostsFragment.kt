@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.StatusViewHolder
+import org.pixeldroid.app.posts.feeds.UIMODEL_STATUS_COMPARATOR
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.hashtags.HashTagContentRepository
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchContentRepository
 import org.pixeldroid.app.utils.api.objects.Results
@@ -74,16 +74,8 @@ class UncachedPostsFragment : UncachedFeedFragment<Status>() {
         return view
     }
 
-    inner class PostsAdapter(private val displayDimensionsInPx: Pair<Int, Int>) : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
-        object : DiffUtil.ItemCallback<Status>() {
-            override fun areItemsTheSame(oldItem: Status, newItem: Status): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Status, newItem: Status): Boolean =
-                oldItem.id == newItem.id
-        }
-    ) {
+    inner class PostsAdapter(private val displayDimensionsInPx: Pair<Int, Int>)
+        : PagingDataAdapter<Status, RecyclerView.ViewHolder>(UIMODEL_STATUS_COMPARATOR) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return StatusViewHolder.create(parent)

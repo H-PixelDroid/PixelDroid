@@ -232,6 +232,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="search_empty_error">Search query can\'t be empty</string>
     <string name="status_more_options">More options</string>
     <string name="report">Report</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="unbookmark">Unbookmark</string>
     <string name="share_link">Share Link</string>
     <string name="optional_report_comment">Optional message for mods/admins</string>
     <string name="report_target">Report @%1$s\'s post</string>
@@ -252,6 +254,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
     <string name="delete_post_failed_error">Could not delete the post, error %1$d</string>
     <string name="delete_post_failed_io_except">Could not delete the post, check your connection?</string>
+    <string name="bookmark_post_failed_error">Could not (un)bookmark the post, error %1$d</string>
+    <string name="bookmark_post_failed_io_except">Could not (un)bookmark the post, check your connection?</string>
 
     <!-- Error message when a selected file can not be found -->
     <string name="file_not_found">File %1$s was not found</string>

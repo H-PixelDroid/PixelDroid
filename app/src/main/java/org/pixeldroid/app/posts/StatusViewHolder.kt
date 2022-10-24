@@ -11,6 +11,7 @@ import android.net.Uri
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -317,7 +318,41 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
     }
 
+    private suspend fun bookmarkPost(api: PixelfedAPI, db: AppDatabase, menu: Menu, bookmarked: Boolean) : Boolean? {
+        //Call the api function
+        status?.id?.let { id ->
+            try {
+                if(bookmarked) {
+                    api.bookmarkStatus(id)
+                } else {
+                    api.undoBookmarkStatus(id)
+                }
+                val user = db.userDao().getActiveUser()!!
+                db.homePostDao().bookmarkStatus(id, user.user_id, user.instance_uri, bookmarked)
+                db.publicPostDao().bookmarkStatus(id, user.user_id, user.instance_uri, bookmarked)
+
+                menu.setGroupVisible(R.id.post_more_menu_group_bookmark, !bookmarked)
+                menu.setGroupVisible(R.id.post_more_menu_group_unbookmark, bookmarked)
+                return bookmarked
+            } catch (exception: HttpException) {
+                Toast.makeText(
+                    binding.root.context,
+                    binding.root.context.getString(R.string.bookmark_post_failed_error, exception.code()),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (exception: IOException) {
+                Toast.makeText(
+                    binding.root.context,
+                    binding.root.context.getString(R.string.bookmark_post_failed_io_except),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        return null
+    }
+
     private fun activateMoreButton(apiHolder: PixelfedAPIHolder, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope){
+        var bookmarked: Boolean? = null
         binding.statusMore.setOnClickListener {
             PopupMenu(it.context, it).apply {
                 setOnMenuItemClickListener { item ->
@@ -339,6 +374,18 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                             }, null)
                             ContextCompat.startActivity(it.context, share, null)
 
+                            true
+                        }
+                        R.id.post_more_menu_bookmark -> {
+                            lifecycleScope.launch {
+                                bookmarked = bookmarkPost(apiHolder.api ?: apiHolder.setToCurrentUser(), db, menu, true)
+                            }
+                            true
+                        }
+                        R.id.post_more_menu_unbookmark -> {
+                            lifecycleScope.launch {
+                                bookmarked = bookmarkPost(apiHolder.api ?: apiHolder.setToCurrentUser(), db, menu, false)
+                            }
                             true
                         }
                         R.id.post_more_menu_save_to_gallery -> {
@@ -429,6 +476,11 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                     }
                 }
                 inflate(R.menu.post_more_menu)
+                if(bookmarked == true || status?.bookmarked == true) {
+                    menu.setGroupVisible(R.id.post_more_menu_group_bookmark, false)
+                } else if(bookmarked == false || status?.bookmarked != true) {
+                    menu.setGroupVisible(R.id.post_more_menu_group_unbookmark, false)
+                }
                 if(status?.media_attachments.isNullOrEmpty()) {
                     //make sure to disable image-related things if there aren't any
                     menu.setGroupVisible(R.id.post_more_group_picture, false)

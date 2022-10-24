@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.gson.Gson
@@ -21,6 +22,7 @@ import org.pixeldroid.app.databinding.ErrorLayoutBinding
 import org.pixeldroid.app.databinding.LoadStateFooterViewItemBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
 import org.pixeldroid.app.utils.api.objects.FeedContent
+import org.pixeldroid.app.utils.api.objects.Status
 import retrofit2.HttpException
 
 /**
@@ -168,4 +170,13 @@ class ReposLoadStateViewHolder(
             return ReposLoadStateViewHolder(binding, retry)
         }
     }
+}
+
+val UIMODEL_STATUS_COMPARATOR = object : DiffUtil.ItemCallback<Status>() {
+    override fun areItemsTheSame(oldItem: Status, newItem: Status): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Status, newItem: Status): Boolean =
+        oldItem.id == newItem.id
 }

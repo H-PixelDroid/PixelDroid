@@ -21,8 +21,8 @@ interface UserDao {
     @Update
     fun updateUser(user: UserDatabaseEntity)
 
-    @Query("UPDATE users SET accessToken = :accessToken, refreshToken = :refreshToken WHERE user_id = :id and instance_uri = :instance_uri")
-    fun updateAccessToken(accessToken: String, refreshToken: String, id: String, instance_uri: String)
+    @Query("UPDATE users SET accessToken = :accessToken, refreshToken = :refreshToken WHERE user_id = :id and instance_uri = :instanceUri")
+    fun updateAccessToken(accessToken: String, refreshToken: String, id: String, instanceUri: String)
 
     @Query("SELECT * FROM users")
     fun getAll(): List<UserDatabaseEntity>
@@ -33,12 +33,12 @@ interface UserDao {
     @Query("UPDATE users SET isActive=0")
     fun deActivateActiveUsers()
 
-    @Query("UPDATE users SET isActive=1 WHERE user_id=:id AND instance_uri=:instance_uri")
-    fun activateUser(id: String, instance_uri: String)
+    @Query("UPDATE users SET isActive=1 WHERE user_id=:id AND instance_uri=:instanceUri")
+    fun activateUser(id: String, instanceUri: String)
 
     @Query("DELETE FROM users WHERE isActive=1")
     fun deleteActiveUsers()
 
-    @Query("SELECT * FROM users WHERE user_id=:id AND instance_uri=:instance_uri")
-    fun getUserWithId(id: String, instance_uri: String): UserDatabaseEntity
+    @Query("SELECT * FROM users WHERE user_id=:id AND instance_uri=:instanceUri")
+    fun getUserWithId(id: String, instanceUri: String): UserDatabaseEntity
 }

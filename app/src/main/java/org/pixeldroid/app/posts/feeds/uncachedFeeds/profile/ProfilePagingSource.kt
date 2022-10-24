@@ -9,16 +9,25 @@ import java.io.IOException
 
 class ProfilePagingSource(
     private val api: PixelfedAPI,
-    private val accountId: String
+    private val accountId: String,
+    private val bookmarks: Boolean
 ) : PagingSource<String, Status>() {
     override suspend fun load(params: LoadParams<String>): LoadResult<String, Status> {
         val position = params.key
         return try {
-            val posts = api.accountPosts(
-                account_id = accountId,
-                max_id = position,
-                limit = params.loadSize
-            )
+            val posts =
+                if(bookmarks) {
+                    api.bookmarks(
+                        limit = params.loadSize,
+                        max_id = position
+                    )
+                } else {
+                    api.accountPosts(
+                        account_id = accountId,
+                        max_id = position,
+                        limit = params.loadSize
+                    )
+                }
 
             val nextKey = posts.lastOrNull()?.id
 

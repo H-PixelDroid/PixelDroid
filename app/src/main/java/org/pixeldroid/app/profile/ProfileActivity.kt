@@ -10,28 +10,20 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Job
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
 import org.pixeldroid.app.databinding.FragmentProfilePostsBinding
 import org.pixeldroid.app.posts.PostActivity
-import org.pixeldroid.app.posts.feeds.initAdapter
-import org.pixeldroid.app.posts.feeds.launch
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedContentRepository
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
 import org.pixeldroid.app.posts.parseHTMLText
 import org.pixeldroid.app.utils.*
 import org.pixeldroid.app.utils.api.PixelfedAPI
@@ -47,13 +39,9 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     private lateinit var domain : String
     private lateinit var accountId : String
     private lateinit var binding: ActivityProfileBinding
-    private lateinit var profileAdapter: PagingDataAdapter<Status, RecyclerView.ViewHolder>
-    private lateinit var viewModel: FeedViewModel<Status>
 
     private var user: UserDatabaseEntity? = null
-    private var job: Job? = null
 
-    @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -69,45 +57,81 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
         accountId = account?.id ?: user!!.user_id
 
-        // get the view model
-        @Suppress("UNCHECKED_CAST")
-        viewModel = ViewModelProvider(this, ProfileViewModelFactory(
-            ProfileContentRepository(
-                apiHolder.setToCurrentUser(),
-                accountId
-            )
-        )
-        )[FeedViewModel::class.java] as FeedViewModel<Status>
-
-        profileAdapter = ProfilePostsAdapter()
-        initAdapter(binding.profileProgressBar, binding.profileRefreshLayout,
-            binding.profilePostsRecyclerView, binding.motionLayout, binding.errorLayout,
-            profileAdapter)
-
-        binding.profilePostsRecyclerView.layoutManager = GridLayoutManager(this, 3)
-
-        binding.profileRefreshLayout.setOnRefreshListener {
-            setContent(account)
-            profileAdapter.refresh()
-        }
-
+        val tabs = createProfileTabs(account)
+        setupTabs(tabs)
         setContent(account)
-        job = launch(job, lifecycleScope, viewModel, profileAdapter)
     }
 
-    /**
-     * Shows or hides the error in the profile
-     */
-    private fun showError(errorText: String = getString(R.string.profile_error), show: Boolean = true){
-        if(show){
-            binding.profileProgressBar.visibility = View.GONE
-            binding.motionLayout.transitionToEnd()
-            binding.errorLayout.errorText.text = errorText
-        } else if(binding.motionLayout.progress == 1F) {
-            binding.motionLayout.transitionToStart()
+    private fun createProfileTabs(account: Account?): Array<Fragment>{
+
+        val profileFeedFragment = ProfileFeedFragment()
+        val argumentsFeed = Bundle().apply {
+            putSerializable(Account.ACCOUNT_TAG, account)
+            putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
+            putSerializable(ProfileFeedFragment.BOOKMARKS, false)
         }
-        binding.profileRefreshLayout.isRefreshing = false
+        profileFeedFragment.arguments = argumentsFeed
+
+        val profileGridFragment = ProfileFeedFragment()
+        val argumentsGrid = Bundle().apply {
+            putSerializable(Account.ACCOUNT_TAG, account)
+            putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
+            putSerializable(ProfileFeedFragment.BOOKMARKS, false)
+        }
+        profileGridFragment.arguments = argumentsGrid
+
+        // If we are viewing our own account, show bookmarks
+        if(account == null || account.id == user?.user_id) {
+            val profileBookmarksFragment = ProfileFeedFragment()
+            val argumentsBookmarks = Bundle().apply {
+                putSerializable(Account.ACCOUNT_TAG, account)
+                putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
+                putSerializable(ProfileFeedFragment.BOOKMARKS, true)
+            }
+            profileBookmarksFragment.arguments = argumentsBookmarks
+            return arrayOf(
+                profileGridFragment,
+                profileFeedFragment,
+                profileBookmarksFragment
+            )
+        }
+        return arrayOf(
+            profileGridFragment,
+            profileFeedFragment
+        )
     }
+
+    private fun setupTabs(
+        tabs: Array<Fragment>
+    ){
+        binding.viewPager.adapter = object : FragmentStateAdapter(this) {
+            override fun createFragment(position: Int): Fragment {
+                return tabs[position]
+            }
+
+            override fun getItemCount(): Int {
+                return tabs.size
+            }
+        }
+        TabLayoutMediator(binding.profileTabs, binding.viewPager) { tab, position ->
+            tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
+            when (position) {
+                0 -> {
+                    tab.setText("Grid view")
+                    tab.setIcon(R.drawable.grid_on_black_24dp)
+                }
+                1 -> {
+                    tab.setText("Feed view")
+                    tab.setIcon(R.drawable.feed_view)
+                }
+                2 -> {
+                    tab.setText("Bookmarks")
+                    tab.setIcon(R.drawable.bookmark)
+                }
+            }
+        }.attach()
+    }
+
 
     private fun setContent(account: Account?) {
         if(account != null) {
@@ -120,9 +144,17 @@ class ProfileActivity : BaseThemedWithBarActivity() {
                     api.verifyCredentials()
                 } catch (exception: IOException) {
                     Log.e("ProfileActivity:", exception.toString())
-                    return@launchWhenResumed showError()
+                    Toast.makeText(
+                        applicationContext, "Could not get your profile",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launchWhenResumed
                 } catch (exception: HttpException) {
-                    return@launchWhenResumed showError()
+                    Toast.makeText(
+                        applicationContext, "Could not get your profile",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launchWhenResumed
                 }
                 setViews(myAccount)
             }
@@ -324,108 +356,4 @@ class ProfileActivity : BaseThemedWithBarActivity() {
             }
         }
     }
-}
-
-
-class ProfileViewModelFactory @ExperimentalPagingApi constructor(
-        private val searchContentRepository: UncachedContentRepository<Status>
-) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(FeedViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return FeedViewModel(searchContentRepository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
-
-class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerView.ViewHolder(binding.root) {
-    private val postPreview: ImageView = binding.postPreview
-    private val albumIcon: ImageView = binding.albumIcon
-    private val videoIcon: ImageView = binding.videoIcon
-
-    fun bind(post: Status) {
-
-        if ((post.media_attachments?.size ?: 0) == 0){
-            //No media in this post, so put a little icon there
-            postPreview.scaleX = 0.3f
-            postPreview.scaleY = 0.3f
-            Glide.with(postPreview).load(R.drawable.ic_comment_empty).into(postPreview)
-            albumIcon.visibility = View.GONE
-            videoIcon.visibility = View.GONE
-        } else {
-            postPreview.scaleX = 1f
-            postPreview.scaleY = 1f
-            if (post.sensitive != false) {
-                Glide.with(postPreview)
-                    .load(post.media_attachments?.firstOrNull()?.blurhash?.let {
-                        BlurHashDecoder.blurHashBitmap(itemView.resources, it, 32, 32)
-                    }
-                    ).placeholder(R.drawable.ic_sensitive).apply(RequestOptions().centerCrop())
-                    .into(postPreview)
-            } else {
-                setSquareImageFromURL(postPreview,
-                    post.getPostPreviewURL(),
-                    postPreview,
-                    post.media_attachments?.firstOrNull()?.blurhash)
-            }
-            if ((post.media_attachments?.size ?: 0) > 1) {
-                albumIcon.visibility = View.VISIBLE
-                videoIcon.visibility = View.GONE
-            } else {
-                albumIcon.visibility = View.GONE
-                if (post.media_attachments?.getOrNull(0)?.type == Attachment.AttachmentType.video) {
-                    videoIcon.visibility = View.VISIBLE
-                } else videoIcon.visibility = View.GONE
-
-            }
-        }
-
-        postPreview.setOnClickListener {
-            val intent = Intent(postPreview.context, PostActivity::class.java)
-            intent.putExtra(Status.POST_TAG, post)
-            postPreview.context.startActivity(intent)
-        }
-    }
-
-    companion object {
-        fun create(parent: ViewGroup): ProfilePostsViewHolder {
-            val itemBinding = FragmentProfilePostsBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-            )
-            return ProfilePostsViewHolder(itemBinding)
-        }
-    }
-}
-
-
-class ProfilePostsAdapter : PagingDataAdapter<Status, RecyclerView.ViewHolder>(
-        UIMODEL_COMPARATOR
-) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ProfilePostsViewHolder.create(parent)
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val post = getItem(position)
-
-        post?.let {
-            (holder as ProfilePostsViewHolder).bind(it)
-        }
-    }
-
-    companion object {
-        private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<Status>() {
-            override fun areItemsTheSame(oldItem: Status, newItem: Status): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Status, newItem: Status): Boolean =
-                    oldItem.content == newItem.content
-        }
-    }
-
 }
