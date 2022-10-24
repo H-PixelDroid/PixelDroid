@@ -57,30 +57,38 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         val account = intent.getSerializableExtra(Account.ACCOUNT_TAG) as Account?
         accountId = account?.id ?: user!!.user_id
 
-        val tabs = createSearchTabs(account)
+        val tabs = createProfileTabs(account)
         setupTabs(tabs)
         setContent(account)
     }
 
-    private fun createSearchTabs(account: Account?): Array<Fragment>{
+    private fun createProfileTabs(account: Account?): Array<Fragment>{
 
-        val arguments = Bundle().apply {
+        val profileFeedFragment = ProfileFeedFragment()
+        val argumentsFeed = Bundle().apply {
             putSerializable(Account.ACCOUNT_TAG, account)
             putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
             putSerializable(ProfileFeedFragment.BOOKMARKS, false)
         }
-        val profileFeedFragment = ProfileFeedFragment()
-        profileFeedFragment.arguments = arguments.deepCopy()
+        profileFeedFragment.arguments = argumentsFeed
 
-        arguments.putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
         val profileGridFragment = ProfileFeedFragment()
-        profileGridFragment.arguments = arguments.deepCopy()
+        val argumentsGrid = Bundle().apply {
+            putSerializable(Account.ACCOUNT_TAG, account)
+            putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
+            putSerializable(ProfileFeedFragment.BOOKMARKS, false)
+        }
+        profileGridFragment.arguments = argumentsGrid
 
         // If we are viewing our own account, show bookmarks
         if(account == null || account.id == user?.user_id) {
             val profileBookmarksFragment = ProfileFeedFragment()
-            arguments.putSerializable(ProfileFeedFragment.BOOKMARKS, true)
-            profileBookmarksFragment.arguments = arguments.deepCopy()
+            val argumentsBookmarks = Bundle().apply {
+                putSerializable(Account.ACCOUNT_TAG, account)
+                putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
+                putSerializable(ProfileFeedFragment.BOOKMARKS, true)
+            }
+            profileBookmarksFragment.arguments = argumentsBookmarks
             return arrayOf(
                 profileGridFragment,
                 profileFeedFragment,
@@ -346,66 +354,6 @@ class ProfileActivity : BaseThemedWithBarActivity() {
                             .show()
                 } else unfollow()
             }
-        }
-    }
-}
-
-
-class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerView.ViewHolder(binding.root) {
-    private val postPreview: ImageView = binding.postPreview
-    private val albumIcon: ImageView = binding.albumIcon
-    private val videoIcon: ImageView = binding.videoIcon
-
-    fun bind(post: Status) {
-
-        if ((post.media_attachments?.size ?: 0) == 0){
-            //No media in this post, so put a little icon there
-            postPreview.scaleX = 0.3f
-            postPreview.scaleY = 0.3f
-            Glide.with(postPreview).load(R.drawable.ic_comment_empty).into(postPreview)
-            albumIcon.visibility = View.GONE
-            videoIcon.visibility = View.GONE
-        } else {
-            postPreview.scaleX = 1f
-            postPreview.scaleY = 1f
-            if (post.sensitive != false) {
-                Glide.with(postPreview)
-                    .load(post.media_attachments?.firstOrNull()?.blurhash?.let {
-                        BlurHashDecoder.blurHashBitmap(itemView.resources, it, 32, 32)
-                    }
-                    ).placeholder(R.drawable.ic_sensitive).apply(RequestOptions().centerCrop())
-                    .into(postPreview)
-            } else {
-                setSquareImageFromURL(postPreview,
-                    post.getPostPreviewURL(),
-                    postPreview,
-                    post.media_attachments?.firstOrNull()?.blurhash)
-            }
-            if ((post.media_attachments?.size ?: 0) > 1) {
-                albumIcon.visibility = View.VISIBLE
-                videoIcon.visibility = View.GONE
-            } else {
-                albumIcon.visibility = View.GONE
-                if (post.media_attachments?.getOrNull(0)?.type == Attachment.AttachmentType.video) {
-                    videoIcon.visibility = View.VISIBLE
-                } else videoIcon.visibility = View.GONE
-
-            }
-        }
-
-        postPreview.setOnClickListener {
-            val intent = Intent(postPreview.context, PostActivity::class.java)
-            intent.putExtra(Status.POST_TAG, post)
-            postPreview.context.startActivity(intent)
-        }
-    }
-
-    companion object {
-        fun create(parent: ViewGroup): ProfilePostsViewHolder {
-            val itemBinding = FragmentProfilePostsBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-            )
-            return ProfilePostsViewHolder(itemBinding)
         }
     }
 }

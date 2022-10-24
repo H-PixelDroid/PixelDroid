@@ -1,9 +1,11 @@
 package org.pixeldroid.app.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -11,14 +13,22 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import org.pixeldroid.app.R
+import org.pixeldroid.app.databinding.FragmentProfilePostsBinding
+import org.pixeldroid.app.posts.PostActivity
 import org.pixeldroid.app.posts.StatusViewHolder
 import org.pixeldroid.app.posts.feeds.UIMODEL_STATUS_COMPARATOR
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.*
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.profile.ProfileContentRepository
+import org.pixeldroid.app.utils.BlurHashDecoder
 import org.pixeldroid.app.utils.api.objects.Account
+import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.displayDimensionsInPx
+import org.pixeldroid.app.utils.setSquareImageFromURL
 
 /**
  * Fragment to show a list of [Account]s, as a result of a search.
@@ -101,6 +111,65 @@ class ProfileFeedFragment : UncachedFeedFragment<Status>() {
                         lifecycleScope, requireContext().displayDimensionsInPx())
                 }
             }
+        }
+    }
+}
+
+class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerView.ViewHolder(binding.root) {
+    private val postPreview: ImageView = binding.postPreview
+    private val albumIcon: ImageView = binding.albumIcon
+    private val videoIcon: ImageView = binding.videoIcon
+
+    fun bind(post: Status) {
+
+        if ((post.media_attachments?.size ?: 0) == 0){
+            //No media in this post, so put a little icon there
+            postPreview.scaleX = 0.3f
+            postPreview.scaleY = 0.3f
+            Glide.with(postPreview).load(R.drawable.ic_comment_empty).into(postPreview)
+            albumIcon.visibility = View.GONE
+            videoIcon.visibility = View.GONE
+        } else {
+            postPreview.scaleX = 1f
+            postPreview.scaleY = 1f
+            if (post.sensitive != false) {
+                Glide.with(postPreview)
+                    .load(post.media_attachments?.firstOrNull()?.blurhash?.let {
+                        BlurHashDecoder.blurHashBitmap(itemView.resources, it, 32, 32)
+                    }
+                    ).placeholder(R.drawable.ic_sensitive).apply(RequestOptions().centerCrop())
+                    .into(postPreview)
+            } else {
+                setSquareImageFromURL(postPreview,
+                    post.getPostPreviewURL(),
+                    postPreview,
+                    post.media_attachments?.firstOrNull()?.blurhash)
+            }
+            if ((post.media_attachments?.size ?: 0) > 1) {
+                albumIcon.visibility = View.VISIBLE
+                videoIcon.visibility = View.GONE
+            } else {
+                albumIcon.visibility = View.GONE
+                if (post.media_attachments?.getOrNull(0)?.type == Attachment.AttachmentType.video) {
+                    videoIcon.visibility = View.VISIBLE
+                } else videoIcon.visibility = View.GONE
+
+            }
+        }
+
+        postPreview.setOnClickListener {
+            val intent = Intent(postPreview.context, PostActivity::class.java)
+            intent.putExtra(Status.POST_TAG, post)
+            postPreview.context.startActivity(intent)
+        }
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): ProfilePostsViewHolder {
+            val itemBinding = FragmentProfilePostsBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+            return ProfilePostsViewHolder(itemBinding)
         }
     }
 }
