@@ -1,2 +1,4 @@
 rootProject.name='PixelDroid'
 include ':app'
+include ':scrambler'
+project(':scrambler').projectDir = new File(rootDir, 'scrambler/scrambler/')

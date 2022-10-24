@@ -1,5 +1,8 @@
 image: registry.gitlab.com/fdroid/ci-images-client
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
