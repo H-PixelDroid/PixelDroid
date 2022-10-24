@@ -13,6 +13,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
 import com.arthenica.ffmpegkit.FFmpegKit
+import com.jarsilio.android.scrambler.exceptions.UnsupportedFileFormatException
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -30,6 +31,7 @@ import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
+import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
 import retrofit2.HttpException
 import java.io.File
@@ -37,6 +39,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import javax.inject.Inject
 import kotlin.math.ceil
+import com.jarsilio.android.scrambler.stripMetadata
 
 // Models the UI state for the PostCreationActivity
 data class PostCreationActivityUiState(
@@ -233,6 +236,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
      * Keeps track of them in the [PhotoData.progress] (for the upload progress), and the
      * [PhotoData.uploadId] (for the list of ids of the uploads).
      */
+    @OptIn(ExperimentalUnsignedTypes::class)
     fun upload() {
         _uiState.update { currentUiState ->
             currentUiState.copy(
@@ -247,21 +251,40 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         }
 
         for (data: PhotoData in getPhotoData().value ?: emptyList()) {
-            val imageUri = data.imageUri
-            val imageInputStream = try {
-                getApplication<PixelDroidApplication>().contentResolver.openInputStream(imageUri)!!
+            val extension = data.imageUri.fileExtension(getApplication<PixelDroidApplication>().contentResolver)
+
+            val strippedImage = File.createTempFile("temp_img", ".$extension", getApplication<PixelDroidApplication>().cacheDir)
+
+            val (strippedOrNot, size) = try {
+                stripMetadata(data.imageUri, strippedImage, getApplication<PixelDroidApplication>().contentResolver)
+                Pair(strippedImage.inputStream(), strippedImage.length())
             } catch (e: FileNotFoundException){
+                strippedImage.delete()
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         userMessage = getApplication<PixelDroidApplication>().getString(R.string.file_not_found,
-                            imageUri)
+                            data.imageUri)
                     )
                 }
                 return
+            } catch (e: UnsupportedFileFormatException){
+                strippedImage.delete()
+                val imageInputStream = try {
+                    getApplication<PixelDroidApplication>().contentResolver.openInputStream(data.imageUri)!!
+                } catch (e: FileNotFoundException){
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            userMessage = getApplication<PixelDroidApplication>().getString(R.string.file_not_found,
+                                data.imageUri)
+                        )
+                    }
+                    return
+                }
+                Pair(imageInputStream, data.size)
             }
 
-            val type = imageUri.getMimeType(getApplication<PixelDroidApplication>().contentResolver)
-            val imagePart = ProgressRequestBody(imageInputStream, data.size, type)
+            val type = data.imageUri.getMimeType(getApplication<PixelDroidApplication>().contentResolver)
+            val imagePart = ProgressRequestBody(strippedOrNot, size, type)
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", System.currentTimeMillis().toString(), imagePart)
@@ -303,11 +326,13 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                                 uploadErrorExplanationVisible = e is HttpException,
                             )
                         }
+                        strippedImage.delete()
                         e.printStackTrace()
                         postSub?.dispose()
                         sub.dispose()
                     },
                     {
+                        strippedImage.delete()
                         data.progress = 100
                         if (getPhotoData().value!!.all { it.progress == 100 && it.uploadId != null }) {
                             _uiState.update { currentUiState ->

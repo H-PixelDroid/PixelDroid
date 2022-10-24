@@ -1,0 +1,3 @@
+[submodule "scrambler"]
+	path = scrambler
+	url = https://gitlab.com/artectrex/scrambler.git
