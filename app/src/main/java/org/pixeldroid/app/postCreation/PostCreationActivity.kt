@@ -217,6 +217,13 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                 model.cancelEncode(currentPosition)
             }
         }
+
+        // Clean up temporary files, if any
+        val tempFiles = intent.getStringArrayExtra(PhotoEditActivity.TEMP_FILES)
+        tempFiles?.asList()?.map { uri -> uri.toString() }?.forEach {
+            val file = File(binding.root.context.cacheDir, it)
+            file.delete()
+        }
     }
 
     private val addPhotoResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

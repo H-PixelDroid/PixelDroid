@@ -148,6 +148,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="image_download_failed">Download has failed, please try again</string>
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
+    <string name="item_load_success">%1$d item loaded successfully</string>
+    <string name="items_load_success">%1$d items loaded successfully</string>
     <!-- Post attributes -->
     <string name="no_description">No description</string>
     <plurals name="likes">

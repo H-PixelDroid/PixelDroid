@@ -81,6 +81,7 @@ class PhotoEditActivity : BaseThemedWithBarActivity() {
         internal const val PICTURE_URI = "picture_uri"
         internal const val PICTURE_POSITION = "picture_position"
         internal const val PICTURE_DESCRIPTION = "picture_description"
+        internal const val TEMP_FILES = "temp_files"
 
         private var executor: ExecutorService = newSingleThreadExecutor()
         private var future: Future<*>? = null
