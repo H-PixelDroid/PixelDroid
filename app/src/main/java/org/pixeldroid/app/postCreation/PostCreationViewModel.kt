@@ -1,5 +1,6 @@
 package org.pixeldroid.app.postCreation
 
+import android.R.attr.orientation
 import android.app.Application
 import android.content.ClipData
 import android.content.Intent
@@ -10,10 +11,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.jarsilio.android.scrambler.exceptions.UnsupportedFileFormatException
+import com.jarsilio.android.scrambler.stripMetadata
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -37,9 +40,10 @@ import retrofit2.HttpException
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.net.URI
 import javax.inject.Inject
 import kotlin.math.ceil
-import com.jarsilio.android.scrambler.stripMetadata
+
 
 // Models the UI state for the PostCreationActivity
 data class PostCreationActivityUiState(
@@ -255,22 +259,24 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
 
             val strippedImage = File.createTempFile("temp_img", ".$extension", getApplication<PixelDroidApplication>().cacheDir)
 
+            val imageUri = data.imageUri
+
             val (strippedOrNot, size) = try {
-                stripMetadata(data.imageUri, strippedImage, getApplication<PixelDroidApplication>().contentResolver)
+                val orientation = ExifInterface(getApplication<PixelDroidApplication>().contentResolver.openInputStream(imageUri)!!).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+
+                stripMetadata(imageUri, strippedImage, getApplication<PixelDroidApplication>().contentResolver)
+
+                // Restore EXIF orientation
+                val exifInterface = ExifInterface(strippedImage)
+                exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, orientation.toString())
+                exifInterface.saveAttributes()
+
                 Pair(strippedImage.inputStream(), strippedImage.length())
-            } catch (e: FileNotFoundException){
+            }  catch (e: UnsupportedFileFormatException){
                 strippedImage.delete()
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        userMessage = getApplication<PixelDroidApplication>().getString(R.string.file_not_found,
-                            data.imageUri)
-                    )
-                }
-                return
-            } catch (e: UnsupportedFileFormatException){
-                strippedImage.delete()
+                if(imageUri != data.imageUri) File(URI(imageUri.toString())).delete()
                 val imageInputStream = try {
-                    getApplication<PixelDroidApplication>().contentResolver.openInputStream(data.imageUri)!!
+                    getApplication<PixelDroidApplication>().contentResolver.openInputStream(imageUri)!!
                 } catch (e: FileNotFoundException){
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
@@ -281,6 +287,16 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                     return
                 }
                 Pair(imageInputStream, data.size)
+            } catch (e: IOException){
+                strippedImage.delete()
+                if(imageUri != data.imageUri) File(URI(imageUri.toString())).delete()
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        userMessage = getApplication<PixelDroidApplication>().getString(R.string.file_not_found,
+                            data.imageUri)
+                    )
+                }
+                return
             }
 
             val type = data.imageUri.getMimeType(getApplication<PixelDroidApplication>().contentResolver)
@@ -327,12 +343,14 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                             )
                         }
                         strippedImage.delete()
+                        if(imageUri != data.imageUri) File(URI(imageUri.toString())).delete()
                         e.printStackTrace()
                         postSub?.dispose()
                         sub.dispose()
                     },
                     {
                         strippedImage.delete()
+                        if(imageUri != data.imageUri) File(URI(imageUri.toString())).delete()
                         data.progress = 100
                         if (getPhotoData().value!!.all { it.progress == 100 && it.uploadId != null }) {
                             _uiState.update { currentUiState ->

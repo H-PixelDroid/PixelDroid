@@ -15,7 +15,6 @@ import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.FloatRange
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
