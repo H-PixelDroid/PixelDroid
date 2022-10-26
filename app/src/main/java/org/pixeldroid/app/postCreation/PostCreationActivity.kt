@@ -226,6 +226,23 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val redraft = intent.getBooleanExtra(PhotoEditActivity.POST_REDRAFT, false)
+        if (redraft) {
+            val builder = AlertDialog.Builder(binding.root.context)
+            builder.apply {
+                setMessage(R.string.redraft_dialog_cancel)
+                setPositiveButton(android.R.string.ok) { _, _ ->
+                    super.onBackPressed()
+                }
+                setNegativeButton(android.R.string.cancel) { _, _ -> }
+                show()
+            }
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     private val addPhotoResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK && result.data?.clipData != null) {
             result.data?.clipData?.let {

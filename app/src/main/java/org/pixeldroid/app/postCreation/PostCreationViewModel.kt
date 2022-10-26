@@ -147,7 +147,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
             clipData.getItemAt(i).let {
                 val sizeAndVideoPair: Pair<Long, Boolean> =
                     getSizeAndVideoValidate(it.uri, (previousList?.size ?: 0) + dataToAdd.size + 1)
-                dataToAdd.add(PhotoData(imageUri = it.uri, size = sizeAndVideoPair.first, video = sizeAndVideoPair.second, imageDescription = it.text.toString()))
+                dataToAdd.add(PhotoData(imageUri = it.uri, size = sizeAndVideoPair.first, video = sizeAndVideoPair.second, imageDescription = it.text?.toString()))
             }
         }
         return previousList?.plus(dataToAdd)?.toMutableList() ?: mutableListOf()

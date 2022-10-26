@@ -40,6 +40,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okio.BufferedSink
 import okio.buffer
@@ -468,13 +469,12 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                         R.id.post_more_menu_redraft -> {
                             val builder = AlertDialog.Builder(binding.root.context)
                             builder.apply {
-                                setMessage(R.string.redraft_dialog)
+                                setMessage(R.string.redraft_dialog_launch)
                                 setPositiveButton(android.R.string.ok) { _, _ ->
 
                                     lifecycleScope.launch {
                                         val user = db.userDao().getActiveUser()!!
                                         status?.id?.let { id ->
-
                                             try {
                                                 // Create new post creation activity
                                                 val intent = Intent(context, PostCreationActivity::class.java)
@@ -558,10 +558,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                                     fromHtml(postDescription!!).toString()
                                                                 )
                                                             }
-                                                            intent.putExtra(
-                                                                PhotoEditActivity.TEMP_FILES,
-                                                                imageUris.map{ uri -> uri.toString() }.toTypedArray()
-                                                            )
+                                                            if (imageUris.isNotEmpty()) {
+                                                                intent.putExtra(
+                                                                    PhotoEditActivity.TEMP_FILES,
+                                                                    imageUris.map{ uri -> uri.toString() }.toTypedArray()
+                                                                )
+                                                            }
+                                                            intent.putExtra(PhotoEditActivity.POST_REDRAFT, true)
 
                                                             // Launch post creation activity
                                                             binding.root.context.startActivity(intent)
@@ -628,7 +631,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                             }
 
                                             // Delete original post
-                                            // TODO: move to better place since this also deletes the post even if redraft is cancelled
                                             deletePost(apiHolder.api ?: apiHolder.setToCurrentUser(), db)
                                         }
                                     }

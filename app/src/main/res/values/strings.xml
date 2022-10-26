@@ -249,7 +249,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="something_went_wrong">Something went wrong…</string>
     <string name="panda_pull_to_refresh_to_try_again">This panda is not happy. Pull to refresh to try again.</string>
     <string name="redraft">Redraft</string>
-    <string name="redraft_dialog">Redrafting this post will allow you to edit the photo and its description, but it will delete all current comments and likes. Continue?</string>
+    <string name="redraft_dialog_launch">Redrafting this post will allow you to edit the photo and its description, but it will delete all current comments and likes. Continue?</string>
+    <string name="redraft_dialog_cancel">If you cancel this redraft, the original post will no longer be on your account. Continue without reposting?</string>
     <string name="delete">Delete</string>
     <string name="delete_dialog">Delete this post?</string>
     <string name="language">Language</string>
