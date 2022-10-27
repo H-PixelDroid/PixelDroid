@@ -1,6 +1,5 @@
 package org.pixeldroid.app.postCreation
 
-import android.R.attr.orientation
 import android.app.Application
 import android.content.ClipData
 import android.content.Intent

@@ -64,6 +64,12 @@ data class PhotoData(
 
 class PostCreationActivity : BaseThemedWithoutBarActivity() {
 
+    companion object {
+        internal const val PICTURE_DESCRIPTION = "picture_description"
+        internal const val TEMP_FILES = "temp_files"
+        internal const val POST_REDRAFT = "post_redraft"
+    }
+
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
 
@@ -104,9 +110,6 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                 }
             )
         }
-
-        //Get initial text value from model (for template)
-        binding.newPostDescriptionInputField.setText(model.uiState.value.newPostDescriptionText)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -167,9 +170,13 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             model.newPostDescriptionChanged(binding.newPostDescriptionInputField.text)
         }
 
-        // Fetch existing description passed through putExtra (if any)
-        val existingDescription = intent.getStringExtra(PhotoEditActivity.PICTURE_DESCRIPTION)
-        binding.newPostDescriptionInputField.setText(existingDescription)
+        val existingDescription: String? = intent.getStringExtra(PICTURE_DESCRIPTION)
+
+        binding.newPostDescriptionInputField.setText(
+            // Set description from redraft if any, otherwise from the template
+            existingDescription ?: model.uiState.value.newPostDescriptionText
+        )
+
 
         binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
 
@@ -219,15 +226,15 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         }
 
         // Clean up temporary files, if any
-        val tempFiles = intent.getStringArrayExtra(PhotoEditActivity.TEMP_FILES)
-        tempFiles?.asList()?.map { uri -> uri.toString() }?.forEach {
+        val tempFiles = intent.getStringArrayExtra(TEMP_FILES)
+        tempFiles?.asList()?.forEach {
             val file = File(binding.root.context.cacheDir, it)
-            file.delete()
+            model.trackTempFile(file)
         }
     }
 
     override fun onBackPressed() {
-        val redraft = intent.getBooleanExtra(PhotoEditActivity.POST_REDRAFT, false)
+        val redraft = intent.getBooleanExtra(POST_REDRAFT, false)
         if (redraft) {
             val builder = AlertDialog.Builder(binding.root.context)
             builder.apply {
