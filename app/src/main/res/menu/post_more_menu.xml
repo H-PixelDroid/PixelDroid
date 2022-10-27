@@ -32,6 +32,10 @@
         android:id="@+id/post_more_menu_group_delete"
         android:visible="false">
 
+        <item android:id="@+id/post_more_menu_redraft"
+            android:title="@string/redraft" />
+
+
         <item android:id="@+id/post_more_menu_delete"
             android:title="@string/delete"/>
 

@@ -148,6 +148,10 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="image_download_failed">Download has failed, please try again</string>
     <string name="image_download_downloading">Downloading…</string>
     <string name="image_download_success">Image downloaded successfully</string>
+    <plurals name="items_load_success">
+        <item quantity="one">%d item loaded successfully</item>
+        <item quantity="other">%d items loaded successfully</item>
+    </plurals>
     <!-- Post attributes -->
     <string name="no_description">No description</string>
     <plurals name="likes">
@@ -246,12 +250,17 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="discover_no_infinite_load">Discover doesn\'t load infinitely. Pull to refresh for other images.</string>
     <string name="something_went_wrong">Something went wrong…</string>
     <string name="panda_pull_to_refresh_to_try_again">This panda is not happy. Pull to refresh to try again.</string>
+    <string name="redraft">Redraft</string>
+    <string name="redraft_dialog_launch">Redrafting this post will allow you to edit the photo and its description, but it will delete all current comments and likes. Continue?</string>
+    <string name="redraft_dialog_cancel">If you cancel this redraft, the original post will no longer be on your account. Continue without reposting?</string>
     <string name="delete">Delete</string>
     <string name="delete_dialog">Delete this post?</string>
     <string name="language">Language</string>
     <string name="help_translate">Help translate PixelDroid to your language:</string>
     <string name="issues_contribute">Report issues or contribute to the application:</string>
     <string name="mascot_description">Image showing a red panda, Pixelfed\'s mascot, using a phone</string>
+    <string name="redraft_post_failed_error">Could not redraft the post, error %1$d</string>
+    <string name="redraft_post_failed_io_except">Could not redraft the post, check your connection?</string>
     <string name="delete_post_failed_error">Could not delete the post, error %1$d</string>
     <string name="delete_post_failed_io_except">Could not delete the post, check your connection?</string>
     <string name="bookmark_post_failed_error">Could not (un)bookmark the post, error %1$d</string>

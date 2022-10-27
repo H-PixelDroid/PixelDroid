@@ -1,6 +1,5 @@
 package org.pixeldroid.app.postCreation
 
-import android.R.attr.orientation
 import android.app.Application
 import android.content.ClipData
 import android.content.Intent
@@ -144,10 +143,10 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
             }
         }
         for (i in 0 until count) {
-            clipData.getItemAt(i).uri.let {
+            clipData.getItemAt(i).let {
                 val sizeAndVideoPair: Pair<Long, Boolean> =
-                    getSizeAndVideoValidate(it, (previousList?.size ?: 0) + dataToAdd.size + 1)
-                dataToAdd.add(PhotoData(imageUri = it, size = sizeAndVideoPair.first, video = sizeAndVideoPair.second))
+                    getSizeAndVideoValidate(it.uri, (previousList?.size ?: 0) + dataToAdd.size + 1)
+                dataToAdd.add(PhotoData(imageUri = it.uri, size = sizeAndVideoPair.first, video = sizeAndVideoPair.second, imageDescription = it.text?.toString()))
             }
         }
         return previousList?.plus(dataToAdd)?.toMutableList() ?: mutableListOf()
