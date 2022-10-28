@@ -27,40 +27,23 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
-import com.arthenica.ffmpegkit.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostCreationBinding
 import org.pixeldroid.app.postCreation.camera.CameraActivity
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
-import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
-import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
-import org.pixeldroid.app.utils.convert
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
-import org.pixeldroid.app.utils.ffmpegCompliantUri
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
 import java.io.File
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.roundToInt
 
 const val TAG = "Post Creation Activity"
-
-data class PhotoData(
-    var imageUri: Uri,
-    var size: Long,
-    var uploadId: String? = null,
-    var progress: Int? = null,
-    var imageDescription: String? = null,
-    var video: Boolean,
-    var videoEncodeProgress: Int? = null,
-    var videoEncodeStabilizationFirstPass: Boolean? = null,
-)
 
 class PostCreationActivity : BaseThemedWithoutBarActivity() {
 
@@ -68,8 +51,6 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
     private lateinit var instance: InstanceDatabaseEntity
 
     private lateinit var binding: ActivityPostCreationBinding
-
-    private val resultHandler: Handler = HandlerCompat.createAsync(Looper.getMainLooper())
 
     private lateinit var model: PostCreationViewModel
 
@@ -94,7 +75,11 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             // update UI
             binding.carousel.addData(
                 newPhotoData.map {
-                    CarouselItem(it.imageUri, it.imageDescription, it.video, it.videoEncodeProgress, it.videoEncodeStabilizationFirstPass)
+                    CarouselItem(
+                        it.imageUri, it.imageDescription, it.video,
+                        it.videoEncodeProgress, it.videoEncodeStabilizationFirstPass,
+                        it.videoEncodeComplete, it.videoEncodeError,
+                    )
                 }
             )
         }
@@ -129,26 +114,6 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
 
 
                     binding.uploadErrorTextExplanation.text = uiState.uploadErrorExplanationText
-
-                    uiState.newEncodingJobPosition?.let { position ->
-                        uiState.newEncodingJobMuted?.let { muted ->
-                            uiState.newEncodingJobVideoStart.let { videoStart ->
-                                uiState.newEncodingJobVideoEnd.let { videoEnd ->
-                                    uiState.newEncodingJobSpeedIndex?.let { speedIndex ->
-                                        uiState.newEncodingJobVideoCrop?.let { crop ->
-                                            uiState.newEncodingJobStabilize?.let { stabilize ->
-                                                startEncoding(position, muted,
-                                                    videoStart, videoEnd,
-                                                    speedIndex, crop, stabilize,
-                                                )
-                                                model.encodingStarted()
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -322,7 +287,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
     private val editResultContract: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         result: ActivityResult? ->
         if (result?.resultCode == Activity.RESULT_OK && result.data != null) {
-            val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
+            val position: Int = result.data!!.getIntExtra(org.pixeldroid.media_editor.photoEdit.PhotoEditActivity.PICTURE_POSITION, 0)
             model.modifyAt(position, result.data!!)
                 ?: Toast.makeText(applicationContext, R.string.error_editing, Toast.LENGTH_SHORT).show()
         } else if(result?.resultCode != Activity.RESULT_CANCELED){
@@ -330,207 +295,13 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         }
     }
 
-    /**
-     * @param muted should audio tracks be removed in the output
-     * @param videoStart when we want to start the video, in seconds, or null if we
-     * don't want to remove the start
-     * @param videoEnd when we want to end the video, in seconds, or null if we
-     * don't want to remove the end
-     */
-    private fun startEncoding(
-        position: Int,
-        muted: Boolean,
-        videoStart: Float?,
-        videoEnd: Float?,
-        speedIndex: Int,
-        crop: VideoEditActivity.RelativeCropPosition,
-        stabilize: Float
-    ) {
-        val originalUri = model.getPhotoData().value!![position].imageUri
-
-        // Having a meaningful suffix is necessary so that ffmpeg knows what to put in output
-        val suffix = originalUri.fileExtension(contentResolver)
-        val file = File.createTempFile("temp_video", ".$suffix", cacheDir)
-        //val file = File.createTempFile("temp_video", ".webm", cacheDir)
-        model.trackTempFile(file)
-        val fileUri = file.toUri()
-        val outputVideoPath = ffmpegCompliantUri(fileUri)
-
-        val inputUri = model.getPhotoData().value!![position].imageUri
-
-        val ffmpegCompliantUri: String = ffmpegCompliantUri(inputUri)
-
-        val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(ffmpegCompliantUri(inputUri)).mediaInformation
-        val totalVideoDuration = mediaInformation?.duration?.toFloatOrNull()
-
-        fun secondPass(stabilizeString: String = ""){
-            val speed = VideoEditActivity.speedChoices[speedIndex]
-
-            val mutedString = if(muted || speedIndex != 1) "-an" else null
-            val startString: List<String?> = if(videoStart != null) listOf("-ss", "${videoStart/speed.toFloat()}") else listOf(null, null)
-
-            val endString: List<String?> = if(videoEnd != null) listOf("-to", "${videoEnd/speed.toFloat() - (videoStart ?: 0f)/speed.toFloat()}") else listOf(null, null)
-
-            // iw and ih are variables for the original width and height values, FFmpeg will know them
-            val cropString = if(crop.notCropped()) "" else "crop=${crop.relativeWidth}*iw:${crop.relativeHeight}*ih:${crop.relativeX}*iw:${crop.relativeY}*ih"
-            val separator = if(speedIndex != 1 && !crop.notCropped()) "," else ""
-            val speedString = if(speedIndex != 1) "setpts=PTS/${speed}" else ""
-
-            val separatorStabilize = if(stabilizeString == "" || (speedString == "" && cropString == "")) "" else ","
-
-            val speedAndCropString: List<String?> = if(speedIndex!= 1 || !crop.notCropped() || stabilizeString.isNotEmpty())
-                listOf("-filter:v", stabilizeString + separatorStabilize + speedString + separator + cropString)
-            // Stream copy is not compatible with filter, but when not filtering we can copy the stream without re-encoding
-            else listOf("-c", "copy")
-
-            // This should be set when re-encoding is required (otherwise it defaults to mpeg which then doesn't play)
-            val encodePreset: List<String?> = if(speedIndex != 1 && !crop.notCropped()) listOf("-c:v", "libx264", "-preset", "ultrafast") else listOf(null, null, null, null)
-
-            val session: FFmpegSession =
-                FFmpegKit.executeWithArgumentsAsync(listOfNotNull(
-                    startString[0], startString[1],
-                    "-i", ffmpegCompliantUri,
-                    speedAndCropString[0], speedAndCropString[1],
-                    endString[0], endString[1],
-                    mutedString, "-y",
-                    encodePreset[0], encodePreset[1], encodePreset[2], encodePreset[3],
-                    outputVideoPath,
-                ).toTypedArray(),
-                    //val session: FFmpegSession = FFmpegKit.executeAsync("$startString -i $inputSafePath $endString -c:v libvpx-vp9 -c:a copy -an -y $outputVideoPath",
-                    { session ->
-                        val returnCode = session.returnCode
-                        if (ReturnCode.isSuccess(returnCode)) {
-                            fun successResult() {
-                                // Hide progress indicator in carousel
-                                binding.carousel.updateProgress(null, position, false)
-                                val (imageSize, _) = outputVideoPath.toUri().let {
-                                    model.setUriAtPosition(it, position)
-                                    model.getSizeAndVideoValidate(it, position)
-                                }
-                                model.setVideoEncodeAtPosition(position, null)
-                                model.setSizeAtPosition(imageSize, position)
-                            }
-
-                            val post = resultHandler.post {
-                                successResult()
-                            }
-                            if(!post) {
-                                Log.e(TAG, "Failed to post changes, trying to recover in 100ms")
-                                resultHandler.postDelayed({successResult()}, 100)
-                            }
-                            Log.d(TAG, "Encode completed successfully in ${session.duration} milliseconds")
-                        } else {
-                            resultHandler.post {
-                                binding.carousel.updateProgress(null, position, error = true)
-                                model.setVideoEncodeAtPosition(position, null)
-                            }
-                            Log.e(TAG, "Encode failed with state ${session.state} and rc $returnCode.${session.failStackTrace}")
-                        }
-                    },
-                    { log -> Log.d("PostCreationActivityEncoding", log.message) }
-                ) { statistics: Statistics? ->
-
-                    val timeInMilliseconds: Int? = statistics?.time
-                    timeInMilliseconds?.let {
-                        if (timeInMilliseconds > 0) {
-                            val completePercentage = totalVideoDuration?.let {
-                                val speedupDurationModifier = VideoEditActivity.speedChoices[speedIndex].toFloat()
-
-                                val newTotalDuration = (it - (videoStart ?: 0f) - (it - (videoEnd ?: it)))/speedupDurationModifier
-                                timeInMilliseconds / (10*newTotalDuration)
-                            }
-                            resultHandler.post {
-                                completePercentage?.let {
-                                    val rounded: Int = it.roundToInt()
-                                    model.setVideoEncodeAtPosition(position, rounded)
-                                    binding.carousel.updateProgress(rounded, position, false)
-                                }
-                            }
-                            Log.d(TAG, "Encoding video: %$completePercentage.")
-                        }
-                    }
-                }
-            model.registerNewFFmpegSession(position, session.sessionId)
-        }
-
-        fun stabilizationFirstPass(){
-
-            val shakeResultsFile = File.createTempFile("temp_shake_results", ".trf", cacheDir)
-            model.trackTempFile(shakeResultsFile)
-            val shakeResultsFileUri = shakeResultsFile.toUri()
-            val shakeResultsFileSafeUri = ffmpegCompliantUri(shakeResultsFileUri).removePrefix("file://")
-
-            val inputSafeUri: String = ffmpegCompliantUri(inputUri)
-
-            // Map chosen "stabilization force" to shakiness, from 3 to 10
-            val shakiness = (0f..100f).convert(stabilize, 3f..10f).roundToInt()
-
-            val analyzeVideoCommandList = listOf(
-                "-y", "-i", inputSafeUri,
-                "-vf", "vidstabdetect=shakiness=$shakiness:accuracy=15:result=$shakeResultsFileSafeUri",
-                "-f", "null", "-"
-            ).toTypedArray()
-
-            FFmpegKit.executeWithArgumentsAsync(analyzeVideoCommandList,
-                { firstPass ->
-                    if (ReturnCode.isSuccess(firstPass.returnCode)) {
-                        // Map chosen "stabilization force" to shakiness, from 8 to 40
-                        val smoothing = (0f..100f).convert(stabilize, 8f..40f).roundToInt()
-
-                        val stabilizeVideoCommand =
-                            "vidstabtransform=smoothing=$smoothing:input=${ffmpegCompliantUri(shakeResultsFileUri).removePrefix("file://")}"
-                        secondPass(stabilizeVideoCommand)
-                    } else {
-                        Log.e(
-                            "PostCreationActivityEncoding",
-                            "Video stabilization first pass failed!"
-                        )
-                    }
-                },
-                { log -> Log.d("PostCreationActivityEncoding", log.message) },
-                { statistics: Statistics? ->
-
-                    val timeInMilliseconds: Int? = statistics?.time
-                    timeInMilliseconds?.let {
-                        if (timeInMilliseconds > 0) {
-                            val completePercentage = totalVideoDuration?.let {
-                                val speedupDurationModifier =
-                                    VideoEditActivity.speedChoices[speedIndex].toFloat()
-
-                                val newTotalDuration = (it - (videoStart ?: 0f) - (it - (videoEnd
-                                    ?: it))) / speedupDurationModifier
-                                timeInMilliseconds / (10 * newTotalDuration)
-                            }
-                            resultHandler.post {
-                                completePercentage?.let {
-                                    val rounded: Int = it.roundToInt()
-                                    model.setVideoEncodeAtPosition(position, rounded, true)
-                                    binding.carousel.updateProgress(rounded, position, false)
-                                }
-                            }
-                            Log.d(TAG, "Stabilization pass: %$completePercentage.")
-                        }
-                    }
-                })
-        }
-
-        if(stabilize > 0.01f) {
-            // Stabilization was requested: we need an additional first pass to get stabilization data
-            stabilizationFirstPass()
-        } else {
-            // Immediately call the second pass, no stabilization needed
-            secondPass()
-        }
-
-    }
-
     private fun edit(position: Int) {
         val intent = Intent(
             this,
-            if(model.getPhotoData().value!![position].video) VideoEditActivity::class.java else PhotoEditActivity::class.java
+            if(model.getPhotoData().value!![position].video) org.pixeldroid.media_editor.photoEdit.VideoEditActivity::class.java else org.pixeldroid.media_editor.photoEdit.PhotoEditActivity::class.java
         )
-            .putExtra(PhotoEditActivity.PICTURE_URI, model.getPhotoData().value!![position].imageUri)
-            .putExtra(PhotoEditActivity.PICTURE_POSITION, position)
+            .putExtra(org.pixeldroid.media_editor.photoEdit.PhotoEditActivity.PICTURE_URI, model.getPhotoData().value!![position].imageUri)
+            .putExtra(org.pixeldroid.media_editor.photoEdit.PhotoEditActivity.PICTURE_POSITION, position)
 
         editResultContract.launch(intent)
 

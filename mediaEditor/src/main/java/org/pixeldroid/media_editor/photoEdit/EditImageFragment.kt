@@ -1,4 +1,4 @@
-package org.pixeldroid.app.postCreation.photoEdit
+package org.pixeldroid.media_editor.photoEdit
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import org.pixeldroid.app.R
-import org.pixeldroid.app.databinding.FragmentEditImageBinding
+import org.pixeldroid.media_editor.databinding.FragmentEditImageBinding
 
 class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
 
@@ -52,13 +51,13 @@ class EditImageFragment : Fragment(),  SeekBar.OnSeekBarChangeListener {
         var prog = progress
 
         listener?.let {
-            when(seekBar!!.id) {
-                R.id.seekbar_brightness -> it.onBrightnessChange(progress - 100)
-                R.id.seekbar_saturation -> {
+            when(seekBar) {
+                binding.seekbarBrightness -> it.onBrightnessChange(progress - 100)
+                binding.seekbarSaturation -> {
                     prog += 10
                     it.onSaturationChange(.10f * prog)
                 }
-                R.id.seekbar_contrast -> {
+                binding.seekbarContrast -> {
                     it.onContrastChange(.10f * prog)
                 }
             }

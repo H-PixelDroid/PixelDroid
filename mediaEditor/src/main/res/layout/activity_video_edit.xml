@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <org.pixeldroid.app.postCreation.photoEdit.cropper.CropImageView
+    <org.pixeldroid.media_editor.photoEdit.cropper.CropImageView
         android:id="@+id/cropImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

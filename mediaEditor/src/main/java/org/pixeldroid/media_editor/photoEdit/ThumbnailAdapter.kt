@@ -1,4 +1,4 @@
-package org.pixeldroid.app.postCreation.photoEdit
+package org.pixeldroid.media_editor.photoEdit
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,13 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zomato.photofilters.utils.ThumbnailItem
-import org.pixeldroid.app.R
-import org.pixeldroid.app.databinding.ThumbnailListItemBinding
-import org.pixeldroid.app.utils.getColorFromAttr
+import org.pixeldroid.media_editor.R
+import org.pixeldroid.media_editor.databinding.ThumbnailListItemBinding
 
 class ThumbnailAdapter (private val context: Context,
                         private val tbItemList: List<ThumbnailItem>,
-                        private val listener: FilterListFragment): RecyclerView.Adapter<ThumbnailAdapter.MyViewHolder>() {
+                        private val listener: FilterListFragment
+): RecyclerView.Adapter<ThumbnailAdapter.MyViewHolder>() {
 
     private var selectedIndex = 0
 

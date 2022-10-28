@@ -6,7 +6,7 @@
     android:layout_width="match_parent">
 
 
-    <org.pixeldroid.app.postCreation.photoEdit.cropper.CropOverlayView
+    <org.pixeldroid.media_editor.photoEdit.cropper.CropOverlayView
         android:id="@+id/CropOverlayView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

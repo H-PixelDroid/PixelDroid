@@ -31,9 +31,6 @@
             android:name=".posts.AlbumActivity"
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent"/>
-        <activity
-            android:name=".postCreation.photoEdit.VideoEditActivity"
-            android:exported="false"/>
 
         <activity
             android:name=".posts.MediaViewerActivity"
@@ -55,7 +52,10 @@
             android:name=".posts.ReportActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".postCreation.photoEdit.PhotoEditActivity" />
+        <activity
+            android:name="org.pixeldroid.media_editor.photoEdit.VideoEditActivity"
+            android:exported="false"/>
+        <activity android:name="org.pixeldroid.media_editor.photoEdit.PhotoEditActivity" />
         <activity
             android:name=".postCreation.PostCreationActivity"
             android:exported="true"

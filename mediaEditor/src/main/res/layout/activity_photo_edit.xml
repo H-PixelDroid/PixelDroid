@@ -5,7 +5,7 @@
     android:id="@+id/coordinator_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".postCreation.photoEdit.PhotoEditActivity">
+    tools:context="org.pixeldroid.media_editor.photoEdit.PhotoEditActivity">
 
     <LinearLayout
         android:orientation="vertical"

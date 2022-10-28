@@ -1,4 +1,4 @@
-package org.pixeldroid.app.postCreation.photoEdit.cropper
+package org.pixeldroid.media_editor.photoEdit.cropper
 
 // Simplified version of https://github.com/ArthurHub/Android-Image-Cropper , which is
 // licensed under the Apache License, Version 2.0. The modifications made to it for PixelDroid
