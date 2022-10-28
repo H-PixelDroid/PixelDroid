@@ -1,4 +1,4 @@
-package org.pixeldroid.app.postCreation.photoEdit
+package org.pixeldroid.media_editor.photoEdit
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,12 +28,8 @@ import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter
-import org.pixeldroid.app.R
-import org.pixeldroid.app.databinding.ActivityPhotoEditBinding
-import org.pixeldroid.app.postCreation.PostCreationActivity
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
-import org.pixeldroid.app.utils.bitmapFromUri
-import org.pixeldroid.app.utils.getColorFromAttr
+import org.pixeldroid.media_editor.databinding.ActivityPhotoEditBinding
+import org.pixeldroid.media_editor.R
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -49,7 +46,7 @@ private val REQUIRED_PERMISSIONS = arrayOf(
     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 )
 
-class PhotoEditActivity : BaseThemedWithBarActivity() {
+class PhotoEditActivity : AppCompatActivity() {
 
     var saving: Boolean = false
     private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
@@ -78,8 +75,8 @@ class PhotoEditActivity : BaseThemedWithBarActivity() {
     }
 
     companion object{
-        internal const val PICTURE_URI = "picture_uri"
-        internal const val PICTURE_POSITION = "picture_position"
+        const val PICTURE_URI = "picture_uri"
+        const val PICTURE_POSITION = "picture_position"
 
         private var executor: ExecutorService = newSingleThreadExecutor()
         private var future: Future<*>? = null
@@ -179,6 +176,7 @@ class PhotoEditActivity : BaseThemedWithBarActivity() {
         saving = false
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (noEdits()) super.onBackPressed()
         else {
@@ -369,7 +367,7 @@ class PhotoEditActivity : BaseThemedWithBarActivity() {
     }
 
     private fun sendBackImage(file: String) {
-        val intent = Intent(this, PostCreationActivity::class.java)
+        val intent = Intent()
         .apply {
             putExtra(PICTURE_URI, file)
             putExtra(PICTURE_POSITION, picturePosition)

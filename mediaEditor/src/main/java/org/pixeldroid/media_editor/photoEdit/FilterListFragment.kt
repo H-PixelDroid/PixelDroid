@@ -1,4 +1,4 @@
-package org.pixeldroid.app.postCreation.photoEdit
+package org.pixeldroid.media_editor.photoEdit
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -15,9 +15,8 @@ import com.zomato.photofilters.imageprocessors.Filter
 import com.zomato.photofilters.utils.ThumbnailItem
 import com.zomato.photofilters.utils.ThumbnailsManager
 import kotlinx.coroutines.launch
-import org.pixeldroid.app.R
-import org.pixeldroid.app.databinding.FragmentFilterListBinding
-import org.pixeldroid.app.utils.bitmapFromUri
+import org.pixeldroid.media_editor.R
+import org.pixeldroid.media_editor.databinding.FragmentFilterListBinding
 
 class FilterListFragment : Fragment() {
 
@@ -52,7 +51,9 @@ class FilterListFragment : Fragment() {
     private fun displayImage() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                val tbImage: Bitmap = bitmapFromUri(requireActivity().contentResolver, PhotoEditActivity.imageUri)
+                val tbImage: Bitmap = bitmapFromUri(requireActivity().contentResolver,
+                    PhotoEditActivity.imageUri
+                )
                 setupFilter(tbImage)
 
                 tbItemList.addAll(ThumbnailsManager.processThumbs(context))

@@ -102,47 +102,6 @@ fun Context.ffmpegCompliantUri(inputUri: Uri?): String =
     else inputUri.toString()
 
 
-fun bitmapFromUri(contentResolver: ContentResolver, uri: Uri?): Bitmap =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        ImageDecoder
-            .decodeBitmap(
-                ImageDecoder.createSource(contentResolver, uri!!)
-            )
-            { decoder, _, _ -> decoder.isMutableRequired = true }
-    } else {
-        @Suppress("DEPRECATION")
-        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-        modifyOrientation(bitmap!!, contentResolver, uri!!)
-    }
-
-fun modifyOrientation(
-    bitmap: Bitmap,
-    contentResolver: ContentResolver,
-    uri: Uri
-): Bitmap {
-    val inputStream = contentResolver.openInputStream(uri)!!
-    val ei = ExifInterface(inputStream)
-    return when (ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)) {
-        ExifInterface.ORIENTATION_ROTATE_90 -> bitmap.rotate(90f)
-        ExifInterface.ORIENTATION_ROTATE_180 -> bitmap.rotate(180f)
-        ExifInterface.ORIENTATION_ROTATE_270 -> bitmap.rotate(270f)
-        ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> bitmap.flip(horizontal = true, vertical = false)
-        ExifInterface.ORIENTATION_FLIP_VERTICAL -> bitmap.flip(horizontal = false, vertical = true)
-        else -> bitmap
-    }
-}
-
-fun Bitmap.rotate(degrees: Float): Bitmap {
-    val matrix = Matrix()
-    matrix.postRotate(degrees)
-    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-}
-
-fun Bitmap.flip(horizontal: Boolean, vertical: Boolean): Bitmap {
-    val matrix = Matrix()
-    matrix.preScale(if (horizontal) -1f else 1f, if (vertical) -1f else 1f)
-    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-}
 
 fun BaseActivity.openUrl(url: String): Boolean {
 
@@ -232,12 +191,6 @@ fun Context.themeActionBar(): Int? {
         3 -> R.style.AppTheme4
         else -> R.style.AppTheme5
     }
-}
-
-/** Maps a Float from this range to target range */
-fun ClosedRange<Float>.convert(number: Float, target: ClosedRange<Float>): Float {
-    val ratio = number / (endInclusive - start)
-    return (ratio * (target.endInclusive - target.start))
 }
 
 @ColorInt

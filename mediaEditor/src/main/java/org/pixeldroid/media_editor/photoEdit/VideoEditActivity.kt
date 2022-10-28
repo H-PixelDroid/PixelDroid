@@ -1,7 +1,9 @@
-package org.pixeldroid.app.postCreation.photoEdit
+package org.pixeldroid.media_editor.photoEdit
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
@@ -18,6 +20,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.os.HandlerCompat
 import androidx.core.view.isVisible
@@ -27,23 +30,24 @@ import androidx.media2.common.UriMediaItem
 import androidx.media2.player.MediaPlayer
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
+import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFprobeKit
 import com.arthenica.ffmpegkit.MediaInformation
 import com.arthenica.ffmpegkit.ReturnCode
+import com.arthenica.ffmpegkit.Statistics
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
-import org.pixeldroid.app.R
-import org.pixeldroid.app.databinding.ActivityVideoEditBinding
-import org.pixeldroid.app.postCreation.PostCreationActivity
-import org.pixeldroid.app.postCreation.carousel.dpToPx
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
-import org.pixeldroid.app.utils.ffmpegCompliantUri
+import org.pixeldroid.media_editor.R
+import org.pixeldroid.media_editor.databinding.ActivityVideoEditBinding
 import java.io.File
 import java.io.Serializable
 import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 
-class VideoEditActivity : BaseThemedWithBarActivity() {
+const val TAG = "VideoEditActivity"
+
+class VideoEditActivity : AppCompatActivity() {
 
     data class RelativeCropPosition(
         // Width of the selected part of the video, relative to the width of the video
@@ -63,6 +67,16 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
     }
 
+    data class VideoEditArguments(
+        val muted: Boolean,
+        val videoStart: Float?,
+        val videoEnd: Float? ,
+        val speedIndex: Int,
+        val videoCrop: RelativeCropPosition,
+        val videoStabilize: Float
+    ): Serializable
+
+    private lateinit var videoUri: Uri
     private lateinit var mediaPlayer: MediaPlayer
     private var videoPosition: Int = -1
 
@@ -117,11 +131,11 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
         val resultHandler: Handler = HandlerCompat.createAsync(Looper.getMainLooper())
 
-        val uri = intent.getParcelableExtra<Uri>(PhotoEditActivity.PICTURE_URI)!!
+        videoUri = intent.getParcelableExtra(PhotoEditActivity.PICTURE_URI)!!
 
         videoPosition = intent.getIntExtra(PhotoEditActivity.PICTURE_POSITION, -1)
 
-        val inputVideoPath = ffmpegCompliantUri(uri)
+        val inputVideoPath = ffmpegCompliantUri(videoUri)
         val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(inputVideoPath).mediaInformation
 
         //Duration in seconds, or null
@@ -132,7 +146,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         binding.videoRangeSeekBar.values = listOf(0f,(duration?: 100f) / 2, duration ?: 100f)
 
 
-        val mediaItem: UriMediaItem = UriMediaItem.Builder(uri).build()
+        val mediaItem: UriMediaItem = UriMediaItem.Builder(videoUri).build()
         mediaItem.metadata = MediaMetadata.Builder()
             .putString(MediaMetadata.METADATA_KEY_TITLE, "")
             .build()
@@ -165,7 +179,7 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         }
 
         binding.cropper.setOnClickListener {
-            showCropInterface(show = true, uri = uri)
+            showCropInterface(show = true, uri = videoUri)
         }
 
         binding.saveCropButton.setOnClickListener {
@@ -270,13 +284,13 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
         val thumbInterval: Float? = duration?.div(7)
 
         thumbInterval?.let {
-            thumbnail(uri, resultHandler, binding.thumbnail1, it)
-            thumbnail(uri, resultHandler, binding.thumbnail2, it.times(2))
-            thumbnail(uri, resultHandler, binding.thumbnail3, it.times(3))
-            thumbnail(uri, resultHandler, binding.thumbnail4, it.times(4))
-            thumbnail(uri, resultHandler, binding.thumbnail5, it.times(5))
-            thumbnail(uri, resultHandler, binding.thumbnail6, it.times(6))
-            thumbnail(uri, resultHandler, binding.thumbnail7, it.times(7))
+            thumbnail(videoUri, resultHandler, binding.thumbnail1, it)
+            thumbnail(videoUri, resultHandler, binding.thumbnail2, it.times(2))
+            thumbnail(videoUri, resultHandler, binding.thumbnail3, it.times(3))
+            thumbnail(videoUri, resultHandler, binding.thumbnail4, it.times(4))
+            thumbnail(videoUri, resultHandler, binding.thumbnail5, it.times(5))
+            thumbnail(videoUri, resultHandler, binding.thumbnail6, it.times(6))
+            thumbnail(videoUri, resultHandler, binding.thumbnail7, it.times(7))
         }
 
         resetControls()
@@ -369,19 +383,20 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
 
     private fun returnWithValues() {
         //TODO Check if some of these should be null to indicate no changes in that category? Ex start/end
-        val intent = Intent(this, PostCreationActivity::class.java)
+        val intent = Intent()
             .apply {
                 putExtra(PhotoEditActivity.PICTURE_POSITION, videoPosition)
-                putExtra(MUTED, binding.muter.isSelected)
-                putExtra(SPEED, speed)
+                putExtra(VIDEO_ARGUMENTS_TAG, VideoEditArguments(
+                    binding.muter.isSelected, binding.videoRangeSeekBar.values.first(),
+                    binding.videoRangeSeekBar.values[2],
+                    speed,
+                    cropRelativeDimensions,
+                    stabilization
+                )
+                )
                 putExtra(MODIFIED, !noEdits())
-                putExtra(VIDEO_START, binding.videoRangeSeekBar.values.first())
-                putExtra(VIDEO_END, binding.videoRangeSeekBar.values[2])
-                putExtra(VIDEO_CROP, cropRelativeDimensions)
-                putExtra(VIDEO_STABILIZE, stabilization)
                 addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             }
-
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
@@ -451,15 +466,182 @@ class VideoEditActivity : BaseThemedWithBarActivity() {
     }
 
     companion object {
-        const val VIDEO_TAG = "VideoEditTag"
-        const val MUTED = "VideoEditMutedTag"
-        const val SPEED = "VideoEditSpeedTag"
+        const val VIDEO_ARGUMENTS_TAG = "org.pixeldroid.media_editor.VideoEditTag"
         // List of choices of speeds
         val speedChoices: List<Number> = listOf(0.5, 1, 2, 4, 8)
-        const val VIDEO_START = "VideoEditVideoStartTag"
-        const val VIDEO_END = "VideoEditVideoEndTag"
-        const val VIDEO_CROP = "VideoEditVideoCropTag"
-        const val VIDEO_STABILIZE = "VideoEditVideoStabilizeTag"
         const val MODIFIED = "VideoEditModifiedTag"
+
+        /**
+         * @param muted should audio tracks be removed in the output
+         * @param videoStart when we want to start the video, in seconds, or null if we
+         * don't want to remove the start
+         * @param videoEnd when we want to end the video, in seconds, or null if we
+         * don't want to remove the end
+         */
+        fun startEncoding(
+            originalUri: Uri,
+            arguments: VideoEditArguments,
+            context: Context,
+            //TODO make interfaces for these callbacks, or something more explicit
+            registerNewFFmpegSession: (Uri, Long) -> Unit,
+            trackTempFile: (File) -> Unit,
+            videoEncodeProgress: (Uri, Int, Boolean, Uri?, Boolean) -> Unit,
+        ) {
+
+            // Having a meaningful suffix is necessary so that ffmpeg knows what to put in output
+            val suffix = originalUri.fileExtension(context.contentResolver)
+            val file = File.createTempFile("temp_video", ".$suffix", context.cacheDir)
+            //val file = File.createTempFile("temp_video", ".webm", cacheDir)
+            trackTempFile(file)
+            val fileUri = file.toUri()
+            val outputVideoPath = context.ffmpegCompliantUri(fileUri)
+
+            val ffmpegCompliantUri: String = context.ffmpegCompliantUri(originalUri)
+
+            val mediaInformation: MediaInformation? = FFprobeKit.getMediaInformation(context.ffmpegCompliantUri(originalUri)).mediaInformation
+            val totalVideoDuration = mediaInformation?.duration?.toFloatOrNull()
+
+            fun secondPass(stabilizeString: String = ""){
+                val speed = speedChoices[arguments.speedIndex]
+
+                val mutedString = if(arguments.muted || arguments.speedIndex != 1) "-an" else null
+                val startString: List<String?> = if(arguments.videoStart != null) listOf("-ss", "${arguments.videoStart/speed.toFloat()}") else listOf(null, null)
+
+                val endString: List<String?> = if(arguments.videoEnd != null) listOf("-to", "${arguments.videoEnd/speed.toFloat() - (arguments.videoStart ?: 0f)/speed.toFloat()}") else listOf(null, null)
+
+                // iw and ih are variables for the original width and height values, FFmpeg will know them
+                val cropString = if(arguments.videoCrop.notCropped()) "" else "crop=${arguments.videoCrop.relativeWidth}*iw:${arguments.videoCrop.relativeHeight}*ih:${arguments.videoCrop.relativeX}*iw:${arguments.videoCrop.relativeY}*ih"
+                val separator = if(arguments.speedIndex != 1 && !arguments.videoCrop.notCropped()) "," else ""
+                val speedString = if(arguments.speedIndex != 1) "setpts=PTS/${speed}" else ""
+
+                val separatorStabilize = if(stabilizeString == "" || (speedString == "" && cropString == "")) "" else ","
+
+                val speedAndCropString: List<String?> = if(arguments.speedIndex!= 1 || !arguments.videoCrop.notCropped() || stabilizeString.isNotEmpty())
+                    listOf("-filter:v", stabilizeString + separatorStabilize + speedString + separator + cropString)
+                // Stream copy is not compatible with filter, but when not filtering we can copy the stream without re-encoding
+                else listOf("-c", "copy")
+
+                // This should be set when re-encoding is required (otherwise it defaults to mpeg which then doesn't play)
+                val encodePreset: List<String?> = if(arguments.speedIndex != 1 && !arguments.videoCrop.notCropped()) listOf("-c:v", "libx264", "-preset", "ultrafast") else listOf(null, null, null, null)
+
+                val session: FFmpegSession =
+                    FFmpegKit.executeWithArgumentsAsync(listOfNotNull(
+                        startString[0], startString[1],
+                        "-i", ffmpegCompliantUri,
+                        speedAndCropString[0], speedAndCropString[1],
+                        endString[0], endString[1],
+                        mutedString, "-y",
+                        encodePreset[0], encodePreset[1], encodePreset[2], encodePreset[3],
+                        outputVideoPath,
+                    ).toTypedArray(),
+                        //val session: FFmpegSession = FFmpegKit.executeAsync("$startString -i $inputSafePath $endString -c:v libvpx-vp9 -c:a copy -an -y $outputVideoPath",
+                        { session ->
+                            val returnCode = session.returnCode
+                            if (ReturnCode.isSuccess(returnCode)) {
+
+                                videoEncodeProgress(originalUri, 100, false, outputVideoPath.toUri(), false)
+
+                                Log.d(TAG, "Encode completed successfully in ${session.duration} milliseconds")
+                            } else {
+                                videoEncodeProgress(originalUri, 0, false, outputVideoPath.toUri(), true)
+                                Log.e(TAG, "Encode failed with state ${session.state} and rc $returnCode.${session.failStackTrace}")
+                            }
+                        },
+                        { log -> Log.d("PostCreationActivityEncoding", log.message) }
+                    ) { statistics: Statistics? ->
+
+                        val timeInMilliseconds: Int? = statistics?.time
+                        timeInMilliseconds?.let {
+                            if (timeInMilliseconds > 0) {
+                                val completePercentage = totalVideoDuration?.let {
+                                    val speedupDurationModifier = speedChoices[arguments.speedIndex].toFloat()
+
+                                    val newTotalDuration = (it - (arguments.videoStart ?: 0f) - (it - (arguments.videoEnd ?: it)))/speedupDurationModifier
+                                    timeInMilliseconds / (10*newTotalDuration)
+                                }
+                                completePercentage?.let {
+                                    val rounded: Int = it.roundToInt()
+                                    videoEncodeProgress(originalUri, rounded, false, null, false)
+                                }
+                                Log.d(TAG, "Encoding video: %$completePercentage.")
+                            }
+                        }
+                    }
+                registerNewFFmpegSession(originalUri, session.sessionId)
+            }
+
+            fun stabilizationFirstPass(){
+
+                val shakeResultsFile = File.createTempFile("temp_shake_results", ".trf", context.cacheDir)
+                trackTempFile(shakeResultsFile)
+                val shakeResultsFileUri = shakeResultsFile.toUri()
+                val shakeResultsFileSafeUri = context.ffmpegCompliantUri(shakeResultsFileUri).removePrefix("file://")
+
+                val inputSafeUri: String = context.ffmpegCompliantUri(originalUri)
+
+                // Map chosen "stabilization force" to shakiness, from 3 to 10
+                val shakiness = (0f..100f).convert(arguments.videoStabilize, 3f..10f).roundToInt()
+
+                val analyzeVideoCommandList = listOf(
+                    "-y", "-i", inputSafeUri,
+                    "-vf", "vidstabdetect=shakiness=$shakiness:accuracy=15:result=$shakeResultsFileSafeUri",
+                    "-f", "null", "-"
+                ).toTypedArray()
+
+                val session: FFmpegSession =
+                    FFmpegKit.executeWithArgumentsAsync(analyzeVideoCommandList,
+                    { firstPass ->
+                        if (ReturnCode.isSuccess(firstPass.returnCode)) {
+                            // Map chosen "stabilization force" to shakiness, from 8 to 40
+                            val smoothing = (0f..100f).convert(arguments.videoStabilize, 8f..40f).roundToInt()
+
+                            val stabilizeVideoCommand =
+                                "vidstabtransform=smoothing=$smoothing:input=${context.ffmpegCompliantUri(shakeResultsFileUri).removePrefix("file://")}"
+                            secondPass(stabilizeVideoCommand)
+                        } else {
+                            Log.e(
+                                "PostCreationActivityEncoding",
+                                "Video stabilization first pass failed!"
+                            )
+                        }
+                    },
+                    { log -> Log.d("PostCreationActivityEncoding", log.message) },
+                    { statistics: Statistics? ->
+
+                        val timeInMilliseconds: Int? = statistics?.time
+                        timeInMilliseconds?.let {
+                            if (timeInMilliseconds > 0) {
+                                val completePercentage = totalVideoDuration?.let {
+                                    // At this stage, we didn't change speed or start/end of the video
+                                    timeInMilliseconds / (10 * it)
+                                }
+                                completePercentage?.let {
+                                    val rounded: Int = it.roundToInt()
+                                    videoEncodeProgress(originalUri, rounded, true, null, false)
+                                }
+
+                                Log.d(TAG, "Stabilization pass: %$completePercentage.")
+                            }
+                        }
+                    })
+                registerNewFFmpegSession(originalUri, session.sessionId)
+            }
+
+            if(arguments.videoStabilize > 0.01f) {
+                // Stabilization was requested: we need an additional first pass to get stabilization data
+                stabilizationFirstPass()
+            } else {
+                // Immediately call the second pass, no stabilization needed
+                secondPass()
+            }
+
+        }
+
+        fun cancelEncoding(){
+            FFmpegKit.cancel()
+        }
+        fun cancelEncoding(sessionId: Long){
+            FFmpegKit.cancel(sessionId)
+        }
     }
 }

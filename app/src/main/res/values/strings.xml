@@ -91,9 +91,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="add_account_name">Add Account</string>
     <string name="add_account_description">Add another Pixelfed Account</string>
     <!-- Post creation -->
-    <string name="permission_denied">Permission denied</string>
-    <string name="save_image_failed">Unable to save image</string>
-    <string name="save_image_success">Image successfully saved</string>
     <plurals name="description_max_characters">
         <item quantity="one">"Description must contain %d character at most."</item>
         <item quantity="other">"Description must contain %d characters at most."</item>
@@ -116,24 +113,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="size_exceeds_instance_limit">Size of image number %1$d in the album exceeds the maximum size allowed by the instance (%2$d kB but the limit is %3$d kB). You might not be able to upload it.</string>
     <string name="video_not_supported">"The server you are using doesn't support video uploads, you might not be able to upload videos included in this post"</string>
     <string name="upload_error">Error code returned by server: %1$d</string>
-
-
-    <!-- Post editing -->
-    <string name="lbl_brightness">Brightness</string>
-    <string name="lbl_contrast">Contrast</string>
-    <string name="lbl_saturation">Saturation</string>
-    <string name="tab_filters">Filters</string>
-    <string name="edit">Edit</string>
-    <string name="filter_thumbnail">Thumbnail of filter</string>
-    <string name="normal_filter">Normal</string>
-    <string name="busy_dialog_text">Still processing image, wait for that to finish first!</string>
-    <string name="busy_dialog_ok_button">OK, wait for that.</string>
-    <string name="crop_result_error">"Couldn't retrieve image after crop"</string>
-    <string name="image_preview">Preview of the image being edited</string>
-    <string name="crop_button">Button to crop or rotate the image</string>
-    <string name="save_before_returning">Save your edits?</string>
-    <string name="no_cancel_edit">No, cancel edit</string>
-    <string name="error_editing">Error while editing</string>
 
     <!-- Camera -->
     <string name="capture_button_alt">Capture</string>
@@ -243,7 +222,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="report_target">Report @%1$s\'s post</string>
     <string name="reported">Post reported</string>
     <string name="report_error">Could not send report</string>
-    <string name="toolbar_title_edit">Edit</string>
     <string name="profile_picture">Profile picture</string>
     <string name="open_drawer_menu">Open drawer menu</string>
     <string name="discover">DISCOVER</string>
@@ -274,23 +252,10 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="no_camera_permission">Camera permission not granted, grant the permission in settings if you want to let PixelDroid use the camera</string>
     <string name="no_storage_permission">Storage permission not granted, grant the permission in settings if you want to let PixelDroid show the thumbnail</string>
     <string name="play_video">Play video</string>
-    <string name="video_edit_not_yet_supported">Video editing is not yet supported</string>
-    <string name="thumbnail_reel_video_edit">Reel showing thumbnails of the video you are editing</string>
-    <string name="reset_edit_menu">RESET</string>
-    <string name="save_edit_menu">SAVE</string>
     <string name="encode_error">Error encoding</string>
     <string name="encode_success">Encode success!</string>
     <string name="encode_progress">Encode %1$d%%</string>
-    <string name="stabilize_video">Stabilize video</string>
-    <string name="stabilize_video_intensity">Change intensity of stabilization</string>
-    <string name="stabilization_saved">Stabilization saved</string>
     <string name="analyzing_stabilization">Analysis for stabilization %1$d%%</string>
-    <string name="select_video_range">Select what to keep of the video</string>
-    <string name="mute_video">Mute video</string>
-    <string name="video_speed">Change video speed</string>
-    <string name="video_crop">Crop video</string>
-    <string name="save_crop">Save crop</string>
-    <string name="crop_saved">Crop saved</string>
     <string name="still_encoding">One or more videos are still encoding. Wait for them to finish before uploading</string>
     <string name="new_post_shortcut_long">Create new post</string>
     <string name="new_post_shortcut_short">New post</string>
