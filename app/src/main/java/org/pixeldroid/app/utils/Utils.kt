@@ -25,7 +25,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.google.android.material.color.MaterialColors
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -95,13 +94,6 @@ fun normalizeDomain(domain: String): String {
             .replace("https://", "")
             .trim(Char::isWhitespace)
 }
-
-fun Context.ffmpegCompliantUri(inputUri: Uri?): String =
-    if (inputUri?.scheme == "content")
-        FFmpegKitConfig.getSafParameterForRead(this, inputUri)
-    else inputUri.toString()
-
-
 
 fun BaseActivity.openUrl(url: String): Boolean {
 

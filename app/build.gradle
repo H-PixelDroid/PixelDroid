@@ -196,10 +196,8 @@ dependencies {
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
 
-    implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.github.yalantis:ucrop:2.2.8-native'
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.0'
     implementation project(path: ':scrambler')
-    implementation project(path: ':mediaEditor')
 
     implementation('com.github.bumptech.glide:glide:4.14.2') {
         exclude group: "com.android.support"
