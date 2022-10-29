@@ -165,7 +165,7 @@ class TrendingActivity : BaseThemedWithBarActivity() {
 
 
     /**
-     * [RecyclerView.Adapter] that can display a list of [Status]s' thumbnails for the discover view
+     * [RecyclerView.Adapter] that can display a list of [Tag]s for the trending view
      */
     class HashtagsRecyclerViewAdapter: RecyclerView.Adapter<HashTagViewHolder>() {
         private val tags: ArrayList<Tag?> = ArrayList()
@@ -190,7 +190,7 @@ class TrendingActivity : BaseThemedWithBarActivity() {
 
 
     /**
-     * [RecyclerView.Adapter] that can display a list of [Status]s' thumbnails for the discover view
+     * [RecyclerView.Adapter] that can display a list of [Account]s for the popular view
      */
     class AccountsRecyclerViewAdapter: RecyclerView.Adapter<AccountViewHolder>() {
         private val accounts: ArrayList<Account?> = ArrayList()
