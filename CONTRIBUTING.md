@@ -22,7 +22,8 @@ Before starting to work on an issue or an improvement, you can ask us on our Mat
 
 Download the latest version of [Android Studio](https://developer.android.com/studio)
 
-TODO: explain cloning git submodules
+Then clone the project: you need to clone it with submodules: `git clone --recurse-submodules`.
+You can find more information about submodules [here](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
 
 When first opening the project, you might encounter this issue: 
 
@@ -38,15 +39,33 @@ Every time you change any dependency in ``build.gradle``, you will encounter the
 
 ![Gradle dependency](Screenshots/gradle-dependency-verification.png)
 
-TODO: explain why
+This is because PixelDroid has [dependency verification](https://docs.gradle.org/current/userguide/dependency_verification.html) enabled.
+Dependency verification is useful to protect against supply chain attacks.
+Only dependencies which are in the `verification-metadata.xml` file are allowed to be used.
 
-In the top toolbar, go to ``Edit Configurations... > Gradle `` and click on ``+`` in the top left corner to add a new run configuration. In the field ``Run``, write the command that triggered the dependency error, which in your case is probably ``assembleDebug`` (command executed when pressing the play button) and give it the arguments ``--write-verification-metadata sha256``.
+However, this means that whenever the dependencies change (for example updates or new dependencies),
+we have to update the `verification-metadata.xml` file. To avoid doing this manually, you can follow
+the following steps:
+
+In the top toolbar, go to ``Edit Configurations... > Gradle`` and click on ``+`` in the top left corner to add a new run configuration.
+In the field ``Run``, write the command that triggered the dependency error,
+which in your case is probably ``assembleDebug`` (command executed when pressing the play button) and give it the arguments ``--write-verification-metadata sha256``.
 
 ![Run Configuration](Screenshots/run-configuration.png)
 
-You can now run PixelDroid with your new configuration
+You can now build PixelDroid this new configuration: select it and then press the play button.
 
 ![Run with new config](Screenshots/run-new-config.png)
 
-This has to be done only once when you encounter this error, then you can run the app as usual again.
-TODO: explain what it did
+This has to be done only once when you encounter this error, then you can run the app as usual again,
+by selecting the "app" Run Configuration.
+
+`--write-verification-metadata` has now added the new dependencies to the `verification-metadata.xml` file.
+When you do a Merge Request, we will check that the added values make sense.
+
+### Getting your changes into the app
+
+Once you are done with your changes, you should create a Merge Request. 
+Depending on if you were given write access to the repository, you may have to create a fork and submit a merge request from there.
+Consult the [GitLab documentation](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html) for more details, 
+and don't hesitate to ask on our Matrix channel (#pixeldroid:gnugen.ch) if you get stuck :)
