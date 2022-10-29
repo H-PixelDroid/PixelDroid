@@ -189,7 +189,6 @@
     <string name="follow_requested">Followeranfrage</string>
     <string name="delete_post_failed_io_except">Beitrag konnte nicht gelöscht werden. Internetverbindung unterbrochen\?</string>
     <string name="edit_link_failed">Das Öffnen der Bearbeitungsseite ist gescheitert</string>
-    <string name="discover_no_infinite_load">\"Entdecke\" lädt nicht endlos. Nach unten ziehen, um weitere Bilder zu laden.</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="no_camera_permission">Die Einwilligung die Kamera zu nutzen wurde nicht erteilt. Erlaube die Kameranutzung in den Einstellungen, wenn du die Kamera in PixelDroid verwenden willst</string>
     <string name="no_storage_permission">Die Erlaubnis, auf die Dateien zuzugreifen wurde nicht erteilt. Erlaube den Zugriff auf Daten wenn du PixelDroid das Thumbnail anzeigen lassen willst</string>

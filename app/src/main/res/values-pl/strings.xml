@@ -88,7 +88,6 @@
     <string name="delete">Usuń</string>
     <string name="delete_dialog">Czy usunąć ten post\?</string>
     <string name="no_cancel_edit">Nie, odrzuć edycję</string>
-    <string name="discover_no_infinite_load">Sekcja Odkryj nie wczytuje się bez końca. Pociągnij, aby odświeżyć dla innych obrazów.</string>
     <string name="switch_to_carousel">Przełącz na karuzelę</string>
     <plurals name="replies_count">
         <item quantity="one">%d odpowiedź</item>

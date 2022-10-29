@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import org.pixeldroid.app.databinding.FragmentSearchBinding
+import org.pixeldroid.app.searchDiscover.TrendingActivity.Companion.TRENDING_TAG
+import org.pixeldroid.app.searchDiscover.TrendingActivity.Companion.TrendingType
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.bindingLifecycleAware
@@ -43,11 +45,15 @@ class SearchDiscoverFragment : BaseFragment() {
 
         api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
-        binding.discoverCardView.setOnClickListener { onClickDiscover() }
+        binding.discoverCardView.setOnClickListener { onClickCardView(TrendingType.DISCOVER) }
+        binding.trendingCardView.setOnClickListener { onClickCardView(TrendingType.POSTS) }
+        binding.hashtagsCardView.setOnClickListener { onClickCardView(TrendingType.HASHTAGS) }
+        binding.accountsCardView.setOnClickListener { onClickCardView(TrendingType.ACCOUNTS) }
     }
 
-    private fun onClickDiscover() {
-        val intent = Intent(requireContext(), DiscoverActivity::class.java)
+    private fun onClickCardView(type: TrendingType) {
+        val intent = Intent(requireContext(), TrendingActivity::class.java)
+        intent.putExtra(TRENDING_TAG, type)
         ContextCompat.startActivity(binding.root.context, intent, null)
     }
 }

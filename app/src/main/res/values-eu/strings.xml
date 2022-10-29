@@ -187,7 +187,6 @@
     <string name="size_exceeds_instance_limit">Albumean %1$d zenbakia duen irudiaren tamainak instantziak onartutako gehienezko tamaina gainditzen du (%2$d kB ditu, eta muga %3$d kB da). Baliteke ezin igo ahal izatea.</string>
     <string name="total_exceeds_album_limit">Zerbitzariak onartutako kopurua (%1$s) baino irudi gehiago aukeratu dituzu. Mugatik gorako irudiei ez ikusia egin zaie.</string>
     <string name="api_not_enabled_dialog">APIa ez dago aktibo instantzia honetan. Jarri zure administratzailearekin kontaktuan aktibatzeko.</string>
-    <string name="discover_no_infinite_load">Aurkikuntza ez da infinituki kargatzen. Tira irudi gehiago kargatzeko.</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="file_not_found">%1$s fitxategia ez da aurkitu</string>
     <string name="edit_link_failed">Huts egin du edizio orria irekitzean</string>

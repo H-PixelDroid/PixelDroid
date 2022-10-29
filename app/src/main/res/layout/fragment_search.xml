@@ -25,49 +25,16 @@
         app:layout_constraintTop_toBottomOf="@+id/search">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/discoverCardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            style="?attr/materialCardViewElevatedStyle"
-            app:layout_constraintBottom_toTopOf="@id/trendingCardView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/discover"
-                    android:textAppearance="?attr/textAppearanceTitleLarge"
-                    android:drawablePadding="4dp"
-                    app:drawableStartCompat="@drawable/explore_24dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/explore_posts"
-                    android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:layout_marginTop="8dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
             android:id="@+id/trendingCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             style="?attr/materialCardViewElevatedStyle"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
             app:layout_constraintBottom_toTopOf="@+id/hashtagsCardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/discoverCardView">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,15 +45,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/trending"
+                    android:text="@string/trending_posts"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:drawablePadding="4dp"
-                    app:drawableLeftCompat="@drawable/baseline_collections_24" />
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    app:drawableLeftCompat="@drawable/baseline_auto_graph_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/daily_trending"
+                    android:textColor="?attr/colorOnSecondaryContainer"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
@@ -98,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             style="?attr/materialCardViewElevatedStyle"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
             app:layout_constraintBottom_toTopOf="@id/accountsCardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -112,15 +82,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/your_hashtags"
+                    android:text="@string/trending_hashtags"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:drawablePadding="4dp"
+                    android:textColor="?attr/colorOnSecondaryContainer"
                     app:drawableStartCompat="@drawable/baseline_tag" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/explore_hashtags"
+                    android:textColor="?attr/colorOnSecondaryContainer"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
@@ -132,7 +104,45 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             style="?attr/materialCardViewElevatedStyle"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
             app:layout_constraintTop_toBottomOf="@id/hashtagsCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/discoverCardView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popular_accounts"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:drawablePadding="4dp"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    app:drawableStartCompat="@drawable/baseline_person_add" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/explore_accounts"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/discoverCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            style="?attr/materialCardViewElevatedStyle"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
+            app:layout_constraintTop_toBottomOf="@id/accountsCardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -146,15 +156,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/find_friends"
+                    android:text="@string/discover"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:drawablePadding="4dp"
-                    app:drawableStartCompat="@drawable/baseline_person_add" />
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    app:drawableStartCompat="@drawable/explore_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/find_accounts"
+                    android:text="@string/explore_posts"
+                    android:textColor="?attr/colorOnSecondaryContainer"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
                     android:layout_marginTop="8dp" />
             </LinearLayout>

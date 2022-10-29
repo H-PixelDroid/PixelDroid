@@ -247,7 +247,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="profile_picture">Profile picture</string>
     <string name="open_drawer_menu">Open drawer menu</string>
     <string name="discover">Discover</string>
-    <string name="discover_no_infinite_load">Discover doesn\'t load infinitely. Pull to refresh for other images.</string>
     <string name="something_went_wrong">Something went wrong…</string>
     <string name="panda_pull_to_refresh_to_try_again">This panda is not happy. Pull to refresh to try again.</string>
     <string name="redraft">Redraft</string>
@@ -315,13 +314,13 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="post_preview">Preview of a post</string>
     <string name="description_template_summary">"Prefill new posts' description with this"</string>
     <string name="description_template">Description template</string>
-    <string name="find_accounts">Find accounts based on common interests</string>
-    <string name="find_friends">Find Friends</string>
-    <string name="explore_hashtags">Explore posts tagged with hashtags you follow</string>
-    <string name="your_hashtags">Your Hashtags</string>
+    <string name="explore_accounts">Explore popular accounts on this instance</string>
+    <string name="popular_accounts">Popular Accounts</string>
+    <string name="explore_hashtags">Explore trending hashtags on this instance</string>
+    <string name="trending_hashtags">Trending Hashtags</string>
     <string name="daily_trending">View daily trending posts</string>
-    <string name="trending">Trending</string>
-    <string name="explore_posts">Explore posts on this instance</string>
+    <string name="trending_posts">Trending Posts</string>
+    <string name="explore_posts">Explore random posts of the day</string>
     <plurals name="replies_count">
         <item quantity="one">%d reply</item>
         <item quantity="other">%d replies</item>

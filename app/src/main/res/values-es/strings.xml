@@ -112,7 +112,6 @@
     <string name="delete">Borrar</string>
     <string name="panda_pull_to_refresh_to_try_again">Este panda está triste. Desliza hacia abajo para intentarlo de nuevo.</string>
     <string name="something_went_wrong">Algo fue mal…</string>
-    <string name="discover_no_infinite_load">\'Descubre\' no carga infinitamente. Desliza hacia abajo para cargar más imágenes.</string>
     <string name="discover">DESCUBRE</string>
     <string name="open_drawer_menu">Abrir el menú lateral</string>
     <string name="profile_picture">Imagen de perfil</string>

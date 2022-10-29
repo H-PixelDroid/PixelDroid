@@ -42,7 +42,6 @@
     <string name="switch_to_grid">Режим сітки</string>
     <string name="switch_to_carousel">Режим каруселі</string>
     <string name="verify_credentials">Не вдалось отримати користувацькі дані</string>
-    <string name="discover_no_infinite_load">Потягніть для оновлення, щоб отримати нові цікаві зображення.</string>
     <string name="instance_error">Не вдалось отримати дані про сервер</string>
     <string name="save_image_description">Зберегти опис зображення</string>
     <string name="no_media_description">Опишіть медіафайл…</string>
