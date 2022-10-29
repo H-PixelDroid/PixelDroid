@@ -172,6 +172,9 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
         <item quantity="one">"%d\nFollowing"</item>
         <item quantity="other">"%d\nFollowing"</item>
     </plurals>
+    <string name="edit">Edit</string>
+    <string name="save_image_failed">Unable to save image</string>
+    <string name="save_image_success">Image successfully saved</string>
     <string name="follow_status_failed">Could not get follow status</string>
     <string name="edit_link_failed">Failed to open edit page</string>
     <string name="empty_feed">Nothing to see here :(</string>

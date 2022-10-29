@@ -450,6 +450,13 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         _uiState.update { it.copy(newPostDescriptionText = text.toString()) }
     }
 
+    /**
+     * @param originalUri the Uri of the file you sent to be edited
+     * @param progress percentage of (this pass of) encoding that is done
+     * @param firstPass Whether this is the first pass (currently for analysis of video stabilization) or the second (and last) pass.
+     * @param outputVideoPath when not null, it means the encoding is done and the result is saved in this file
+     * @param error is true when there has been an error during encoding.
+     */
     private fun videoEncodeProgress(originalUri: Uri, progress: Int, firstPass: Boolean, outputVideoPath: Uri?, error: Boolean){
         photoData.value?.indexOfFirst { it.imageUri == originalUri }?.let { position ->
 
