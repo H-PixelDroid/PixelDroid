@@ -7,6 +7,7 @@ import okhttp3.Interceptor
 import org.pixeldroid.app.utils.api.objects.*
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import org.pixeldroid.app.utils.api.objects.Tag
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
@@ -20,7 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
 import java.time.Instant
-import java.time.format.DateTimeFormatter
 
 
 /*
@@ -319,6 +319,17 @@ interface PixelfedAPI {
     // get discover
     @GET("/api/v1/discover/posts")
     suspend fun discover() : DiscoverPosts
+
+    @GET("/api/v1.1/discover/accounts/popular")
+    suspend fun popularAccounts() : List<Account>
+
+    @GET("/api/v1.1/discover/posts/trending")
+    suspend fun trendingPosts(
+        @Query("range") range: String
+    ) : List<Status>
+
+    @GET("/api/v1.1/discover/posts/hashtags")
+    suspend fun trendingHashtags() : List<Tag>
 
     @FormUrlEncoded
     @POST("/api/v1/reports")

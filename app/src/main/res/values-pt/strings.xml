@@ -231,7 +231,6 @@
     </plurals>
     <string name="media_upload_completed">Envio de media terminado</string>
     <string name="report_target">Denunciar a publicação de @%1$s</string>
-    <string name="discover_no_infinite_load">Descobrir não carrega infinitamente. Puxe para atualizar para outras imagens.</string>
     <string name="delete_post_failed_error">Não foi possível eliminar a publicação, erro %1$d</string>
     <string name="video_not_supported">O servidor que está a usar não permite o envio de vídeos</string>
     <string name="media_upload_failed">Falhou o envio da media, tente novamente ou verifique a sua conectividade</string>

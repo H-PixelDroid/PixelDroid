@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".searchDiscover.DiscoverActivity">
+    tools:context=".searchDiscover.TrendingActivity">
 
     <ProgressBar
-        android:id="@+id/discoverProgressBar"
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/discoverRefreshLayout"
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -41,26 +41,16 @@
                     <include layout="@layout/error_layout"/>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/discoverList"
+                        android:id="@+id/list"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:nestedScrollingEnabled="false"
+                        app:layoutManager="LinearLayoutManager"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/discoverText" />
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                 </androidx.constraintlayout.motion.widget.MotionLayout>
-
-                <TextView
-                    android:id="@+id/discoverNoInfiniteLoad"
-                    android:visibility="invisible"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="@string/discover_no_infinite_load"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/motionLayout"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

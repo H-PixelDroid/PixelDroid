@@ -122,7 +122,6 @@
     <string name="delete_dialog">删除这则帖子？</string>
     <string name="panda_pull_to_refresh_to_try_again">这只熊猫不高兴。下拉刷新以再次尝试。</string>
     <string name="something_went_wrong">出错了…</string>
-    <string name="discover_no_infinite_load">Discover 不会无限加载。下拉来刷新获取其他图像。</string>
     <string name="discover">发现</string>
     <string name="open_drawer_menu">打开抽屉按钮</string>
     <string name="profile_picture">个人资料图片</string>

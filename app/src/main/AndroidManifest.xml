@@ -150,7 +150,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".searchDiscover.DiscoverActivity"
+            android:name=".searchDiscover.TrendingActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity">
         </activity>
