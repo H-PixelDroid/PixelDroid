@@ -18,13 +18,10 @@ import androidx.recyclerview.widget.*
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ImageCarouselBinding
 import me.relex.circleindicator.CircleIndicator2
-import org.jetbrains.annotations.NotNull
-import org.jetbrains.annotations.Nullable
-
 
 class ImageCarousel(
-        @NotNull context: Context,
-        @Nullable private var attributeSet: AttributeSet?
+        context: Context,
+        private var attributeSet: AttributeSet?
 ) : ConstraintLayout(context, attributeSet), OnItemClickListener {
 
     private var adapter: CarouselAdapter? = null
@@ -91,17 +88,7 @@ class ImageCarousel(
             }
 
             if (position != RecyclerView.NO_POSITION && field != position) {
-                val thisProgress = data?.getOrNull(position)?.encodeProgress
-                if (thisProgress != null) {
-                    binding.encodeInfoCard.visibility = VISIBLE
-                    binding.encodeProgress.visibility = VISIBLE
-                    binding.encodeInfoText.text = (if(data?.getOrNull(position)?.stabilizationFirstPass == true){
-                        context.getString(R.string.analyzing_stabilization)
-                    } else context.getString(R.string.encode_progress)).format(thisProgress)
-                    binding.encodeProgress.progress = thisProgress
-                } else {
-                    binding.encodeInfoCard.visibility = GONE
-                }
+                updateProgress()
             } else if(position == RecyclerView.NO_POSITION) binding.encodeInfoCard.visibility = GONE
 
             if (position != RecyclerView.NO_POSITION && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -558,36 +545,42 @@ class ImageCarousel(
 
             this@ImageCarousel.data = data.toMutableList()
 
+            updateProgress()
             initOnScrollStateChange()
         }
         showNavigationButtons = data.size != 1
     }
 
-    fun updateProgress(progress: Int?, position: Int, error: Boolean){
-        data?.getOrNull(position)?.encodeProgress = progress
-        if(currentPosition == position) {
-            if (progress == null) {
-                binding.encodeProgress.visibility = GONE
-                if(error){
-                    binding.encodeInfoText.setText(R.string.encode_error)
-                    binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.error),
-                        null, null, null)
+    private fun updateProgress(){
 
-                } else {
-                    binding.encodeInfoText.setText(R.string.encode_success)
-                    binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.check_circle_24),
+        val currentItem = data?.getOrNull(currentPosition)
+
+        currentItem?.let {
+            if(it.encodeError){
+                binding.encodeInfoCard.visibility = VISIBLE
+                binding.encodeProgress.visibility = GONE
+                binding.encodeInfoText.setText(R.string.encode_error)
+                binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.error),
                     null, null, null)
-                }
-            } else {
+            } else if(it.encodeComplete){
+                binding.encodeInfoCard.visibility = VISIBLE
+                binding.encodeProgress.visibility = GONE
+                binding.encodeInfoText.setText(R.string.encode_success)
+                binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.check_circle_24),
+                    null, null, null)
+            } else if(it.encodeProgress != null){
                 binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
                 binding.encodeProgress.visibility = VISIBLE
                 binding.encodeInfoCard.visibility = VISIBLE
-                binding.encodeProgress.progress = progress
-                binding.encodeInfoText.text = (if(data?.getOrNull(position)?.stabilizationFirstPass == true){
+                binding.encodeProgress.progress = it.encodeProgress ?: 0
+                binding.encodeInfoText.text = (if(it.stabilizationFirstPass == true){
                     context.getString(R.string.analyzing_stabilization)
-                } else context.getString(R.string.encode_progress)).format(progress)
+                } else context.getString(R.string.encode_progress)).format(it.encodeProgress ?: 0)
+            } else {
+                binding.encodeInfoCard.visibility = GONE
             }
         }
+
     }
 
     /**

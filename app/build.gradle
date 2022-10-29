@@ -177,8 +177,6 @@ dependencies {
      */
 
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
-    implementation 'com.arthenica:ffmpeg-kit-min-gpl:5.1.LTS'
-
 
     implementation 'com.google.android.material:material:1.7.0'
 
@@ -198,8 +196,7 @@ dependencies {
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
 
-    implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.github.yalantis:ucrop:2.2.8-native'
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.1'
     implementation project(path: ':scrambler')
 
     implementation('com.github.bumptech.glide:glide:4.14.2') {

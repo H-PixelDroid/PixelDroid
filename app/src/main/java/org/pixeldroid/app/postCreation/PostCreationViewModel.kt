@@ -13,7 +13,6 @@ import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
-import com.arthenica.ffmpegkit.FFmpegKit
 import com.jarsilio.android.scrambler.exceptions.UnsupportedFileFormatException
 import com.jarsilio.android.scrambler.stripMetadata
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -26,9 +25,8 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
-import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity
-import org.pixeldroid.app.postCreation.photoEdit.VideoEditActivity.RelativeCropPosition
+import org.pixeldroid.media_editor.photoEdit.VideoEditActivity
+import org.pixeldroid.media_editor.photoEdit.VideoEditActivity.RelativeCropPosition
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
@@ -63,15 +61,20 @@ data class PostCreationActivityUiState(
     val uploadErrorVisible: Boolean = false,
     val uploadErrorExplanationText: String = "",
     val uploadErrorExplanationVisible: Boolean = false,
+    )
 
-    val newEncodingJobPosition: Int? = null,
-    val newEncodingJobMuted: Boolean? = null,
-    val newEncodingJobSpeedIndex: Int? = null,
-    val newEncodingJobVideoStart: Float? = null,
-    val newEncodingJobVideoEnd: Float? = null,
-    val newEncodingJobVideoCrop: RelativeCropPosition? = null,
-    val newEncodingJobStabilize: Float? = null,
-)
+data class PhotoData(
+    var imageUri: Uri,
+    var size: Long,
+    var uploadId: String? = null,
+    var progress: Int? = null,
+    var imageDescription: String? = null,
+    var video: Boolean,
+    var videoEncodeProgress: Int? = null,
+    var videoEncodeStabilizationFirstPass: Boolean? = null,
+    var videoEncodeComplete: Boolean = false,
+    var videoEncodeError: Boolean = false,
+    )
 
 class PostCreationViewModel(application: Application, clipdata: ClipData? = null, val instance: InstanceDatabaseEntity? = null) : AndroidViewModel(application) {
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
@@ -96,27 +99,14 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
 
     val uiState: StateFlow<PostCreationActivityUiState> = _uiState
 
-
     // Map photoData indexes to FFmpeg Session IDs
-    private val sessionMap: MutableMap<Int, Long> = mutableMapOf()
+    private val sessionMap: MutableMap<Uri, Long> = mutableMapOf()
     // Keep track of temporary files to delete them (avoids filling cache super fast with videos)
     private val tempFiles: java.util.ArrayList<File> = java.util.ArrayList()
 
     fun userMessageShown() {
         _uiState.update { currentUiState ->
             currentUiState.copy(userMessage = null)
-        }
-    }
-
-    fun encodingStarted() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                newEncodingJobPosition = null,
-                newEncodingJobMuted = null,
-                newEncodingJobSpeedIndex = null,
-                newEncodingJobVideoStart = null,
-                newEncodingJobVideoEnd = null,
-            )
         }
     }
 
@@ -209,9 +199,17 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         photoData.value = photoData.value?.map { it.copy(uploadId = null, progress = null) }?.toMutableList()
     }
 
-    fun setVideoEncodeAtPosition(position: Int, progress: Int?, stabilizationFirstPass: Boolean = false) {
-        photoData.value?.set(position, photoData.value!![position].copy(videoEncodeProgress = progress, videoEncodeStabilizationFirstPass = stabilizationFirstPass))
-        photoData.value = photoData.value
+    fun setVideoEncodeAtPosition(uri: Uri, progress: Int?, stabilizationFirstPass: Boolean = false, error: Boolean = false) {
+        photoData.value?.indexOfFirst { it.imageUri == uri }?.let { position ->
+            photoData.value?.set(position,
+                photoData.value!![position].copy(
+                    videoEncodeProgress = progress,
+                    videoEncodeStabilizationFirstPass = stabilizationFirstPass,
+                    videoEncodeError = error,
+                )
+            )
+            photoData.value = photoData.value
+        }
     }
 
     fun setUriAtPosition(uri: Uri, position: Int) {
@@ -415,37 +413,24 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
             if (video) {
                 val modified: Boolean = data.getBooleanExtra(VideoEditActivity.MODIFIED, false)
                 if(modified){
-                    val muted: Boolean = data.getBooleanExtra(VideoEditActivity.MUTED, false)
-                    val speedIndex: Int = data.getIntExtra(VideoEditActivity.SPEED, 1)
-                    val videoStart: Float? = data.getFloatExtra(VideoEditActivity.VIDEO_START, -1f).let {
-                        if(it == -1f) null else it
-                    }
-                    val videoEnd: Float? = data.getFloatExtra(VideoEditActivity.VIDEO_END, -1f).let {
-                        if(it == -1f) null else it
-                    }
+                    val videoEncodingArguments: VideoEditActivity.VideoEditArguments? = data.getSerializableExtra(VideoEditActivity.VIDEO_ARGUMENTS_TAG) as? VideoEditActivity.VideoEditArguments
 
-                    val videoCrop: RelativeCropPosition = data.getSerializableExtra(VideoEditActivity.VIDEO_CROP) as RelativeCropPosition
+                    sessionMap[imageUri]?.let { VideoEditActivity.cancelEncoding(it) }
 
-                    val videoStabilize: Float = data.getFloatExtra(VideoEditActivity.VIDEO_STABILIZE, 0f)
+                    videoEncodingArguments?.let {
+                        videoEncodeStabilizationFirstPass = videoEncodingArguments.videoStabilize > 0.01f
+                        videoEncodeProgress = 0
 
-                    videoEncodeStabilizationFirstPass = videoStabilize > 0.01f
-                    videoEncodeProgress = 0
-
-                    sessionMap[position]?.let { FFmpegKit.cancel(it) }
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            newEncodingJobPosition = position,
-                            newEncodingJobMuted = muted,
-                            newEncodingJobSpeedIndex = speedIndex,
-                            newEncodingJobVideoStart = videoStart,
-                            newEncodingJobVideoEnd = videoEnd,
-                            newEncodingJobVideoCrop = videoCrop,
-                            newEncodingJobStabilize = videoStabilize
+                        VideoEditActivity.startEncoding(imageUri, it,
+                            context = getApplication<PixelDroidApplication>(),
+                            registerNewFFmpegSession = ::registerNewFFmpegSession,
+                            trackTempFile = ::trackTempFile,
+                            videoEncodeProgress = ::videoEncodeProgress
                         )
                     }
                 }
             } else {
-                imageUri = data.getStringExtra(PhotoEditActivity.PICTURE_URI)!!.toUri()
+                imageUri = data.getStringExtra(org.pixeldroid.media_editor.photoEdit.PhotoEditActivity.PICTURE_URI)!!.toUri()
                 val (imageSize, imageVideo) = getSizeAndVideoValidate(imageUri, position)
                 size = imageSize
                 video = imageVideo
@@ -465,24 +450,66 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         _uiState.update { it.copy(newPostDescriptionText = text.toString()) }
     }
 
+    /**
+     * @param originalUri the Uri of the file you sent to be edited
+     * @param progress percentage of (this pass of) encoding that is done
+     * @param firstPass Whether this is the first pass (currently for analysis of video stabilization) or the second (and last) pass.
+     * @param outputVideoPath when not null, it means the encoding is done and the result is saved in this file
+     * @param error is true when there has been an error during encoding.
+     */
+    private fun videoEncodeProgress(originalUri: Uri, progress: Int, firstPass: Boolean, outputVideoPath: Uri?, error: Boolean){
+        photoData.value?.indexOfFirst { it.imageUri == originalUri }?.let { position ->
+
+            if(outputVideoPath != null){
+                // If outputVideoPath is not null, it means the video is done and we can change Uris
+                val (size, _) = getSizeAndVideoValidate(outputVideoPath, position)
+
+                photoData.value?.set(position,
+                    photoData.value!![position].copy(
+                        imageUri = outputVideoPath,
+                        videoEncodeProgress = progress,
+                        videoEncodeStabilizationFirstPass = firstPass,
+                        videoEncodeComplete = true,
+                        videoEncodeError = error,
+                        size = size,
+                    )
+                )
+            } else {
+                photoData.value?.set(position,
+                    photoData.value!![position].copy(
+                        videoEncodeProgress = progress,
+                        videoEncodeStabilizationFirstPass = firstPass,
+                        videoEncodeComplete = false,
+                        videoEncodeError = error,
+                    )
+                )
+            }
+
+            // Run assignment in main thread
+            viewModelScope.launch {
+                photoData.value = photoData.value
+            }
+        }
+    }
+
     fun trackTempFile(file: File) {
         tempFiles.add(file)
     }
 
     fun cancelEncode(currentPosition: Int) {
-        sessionMap[currentPosition]?.let { FFmpegKit.cancel(it) }
+        sessionMap[photoData.value?.getOrNull(currentPosition)?.imageUri]?.let { VideoEditActivity.cancelEncoding(it) }
     }
 
     override fun onCleared() {
         super.onCleared()
-        FFmpegKit.cancel()
+        VideoEditActivity.cancelEncoding()
         tempFiles.forEach {
             it.delete()
         }
 
     }
 
-    fun registerNewFFmpegSession(position: Int, sessionId: Long) {
+    fun registerNewFFmpegSession(position: Uri, sessionId: Long) {
         sessionMap[position] = sessionId
     }
 
