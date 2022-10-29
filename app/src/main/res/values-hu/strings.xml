@@ -31,7 +31,6 @@
     <string name="delete">Törlés</string>
     <string name="panda_pull_to_refresh_to_try_again">Ez a panda nem boldog. Húzza le a frissítéshez.</string>
     <string name="something_went_wrong">Valami hiba történt…</string>
-    <string name="discover_no_infinite_load">A felfedezés nem tölt be a végtelenségig. Húzza le a frissítéshez, hogy több képet lásson.</string>
     <string name="discover">FELFEDEZÉS</string>
     <string name="open_drawer_menu">Fiókmenü megnyitása</string>
     <string name="profile_picture">Profilkép</string>

@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal">
 
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search"
         android:layout_width="wrap_content"
@@ -16,75 +15,163 @@
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="@string/search" />
 
-    <ProgressBar
-        android:id="@+id/discoverProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/discoverRefreshLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search">
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <androidx.constraintlayout.motion.widget.MotionLayout
-                android:id="@+id/motionLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutDescription="@xml/error_layout_xml_error_scene">
 
-                <include layout="@layout/error_layout"/>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/trendingCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            style="?attr/materialCardViewElevatedStyle"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
+            app:layout_constraintBottom_toTopOf="@+id/hashtagsCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/discoverText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:text="@string/trending_posts"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:drawablePadding="4dp"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    app:drawableLeftCompat="@drawable/baseline_auto_graph_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/daily_trending"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/hashtagsCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            style="?attr/materialCardViewElevatedStyle"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
+            app:layout_constraintBottom_toTopOf="@id/accountsCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trendingCardView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trending_hashtags"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:drawablePadding="4dp"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    app:drawableStartCompat="@drawable/baseline_tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/explore_hashtags"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/accountsCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            style="?attr/materialCardViewElevatedStyle"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
+            app:layout_constraintTop_toBottomOf="@id/hashtagsCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/discoverCardView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popular_accounts"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:drawablePadding="4dp"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    app:drawableStartCompat="@drawable/baseline_person_add" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/explore_accounts"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/discoverCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            style="?attr/materialCardViewElevatedStyle"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer"
+            app:layout_constraintTop_toBottomOf="@id/accountsCardView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/discover"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/errorLayout"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    android:drawablePadding="4dp"
+                    android:textColor="?attr/colorOnSecondaryContainer"
                     app:drawableStartCompat="@drawable/explore_24dp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/discoverList"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/discoverText" />
-
-            </androidx.constraintlayout.motion.widget.MotionLayout>
-
                 <TextView
-                    android:id="@+id/discoverNoInfiniteLoad"
-                    android:visibility="invisible"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="@string/discover_no_infinite_load"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/motionLayout"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
+                    android:layout_height="wrap_content"
+                    android:text="@string/explore_posts"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

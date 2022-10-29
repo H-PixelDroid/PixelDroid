@@ -110,7 +110,6 @@
     <string name="toolbar_title_edit">Sunting</string>
     <string name="profile_picture">Gambar profil</string>
     <string name="discover">TEMUKAN</string>
-    <string name="discover_no_infinite_load">Temukan tidak memuat selamanya. Tarik untuk memuat ulang gambar lain.</string>
     <string name="something_went_wrong">Suatu kesalahan terjadi…</string>
     <string name="delete">Hapus</string>
     <string name="delete_dialog">Hapus postingan ini\?</string>

@@ -149,7 +149,6 @@
     <string name="no_cancel_edit">No, cancel·lar l\'edició</string>
     <string name="add_comment">Afegir un comentari</string>
     <string name="submit_comment">Enviar el comentari</string>
-    <string name="discover_no_infinite_load">El Discover no es carrega infinitament. Tireu per actualitzar altres imatges.</string>
     <string name="save_before_returning">Voleu desar les vostres edicions\?</string>
     <string name="switch_to_carousel">Canvia a carrusel</string>
     <string name="save_image_description">Desar la descripció de la imatge</string>

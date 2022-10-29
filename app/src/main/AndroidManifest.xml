@@ -149,6 +149,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        <activity android:name=".searchDiscover.TrendingActivity"/>
         <activity
             android:name=".settings.AboutActivity"
             android:parentActivityName=".settings.SettingsActivity"
