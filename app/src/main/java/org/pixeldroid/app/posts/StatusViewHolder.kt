@@ -40,7 +40,6 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okio.BufferedSink
 import okio.buffer
@@ -50,7 +49,6 @@ import org.pixeldroid.app.databinding.AlbumImageViewBinding
 import org.pixeldroid.app.databinding.OpenedAlbumBinding
 import org.pixeldroid.app.databinding.PostFragmentBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
-import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
 import org.pixeldroid.app.posts.MediaViewerActivity.Companion.openActivity
 import org.pixeldroid.app.utils.BlurHashDecoder
 import org.pixeldroid.app.utils.api.PixelfedAPI
@@ -65,7 +63,6 @@ import org.pixeldroid.app.utils.setProfileImageFromURL
 import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
-import java.net.URI
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
 
