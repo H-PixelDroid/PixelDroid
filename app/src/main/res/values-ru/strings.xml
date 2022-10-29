@@ -201,7 +201,6 @@
 \nДополнительную информации о Pixelfed вы можете посмотреть здесь: https://pixelfed.org</string>
     <string name="crop_button">Кнопка для обрезки или поворота изображения</string>
     <string name="switch_to_grid">Переключить в вид сетки</string>
-    <string name="discover_no_infinite_load">Обзор не может загружаться бесконечно. Потяните, чтобы обновить другие изображения.</string>
     <string name="dialog_message_cancel_follow_request">Отменить запрос на подписку\?</string>
     <string name="follow_requested">Подписаться на запрос</string>
     <string name="total_exceeds_album_limit">Вы выбрали большее изображений, чем разрешено вашим сервером (%1$s). Изображения сверх установленного лимита игнорируются.</string>

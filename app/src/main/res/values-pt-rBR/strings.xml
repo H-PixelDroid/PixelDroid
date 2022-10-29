@@ -189,7 +189,6 @@
     <string name="mascot_description">Imagem mostrando um panda vermelho, mascote do Pixelfed, usando um telefone</string>
     <string name="issues_contribute">Relate problemas ou contribua com o aplicativo:</string>
     <string name="panda_pull_to_refresh_to_try_again">O panda não está feliz. Puxe para atualizar e tentar novamente.</string>
-    <string name="discover_no_infinite_load">As descobertas não carregam infinitamente. Puxe para atualizar para outras imagens.</string>
     <string name="open_drawer_menu">Abrir o menu lateral</string>
     <string name="follows_title">%1$s está seguindo</string>
     <string name="media_upload_failed">Envio de mídia falhou. Tente novamente ou verifique as condições de conectividade</string>

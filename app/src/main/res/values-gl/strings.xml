@@ -191,7 +191,6 @@
     <string name="follow_requested">Seguimento solicitado</string>
     <string name="empty_feed">Nada por aquí :(</string>
     <string name="edit_link_failed">Non se puido abrir a páxina de edición</string>
-    <string name="discover_no_infinite_load">Descubrimento non carga indefinidamente. Arrastra hacia abaixo para ter máis imaxes.</string>
     <string name="file_not_found">Non se atopou o ficheiro %1$s</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="comment_notification">%1$s comentou a túa publicación</string>

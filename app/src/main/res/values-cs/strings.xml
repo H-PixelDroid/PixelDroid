@@ -200,7 +200,6 @@
     <string name="media_upload_failed">Nahrávání selhalo, zkuste znovu nebo zkontrolujte stav sítě</string>
     <string name="posting_image_accessibility_hint">Obrázek se zveřejňuje</string>
     <string name="switch_to_carousel">Zobrazit v karuselu</string>
-    <string name="discover_no_infinite_load">Načítá se pouze omezené množství obsahu. Pro zobrazení dalších obrázku zatáhněte dolů.</string>
     <string name="panda_pull_to_refresh_to_try_again">Panda je smutná. Zatáhněte dolů a pro obnovení.</string>
     <string name="issues_contribute">Nahlaste problémy nebo přispějte do aplikace:</string>
     <string name="mascot_description">Obrázek zobrazuje červenou pandu, maskota aplikace Pixelfed používající telefon</string>
