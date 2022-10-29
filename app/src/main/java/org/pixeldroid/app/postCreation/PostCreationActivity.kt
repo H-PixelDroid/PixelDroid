@@ -46,6 +46,12 @@ const val TAG = "Post Creation Activity"
 
 class PostCreationActivity : BaseThemedWithoutBarActivity() {
 
+    companion object {
+        internal const val PICTURE_DESCRIPTION = "picture_description"
+        internal const val TEMP_FILES = "temp_files"
+        internal const val POST_REDRAFT = "post_redraft"
+    }
+
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
 
@@ -67,7 +73,13 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             }
         } ?: InstanceDatabaseEntity("", "")
 
-        val _model: PostCreationViewModel by viewModels { PostCreationViewModelFactory(application, intent.clipData!!, instance) }
+        val _model: PostCreationViewModel by viewModels {
+            PostCreationViewModelFactory(
+                application,
+                intent.clipData!!,
+                instance
+            )
+        }
         model = _model
 
         model.getPhotoData().observe(this) { newPhotoData ->
@@ -83,9 +95,6 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             )
         }
 
-        //Get initial text value from model (for template)
-        binding.newPostDescriptionInputField.setText(model.uiState.value.newPostDescriptionText)
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.uiState.collect { uiState ->
@@ -100,15 +109,20 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                     }
                     binding.addPhotoButton.isEnabled = uiState.addPhotoButtonEnabled
                     enableButton(uiState.postCreationSendButtonEnabled)
-                    binding.uploadProgressBar.visibility = if(uiState.uploadProgressBarVisible) VISIBLE else INVISIBLE
+                    binding.uploadProgressBar.visibility =
+                        if (uiState.uploadProgressBarVisible) VISIBLE else INVISIBLE
                     binding.uploadProgressBar.progress = uiState.uploadProgress
-                    binding.uploadCompletedTextview.visibility = if(uiState.uploadCompletedTextviewVisible) VISIBLE else INVISIBLE
+                    binding.uploadCompletedTextview.visibility =
+                        if (uiState.uploadCompletedTextviewVisible) VISIBLE else INVISIBLE
                     binding.removePhotoButton.isEnabled = uiState.removePhotoButtonEnabled
                     binding.editPhotoButton.isEnabled = uiState.editPhotoButtonEnabled
-                    binding.uploadError.visibility = if(uiState.uploadErrorVisible) VISIBLE else INVISIBLE
-                    binding.uploadErrorTextExplanation.visibility = if(uiState.uploadErrorExplanationVisible) VISIBLE else INVISIBLE
+                    binding.uploadError.visibility =
+                        if (uiState.uploadErrorVisible) VISIBLE else INVISIBLE
+                    binding.uploadErrorTextExplanation.visibility =
+                        if (uiState.uploadErrorExplanationVisible) VISIBLE else INVISIBLE
 
-                    binding.toolbarPostCreation.visibility = if(uiState.isCarousel) VISIBLE else INVISIBLE
+                    binding.toolbarPostCreation.visibility =
+                        if (uiState.isCarousel) VISIBLE else INVISIBLE
                     binding.carousel.layoutCarousel = uiState.isCarousel
 
 
@@ -119,6 +133,15 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         binding.newPostDescriptionInputField.doAfterTextChanged {
             model.newPostDescriptionChanged(binding.newPostDescriptionInputField.text)
         }
+
+        val existingDescription: String? = intent.getStringExtra(PICTURE_DESCRIPTION)
+
+        binding.newPostDescriptionInputField.setText(
+            // Set description from redraft if any, otherwise from the template
+            existingDescription ?: model.uiState.value.newPostDescriptionText
+        )
+
+
         binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
 
         binding.carousel.apply {
@@ -164,6 +187,30 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                 model.removeAt(currentPosition)
                 model.cancelEncode(currentPosition)
             }
+        }
+
+        // Clean up temporary files, if any
+        val tempFiles = intent.getStringArrayExtra(TEMP_FILES)
+        tempFiles?.asList()?.forEach {
+            val file = File(binding.root.context.cacheDir, it)
+            model.trackTempFile(file)
+        }
+    }
+
+    override fun onBackPressed() {
+        val redraft = intent.getBooleanExtra(POST_REDRAFT, false)
+        if (redraft) {
+            val builder = AlertDialog.Builder(binding.root.context)
+            builder.apply {
+                setMessage(R.string.redraft_dialog_cancel)
+                setPositiveButton(android.R.string.ok) { _, _ ->
+                    super.onBackPressed()
+                }
+                setNegativeButton(android.R.string.cancel) { _, _ -> }
+                show()
+            }
+        } else {
+            super.onBackPressed()
         }
     }
 

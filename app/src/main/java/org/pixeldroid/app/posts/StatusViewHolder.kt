@@ -3,11 +3,14 @@ package org.pixeldroid.app.posts
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ClipData
 import android.content.Intent
 import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
+import android.location.GnssAntennaInfo.Listener
 import android.net.Uri
+import android.os.Looper
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,10 +40,17 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import okhttp3.*
+import okio.BufferedSink
+import okio.buffer
+import okio.sink
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.AlbumImageViewBinding
 import org.pixeldroid.app.databinding.OpenedAlbumBinding
 import org.pixeldroid.app.databinding.PostFragmentBinding
+import org.pixeldroid.app.postCreation.PostCreationActivity
+import org.pixeldroid.app.postCreation.photoEdit.PhotoEditActivity
 import org.pixeldroid.app.posts.MediaViewerActivity.Companion.openActivity
 import org.pixeldroid.app.utils.BlurHashDecoder
 import org.pixeldroid.app.utils.api.PixelfedAPI
@@ -55,6 +65,8 @@ import org.pixeldroid.app.utils.setProfileImageFromURL
 import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
+import java.net.URI
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
 
 
@@ -322,7 +334,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         //Call the api function
         status?.id?.let { id ->
             try {
-                if(bookmarked) {
+                if (bookmarked) {
                     api.bookmarkStatus(id)
                 } else {
                     api.undoBookmarkStatus(id)
@@ -337,7 +349,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             } catch (exception: HttpException) {
                 Toast.makeText(
                     binding.root.context,
-                    binding.root.context.getString(R.string.bookmark_post_failed_error, exception.code()),
+                    binding.root.context.getString(
+                        R.string.bookmark_post_failed_error,
+                        exception.code()
+                    ),
                     Toast.LENGTH_SHORT
                 ).show()
             } catch (exception: IOException) {
@@ -442,28 +457,195 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                 setPositiveButton(android.R.string.ok) { _, _ ->
 
                                     lifecycleScope.launch {
-                                        val user = db.userDao().getActiveUser()!!
-                                        status?.id?.let { id ->
-                                            db.homePostDao().delete(id, user.user_id, user.instance_uri)
-                                            db.publicPostDao().delete(id, user.user_id, user.instance_uri)
-                                            try {
-                                                val api = apiHolder.api ?: apiHolder.setToCurrentUser()
-                                                api.deleteStatus(id)
-                                                binding.root.visibility = View.GONE
-                                            } catch (exception: HttpException) {
+                                        deletePost(apiHolder.api ?: apiHolder.setToCurrentUser(), db)
+                                    }
+                                }
+                                setNegativeButton(android.R.string.cancel) { _, _ -> }
+                                show()
+                            }
+
+                            true
+                        }
+                        R.id.post_more_menu_redraft -> {
+                            val builder = AlertDialog.Builder(binding.root.context)
+                            builder.apply {
+                                setMessage(R.string.redraft_dialog_launch)
+                                setPositiveButton(android.R.string.ok) { _, _ ->
+
+                                    lifecycleScope.launch {
+                                        try {
+                                            // Create new post creation activity
+                                            val intent =
+                                                Intent(context, PostCreationActivity::class.java)
+
+                                            // Get descriptions and images from original post
+                                            val postDescription = status?.content ?: ""
+                                            val postAttachments =
+                                                status?.media_attachments!!  // Catch possible exception from !! (?)
+                                            val imageUris: MutableList<Uri> = mutableListOf()
+                                            val imageNames: MutableList<String> = mutableListOf()
+                                            val imageDescriptions: MutableList<String> =
+                                                mutableListOf()
+
+                                            for (currentAttachment in postAttachments) {
+                                                val imageUri = currentAttachment.url ?: ""
+                                                val imageName =
+                                                    Uri.parse(imageUri).lastPathSegment.toString()
+                                                val imageDescription =
+                                                    currentAttachment.description ?: ""
+                                                val downloadedFile =
+                                                    File(context.cacheDir, imageName)
+                                                val downloadedUri = Uri.fromFile(downloadedFile)
+
+                                                imageUris.add(downloadedUri)
+                                                imageNames.add(imageName)
+                                                imageDescriptions.add(imageDescription)
+                                            }
+
+                                            val counter = AtomicInteger(0)
+
+                                            // Define callback function for after downloading the images
+                                            fun continuation() {
+                                                // Wait for all outstanding downloads to finish
+                                                if (counter.incrementAndGet() == imageUris.size) {
+                                                    if (allFilesExist(imageNames)) {
+                                                        val counterInt = counter.get()
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            binding.root.context.resources.getQuantityString(
+                                                                R.plurals.items_load_success,
+                                                                counterInt,
+                                                                counterInt
+                                                            ),
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        // Pass downloaded images to new post creation activity
+                                                        intent.apply {
+                                                            assert(imageUris.size == imageDescriptions.size)
+
+                                                            for (i in 0 until imageUris.size) {
+                                                                val imageUri = imageUris[i]
+                                                                val imageDescription =
+                                                                    fromHtml(imageDescriptions[i]).toString()
+                                                                val imageItem = ClipData.Item(
+                                                                    imageDescription,
+                                                                    null,
+                                                                    imageUri
+                                                                )
+                                                                if (clipData == null) {
+                                                                    clipData = ClipData(
+                                                                        "",
+                                                                        emptyArray(),
+                                                                        imageItem
+                                                                    )
+                                                                } else {
+                                                                    clipData!!.addItem(imageItem)
+                                                                }
+                                                            }
+
+                                                            addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                                                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                        }
+
+                                                        // Pass post description of existing post to new post creation activity
+                                                        intent.putExtra(
+                                                            PostCreationActivity.PICTURE_DESCRIPTION,
+                                                            fromHtml(postDescription).toString()
+                                                        )
+                                                        if (imageNames.isNotEmpty()) {
+                                                            intent.putExtra(
+                                                                PostCreationActivity.TEMP_FILES,
+                                                                imageNames.toTypedArray()
+                                                            )
+                                                        }
+                                                        intent.putExtra(
+                                                            PostCreationActivity.POST_REDRAFT,
+                                                            true
+                                                        )
+
+                                                        // Launch post creation activity
+                                                        binding.root.context.startActivity(intent)
+                                                    }
+                                                }
+                                            }
+
+                                            if (!allFilesExist(imageNames)) {
+                                                // Track download progress
                                                 Toast.makeText(
-                                                        binding.root.context,
-                                                        binding.root.context.getString(R.string.delete_post_failed_error, exception.code()),
-                                                        Toast.LENGTH_SHORT
-                                                ).show()
-                                            } catch (exception: IOException) {
-                                                Toast.makeText(
-                                                        binding.root.context,
-                                                        binding.root.context.getString(R.string.delete_post_failed_io_except),
-                                                        Toast.LENGTH_SHORT
+                                                    binding.root.context,
+                                                    binding.root.context.getString(R.string.image_download_downloading),
+                                                    Toast.LENGTH_SHORT
                                                 ).show()
                                             }
+
+                                            // Iterate through all pictures of the original post
+                                            for (currentAttachment in postAttachments) {
+                                                val imageUri = currentAttachment.url ?: ""
+                                                val imageName =
+                                                    Uri.parse(imageUri).lastPathSegment.toString()
+                                                val downloadedFile =
+                                                    File(context.cacheDir, imageName)
+                                                val downloadRequest: Request =
+                                                    Request.Builder().url(imageUri).build()
+
+                                                // Check whether image is in cache directory already (maybe rather do so using Glide in the future?)
+                                                if (!downloadedFile.exists()) {
+                                                    OkHttpClient().newCall(downloadRequest)
+                                                        .enqueue(object : Callback {
+                                                            override fun onFailure(
+                                                                call: Call,
+                                                                e: IOException
+                                                            ) {
+                                                                Looper.prepare()
+                                                                downloadedFile.delete()
+                                                                Toast.makeText(
+                                                                    binding.root.context,
+                                                                    binding.root.context.getString(R.string.redraft_post_failed_io_except),
+                                                                    Toast.LENGTH_SHORT
+                                                                ).show()
+                                                            }
+
+                                                            @Throws(IOException::class)
+                                                            override fun onResponse(
+                                                                call: Call,
+                                                                response: Response
+                                                            ) {
+                                                                val sink: BufferedSink =
+                                                                    downloadedFile.sink().buffer()
+                                                                sink.writeAll(response.body!!.source())
+                                                                sink.close()
+                                                                Looper.prepare()
+                                                                continuation()
+                                                            }
+                                                        })
+                                                } else {
+                                                    continuation()
+                                                }
+                                            }
+
+                                        } catch (exception: HttpException) {
+                                            Toast.makeText(
+                                                binding.root.context,
+                                                binding.root.context.getString(
+                                                    R.string.redraft_post_failed_error,
+                                                    exception.code()
+                                                ),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        } catch (exception: IOException) {
+                                            Toast.makeText(
+                                                binding.root.context,
+                                                binding.root.context.getString(R.string.redraft_post_failed_io_except),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
                                         }
+
+                                        // Delete original post
+                                        deletePost(
+                                            apiHolder.api ?: apiHolder.setToCurrentUser(),
+                                            db
+                                        )
+
                                     }
                                 }
                                 setNegativeButton(android.R.string.cancel) { _, _ -> }
@@ -546,6 +728,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         status?.media_attachments?.let { binding.postPagerHost.images = ArrayList(it) }
 
     }
+
     private fun ImageView.animateView() {
         visibility = View.VISIBLE
         when (val drawable = drawable) {
@@ -627,8 +810,39 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
     }
 
+    private suspend fun deletePost(api: PixelfedAPI, db: AppDatabase) {
+        val user = db.userDao().getActiveUser()!!
+        status?.id?.let { id ->
+            db.homePostDao().delete(id, user.user_id, user.instance_uri)
+            db.publicPostDao().delete(id, user.user_id, user.instance_uri)
+            try {
+                api.deleteStatus(id)
+                binding.root.visibility = View.GONE
+            } catch (exception: HttpException) {
+                Toast.makeText(
+                    binding.root.context,
+                    binding.root.context.getString(R.string.delete_post_failed_error, exception.code()),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (exception: IOException) {
+                Toast.makeText(
+                    binding.root.context,
+                    binding.root.context.getString(R.string.delete_post_failed_io_except),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
-
+    private fun allFilesExist(listOfNames: MutableList<String>): Boolean {
+        for (name in listOfNames) {
+            val file = File(binding.root.context.cacheDir, name)
+            if (!file.exists()) {
+                return false
+            }
+        }
+        return true
+    }
 
     companion object {
         fun create(parent: ViewGroup): StatusViewHolder {
