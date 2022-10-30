@@ -8,6 +8,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
+apply plugin: "kotlin-parcelize"
 
 
 // Force latest version of Jacoco, initially done to resolve https://github.com/jacoco/jacoco/issues/1155

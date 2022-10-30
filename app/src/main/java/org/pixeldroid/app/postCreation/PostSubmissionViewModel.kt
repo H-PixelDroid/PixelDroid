@@ -2,15 +2,12 @@ package org.pixeldroid.app.postCreation
 
 import android.app.Application
 import android.content.ClipData
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Parcelable
 import android.provider.OpenableColumns
 import android.text.Editable
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
@@ -25,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import okhttp3.MultipartBody
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
@@ -41,22 +37,16 @@ import retrofit2.HttpException
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.Serializable
 import java.net.URI
 import javax.inject.Inject
 import kotlin.math.ceil
 
 
 // Models the UI state for the PostCreationActivity
-data class PostCreationActivityUiState(
+data class PostSubmissionActivityUiState(
     val userMessage: String? = null,
 
-    val addPhotoButtonEnabled: Boolean = true,
-    val editPhotoButtonEnabled: Boolean = true,
-    val removePhotoButtonEnabled: Boolean = true,
     val postCreationSendButtonEnabled: Boolean = true,
-
-    val isCarousel: Boolean = true,
 
     val newPostDescriptionText: String = "",
 
@@ -66,26 +56,12 @@ data class PostCreationActivityUiState(
     val uploadErrorVisible: Boolean = false,
     val uploadErrorExplanationText: String = "",
     val uploadErrorExplanationVisible: Boolean = false,
-)
+    )
 
-@Parcelize
-data class PhotoData(
-    var imageUri: Uri,
-    var size: Long,
-    var uploadId: String? = null,
-    var progress: Int? = null,
-    var imageDescription: String? = null,
-    var video: Boolean,
-    var videoEncodeProgress: Int? = null,
-    var videoEncodeStabilizationFirstPass: Boolean? = null,
-    var videoEncodeComplete: Boolean = false,
-    var videoEncodeError: Boolean = false,
-) : Parcelable
-
-class PostCreationViewModel(application: Application, clipdata: ClipData? = null, val instance: InstanceDatabaseEntity? = null) : AndroidViewModel(application) {
+class PostSubmissionViewModel(application: Application, clipdata: ClipData? = null, val instance: InstanceDatabaseEntity? = null) : AndroidViewModel(application) {
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
         MutableLiveData<MutableList<PhotoData>>().also {
-            it.value =  clipdata?.let { it1 -> addPossibleImages(it1, mutableListOf()) }
+           it.value =  clipdata?.let { it1 -> addPossibleImages(it1, mutableListOf()) }
         }
     }
 
@@ -244,7 +220,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
      * [PhotoData.uploadId] (for the list of ids of the uploads).
      */
     @OptIn(ExperimentalUnsignedTypes::class)
-    fun upload(context: Context, bindingContext: Context) {
+    fun upload() {
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 postCreationSendButtonEnabled = false,
@@ -256,10 +232,6 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
                 uploadProgressBarVisible = true
             )
         }
-
-        val intent = Intent(context, PostSubmissionActivity::class.java)
-        intent.putExtra(PostSubmissionActivity.PHOTO_DATA, getPhotoData().value?.let { ArrayList(it) })
-        ContextCompat.startActivity(bindingContext, intent, null)
 
         for (data: PhotoData in getPhotoData().value ?: emptyList()) {
             val extension = data.imageUri.fileExtension(getApplication<PixelDroidApplication>().contentResolver)
@@ -418,92 +390,12 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         }
     }
 
-    fun modifyAt(position: Int, data: Intent): Unit? {
-        val result: PhotoData = photoData.value?.getOrNull(position)?.run {
-            if (video) {
-                val modified: Boolean = data.getBooleanExtra(VideoEditActivity.MODIFIED, false)
-                if(modified){
-                    val videoEncodingArguments: VideoEditActivity.VideoEditArguments? = data.getSerializableExtra(VideoEditActivity.VIDEO_ARGUMENTS_TAG) as? VideoEditActivity.VideoEditArguments
-
-                    sessionMap[imageUri]?.let { VideoEditActivity.cancelEncoding(it) }
-
-                    videoEncodingArguments?.let {
-                        videoEncodeStabilizationFirstPass = videoEncodingArguments.videoStabilize > 0.01f
-                        videoEncodeProgress = 0
-
-                        VideoEditActivity.startEncoding(imageUri, it,
-                            context = getApplication<PixelDroidApplication>(),
-                            registerNewFFmpegSession = ::registerNewFFmpegSession,
-                            trackTempFile = ::trackTempFile,
-                            videoEncodeProgress = ::videoEncodeProgress
-                        )
-                    }
-                }
-            } else {
-                imageUri = data.getStringExtra(org.pixeldroid.media_editor.photoEdit.PhotoEditActivity.PICTURE_URI)!!.toUri()
-                val (imageSize, imageVideo) = getSizeAndVideoValidate(imageUri, position)
-                size = imageSize
-                video = imageVideo
-            }
-            progress = null
-            uploadId = null
-            this
-        } ?: return null
-        result.let {
-            photoData.value?.set(position, it)
-            photoData.value = photoData.value
-        }
-        return Unit
-    }
-
-    /**
-     * @param originalUri the Uri of the file you sent to be edited
-     * @param progress percentage of (this pass of) encoding that is done
-     * @param firstPass Whether this is the first pass (currently for analysis of video stabilization) or the second (and last) pass.
-     * @param outputVideoPath when not null, it means the encoding is done and the result is saved in this file
-     * @param error is true when there has been an error during encoding.
-     */
-    private fun videoEncodeProgress(originalUri: Uri, progress: Int, firstPass: Boolean, outputVideoPath: Uri?, error: Boolean){
-        photoData.value?.indexOfFirst { it.imageUri == originalUri }?.let { position ->
-
-            if(outputVideoPath != null){
-                // If outputVideoPath is not null, it means the video is done and we can change Uris
-                val (size, _) = getSizeAndVideoValidate(outputVideoPath, position)
-
-                photoData.value?.set(position,
-                    photoData.value!![position].copy(
-                        imageUri = outputVideoPath,
-                        videoEncodeProgress = progress,
-                        videoEncodeStabilizationFirstPass = firstPass,
-                        videoEncodeComplete = true,
-                        videoEncodeError = error,
-                        size = size,
-                    )
-                )
-            } else {
-                photoData.value?.set(position,
-                    photoData.value!![position].copy(
-                        videoEncodeProgress = progress,
-                        videoEncodeStabilizationFirstPass = firstPass,
-                        videoEncodeComplete = false,
-                        videoEncodeError = error,
-                    )
-                )
-            }
-
-            // Run assignment in main thread
-            viewModelScope.launch {
-                photoData.value = photoData.value
-            }
-        }
+    fun newPostDescriptionChanged(text: Editable?) {
+        _uiState.update { it.copy(newPostDescriptionText = text.toString()) }
     }
 
     fun trackTempFile(file: File) {
         tempFiles.add(file)
-    }
-
-    fun cancelEncode(currentPosition: Int) {
-        sessionMap[photoData.value?.getOrNull(currentPosition)?.imageUri]?.let { VideoEditActivity.cancelEncoding(it) }
     }
 
     override fun onCleared() {
@@ -512,24 +404,12 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         tempFiles.forEach {
             it.delete()
         }
-
-    }
-
-    fun registerNewFFmpegSession(position: Uri, sessionId: Long) {
-        sessionMap[position] = sessionId
-    }
-
-    fun becameCarousel(became: Boolean) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isCarousel = became
-            )
-        }
     }
 }
 
-class PostCreationViewModelFactory(val application: Application, val clipdata: ClipData, val instance: InstanceDatabaseEntity) : ViewModelProvider.Factory {
+
+class PostSubmissionViewModelFactory(val application: Application, val photoData: ArrayList<PhotoData>, val instance: InstanceDatabaseEntity) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java, ClipData::class.java, InstanceDatabaseEntity::class.java).newInstance(application, clipdata, instance)
+        return modelClass.getConstructor(Application::class.java, ArrayList::class.java, InstanceDatabaseEntity::class.java).newInstance(application, photoData, instance)
     }
 }
