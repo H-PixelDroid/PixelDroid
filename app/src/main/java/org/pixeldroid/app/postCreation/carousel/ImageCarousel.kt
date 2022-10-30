@@ -242,7 +242,6 @@ class ImageCarousel(
 
             if(value){
                 recyclerView.layoutManager = CarouselLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
                 showNavigationButtons = showNavigationButtons
 
                 binding.editMediaDescriptionLayout.visibility = if(editingMediaDescription) VISIBLE else INVISIBLE
@@ -425,6 +424,7 @@ class ImageCarousel(
                 e.printStackTrace()
             }
         }
+        initIndicator()
     }
 
 
