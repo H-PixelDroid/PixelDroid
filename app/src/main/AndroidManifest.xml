@@ -31,7 +31,9 @@
             android:name=".posts.AlbumActivity"
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent"/>
-
+        <activity
+            android:name=".profile.EditProfileActivity"
+            android:exported="false"/>
         <activity
             android:name=".posts.MediaViewerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

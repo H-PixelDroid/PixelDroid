@@ -116,7 +116,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/edit_profile"
                     android:visibility="gone"
-                    app:icon="@drawable/ic_baseline_open_in_browser_24"
                     app:layout_constraintBottom_toBottomOf="@+id/profilePictureImageView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
