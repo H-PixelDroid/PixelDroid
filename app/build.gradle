@@ -9,6 +9,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 
+
 // Force latest version of Jacoco, initially done to resolve https://github.com/jacoco/jacoco/issues/1155
 jacoco.toolVersion = "0.8.7"
 

@@ -2,24 +2,38 @@ package org.pixeldroid.app.profile
 
 import android.app.Application
 import android.net.Uri
+import android.provider.OpenableColumns
+import android.text.Editable
 import android.util.Log
+import android.widget.Toast
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.RequestBody
+import org.pixeldroid.app.R
+import org.pixeldroid.app.postCreation.ProgressRequestBody
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Account
+import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import retrofit2.HttpException
+import java.io.File
 import java.io.IOException
 import java.lang.Exception
+import java.net.URI
 import javax.inject.Inject
 
 class EditProfileViewModel(application: Application) : AndroidViewModel(application) {
@@ -41,7 +55,8 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             val api = apiHolder.api ?: apiHolder.setToCurrentUser()
             try {
-                oldProfile = api.verifyCredentials()
+                val profile = api.verifyCredentials()
+                if (oldProfile == null) oldProfile = profile
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         name = oldProfile?.display_name,
@@ -49,53 +64,94 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                         profilePictureUri = oldProfile?.anyAvatar()?.toUri(),
                         privateAccount = oldProfile?.locked,
                         loadingProfile = false,
-                        sendingProfile = false
+                        sendingProfile = false,
+                        profileLoaded = true,
+                        error = false
                     )
                 }
             } catch (exception: IOException) {
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
+                        sendingProfile = false,
+                        profileSent = false,
+                        loadingProfile = false,
+                        profileLoaded = false,
+                        error = true
                     )
                 }
             } catch (exception: HttpException) {
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
+                        sendingProfile = false,
+                        profileSent = false,
+                        loadingProfile = false,
+                        profileLoaded = false,
+                        error = true
                     )
                 }
             }
         }
     }
 
-    fun apply(name: String, bio: String) {
-        //TODO check if name and bio have changed, else send null to updatecredentials or don't update at all
-        _uiState.update { currentUiState ->
-            if(oldProfile != null) currentUiState.copy(name = name, bio = bio, sendingProfile = true, loadingProfile = false)
-            else currentUiState.copy(name = name, bio = bio, sendingProfile = false)
-        }
-        if(oldProfile == null) return
-
+    fun sendProfile() {
         val api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
-        val requestBody = null //MultipartBody.Part.createFormData("avatar", System.currentTimeMillis().toString(), avatarBody)
+        val requestBody =
+            null //MultipartBody.Part.createFormData("avatar", System.currentTimeMillis().toString(), avatarBody)
+
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                sendingProfile = true,
+                profileSent = false,
+                loadingProfile = false,
+                profileLoaded = false,
+                error = false
+            )
+        }
 
         viewModelScope.launch {
             with(uiState.value) {
                 try {
-                    api.updateCredentials(
+                    val account = api.updateCredentials(
                         displayName = name,
                         note = bio,
                         locked = privateAccount,
-                      //  avatar = requestBody
                     )
+                    oldProfile = account
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            bio = account.note,
+                            name = account.display_name,
+                            profilePictureUri = account.anyAvatar()?.toUri(),
+                            privateAccount = account.locked,
+                            sendingProfile = false,
+                            profileSent = true,
+                            loadingProfile = false,
+                            profileLoaded = true,
+                            error = false
+                        )
+                    }
                 } catch (exception: IOException) {
                     Log.e("TAG", exception.toString())
                     _uiState.update { currentUiState ->
-                        currentUiState.copy(error = true)
+                        currentUiState.copy(
+                            sendingProfile = false,
+                            profileSent = false,
+                            loadingProfile = false,
+                            profileLoaded = false,
+                            error = true
+                        )
                     }
                 } catch (exception: HttpException) {
                     Log.e("TAG", exception.toString())
                     _uiState.update { currentUiState ->
-                        currentUiState.copy(error = true)
+                        currentUiState.copy(
+                            sendingProfile = false,
+                            profileSent = false,
+                            loadingProfile = false,
+                            profileLoaded = false,
+                            error = true
+                        )
                     }
                 } catch (exception: Exception) {
                     Log.e("TAG", exception.toString())
@@ -110,7 +166,137 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
             currentUiState.copy(error = false)
         }
     }
+
+    fun updateBio(bio: Editable?) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(bio = bio.toString())
+        }
+    }
+
+    fun updateName(name: Editable?) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(name = name.toString())
+        }
+    }
+
+    fun updatePrivate(isChecked: Boolean) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(privateAccount = isChecked)
+        }
+    }
+
+    fun changesApplied() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(profileLoaded = false)
+        }
+    }
+
+    fun madeChanges(): Boolean =
+        with(uiState.value) {
+            oldProfile?.locked != privateAccount
+                    || oldProfile?.display_name != name || oldProfile?.note != bio
+        }
+
+    fun clickedCard() {
+        if (uiState.value.error) {
+            if (!uiState.value.profileLoaded) {
+                // Load failed
+                loadProfile()
+            } else if (uiState.value.profileLoaded) {
+                // Send failed
+                sendProfile()
+            }
+        } else {
+            // Dismiss success card
+            _uiState.update { currentUiState ->
+                currentUiState.copy(profileSent = false)
+            }
+        }
+    }
+
+    fun uploadImage(image: String) {
+        //TODO fix
+        val inputStream =
+            getApplication<PixelDroidApplication>().contentResolver.openInputStream(image.toUri())
+                ?: return
+
+        val size: Long =
+            if (image.toUri().scheme == "content") {
+                getApplication<PixelDroidApplication>().contentResolver.query(
+                    image.toUri(),
+                    null,
+                    null,
+                    null,
+                    null
+                )
+                    ?.use { cursor ->
+                        /* Get the column indexes of the data in the Cursor,
+                                         * move to the first row in the Cursor, get the data,
+                                         * and display it.
+                                         */
+                        val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                        cursor.moveToFirst()
+                        cursor.getLong(sizeIndex)
+                    } ?: 0
+            } else {
+                image.toUri().toFile().length()
+            }
+
+        val imagePart = ProgressRequestBody(inputStream, size, "image/*")
+
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("avatar", System.currentTimeMillis().toString(), imagePart)
+            .build()
+        val sub = imagePart.progressSubject
+            .subscribeOn(Schedulers.io())
+            .subscribe { percentage ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        uploadProgress = percentage.toInt()
+                    )
+                }
+            }
+
+        var postSub: Disposable? = null
+
+        val api = apiHolder.api ?: apiHolder.setToCurrentUser()
+        val inter = api.updateProfilePicture(requestBody.parts[0])
+
+        postSub = inter
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { it: Account ->
+                    Log.e("qsdfqsdfs", it.toString())
+
+                },
+                { e: Throwable ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            uploadProgress = 0,
+                            uploadingPicture = true,
+                            error = true
+                        )
+                    }
+                    e.printStackTrace()
+                    postSub?.dispose()
+                    sub.dispose()
+                },
+                {
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            uploadProgress = 100,
+                            uploadingPicture = false
+                        )
+                    }
+                    postSub?.dispose()
+                    sub.dispose()
+                }
+            )
+    }
 }
+
 
 data class EditProfileActivityUiState(
     val name: String? = null,
@@ -118,8 +304,12 @@ data class EditProfileActivityUiState(
     val profilePictureUri: Uri?= null,
     val privateAccount: Boolean? = null,
     val loadingProfile: Boolean = true,
+    val profileLoaded: Boolean = false,
     val sendingProfile: Boolean = false,
-    val error: Boolean = false
+    val profileSent: Boolean = false,
+    val error: Boolean = false,
+    val uploadingPicture: Boolean = false,
+    val uploadProgress: Int = 0,
 )
 
 class EditProfileViewModelFactory(val application: Application) : ViewModelProvider.Factory {
