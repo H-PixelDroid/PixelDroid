@@ -153,18 +153,18 @@ interface PixelfedAPI {
     @FormUrlEncoded
     @POST("/api/v1/statuses")
     suspend fun postStatus(
-        @Field("status") statusText : String,
-        @Field("in_reply_to_id") in_reply_to_id : String? = null,
-        @Field("media_ids[]") media_ids : List<String> = emptyList(),
-        @Field("poll[options][]") poll_options : List<String>? = null,
-        @Field("poll[expires_in]") poll_expires : List<String>? = null,
-        @Field("poll[multiple]") poll_multiple : List<String>? = null,
-        @Field("poll[hide_totals]") poll_hideTotals : List<String>? = null,
-        @Field("sensitive") sensitive : Boolean? = null,
-        @Field("spoiler_text") spoiler_text : String? = null,
-        @Field("visibility") visibility : String = "public",
-        @Field("scheduled_at") scheduled_at : String? = null,
-        @Field("language") language : String? = null
+        @Field("status") statusText: String,
+        @Field("in_reply_to_id") in_reply_to_id: String? = null,
+        @Field("media_ids[]") media_ids: List<String> = emptyList(),
+        @Field("poll[options][]") poll_options: List<String>? = null,
+        @Field("poll[expires_in]") poll_expires: List<String>? = null,
+        @Field("poll[multiple]") poll_multiple: List<String>? = null,
+        @Field("poll[hide_totals]") poll_hideTotals: List<String>? = null,
+        @Field("sensitive") sensitive: Int? = null,
+        @Field("spoiler_text") spoiler_text: String? = null,
+        @Field("visibility") visibility: String = "public",
+        @Field("scheduled_at") scheduled_at: String? = null,
+        @Field("language") language: String? = null
     ) : Status
 
     @DELETE("/api/v1/statuses/{id}")

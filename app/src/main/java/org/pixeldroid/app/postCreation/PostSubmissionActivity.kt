@@ -1,60 +1,39 @@
 package org.pixeldroid.app.postCreation
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentResolver
-import android.content.ContentValues
-import android.content.Intent
-import android.media.MediaScannerConnection
-import android.net.Uri
-import android.os.*
-import android.provider.MediaStore
-import android.util.Log
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.View.GONE
-import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.net.toFile
-import androidx.core.net.toUri
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
-import org.pixeldroid.app.databinding.ActivityPostCreationBinding
 import org.pixeldroid.app.databinding.ActivityPostSubmissionBinding
-import org.pixeldroid.app.postCreation.camera.CameraActivity
-import org.pixeldroid.app.postCreation.carousel.CarouselItem
+import org.pixeldroid.app.postCreation.PostCreationActivity.Companion.TEMP_FILES
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
-import org.pixeldroid.app.utils.fileExtension
-import org.pixeldroid.app.utils.getMimeType
 import org.pixeldroid.app.utils.setSquareImageFromURL
 import java.io.File
-import java.io.OutputStream
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
 
     companion object {
         internal const val PICTURE_DESCRIPTION = "picture_description"
-        internal const val TEMP_FILES = "temp_files"
-        internal const val POST_REDRAFT = "post_redraft"
         internal const val PHOTO_DATA = "photo_data"
     }
 
+    private lateinit var accounts: List<UserDatabaseEntity>
+    private var selectedAccount: Int = -1
+    private lateinit var menu: Menu
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
 
@@ -69,8 +48,10 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setTitle(R.string.add_details)
 
         user = db.userDao().getActiveUser()
+        accounts = db.userDao().getAll()
 
         instance = user?.run {
             db.instanceDao().getAll().first { instanceDatabaseEntity ->
@@ -83,8 +64,7 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
         val _model: PostSubmissionViewModel by viewModels {
             PostSubmissionViewModelFactory(
                 application,
-                photoData!!,
-                instance
+                photoData!!
             )
         }
         model = _model
@@ -112,12 +92,18 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
                     binding.uploadErrorTextExplanation.visibility =
                         if (uiState.uploadErrorExplanationVisible) VISIBLE else INVISIBLE
 
+                    selectedAccount = accounts.indexOf(uiState.chosenAccount)
+
                     binding.uploadErrorTextExplanation.text = uiState.uploadErrorExplanationText
                 }
             }
         }
         binding.newPostDescriptionInputField.doAfterTextChanged {
             model.newPostDescriptionChanged(binding.newPostDescriptionInputField.text)
+        }
+
+        binding.nsfwSwitch.setOnCheckedChangeListener { _, isChecked ->
+            model.updateNSFW(isChecked)
         }
 
         val existingDescription: String? = intent.getStringExtra(PICTURE_DESCRIPTION)
@@ -130,8 +116,7 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
 
         binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
 
-        val firstPostImage = photoData!![0]
-        setSquareImageFromURL(View(applicationContext), firstPostImage.imageUri.toString(), binding.postPreview)
+        setSquareImageFromURL(View(applicationContext), photoData!![0].imageUri.toString(), binding.postPreview)
         // get the description and send the post
         binding.postCreationSendButton.setOnClickListener {
             if (validatePost()) model.upload()
@@ -151,21 +136,30 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        val redraft = intent.getBooleanExtra(POST_REDRAFT, false)
-        if (redraft) {
-            val builder = AlertDialog.Builder(binding.root.context)
-            builder.apply {
-                setMessage(R.string.redraft_dialog_cancel)
-                setPositiveButton(android.R.string.ok) { _, _ ->
-                    super.onBackPressed()
-                }
-                setNegativeButton(android.R.string.cancel) { _, _ -> }
-                show()
+    override fun onCreateOptionsMenu(newMenu: Menu): Boolean {
+        menuInflater.inflate(R.menu.post_submission_account_menu, newMenu)
+        menu = newMenu
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.action_switch_accounts -> {
+                AlertDialog.Builder(this).apply {
+                    setIcon(R.drawable.material_drawer_ico_account)
+                    setTitle(R.string.switch_accounts)
+                    setSingleChoiceItems(accounts.map { it.username + " (${it.fullHandle})" }.toTypedArray(), selectedAccount) { dialog, which ->
+                        if(selectedAccount != which){
+                            model.chooseAccount(accounts[which])
+                        }
+                        dialog.dismiss()
+                    }
+                    setNegativeButton(android.R.string.cancel) { _, _ -> }
+                }.show()
+                return true
             }
-        } else {
-            super.onBackPressed()
         }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun validatePost(): Boolean {
