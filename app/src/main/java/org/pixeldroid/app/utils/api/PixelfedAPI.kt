@@ -7,6 +7,7 @@ import okhttp3.Interceptor
 import org.pixeldroid.app.utils.api.objects.*
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import org.pixeldroid.app.utils.api.objects.Collection
 import org.pixeldroid.app.utils.api.objects.Tag
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
@@ -201,6 +202,33 @@ interface PixelfedAPI {
         @Path("id") statusId: String
     ) : Status
 
+    @GET("/api/v1.1/collections/accounts/{id}")
+    suspend fun accountCollections(
+        @Path("id") account_id: String? = null
+    ): List<Collection>
+
+    @GET("/api/v1.1/collections/items/{id}")
+    suspend fun collectionItems(
+        @Path("id") id: String,
+        @Query("page") page: String? = null
+    ): List<Status>
+
+    @DELETE("/api/v1.1/collections/delete/{id}")
+    suspend fun deleteCollection(
+        @Path("id") id: String,
+    )
+
+    @POST("/api/v1.1/collections/add")
+    suspend fun addToCollection(
+        @Query("collection_id") collection_id: String,
+        @Query("post_id") post_id: String,
+    ): Status
+
+    @POST("/api/v1.1/collections/remove")
+    suspend fun removeFromCollection(
+        @Query("collection_id") collection_id: String,
+        @Query("post_id") post_id: String,
+    )
 
     //Used in our case to retrieve comments for a given status
     @GET("/api/v1/statuses/{id}/context")

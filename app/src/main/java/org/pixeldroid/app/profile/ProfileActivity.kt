@@ -65,40 +65,44 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     private fun createProfileTabs(account: Account?): Array<Fragment>{
 
         val profileFeedFragment = ProfileFeedFragment()
-        val argumentsFeed = Bundle().apply {
+        profileFeedFragment.arguments = Bundle().apply {
             putSerializable(Account.ACCOUNT_TAG, account)
             putSerializable(ProfileFeedFragment.PROFILE_GRID, false)
             putSerializable(ProfileFeedFragment.BOOKMARKS, false)
         }
-        profileFeedFragment.arguments = argumentsFeed
 
         val profileGridFragment = ProfileFeedFragment()
-        val argumentsGrid = Bundle().apply {
+        profileGridFragment.arguments = Bundle().apply {
             putSerializable(Account.ACCOUNT_TAG, account)
             putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
             putSerializable(ProfileFeedFragment.BOOKMARKS, false)
         }
-        profileGridFragment.arguments = argumentsGrid
+
+        val profileCollectionsFragment = ProfileFeedFragment()
+        profileCollectionsFragment.arguments = Bundle().apply {
+            putSerializable(Account.ACCOUNT_TAG, account)
+            putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
+            putSerializable(ProfileFeedFragment.BOOKMARKS, false)
+            putSerializable(ProfileFeedFragment.COLLECTIONS, true)
+        }
+
+        val returnArray: Array<Fragment> = arrayOf(
+            profileGridFragment,
+            profileFeedFragment,
+            profileCollectionsFragment
+        )
 
         // If we are viewing our own account, show bookmarks
         if(account == null || account.id == user?.user_id) {
             val profileBookmarksFragment = ProfileFeedFragment()
-            val argumentsBookmarks = Bundle().apply {
+            profileBookmarksFragment.arguments = Bundle().apply {
                 putSerializable(Account.ACCOUNT_TAG, account)
                 putSerializable(ProfileFeedFragment.PROFILE_GRID, true)
                 putSerializable(ProfileFeedFragment.BOOKMARKS, true)
             }
-            profileBookmarksFragment.arguments = argumentsBookmarks
-            return arrayOf(
-                profileGridFragment,
-                profileFeedFragment,
-                profileBookmarksFragment
-            )
+            return returnArray + profileBookmarksFragment
         }
-        return arrayOf(
-            profileGridFragment,
-            profileFeedFragment
-        )
+        return returnArray
     }
 
     private fun setupTabs(
@@ -117,15 +121,19 @@ class ProfileActivity : BaseThemedWithBarActivity() {
             tab.tabLabelVisibility = TabLayout.TAB_LABEL_VISIBILITY_UNLABELED
             when (position) {
                 0 -> {
-                    tab.setText("Grid view")
+                    tab.setText(R.string.grid_view)
                     tab.setIcon(R.drawable.grid_on_black_24dp)
                 }
                 1 -> {
-                    tab.setText("Feed view")
+                    tab.setText(R.string.feed_view)
                     tab.setIcon(R.drawable.feed_view)
                 }
                 2 -> {
-                    tab.setText("Bookmarks")
+                    tab.setText(R.string.collections)
+                    tab.setIcon(R.drawable.collections)
+                }
+                3 -> {
+                    tab.setText(R.string.bookmarks)
                     tab.setIcon(R.drawable.bookmark)
                 }
             }

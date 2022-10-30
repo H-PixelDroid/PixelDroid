@@ -95,7 +95,7 @@ fun normalizeDomain(domain: String): String {
             .trim(Char::isWhitespace)
 }
 
-fun BaseActivity.openUrl(url: String): Boolean {
+fun Context.openUrl(url: String): Boolean {
 
     val intent = CustomTabsIntent.Builder().build()
 

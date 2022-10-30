@@ -177,6 +177,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="save_image_success">Image successfully saved</string>
     <string name="follow_status_failed">Could not get follow status</string>
     <string name="edit_link_failed">Failed to open edit page</string>
+    <string name="new_collection_link_failed">Failed to open collection creation page</string>
     <string name="empty_feed">Nothing to see here :(</string>
     <string name="follow_button_failed">Could not display follow button</string>
     <string name="follow_error">Could not follow</string>
@@ -212,6 +213,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="license_info">PixelDroid is free and open source software, licensed under the GNU General Public License (version 3 or later)</string>
     <string name="about">About</string>
     <string name="post_title">%1$s\'s post</string>
+    <string name="collection_title">%1$s\'s collection</string>
     <string name="followers_title">%1$s\'s followers</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="follows_title">%1$s\'s follows</string>
@@ -289,6 +291,20 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="daily_trending">View daily trending posts</string>
     <string name="trending_posts">Trending Posts</string>
     <string name="explore_posts">Explore random posts of the day</string>
+    <string name="grid_view">Grid view</string>
+    <string name="feed_view">Feed view</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="collections">Collections</string>
+    <string name="delete_collection">Delete collection</string>
+    <string name="collection_add_post">Add post</string>
+    <string name="collection_remove_post">Remove post</string>
+    <string name="delete_collection_warning">Are you sure you want to delete this collection?</string>
+    <string name="add_to_collection">Choose a post to add</string>
+    <string name="delete_from_collection">Choose a post to remove</string>
+    <string name="added_post_to_collection">Added post to the collection</string>
+    <string name="error_add_post_to_collection">Failed to add post to the collection</string>
+    <string name="error_remove_post_from_collection">Failed to remove post from the collection</string>
+    <string name="removed_post_from_collection">Removed post from collection</string>
     <plurals name="replies_count">
         <item quantity="one">%d reply</item>
         <item quantity="other">%d replies</item>
