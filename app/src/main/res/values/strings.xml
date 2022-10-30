@@ -103,6 +103,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="upload_post_error">Post upload error</string>
     <string name="description">Description…</string>
     <string name="post">Post</string>
+    <string name="upload_next_step">Next step</string>
+    <string name="add_details">Add some details</string>
     <string name="add_photo">Add a photo</string>
     <string name="post_image">One of the images in the post</string>
     <string name="switch_to_grid">Switch to grid view</string>
@@ -322,4 +324,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="profile_saved">Changes saved!</string>
     <string name="error_profile">Something went wrong. Tap to retry</string>
     <string name="change_profile_picture">Change your profile picture</string>
+    <string name="contains_nsfw">Contains NSFW media</string>
+    <string name="switch_accounts">Switch accounts</string>
 </resources>

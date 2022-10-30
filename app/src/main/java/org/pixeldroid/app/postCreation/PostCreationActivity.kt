@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.View.GONE
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -21,7 +20,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -108,41 +106,14 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                         model.userMessageShown()
                     }
                     binding.addPhotoButton.isEnabled = uiState.addPhotoButtonEnabled
-                    enableButton(uiState.postCreationSendButtonEnabled)
-                    binding.uploadProgressBar.visibility =
-                        if (uiState.uploadProgressBarVisible) VISIBLE else INVISIBLE
-                    binding.uploadProgressBar.progress = uiState.uploadProgress
-                    binding.uploadCompletedTextview.visibility =
-                        if (uiState.uploadCompletedTextviewVisible) VISIBLE else INVISIBLE
                     binding.removePhotoButton.isEnabled = uiState.removePhotoButtonEnabled
                     binding.editPhotoButton.isEnabled = uiState.editPhotoButtonEnabled
-                    binding.uploadError.visibility =
-                        if (uiState.uploadErrorVisible) VISIBLE else INVISIBLE
-                    binding.uploadErrorTextExplanation.visibility =
-                        if (uiState.uploadErrorExplanationVisible) VISIBLE else INVISIBLE
-
                     binding.toolbarPostCreation.visibility =
                         if (uiState.isCarousel) VISIBLE else INVISIBLE
                     binding.carousel.layoutCarousel = uiState.isCarousel
-
-
-                    binding.uploadErrorTextExplanation.text = uiState.uploadErrorExplanationText
                 }
             }
         }
-        binding.newPostDescriptionInputField.doAfterTextChanged {
-            model.newPostDescriptionChanged(binding.newPostDescriptionInputField.text)
-        }
-
-        val existingDescription: String? = intent.getStringExtra(PICTURE_DESCRIPTION)
-
-        binding.newPostDescriptionInputField.setText(
-            // Set description from redraft if any, otherwise from the template
-            existingDescription ?: model.uiState.value.newPostDescriptionText
-        )
-
-
-        binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
 
         binding.carousel.apply {
             layoutCarouselCallback = { model.becameCarousel(it)}
@@ -156,13 +127,9 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         }
         // get the description and send the post
         binding.postCreationSendButton.setOnClickListener {
-            if (validatePost() && model.isNotEmpty()) model.upload()
-        }
-
-        // Button to retry image upload when it fails
-        binding.retryUploadButton.setOnClickListener {
-            model.resetUploadStatus()
-            model.upload()
+            if (validatePost() && model.isNotEmpty()) {
+                model.nextStep(binding.root.context)
+            }
         }
 
         binding.editPhotoButton.setOnClickListener {
@@ -180,7 +147,6 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                 savePicture(it, currentPosition)
             }
         }
-
 
         binding.removePhotoButton.setOnClickListener {
             binding.carousel.currentPosition.takeIf { it != RecyclerView.NO_POSITION }?.let { currentPosition ->
@@ -300,15 +266,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
 
 
     private fun validatePost(): Boolean {
-        binding.postTextInputLayout.run {
-            val content = editText?.length() ?: 0
-            if (content > counterMaxLength) {
-                // error, too many characters
-                error = resources.getQuantityString(R.plurals.description_max_characters, counterMaxLength, counterMaxLength)
-                return false
-            }
-        }
-        if(model.getPhotoData().value?.all { it.videoEncodeProgress == null } == false){
+        if(model.getPhotoData().value?.all { !it.video || it.videoEncodeComplete } == false){
             AlertDialog.Builder(this).apply {
                 setMessage(R.string.still_encoding)
                 setNegativeButton(android.R.string.ok) { _, _ -> }
@@ -316,18 +274,6 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             return false
         }
         return true
-    }
-
-    private fun enableButton(enable: Boolean = true){
-        binding.postCreationSendButton.isEnabled = enable
-        if(enable){
-            binding.postingProgressBar.visibility = GONE
-            binding.postCreationSendButton.visibility = VISIBLE
-        } else {
-            binding.postingProgressBar.visibility = VISIBLE
-            binding.postCreationSendButton.visibility = GONE
-        }
-
     }
 
     private val editResultContract: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){

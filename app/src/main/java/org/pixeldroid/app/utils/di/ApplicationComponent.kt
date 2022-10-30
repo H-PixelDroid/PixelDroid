@@ -9,6 +9,7 @@ import org.pixeldroid.app.utils.BaseFragment
 import dagger.Component
 import org.pixeldroid.app.postCreation.PostCreationViewModel
 import org.pixeldroid.app.profile.EditProfileViewModel
+import org.pixeldroid.app.postCreation.PostSubmissionViewModel
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker
 import javax.inject.Singleton
 
@@ -22,6 +23,7 @@ interface ApplicationComponent {
     fun inject(notificationsWorker: NotificationsWorker)
     fun inject(postCreationViewModel: PostCreationViewModel)
     fun inject(editProfileViewModel: EditProfileViewModel)
+    fun inject(postSubmissionViewModel: PostSubmissionViewModel)
 
     val context: Context?
     val application: Application?
