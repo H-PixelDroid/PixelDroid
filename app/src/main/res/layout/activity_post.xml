@@ -47,7 +47,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/comment"
                             android:importantForAutofill="no"
-                            android:inputType="text" />
+                            android:inputType="text|textCapSentences|textMultiLine" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
