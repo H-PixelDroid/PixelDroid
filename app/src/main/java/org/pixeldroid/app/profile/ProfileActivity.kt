@@ -2,6 +2,7 @@ package org.pixeldroid.app.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -195,9 +196,11 @@ class ProfileActivity : BaseThemedWithBarActivity() {
 
         binding.descriptionTextView.text = parseHTMLText(
                 account.note ?: "", emptyList(), apiHolder,
-                applicationContext,
+                binding.descriptionTextView.context,
                 lifecycleScope
         )
+        // This is so that the clicks in the text (eg #, @) work.
+        binding.descriptionTextView.movementMethod = LinkMovementMethod.getInstance();
 
         val displayName = account.getDisplayName()
 
