@@ -10,13 +10,20 @@ import java.io.IOException
 class ProfilePagingSource(
     private val api: PixelfedAPI,
     private val accountId: String,
-    private val bookmarks: Boolean
+    private val bookmarks: Boolean,
+    private val collectionId: String?,
 ) : PagingSource<String, Status>() {
     override suspend fun load(params: LoadParams<String>): LoadResult<String, Status> {
         val position = params.key
         return try {
             val posts =
-                if(bookmarks) {
+                if(collectionId != null){
+                    api.collectionItems(
+                        collectionId,
+                        page = position
+                    )
+                }
+                else if(bookmarks) {
                     api.bookmarks(
                         limit = params.loadSize,
                         max_id = position
@@ -34,7 +41,9 @@ class ProfilePagingSource(
             LoadResult.Page(
                 data = posts,
                 prevKey = null,
-                nextKey = if(nextKey == position) null else nextKey
+                nextKey = if(collectionId != null ) {
+                    if(posts.isEmpty()) null else (params.key?.toIntOrNull()?.plus(1))?.toString()
+                } else if(nextKey == position) null else nextKey
             )
         } catch (exception: HttpException) {
             LoadResult.Error(exception)

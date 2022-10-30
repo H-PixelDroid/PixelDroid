@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.pixeldroid.app.postCreation.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foreground="?selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/addPhotoSquare"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:backgroundTint="?attr/colorOnBackground"
+        android:background="@drawable/collection_add"
+        android:contentDescription="@string/add_photo" />
+</org.pixeldroid.app.postCreation.SquareLayout>

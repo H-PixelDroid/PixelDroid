@@ -86,6 +86,7 @@
             android:name=".profile.ProfileActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".profile.CollectionActivity"/>
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings2"

@@ -6,26 +6,23 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedContentRepository
 import org.pixeldroid.app.utils.api.PixelfedAPI
-import org.pixeldroid.app.utils.api.objects.Status
 import kotlinx.coroutines.flow.Flow
+import org.pixeldroid.app.utils.api.objects.Collection
 import javax.inject.Inject
 
-class ProfileContentRepository @ExperimentalPagingApi
+class CollectionsContentRepository @ExperimentalPagingApi
 @Inject constructor(
     private val api: PixelfedAPI,
     private val accountId: String,
-    private val bookmarks: Boolean,
-    private val collectionId: String?,
-) : UncachedContentRepository<Status> {
-    override fun getStream(): Flow<PagingData<Status>> {
+) : UncachedContentRepository<Collection> {
+    override fun getStream(): Flow<PagingData<Collection>> {
         return Pager(
             config = PagingConfig(
                 initialLoadSize = NETWORK_PAGE_SIZE,
                 pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = {
-                ProfilePagingSource(api, accountId, bookmarks, collectionId)
-            },
-            initialKey = if(collectionId != null) "1" else null
+                CollectionsPagingSource(api, accountId)
+            }
         ).flow
     }
 
