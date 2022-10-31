@@ -31,8 +31,7 @@ import retrofit2.HttpException
 private fun showError(
         errorText: String, show: Boolean = true,
         motionLayout: MotionLayout,
-        errorLayout: ErrorLayoutBinding,
-        progressBar: ProgressBar){
+        errorLayout: ErrorLayoutBinding){
 
     if(show) {
         motionLayout.transitionToEnd()
@@ -40,7 +39,6 @@ private fun showError(
     } else if(motionLayout.progress == 1F) {
         motionLayout.transitionToStart()
     }
-    progressBar.visibility = View.GONE
 }
 
 /**
@@ -87,7 +85,7 @@ internal fun <T: Any> initAdapter(
             val error: String = (it.error as? HttpException)?.response()?.errorBody()?.string()?.ifEmpty { null }?.let { s ->
                 Gson().fromJson(s, org.pixeldroid.app.utils.api.objects.Error::class.java)?.error?.ifBlank { null }
             } ?: it.error.localizedMessage.orEmpty()
-            showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = error, progressBar = progressBar)
+            showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = error)
         }
 
         // If the state is not an error, hide the error layout, or show message that the feed is empty
@@ -100,10 +98,9 @@ internal fun <T: Any> initAdapter(
                 showError(
                     motionLayout = motionLayout, errorLayout = errorLayout,
                     errorText = errorLayout.root.context.getString(R.string.empty_feed),
-                    progressBar = progressBar
                 )
             } else {
-                showError(motionLayout = motionLayout, errorLayout = errorLayout, show = false, errorText = "",  progressBar = progressBar)
+                showError(motionLayout = motionLayout, errorLayout = errorLayout, show = false, errorText = "")
             }
         }
     }
