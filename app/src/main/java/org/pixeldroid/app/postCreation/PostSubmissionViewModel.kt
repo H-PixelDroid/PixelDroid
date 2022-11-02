@@ -62,6 +62,7 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
             }
         }
     }
+    private var existingDescription: String? = null
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -74,7 +75,7 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
             PreferenceManager.getDefaultSharedPreferences(application)
         val initialDescription = sharedPreferences.getString("prefill_description", "") ?: ""
 
-        _uiState = MutableStateFlow(PostSubmissionActivityUiState(newPostDescriptionText = initialDescription))
+        _uiState = MutableStateFlow(PostSubmissionActivityUiState(newPostDescriptionText = existingDescription ?: initialDescription))
     }
 
     val uiState: StateFlow<PostSubmissionActivityUiState> = _uiState
@@ -286,6 +287,10 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
 
     fun newPostDescriptionChanged(text: Editable?) {
         _uiState.update { it.copy(newPostDescriptionText = text.toString()) }
+    }
+
+    fun setExistingDescription(description: String?) {
+        existingDescription = description
     }
 
     fun trackTempFile(file: File) {
