@@ -93,6 +93,8 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             )
         }
 
+        model.setExistingDescription(intent.getStringExtra(PICTURE_DESCRIPTION))
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.uiState.collect { uiState ->

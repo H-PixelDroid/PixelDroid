@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.pixeldroid.app.R
+import org.pixeldroid.app.posts.fromHtml
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
@@ -80,6 +81,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
             it.value =  clipdata?.let { it1 -> addPossibleImages(it1, mutableListOf()) }
         }
     }
+    private var existingDescription: String? = null
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -92,7 +94,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
             PreferenceManager.getDefaultSharedPreferences(application)
         val initialDescription = sharedPreferences.getString("prefill_description", "") ?: ""
 
-        _uiState = MutableStateFlow(PostCreationActivityUiState(newPostDescriptionText = initialDescription))
+        _uiState = MutableStateFlow(PostCreationActivityUiState(newPostDescriptionText = existingDescription ?: initialDescription))
     }
 
     val uiState: StateFlow<PostCreationActivityUiState> = _uiState
@@ -193,6 +195,10 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         photoData.value = photoData.value
     }
 
+    fun setExistingDescription(description: String?) {
+        existingDescription = description
+    }
+
     fun removeAt(currentPosition: Int) {
         photoData.value?.removeAt(currentPosition)
         _uiState.update {
@@ -209,6 +215,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
     fun nextStep(context: Context) {
         val intent = Intent(context, PostSubmissionActivity::class.java)
         intent.putExtra(PostSubmissionActivity.PHOTO_DATA, getPhotoData().value?.let { ArrayList(it) })
+        intent.putExtra(PostSubmissionActivity.PICTURE_DESCRIPTION, existingDescription)
         ContextCompat.startActivity(context, intent, null)
     }
 
