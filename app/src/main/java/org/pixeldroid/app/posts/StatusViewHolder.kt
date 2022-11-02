@@ -10,6 +10,7 @@ import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.location.GnssAntennaInfo.Listener
 import android.net.Uri
+import android.os.Handler
 import android.os.Looper
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -18,6 +19,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -40,6 +42,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okio.BufferedSink
 import okio.buffer
@@ -506,6 +509,13 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                 // Wait for all outstanding downloads to finish
                                                 if (counter.incrementAndGet() == imageUris.size) {
                                                     if (allFilesExist(imageNames)) {
+                                                        // Delete original post
+                                                        Handler(Looper.getMainLooper()).post {
+                                                            runBlocking {
+                                                                deletePost(apiHolder.api ?: apiHolder.setToCurrentUser(), db)
+                                                            }
+                                                        }
+
                                                         val counterInt = counter.get()
                                                         Toast.makeText(
                                                             binding.root.context,
@@ -574,6 +584,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             }
+                                            val okHttpClient = OkHttpClient()
 
                                             // Iterate through all pictures of the original post
                                             for (currentAttachment in postAttachments) {
@@ -587,7 +598,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
                                                 // Check whether image is in cache directory already (maybe rather do so using Glide in the future?)
                                                 if (!downloadedFile.exists()) {
-                                                    OkHttpClient().newCall(downloadRequest)
+                                                    okHttpClient.newCall(downloadRequest)
                                                         .enqueue(object : Callback {
                                                             override fun onFailure(
                                                                 call: Call,
@@ -615,6 +626,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                                 continuation()
                                                             }
                                                         })
+
                                                 } else {
                                                     continuation()
                                                 }
@@ -636,13 +648,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
-
-                                        // Delete original post
-                                        deletePost(
-                                            apiHolder.api ?: apiHolder.setToCurrentUser(),
-                                            db
-                                        )
-
                                     }
                                 }
                                 setNegativeButton(android.R.string.cancel) { _, _ -> }
