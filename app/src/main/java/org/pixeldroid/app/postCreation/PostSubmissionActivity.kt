@@ -29,7 +29,8 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
     companion object {
         internal const val PICTURE_DESCRIPTION = "picture_description"
         internal const val PHOTO_DATA = "photo_data"
-    }
+        internal const val POST_NSFW = "post_nsfw"
+}
 
     private lateinit var accounts: List<UserDatabaseEntity>
     private var selectedAccount: Int = -1
@@ -70,6 +71,10 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
         model = _model
 
         model.setExistingDescription(intent.getStringExtra(PICTURE_DESCRIPTION))
+
+        val sensitive = intent.getBooleanExtra(POST_NSFW, false)
+        model.updateNSFW(sensitive)
+        binding.nsfwSwitch.isChecked = sensitive
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -114,7 +119,6 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
             // Set description from redraft if any, otherwise from the template
             existingDescription ?: model.uiState.value.newPostDescriptionText
         )
-
 
         binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
 

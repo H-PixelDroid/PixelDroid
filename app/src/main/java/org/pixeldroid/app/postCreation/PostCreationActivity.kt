@@ -48,6 +48,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         internal const val PICTURE_DESCRIPTION = "picture_description"
         internal const val TEMP_FILES = "temp_files"
         internal const val POST_REDRAFT = "post_redraft"
+        internal const val POST_NSFW = "post_nsfw"
     }
 
     private var user: UserDatabaseEntity? = null
@@ -94,6 +95,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
         }
 
         model.setExistingDescription(intent.getStringExtra(PICTURE_DESCRIPTION))
+        model.setExistingNSFW(intent.getBooleanExtra(POST_NSFW, false))
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

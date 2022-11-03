@@ -236,7 +236,7 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
         val description = uiState.value.newPostDescriptionText
 
         //TODO investigate why this works but booleans don't
-        val nsfw = if(uiState.value.nsfw) 1 else 0
+        val nsfw = if (uiState.value.nsfw) 1 else 0
 
         _uiState.update { currentUiState ->
             currentUiState.copy(
