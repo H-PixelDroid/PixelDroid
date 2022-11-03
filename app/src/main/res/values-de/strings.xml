@@ -20,11 +20,7 @@
     <string name="save_to_gallery">In Galerie speichern…</string>
     <string name="image_download_failed">Der Download ist fehlgeschlagen, bitte versuche es erneut</string>
     <string name="logout">Abmelden</string>
-    <string name="lbl_brightness">Helligkeit</string>
-    <string name="tab_filters">Filter</string>
     <string name="edit">bearbeiten</string>
-    <string name="lbl_contrast">Kontrast</string>
-    <string name="lbl_saturation">Sättigung</string>
     <string name="NoCommentsToShow">Keine Kommentare zu diesem Beitrag…</string>
     <string name="image_download_downloading">Herunterladen…</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW/NSFW/Versteckte Medien
@@ -41,9 +37,7 @@
     <string name="instance_error">Konnte die Informationen der Instanz nicht abrufen</string>
     <string name="upload_picture_failed">Fehler beim Hochladen!</string>
     <string name="default_system">Standard (Systemeinstellung)</string>
-    <string name="permission_denied">Berechtigung verweigert</string>
     <string name="save_image_failed">Bild kann nicht gespeichert werden</string>
-    <string name="normal_filter">Normal</string>
     <string name="save_image_success">Bild erfolgreich gespeichert</string>
     <string name="picture_format_error">Upload-Fehler: falsches Bildformat.</string>
     <string name="upload_post_failed">Das Hochladen des Beitrags ist fehlgeschlagen</string>
@@ -88,9 +82,6 @@
     <string name="write_permission_share_pic">Für die Teilen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
     <string name="follow_status_failed">Konnte den Folgestatus nicht erhalten</string>
     <string name="retry">Wiederholen</string>
-    <string name="crop_result_error">Konnte das Bild nach dem Zuschneiden nicht verarbeiten</string>
-    <string name="busy_dialog_ok_button">Ok, warten.</string>
-    <string name="busy_dialog_text">Das Bild wird noch verarbeitet, warte bis es fertig ist!</string>
     <string name="nothing_to_see_here">Hier gibt\'s nichts zu sehen!</string>
     <string name="optional_report_comment">Optionale Nachricht für mods/admins</string>
     <string name="share_link">Link teilen</string>
@@ -112,10 +103,8 @@
     <string name="instance_not_pixelfed_continue">Ok, trotzdem fortfahren</string>
     <string name="instance_not_pixelfed_warning">Dies scheint keine Pixelfed-Instanz zu sein. Die App könnte sich daher unerwartet verhalten.</string>
     <string name="switch_to_grid">Wechsle zur Rasteransicht</string>
-    <string name="no_cancel_edit">Nein, Änderung abbrechen</string>
     <string name="mascot_description">Das Bild zeigt einen roten Panda, das Maskottchen von Pixelfed, der ein Telefon benutzt</string>
     <string name="switch_to_carousel">Wechsel zur Karussellansicht</string>
-    <string name="save_before_returning">Änderungen speichern\?</string>
     <string name="issues_contribute">Melde Probleme oder hilf mit bei der Entwicklung der Anwendung:</string>
     <string name="help_translate">Helfe PixelDroid in deine Sprache zu übersetzen:</string>
     <string name="language">Sprache</string>
@@ -126,16 +115,12 @@
     <string name="discover">ENTDECKE</string>
     <string name="open_drawer_menu">Öffne Menü</string>
     <string name="profile_picture">Profilbild</string>
-    <string name="toolbar_title_edit">Bearbeiten</string>
     <string name="report_error">Konnte nicht gemeldet werden</string>
     <string name="reported">Post wurde gemeldet</string>
     <string name="report_target">Melde den Beitrag von @%1$s</string>
     <string name="post_is_album">Dieser Beitrag ist ein Album</string>
     <string name="submit_comment">Kommentar senden</string>
     <string name="add_comment">Erstelle einen Kommentar</string>
-    <string name="crop_button">Schaltfläche zum ausschneiden oder rotieren des Bildes</string>
-    <string name="image_preview">Vorschau des bearbeiteten Bildes</string>
-    <string name="filter_thumbnail">Vorschaubild des Filters</string>
     <string name="post_image">Eines der Bilder im Beitrag</string>
     <string name="verify_credentials">Benutzerdaten konnten nicht geladen werden</string>
     <plurals name="nb_posts">
@@ -215,17 +200,12 @@
     <string name="video_not_supported">Der von dir verwendete Server unterstützt keine Video-Uploads, daher wirst du die in diesem Beitrag enthaltende Videos möglicherweise nicht hochladen können</string>
     <string name="post_is_video">Dieser Beitrag ist ein Video</string>
     <string name="play_video">Video abspielen</string>
-    <string name="video_edit_not_yet_supported">Das Bearbeiten von Videos wird noch nicht unterstützt</string>
-    <string name="reset_edit_menu">ZURÜCKSETZEN</string>
-    <string name="save_edit_menu">SPEICHERN</string>
     <string name="new_post_shortcut_long">Neuen Beitrag erstellen</string>
     <string name="new_post_shortcut_short">Neuer Beitrag</string>
     <string name="status_notification">%1$s hat einen Beitrag erstellt</string>
-    <string name="thumbnail_reel_video_edit">Vorschaubilder des Videos, das Sie bearbeiten</string>
     <string name="encode_error">Fehler-Kodierung</string>
     <string name="encode_success">Kodierung war erfolgreich!</string>
     <string name="encode_progress">Kodierung %1$d%%</string>
-    <string name="select_video_range">Wählen Sie aus was sie vom Video behalten möchten</string>
     <string name="still_encoding">Mindestens ein Video wird noch kodiert. Bitte warten bis alle fertig sind, bevor sie die Videos hochladen</string>
     <string name="follow_request">%1$s möchte dir folgen</string>
     <string name="home_feed">Start</string>
@@ -241,7 +221,6 @@
         <item quantity="one">%d Antwort</item>
         <item quantity="other">%d Antworten</item>
     </plurals>
-    <string name="error_editing">Fehler beim Bearbeiten</string>
     <string name="profile_error">Profil konnte nicht geladen werden</string>
     <string name="from_other_domain">von %1$s</string>
     <string name="add_images_error">Fehler beim Hinzufügen der Bilder</string>

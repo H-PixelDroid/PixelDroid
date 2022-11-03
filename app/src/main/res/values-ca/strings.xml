@@ -26,10 +26,6 @@
     <string name="switch_camera_button_alt">Canviar la càmera</string>
     <string name="login_connection_required_once">Per poder afegir el primer compte i utilitzar PixelDroid, has d’estar en línia :(</string>
     <string name="theme_header">Tema</string>
-    <string name="lbl_brightness">BRILLANTOR</string>
-    <string name="lbl_contrast">CONTRAST</string>
-    <string name="lbl_saturation">SATURACIÓ</string>
-    <string name="tab_filters">FILTRES</string>
     <string name="edit">EDITAR</string>
     <string name="capture_button_alt">Captura</string>
     <string name="gallery_button_alt">Galeria</string>
@@ -71,7 +67,6 @@
     <string name="no_description">Sense descripció</string>
     <string name="feed_failed">No s\'ha pogut obtenir el fil</string>
     <string name="loading_toast">Alguna cosa no ha funcionat correctament mentre es carregava</string>
-    <string name="normal_filter">Normal</string>
     <string name="upload_post_error">Error de pujada</string>
     <string name="upload_post_success">S\'ha publicat amb èxit la publicació</string>
     <string name="upload_post_failed">Ha fallat l\'enviament de la publicació</string>
@@ -80,7 +75,6 @@
     <string name="upload_picture_failed">Error d\'enviament d\'imatges!</string>
     <string name="save_image_success">La imatge s\'ha desat correctament</string>
     <string name="save_image_failed">No es pot desar la imatge</string>
-    <string name="permission_denied">Permís denegat</string>
     <string name="dark_theme">Fosc</string>
     <string name="light_theme">Clar</string>
     <string name="default_system">Per defecte (seguint el sistema)</string>
@@ -88,9 +82,6 @@
     <string name="media_upload_failed">Ha fallat la pujada del contingut gràfic, torneu-ho a provar o reviseu les condicions de la xarxa</string>
     <string name="posting_image_accessibility_hint">Imatge que s\'està publicant</string>
     <string name="retry">Tornar a provar</string>
-    <string name="crop_result_error">No s\'ha pogut recuperar la imatge després del tall</string>
-    <string name="busy_dialog_ok_button">D\'acord, espera per això.</string>
-    <string name="busy_dialog_text">Processant la imatge, espara abans de continuar!</string>
     <string name="nothing_to_see_here">Res per veure aquí!</string>
     <string name="delete_dialog">Esborra aquest contingut\?</string>
     <string name="language">Idioma</string>
@@ -106,7 +97,6 @@
     <string name="about">Quant a</string>
     <string name="post_title">%1$s imatges</string>
     <string name="followers_title">%1$s seguidors</string>
-    <string name="toolbar_title_edit">Editar</string>
     <string name="profile_picture">Imatge de perfil</string>
     <string name="something_went_wrong">Alguna cosa ha anat malament…</string>
     <string name="add_photo">Afegeix una fotografia</string>
@@ -146,10 +136,8 @@
     </plurals>
     <string name="issues_contribute">Informar de problemes o contribuir a l\'aplicació:</string>
     <string name="switch_to_grid">Canvia a la vista de quadrícula</string>
-    <string name="no_cancel_edit">No, cancel·lar l\'edició</string>
     <string name="add_comment">Afegir un comentari</string>
     <string name="submit_comment">Enviar el comentari</string>
-    <string name="save_before_returning">Voleu desar les vostres edicions\?</string>
     <string name="switch_to_carousel">Canvia a carrusel</string>
     <string name="save_image_description">Desar la descripció de la imatge</string>
     <string name="no_media_description">Afegeix aquí una descripció del contingut gràfic…</string>
@@ -163,8 +151,6 @@
     <string name="follow_requested">Seguiment sol·licitat</string>
     <string name="dialog_message_cancel_follow_request">Voleu cancel·lar la sol·licitud de seguiment\?</string>
     <string name="delete_post_failed_io_except">No s\'ha pogut suprimir la publicació, comproveu la vostra connexió\?</string>
-    <string name="filter_thumbnail">Miniatura del filtre</string>
-    <string name="image_preview">Previsualització de la imatge que s\'està editant</string>
     <plurals name="nb_following">
         <item quantity="one">%d
 \nSeguint</item>
@@ -201,7 +187,6 @@
     </plurals>
     <string name="poll_notification_channel">Enquestes</string>
     <string name="size_exceeds_instance_limit">La mida del número d\'imatge %1$d a l\'àlbum supera la mida màxima permesa per la instància (%2$d kB però el límit és %3$d kB). És possible que no puguis pujar-ho.</string>
-    <string name="crop_button">Botó per escapçar o girar la imatge</string>
     <string name="post_is_album">Aquesta entrada és un àlbum</string>
     <string name="delete_post_failed_error">No s\'ha pogut suprimir la publicació, error %1$d</string>
     <string name="notifications_settings">Configuració de notificacions</string>

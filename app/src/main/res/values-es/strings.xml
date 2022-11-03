@@ -25,10 +25,6 @@
     <string name="switch_camera_button_alt">Cambiar cámara</string>
     <string name="theme_title">Tema de la Aplicación</string>
     <string name="theme_header">Tema</string>
-    <string name="lbl_brightness">BRILLO</string>
-    <string name="lbl_contrast">CONTRASTE</string>
-    <string name="lbl_saturation">SATURACIÓN</string>
-    <string name="tab_filters">FILTROS</string>
     <string name="edit">EDITAR</string>
     <string name="capture_button_alt">Capturar</string>
     <string name="gallery_button_alt">Galería</string>
@@ -75,7 +71,6 @@
     <string name="no_description">Sin descripción</string>
     <string name="feed_failed">No se pudieron obtener publicaciones</string>
     <string name="loading_toast">Algo salió mal al cargar</string>
-    <string name="normal_filter">Normal</string>
     <string name="upload_post_error">Falló la subida de la publicación</string>
     <string name="upload_post_success">Publicación subida correctamente</string>
     <string name="upload_post_failed">Falló la subida de la publicación</string>
@@ -84,13 +79,9 @@
     <string name="upload_picture_failed">¡Error al subir la foto!</string>
     <string name="save_image_success">Imagen guardada correctamente</string>
     <string name="save_image_failed">No se puede guardar la imagen</string>
-    <string name="permission_denied">Permiso denegado</string>
     <string name="dark_theme">Oscuro</string>
     <string name="light_theme">Claro</string>
     <string name="default_system">Por defecto (Sistema)</string>
-    <string name="crop_result_error">No se pudo recuperar la imagen después del recorte</string>
-    <string name="busy_dialog_ok_button">Bien, espera.</string>
-    <string name="busy_dialog_text">Procesando imagen, ¡Espera a que termine!</string>
     <string name="nothing_to_see_here">¡Nada que ver aquí!</string>
     <plurals name="nb_following">
         <item quantity="one">%d
@@ -115,7 +106,6 @@
     <string name="discover">DESCUBRE</string>
     <string name="open_drawer_menu">Abrir el menú lateral</string>
     <string name="profile_picture">Imagen de perfil</string>
-    <string name="toolbar_title_edit">Editar</string>
     <string name="report_error">No se pudo enviar el reporte</string>
     <string name="reported">Reportado {gmd_check_circle}</string>
     <string name="report_target">Reportar la publicación de @%1$s</string>
@@ -164,11 +154,6 @@
         <item quantity="one">%d Me gusta</item>
         <item quantity="other">%d Me gustas</item>
     </plurals>
-    <string name="no_cancel_edit">No, cancelar edición</string>
-    <string name="save_before_returning">¿Guardar tus ediciones\?</string>
-    <string name="crop_button">Botón para recortar o rotar la imagen</string>
-    <string name="image_preview">Previsualización de la imagen siendo editada</string>
-    <string name="filter_thumbnail">Previsualización del filtro</string>
     <string name="upload_error">Código de error devuelto por el servidor: %1$d</string>
     <string name="size_exceeds_instance_limit">El tamaño de la imagen número %1$d del álbum, supera el máximo permitido por esta instancia (%2$d kB, siendo el límite: %3$d kB). Podrías no subirla.</string>
     <string name="total_exceeds_album_limit">Has escogido más imágenes que el máximo que tu servidor permite (%1$s). Las imágenes por encima de ese límite serán ignoradas.</string>

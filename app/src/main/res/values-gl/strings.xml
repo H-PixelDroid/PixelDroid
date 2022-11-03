@@ -17,10 +17,6 @@
     <string name="post">Publicar</string>
     <string name="whats_an_instance">Que é unha instancia\?</string>
     <string name="logout">Saír</string>
-    <string name="lbl_brightness">Brillo</string>
-    <string name="lbl_contrast">Contraste</string>
-    <string name="lbl_saturation">Saturación</string>
-    <string name="tab_filters">Filtros</string>
     <string name="edit">EDITAR</string>
     <string name="save_to_gallery">Gardar na Galería…</string>
     <string name="image_download_downloading">Descargando…</string>
@@ -72,7 +68,6 @@
     <string name="no_description">Sen descrición</string>
     <string name="feed_failed">Non se obtivo a fonte</string>
     <string name="loading_toast">Algo fallou ao realizar a subida</string>
-    <string name="normal_filter">Normal</string>
     <string name="upload_post_error">Erro ao subir a publicación</string>
     <string name="upload_post_success">Publicación correcta</string>
     <string name="upload_post_failed">Fallou a subida da publicación</string>
@@ -80,7 +75,6 @@
     <string name="picture_format_error">Erro na subida: formato de imaxe non válido.</string>
     <string name="upload_picture_failed">Erro ao subir a foto!</string>
     <string name="save_image_failed">Non se gardou a imaxe</string>
-    <string name="permission_denied">Permiso denegado</string>
     <string name="dark_theme">Escuro</string>
     <string name="light_theme">Claro</string>
     <string name="default_system">Por omisión (do sistema)</string>
@@ -89,9 +83,6 @@
     <string name="media_upload_completed">Subida do multimedia completada</string>
     <string name="retry">Reintentar</string>
     <string name="nothing_to_see_here">Nada por aquí!</string>
-    <string name="crop_result_error">Tras o recorte non se puido obter a imaxe</string>
-    <string name="busy_dialog_ok_button">OK, agardo.</string>
-    <string name="busy_dialog_text">Estase procesando a imaxe, agarda a que remate!</string>
     <string name="instance_not_pixelfed_warning">Non semella ser unha instancia Pixelfed, polo que a app podería non funcionar correctamente.</string>
     <string name="instance_not_pixelfed_continue">Ok, adiante igualmente</string>
     <string name="instance_not_pixelfed_cancel">Cancelar o acceso</string>
@@ -112,7 +103,6 @@
     <string name="report_target">Denuncia a publicación de %1$s</string>
     <string name="reported">Publicación denunciada</string>
     <string name="report_error">Non se puido enviar a denuncia</string>
-    <string name="toolbar_title_edit">Editar</string>
     <string name="profile_picture">Imaxe de perfil</string>
     <string name="open_drawer_menu">Abrir o menú do editor</string>
     <string name="discover">DESCUBRIR</string>
@@ -160,11 +150,6 @@
         <item quantity="one">%d Gústame</item>
         <item quantity="other">%d Gústame</item>
     </plurals>
-    <string name="no_cancel_edit">Non, cancela a edición</string>
-    <string name="save_before_returning">Gardar a edición\?</string>
-    <string name="crop_button">Botón para recortar ou rotar a imaxe</string>
-    <string name="image_preview">Vista previa da imaxe a ser editada</string>
-    <string name="filter_thumbnail">Miniatura do filtro</string>
     <string name="upload_error">Código de erro devolto polo servidor: %1$d</string>
     <string name="size_exceeds_instance_limit">O tamaño do número de imaxes %1$d no álbume supera o máximo permitido pola instancia (%2$d kB pero o límite é %3$d kB). É posible que non poidas subilas.</string>
     <string name="total_exceeds_album_limit">Elexiches máis imaxes das que permite o servidor (%1$s). As imaxes que superan o límite serán ignoradas.</string>
@@ -217,9 +202,6 @@
     <string name="post_is_video">Esta publicación é un vídeo</string>
     <string name="no_storage_permission">Non tes permiso de almacenaxe, concede o permiso nos axustes se queres permitir que PixelDroid mostre a miniatura</string>
     <string name="play_video">Reproducir vídeo</string>
-    <string name="video_edit_not_yet_supported">Aínda non hai soporte para edición de vídeo</string>
-    <string name="reset_edit_menu">RESTABLECER</string>
-    <string name="save_edit_menu">GARDAR</string>
     <string name="encode_error">Erro ao codificar</string>
     <string name="encode_success">Codificación correcta!</string>
     <string name="encode_progress">Codificar %1$d%%</string>
@@ -228,9 +210,6 @@
     <string name="new_post_shortcut_short">Nova publicación</string>
     <string name="follow_request">%1$s solicitou seguirte</string>
     <string name="status_notification">%1$s creou unha publicación</string>
-    <string name="thumbnail_reel_video_edit">Fila mostrando as miniaturas do vídeo que estás editando</string>
-    <string name="select_video_range">Elixe a parte a conservar do vídeo</string>
-    <string name="error_editing">Erro ao editar</string>
     <string name="color_choice_button">Elixe esta cor</string>
     <string name="notification_thumbnail">Miniatura da imaxe na notificación desta publicación</string>
     <string name="home_feed">Inicio</string>

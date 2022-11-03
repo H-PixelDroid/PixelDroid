@@ -26,10 +26,6 @@
     <string name="share_picture">Afbeelding delen…</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Verborgen Media
 \n (Klik om weer te geven)</string>
-    <string name="lbl_brightness">Helderheid</string>
-    <string name="lbl_contrast">CONTRAST</string>
-    <string name="lbl_saturation">VERZADIGING</string>
-    <string name="tab_filters">FILTERS</string>
     <string name="edit">BEWERKEN</string>
     <string name="capture_button_alt">Vastleggen</string>
     <string name="switch_camera_button_alt">Van camera wisselen</string>
@@ -55,7 +51,6 @@
     <string name="empty_comment">Commentaar mag niet leeg zijn!</string>
     <string name="no_description">Geen beschrijving</string>
     <string name="loading_toast">Er ging iets mis tijdens het laden</string>
-    <string name="normal_filter">Normaal</string>
     <string name="picture_format_error">Uploadfout: verkeerd beeldformaat.</string>
     <string name="save_image_success">Beeld succesvol opgeslagen</string>
     <string name="upload_post_success">Post met succes geüpload</string>
@@ -67,7 +62,6 @@
     <string name="upload_post_error">Post-upload mislukt</string>
     <string name="upload_post_failed">Kon post niet uploaden</string>
     <string name="save_image_failed">Kon afbeelding niet opslaan</string>
-    <string name="permission_denied">Toestemming geweigerd</string>
     <string name="default_system">Standaard (systeem instelling)</string>
     <string name="instance_error">Kon instance-informatie niet ophalen</string>
     <string name="request_format_error">Fout bij het uploaden: slecht verzoekformaat</string>
@@ -79,9 +73,6 @@
     <string name="write_permission_share_pic">Je moet schrijven toestaan om afbeeldingen te delen!</string>
     <string name="write_permission_download_pic">Je moet schrijven toestaan om afbeeldingen te downloaden!</string>
     <string name="follow_status_failed">Kon volgstatus niet ophalen</string>
-    <string name="busy_dialog_ok_button">Ok, wacht.</string>
-    <string name="crop_result_error">Kon de afbeelding niet ophalen na bijsnijden</string>
-    <string name="busy_dialog_text">Bezig met het verwerken van de afbeelding, wacht even tot dat het klaar is!</string>
     <string name="follow_error">Kon niet volgen</string>
     <string name="feed_failed">Kon de feed niet halen</string>
     <string name="nothing_to_see_here">Niets te zien hier!</string>
@@ -95,9 +86,6 @@
     <string name="share_link">Link delen</string>
     <string name="status_more_options">Meer opties</string>
     <string name="unfollow">Stoppen met volgen</string>
-    <string name="crop_button">Knop om de afbeelding af te snijden of te draaien</string>
-    <string name="image_preview">Voorbeeld van de afbeelding die bewerkt wordt</string>
-    <string name="filter_thumbnail">Miniatuur van de filter</string>
     <string name="post_image">Een van de afbeeldingen in de post</string>
     <string name="verify_credentials">Kon gebruiker informatie niet verkrijgen</string>
     <string name="mascot_description">Afbeelding dat een rode panda (de mascotte van Pixelfed) toont, in gebruik van een telefoon</string>
@@ -110,7 +98,6 @@
     <string name="something_went_wrong">Er is iets misgegaan…</string>
     <string name="discover">ONTDEK</string>
     <string name="profile_picture">Profiel afbeelding</string>
-    <string name="toolbar_title_edit">Bewerken</string>
     <string name="optional_report_comment">Optioneel bericht voor moderators/admins</string>
     <string name="about">Over</string>
     <string name="license_info">PixelDroid is vrije software, gelicenseerd onder de GNU General Public License (versie 3 of hoger)</string>
@@ -126,8 +113,6 @@
     <string name="instance_not_pixelfed_warning">Dit is geen Pixelfed instantie, dus de app zou zich op onverwachte wijze kunnen gedragen.</string>
     <string name="report">Melden</string>
     <string name="poll_notification">De peiling van %1$s is beëindigd</string>
-    <string name="save_before_returning">Wijzigingen opslaan\?</string>
-    <string name="no_cancel_edit">Nee, bewerken annuleren</string>
     <string name="delete_post_failed_error">Kon post niet verwijderen, error %1$d</string>
     <string name="delete_post_failed_io_except">Kon post niet verwijderen, controleer je verbinding\?</string>
     <plurals name="number_comments">

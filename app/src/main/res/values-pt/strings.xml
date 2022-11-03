@@ -58,19 +58,8 @@
     <string name="request_format_error">Erro de envio: formato inválido</string>
     <string name="no_media_description">Adicionar descrição aqui…</string>
     <string name="upload_error">Código de erro enviado pelo servidor: %1$d</string>
-    <string name="lbl_brightness">Brilho</string>
-    <string name="lbl_contrast">Contraste</string>
-    <string name="lbl_saturation">Saturação</string>
-    <string name="tab_filters">Filtros</string>
     <string name="edit">Editar</string>
-    <string name="busy_dialog_text">Espere que acabe de processar a imagem!</string>
-    <string name="busy_dialog_ok_button">Ok, espere que acabe.</string>
-    <string name="save_before_returning">Guardar as edições\?</string>
-    <string name="no_cancel_edit">Não, cancelar edição</string>
-    <string name="image_preview">Pré-visualização da imagem a ser editada</string>
     <string name="size_exceeds_instance_limit">O tamanho da imagem núm. %1$d no álbum ultrapassa o limite de tamanho permitido pela instância (%2$d kB mas o limte é %3$d kB). Poderá não ser possível o envio.</string>
-    <string name="filter_thumbnail">Miniaturas dos filtros</string>
-    <string name="crop_result_error">Não foi possível buscar a imagem após redimensionar</string>
     <string name="capture_button_alt">Capturar</string>
     <string name="switch_camera_button_alt">Mudar câmara</string>
     <string name="gallery_button_alt">Galeria</string>
@@ -154,7 +143,6 @@
     <string name="report">Denunciar</string>
     <string name="share_link">Partilhar Link</string>
     <string name="reported">Publicação denunciada</string>
-    <string name="toolbar_title_edit">Editar</string>
     <string name="profile_picture">Imagem de perfil</string>
     <string name="discover">DESCOBRIR</string>
     <string name="something_went_wrong">Algo correu mal…</string>
@@ -172,7 +160,6 @@
     <string name="login_notifications">Não foi possível buscar as últimas notificações</string>
     <string name="no_camera_permission">Permissão para usar a câmara não permitida. Se quer que PixelDroid use a câmara, adicione a permissão nas definições</string>
     <string name="play_video">Reproduzir vídeo</string>
-    <string name="save_edit_menu">GUARDAR</string>
     <string name="new_post_shortcut_long">Criar nova publicação</string>
     <string name="new_post_shortcut_short">Nova publicação</string>
     <string name="follow_request">%1$s pediu para o seguir</string>
@@ -194,12 +181,9 @@
         <item quantity="one">%d resposta</item>
         <item quantity="other">%d respostas</item>
     </plurals>
-    <string name="video_edit_not_yet_supported">Edição de vídeo ainda não suportada</string>
-    <string name="reset_edit_menu">RESET</string>
     <string name="encode_error">Erro ao codificar</string>
     <string name="encode_success">Codificação com sucesso!</string>
     <string name="encode_progress">Codificação %1$d%%</string>
-    <string name="select_video_range">Selecione o que manter do video</string>
     <string name="still_encoding">Um ou mais vídeos ainda estão a ser codificados. Espere que termine ante do envio</string>
     <string name="verify_credentials">Não foi possível obter informação do utilizador</string>
     <string name="instance_not_pixelfed_warning">Não parece ser uma instância Pixelfed, por isso a aplicação pode terminar de forma inesperada.</string>
@@ -212,12 +196,9 @@
 \nTambém significa que tem de escolher um servidor, ou \"instância\" de Pixelfed a usar. Se não sabe qual usar, veja aqui: https://pixelfed.org/join
 \n
 \nPara mais informação sobre Pixelfed, veja aqui: https://pixelfed.org</string>
-    <string name="permission_denied">Permissão negada</string>
     <string name="upload_post_success">Publicação enviada com sucesso</string>
     <string name="switch_to_carousel">Mudar para vista em carrossel</string>
     <string name="save_image_description">Guardar descrição da imagem</string>
-    <string name="normal_filter">Normal</string>
-    <string name="error_editing">Erro ao editar</string>
     <string name="image_download_failed">A transferência falhou, por favor tente novamente</string>
     <plurals name="number_comments">
         <item quantity="one">%d comentário</item>

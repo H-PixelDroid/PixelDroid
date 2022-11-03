@@ -14,7 +14,6 @@
         <item quantity="other">Kuvaus saa sisältää enintään %d merkkiä.</item>
     </plurals>
     <string name="save_image_failed">Kuvan tallentaminen epäonnistui</string>
-    <string name="permission_denied">Lupa evätty</string>
     <string name="api_not_enabled_dialog">API ei ole käytössä tässä instansissa. Pyydä ylläpitäjää ottamaan se käyttöön.</string>
     <string name="login_connection_required_once">Sinun on oltava verkossa, jotta voit lisätä ensimmäisen tilin ja käyttää PixelDroidia :(</string>
     <string name="whats_an_instance_explanation">Saatat olla hämmentynyt tekstikentästä, jossa kysytään \'instanssisi\' verkkotunnusta.
@@ -38,8 +37,6 @@
     <string name="project_website">Projektin verkkosivu: https://pixeldroid.org</string>
     <string name="add_comment">Lisää kommentti</string>
     <string name="save_to_gallery">Tallenna galleriaan…</string>
-    <string name="no_cancel_edit">Ei, peruuta muokkaukset</string>
-    <string name="save_before_returning">Tallennetaanko muokkaukset\?</string>
     <string name="add_photo">Lisää kuva</string>
     <string name="mention_notification">%1$s mainitsi sinut</string>
     <string name="instance_not_pixelfed_cancel">Peruuta kirjautuminen</string>
@@ -103,7 +100,6 @@
     <string name="invalid_domain">Virheellinen verkkotunnus</string>
     <string name="language">Kieli</string>
     <string name="delete">Poista</string>
-    <string name="toolbar_title_edit">Muokkaa</string>
     <string name="report">Ilmianna</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="about">Tietoja</string>
@@ -115,12 +111,7 @@
     <string name="comment">Kommentti</string>
     <string name="image_download_downloading">Ladataan…</string>
     <string name="gallery_button_alt">Galleria</string>
-    <string name="normal_filter">Normaali</string>
     <string name="edit">Muokkaa</string>
-    <string name="tab_filters">SUODATIN</string>
-    <string name="lbl_saturation">VÄRIKYLLÄISYYS</string>
-    <string name="lbl_contrast">KONTRASTI</string>
-    <string name="lbl_brightness">KIRKKAUS</string>
     <string name="post">julkaise</string>
     <string name="description">Kuvaus…</string>
     <string name="dark_theme">Tumma</string>

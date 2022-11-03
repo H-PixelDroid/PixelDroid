@@ -14,10 +14,6 @@
     <string name="post">送信</string>
     <string name="whats_an_instance">インスタンスとは？</string>
     <string name="logout">ログアウト</string>
-    <string name="lbl_brightness">輝度</string>
-    <string name="lbl_contrast">コントラスト</string>
-    <string name="lbl_saturation">サチュレーション</string>
-    <string name="tab_filters">フィルター</string>
     <string name="save_to_gallery">ギャラリーに保存…</string>
     <string name="image_download_downloading">ダウンロード中…</string>
     <string name="image_download_success">画像のダウンロードに成功しました</string>
@@ -75,7 +71,6 @@
     <string name="no_description">説明はありません</string>
     <string name="feed_failed">フィードを取得できませんでした</string>
     <string name="loading_toast">読み込み中に問題が発生しました</string>
-    <string name="normal_filter">ノーマル</string>
     <string name="upload_post_error">投稿のアップロードに失敗しました</string>
     <string name="upload_post_success">投稿のアップロードに成功しました</string>
     <string name="upload_post_failed">投稿のアップロードに失敗しました</string>
@@ -84,12 +79,8 @@
     <string name="upload_picture_failed">画像アップロードエラー</string>
     <string name="save_image_success">画像が保存されました</string>
     <string name="save_image_failed">画像を保存できません</string>
-    <string name="permission_denied">権限がありません</string>
     <string name="dark_theme">ダーク</string>
     <string name="light_theme">ライト</string>
     <string name="default_system">デフォルト(システム設定)</string>
-    <string name="busy_dialog_ok_button">お待ちください。</string>
-    <string name="busy_dialog_text">画像を処理しています。しばらくお待ちください。</string>
     <string name="nothing_to_see_here">ここには何もありません！</string>
-    <string name="crop_result_error">トリミング後に画像を取得できませんでした</string>
 </resources>
