@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -20,13 +21,11 @@
 
     <application
         android:name=".utils.PixelDroidApplication"
-        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".posts.AlbumActivity"
             android:exported="false"
@@ -135,12 +134,6 @@
                     android:scheme="@string/auth_scheme" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:exported="true"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".searchDiscover.SearchActivity"
             android:exported="true"
