@@ -18,7 +18,6 @@
     <string name="post">ارسل</string>
     <string name="whats_an_instance">ماذا نعني بمثيل الخادم؟</string>
     <string name="logout">الخروج</string>
-    <string name="tab_filters">الفلاتر</string>
     <string name="edit">تعديل</string>
     <string name="save_to_gallery">احتفظ بها في المعرض…</string>
     <string name="image_download_downloading">التنزيل جارٍ…</string>
@@ -28,7 +27,6 @@
     <string name="share_picture">شارِك الصورة…</string>
     <string name="NoCommentsToShow">لا توجد تعليقات في هذا المنشور…</string>
     <string name="connect_to_pixelfed">لِج إلى Pixelfed</string>
-    <string name="lbl_brightness">السطوع</string>
     <string name="image_download_failed">فشل التنزيل ، حاول مجددًا مِن فضلك</string>
     <string name="liked_notification">أعجِب %1$s بمنشورك</string>
     <string name="domain_of_your_instance">اسم نطاق مثيل خادمك</string>
@@ -36,13 +34,10 @@
     <string name="capture_button_alt">لقطة شاشة</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / وسائط مخفية
 \n (اضعط للعرض)</string>
-    <string name="lbl_contrast">تباين عالٍ</string>
-    <string name="lbl_saturation">التشبّع اللوني</string>
     <string name="add_account_description">إضافة حساب Pixelfed آخر</string>
     <string name="add_account_name">إضافة حساب</string>
     <string name="instance_error">تعذّر الحصول على معلومات مثيل الخادم</string>
     <string name="save_image_failed">لا يمكن حفظ الصورة</string>
-    <string name="permission_denied">رُفض التصريح</string>
     <string name="dark_theme">داكن</string>
     <string name="light_theme">فاتح</string>
     <string name="save_image_success">تم حفظ الصورة بنجاح</string>
@@ -51,7 +46,6 @@
     <string name="upload_post_failed">فشل في تحميل المنشور</string>
     <string name="upload_picture_failed">خطأ في تحميل الصورة!</string>
     <string name="loading_toast">حدث خلل اثناء التحميل</string>
-    <string name="normal_filter">عادي</string>
     <string name="upload_post_error">فشل في تحميل المنشور</string>
 
     <string name="comment">تعليق</string>
@@ -89,7 +83,4 @@
     <string name="picture_format_error">خطأ في التحميل: نسق الصورة غير صالح.</string>
     <string name="request_format_error">خطأ في التحميل: نسق الطلب غير صالح</string>
     <string name="media_upload_failed">{gmd_cloud_off} فشل في تحميل الوسائط ، يرجى إعادة المحاولة أو تحقق مِن حالة الشبكة</string>
-    <string name="busy_dialog_ok_button">حسنًا ، انتظر ذلك.</string>
-    <string name="crop_result_error">تعذّر جلب الصورة بعد القص</string>
-    <string name="busy_dialog_text">"لا تزال الصورة في المعالجة, انتظر حتى تنتهي من ذالك  أولاً!"</string>
 </resources>

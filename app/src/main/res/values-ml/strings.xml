@@ -2,7 +2,6 @@
 <resources>
     <string name="save_image_description">ഇമേജ് വിവരണം സംരക്ഷിക്കുക</string>
     <string name="description">വിവരണം…</string>
-    <string name="permission_denied">അനുമതി നിഷേധിച്ചു</string>
     <string name="instance_not_pixelfed_cancel">പ്രവേശിക്കുന്നത് റദ്ദാക്കുക</string>
     <string name="instance_not_pixelfed_continue">ശരി, എന്തായാലും തുടരുക</string>
     <string name="invalid_domain">അസാധുവായ മേഖല</string>
@@ -11,7 +10,6 @@
     <string name="language">ഭാഷ</string>
     <string name="delete_dialog">ഈ പോസ്റ്റ് ഇല്ലാതാക്കണോ\?</string>
     <string name="delete">ഇല്ലാതാക്കൂ</string>
-    <string name="toolbar_title_edit">തിരുത്തുക</string>
     <string name="about">കുറിച്ച്</string>
     <string name="about_pixeldroid">PixelDroid-നെ കുറിച്ച്</string>
     <string name="accounts">അക്കൗണ്ടുകൾ</string>
@@ -32,7 +30,6 @@
     <string name="followed_notification">%1$s നിങ്ങളെ പിന്തുടർന്നു</string>
     <string name="theme_header">തീം</string>
     <string name="title_activity_settings2">ക്രമീകരണങ്ങൾ</string>
-    <string name="normal_filter">സാധാരണ</string>
     <string name="menu_settings">ക്രമീകരണ</string>
     <string name="app_name">PixelDroid</string>
     <string name="media_upload_completed">മീഡിയ അപ്‌ലോഡ് പൂർത്തിയായി</string>
@@ -56,7 +53,6 @@
         <item quantity="other">%d
 \nപോസ്റ്റുകൾ</item>
     </plurals>
-    <string name="busy_dialog_ok_button">ശരി, അതിനായി കാത്തിരിക്കുക.</string>
     <string name="upload_post_success">പോസ്റ്റ് അപ്‌ലോഡുചെയ്‌തു</string>
     <string name="upload_post_failed">പോസ്റ്റ് അപ്‌ലോഡ് പരാജയപ്പെട്ടു</string>
     <string name="save_image_success">ചിത്രം സംരക്ഷിച്ചു</string>
@@ -83,11 +79,6 @@
     <string name="gallery_button_alt">ഗാലറി</string>
     <string name="switch_camera_button_alt">ക്യാമറ മാറ്റുക</string>
     <string name="capture_button_alt">എടുക്കുക</string>
-    <string name="no_cancel_edit">ഇല്ല, എഡിറ്റ് റദ്ദാക്കുക</string>
-    <string name="lbl_contrast">ദൃശ്യതീവ്രത</string>
-    <string name="lbl_saturation">സാച്ചുറേഷൻ</string>
-    <string name="tab_filters">ഫിൽട്ടറുകൾ</string>
-    <string name="lbl_brightness">തെളിച്ചം</string>
     <string name="no_media_description">ഒരു മീഡിയ വിവരണം ഇവിടെ ചേർക്കുക…</string>
     <string name="logout">പുറത്തു കടക്കുക</string>
     <string name="whats_an_instance">ഒരു ഇൻസ്റ്റൻസ് എന്താണ്\?</string>
@@ -95,11 +86,9 @@
     <string name="menu_account">എന്റെ പ്രൊഫൈൽ</string>
     <string name="upload_post_error">പോസ്റ്റ് അപ്‌ലോഡ് പിശക്</string>
     <string name="switch_to_carousel">കറൗസലിലേക്ക് മാറുക</string>
-    <string name="save_before_returning">നിങ്ങളുടെ മാറ്റങ്ങൾ സംരക്ഷിക്കണോ\?</string>
     <string name="post_is_album">ഈ പോസ്റ്റ് ഒരു ആൽബമാണ്</string>
     <string name="action_not_allowed">ഈ പ്രവർത്തനം അനുവദനീയമല്ല</string>
     <string name="hashtags">ഹാഷ്‌ടാഗുകൾ</string>
-    <string name="busy_dialog_text">ഇപ്പോഴും ഇമേജ് പ്രോസസ്സ് ചെയ്യുന്നു, ആദ്യം അത് പൂർത്തിയാകാൻ കാത്തിരിക്കുക!</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="default_system">സ്ഥിരസ്ഥിതി (സിസ്റ്റം പിന്തുടരുന്നു)</string>
     <string name="login_connection_required_once">PixelDroid ഉപയോഗിക്കാനും ഒരു അക്കൗണ്ട് ചേർക്കാനും നിങ്ങൾ ഓൺലൈനിൽ ആയിരിക്കണം :(</string>

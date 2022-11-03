@@ -10,11 +10,7 @@
     <string name="shared_notification">%1$s поделился(ась) вашим постом</string>
     <string name="post">пост</string>
     <string name="logout">Выйти</string>
-    <string name="lbl_brightness">ЯРКОСТЬ</string>
     <string name="whats_an_instance">Что такое инстанс\?</string>
-    <string name="lbl_contrast">КОНТРАСТ</string>
-    <string name="lbl_saturation">НАСЫЩЕННОСТЬ</string>
-    <string name="tab_filters">ФИЛЬТРЫ</string>
     <string name="edit">РЕДАКТИРОВАТЬ</string>
     <string name="save_to_gallery">Сохранить в Галерею…</string>
     <string name="image_download_downloading">Загрузка…</string>
@@ -52,7 +48,6 @@
     <string name="no_description">Нет описания</string>
     <string name="feed_failed">Не удалось загрузить ленту</string>
     <string name="loading_toast">При загрузке что-то пошло не так</string>
-    <string name="normal_filter">Обычный</string>
     <string name="upload_post_error">Ошибка загрузки поста</string>
     <string name="upload_post_success">Пост успешно загружен</string>
     <string name="upload_post_failed">Не удалось загрузить пост</string>
@@ -61,7 +56,6 @@
     <string name="upload_picture_failed">Ошибка загрузки изображения!</string>
     <string name="save_image_success">Изображение успешно сохранено</string>
     <string name="save_image_failed">Не удалось сохранить изображение</string>
-    <string name="permission_denied">Отказано в доступе</string>
     <string name="dark_theme">Тёмная</string>
     <string name="light_theme">Светлая</string>
     <string name="default_system">По умолчанию (как в системе)</string>
@@ -89,15 +83,11 @@
     <string name="retry">Повторить</string>
     <string name="media_upload_failed">Ошибка загрузки медиа, попробуйте ещё раз или проверьте состояние сети</string>
     <string name="nothing_to_see_here">Здесь нечего смотреть!</string>
-    <string name="crop_result_error">Не удалось получить изображение после обрезки</string>
-    <string name="busy_dialog_ok_button">Ок, ожидайте.</string>
-    <string name="busy_dialog_text">Изображение обрабатывается, пожалуйста, ожидайте!</string>
     <string name="open_drawer_menu">Открыть меню навигации</string>
     <string name="panda_pull_to_refresh_to_try_again">Панде грустно. Потяните, чтобы обновить.</string>
     <string name="something_went_wrong">Что-то пошло не так…</string>
     <string name="discover">ОБЗОР</string>
     <string name="profile_picture">Изображение профиля</string>
-    <string name="toolbar_title_edit">Редактировать</string>
     <string name="report_error">Не удалось отправить жалобу</string>
     <string name="reported">Отправлено {gmd_check_circle}</string>
     <string name="report_target">Пожаловаться на пост @%1$s</string>
@@ -129,8 +119,6 @@
         <item quantity="many">Описание должно содержать максимум %d символов.</item>
         <item quantity="other">Описание должно содержать максимум %d символов.</item>
     </plurals>
-    <string name="no_cancel_edit">Нет, отменить изменения</string>
-    <string name="save_before_returning">Сохранить изменения\?</string>
     <string name="mascot_description">Изображение красной панды, талисман Pixelfed , использующей телефон</string>
     <string name="issues_contribute">Сообщайте о проблемах или вносите свой вклад в приложение:</string>
     <string name="help_translate">Помогите перевести PixelDroid на ваш язык:</string>
@@ -188,8 +176,6 @@
         <item quantity="many">%d Лайков</item>
         <item quantity="other">%d Лайков</item>
     </plurals>
-    <string name="image_preview">Предварительный просмотр редактируемого изображения</string>
-    <string name="filter_thumbnail">Фильтр миниатюр</string>
     <string name="no_media_description">Добавьте описание медиа файла здесь…</string>
     <string name="switch_to_carousel">Показывать в режиме «карусель»</string>
     <string name="whats_an_instance_explanation">Вас может смутить текстовое поле, запрашивающее доменное имя вашего \'инстанса\'.
@@ -199,7 +185,6 @@
 \nЭто также означает, что вы должны выбрать, какой сервер или \'инстанс\' Pixelfed использовать. Если вы еще ничего не знаете об этом, перейдите по ссылке: https://pixelfed.org/join
 \n
 \nДополнительную информации о Pixelfed вы можете посмотреть здесь: https://pixelfed.org</string>
-    <string name="crop_button">Кнопка для обрезки или поворота изображения</string>
     <string name="switch_to_grid">Переключить в вид сетки</string>
     <string name="dialog_message_cancel_follow_request">Отменить запрос на подписку\?</string>
     <string name="follow_requested">Подписаться на запрос</string>
@@ -239,5 +224,4 @@
     <string name="no_camera_permission">Разрешение на использование камеры не предоставлено, выдайте разрешение в настройках, если хотите чтобы PixelDroid использовал камеру</string>
     <string name="no_storage_permission">Разрешение на хранилище не предоставлено, дайте разрешение в настройках, если вы хотите, чтобы PixelDroid показывал миниатюры</string>
     <string name="play_video">Воспроизвести видео</string>
-    <string name="video_edit_not_yet_supported">Редактирование видео ещё не поддерживается</string>
 </resources>

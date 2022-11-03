@@ -256,7 +256,7 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                 else MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             val imageUri: Uri = resolver.insert(store, contentValues)!!
             path = imageUri.toString()
-            outputStream = resolver.openOutputStream(Objects.requireNonNull(imageUri))!!
+            outputStream = resolver.openOutputStream(imageUri)!!
         } else {
             @Suppress("DEPRECATION") val imagesDir =
                 Environment.getExternalStoragePublicDirectory(getString(R.string.app_name))

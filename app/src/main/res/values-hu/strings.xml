@@ -7,13 +7,8 @@
     <string name="new_post_shortcut_short">Új bejegyzés</string>
     <string name="new_post_shortcut_long">Új bejegyzés létrehozása</string>
     <string name="still_encoding">Egy vagy több videó még kódolás alatt áll. A feltöltés előtt várjon a befejeződésükre.</string>
-    <string name="select_video_range">Válassza ki, hogy mit tart meg a videóból</string>
     <string name="encode_success">A kódolás sikeres!</string>
     <string name="encode_error">Hiba a kódoláskor</string>
-    <string name="save_edit_menu">MENTÉS</string>
-    <string name="reset_edit_menu">VISSZAÁLLÍTÁS</string>
-    <string name="thumbnail_reel_video_edit">A szerkesztett videó bélyegképeit tartalmazó filmtekercs</string>
-    <string name="video_edit_not_yet_supported">A videószerkesztés még nem támogatott</string>
     <string name="play_video">Videó lejátszása</string>
     <string name="no_storage_permission">A tároló engedély nincs megadva, adja meg a beállításokban, ha szeretné, hogy a PixelDroid megjelenítse a bélyegképet</string>
     <string name="no_camera_permission">A kamera engedély nincs megadva, adja meg a beállításokban, ha szeretné, hogy a PixelDroid használhassa a kamerát</string>
@@ -34,7 +29,6 @@
     <string name="discover">FELFEDEZÉS</string>
     <string name="open_drawer_menu">Fiókmenü megnyitása</string>
     <string name="profile_picture">Profilkép</string>
-    <string name="toolbar_title_edit">Szerkesztés</string>
     <string name="report_error">A jelentés elküldése sikertelen</string>
     <string name="reported">Jelentve {gmd_check_circle}</string>
     <string name="report_target">\@%1$s bejegyzésének jelentése</string>
@@ -136,20 +130,7 @@
     <string name="gallery_button_alt">Galéria</string>
     <string name="switch_camera_button_alt">Kamera váltása</string>
     <string name="capture_button_alt">Rögzítés</string>
-    <string name="no_cancel_edit">Nem, a szerkesztés megszakítása</string>
-    <string name="save_before_returning">Menti a szerkesztéseit\?</string>
-    <string name="crop_button">Gomb a kép levágásához vagy forgatásához</string>
-    <string name="image_preview">A szerkesztett kép előnézete</string>
-    <string name="crop_result_error">A kép lekérése a vágás után sikertelen</string>
-    <string name="busy_dialog_ok_button">Rendben, megvárom.</string>
-    <string name="busy_dialog_text">A kép még feldolgozás alatt van, várjon, hogy befejeződjön!</string>
-    <string name="normal_filter">Normál</string>
-    <string name="filter_thumbnail">A szűrő bélyegképe</string>
     <string name="edit">Szerkesztés</string>
-    <string name="tab_filters">SZŰRŐK</string>
-    <string name="lbl_saturation">TELÍTETTSÉG</string>
-    <string name="lbl_contrast">KONTRASZT</string>
-    <string name="lbl_brightness">FÉNYERŐ</string>
     <string name="upload_error">A kiszolgáló által visszaadott hibakód: %1$d</string>
     <string name="video_not_supported">A használt kiszolgáló nem támogatja a videók feltöltését, lehet hogy nem fogja tudni feltölteni a bejegyzésben szereplő videókat</string>
     <string name="size_exceeds_instance_limit">Az album %1$d. képének mérete túllépi a példány által megengedett legnagyobb méretet (%2$d kB a méret, de a korlát %3$d kB-os). Lehet, hogy nem fogja tudni feltölteni.</string>
@@ -174,7 +155,6 @@
     </plurals>
     <string name="save_image_success">A kép mentése sikeres</string>
     <string name="save_image_failed">A kép nem menthető</string>
-    <string name="permission_denied">Hozzáférés megtagadva</string>
     <string name="add_account_description">Másik Pixelfed-fiók hozzáadása</string>
     <string name="add_account_name">Fiók hozzáadása</string>
     <string name="logout">Kijelentkezés</string>

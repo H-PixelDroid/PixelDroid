@@ -29,14 +29,7 @@
     <string name="description">Opis…</string>
     <string name="post">Post</string>
     <string name="add_photo">Dodaj zdjęcie</string>
-    <string name="lbl_brightness">Jasność</string>
-    <string name="lbl_contrast">Kontrast</string>
-    <string name="lbl_saturation">Nasycenie</string>
-    <string name="tab_filters">Filtry</string>
     <string name="edit">EDYCJA</string>
-    <string name="normal_filter">Zwykły</string>
-    <string name="busy_dialog_ok_button">OK, zaczekam.</string>
-    <string name="crop_result_error">Nie udało się pobrać obrazka po przycięciu</string>
     <string name="capture_button_alt">Zrób zdjęcie</string>
     <string name="switch_camera_button_alt">Przełącz aparat</string>
     <string name="gallery_button_alt">Galeria</string>
@@ -61,10 +54,8 @@
     <string name="liked_notification">%1$s polubień</string>
     <string name="whats_an_instance">Co to jest instancja\?</string>
     <string name="login_connection_required_once">Musisz być online, aby dodać konto i korzystać z PixelDroida :(</string>
-    <string name="permission_denied">Brak dostępu</string>
     <string name="picture_format_error">Błąd wgrywania na serwer: niewłaściwy format pliku.</string>
     <string name="upload_post_error">Błąd podczas publikacji posta</string>
-    <string name="busy_dialog_text">Przetwarzam obrazek, zaczekaj aż skończę!</string>
     <string name="loading_toast">Coś poszło nie tak podczas ładowania</string>
     <string name="save_to_gallery">Zapisz w galerii…</string>
     <string name="image_download_failed">Błąd pobierania, spróbuj ponownie</string>
@@ -87,7 +78,6 @@
     </plurals>
     <string name="delete">Usuń</string>
     <string name="delete_dialog">Czy usunąć ten post\?</string>
-    <string name="no_cancel_edit">Nie, odrzuć edycję</string>
     <string name="switch_to_carousel">Przełącz na karuzelę</string>
     <plurals name="replies_count">
         <item quantity="one">%d odpowiedź</item>
@@ -117,10 +107,7 @@
     <string name="follow_requested">Prośba obserwacji</string>
     <string name="dialog_message_cancel_follow_request">Anulować prośbę obserwacji\?</string>
     <string name="delete_post_failed_io_except">Nie udało się usunąć posta, sprawdź swoje połączenie internetowe\?</string>
-    <string name="filter_thumbnail">Miniaturka filtra</string>
     <string name="post_image">Jedno ze zdjęć w tym poście</string>
-    <string name="crop_button">Przycisk do przycinania lub obracania zdjęcia</string>
-    <string name="image_preview">Podgląd edytowanego zdjęcia</string>
     <string name="no_camera_permission">Dostęp do aparatu nie został przyznany, przyznaj dostęp w ustawieniach jeśli chcesz, aby PixelDroid korzystał z kamery</string>
     <string name="no_storage_permission">Dostęp do pamięci nie został przyznany, przyznaj dostęp w ustawieniach, jeśli chcesz, aby PixelDroid wyświetlał miniatury</string>
     <plurals name="nb_posts">
@@ -167,7 +154,6 @@
     <string name="search">Szukaj</string>
     <string name="post_title">post %1$s</string>
     <string name="reported">Post zgłoszony</string>
-    <string name="toolbar_title_edit">Edytuj</string>
     <string name="open_drawer_menu">Otwórz menu szuflady</string>
     <string name="something_went_wrong">Coś poszło nie tak…</string>
     <string name="profile_picture">Zdjęcie profilowe</string>
@@ -178,10 +164,8 @@
     <string name="file_not_found">Plik %1$s nie został odnaleziony</string>
     <string name="switch_to_grid">Zmień na widok siatki</string>
     <string name="unfollow">Anuluj obserwowanie</string>
-    <string name="save_before_returning">Zapisać edycję\?</string>
     <string name="media_upload_failed">Wysyłanie multimediów nie udało się, spróbuj ponownie lub sprawdź swoje połączenie sieciowe</string>
     <string name="posting_image_accessibility_hint">Zdjęcie, które jest publikowane</string>
-    <string name="error_editing">Błąd podczas edycji</string>
     <string name="nothing_to_see_here">Nic tu nie ma!</string>
     <string name="about_pixeldroid">O PixelDroid</string>
     <string name="accounts">KONTA</string>
@@ -221,12 +205,8 @@
 \nTo też oznacza, że powinieneś wybrać serwer lub „instancję” Pixelfeda, z której chcesz korzystać. Jeśli nie znasz żadnej, to poszukaj tutaj: https://pixelfed.org/join
 \n
 \nAby uzyskać więcej informacji na temat Pixelfeda, wejdź tutaj: https://pixelfed.org</string>
-    <string name="thumbnail_reel_video_edit">Rolka pokazująca miniaturę edytowanego filmu</string>
-    <string name="reset_edit_menu">ZRESETUJ</string>
-    <string name="save_edit_menu">ZAPISZ</string>
     <string name="encode_success">Sukces kodowania!</string>
     <string name="encode_progress">Kodowanie %1$d%%</string>
-    <string name="select_video_range">Wybierz fragment filmu, który chcesz zachować</string>
     <string name="still_encoding">Jeden lub więcej filmów jest właśnie kodowany. Poczekaj z publikacją do zakończenia tego procesu</string>
     <string name="new_post_shortcut_long">Stwórz nowy post</string>
     <string name="new_post_shortcut_short">Nowy post</string>
@@ -267,7 +247,6 @@
     <string name="help_translate">Pomóż przetłumaczyć PixelDroid na Twój język:</string>
     <string name="login_notifications">Nie udało się uzyskać najnowszych powiadomień</string>
     <string name="play_video">Odtwórz wideo</string>
-    <string name="video_edit_not_yet_supported">Edytowanie filmów nie jest wspierane</string>
     <string name="follow_request">%1$s poprosił Cię o obserwowanie</string>
     <string name="profile_error">Niepowodzenie podczas ładowania profilu</string>
     <string name="from_other_domain">Z %1$s</string>

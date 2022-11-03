@@ -20,10 +20,6 @@
     <string name="liked_notification">%1$s 给你的帖文点赞</string>
     <string name="description">描述……</string>
     <string name="whats_an_instance">什么是实例？</string>
-    <string name="lbl_brightness">亮度</string>
-    <string name="lbl_contrast">对比度</string>
-    <string name="lbl_saturation">饱和度</string>
-    <string name="tab_filters">滤镜</string>
     <string name="edit">编辑</string>
     <string name="save_to_gallery">保存到相册……</string>
     <string name="image_download_failed">下载失败，请重试</string>
@@ -75,7 +71,6 @@
     <string name="no_description">没有描述</string>
     <string name="feed_failed">无法获取订阅</string>
     <string name="loading_toast">加载时出了一些问题</string>
-    <string name="normal_filter">正常</string>
     <string name="upload_post_error">帖文上传错误</string>
     <string name="upload_post_failed">帖文上传失败</string>
     <string name="upload_post_success">帖文成功上传</string>
@@ -84,14 +79,10 @@
     <string name="upload_picture_failed">图片上传错误！</string>
     <string name="save_image_success">图片成功保存</string>
     <string name="save_image_failed">无法保存图像</string>
-    <string name="permission_denied">没有权限</string>
     <string name="default_system">默认（跟随系统设置）</string>
     <string name="light_theme">浅色</string>
     <string name="dark_theme">深色</string>
     <string name="nothing_to_see_here">这里什么也没有！</string>
-    <string name="crop_result_error">图像裁剪后无法恢复</string>
-    <string name="busy_dialog_ok_button">好的，等一下。</string>
-    <string name="busy_dialog_text">图像仍在处理中，请先等待完成！</string>
     <string name="post_image">帖文中的一张图片</string>
     <string name="add_photo">添加照片</string>
     <string name="poll_notification">%1$s投票已经结束</string>
@@ -125,7 +116,6 @@
     <string name="discover">发现</string>
     <string name="open_drawer_menu">打开抽屉按钮</string>
     <string name="profile_picture">个人资料图片</string>
-    <string name="toolbar_title_edit">编辑</string>
     <string name="report_error">无法发送报告</string>
     <string name="reported">已报告该帖文</string>
     <string name="report_target">报告 @%1$s 的帖子</string>
@@ -148,11 +138,6 @@
     <plurals name="number_comments">
         <item quantity="other">%d 条评论</item>
     </plurals>
-    <string name="no_cancel_edit">不，取消编辑</string>
-    <string name="save_before_returning">保存你的编辑？</string>
-    <string name="crop_button">裁剪或旋转图片的按钮</string>
-    <string name="image_preview">被编辑图片的预览</string>
-    <string name="filter_thumbnail">过滤器的缩略图</string>
     <string name="upload_error">服务器返回了错误码：%1$d</string>
     <string name="size_exceeds_instance_limit">相册中 %1$d 号图片的尺寸超出了实例允许的最大尺寸 (图片大小为 %2$d kb 而上限为 %3$d kb)。你可能无法上传这张图片。</string>
     <string name="total_exceeds_album_limit">你选择的图片数超出了你服务器允许的最大数目 (%1$s)。超出上限的图像已被忽略。</string>
@@ -201,19 +186,14 @@
         <item quantity="other">%d 条新通知</item>
     </plurals>
     <string name="video_not_supported">你正使用的服务器不支持视频上传，你可能无法上传包含于该帖子内的视频</string>
-    <string name="video_edit_not_yet_supported">尚不支持视频编辑</string>
     <string name="notification_summary_large">%1$s、%2$s、%3$s 和其他 %4$d</string>
     <string name="notification_summary_medium">%1$s、%2$s, 和 %3$s</string>
     <string name="notification_summary_small">%1$s 和 %2$s</string>
     <string name="post_is_video">该帖子是一个视频</string>
     <string name="play_video">播放视频</string>
-    <string name="thumbnail_reel_video_edit">滚动显示你正编辑的视频的缩略图</string>
-    <string name="reset_edit_menu">重置</string>
-    <string name="save_edit_menu">保存</string>
     <string name="encode_error">编码出错</string>
     <string name="encode_success">编码成功！</string>
     <string name="encode_progress">编码 %1$d%%</string>
-    <string name="select_video_range">选择要保留的视频内容</string>
     <string name="still_encoding">一个或多个视频仍在编码中。请等编码完成后再上传</string>
     <string name="new_post_shortcut_long">新建帖子</string>
     <string name="new_post_shortcut_short">新帖子</string>
@@ -228,7 +208,6 @@
     <string name="color_choice_button">选择这个强调色</string>
     <string name="color_chosen">已选择强调色</string>
     <string name="accentColorTitle">强调色</string>
-    <string name="error_editing">编辑时出错</string>
     <string name="profile_error">无法加载个人资料</string>
     <string name="from_other_domain">来自 %1$s</string>
     <string name="add_images_error">添加图片时出错</string>

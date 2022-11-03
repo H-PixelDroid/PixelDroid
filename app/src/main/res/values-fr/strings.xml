@@ -25,10 +25,6 @@
     <string name="connect_to_pixelfed">Se connecter à Pixelfed</string>
     <string name="theme_title">Thème de l’application</string>
     <string name="theme_header">Thème</string>
-    <string name="lbl_brightness">Luminosité</string>
-    <string name="lbl_contrast">Contraste</string>
-    <string name="lbl_saturation">Saturation</string>
-    <string name="tab_filters">Filtres</string>
     <string name="edit">Modifier</string>
     <string name="capture_button_alt">Prendre une photo</string>
     <string name="switch_camera_button_alt">Changer de caméra</string>
@@ -46,7 +42,6 @@
     <string name="upload_picture_failed">Erreur de téléversement d\'image !</string>
     <string name="save_image_success">Image enregistrée avec succès</string>
     <string name="save_image_failed">Impossible d\'enregistrer l\'image</string>
-    <string name="permission_denied">Permission refusée</string>
     <string name="dark_theme">Sombre</string>
     <string name="light_theme">Clair</string>
     <string name="default_system">Par défaut (selon votre système)</string>
@@ -58,7 +53,6 @@
     <string name="default_nfollowers">- 
 \nAbonné·e·s</string>
     <string name="upload_post_error">Le téléversement de la publication a échoué</string>
-    <string name="normal_filter">Normal</string>
     <string name="loading_toast">Une erreur s\'est produite lors du chargement</string>
     <string name="feed_failed">Impossible d\'obtenir le flux</string>
     <string name="no_description">Sans description</string>
@@ -88,17 +82,12 @@
     <string name="retry">Réessayez</string>
     <string name="posting_image_accessibility_hint">Image en cours de publication</string>
     <string name="media_upload_failed">Échec du téléversement du média, réessayez ou vérifiez l\'état du réseau</string>
-    <string name="crop_result_error">Impossible de récupérer l\'image après le recadrage</string>
-    <string name="busy_dialog_ok_button">D\'accord, attendez pour ça.</string>
-    <string name="busy_dialog_text">Toujours en train de traiter l\'image, attendez tout d\'abord que cela se termine !</string>
     <string name="nothing_to_see_here">Rien à voir ici !</string>
     <string name="issues_contribute">Signaler des problèmes ou contribuer à l\'application :</string>
     <string name="something_went_wrong">Il y a eu un problème…</string>
     <string name="reported">Signalé {gmd_check_circle}</string>
     <string name="report_target">Signaler la publication de @%1$s</string>
     <string name="report">Signaler</string>
-    <string name="image_preview">Aperçu de l\'image en cours de modification</string>
-    <string name="filter_thumbnail">Vignette d\'un filtre</string>
     <string name="mascot_description">Image montrant un panda rouge (la mascotte de Pixelfed) utilisant un téléphone</string>
     <string name="help_translate">Aidez à traduire PixelDroid dans votre langue :</string>
     <string name="language">Langue</string>
@@ -106,7 +95,6 @@
     <string name="delete">Supprimer</string>
     <string name="discover">DÉCOUVRIR</string>
     <string name="profile_picture">Photo de profil</string>
-    <string name="toolbar_title_edit">Modifier</string>
     <string name="report_error">Échec lors de l\'envoi du signalement</string>
     <string name="optional_report_comment">Message facultatif pour les modérateurs/admins</string>
     <string name="share_link">Partager le lien</string>
@@ -122,7 +110,6 @@
     <string name="post_is_album">Cette publication est un album</string>
     <string name="submit_comment">Envoyer le commentaire</string>
     <string name="add_comment">Ajouter un commentaire</string>
-    <string name="crop_button">Bouton pour effectuer une rotation ou recadrement de l\'image</string>
     <string name="post_image">Une des images de la publication</string>
     <string name="add_photo">Ajouter une photo</string>
     <string name="poll_notification">Le sondage de %1$s est terminé</string>
@@ -131,8 +118,6 @@
     <string name="instance_not_pixelfed_warning">Il ne semble pas s\'agir d\'une instance Pixelfed, l\'application pourrait rencontrer des bugs de manière inattendue.</string>
     <string name="switch_to_carousel">Changer vers la vue carrousel</string>
     <string name="switch_to_grid">Changer vers la vue en grille</string>
-    <string name="no_cancel_edit">Non, annuler la modification</string>
-    <string name="save_before_returning">Enregistrer vos modifications \?</string>
     <string name="panda_pull_to_refresh_to_try_again">Ce panda est malheureux. Glissez pour actualiser et réessayer.</string>
     <string name="open_drawer_menu">Ouvrir le menu latéral</string>
     <string name="follows_title">Abonnements de %1$s</string>

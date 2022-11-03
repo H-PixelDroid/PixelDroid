@@ -19,10 +19,6 @@
     <string name="post">بفرست</string>
     <string name="whats_an_instance">نمونه چیست؟</string>
     <string name="logout">خروج</string>
-    <string name="lbl_brightness">روشنایی</string>
-    <string name="lbl_contrast">تضاد</string>
-    <string name="lbl_saturation">اشباع</string>
-    <string name="tab_filters">پالایه‌ها</string>
     <string name="edit">ویرایش</string>
     <string name="save_to_gallery">ذخیره در نگارخانه…</string>
     <string name="image_download_failed">بارگیری شکست خورد، دوباره تلاش کنید</string>
@@ -41,7 +37,6 @@
     <string name="add_account_description">افزودن یک حساب دیگر پیکسل‌فد</string>
     <string name="add_account_name">افزودن حساب</string>
     <string name="instance_error">نتوانستیم اطلاعات نمونه را دریافت کنیم</string>
-    <string name="permission_denied">ممنوعیت دسترسی</string>
     <string name="save_image_failed">نتوانستیم تصویر را ذخیره کنیم</string>
     <string name="default_system">پیش‌گزیده (پیروی از سامانه)</string>
     <string name="light_theme">روشن</string>
@@ -53,7 +48,6 @@
     <string name="request_format_error">خطای بارگذاری: درخواست با قالب نادرست</string>
     <string name="upload_post_failed">بارگذاری فرسته ناموفق بود</string>
     <string name="upload_post_success">فرسته با موفقیت بارگذاری شد</string>
-    <string name="normal_filter">عادی</string>
     <string name="loading_toast">مشکلی حین بارکردن رخ داد</string>
     <string name="feed_failed">نتوانستیم خوراک را دریافت کنیم</string>
     <string name="no_description">بدون توضیحات</string>
@@ -88,9 +82,6 @@
     <string name="default_nfollowing">-
 \nپی‌گیری</string>
     <string name="media_upload_failed">بارگذاری رسانه شکست خورد، وضعیت شبکه را بررسی کرده یا دوباره تلاش کنید</string>
-    <string name="crop_result_error">تصویر برش یافته از دسترس خارج شده است</string>
-    <string name="busy_dialog_ok_button">خوب، منتظر می‌مانم.</string>
-    <string name="busy_dialog_text">منتظر بمانید تا پردازش تصویر پایان یابد!</string>
     <string name="nothing_to_see_here">چیزی برای دیدن نیست!</string>
     <string name="instance_not_pixelfed_cancel">لغو ورود</string>
     <string name="instance_not_pixelfed_continue">باشه، به هر حال ادامه بده</string>
@@ -107,7 +98,6 @@
     <string name="discover">کشف</string>
     <string name="open_drawer_menu">گشودن فهرست کشویی</string>
     <string name="profile_picture">تصویر نمایه</string>
-    <string name="toolbar_title_edit">ویرایش</string>
     <string name="report_error">گزارش نتوانست ارسال شود</string>
     <string name="reported">گزارش شد {gmd_check_circle}</string>
     <string name="report_target">گزارش فرستهٔ @%1$s</string>
@@ -128,9 +118,6 @@
     <string name="post_is_album">این فرسته، یک آلبوم است</string>
     <string name="submit_comment">فرستادن نظر</string>
     <string name="add_comment">نظری اضافه کنید</string>
-    <string name="crop_button">دکمه برش یا چرخش تصویر</string>
-    <string name="image_preview">پیش‌نمایش تصویری که در حال ویرایش است</string>
-    <string name="filter_thumbnail">تصویر بندانگشتی پالایه</string>
     <string name="post_image">یکی از تصاویر در فرسته</string>
     <string name="verify_credentials">ناتوانی در دریافت اطلاعات کاربر</string>
     <string name="mascot_description">تصویر، یک پاندای قرمز که شگونهٔ پیکسل‌فد است را گوشی به دست نشان می‌دهد</string>
@@ -153,8 +140,6 @@
         <item quantity="other">%d پسند</item>
     </plurals>
     <string name="switch_to_carousel">تغییر وضعیت به نمای گردونه</string>
-    <string name="no_cancel_edit">خیر، ویرایش لغو شود</string>
-    <string name="save_before_returning">ویرایش‌ها ذخیره شوند؟</string>
     <plurals name="nb_followers">
         <item quantity="one">%d
 \nپی‌گیر</item>

@@ -57,7 +57,6 @@
     </plurals>
     <string name="save_image_success">Billedet gemt</string>
     <string name="save_image_failed">Kunne i gemme billedet</string>
-    <string name="permission_denied">Adgang nægtet</string>
     <string name="add_account_description">Tilføj endnu en Pixelfed konto</string>
     <string name="add_account_name">Tilføj konto</string>
     <string name="logout">Log ud</string>
