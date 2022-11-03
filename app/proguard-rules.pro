@@ -93,6 +93,14 @@
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
 
+-dontwarn org.bouncycastle.**
+-dontwarn org.conscrypt.**
+-dontwarn org.openjsse.javax.net.ssl.**
+-dontwarn org.openjsse.net.ssl.**
+
+-dontwarn org.checkerframework.checker.nullness.qual.EnsuresNonNull
+-dontwarn org.checkerframework.checker.nullness.qual.RequiresNonNull
+
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
