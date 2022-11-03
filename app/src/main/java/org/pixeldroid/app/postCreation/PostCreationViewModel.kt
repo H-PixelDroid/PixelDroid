@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.pixeldroid.app.R
-import org.pixeldroid.app.posts.fromHtml
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
