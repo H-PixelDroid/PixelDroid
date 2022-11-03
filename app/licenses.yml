@@ -925,12 +925,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/davemorrissey/subsampling-scale-image-view
-- artifact: com.arthenica:ffmpeg-kit-min:+
-  name: ffmpeg-kit-min
-  copyrightHolder:  Taner Şener
-  license: GNU Lesser General Public License, Version 3
-  licenseUrl: https://www.gnu.org/licenses/lgpl-3.0.txt
-  url: https://github.com/tanersener/ffmpeg-kit
 - artifact: com.arthenica:smart-exception-java:+
   name: smart-exception-java
   copyrightHolder: Taner Şener
@@ -949,3 +943,47 @@
   license: Simplified BSD License
   licenseUrl: http://www.opensource.org/licenses/bsd-license
   url: https://github.com/bumptech/glide
+- artifact: androidx.core:core-splashscreen:+
+  name: core-splashscreen
+  copyrightHolder: Google Inc.
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/jetpack/androidx/releases/core#1.0.0
+- artifact: androidx.databinding:databinding-adapters:+
+  name: databinding-adapters
+  copyrightHolder: Google Inc.
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+- artifact: androidx.databinding:databinding-ktx:+
+  name: databinding-ktx
+  copyrightHolder: Google Inc.
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+- artifact: androidx.databinding:databinding-runtime:+
+  name: databinding-runtime
+  copyrightHolder: Google Inc.
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+- artifact: androidx.databinding:viewbinding:+
+  name: viewbinding
+  copyrightHolder: Google Inc.
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+- artifact: com.squareup.okio:okio-jvm:+
+  name: okio-jvm
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/square/okio/
+- artifact: com.arthenica:ffmpeg-kit-min-gpl:+
+  name: ffmpeg-kit-min-gpl
+  copyrightHolder:  Taner Şener
+  license: GNU Lesser General Public License, Version 3
+  licenseUrl: https://www.gnu.org/licenses/lgpl-3.0.txt
+  url: https://github.com/arthenica/ffmpeg-kit
+- artifact: org.pixeldroid.pixeldroid:android-media-editor:+
+  name: android-media-editor
+  copyrightHolder: Matthieu De Beule
+  license: GNU General Public License version 3
+  licenseUrl: https://www.gnu.org/licenses/gpl-3.0.html
+  url: https://gitlab.shinice.net/pixeldroid/android-media-editor/

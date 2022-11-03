@@ -17,7 +17,6 @@
     <string name="whats_an_instance">Apa itu instansi\?</string>
     <string name="logout">Keluar</string>
     <string name="add_account_description">Tambahkan Akun Pixelfed lain</string>
-    <string name="permission_denied">Izin ditolak</string>
     <string name="save_image_success">Gambar berhasil disimpan</string>
     <string name="picture_format_error">Kesalahan pengunggahan: format gambar salah.</string>
     <string name="request_format_error">Kesalahan pengunggahan: format permintaan buruk</string>
@@ -25,17 +24,7 @@
     <string name="post">postingan</string>
     <string name="save_image_description">Simpan keterangan gambar</string>
     <string name="upload_error">Kode kesalahan yang dikembalikan oleh server: %1$d</string>
-    <string name="lbl_brightness">KECERAHAN</string>
-    <string name="lbl_contrast">KONTRAS</string>
-    <string name="lbl_saturation">KEJENUHAN</string>
-    <string name="tab_filters">FILTER-FILTER</string>
     <string name="edit">Sunting</string>
-    <string name="normal_filter">Normal</string>
-    <string name="busy_dialog_text">Masih memproses gambar, tunggu sampai itu selesai dahulu!</string>
-    <string name="busy_dialog_ok_button">Oke, tunggu itu.</string>
-    <string name="crop_result_error">Tidak dapat menerima gambar setelah pemotongan</string>
-    <string name="save_before_returning">Simpan suntingan-suntingan Anda\?</string>
-    <string name="no_cancel_edit">Tidak, batalkan suntingan</string>
     <string name="capture_button_alt">Tangkap</string>
     <string name="switch_camera_button_alt">Ubah kamera</string>
     <string name="gallery_button_alt">Galeri</string>
@@ -107,7 +96,6 @@
     <string name="optional_report_comment">Pesan opsional untuk para mod/admin</string>
     <string name="report_target">Laporkan postingan @%1$s</string>
     <string name="report_error">Tidak dapat mengirim laporan</string>
-    <string name="toolbar_title_edit">Sunting</string>
     <string name="profile_picture">Gambar profil</string>
     <string name="discover">TEMUKAN</string>
     <string name="something_went_wrong">Suatu kesalahan terjadi…</string>
@@ -140,7 +128,6 @@
     <string name="switch_to_carousel">Beralih ke karosel</string>
     <string name="no_media_description">Tambahkan sebuah keterangan media di sini…</string>
     <string name="size_exceeds_instance_limit">Ukuran gambar nomor %1$d di album melewati ukuran maksimum yang diperbolehkan oleh instansi ini (%2$d kB tetapi batasnya %3$d kB). Anda mungkin tidak dapat mengunggahnya.</string>
-    <string name="crop_button">Tombol untuk memotong atau memutar gambar</string>
     <string name="image_download_failed">Pengunduhan gagal, mohon coba lagi</string>
     <string name="no_description">Tidak ada keterangan</string>
     <string name="write_permission_download_pic">Anda harus memberikan izin menulis untuk mengunduh gambar!</string>

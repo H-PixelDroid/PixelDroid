@@ -1,12 +1,15 @@
 package org.pixeldroid.app.utils.notificationsWorker
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
@@ -143,7 +146,10 @@ class NotificationsWorker(
             )
 
         with(NotificationManagerCompat.from(applicationContext)) {
-            notify(uniqueUserId.hashCode(), groupBuilder.build())
+            if (ActivityCompat.checkSelfPermission(applicationContext,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) notify(uniqueUserId.hashCode(), groupBuilder.build())
         }
 
     }
@@ -216,7 +222,10 @@ class NotificationsWorker(
 
         with(NotificationManagerCompat.from(applicationContext)) {
             // notificationId is a unique int for each notification
-            notify((uniqueUserId + notification.id).hashCode(), builder.build())
+            if (ActivityCompat.checkSelfPermission(applicationContext,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) notify((uniqueUserId + notification.id).hashCode(), builder.build())
         }
     }
 

@@ -198,7 +198,7 @@ dependencies {
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
 
-    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.1'
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.2'
     implementation project(path: ':scrambler')
 
     implementation('com.github.bumptech.glide:glide:4.14.2') {

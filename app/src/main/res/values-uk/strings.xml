@@ -10,10 +10,6 @@
     <string name="mention_notification">%1$s вас згадує</string>
     <string name="description">Опис…</string>
     <string name="post">надіслати</string>
-    <string name="lbl_brightness">ЯСКРАВІСТЬ</string>
-    <string name="lbl_contrast">КОНТРАСТ</string>
-    <string name="lbl_saturation">НАСИЧЕННЯ</string>
-    <string name="tab_filters">ФІЛЬТРИ</string>
     <string name="save_to_gallery">Зберегти до галереї…</string>
     <string name="image_download_downloading">Завантаження…</string>
     <string name="image_download_success">Зображення успішно завантажено</string>
@@ -30,7 +26,6 @@
     <string name="help_translate">Допоможіть перекласти PixelDroid:</string>
     <string name="default_system">Усталено (як у системі)</string>
     <string name="delete">Видалити</string>
-    <string name="no_cancel_edit">Ні, знехтувати</string>
     <string name="whats_an_instance_explanation">Можливо, вас дивує текстове поле з проханням зазначити домен вашого сервера.
 \n
 \nPixelfed — федерована платформа в складі федіверсу, тобто ви можете прямо в застосунку спілкуватися з авдиторією інших платформ, сервери яких втілюють домовлений стандарт, наприклад Mastodon (див. https://joinmastodon.org).
@@ -53,7 +48,6 @@
     <string name="size_exceeds_instance_limit">Зображення %1$d в альбомі важить більше (%2$d кБ), ніж дозволяє сервер (%3$d кБ). Ймовірно, вивантажити його не вдасться.</string>
     <string name="upload_error">Код помилки сервера: %1$d</string>
     <string name="hashtag_title">#%1$s</string>
-    <string name="save_before_returning">Зберегти зміни\?</string>
     <string name="add_account_description">Кілька сторінок, один пристрій</string>
     <string name="no_storage_permission">Бракує дозволу на доступ до пам\'яті. Надайте цей дозвіл у параметрах, якщо бажаєте бачити мініатюри в PixelDroid</string>
     <string name="upload_post_success">Допис успішно вивантажено</string>
@@ -62,12 +56,8 @@
     <string name="issues_contribute">Опишіть вади чи зробіть внесок до застосунку:</string>
     <string name="follow_requested">Запит на підписку</string>
     <string name="dialog_message_cancel_follow_request">Відхилити запит на підписку\?</string>
-    <string name="permission_denied">Бракує дозволу</string>
     <string name="upload_picture_failed">Помилка вивантаження зображення!</string>
     <string name="post_image">Одне з зображень допису</string>
-    <string name="filter_thumbnail">Мініатюра фільтра</string>
-    <string name="image_preview">Попередній перегляд редагованого зображення</string>
-    <string name="crop_button">Кнопка зрізу чи оберту зображення</string>
     <plurals name="number_comments">
         <item quantity="one">%d коментар</item>
         <item quantity="few">%d коментарі</item>
@@ -90,7 +80,6 @@
     <string name="instance_not_pixelfed_cancel">Скасувати вхід</string>
     <string name="request_format_error">Помилка вивантаження: хибний формат запиту</string>
     <string name="connect_to_pixelfed">З\'єднатися з Pixelfed</string>
-    <string name="normal_filter">Оригінал</string>
     <string name="comment">Коментар</string>
     <plurals name="nb_posts">
         <item quantity="one">%d
@@ -141,10 +130,8 @@
     <string name="whats_an_instance">Що таке сервер\?</string>
     <string name="login_connection_required_once">Слід бути в мережі, щоб додати перший обліковий запис та почати користуватись PixelDroid :(</string>
     <string name="add_account_name">Додати обліковий запис</string>
-    <string name="crop_result_error">Не вдалося отримати зображення після зрізу</string>
     <string name="capture_button_alt">Знімати</string>
     <string name="comment_error">Помилка коментування!</string>
-    <string name="busy_dialog_ok_button">Гаразд, зачекаю.</string>
     <string name="loading_toast">Щось пішло не так при завантаженні</string>
     <string name="comment_posted">Коментар: %1$s надіслано!</string>
     <string name="follow_button_failed">Не вдалось показати кнопку підписки</string>
@@ -165,7 +152,6 @@
     <string name="license_info">PixelDroid — вільне й відкрите програмне забезпечення, доступне на умовах Загальної громадської ліцензії GNU (версії 3 чи новішої)</string>
     <string name="about">Про застосунок</string>
     <string name="post_title">Допис %1$s</string>
-    <string name="toolbar_title_edit">Редагувати</string>
     <string name="reported">Скаргу надіслано {gmd_check_circle}</string>
     <string name="profile_picture">Зображення профілю</string>
     <string name="open_drawer_menu">Відкрити висувне меню</string>
@@ -181,7 +167,6 @@
     <string name="file_not_found">Файлу %1$s не знайдено</string>
     <string name="write_permission_share_pic">Для поширення зображень потрібен дозвіл на запис!</string>
     <string name="picture_format_error">Помилка вивантаження: хибний формат зображення.</string>
-    <string name="busy_dialog_text">Триває обробка зображення, дочекайтесь її завершення!</string>
     <string name="unfollow">Відписатись</string>
     <string name="media_upload_failed">Не вдалося вивантажити медіа, повторіть спробу чи перевірте мережне з\'єднання</string>
     <string name="posting_image_accessibility_hint">Розміщуване зображення</string>
@@ -239,5 +224,4 @@
     <string name="video_not_supported">Використовуваний сервер не підтримує вивантаження відео. Ймовірно, вивантажити відео цього допису не вдасться</string>
     <string name="post_is_video">Це відеодопис</string>
     <string name="play_video">Відтворити відео</string>
-    <string name="video_edit_not_yet_supported">Редагування відео ще не підтримується</string>
 </resources>

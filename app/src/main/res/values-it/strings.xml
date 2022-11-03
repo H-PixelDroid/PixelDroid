@@ -13,15 +13,11 @@
     <string name="followed_notification">%1$s ti ha seguito</string>
     <string name="mention_notification">%1$s ti ha menzionato</string>
     <string name="liked_notification">%1$s è piaciuto il tuo post</string>
-    <string name="tab_filters">FILTRI</string>
     <string name="post">invia</string>
-    <string name="lbl_brightness">LUMINOSITÀ</string>
     <string name="description">Descrizione…</string>
     <string name="whats_an_instance">Cos\'è un\'istanza\?</string>
     <string name="logout">Disconnettersi</string>
-    <string name="lbl_saturation">SATURAZIONE</string>
     <string name="connect_to_pixelfed">Connetti a Pixelfed</string>
-    <string name="lbl_contrast">CONTRASTO</string>
     <string name="save_to_gallery">Salva nella galleria…</string>
     <string name="image_download_failed">Il download non è riuscito, per favore riprova</string>
     <string name="share_picture">Condividi immagine…</string>
@@ -38,7 +34,6 @@
     <string name="login_connection_required_once">Devi essere online per poter aggiungere il primo account e utilizzare PixelDroid :(</string>
     <string name="invalid_domain">Dominio non valido</string>
     <string name="edit">MODIFICA</string>
-    <string name="permission_denied">Permesso negato</string>
     <string name="instance_error">Impossibile ottenere informazioni sull\'istanza</string>
     <string name="save_image_failed">Impossibile salvare l\'immagine</string>
     <string name="light_theme">Chiaro</string>
@@ -54,7 +49,6 @@
     <string name="upload_post_failed">Caricamento post non riuscito</string>
     <string name="upload_post_success">Post caricato correttamente</string>
     <string name="retry">Riprova</string>
-    <string name="normal_filter">Normale</string>
     <string name="feed_failed">Impossibile ottenere il feed</string>
     <string name="no_description">Nessuna descrizione</string>
     <string name="posted_on">Postato su %1$s</string>
@@ -88,9 +82,6 @@
     <string name="follow_button_failed">Impossibile visualizzare il tasto segui</string>
     <string name="follow_status_failed">Impossibile ottenere lo stato segui</string>
     <string name="default_system">Predefinito (Segue il sistema)</string>
-    <string name="crop_result_error">Impossibile recuperare l\'immagine dopo il ritaglio</string>
-    <string name="busy_dialog_ok_button">Ok, aspetta.</string>
-    <string name="busy_dialog_text">Elaborando ancora l\'immagine, attendi che finisca prima!</string>
     <string name="nothing_to_see_here">Niente da vedere quì!</string>
     <string name="instance_not_pixelfed_warning">Questa non sembra essere un\'istanza di Pixelfed, quindi l\'app potrebbe interrompersi in modi inaspettati.</string>
     <string name="instance_not_pixelfed_cancel">Annullare l\'accesso</string>
@@ -98,7 +89,6 @@
     <string name="discover">SCOPRI</string>
     <string name="open_drawer_menu">Apri il menu a scomparsa</string>
     <string name="profile_picture">Foto profilo</string>
-    <string name="toolbar_title_edit">Modifica</string>
     <string name="report_error">Impossibile inviare la segnalazione</string>
     <string name="reported">Segnalato {gmd_check_circle}</string>
     <string name="report_target">Segnala @%1$s\'s post</string>
@@ -129,14 +119,9 @@
     <string name="post_is_album">Questo post è un album</string>
     <string name="submit_comment">Invia commento</string>
     <string name="add_comment">Aggiungi un commento</string>
-    <string name="crop_button">Pulsante per ritagliare o ruotare l\'immagine</string>
-    <string name="image_preview">Anteprima dell\'immagine in fase di modifica</string>
-    <string name="filter_thumbnail">Miniatura del filtro</string>
     <string name="post_image">Una delle immagini nel post</string>
     <string name="verify_credentials">Impossibile ottenere le informazioni sull\'utente</string>
     <string name="switch_to_grid">Passa alla visualizzazione a griglia</string>
-    <string name="no_cancel_edit">No, cancella la modifica</string>
-    <string name="save_before_returning">Salavre le tue modifiche\?</string>
     <string name="switch_to_carousel">Passa alla panoramica</string>
     <string name="whats_an_instance_explanation">Potresti essere confuso dal campo di testo che chiede il dominio della tua \'instanza\'.
 \n
