@@ -54,10 +54,6 @@
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="org.pixeldroid.media_editor.photoEdit.VideoEditActivity"
-            android:exported="false"/>
-        <activity android:name="org.pixeldroid.media_editor.photoEdit.PhotoEditActivity" />
-        <activity
             android:name=".postCreation.PostCreationActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
