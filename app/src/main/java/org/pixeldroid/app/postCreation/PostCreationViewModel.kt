@@ -82,6 +82,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         }
     }
     private var existingDescription: String? = null
+    private var existingNSFW: Boolean = false
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -199,6 +200,10 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         existingDescription = description
     }
 
+    fun setExistingNSFW(sensitive: Boolean) {
+        existingNSFW = sensitive
+    }
+
     fun removeAt(currentPosition: Int) {
         photoData.value?.removeAt(currentPosition)
         _uiState.update {
@@ -216,6 +221,7 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         val intent = Intent(context, PostSubmissionActivity::class.java)
         intent.putExtra(PostSubmissionActivity.PHOTO_DATA, getPhotoData().value?.let { ArrayList(it) })
         intent.putExtra(PostSubmissionActivity.PICTURE_DESCRIPTION, existingDescription)
+        intent.putExtra(PostSubmissionActivity.POST_NSFW, existingNSFW)
         ContextCompat.startActivity(context, intent, null)
     }
 

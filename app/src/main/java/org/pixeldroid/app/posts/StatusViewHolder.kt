@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
-import android.location.GnssAntennaInfo.Listener
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -19,7 +18,6 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -486,6 +484,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                             val imageNames: MutableList<String> = mutableListOf()
                                             val imageDescriptions: MutableList<String> =
                                                 mutableListOf()
+                                            val postNSFW = status?.sensitive
 
                                             for (currentAttachment in postAttachments) {
                                                 val imageUri = currentAttachment.url ?: ""
@@ -569,6 +568,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                             PostCreationActivity.POST_REDRAFT,
                                                             true
                                                         )
+                                                        intent.putExtra(
+                                                            PostCreationActivity.POST_NSFW,
+                                                            postNSFW
+                                                        )
 
                                                         // Launch post creation activity
                                                         binding.root.context.startActivity(intent)
@@ -584,7 +587,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             }
-                                            val okHttpClient = OkHttpClient()
 
                                             // Iterate through all pictures of the original post
                                             for (currentAttachment in postAttachments) {
@@ -598,7 +600,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
                                                 // Check whether image is in cache directory already (maybe rather do so using Glide in the future?)
                                                 if (!downloadedFile.exists()) {
-                                                    okHttpClient.newCall(downloadRequest)
+                                                    OkHttpClient().newCall(downloadRequest)
                                                         .enqueue(object : Callback {
                                                             override fun onFailure(
                                                                 call: Call,
@@ -626,7 +628,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                                 continuation()
                                                             }
                                                         })
-
                                                 } else {
                                                     continuation()
                                                 }
