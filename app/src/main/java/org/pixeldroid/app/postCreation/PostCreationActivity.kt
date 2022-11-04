@@ -14,6 +14,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -76,7 +77,9 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             PostCreationViewModelFactory(
                 application,
                 intent.clipData!!,
-                instance
+                instance,
+                intent.getStringExtra(PICTURE_DESCRIPTION),
+                intent.getBooleanExtra(POST_NSFW, false)
             )
         }
         model = _model
@@ -93,9 +96,6 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
                 }
             )
         }
-
-        model.setExistingDescription(intent.getStringExtra(PICTURE_DESCRIPTION))
-        model.setExistingNSFW(intent.getBooleanExtra(POST_NSFW, false))
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -165,23 +165,25 @@ class PostCreationActivity : BaseThemedWithoutBarActivity() {
             val file = File(binding.root.context.cacheDir, it)
             model.trackTempFile(file)
         }
-    }
 
-    override fun onBackPressed() {
-        val redraft = intent.getBooleanExtra(POST_REDRAFT, false)
-        if (redraft) {
-            val builder = AlertDialog.Builder(binding.root.context)
-            builder.apply {
-                setMessage(R.string.redraft_dialog_cancel)
-                setPositiveButton(android.R.string.ok) { _, _ ->
-                    super.onBackPressed()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val redraft = intent.getBooleanExtra(POST_REDRAFT, false)
+                if (redraft) {
+                    val builder = AlertDialog.Builder(binding.root.context)
+                    builder.apply {
+                        setMessage(R.string.redraft_dialog_cancel)
+                        setPositiveButton(android.R.string.ok) { _, _ ->
+                            finish()
+                        }
+                        setNegativeButton(android.R.string.cancel) { _, _ -> }
+                        show()
+                    }
+                } else {
+                    finish()
                 }
-                setNegativeButton(android.R.string.cancel) { _, _ -> }
-                show()
             }
-        } else {
-            super.onBackPressed()
-        }
+        })
     }
 
     private val addPhotoResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

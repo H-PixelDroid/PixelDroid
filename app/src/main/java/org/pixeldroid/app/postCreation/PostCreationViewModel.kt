@@ -74,14 +74,12 @@ data class PhotoData(
     var videoEncodeError: Boolean = false,
 ) : Parcelable
 
-class PostCreationViewModel(application: Application, clipdata: ClipData? = null, val instance: InstanceDatabaseEntity? = null) : AndroidViewModel(application) {
+class PostCreationViewModel(application: Application, clipdata: ClipData? = null, val instance: InstanceDatabaseEntity? = null, val existingDescription: String? = null, val existingNSFW: Boolean = false) : AndroidViewModel(application) {
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
         MutableLiveData<MutableList<PhotoData>>().also {
             it.value =  clipdata?.let { it1 -> addPossibleImages(it1, mutableListOf()) }
         }
     }
-    private var existingDescription: String? = null
-    private var existingNSFW: Boolean = false
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -193,14 +191,6 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
     fun updateDescription(position: Int, description: String) {
         photoData.value?.getOrNull(position)?.imageDescription = description
         photoData.value = photoData.value
-    }
-
-    fun setExistingDescription(description: String?) {
-        existingDescription = description
-    }
-
-    fun setExistingNSFW(sensitive: Boolean) {
-        existingNSFW = sensitive
     }
 
     fun removeAt(currentPosition: Int) {
@@ -333,8 +323,8 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
     }
 }
 
-class PostCreationViewModelFactory(val application: Application, val clipdata: ClipData, val instance: InstanceDatabaseEntity) : ViewModelProvider.Factory {
+class PostCreationViewModelFactory(val application: Application, val clipdata: ClipData, val instance: InstanceDatabaseEntity, val existingDescription: String?, val existingNSFW: Boolean) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java, ClipData::class.java, InstanceDatabaseEntity::class.java).newInstance(application, clipdata, instance)
+        return modelClass.getConstructor(Application::class.java, ClipData::class.java, InstanceDatabaseEntity::class.java, String::class.java, Boolean::class.java).newInstance(application, clipdata, instance, existingDescription, existingNSFW)
     }
 }

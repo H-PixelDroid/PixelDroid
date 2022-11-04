@@ -54,7 +54,7 @@ data class PostSubmissionActivityUiState(
     val uploadErrorExplanationVisible: Boolean = false,
 )
 
-class PostSubmissionViewModel(application: Application, photodata: ArrayList<PhotoData>? = null) : AndroidViewModel(application) {
+class PostSubmissionViewModel(application: Application, photodata: ArrayList<PhotoData>? = null, val existingDescription: String? = null) : AndroidViewModel(application) {
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
         MutableLiveData<MutableList<PhotoData>>().also {
             if (photodata != null) {
@@ -62,7 +62,6 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
             }
         }
     }
-    private var existingDescription: String? = null
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -289,10 +288,6 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
         _uiState.update { it.copy(newPostDescriptionText = text.toString()) }
     }
 
-    fun setExistingDescription(description: String?) {
-        existingDescription = description
-    }
-
     fun trackTempFile(file: File) {
         tempFiles.add(file)
     }
@@ -312,8 +307,8 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
 }
 
 
-class PostSubmissionViewModelFactory(val application: Application, val photoData: ArrayList<PhotoData>) : ViewModelProvider.Factory {
+class PostSubmissionViewModelFactory(val application: Application, val photoData: ArrayList<PhotoData>, val existingDescription: String?) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java, ArrayList::class.java).newInstance(application, photoData)
+        return modelClass.getConstructor(Application::class.java, ArrayList::class.java, String::class.java).newInstance(application, photoData, existingDescription)
     }
 }

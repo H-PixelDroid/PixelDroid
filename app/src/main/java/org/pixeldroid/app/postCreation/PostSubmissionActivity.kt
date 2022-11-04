@@ -65,12 +65,11 @@ class PostSubmissionActivity : BaseThemedWithoutBarActivity() {
         val _model: PostSubmissionViewModel by viewModels {
             PostSubmissionViewModelFactory(
                 application,
-                photoData!!
+                photoData!!,
+                intent.getStringExtra(PICTURE_DESCRIPTION)
             )
         }
         model = _model
-
-        model.setExistingDescription(intent.getStringExtra(PICTURE_DESCRIPTION))
 
         val sensitive = intent.getBooleanExtra(POST_NSFW, false)
         model.updateNSFW(sensitive)
