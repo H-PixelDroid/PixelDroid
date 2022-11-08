@@ -19,10 +19,10 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityEditProfileBinding
-import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.openUrl
 
-class EditProfileActivity : BaseActivity() {
+class EditProfileActivity : BaseThemedWithBarActivity() {
 
     private lateinit var model: EditProfileViewModel
     private lateinit var binding: ActivityEditProfileBinding
