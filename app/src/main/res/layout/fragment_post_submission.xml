@@ -4,7 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".postCreation.PostSubmissionActivity">
+    tools:context=".postCreation.PostSubmissionFragment"
+    android:id="@+id/postSubmissionFragment" >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/top_bar"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/post_preview" />
 
     <ImageView
         android:id="@+id/post_preview"
@@ -13,7 +25,7 @@
         android:layout_height="88dp"
         android:contentDescription="@string/post_preview"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/top_bar"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/upload_error"
@@ -24,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
         tools:visibility="visible">
 
         <TextView
@@ -35,25 +47,25 @@
             android:text="@string/media_upload_failed"
             android:textColor="?attr/colorOnError"
             android:textSize="20sp"
+            app:drawableStartCompat="@drawable/cloud_off_24"
+            app:drawableTint="?attr/colorOnError"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:drawableStartCompat="@drawable/cloud_off_24"
-            app:drawableTint="?attr/colorOnError" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/upload_error_text_explanation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/colorError"
-            tools:text="Error code returned by server: 413"
             android:textColor="?attr/colorOnError"
             android:textSize="20sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/upload_error_text_view"
+            tools:text="Error code returned by server: 413"
             tools:visibility="visible" />
 
         <Button
@@ -65,8 +77,6 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="@id/upload_error_text_view"
             app:layout_constraintTop_toBottomOf="@+id/upload_error_text_explanation" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
