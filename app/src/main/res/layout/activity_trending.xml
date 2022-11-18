@@ -38,7 +38,9 @@
                     android:layout_height="match_parent"
                     app:layoutDescription="@xml/error_layout_xml_error_scene">
 
-                    <include layout="@layout/error_layout"/>
+                    <include
+                        android:id="@+id/errorLayout"
+                        layout="@layout/error_layout"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/list"
