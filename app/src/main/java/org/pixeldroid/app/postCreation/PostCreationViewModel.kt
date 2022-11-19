@@ -102,7 +102,13 @@ data class PhotoData(
     var videoEncodeError: Boolean = false,
 ) : Parcelable
 
-class PostCreationViewModel(application: Application, clipdata: ClipData? = null, val instance: InstanceDatabaseEntity? = null, val existingDescription: String? = null, val existingNSFW: Boolean = false) : AndroidViewModel(application) {
+class PostCreationViewModel(
+    application: Application,
+    clipdata: ClipData? = null,
+    val instance: InstanceDatabaseEntity? = null,
+    existingDescription: String? = null,
+    existingNSFW: Boolean = false
+) : AndroidViewModel(application) {
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
         MutableLiveData<MutableList<PhotoData>>().also {
             it.value =  clipdata?.let { it1 -> addPossibleImages(it1, mutableListOf()) }
@@ -118,10 +124,10 @@ class PostCreationViewModel(application: Application, clipdata: ClipData? = null
         (application as PixelDroidApplication).getAppComponent().inject(this)
         val sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(application)
-        val initialDescription = sharedPreferences.getString("prefill_description", "") ?: ""
+        val templateDescription = sharedPreferences.getString("prefill_description", "") ?: ""
 
         _uiState = MutableStateFlow(PostCreationActivityUiState(
-            newPostDescriptionText = existingDescription ?: initialDescription,
+            newPostDescriptionText = existingDescription ?: templateDescription,
             nsfw = existingNSFW
         ))
     }

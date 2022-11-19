@@ -223,11 +223,11 @@ class PostCreationFragment : BaseFragment() {
                 requireActivity(),
                 arrayOf(path.toUri().toFile().absolutePath),
                 null
-            ) { path, uri ->
+            ) { tried_path, uri ->
                 if (uri == null) {
                     Log.e(
                         "NEW IMAGE SCAN FAILED",
-                        "Tried to scan $path, but it failed"
+                        "Tried to scan $tried_path, but it failed"
                     )
                 }
             }
@@ -263,8 +263,7 @@ class PostCreationFragment : BaseFragment() {
             path = imageUri.toString()
             outputStream = resolver.openOutputStream(imageUri)!!
         } else {
-            @Suppress("DEPRECATION") val imagesDir =
-                Environment.getExternalStoragePublicDirectory(getString(R.string.app_name))
+            val imagesDir = Environment.getExternalStoragePublicDirectory(getString(R.string.app_name))
             imagesDir.mkdir()
             val file = File(imagesDir, name)
             path = Uri.fromFile(file).toString()
@@ -289,7 +288,7 @@ class PostCreationFragment : BaseFragment() {
         ActivityResultContracts.StartActivityForResult()){
             result: ActivityResult? ->
         if (result?.resultCode == Activity.RESULT_OK && result.data != null) {
-            val position: Int = result.data!!.getIntExtra(org.pixeldroid.media_editor.photoEdit.PhotoEditActivity.PICTURE_POSITION, 0)
+            val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
             model.modifyAt(position, result.data!!)
                 ?: Toast.makeText(requireActivity(), R.string.error_editing, Toast.LENGTH_SHORT).show()
         } else if(result?.resultCode != Activity.RESULT_CANCELED){

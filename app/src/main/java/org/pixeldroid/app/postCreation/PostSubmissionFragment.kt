@@ -30,7 +30,6 @@ class PostSubmissionFragment : BaseFragment() {
 
     private lateinit var accounts: List<UserDatabaseEntity>
     private var selectedAccount: Int = -1
-//    private lateinit var menu: Menu
 
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
@@ -46,7 +45,6 @@ class PostSubmissionFragment : BaseFragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentPostSubmissionBinding.inflate(layoutInflater)
-//        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -119,7 +117,7 @@ class PostSubmissionFragment : BaseFragment() {
 
         binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
 
-        setSquareImageFromURL(View(requireActivity()), model.getPhotoData()!!.value?.get(0)?.imageUri.toString(), binding.postPreview)
+        setSquareImageFromURL(View(requireActivity()), model.getPhotoData().value?.get(0)?.imageUri.toString(), binding.postPreview)
 
         // Get the description and send the post
         binding.postCreationSendButton.setOnClickListener {
