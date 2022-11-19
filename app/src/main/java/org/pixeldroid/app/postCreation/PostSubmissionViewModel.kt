@@ -54,7 +54,7 @@ data class PostSubmissionActivityUiState(
     val uploadErrorExplanationVisible: Boolean = false,
 )
 
-class PostSubmissionViewModel(application: Application, photodata: ArrayList<PhotoData>? = null) : AndroidViewModel(application) {
+class PostSubmissionViewModel(application: Application, photodata: ArrayList<PhotoData>? = null, val existingDescription: String? = null) : AndroidViewModel(application) {
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
         MutableLiveData<MutableList<PhotoData>>().also {
             if (photodata != null) {
@@ -74,7 +74,7 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
             PreferenceManager.getDefaultSharedPreferences(application)
         val initialDescription = sharedPreferences.getString("prefill_description", "") ?: ""
 
-        _uiState = MutableStateFlow(PostSubmissionActivityUiState(newPostDescriptionText = initialDescription))
+        _uiState = MutableStateFlow(PostSubmissionActivityUiState(newPostDescriptionText = existingDescription ?: initialDescription))
     }
 
     val uiState: StateFlow<PostSubmissionActivityUiState> = _uiState
@@ -235,7 +235,7 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
         val description = uiState.value.newPostDescriptionText
 
         //TODO investigate why this works but booleans don't
-        val nsfw = if(uiState.value.nsfw) 1 else 0
+        val nsfw = if (uiState.value.nsfw) 1 else 0
 
         _uiState.update { currentUiState ->
             currentUiState.copy(
@@ -307,8 +307,8 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
 }
 
 
-class PostSubmissionViewModelFactory(val application: Application, val photoData: ArrayList<PhotoData>) : ViewModelProvider.Factory {
+class PostSubmissionViewModelFactory(val application: Application, val photoData: ArrayList<PhotoData>, val existingDescription: String?) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java, ArrayList::class.java).newInstance(application, photoData)
+        return modelClass.getConstructor(Application::class.java, ArrayList::class.java, String::class.java).newInstance(application, photoData, existingDescription)
     }
 }

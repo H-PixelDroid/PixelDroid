@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
-import android.location.GnssAntennaInfo.Listener
 import android.net.Uri
 import android.os.Looper
 import android.text.method.LinkMovementMethod
@@ -479,24 +478,25 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                             val postDescription = status?.content ?: ""
                                             val postAttachments =
                                                 status?.media_attachments!!  // Catch possible exception from !! (?)
-                                            val imageUris: MutableList<Uri> = mutableListOf()
-                                            val imageNames: MutableList<String> = mutableListOf()
-                                            val imageDescriptions: MutableList<String> =
-                                                mutableListOf()
+                                            val postNSFW = status?.sensitive
 
-                                            for (currentAttachment in postAttachments) {
-                                                val imageUri = currentAttachment.url ?: ""
-                                                val imageName =
-                                                    Uri.parse(imageUri).lastPathSegment.toString()
-                                                val imageDescription =
-                                                    currentAttachment.description ?: ""
-                                                val downloadedFile =
-                                                    File(context.cacheDir, imageName)
-                                                val downloadedUri = Uri.fromFile(downloadedFile)
-
-                                                imageUris.add(downloadedUri)
-                                                imageNames.add(imageName)
-                                                imageDescriptions.add(imageDescription)
+                                            val imageUriStrings = postAttachments.map { postAttachment ->
+                                                postAttachment.url ?: ""
+                                            }
+                                            val imageNames = imageUriStrings.map { imageUriString ->
+                                                Uri.parse(imageUriString).lastPathSegment.toString()
+                                            }
+                                            val downloadedFiles = imageNames.map { imageName ->
+                                                File(context.cacheDir, imageName)
+                                            }
+                                            val imageUris = downloadedFiles.map { downloadedFile ->
+                                                Uri.fromFile(downloadedFile)
+                                            }
+                                            val imageDescriptions = postAttachments.map { postAttachment ->
+                                                fromHtml(postAttachment.description ?: "").toString()
+                                            }
+                                            val downloadRequests: List<Request> = imageUriStrings.map { imageUriString ->
+                                                Request.Builder().url(imageUriString).build()
                                             }
 
                                             val counter = AtomicInteger(0)
@@ -506,6 +506,11 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                 // Wait for all outstanding downloads to finish
                                                 if (counter.incrementAndGet() == imageUris.size) {
                                                     if (allFilesExist(imageNames)) {
+                                                        // Delete original post
+                                                        lifecycleScope.launch {
+                                                            deletePost(apiHolder.api ?: apiHolder.setToCurrentUser(), db)
+                                                        }
+
                                                         val counterInt = counter.get()
                                                         Toast.makeText(
                                                             binding.root.context,
@@ -518,17 +523,9 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                         ).show()
                                                         // Pass downloaded images to new post creation activity
                                                         intent.apply {
-                                                            assert(imageUris.size == imageDescriptions.size)
-
-                                                            for (i in 0 until imageUris.size) {
-                                                                val imageUri = imageUris[i]
-                                                                val imageDescription =
-                                                                    fromHtml(imageDescriptions[i]).toString()
-                                                                val imageItem = ClipData.Item(
-                                                                    imageDescription,
-                                                                    null,
-                                                                    imageUri
-                                                                )
+                                                            imageUris.zip(imageDescriptions).map { (imageUri, imageDescription) ->
+                                                                ClipData.Item(imageDescription, null, imageUri)
+                                                            }.forEach { imageItem ->
                                                                 if (clipData == null) {
                                                                     clipData = ClipData(
                                                                         "",
@@ -539,7 +536,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                                     clipData!!.addItem(imageItem)
                                                                 }
                                                             }
-
                                                             addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                                                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                                         }
@@ -559,6 +555,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                             PostCreationActivity.POST_REDRAFT,
                                                             true
                                                         )
+                                                        intent.putExtra(
+                                                            PostCreationActivity.POST_NSFW,
+                                                            postNSFW
+                                                        )
 
                                                         // Launch post creation activity
                                                         binding.root.context.startActivity(intent)
@@ -576,15 +576,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                             }
 
                                             // Iterate through all pictures of the original post
-                                            for (currentAttachment in postAttachments) {
-                                                val imageUri = currentAttachment.url ?: ""
-                                                val imageName =
-                                                    Uri.parse(imageUri).lastPathSegment.toString()
-                                                val downloadedFile =
-                                                    File(context.cacheDir, imageName)
-                                                val downloadRequest: Request =
-                                                    Request.Builder().url(imageUri).build()
-
+                                            downloadRequests.zip(downloadedFiles).forEach { (downloadRequest, downloadedFile) ->
                                                 // Check whether image is in cache directory already (maybe rather do so using Glide in the future?)
                                                 if (!downloadedFile.exists()) {
                                                     OkHttpClient().newCall(downloadRequest)
@@ -619,7 +611,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                     continuation()
                                                 }
                                             }
-
                                         } catch (exception: HttpException) {
                                             Toast.makeText(
                                                 binding.root.context,
@@ -636,13 +627,6 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
-
-                                        // Delete original post
-                                        deletePost(
-                                            apiHolder.api ?: apiHolder.setToCurrentUser(),
-                                            db
-                                        )
-
                                     }
                                 }
                                 setNegativeButton(android.R.string.cancel) { _, _ -> }
@@ -831,14 +815,10 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         }
     }
 
-    private fun allFilesExist(listOfNames: MutableList<String>): Boolean {
-        for (name in listOfNames) {
-            val file = File(binding.root.context.cacheDir, name)
-            if (!file.exists()) {
-                return false
-            }
+    private fun allFilesExist(listOfNames: List<String>): Boolean {
+        return listOfNames.all {
+            File(binding.root.context.cacheDir, it).exists()
         }
-        return true
     }
 
     companion object {

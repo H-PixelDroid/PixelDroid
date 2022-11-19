@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/post_creation_graph"
+    app:startDestination="@id/postCreationFragment" >
+
+    <fragment
+        android:id="@+id/postCreationFragment"
+        android:name="org.pixeldroid.app.postCreation.PostCreationFragment"
+        tools:layout="@layout/fragment_post_creation" >
+        <action
+            android:id="@+id/action_postCreationFragment_to_postSubmissionFragment"
+            app:destination="@id/postSubmissionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postSubmissionFragment"
+        android:name="org.pixeldroid.app.postCreation.PostSubmissionFragment"
+        android:label="@string/add_details"
+        tools:layout="@layout/fragment_post_submission" >
+        <action
+            android:id="@+id/action_postSubmissionFragment_to_postCreationFragment"
+            app:destination="@id/postCreationFragment" />
+    </fragment>
+</navigation>

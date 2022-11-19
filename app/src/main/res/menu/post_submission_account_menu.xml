@@ -6,6 +6,6 @@
         android:id="@+id/action_switch_accounts"
         android:orderInCategory="100"
         android:title="@string/switch_accounts"
-        android:icon="@drawable/material_drawer_ico_account"
+        android:icon="@drawable/switch_account"
         app:showAsAction="ifRoom"/>
 </menu>
