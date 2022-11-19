@@ -68,9 +68,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".postCreation.PostSubmissionActivity">
-        </activity>
-        <activity
             android:name=".profile.FollowsActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
