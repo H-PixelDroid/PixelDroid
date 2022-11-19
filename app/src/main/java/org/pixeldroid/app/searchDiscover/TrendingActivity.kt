@@ -1,8 +1,8 @@
 package org.pixeldroid.app.searchDiscover
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
@@ -19,6 +19,7 @@ import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.Attachment
+import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.api.objects.Tag
 import org.pixeldroid.app.utils.setSquareImageFromURL
@@ -27,44 +28,41 @@ import java.io.IOException
 
 class TrendingActivity : BaseThemedWithBarActivity() {
 
-    private lateinit var api: PixelfedAPI
     private lateinit var binding: ActivityTrendingBinding
-    private lateinit var recycler : RecyclerView
-    private lateinit var discoverAdapter : DiscoverRecyclerViewAdapter
-    private lateinit var hashtagsAdapter : HashtagsRecyclerViewAdapter
-    private lateinit var accountsAdapter : AccountsRecyclerViewAdapter
+    private lateinit var trendingAdapter : TrendingRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTrendingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        api = apiHolder.api ?: apiHolder.setToCurrentUser()
-        recycler = binding.list
+        val recycler = binding.list
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val type = intent.getSerializableExtra(TRENDING_TAG) as TrendingType? ?: TrendingType.POSTS
 
-        if(type == TrendingType.POSTS || type == TrendingType.DISCOVER) {
-            // Set posts RecyclerView as a grid with 3 columns
-            recycler.layoutManager = GridLayoutManager(this, 3)
-            discoverAdapter = DiscoverRecyclerViewAdapter()
-            recycler.adapter = discoverAdapter
-            if(type == TrendingType.POSTS) {
-                supportActionBar?.setTitle(R.string.trending_posts)
-            } else {
-                supportActionBar?.setTitle(R.string.discover)
+        when (type) {
+            TrendingType.POSTS, TrendingType.DISCOVER -> {
+                // Set posts RecyclerView as a grid with 3 columns
+                recycler.layoutManager = GridLayoutManager(this, 3)
+                supportActionBar?.setTitle(
+                    if (type == TrendingType.POSTS) {
+                        R.string.trending_posts
+                    } else {
+                        R.string.discover
+                    }
+                )
+                this.trendingAdapter = DiscoverRecyclerViewAdapter()
+            }
+            TrendingType.HASHTAGS -> {
+                supportActionBar?.setTitle(R.string.trending_hashtags)
+                this.trendingAdapter = HashtagsRecyclerViewAdapter()
+            }
+            TrendingType.ACCOUNTS -> {
+                supportActionBar?.setTitle(R.string.popular_accounts)
+                this.trendingAdapter = AccountsRecyclerViewAdapter()
             }
         }
-        if(type == TrendingType.HASHTAGS) {
-            supportActionBar?.setTitle(R.string.trending_hashtags)
-            hashtagsAdapter = HashtagsRecyclerViewAdapter()
-            recycler.adapter = hashtagsAdapter
-        }
-        if(type == TrendingType.ACCOUNTS) {
-            supportActionBar?.setTitle(R.string.popular_accounts)
-            accountsAdapter = AccountsRecyclerViewAdapter()
-            recycler.adapter = accountsAdapter
-        }
+        recycler.adapter = this.trendingAdapter
 
         getTrending(type)
         binding.refreshLayout.setOnRefreshListener {
@@ -76,6 +74,7 @@ class TrendingActivity : BaseThemedWithBarActivity() {
         binding.motionLayout.apply {
             if(show){
                 transitionToEnd()
+                binding.errorLayout.errorText.setText(errorText)
             } else {
                 transitionToStart()
             }
@@ -87,25 +86,14 @@ class TrendingActivity : BaseThemedWithBarActivity() {
     private fun getTrending(type: TrendingType) {
         lifecycleScope.launchWhenCreated {
             try {
-                when(type) {
-                    TrendingType.POSTS -> {
-                        val trendingPosts = api.trendingPosts("daily")
-                        discoverAdapter.addPosts(trendingPosts)
-                    }
-                    TrendingType.HASHTAGS -> {
-                        val trendingTags = api.trendingHashtags()
-                            .map { it.copy(name = it.name.removePrefix("#")) }
-                        hashtagsAdapter.addHashtags(trendingTags)
-                    }
-                    TrendingType.ACCOUNTS -> {
-                        val trendingAccounts = api.popularAccounts()
-                        accountsAdapter.addAccounts(trendingAccounts)
-                    }
-                    TrendingType.DISCOVER -> {
-                        val posts = api.discover().posts
-                        discoverAdapter.addPosts(posts)
-                    }
+                val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
+                val content: List<FeedContent> = when(type) {
+                    TrendingType.POSTS ->  api.trendingPosts(Range.daily)
+                    TrendingType.HASHTAGS -> api.trendingHashtags().map { it.copy(name = it.name.removePrefix("#")) }
+                    TrendingType.ACCOUNTS -> api.popularAccounts()
+                    TrendingType.DISCOVER -> api.discover().posts
                 }
+                trendingAdapter.addPosts(content)
                 showError(show = false)
             } catch (exception: IOException) {
                 showError()
@@ -116,25 +104,32 @@ class TrendingActivity : BaseThemedWithBarActivity() {
     }
 
     /**
-     * [RecyclerView.Adapter] that can display a list of [Status]s' thumbnails for the discover view
+     * Abstract class for the different RecyclerViewAdapters used in this activity
      */
-    class DiscoverRecyclerViewAdapter: RecyclerView.Adapter<ProfilePostViewHolder>() {
-        private val posts: ArrayList<Status?> = ArrayList()
+    abstract class TrendingRecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+        val data: ArrayList<FeedContent?> = ArrayList()
 
-        fun addPosts(newPosts : List<Status>) {
-            posts.clear()
-            posts.addAll(newPosts)
+        @SuppressLint("NotifyDataSetChanged")
+        fun addPosts(newPosts: List<FeedContent>){
+            data.clear()
+            data.addAll(newPosts)
             notifyDataSetChanged()
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfilePostViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_profile_posts, parent, false)
-            return ProfilePostViewHolder(view)
-        }
+        override fun getItemCount(): Int = data.size
+    }
 
-        override fun onBindViewHolder(holder: ProfilePostViewHolder, position: Int) {
-            val post = posts[position]
+    /**
+     * [RecyclerView.Adapter] that can display a list of [Status]s' thumbnails for the discover view
+     */
+    class DiscoverRecyclerViewAdapter: TrendingRecyclerViewAdapter() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfilePostViewHolder =
+            ProfilePostViewHolder.create(parent)
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            if (holder !is ProfilePostViewHolder) return
+
+            val post = data[position] as? Status
             if((post?.media_attachments?.size ?: 0) > 1) {
                 holder.albumIcon.visibility = View.VISIBLE
             } else {
@@ -144,15 +139,14 @@ class TrendingActivity : BaseThemedWithBarActivity() {
                 } else holder.videoIcon.visibility = View.GONE
 
             }
-            setSquareImageFromURL(holder.postView, post?.getPostPreviewURL(), holder.postPreview, post?.media_attachments?.firstOrNull()?.blurhash)
+            setSquareImageFromURL(holder.postView.root, post?.getPostPreviewURL(), holder.postPreview, post?.media_attachments?.firstOrNull()?.blurhash)
             holder.postPreview.setOnClickListener {
-                val intent = Intent(holder.postView.context, PostActivity::class.java)
+                val intent = Intent(holder.postView.root.context, PostActivity::class.java)
                 intent.putExtra(Status.POST_TAG, post)
-                holder.postView.context.startActivity(intent)
+                holder.postView.root.context.startActivity(intent)
             }
         }
 
-        override fun getItemCount(): Int = posts.size
     }
 
     companion object {
@@ -161,55 +155,38 @@ class TrendingActivity : BaseThemedWithBarActivity() {
         enum class TrendingType {
             POSTS, HASHTAGS, ACCOUNTS, DISCOVER
         }
+
+        @Suppress("EnumEntryName", "unused")
+        enum class Range {
+            daily, monthly, yearly
+        }
     }
 
 
     /**
      * [RecyclerView.Adapter] that can display a list of [Tag]s for the trending view
      */
-    class HashtagsRecyclerViewAdapter: RecyclerView.Adapter<HashTagViewHolder>() {
-        private val tags: ArrayList<Tag?> = ArrayList()
+    class HashtagsRecyclerViewAdapter: TrendingRecyclerViewAdapter() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HashTagViewHolder =
+            HashTagViewHolder.create(parent)
 
-        fun addHashtags(newTags : List<Tag>) {
-            tags.clear()
-            tags.addAll(newTags)
-            notifyDataSetChanged()
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val tag = data[position] as Tag
+            (holder as HashTagViewHolder).bind(tag)
         }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HashTagViewHolder {
-            return HashTagViewHolder.create(parent)
-        }
-
-        override fun onBindViewHolder(holder: HashTagViewHolder, position: Int) {
-            val tag = tags[position]
-            holder.bind(tag)
-        }
-
-        override fun getItemCount(): Int = tags.size
     }
 
 
     /**
      * [RecyclerView.Adapter] that can display a list of [Account]s for the popular view
      */
-    class AccountsRecyclerViewAdapter: RecyclerView.Adapter<AccountViewHolder>() {
-        private val accounts: ArrayList<Account?> = ArrayList()
+    class AccountsRecyclerViewAdapter: TrendingRecyclerViewAdapter() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder =
+            AccountViewHolder.create(parent)
 
-        fun addAccounts(newAccounts : List<Account>) {
-            accounts.clear()
-            accounts.addAll(newAccounts)
-            notifyDataSetChanged()
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val account = data[position] as? Account
+            (holder as AccountViewHolder).bind(account)
         }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
-            return AccountViewHolder.create(parent)
-        }
-
-        override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-            val account = accounts[position]
-            holder.bind(account)
-        }
-
-        override fun getItemCount(): Int = accounts.size
     }
 }
