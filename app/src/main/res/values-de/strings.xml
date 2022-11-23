@@ -230,4 +230,5 @@
     <string name="collection_title">%1$s\'s Album</string>
     <string name="bookmark">Lesezeichen</string>
     <string name="unbookmark">Nicht mehr abonnieren</string>
+    <string name="popular_accounts">Beliebte Konten</string>
 </resources>
