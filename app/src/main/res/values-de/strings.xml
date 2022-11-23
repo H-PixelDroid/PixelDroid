@@ -228,6 +228,6 @@
     <string name="post_preview">Vorschau eines Betrags</string>
     <string name="upload_next_step">Nächster Schritt</string>
     <string name="collection_title">%1$s\'s Album</string>
-    <string name="bookmark">Abonnieren</string>
+    <string name="bookmark">Lesezeichen</string>
     <string name="unbookmark">Nicht mehr abonnieren</string>
 </resources>
