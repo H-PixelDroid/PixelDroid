@@ -1,0 +1,11 @@
+*Benutzerdefinierte Fehlergrafik Roter Panda hinzugefügt 
+
+* Freies Zuschneiden in der Bildbearbeitung
+
+* F-Droid-Metadaten verbessert
+
+* Übersetzungsaktualisierungen
+
+* Abhängigkeiten aktualisiert
+
+* Fehler behoben
