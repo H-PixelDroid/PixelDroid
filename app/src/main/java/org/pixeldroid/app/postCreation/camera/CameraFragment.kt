@@ -81,6 +81,7 @@ class CameraFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         inActivity = arguments?.getBoolean("CameraActivity") ?: false
 
         binding = FragmentCameraBinding.inflate(layoutInflater)

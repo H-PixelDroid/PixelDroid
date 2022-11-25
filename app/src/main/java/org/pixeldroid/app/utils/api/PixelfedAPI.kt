@@ -7,6 +7,7 @@ import okhttp3.Interceptor
 import org.pixeldroid.app.utils.api.objects.*
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import org.pixeldroid.app.searchDiscover.TrendingActivity
 import org.pixeldroid.app.utils.api.objects.Collection
 import org.pixeldroid.app.utils.api.objects.Tag
 import org.pixeldroid.app.utils.db.AppDatabase
@@ -367,7 +368,7 @@ interface PixelfedAPI {
 
     @GET("/api/v1.1/discover/posts/trending")
     suspend fun trendingPosts(
-        @Query("range") range: String
+        @Query("range") range: TrendingActivity.Companion.Range
     ) : List<Status>
 
     @GET("/api/v1.1/discover/posts/hashtags")

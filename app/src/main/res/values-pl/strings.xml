@@ -197,7 +197,7 @@
     </plurals>
     <string name="status_notification">%1$s udostępnił post</string>
     <string name="notification_thumbnail">Miniatura zdjęcia w powiadomieniu o tym poście</string>
-    <string name="discover">ODKRYJ</string>
+    <string name="discover">Odkrywanie</string>
     <string name="whats_an_instance_explanation">Możesz być zdezorientowany polem tekstowym pytającym o domenę twojej „instancji”.
 \n
 \nPixelfed to sfederowana platforma będąca częścią „Fediwersum”, co oznacza, że może ona komunikować się z innymi platformami tego „świata”, na przykład z Mastodonem (zobacz https://joinmastodon.org).
@@ -252,4 +252,35 @@
     <string name="from_other_domain">Z %1$s</string>
     <string name="add_images_error">Błąd podczas dodawania zdjęcia</string>
     <string name="post_preview">Podgląd posta</string>
+    <string name="upload_next_step">Następny krok</string>
+    <plurals name="items_load_success">
+        <item quantity="one">Dodanie elementu %d zakończone sukcesem</item>
+        <item quantity="few">Dodanie %d elementów zakończone sukcesem</item>
+        <item quantity="many">Ładowanie zakończone</item>
+        <item quantity="other">Ładowanie zakończone</item>
+    </plurals>
+    <string name="description_template">Wzorzec opisu</string>
+    <string name="trending_hashtags">Hasztagi zyskujące popularność</string>
+    <string name="delete_from_collection">Wybierz co chcesz usunąć</string>
+    <string name="use_dynamic_color">Użyj dynamicznych kolorów z systemu</string>
+    <string name="add_details">Dodaj szczegóły</string>
+    <string name="bookmark">Dodaj do zakładek</string>
+    <string name="unbookmark">Usuń z zakładek</string>
+    <string name="explore_accounts">Szukaj popularnych kont na tej instancji</string>
+    <string name="popular_accounts">Popularne konta</string>
+    <string name="grid_view">Widok w siatce</string>
+    <string name="bookmarks">Zakładki</string>
+    <string name="collections">Kolekcje</string>
+    <string name="delete_collection">Usuń kolekcję</string>
+    <string name="collection_add_post">Dodaj wpis</string>
+    <string name="collection_remove_post">Usuń wpis</string>
+    <string name="delete_collection_warning">Czy na pewno chcesz usunąć kolekcję\?</string>
+    <string name="add_to_collection">Wybierz co chcesz dodać</string>
+    <string name="added_post_to_collection">Dodany do kolekcji</string>
+    <string name="error_add_post_to_collection">Błąd dodawania do kolekcji</string>
+    <string name="error_remove_post_from_collection">Błąd usuwania z kolekcji</string>
+    <string name="removed_post_from_collection">Usunięto z kolekcji</string>
+    <string name="save">Zapisz</string>
+    <string name="more_profile_settings">Więcej ustawień profilu</string>
+    <string name="private_account">Konto prywatne</string>
 </resources>

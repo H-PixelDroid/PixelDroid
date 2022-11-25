@@ -68,6 +68,7 @@
         <activity
             android:name=".postCreation.PostCreationActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
@@ -78,9 +79,6 @@
                 <data android:mimeType="image/*" />
                 <data android:mimeType="video/*" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".postCreation.PostSubmissionActivity">
         </activity>
         <activity
             android:name=".profile.FollowsActivity"

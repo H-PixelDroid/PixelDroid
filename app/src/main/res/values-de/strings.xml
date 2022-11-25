@@ -6,7 +6,7 @@
     <string name="invalid_domain">Ungültige Domäne</string>
     <string name="browser_launch_failed">Der Browser konnte nicht gestartet werden, haben Sie einen\?</string>
     <string name="auth_failed">Authentifizierung fehlgeschlagen</string>
-    <string name="token_error">Beim Erhalten des Token ist ein Fehler aufgetreten</string>
+    <string name="token_error">Fehler beim Abruf des Tokens</string>
     <string name="title_activity_settings2">Einstellungen</string>
     <string name="theme_header">Erscheinungsbild</string>
     <string name="followed_notification">%1$s folgt dir</string>
@@ -33,14 +33,14 @@
     <string name="connect_to_pixelfed">Mit Pixelfed verbinden</string>
     <string name="login_connection_required_once">Sie müssen online sein, um das erste Konto hinzuzufügen und um PixelDroid zu verwenden :(</string>
     <string name="switch_camera_button_alt">Kamera wechseln</string>
-    <string name="registration_failed">Konnte die App nicht mit diesem Server verbinden</string>
+    <string name="registration_failed">App konnte sich nicht mit diesem Server verbinden</string>
     <string name="instance_error">Konnte die Informationen der Instanz nicht abrufen</string>
     <string name="upload_picture_failed">Fehler beim Hochladen!</string>
     <string name="default_system">Standard (Systemeinstellung)</string>
     <string name="save_image_failed">Bild kann nicht gespeichert werden</string>
     <string name="save_image_success">Bild erfolgreich gespeichert</string>
     <string name="picture_format_error">Upload-Fehler: falsches Bildformat.</string>
-    <string name="upload_post_failed">Das Hochladen des Beitrags ist fehlgeschlagen</string>
+    <string name="upload_post_failed">Hochladen des Beitrags fehlgeschlagen</string>
     <string name="add_account_name">Konto hinzufügen</string>
     <string name="add_account_description">Weiteres Pixelfed-Konto hinzufügen</string>
     <string name="light_theme">Hell</string>
@@ -57,12 +57,12 @@
     <string name="upload_post_error">Beim Hochladen des Beitrags ist ein Fehler aufgetreten</string>
     <string name="comment_error">Kommentarfehler!</string>
     <string name="comment_posted">Kommentar: %1$s geschrieben!</string>
-    <string name="follow_button_failed">Konnte Knopf zum Folgen nicht anzeigen</string>
+    <string name="follow_button_failed">Schaltfläche \"Folgen\" konnte nicht angezeigt werden</string>
     <string name="follow_error">Konnte nicht folgen</string>
     <string name="no_username">Kein Benutzername</string>
     <string name="default_nfollowing">-
-\nFolgend</string>
-    <string name="action_not_allowed">Diese Handlung ist nicht erlaubt</string>
+\nFolgt</string>
+    <string name="action_not_allowed">Diese Aktion ist nicht zulässig</string>
     <string name="unfollow_error">Konnte nicht entfolgen</string>
     <string name="access_token_invalid">Dieser Zugangstoken ist ungültig</string>
     <string name="default_nposts">-
@@ -89,8 +89,8 @@
     <string name="status_more_options">Mehr Optionen</string>
     <string name="search_empty_error">Suchanfrage darf nicht leer sein</string>
     <string name="follows_title">%1$s folgt</string>
-    <string name="followers_title">%1$s Follower</string>
-    <string name="post_title">%1$s Beitrag</string>
+    <string name="followers_title">%1$s\'s Follower</string>
+    <string name="post_title">%1$s\'s Beitrag</string>
     <string name="about">Über</string>
     <string name="license_info">PixelDroid ist freie und quelloffene Software lizenziert unter der GNU General Public License (Version 3 oder höher)</string>
     <string name="project_website">Projektwebseite: https://pixeldroid.org</string>
@@ -105,18 +105,18 @@
     <string name="switch_to_grid">Wechsle zur Rasteransicht</string>
     <string name="mascot_description">Das Bild zeigt einen roten Panda, das Maskottchen von Pixelfed, der ein Telefon benutzt</string>
     <string name="switch_to_carousel">Wechsel zur Karussellansicht</string>
-    <string name="issues_contribute">Melde Probleme oder hilf mit bei der Entwicklung der Anwendung:</string>
-    <string name="help_translate">Helfe PixelDroid in deine Sprache zu übersetzen:</string>
+    <string name="issues_contribute">Melde Probleme oder helfe bei der Entwicklung der Anwendung:</string>
+    <string name="help_translate">Helfe dabei PixelDroid in deine Sprache zu übersetzen:</string>
     <string name="language">Sprache</string>
     <string name="delete_dialog">Beitrag löschen\?</string>
     <string name="delete">Löschen</string>
     <string name="panda_pull_to_refresh_to_try_again">Der Panda ist nicht glücklich. Ziehe um erneut zu laden.</string>
     <string name="something_went_wrong">Etwas ist schiefgelaufen…</string>
-    <string name="discover">ENTDECKE</string>
+    <string name="discover">Entdecke</string>
     <string name="open_drawer_menu">Öffne Menü</string>
     <string name="profile_picture">Profilbild</string>
-    <string name="report_error">Konnte nicht gemeldet werden</string>
-    <string name="reported">Post wurde gemeldet</string>
+    <string name="report_error">Beitrag konnte nicht gemeldet werden</string>
+    <string name="reported">Beitrag wurde gemeldet</string>
     <string name="report_target">Melde den Beitrag von @%1$s</string>
     <string name="post_is_album">Dieser Beitrag ist ein Album</string>
     <string name="submit_comment">Kommentar senden</string>
@@ -133,7 +133,7 @@
         <item quantity="one">%d Kommentar</item>
         <item quantity="other">%d Kommentare</item>
     </plurals>
-    <string name="no_media_description">Ergänze hier eine Medienbeschreibung hier…</string>
+    <string name="no_media_description">Füge hier eine Medienbeschreibung hinzu…</string>
     <string name="save_image_description">Bildbeschreibung speichern</string>
     <plurals name="description_max_characters">
         <item quantity="one">Die Beschreibung muss mindestens %d Zeichen enthalten.</item>
@@ -150,13 +150,15 @@
     <string name="dialog_message_cancel_follow_request">Followeranfrage zurückziehen\?</string>
     <string name="empty_feed">Hier gibt es nichts zu sehen :(</string>
     <plurals name="nb_following">
-        <item quantity="one">Folgt %d</item>
-        <item quantity="other">Folgt %d</item>
+        <item quantity="one">%d 
+\nFolge ich</item>
+        <item quantity="other">%d 
+\nFolge ich</item>
     </plurals>
     <plurals name="nb_followers">
-        <item quantity="one">%d
+        <item quantity="one">%d 
 \nFollower</item>
-        <item quantity="other">%d
+        <item quantity="other">%d 
 \nFollower</item>
     </plurals>
     <plurals name="shares">
@@ -168,7 +170,7 @@
         <item quantity="other">%d Gefällt-Mirs</item>
     </plurals>
     <string name="upload_error">Serverfehler: %1$d</string>
-    <string name="size_exceeds_instance_limit">Die Größe von Bild %1$d im Album übersteigt mit %2$d kB die von deiner Instanz festgelegte Obergrenze von zulässige Obergrenze von %3$d kB je Bild.</string>
+    <string name="size_exceeds_instance_limit">Die Größe von Bild %1$d im Album übersteigt mit %2$d kB die von deiner Instanz festgelegte Obergrenze von %3$d kB je Bild.</string>
     <string name="total_exceeds_album_limit">Du hast mehr Bilder ausgewählt, als auf deinem Server zulässig sind (%1$s). Bilder jenseits des Limits wurden nicht berücksichtigt.</string>
     <string name="api_not_enabled_dialog">Die API ist auf deiner Instanz nicht aktiv. Bitte kontaktiere den Betreiber deiner Instanz, damit sie aktiviert werden kann.</string>
     <string name="follow_requested">Followeranfrage</string>
@@ -176,7 +178,7 @@
     <string name="edit_link_failed">Das Öffnen der Bearbeitungsseite ist gescheitert</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="no_camera_permission">Die Einwilligung die Kamera zu nutzen wurde nicht erteilt. Erlaube die Kameranutzung in den Einstellungen, wenn du die Kamera in PixelDroid verwenden willst</string>
-    <string name="no_storage_permission">Die Erlaubnis, auf die Dateien zuzugreifen wurde nicht erteilt. Erlaube den Zugriff auf Daten wenn du PixelDroid das Thumbnail anzeigen lassen willst</string>
+    <string name="no_storage_permission">Die Erlaubnis auf Speichermedien zuzugreifen wurde nicht erteilt. Erlaube den Zugriff wenn du PixelDroid das Thumbnail anzeigen lassen willst</string>
     <string name="file_not_found">Datei %1$s wurde nicht gefunden</string>
     <string name="other_notification">Benachrichtigung von %1$s</string>
     <string name="followed_notification_channel">Neue Follower</string>
@@ -197,16 +199,16 @@
     </plurals>
     <string name="notification_summary_medium">%1$s, %2$s und %3$s</string>
     <string name="notification_summary_small">%1$s und %2$s</string>
-    <string name="video_not_supported">Der von dir verwendete Server unterstützt keine Video-Uploads, daher wirst du die in diesem Beitrag enthaltende Videos möglicherweise nicht hochladen können</string>
+    <string name="video_not_supported">Der von dir verwendete Server unterstützt keine Video-Uploads, daher wirst du die in diesem Beitrag enthaltenen Videos möglicherweise nicht hochladen können</string>
     <string name="post_is_video">Dieser Beitrag ist ein Video</string>
     <string name="play_video">Video abspielen</string>
     <string name="new_post_shortcut_long">Neuen Beitrag erstellen</string>
     <string name="new_post_shortcut_short">Neuer Beitrag</string>
     <string name="status_notification">%1$s hat einen Beitrag erstellt</string>
-    <string name="encode_error">Fehler-Kodierung</string>
+    <string name="encode_error">Bei der Kodierung ist ein Fehler aufgetreten</string>
     <string name="encode_success">Kodierung war erfolgreich!</string>
-    <string name="encode_progress">Kodierung %1$d%%</string>
-    <string name="still_encoding">Mindestens ein Video wird noch kodiert. Bitte warten bis alle fertig sind, bevor sie die Videos hochladen</string>
+    <string name="encode_progress">Kodiere %1$d%%</string>
+    <string name="still_encoding">Mindestens ein Video wird noch kodiert. Vor dem Hochladen bitte warten bis alle Vorgänge abgeschlossen sind</string>
     <string name="follow_request">%1$s möchte dir folgen</string>
     <string name="home_feed">Start</string>
     <string name="search_discover_feed">Suche</string>
@@ -214,7 +216,7 @@
     <string name="public_feed">Öffentlich</string>
     <string name="accentColorTitle">Farbakzent</string>
     <string name="accentColorSummary">Farbakzent auswählen</string>
-    <string name="color_chosen">Auswählter Farbakzent</string>
+    <string name="color_chosen">Ausgewählter Farbakzent</string>
     <string name="create_feed">Erstellen</string>
     <string name="color_choice_button">Diesen Farbakzent auswählen</string>
     <plurals name="replies_count">
@@ -224,6 +226,62 @@
     <string name="profile_error">Profil konnte nicht geladen werden</string>
     <string name="from_other_domain">von %1$s</string>
     <string name="add_images_error">Fehler beim Hinzufügen der Bilder</string>
-    <string name="notification_thumbnail">Vorschaubild dieser Benachrichtigung</string>
-    <string name="post_preview">Vorschau eines Betrags</string>
+    <string name="notification_thumbnail">Vorschau des Bildes im Beitrag dieser Benachrichtigung</string>
+    <string name="post_preview">Vorschau eines Beitrags</string>
+    <string name="upload_next_step">Nächster Schritt</string>
+    <string name="collection_title">%1$s\'s Sammlung</string>
+    <string name="bookmark">Lesezeichen</string>
+    <string name="unbookmark">Lesezeichen entfernen</string>
+    <string name="popular_accounts">Beliebte Konten</string>
+    <string name="redraft_dialog_cancel">Bei Abbruch der Überarbeitung wird der ursprüngliche Beitrag nicht mehr vorhanden sein. Wirklich ohne Wiederveröffentlichung fortsetzen\?</string>
+    <string name="profile_save_changes">Deine Änderungen wurden nicht gespeichert. Wirklich beenden\?</string>
+    <string name="private_account_explanation">Wenn Dein Konto privat ist können andere nur mit Deiner Genehmigung Deine Fotos und Videos auf Pixelfed sehen. Bestehende Follower sind davon nicht betroffen.</string>
+    <string name="redraft_post_failed_error">Beitrag konnte nicht überarbeitet werden, Fehler %1$d</string>
+    <string name="redraft">Überarbeiten</string>
+    <string name="redraft_dialog_launch">Die Überarbeitung dieses Beitrags ermöglicht Dir das Foto und seine Beschreibung zu ändern, aber alle aktuellen Kommentare und Likes werden gelöscht. Fortsetzen\?</string>
+    <string name="bookmark_post_failed_error">Konnte Lesezeichen für den Beitrag nicht hinzufügen/entfernen, Fehler %1$d</string>
+    <string name="add_details">Füge ein paar Details hinzu</string>
+    <string name="new_collection_link_failed">Die Seite zum Erstellen der Sammlung konnte nicht geöffnet werden</string>
+    <string name="redraft_post_failed_io_except">Beitrag konnte nicht überarbeitet werden, besteht eine Internet-Verbindung\?</string>
+    <string name="switch_accounts">Konto wechseln</string>
+    <string name="fetching_profile">Dein Profil wird abgerufen...</string>
+    <string name="your_name">Dein Name</string>
+    <string name="your_bio">Informationen über Dich</string>
+    <string name="private_account">Privates Konto</string>
+    <string name="more_profile_settings">Erweiterte Profil-Einstellungen</string>
+    <string name="use_dynamic_color">Verwende dynamische Farben von Deinem System</string>
+    <string name="save">Speichern</string>
+    <string name="bookmark_post_failed_io_except">Konnte Lesezeichen für den Beitrag nicht hinzufügen/entfernen, besteht eine Internet-Verbindung\?</string>
+    <string name="analyzing_stabilization">%1$d%% für die Stabilisierung analysieren</string>
+    <string name="description_template_summary">Vorgefertigte Beschreibung für neue Beiträge</string>
+    <string name="description_template">Beschreibungs-Vorlage</string>
+    <string name="explore_accounts">Entdecke beliebte Konten auf dieser Instanz</string>
+    <string name="explore_hashtags">Entdecke beliebte Hashtags auf dieser Instanz</string>
+    <string name="trending_hashtags">Beliebte Hashtags</string>
+    <string name="daily_trending">Entdecke beliebte Beiträge des Tages</string>
+    <string name="trending_posts">Beliebte Beiträge</string>
+    <string name="explore_posts">Entdecke zufällige Beiträge des Tages</string>
+    <string name="grid_view">Rasteransicht</string>
+    <string name="feed_view">Feed-Ansicht</string>
+    <string name="bookmarks">Lesezeichen</string>
+    <string name="collections">Sammlungen</string>
+    <string name="delete_collection">Sammlung löschen</string>
+    <string name="collection_add_post">Beitrag erstellen</string>
+    <string name="collection_remove_post">Beitrag löschen</string>
+    <string name="delete_collection_warning">Bist Du sicher dass Du diese Sammlung löschen willst\?</string>
+    <string name="add_to_collection">Wähle den hinzuzufügenden Beitrag aus</string>
+    <string name="added_post_to_collection">Beitrag zur Sammlung hinzugefügt</string>
+    <string name="error_add_post_to_collection">Beitrag konnte der Sammlung nicht hinzugefügt werden</string>
+    <string name="removed_post_from_collection">Beitrag von der Sammlung entfernt</string>
+    <string name="profile_saved">Änderungen gespeichert!</string>
+    <string name="error_profile">Etwas ist schief gelaufen. Tippe um es erneut zu versuchen</string>
+    <string name="change_profile_picture">Ändere Dein Profilbild</string>
+    <string name="contains_nsfw">Enthält NSFW-Medien</string>
+    <string name="saving_profile">Dein Profil wird gespeichert</string>
+    <string name="delete_from_collection">Wähle den zu löschenden Beitrag aus</string>
+    <string name="error_remove_post_from_collection">Beitrag konnte nicht von der Sammlung entfernt werden</string>
+    <plurals name="items_load_success">
+        <item quantity="one">%d Element erfolgreich geladen</item>
+        <item quantity="other">%d Elemente erfolgreich geladen</item>
+    </plurals>
 </resources>
