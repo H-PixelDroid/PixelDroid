@@ -142,7 +142,9 @@ class LanguageSettingFragment : DialogFragment() {
         val checkedItem: Int =
             if(locales.isEmpty) 0
             else {
-                val index = list.indexOf(locales.get(0)?.toLanguageTag())
+                // For some reason we get a bit inconsistent language tags. This normalises it for
+                // the currently used languages, but it might break in the future if we add some
+                val index = list.indexOf(locales.get(0)?.toLanguageTag()?.lowercase()?.replace('_', '-'))
                 // If found, we want to compensate for the first in the list being the default
                 if(index == -1) -1
                 else index + 1
@@ -156,8 +158,8 @@ class LanguageSettingFragment : DialogFragment() {
                 appLocale.get(0)!!.getDisplayName(appLocale.get(0)!!)
             }).toTypedArray(), checkedItem) { dialog, which ->
                 val languageTag = if(which in 1..list.size) list[which - 1] else null
-                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageTag))
                 dialog.dismiss()
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageTag))
             }
             setNegativeButton(android.R.string.ok) { _, _ -> }
         }.create()
