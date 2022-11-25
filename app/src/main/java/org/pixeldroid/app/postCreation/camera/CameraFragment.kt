@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.DisplayMetrics
@@ -204,14 +205,19 @@ class CameraFragment : BaseFragment() {
         // Update gallery thumbnail
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) Manifest.permission.READ_MEDIA_IMAGES
+                else Manifest.permission.READ_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             updateGalleryThumbnail()
         }
         else if (!filePermissionDialogLaunched) {
             // Ask for external storage permission.
-            updateGalleryThumbnailPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            updateGalleryThumbnailPermissionLauncher.launch(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Manifest.permission.READ_MEDIA_IMAGES
+                } else Manifest.permission.READ_EXTERNAL_STORAGE
+            )
         }
 
         cameraLifecycleOwner.resume()
@@ -273,14 +279,14 @@ class CameraFragment : BaseFragment() {
             // Find the last picture
             val projection = arrayOf(
                 MediaStore.Images.ImageColumns._ID,
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) MediaStore.Images.ImageColumns.DATE_TAKEN
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.Images.ImageColumns.DATE_TAKEN
                 else MediaStore.Images.ImageColumns.DATE_MODIFIED,
             )
             val cursor = requireContext().contentResolver
                 .query(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
                     null,
-                    (if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) MediaStore.Images.ImageColumns.DATE_TAKEN
+                    (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.Images.ImageColumns.DATE_TAKEN
                     else MediaStore.Images.ImageColumns.DATE_MODIFIED) + " DESC"
                 )
             if (cursor != null && cursor.moveToFirst()) {
