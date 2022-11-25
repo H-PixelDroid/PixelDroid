@@ -257,8 +257,9 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
 
         //Successful authorization
         pixelfedAPI = PixelfedAPI.createFromUrl(domain)
-        val nodeInfo: NodeInfo? = Gson().fromJson(preferences.getString("nodeInfo", null), NodeInfo::class.java)
-        val instance: Instance? = Gson().fromJson(preferences.getString("instance", null), Instance::class.java)
+        val gson = Gson()
+        val nodeInfo: NodeInfo? = gson.fromJson(preferences.getString("nodeInfo", null), NodeInfo::class.java)
+        val instance: Instance? = gson.fromJson(preferences.getString("instance", null), Instance::class.java)
 
         lifecycleScope.launch {
             try {

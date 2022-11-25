@@ -1,10 +1,16 @@
 package org.pixeldroid.app.settings
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.XmlResourceParser
 import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.DialogFragment
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
@@ -12,6 +18,7 @@ import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.setThemeFromPreferences
+
 
 class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var restartMainOnExit = false
@@ -57,9 +64,6 @@ class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnShared
     }
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            "language" -> {
-                recreateWithRestartStatus()
-            }
             "theme" -> {
                 setThemeFromPreferences(sharedPreferences, resources)
                 recreateWithRestartStatus()
@@ -88,6 +92,8 @@ class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnShared
             var dialogFragment: DialogFragment? = null
             if (preference is ColorPreference) {
                 dialogFragment = ColorPreferenceDialog((preference as ColorPreference?)!!)
+            } else if(preference.key == "language"){
+                dialogFragment = LanguageSettingFragment()
             }
             if (dialogFragment != null) {
                 dialogFragment.setTargetFragment(this, 0)
@@ -100,12 +106,60 @@ class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnShared
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
+            findPreference<ListPreference>("language")?.let {
+                it.setSummaryProvider {
+                    val locale = AppCompatDelegate.getApplicationLocales().get(0)
+                    locale?.getDisplayName(locale) ?: getString(R.string.default_system)
+                }
+            }
+
             //Hide Notification setting for Android versions where it doesn't work
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                preferenceManager.findPreference<Preference>("notification")
+                findPreference<Preference>("notification")
                     ?.let { preferenceScreen.removePreference(it) }
             }
         }
     }
 
+}
+class LanguageSettingFragment : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val list: MutableList<String> = mutableListOf()
+        resources.getXml(R.xml.locales_config).use {
+            var eventType = it.eventType
+            while (eventType != XmlResourceParser.END_DOCUMENT) {
+                when (eventType) {
+                    XmlResourceParser.START_TAG -> {
+                        if (it.name == "locale") {
+                            list.add(it.getAttributeValue(0))
+                        }
+                    }
+                }
+                eventType = it.next()
+            }
+        }
+        val locales = AppCompatDelegate.getApplicationLocales()
+        val checkedItem: Int =
+            if(locales.isEmpty) 0
+            else {
+                val index = list.indexOf(locales.get(0)?.toLanguageTag())
+                // If found, we want to compensate for the first in the list being the default
+                if(index == -1) -1
+                else index + 1
+            }
+
+        return AlertDialog.Builder(requireContext()).apply {
+            setIcon(R.drawable.translate_black_24dp)
+            setTitle(R.string.language)
+            setSingleChoiceItems((mutableListOf(getString(R.string.default_system)) + list.map {
+                val appLocale = LocaleListCompat.forLanguageTags(it)
+                appLocale.get(0)!!.getDisplayName(appLocale.get(0)!!)
+            }).toTypedArray(), checkedItem) { dialog, which ->
+                val languageTag = if(which in 1..list.size) list[which - 1] else null
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageTag))
+                dialog.dismiss()
+            }
+            setNegativeButton(android.R.string.ok) { _, _ -> }
+        }.create()
+    }
 }
