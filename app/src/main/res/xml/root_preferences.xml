@@ -19,12 +19,8 @@
     </PreferenceCategory>
 
     <ListPreference
-        app:defaultValue="default"
-        app:entries="@array/languages_entries"
-        app:entryValues="@array/languages_values"
         app:key="language"
         app:title="@string/language"
-        app:useSimpleSummaryProvider="true"
         app:icon="@drawable/translate_black_24dp" />
 
     <Preference android:title="@string/notifications_settings"
@@ -40,8 +36,7 @@
     <EditTextPreference android:title="@string/description_template"
         android:key="prefill_description"
         android:summary="@string/description_template_summary"
-        app:icon="@drawable/note"
-        />
+        app:icon="@drawable/note" />
 
     <Preference android:title="@string/about"
         android:key="about"
