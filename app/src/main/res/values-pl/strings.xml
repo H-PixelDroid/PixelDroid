@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_settings">Ustawienia</string>
-    <string name="invalid_domain">Błąd nazwy domeny</string>
+    <string name="invalid_domain">Błędna domena</string>
     <string name="browser_launch_failed">Nie udało się uruchomić przeglądarki, czy jest zainstalowana\?</string>
     <string name="auth_failed">Niewłaściwe dane logowania</string>
     <string name="token_error">Nie udało się pobrać tokena</string>
@@ -13,7 +13,7 @@
     <string name="theme_header">Motyw</string>
     <string name="light_theme">Jasny</string>
     <string name="dark_theme">Ciemny</string>
-    <string name="mention_notification">%1$s wzmianek</string>
+    <string name="mention_notification">%1$s wspomniało o Tobie</string>
     <string name="shared_notification">%1$s udostępnień</string>
     <string name="domain_of_your_instance">Nazwa Twojej instancji</string>
     <string name="connect_to_pixelfed">Połącz z Pixelfed</string>
@@ -23,13 +23,13 @@
     <string name="save_image_failed">Nie udało się zapisać obrazka</string>
     <string name="save_image_success">Obrazek zapisany</string>
     <string name="upload_picture_failed">Nie udało się wgrać obrazka na serwer!</string>
-    <string name="request_format_error">Błąd wgrywania na serwer: błąd formatu zapytania</string>
+    <string name="request_format_error">Błąd wgrywania na serwer: błędny format żądania</string>
     <string name="upload_post_failed">Nie udało się opublikować posta</string>
     <string name="upload_post_success">Post opublikowany</string>
     <string name="description">Opis…</string>
     <string name="post">Post</string>
     <string name="add_photo">Dodaj zdjęcie</string>
-    <string name="edit">EDYCJA</string>
+    <string name="edit">Edytuj</string>
     <string name="capture_button_alt">Zrób zdjęcie</string>
     <string name="switch_camera_button_alt">Przełącz aparat</string>
     <string name="gallery_button_alt">Galeria</string>
@@ -61,7 +61,7 @@
     <string name="image_download_failed">Błąd pobierania, spróbuj ponownie</string>
     <string name="NoCommentsToShow">Brak komentarzy…</string>
     <string name="write_permission_download_pic">Musisz nadać uprawnienia do zapisu, aby móc pobierać obrazki!</string>
-    <string name="verify_credentials">Nie udało się uzyskać informacji o użytkowniku</string>
+    <string name="verify_credentials">Nie udało się pobrać informacji o użytkowniku</string>
     <string name="poll_notification">Ankieta użytkownika %1$s zakończyła się</string>
     <string name="comment_notification">%1$s skomentował Twój post</string>
     <string name="other_notification">Powiadomienie od %1$s</string>
@@ -73,8 +73,8 @@
     <plurals name="notification_title_summary">
         <item quantity="one">%d nowe powiadomienie</item>
         <item quantity="few">%d nowych powiadomień</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="many">%d nowych powiadomień</item>
+        <item quantity="other">%d nowych powiadomień</item>
     </plurals>
     <string name="delete">Usuń</string>
     <string name="delete_dialog">Czy usunąć ten post\?</string>
@@ -86,12 +86,12 @@
         <item quantity="other">%d odpowiedzi</item>
     </plurals>
     <string name="save_image_description">Zapisz opis zdjęcia</string>
-    <string name="no_media_description">Dodaj opis obiektu tutaj…</string>
+    <string name="no_media_description">Dodaj tu opis mediów…</string>
     <plurals name="nb_following">
         <item quantity="one">%d
-\nobserwuje</item>
+\nobserwowany</item>
         <item quantity="few">%d
-\nobserwuje</item>
+\nobserwowanych</item>
         <item quantity="many">%d
 \nobserwuje</item>
         <item quantity="other">%d
@@ -101,7 +101,7 @@
     <string name="api_not_enabled_dialog">API nie zostało aktywowane na tej instancji. Skontaktuj się z administratorem i poproś o aktywację.</string>
     <string name="hashtag_title">#%1$s</string>
     <string name="retry">Ponów</string>
-    <string name="about">O</string>
+    <string name="about">O projekcie</string>
     <string name="edit_link_failed">Nie udało się otworzyć ekranu edycji</string>
     <string name="empty_feed">Nic tu nie ma :(</string>
     <string name="follow_requested">Prośba obserwacji</string>
@@ -112,13 +112,13 @@
     <string name="no_storage_permission">Dostęp do pamięci nie został przyznany, przyznaj dostęp w ustawieniach, jeśli chcesz, aby PixelDroid wyświetlał miniatury</string>
     <plurals name="nb_posts">
         <item quantity="one">%d
-\npost</item>
+\nwpis</item>
         <item quantity="few">%d
-\nposty</item>
+\nwpisy</item>
         <item quantity="many">%d
-\npostów</item>
+\nWpisów</item>
         <item quantity="other">%d
-\npostów</item>
+\nWpisów</item>
     </plurals>
     <string name="no_username">Brak nazwy użytkownika</string>
     <string name="follow">Obserwuj</string>
@@ -144,7 +144,7 @@
     <string name="unfollow_error">Nie udało się anulować obserwowania</string>
     <string name="access_token_invalid">Token dostępu jest nieprawidłowy</string>
     <string name="default_nposts">-
-\nposty</string>
+\nWpisy</string>
     <string name="default_nfollowers">-
 \nObserwujący</string>
     <string name="default_nfollowing">-
@@ -152,15 +152,15 @@
     <string name="posts">POSTY</string>
     <string name="edit_profile">Edytuj profil</string>
     <string name="search">Szukaj</string>
-    <string name="post_title">post %1$s</string>
+    <string name="post_title">Wpis %1$s</string>
     <string name="reported">Post zgłoszony</string>
     <string name="open_drawer_menu">Otwórz menu szuflady</string>
     <string name="something_went_wrong">Coś poszło nie tak…</string>
     <string name="profile_picture">Zdjęcie profilowe</string>
-    <string name="hashtags">HASHTAGI</string>
+    <string name="hashtags">HASZTAGI</string>
     <string name="panda_pull_to_refresh_to_try_again">Ta panda nie jest zadowolona. Pociągnij, aby odświeżyć i spróbować ponownie.</string>
     <string name="cw_nsfw_hidden_media_n_click_to_show">CW / NSFW / Ukryte multimedia
-\n (naciśnij, aby zobaczyć)</string>
+\n(naciśnij, aby zobaczyć)</string>
     <string name="file_not_found">Plik %1$s nie został odnaleziony</string>
     <string name="switch_to_grid">Zmień na widok siatki</string>
     <string name="unfollow">Anuluj obserwowanie</string>
@@ -177,7 +177,7 @@
     <string name="search_empty_error">Fraza wyszukiwania nie może być pusta</string>
     <string name="status_more_options">Więcej opcji</string>
     <string name="report">Zgłoś</string>
-    <string name="share_link">Udostępnij link</string>
+    <string name="share_link">Udostępnij łącze</string>
     <string name="optional_report_comment">Dodatkowe komunikaty dla moderatorów/administratorów</string>
     <string name="report_target">Zgłoś post użytkownika @%1$s</string>
     <string name="issues_contribute">Zgłoś błąd lub wspomóż rozwój aplikacji:</string>
@@ -197,10 +197,10 @@
     </plurals>
     <string name="status_notification">%1$s udostępnił post</string>
     <string name="notification_thumbnail">Miniatura zdjęcia w powiadomieniu o tym poście</string>
-    <string name="discover">Odkrywanie</string>
+    <string name="discover">Odkrywaj</string>
     <string name="whats_an_instance_explanation">Możesz być zdezorientowany polem tekstowym pytającym o domenę twojej „instancji”.
 \n
-\nPixelfed to sfederowana platforma będąca częścią „Fediwersum”, co oznacza, że może ona komunikować się z innymi platformami tego „świata”, na przykład z Mastodonem (zobacz https://joinmastodon.org).
+\nPixelfed to platforma wchodząca w sklad federacji serwisów, będąca częścią „Fediwersum”, co oznacza, że może ona komunikować się z innymi platformami tego „świata”, na przykład z Mastodonem (zobacz https://joinmastodon.org).
 \n
 \nTo też oznacza, że powinieneś wybrać serwer lub „instancję” Pixelfeda, z której chcesz korzystać. Jeśli nie znasz żadnej, to poszukaj tutaj: https://pixelfed.org/join
 \n
@@ -212,12 +212,12 @@
     <string name="new_post_shortcut_short">Nowy post</string>
     <string name="encode_error">Błąd kodowania</string>
     <string name="mascot_description">Zdjęcie przedstawiające czerwoną pandę korzystającą z telefonu, maskotkę projektu PixelDroid</string>
-    <string name="mention_notification_channel">Wspomnienia</string>
+    <string name="mention_notification_channel">Wspomnień o Tobie</string>
     <string name="shared_notification_channel">Udostępnienia</string>
     <string name="follow_status_failed">Nie udało się pobrać statusu obserwowania</string>
     <string name="notifications_settings">Ustawienia powiadomień</string>
     <string name="notification_summary_small">%1$s i %2$s</string>
-    <string name="video_not_supported">Wykorzystywany przez Ciebie serwer nie obsługuje materiałów wideo, co sprawia, że udostępnienie filmu w tym poście może się nie udać</string>
+    <string name="video_not_supported">Wykorzystywany przez Ciebie serwer nie obsługuje materiałów wideo - udostępnienie filmu w tym poście może się nie udać</string>
     <string name="upload_error">Kod błędu zwrócony przez serwer: %1$d</string>
     <string name="add_comment">Dodaj komentarz</string>
     <string name="submit_comment">Zatwierdź komentarz</string>
@@ -227,7 +227,7 @@
     <string name="notification_summary_large">%1$s, %2$s, %3$s, oraz %4$d innych</string>
     <string name="notification_summary_medium">%1$s, %2$s oraz %3$s</string>
     <string name="total_exceeds_album_limit">Wybrałeś więcej zdjęć niż pozwala na to serwer (%1$s). Zdjęcia powyżej tego limitu zostaną zignorowane.</string>
-    <string name="size_exceeds_instance_limit">Rozmiar zdjęcia %1$d w albumie wynosi więcej niż pozwala na to instancja (%2$d kB a limit to %3$d kB). Możesz nie być w stanie dodać to zdjęcie.</string>
+    <string name="size_exceeds_instance_limit">Rozmiar zdjęcia %1$d w albumie przekracza limit ustawiony w instancji (%2$d kB, a limit to %3$d kB). Dodanie tego zdjęcia może się nie udać.</string>
     <string name="create_feed">Stwórz</string>
     <string name="notifications_feed">Aktualizacje</string>
     <plurals name="number_comments">
@@ -256,13 +256,13 @@
     <plurals name="items_load_success">
         <item quantity="one">Dodanie elementu %d zakończone sukcesem</item>
         <item quantity="few">Dodanie %d elementów zakończone sukcesem</item>
-        <item quantity="many">Ładowanie zakończone</item>
-        <item quantity="other">Ładowanie zakończone</item>
+        <item quantity="many">Dodawanie %d elementów udało się</item>
+        <item quantity="other">Dodawanie %d elementów udało się</item>
     </plurals>
     <string name="description_template">Wzorzec opisu</string>
     <string name="trending_hashtags">Hasztagi zyskujące popularność</string>
     <string name="delete_from_collection">Wybierz co chcesz usunąć</string>
-    <string name="use_dynamic_color">Użyj dynamicznych kolorów z systemu</string>
+    <string name="use_dynamic_color">Użyj kolorów dynamicznych pobranych z systemu</string>
     <string name="add_details">Dodaj szczegóły</string>
     <string name="bookmark">Dodaj do zakładek</string>
     <string name="unbookmark">Usuń z zakładek</string>
@@ -283,4 +283,31 @@
     <string name="save">Zapisz</string>
     <string name="more_profile_settings">Więcej ustawień profilu</string>
     <string name="private_account">Konto prywatne</string>
+    <string name="redraft_dialog_cancel">Jeśli zaniechasz zmian, oryginalny wpis zniknie z Twojego konta. Chcesz posłać ponownie\?</string>
+    <string name="new_collection_link_failed">Błąd otwarcia strony umożliwiającej tworzenie kolekcji</string>
+    <string name="redraft">Zmień wersję roboczą</string>
+    <string name="redraft_dialog_launch">Dokonanie zmian w wersji roboczej pozwoli Ci na edycję zdjęcia i zmianę jego opisu, ale spowoduje usunięcie wszystkich dotychczasowych komentarzy i polubień. Chcesz kontynuować\?</string>
+    <string name="redraft_post_failed_error">Nie można zmodyfikować wpisu, błąd %1$d</string>
+    <string name="redraft_post_failed_io_except">Nie mogę zmodyfikować wpisu, sprawdzić połączenie\?</string>
+    <string name="bookmark_post_failed_error">Nie można dodać/usunąć wpisu do/z ulubionych, błąd %1$d</string>
+    <string name="collection_title">kolekcja %1$</string>
+    <string name="private_account_explanation">Kiedy Twoje konto jest prywatne, Twoje fotografie i filmy mogą zobaczyć na pixelfed tylko osoby którym na to pozwolisz. Ustawienie nie ma zastosowania do osób które już Cię obserwują.</string>
+    <string name="your_name">Imię</string>
+    <string name="profile_save_changes">Nie zapisano zmian! Na pewno chcesz wyjść\?</string>
+    <string name="fetching_profile">Pobieranie Twojego profilu...</string>
+    <string name="saving_profile">Zapisywanie Twojego profilu</string>
+    <string name="profile_saved">Zapisano zmiany!</string>
+    <string name="error_profile">Coś poszło nie tak. Tapnij by powtórzyć</string>
+    <string name="change_profile_picture">Zmień obrazek swojego profilu</string>
+    <string name="switch_accounts">Przełącz między kontami</string>
+    <string name="bookmark_post_failed_io_except">Nie można dodać/usunąć wpisu, sprawdzić połączenie\?</string>
+    <string name="analyzing_stabilization">Analiza stabilizacji %1$d %%</string>
+    <string name="description_template_summary">Automatycznie wypelniaj opis wpisu tekstem</string>
+    <string name="explore_hashtags">Eksploruj hasztagi zyskujące popularność na tej instancji</string>
+    <string name="trending_posts">Wpisy zyskujące popularność</string>
+    <string name="daily_trending">Przeglądaj dzisiejsze wpisy zyskujące popularność</string>
+    <string name="contains_nsfw">Zawiera media NSFW</string>
+    <string name="explore_posts">Eksploruj losowe wpisy z dnia</string>
+    <string name="feed_view">Widok strumienia wpisów</string>
+    <string name="your_bio">Kilka słów o sobie</string>
 </resources>

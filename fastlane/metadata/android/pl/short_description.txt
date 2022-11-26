@@ -1,0 +1,1 @@
+Oprogramowanie klienckie dla Pixelfed, platformy wchodzącej w sklad federacji platform do udostępniania obrazów
