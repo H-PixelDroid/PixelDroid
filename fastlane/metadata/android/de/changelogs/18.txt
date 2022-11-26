@@ -1,4 +1,4 @@
-*Benutzerdefinierte Fehlergrafik Roter Panda hinzugefügt 
+*Benutzerdefinierte Fehlergrafik Roter Panda hinzugefügt
 
 * Freies Zuschneiden in der Bildbearbeitung
 
