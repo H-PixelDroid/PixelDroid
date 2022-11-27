@@ -21,8 +21,6 @@ import androidx.room.withTransaction
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
-import retrofit2.HttpException
-import java.io.IOException
 import java.lang.NullPointerException
 import javax.inject.Inject
 
@@ -74,9 +72,7 @@ class PublicFeedRemoteMediator @Inject constructor(
                 db.publicPostDao().insertAll(dbObjects)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-        } catch (exception: IOException) {
-            return MediatorResult.Error(exception)
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             return MediatorResult.Error(exception)
         }
     }

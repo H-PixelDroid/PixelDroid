@@ -5,7 +5,6 @@ import androidx.paging.PagingState
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
 import retrofit2.HttpException
-import java.io.IOException
 
 class FollowersPagingSource(
     private val api: PixelfedAPI,
@@ -58,9 +57,7 @@ class FollowersPagingSource(
                 prevKey = null,
                 nextKey = if (accounts.isEmpty() || nextPosition.isEmpty() || nextPosition == position) null else nextPosition
             )
-        } catch (exception: IOException) {
-            LoadResult.Error(exception)
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             LoadResult.Error(exception)
         }
     }

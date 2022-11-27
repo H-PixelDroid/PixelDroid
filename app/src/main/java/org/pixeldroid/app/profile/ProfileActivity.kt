@@ -4,34 +4,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
-import org.pixeldroid.app.databinding.FragmentProfilePostsBinding
-import org.pixeldroid.app.posts.PostActivity
 import org.pixeldroid.app.posts.parseHTMLText
-import org.pixeldroid.app.utils.*
+import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
-import org.pixeldroid.app.utils.api.objects.Attachment
-import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+import org.pixeldroid.app.utils.setProfileImageFromURL
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -151,14 +141,8 @@ class ProfileActivity : BaseThemedWithBarActivity() {
                 val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                 val myAccount: Account = try {
                     api.verifyCredentials()
-                } catch (exception: IOException) {
+                } catch (exception: Exception) {
                     Log.e("ProfileActivity:", exception.toString())
-                    Toast.makeText(
-                        applicationContext, "Could not get your profile",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@launchWhenResumed
-                } catch (exception: HttpException) {
                     Toast.makeText(
                         applicationContext, "Could not get your profile",
                         Toast.LENGTH_SHORT
@@ -304,13 +288,8 @@ class ProfileActivity : BaseThemedWithBarActivity() {
                         val rel = api.follow(account.id.orEmpty())
                         if(rel.following == true) setOnClickUnfollow(account, rel.requested == true)
                         else setOnClickFollow(account)
-                    } catch (exception: IOException) {
+                    } catch (exception: Exception) {
                         Log.e("FOLLOW ERROR", exception.toString())
-                        Toast.makeText(
-                            applicationContext, getString(R.string.follow_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } catch (exception: HttpException) {
                         Toast.makeText(
                             applicationContext, getString(R.string.follow_error),
                             Toast.LENGTH_SHORT

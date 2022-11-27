@@ -15,17 +15,19 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.ActivityLoginBinding
-import org.pixeldroid.app.utils.*
+import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Application
 import org.pixeldroid.app.utils.api.objects.Instance
 import org.pixeldroid.app.utils.api.objects.NodeInfo
 import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.storeInstance
+import org.pixeldroid.app.utils.hasInternet
+import org.pixeldroid.app.utils.normalizeDomain
 import org.pixeldroid.app.utils.notificationsWorker.makeChannelGroupId
 import org.pixeldroid.app.utils.notificationsWorker.makeNotificationChannels
-import retrofit2.HttpException
-import java.io.IOException
+import org.pixeldroid.app.utils.openUrl
+import org.pixeldroid.app.utils.validDomain
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -139,9 +141,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
                         pixelfedAPI.registerApplication(
                                 appName, "$oauthScheme://$PACKAGE_ID", SCOPE, "https://pixeldroid.org"
                         )
-                    } catch (exception: IOException) {
-                        return@async null
-                    } catch (exception: HttpException) {
+                    } catch (exception: Exception) {
                         return@async null
                     }
                 }
@@ -163,9 +163,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
                 }?.href ?: return@launch failedRegistration(getString(R.string.instance_error))
 
                 nodeInfoSchema(normalizedDomain, clientId, nodeInfoSchemaUrl)
-            } catch (exception: IOException) {
-                return@launch failedRegistration()
-            } catch (exception: HttpException) {
+            } catch (exception: Exception) {
                 return@launch failedRegistration()
             }
         }
@@ -179,12 +177,9 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
 
         val nodeInfo: NodeInfo = try {
             pixelfedAPI.nodeInfoSchema(nodeInfoSchemaUrl)
-        } catch (exception: IOException) {
-            return@coroutineScope failedRegistration(getString(R.string.instance_error))
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             return@coroutineScope failedRegistration(getString(R.string.instance_error))
         }
-
         val domain: String = try {
             if (nodeInfo.hasInstanceEndpointInfo()) {
                 preferences.edit().putString("nodeInfo", Gson().toJson(nodeInfo)).remove("instance").apply()
@@ -192,9 +187,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
             } else {
                 val instance: Instance = try {
                     pixelfedAPI.instance()
-                } catch (exception: IOException) {
-                    return@coroutineScope failedRegistration(getString(R.string.instance_error))
-                } catch (exception: HttpException) {
+                } catch (exception: Exception) {
                     return@coroutineScope failedRegistration(getString(R.string.instance_error))
                 }
                 preferences.edit().putString("instance", Gson().toJson(instance)).remove("nodeInfo").apply()
@@ -279,10 +272,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
                     domain
                 )
                 wipeSharedSettings()
-            } catch (exception: IOException) {
-                return@launch failedRegistration(getString(R.string.token_error))
-
-            } catch (exception: HttpException) {
+            } catch (exception: Exception) {
                 return@launch failedRegistration(getString(R.string.token_error))
             }
         }
@@ -324,9 +314,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
                 clientSecret = clientSecret
             )
             apiHolder.setToCurrentUser()
-        } catch (exception: IOException) {
-            return failedRegistration(getString(R.string.verify_credentials))
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             return failedRegistration(getString(R.string.verify_credentials))
         }
 
@@ -345,11 +333,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
             notifications.forEach{it.user_id = user.user_id; it.instance_uri = user.instance_uri}
 
             db.notificationDao().insertAll(notifications)
-        } catch (exception: IOException) {
-            return failedRegistration(getString(R.string.login_notifications))
-        } catch (exception: HttpException) {
-            return failedRegistration(getString(R.string.login_notifications))
-        } catch (exception: NullPointerException) {
+        } catch (exception: Exception) {
             return failedRegistration(getString(R.string.login_notifications))
         }
 

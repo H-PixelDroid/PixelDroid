@@ -30,9 +30,7 @@ class HashTagPagingSource(
                 prevKey = null,
                 nextKey = if(nextKey == position) null else nextKey
             )
-        } catch (exception: HttpException) {
-            LoadResult.Error(exception)
-        } catch (exception: IOException) {
+        } catch (exception: Exception) {
             LoadResult.Error(exception)
         }
     }

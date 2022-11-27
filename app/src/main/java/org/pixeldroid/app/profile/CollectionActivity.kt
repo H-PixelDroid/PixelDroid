@@ -16,8 +16,7 @@ import org.pixeldroid.app.profile.ProfileFeedFragment.Companion.COLLECTION_ID
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Collection
-import retrofit2.HttpException
-import java.io.IOException
+import java.lang.Exception
 
 class CollectionActivity : BaseThemedWithBarActivity() {
     private lateinit var binding: ActivityCollectionBinding
@@ -42,7 +41,6 @@ class CollectionActivity : BaseThemedWithBarActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         collection = intent.getSerializableExtra(COLLECTION_TAG) as Collection
-
 
         addCollection = intent.getBooleanExtra(ADD_COLLECTION_TAG, false)
         deleteFromCollection = intent.getBooleanExtra(DELETE_FROM_COLLECTION_TAG, false)
@@ -90,9 +88,9 @@ class CollectionActivity : BaseThemedWithBarActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         // Relaunch same activity, to avoid duplicates in history
-        super.onNewIntent(intent);
-        finish();
-        startActivity(intent);
+        super.onNewIntent(intent)
+        finish()
+        startActivity(intent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -108,10 +106,11 @@ class CollectionActivity : BaseThemedWithBarActivity() {
                                 api.deleteCollection(collection.id)
                                 // Deleted, exit activity
                                 finish()
-                            } catch (exception: IOException) {
-                                TODO("Error")
-                            } catch (exception: HttpException) {
-                                TODO("Error")
+                            } catch (exception: Exception) {
+                                Snackbar.make(
+                                    binding.root, getString(R.string.something_went_wrong),
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                     }

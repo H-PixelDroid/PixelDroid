@@ -5,7 +5,6 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import android.text.Editable
 import android.util.Log
-import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
@@ -19,21 +18,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import org.pixeldroid.app.R
 import org.pixeldroid.app.postCreation.ProgressRequestBody
+import org.pixeldroid.app.posts.fromHtml
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Account
-import org.pixeldroid.app.utils.api.objects.Attachment
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
-import retrofit2.HttpException
-import java.io.File
-import java.io.IOException
-import java.lang.Exception
-import java.net.URI
 import javax.inject.Inject
 
 class EditProfileViewModel(application: Application) : AndroidViewModel(application) {
@@ -69,17 +59,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                         error = false
                     )
                 }
-            } catch (exception: IOException) {
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        sendingProfile = false,
-                        profileSent = false,
-                        loadingProfile = false,
-                        profileLoaded = false,
-                        error = true
-                    )
-                }
-            } catch (exception: HttpException) {
+            } catch (exception: Exception) {
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         sendingProfile = false,
@@ -120,7 +100,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                     oldProfile = account
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            bio = account.note,
+                            bio = account.source?.note ?: account.note?.let {fromHtml(it).toString()},
                             name = account.display_name,
                             profilePictureUri = account.anyAvatar()?.toUri(),
                             privateAccount = account.locked,
@@ -131,39 +111,19 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                             error = false
                         )
                     }
-                } catch (exception: IOException) {
-                    Log.e("TAG", exception.toString())
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            sendingProfile = false,
-                            profileSent = false,
-                            loadingProfile = false,
-                            profileLoaded = false,
-                            error = true
-                        )
-                    }
-                } catch (exception: HttpException) {
-                    Log.e("TAG", exception.toString())
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            sendingProfile = false,
-                            profileSent = false,
-                            loadingProfile = false,
-                            profileLoaded = false,
-                            error = true
-                        )
-                    }
                 } catch (exception: Exception) {
                     Log.e("TAG", exception.toString())
-
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            sendingProfile = false,
+                            profileSent = false,
+                            loadingProfile = false,
+                            profileLoaded = false,
+                            error = true
+                        )
+                    }
                 }
             }
-        }
-    }
-
-    fun errorShown() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(error = false)
         }
     }
 
@@ -193,8 +153,12 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
 
     fun madeChanges(): Boolean =
         with(uiState.value) {
-            oldProfile?.locked != privateAccount
-                    || oldProfile?.display_name != name || oldProfile?.note != bio
+            val bioUnchanged: Boolean = oldProfile?.source?.note?.let { it != bio }
+                // If source note is null, check note
+                ?: oldProfile?.note?.let { fromHtml(it).toString() != bio }
+                ?: true
+            oldProfile?.locked != privateAccount || oldProfile?.display_name != name
+                    || bioUnchanged
         }
 
     fun clickedCard() {

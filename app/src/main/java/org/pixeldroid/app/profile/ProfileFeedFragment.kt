@@ -41,8 +41,6 @@ import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.displayDimensionsInPx
 import org.pixeldroid.app.utils.openUrl
 import org.pixeldroid.app.utils.setSquareImageFromURL
-import retrofit2.HttpException
-import java.io.IOException
 
 /**
  * Fragment to show a list of [Account]s, as a result of a search.
@@ -84,6 +82,7 @@ class ProfileFeedFragment : UncachedFeedFragment<FeedContent>() {
             collections = false
             bookmarks = false
         }
+
         adapter = ProfilePostsAdapter()
 
         //get the currently active user
@@ -302,10 +301,7 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
                                 putExtra(CollectionActivity.COLLECTION_TAG, collection)
                             }
                         postPreview.context.startActivity(intent)
-                    } catch (exception: IOException) {
-                        Snackbar.make(postPreview, postPreview.context.getString(R.string.error_add_post_to_collection),
-                            Snackbar.LENGTH_LONG).show()
-                    } catch (exception: HttpException) {
+                    } catch (exception: Exception) {
                         Snackbar.make(postPreview, postPreview.context.getString(R.string.error_add_post_to_collection),
                             Snackbar.LENGTH_LONG).show()
                     }
@@ -322,10 +318,7 @@ class ProfilePostsViewHolder(binding: FragmentProfilePostsBinding) : RecyclerVie
                                 putExtra(CollectionActivity.COLLECTION_TAG, collection)
                             }
                         postPreview.context.startActivity(intent)
-                    } catch (exception: IOException) {
-                        Snackbar.make(postPreview, postPreview.context.getString(R.string.error_remove_post_from_collection),
-                            Snackbar.LENGTH_LONG).show()
-                    } catch (exception: HttpException) {
+                    } catch (exception: Exception) {
                         Snackbar.make(postPreview, postPreview.context.getString(R.string.error_remove_post_from_collection),
                             Snackbar.LENGTH_LONG).show()
                     }

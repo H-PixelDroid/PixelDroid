@@ -7,8 +7,6 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityReportBinding
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 import org.pixeldroid.app.utils.api.objects.Status
-import retrofit2.HttpException
-import java.io.IOException
 
 class ReportActivity : BaseThemedWithBarActivity() {
 
@@ -44,9 +42,7 @@ class ReportActivity : BaseThemedWithBarActivity() {
                     )
 
                     reportStatus(true)
-                } catch (exception: IOException) {
-                    reportStatus(false)
-                } catch (exception: HttpException) {
+                } catch (exception: Exception) {
                     reportStatus(false)
                 }
             }

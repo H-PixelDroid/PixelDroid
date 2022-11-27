@@ -4,8 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Collection
-import retrofit2.HttpException
-import java.io.IOException
 
 class CollectionsPagingSource(
     private val api: PixelfedAPI,
@@ -21,9 +19,7 @@ class CollectionsPagingSource(
                 //TODO pagination. For now, don't paginate
                 nextKey = null
             )
-        } catch (exception: HttpException) {
-            LoadResult.Error(exception)
-        } catch (exception: IOException) {
+        } catch (exception: Exception) {
             LoadResult.Error(exception)
         }
     }
