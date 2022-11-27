@@ -1,0 +1,4 @@
+- Delete and redraft existing posts
+- Collections of own posts can now be viewed and edited
+- Post creation is now performed in two steps, with new support for: NSFW sensitivity, account switching
+- Many other changes and improvements :)
