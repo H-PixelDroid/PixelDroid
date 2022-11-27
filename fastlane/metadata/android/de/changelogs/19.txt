@@ -1,17 +1,9 @@
 * Metadaten von Fotos vor dem Hochladen entfernen
-
 * Lesezeichen!
-
 * Profile als Feed oder Raster ansehen
-
 * Lege Vorlagen für Beschreibungen an
-
 * Das Benachrichtigungssymbol hat nun eine Markierung wenn Du neue Benachrichtigungen erhalten hast
-
 * Weitere Videobearbeitungsfunktionen: Zuschneiden, Geschwindigkeit ändern, Stabilisieren
-
 * Dynamische Farben: PixelDroid kann sich den Farben Deines Hintergrunds anpassen (Android 12 und höher)
-
 * Fehlerbehebungen
-
 * Übersetzungen aktualisiert

@@ -1,8 +1,8 @@
-* Verbesserungen bei den Kommentaren: Öffnen um Antworten zu sehen, zu liken, außerdem zeigen sie den Avatar des Verfassers usw. 
-* Aktualisierungen der Übersetzungen. Vielen Dank an die Übersetzer :) Hilf gerne mit PixelDroid in Deine Sprache zu übersetzen: weblate.pixeldroid.org 
-* Sicherheit: Abhängigkeitsüberprüfung stellt sicher, dass die in der App enthaltenen Abhängigkeiten nicht manipuliert wurden, PixelDroid verweigert nun jede Nicht-HTTPS-Verbindung. 
-* PixelDroid verwendet nun einen eigenen "PixelDroid"-Benutzer-Agenten anstelle des OkHttp-Bibliotheks-Agenten. 
-* Alle hartkodierten Zeichenketten wurden aus der App entfernt, alles sollte nun übersetzbar sein. 
-* Einige Verbesserungen am Code 
-* Behebt das Speichern von Bildern, die aus der Bibliothek kommen oder für die App freigegeben sind. 
-* Absturz bei der Verwendung von Mastodon-Instanzen behoben
+* Kommentar-Verbesserungen: Öffnen um Antworten zu sehen, liken, Verfasser-Avatar anzeigen usw.
+* Übersetzungs-Aktualisierungen. Vielen Dank an die Übersetzer :) Hilf gerne mit PixelDroid in Deine Sprache zu übersetzen: weblate.pixeldroid.org
+* Sicherheit: Überprüfung stellt sicher, dass App-Abhängigkeiten nicht manipuliert wurden, nur noch HTTPS-Verbindungen erlaubt
+* App verwendet nun einen eigenen "PixelDroid"-Benutzer-Agenten anstelle des OkHttp-Bibliotheks-Agenten
+* Alle hartkodierten Zeichenketten wurden aus der App entfernt, somit nun alles übersetzbar
+* Verbesserungen am Code
+* Behebt Probleme mit Medien die für die App freigegeben wurden/aus Bibliothek
+* Absturz bei Verwendung von Mastodon-Instanzen behoben
