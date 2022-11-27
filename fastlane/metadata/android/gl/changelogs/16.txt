@@ -1,0 +1,4 @@
+* Adición de regras gson proguard para arranxar problemas con instancias Mastodon
+* Adición de personalización da cor do decorado con 4 decorados diferentes
+* Agora na versión Material 3
+* Mellora da consistencia na IU

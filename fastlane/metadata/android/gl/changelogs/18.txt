@@ -1,0 +1,11 @@
+* Add custom error graphic red panda
+
+* Allow freestyle cropping in image edit
+ 
+* Improve F-Droid metadata
+
+* Translation updates
+
+* Update dependencies
+
+* Fix bugs

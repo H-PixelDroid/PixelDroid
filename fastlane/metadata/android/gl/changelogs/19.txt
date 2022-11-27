@@ -1,0 +1,9 @@
+* Remove photos' metadata before uploading
+* Bookmarks!
+* See a profile as a feed or grid
+* Set a template for your descriptions
+* Badge on the notification icon if you got new notifications
+* More video editing features: crop, change speed, add stabilization
+* Implement dynamic colors: you can make PixelDroid follow the color of your background (Android 12 and up)
+* Bug fixes
+* Update translations
