@@ -18,8 +18,6 @@ import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_COMMENT_TAG
 import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_TAG
 import org.pixeldroid.app.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import org.pixeldroid.app.utils.displayDimensionsInPx
-import retrofit2.HttpException
-import java.io.IOException
 
 class PostActivity : BaseThemedWithBarActivity() {
     private lateinit var binding: ActivityPostBinding
@@ -100,7 +98,7 @@ class PostActivity : BaseThemedWithBarActivity() {
         val nonNullText = textIn.toString()
         status.id.let {
             try {
-                val response = api.postStatus(nonNullText, it)
+                api.postStatus(nonNullText, it)
                 binding.commentIn.visibility = View.GONE
 
                 //Reload to add the comment to the comment section
@@ -111,18 +109,12 @@ class PostActivity : BaseThemedWithBarActivity() {
                     binding.root.context.getString(R.string.comment_posted).format(textIn),
                     Toast.LENGTH_SHORT
                 ).show()
-            } catch (exception: IOException) {
+            } catch (exception: Exception) {
                 Log.e("COMMENT ERROR", exception.toString())
                 Toast.makeText(
                     binding.root.context, binding.root.context.getString(R.string.comment_error),
                     Toast.LENGTH_SHORT
                 ).show()
-            } catch (exception: HttpException) {
-                Toast.makeText(
-                    binding.root.context, binding.root.context.getString(R.string.comment_error),
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.e("ERROR_CODE", exception.code().toString())
             }
         }
     }

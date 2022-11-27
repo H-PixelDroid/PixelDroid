@@ -297,10 +297,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 //Update shown share count
                 binding.nshares.text = resp.getNShares(binding.root.context)
                 binding.reblogger.isChecked = resp.reblogged!!
-            } catch (exception: HttpException) {
-                Log.e("RESPONSE_CODE", exception.code().toString())
-                binding.reblogger.isChecked = false
-            } catch (exception: IOException) {
+            } catch (exception: Exception) {
                 Log.e("REBLOG ERROR", exception.toString())
                 binding.reblogger.isChecked = false
             }
@@ -319,7 +316,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             } catch (exception: HttpException) {
                 Log.e("RESPONSE_CODE", exception.code().toString())
                 binding.reblogger.isChecked = true
-            } catch (exception: IOException) {
+            } catch (exception: Exception) {
                 Log.e("REBLOG ERROR", exception.toString())
                 binding.reblogger.isChecked = true
             }
@@ -732,11 +729,11 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 //Update shown like count and internal like toggle
                 binding.nlikes.text = resp.getNLikes(binding.root.context)
                 binding.liker.isChecked = resp.favourited ?: false
-            } catch (exception: IOException) {
-                Log.e("LIKE ERROR", exception.toString())
-                binding.liker.isChecked = false
             } catch (exception: HttpException) {
                 Log.e("RESPONSE_CODE", exception.code().toString())
+                binding.liker.isChecked = false
+            } catch (exception: Exception) {
+                Log.e("LIKE ERROR", exception.toString())
                 binding.liker.isChecked = false
             }
         }
@@ -752,11 +749,11 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 //Update shown like count and internal like toggle
                 binding.nlikes.text = resp.getNLikes(binding.root.context)
                 binding.liker.isChecked = resp.favourited ?: false
-            } catch (exception: IOException) {
-                Log.e("UNLIKE ERROR", exception.toString())
-                binding.liker.isChecked = true
             } catch (exception: HttpException) {
                 Log.e("RESPONSE_CODE", exception.code().toString())
+                binding.liker.isChecked = true
+            } catch (exception: Exception) {
+                Log.e("UNLIKE ERROR", exception.toString())
                 binding.liker.isChecked = true
             }
         }

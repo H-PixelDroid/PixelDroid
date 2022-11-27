@@ -13,7 +13,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -63,8 +62,6 @@ import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companio
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
-import retrofit2.HttpException
-import java.io.IOException
 import java.time.Instant
 
 
@@ -278,9 +275,7 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                     val account = api.verifyCredentials()
                     addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
                     fillDrawerAccountInfo(account.id!!)
-                } catch (exception: IOException) {
-                    Log.e("ACCOUNT UPDATE:", exception.toString())
-                } catch (exception: HttpException) {
+                } catch (exception: Exception) {
                     Log.e("ACCOUNT UPDATE:", exception.toString())
                 }
             }
@@ -446,14 +441,9 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                         }
                         val numberOfNewNotifications = if((filtered?.size ?: 20) >= 20) null else filtered?.size
                         if(filtered?.isNotEmpty() == true ) setNotificationBadge(true, numberOfNewNotifications)
-                    } catch (exception: IOException) {
-                        return@repeatOnLifecycle
-                    } catch (exception: HttpException) {
+                    } catch (exception: Exception) {
                         return@repeatOnLifecycle
                     }
-
-
-
                 }
             }
         }

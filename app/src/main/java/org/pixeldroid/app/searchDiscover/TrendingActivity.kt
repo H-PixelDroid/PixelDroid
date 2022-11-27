@@ -23,8 +23,6 @@ import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.api.objects.Tag
 import org.pixeldroid.app.utils.setSquareImageFromURL
-import retrofit2.HttpException
-import java.io.IOException
 
 class TrendingActivity : BaseThemedWithBarActivity() {
 
@@ -95,9 +93,7 @@ class TrendingActivity : BaseThemedWithBarActivity() {
                 }
                 trendingAdapter.addPosts(content)
                 showError(show = false)
-            } catch (exception: IOException) {
-                showError()
-            } catch (exception: HttpException) {
+            } catch (exception: Exception) {
                 showError()
             }
         }

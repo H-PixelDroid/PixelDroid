@@ -4,8 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Status
-import retrofit2.HttpException
-import java.io.IOException
 
 class CommentPagingSource(
     private val api: PixelfedAPI,
@@ -23,9 +21,7 @@ class CommentPagingSource(
                 prevKey = null,
                 nextKey = null
             )
-        } catch (exception: HttpException) {
-            LoadResult.Error(exception)
-        } catch (exception: IOException) {
+        } catch (exception: Exception) {
             LoadResult.Error(exception)
         }
     }

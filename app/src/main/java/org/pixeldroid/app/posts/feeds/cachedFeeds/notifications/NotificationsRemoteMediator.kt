@@ -21,8 +21,6 @@ import androidx.room.withTransaction
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.api.objects.Notification
-import retrofit2.HttpException
-import java.io.IOException
 import java.lang.Exception
 import java.lang.NullPointerException
 import javax.inject.Inject
@@ -74,11 +72,7 @@ class NotificationsRemoteMediator @Inject constructor(
                 db.notificationDao().insertAll(apiResponse)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-        } catch (exception: IOException) {
-            return MediatorResult.Error(exception)
-        } catch (exception: HttpException) {
-            return MediatorResult.Error(exception)
-        } catch (exception: Exception){
+        }  catch (exception: Exception){
             return MediatorResult.Error(exception)
         }
     }
