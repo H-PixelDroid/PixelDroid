@@ -105,7 +105,7 @@
     <string name="report_error">Non se puido enviar a denuncia</string>
     <string name="profile_picture">Imaxe de perfil</string>
     <string name="open_drawer_menu">Abrir o menú do editor</string>
-    <string name="discover">DESCUBRIR</string>
+    <string name="discover">Descubrir</string>
     <string name="license_info">PixelDroid é softare libre e de código aberto, baixo licenza GNU General Public License (versión 3 ou posterior)</string>
     <string name="panda_pull_to_refresh_to_try_again">O panda está triste. Arrastra hacia abaixo a pantalla e inténtao outra vez.</string>
     <string name="something_went_wrong">Algo fallou…</string>
@@ -224,4 +224,22 @@
     <string name="from_other_domain">desde %1$s</string>
     <string name="add_images_error">Erro ao engadir as imaxes</string>
     <string name="post_preview">Vista previa da publicación</string>
+    <plurals name="items_load_success">
+        <item quantity="one">%d elemento gardado correctamente</item>
+        <item quantity="other">%d elementos gardados correctamente</item>
+    </plurals>
+    <string name="new_collection_link_failed">Non se puido abrir a páxina de creación dunha colección</string>
+    <string name="redraft_dialog_launch">Ao editar esta publicación poderás editar a foto e a descrición, pero eliminarás os comentarios e favoritos actuais. Continuar\?</string>
+    <string name="upload_next_step">Seguinte paso</string>
+    <string name="add_details">Engade algún detalle</string>
+    <string name="collection_title">Colección de %1$s</string>
+    <string name="bookmark">Marcar</string>
+    <string name="unbookmark">Desmarcar</string>
+    <string name="redraft">Editar</string>
+    <string name="redraft_dialog_cancel">Se cancelas a edición, a publicación orixinal non estará presente na túa conta. Continuar sen volver a publicar\?</string>
+    <string name="redraft_post_failed_error">Non se puido editar a publicación, erro %1$d</string>
+    <string name="redraft_post_failed_io_except">Non se editou a publicación, tes conexión á rede\?</string>
+    <string name="bookmark_post_failed_error">Non se puido (des)marcar a publicación, erro %1$d</string>
+    <string name="bookmark_post_failed_io_except">Non se puido (des)marcar a publicación, tes conexión á rede\?</string>
+    <string name="analyzing_stabilization">Análise da estabilización %1$d%%</string>
 </resources>
