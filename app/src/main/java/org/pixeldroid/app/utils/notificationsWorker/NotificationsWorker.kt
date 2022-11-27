@@ -108,9 +108,7 @@ class NotificationsWorker(
                         since_id = previouslyLatestNotification?.id
                     )
                 }
-            } catch (exception: IOException) {
-                return Result.failure()
-            } catch (exception: HttpException) {
+            } catch (exception: Exception) {
                 return Result.failure()
             }
         }

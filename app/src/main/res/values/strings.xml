@@ -319,7 +319,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="your_bio">Your bio</string>
     <string name="your_name">Your Name</string>
     <string name="profile_save_changes">You did not save your changes. Exit?</string>
-    <string name="fetching_profile">Fetching your profile...</string>
+    <string name="fetching_profile">Fetching your profile…</string>
     <string name="saving_profile">Saving your profile</string>
     <string name="profile_saved">Changes saved!</string>
     <string name="error_profile">Something went wrong. Tap to retry</string>

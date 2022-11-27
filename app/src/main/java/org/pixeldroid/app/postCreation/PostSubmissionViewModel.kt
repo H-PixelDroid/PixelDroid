@@ -260,15 +260,6 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 //TODO make the activity launch this instead (and surrounding toasts too)
                 getApplication<PixelDroidApplication>().startActivity(intent)
-            } catch (exception: IOException) {
-                Toast.makeText(getApplication(), getApplication<PixelDroidApplication>().getString(R.string.upload_post_error),
-                    Toast.LENGTH_SHORT).show()
-                Log.e(TAG, exception.toString())
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        postCreationSendButtonEnabled = true
-                    )
-                }
             } catch (exception: HttpException) {
                 Toast.makeText(getApplication(), getApplication<PixelDroidApplication>().getString(R.string.upload_post_failed),
                     Toast.LENGTH_SHORT).show()
@@ -278,7 +269,16 @@ class PostSubmissionViewModel(application: Application, photodata: ArrayList<Pho
                         postCreationSendButtonEnabled = true
                     )
                 }
-            } finally {
+            } catch (exception: Exception) {
+                Toast.makeText(getApplication(), getApplication<PixelDroidApplication>().getString(R.string.upload_post_error),
+                    Toast.LENGTH_SHORT).show()
+                Log.e(TAG, exception.toString())
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        postCreationSendButtonEnabled = true
+                    )
+                }
+            }finally {
                 apiHolder.api = null
             }
         }

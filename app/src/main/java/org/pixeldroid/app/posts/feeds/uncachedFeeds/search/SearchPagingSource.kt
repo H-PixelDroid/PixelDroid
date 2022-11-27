@@ -5,8 +5,6 @@ import androidx.paging.PagingState
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.api.objects.Results
-import retrofit2.HttpException
-import java.io.IOException
 
 /**
  * Provides the PagingSource for search feeds. Is used in [SearchContentRepository]
@@ -41,9 +39,7 @@ class SearchPagingSource<T: FeedContent>(
                 prevKey = null,
                 nextKey = if(nextKey == position) null else nextKey
             )
-        } catch (exception: HttpException) {
-            LoadResult.Error(exception)
-        } catch (exception: IOException) {
+        } catch (exception: Exception) {
             LoadResult.Error(exception)
         }
     }
