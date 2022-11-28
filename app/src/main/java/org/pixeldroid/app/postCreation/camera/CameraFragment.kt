@@ -18,9 +18,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
-import androidx.camera.core.*
+import androidx.camera.core.AspectRatio
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.Metadata
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -29,6 +33,7 @@ import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
@@ -264,7 +269,7 @@ class CameraFragment : BaseFragment() {
             if (isGranted) {
                 updateGalleryThumbnail()
             } else if(!filePermissionDialogLaunched){
-                AlertDialog.Builder(requireContext())
+                MaterialAlertDialogBuilder(requireContext())
                     .setMessage(getString(R.string.no_storage_permission))
                     .setPositiveButton(android.R.string.ok) { _, _ ->}.show()
                 filePermissionDialogLaunched = true
@@ -346,7 +351,7 @@ class CameraFragment : BaseFragment() {
         if (isGranted) {
             bindCameraUseCases()
         } else {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.no_camera_permission)
                 .setPositiveButton(android.R.string.ok) { _, _ ->}.show()
         }

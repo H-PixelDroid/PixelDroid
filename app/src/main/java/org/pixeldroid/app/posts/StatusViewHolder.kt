@@ -2,7 +2,6 @@ package org.pixeldroid.app.posts
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Typeface
@@ -33,6 +32,7 @@ import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -444,24 +444,21 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                             true
                         }
                         R.id.post_more_menu_delete -> {
-                            val builder = AlertDialog.Builder(binding.root.context)
-                            builder.apply {
-                                setMessage(R.string.delete_dialog)
-                                setPositiveButton(android.R.string.ok) { _, _ ->
+                            MaterialAlertDialogBuilder(binding.root.context)
+                                .setMessage(R.string.delete_dialog)
+                                .setPositiveButton(android.R.string.ok) { _, _ ->
 
                                     lifecycleScope.launch {
                                         deletePost(apiHolder.api ?: apiHolder.setToCurrentUser(), db)
                                     }
                                 }
-                                setNegativeButton(android.R.string.cancel) { _, _ -> }
-                                show()
-                            }
+                                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                                .show()
 
                             true
                         }
                         R.id.post_more_menu_redraft -> {
-                            val builder = AlertDialog.Builder(binding.root.context)
-                            builder.apply {
+                            MaterialAlertDialogBuilder(binding.root.context).apply {
                                 setMessage(R.string.redraft_dialog_launch)
                                 setPositiveButton(android.R.string.ok) { _, _ ->
 

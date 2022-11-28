@@ -1,13 +1,14 @@
 package org.pixeldroid.app.postCreation
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
@@ -42,7 +44,7 @@ import org.pixeldroid.media_editor.photoEdit.VideoEditActivity
 import java.io.File
 import java.io.OutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 
 class PostCreationFragment : BaseFragment() {
@@ -103,7 +105,7 @@ class PostCreationFragment : BaseFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.uiState.collect { uiState ->
                     uiState.userMessage?.let {
-                        AlertDialog.Builder(binding.root.context).apply {
+                        MaterialAlertDialogBuilder(binding.root.context).apply {
                             setMessage(it)
                             setNegativeButton(android.R.string.ok) { _, _ -> }
                         }.show()
@@ -173,8 +175,7 @@ class PostCreationFragment : BaseFragment() {
             override fun handleOnBackPressed() {
                 val redraft = requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_REDRAFT, false)
                 if (redraft) {
-                    val builder = AlertDialog.Builder(binding.root.context)
-                    builder.apply {
+                    MaterialAlertDialogBuilder(binding.root.context).apply {
                         setMessage(R.string.redraft_dialog_cancel)
                         setPositiveButton(android.R.string.ok) { _, _ ->
                             requireActivity().finish()
@@ -275,7 +276,7 @@ class PostCreationFragment : BaseFragment() {
 
     private fun validatePost(): Boolean {
         if (model.getPhotoData().value?.all { !it.video || it.videoEncodeComplete } == false) {
-            AlertDialog.Builder(requireActivity()).apply {
+            MaterialAlertDialogBuilder(requireActivity()).apply {
                 setMessage(R.string.still_encoding)
                 setNegativeButton(android.R.string.ok) { _, _ -> }
             }.show()

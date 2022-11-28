@@ -6,11 +6,11 @@ import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
@@ -331,7 +331,7 @@ class ProfileActivity : BaseThemedWithBarActivity() {
 
             setOnClickListener {
                 if(account.locked == true && requested){
-                    AlertDialog.Builder(context)
+                    MaterialAlertDialogBuilder(context)
                             .setMessage(R.string.dialog_message_cancel_follow_request)
                             .setPositiveButton(android.R.string.ok) { _, _ ->
                                 unfollow()

@@ -1,6 +1,5 @@
 package org.pixeldroid.app.postCreation
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -17,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentPostSubmissionBinding
@@ -81,10 +81,10 @@ class PostSubmissionFragment : BaseFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.uiState.collect { uiState ->
                     uiState.userMessage?.let {
-                        AlertDialog.Builder(binding.root.context).apply {
-                            setMessage(it)
-                            setNegativeButton(android.R.string.ok) { _, _ -> }
-                        }.show()
+                        MaterialAlertDialogBuilder(binding.root.context)
+                            .setMessage(it)
+                            .setNegativeButton(android.R.string.ok) { _, _ -> }
+                            .show()
 
                         // Notify the ViewModel the message is displayed
                         model.userMessageShown()
@@ -147,7 +147,7 @@ class PostSubmissionFragment : BaseFragment() {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.action_switch_accounts -> {
-                        AlertDialog.Builder(requireActivity()).apply {
+                        MaterialAlertDialogBuilder(requireActivity()).apply {
                             setIcon(R.drawable.switch_account)
                             setTitle(R.string.switch_accounts)
                             setSingleChoiceItems(accounts.map { it.username + " (${it.fullHandle})" }.toTypedArray(), selectedAccount) { dialog, which ->

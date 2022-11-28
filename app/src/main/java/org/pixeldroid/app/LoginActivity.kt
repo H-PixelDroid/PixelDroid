@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -106,13 +107,11 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
 
 
     private fun whatsAnInstance() {
-        val builder = AlertDialog.Builder(this)
-        builder.apply {
-            setView(layoutInflater.inflate(R.layout.whats_an_instance_explanation, null))
-            setPositiveButton(android.R.string.ok) { _, _ -> }
-        }
-        // Create the AlertDialog
-        builder.show()
+        MaterialAlertDialogBuilder(this)
+            .setView(layoutInflater.inflate(R.layout.whats_an_instance_explanation, null))
+            .setPositiveButton(android.R.string.ok) { _, _ -> }
+            // Create the AlertDialog
+            .show()
     }
 
     private fun hideKeyboard() {
@@ -202,7 +201,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
 
 
         if (!nodeInfo.software?.name.orEmpty().contains("pixelfed")) {
-            AlertDialog.Builder(this@LoginActivity).apply {
+            MaterialAlertDialogBuilder(this@LoginActivity).apply {
                 setMessage(R.string.instance_not_pixelfed_warning)
                 setPositiveButton(R.string.instance_not_pixelfed_continue) { _, _ ->
                     promptOAuth(normalizedDomain, clientId)
@@ -213,7 +212,7 @@ class LoginActivity : BaseThemedWithoutBarActivity() {
                 }
             }.show()
         } else if (nodeInfo.metadata?.config?.features?.mobile_apis != true) {
-            AlertDialog.Builder(this@LoginActivity).apply {
+            MaterialAlertDialogBuilder(this@LoginActivity).apply {
                 setMessage(R.string.api_not_enabled_dialog)
                 setNegativeButton(android.R.string.ok) { _, _ ->
                     loadingAnimation(false)
