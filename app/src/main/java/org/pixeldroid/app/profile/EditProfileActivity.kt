@@ -1,7 +1,6 @@
 package org.pixeldroid.app.profile
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -15,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
@@ -135,7 +135,7 @@ class EditProfileActivity : BaseThemedWithBarActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if(model.madeChanges()){
-            AlertDialog.Builder(binding.root.context).apply {
+            MaterialAlertDialogBuilder(binding.root.context).apply {
                 setMessage(getString(R.string.profile_save_changes))
                 setNegativeButton(android.R.string.cancel) { _, _ -> }
                 setPositiveButton(android.R.string.ok) { _, _ -> super.onBackPressed()}

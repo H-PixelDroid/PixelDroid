@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.content.res.XmlResourceParser
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.DialogFragment
@@ -14,6 +13,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
@@ -150,7 +150,7 @@ class LanguageSettingFragment : DialogFragment() {
                 else index + 1
             }
 
-        return AlertDialog.Builder(requireContext()).apply {
+        return MaterialAlertDialogBuilder(requireContext()).apply {
             setIcon(R.drawable.translate_black_24dp)
             setTitle(R.string.language)
             setSingleChoiceItems((mutableListOf(getString(R.string.default_system)) + list.map {
