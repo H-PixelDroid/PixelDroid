@@ -193,7 +193,7 @@
     <string name="no_camera_permission">مجوز دسترسی به دوربین اعطا نشده است. اگر می‌خواهید که پیکسل‌دروید اجازه استفاده از دوربین را داشته باشد، این مجوز را از طریق تنظیمات اعطا کنید</string>
     <string name="no_storage_permission">مجوز دسترسی به حافظه اعطا نشده است. اگر می‌خواهید که پیکسل‌دروید تصاویر بندانگشتی را نشان دهد این مجوز را از طریق تنظیمات اعطا کنید</string>
     <plurals name="replies_count">
-        <item quantity="one">۱ پاسخ</item>
+        <item quantity="one">%d پاسخ</item>
         <item quantity="other">%d پاسخ</item>
     </plurals>
     <string name="post_is_video">این فرسته ویدیوییست</string>
@@ -203,7 +203,7 @@
     <string name="new_post_shortcut_short">فرستهٔ جدید</string>
     <string name="follow_request">%1$s درخواست پی‌گیریتان را دارد</string>
     <plurals name="notification_title_summary">
-        <item quantity="one">۱ آگاهی جدید</item>
+        <item quantity="one">%d آگاهی جدید</item>
         <item quantity="other">%d آگاهی جدید</item>
     </plurals>
     <string name="encode_error">خطای کدگذاری</string>
