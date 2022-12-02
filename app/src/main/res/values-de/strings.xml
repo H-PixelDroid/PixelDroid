@@ -244,7 +244,7 @@
     <string name="new_collection_link_failed">Die Seite zum Erstellen der Sammlung konnte nicht geöffnet werden</string>
     <string name="redraft_post_failed_io_except">Beitrag konnte nicht überarbeitet werden, besteht eine Internet-Verbindung\?</string>
     <string name="switch_accounts">Konto wechseln</string>
-    <string name="fetching_profile">Dein Profil wird abgerufen...</string>
+    <string name="fetching_profile">Dein Profil wird abgerufen…</string>
     <string name="your_name">Dein Name</string>
     <string name="your_bio">Informationen über Dich</string>
     <string name="private_account">Privates Konto</string>

@@ -1,1 +1,1 @@
-Client für Pixelfed, der föderierten Plattform für den Austausch von Bildern
+Client für PixelFed, der föderierten Plattform für den Austausch von Bildern
