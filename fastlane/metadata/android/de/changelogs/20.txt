@@ -1,0 +1,4 @@
+- Vorhandene Beiträge löschen und überarbeiten
+- Sammlungen eigener Beiträge können nun eingesehen und bearbeitet werden
+- Die Beitragserstellung erfolgt jetzt in zwei Schritten, mit neuer Unterstützung für: NSFW-Sensitivität, Kontowechsel
+- Viele weitere Änderungen und Verbesserungen :)
