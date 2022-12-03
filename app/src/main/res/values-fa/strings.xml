@@ -266,4 +266,12 @@
     <string name="contains_nsfw">دارای رسانهٔ NSFW</string>
     <string name="switch_accounts">تعویض حساب‌ها</string>
     <string name="change_profile_picture">تغییر نگارهٔ نمایه‌تان</string>
+    <plurals name="items_load_success">
+        <item quantity="one">۱ مورد با موفّقیت بار شد</item>
+        <item quantity="other">%d مورد با موفّقیت بار شد</item>
+    </plurals>
+    <string name="notification_thumbnail">بندانگشتی تصویر در فرستهٔ این آگاهی</string>
+    <string name="analyzing_stabilization">تجزیه برای پایدارسازی %1$d٪</string>
+    <string name="description_template_summary">پر کردن شرح فرسته‌های جدید با این</string>
+    <string name="redraft_post_failed_error">نتوانست فرسته را بازپیش‌نویس کن. خطای %1$d</string>
 </resources>
