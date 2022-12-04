@@ -267,7 +267,7 @@
     <string name="switch_accounts">تعویض حساب‌ها</string>
     <string name="change_profile_picture">تغییر نگارهٔ نمایه‌تان</string>
     <plurals name="items_load_success">
-        <item quantity="one">۱ مورد با موفّقیت بار شد</item>
+        <item quantity="one">%d مورد با موفّقیت بار شد</item>
         <item quantity="other">%d مورد با موفّقیت بار شد</item>
     </plurals>
     <string name="notification_thumbnail">بندانگشتی تصویر در فرستهٔ این آگاهی</string>
