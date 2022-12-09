@@ -240,4 +240,19 @@
     <string name="notification_thumbnail">Náhled obrázku v příspěvku tohoto upozornění</string>
     <string name="accentColorTitle">Barevný odstín</string>
     <string name="accentColorSummary">Vyberte barevný odstín</string>
+    <string name="upload_next_step">Další krok</string>
+    <plurals name="items_load_success">
+        <item quantity="one">%d položka nahrána úspěšně</item>
+        <item quantity="few">%d položky nahrány úspěšně</item>
+        <item quantity="other">%d položek nahráno úspěšně</item>
+    </plurals>
+    <string name="new_collection_link_failed">Chyba při otevírání stránky tvorby kolekce</string>
+    <string name="description_template">Popis šablony</string>
+    <string name="popular_accounts">Oblíbené účty</string>
+    <string name="explore_accounts">Objevovat oblíbené účty na této instanci</string>
+    <string name="trending_hashtags">Trendové štítky</string>
+    <string name="daily_trending">Zobrazit denní trendové příspěvky</string>
+    <string name="trending_posts">Trendové příspěvky</string>
+    <string name="explore_hashtags">Objevovat trendové štítky na této instanci</string>
+    <string name="explore_posts">Objevovat náhodné příspěvky dne</string>
 </resources>
