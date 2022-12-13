@@ -1,7 +1,6 @@
 package org.pixeldroid.app.posts.feeds
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -83,7 +82,14 @@ internal fun <T: Any> initAdapter(
             ?: loadState.refresh as? LoadState.Error
         errorState?.let {
             val error: String = (it.error as? HttpException)?.response()?.errorBody()?.string()?.ifEmpty { null }?.let { s ->
-                Gson().fromJson(s, org.pixeldroid.app.utils.api.objects.Error::class.java)?.error?.ifBlank { null }
+                try {
+                    Gson().fromJson(s, org.pixeldroid.app.utils.api.objects.Error::class.java)?.error?.ifBlank { null }
+                } catch (exception: Exception) {
+                    errorLayout.root.context.getString(
+                        R.string.server_down_error,
+                        it.error.localizedMessage.orEmpty()
+                    )
+                }
             } ?: it.error.localizedMessage.orEmpty()
             showError(motionLayout = motionLayout, errorLayout = errorLayout, errorText = error)
         }
