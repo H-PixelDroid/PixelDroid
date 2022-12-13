@@ -111,6 +111,7 @@ android {
     buildFeatures {
         viewBinding true
         dataBinding = true
+        buildConfig = true
     }
 
     apply plugin: 'kotlin-kapt'
@@ -274,8 +275,8 @@ tasks.withType(Test) {
 task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedStagingAndroidTest', 'testStagingUnitTest', 'createStagingCoverageReport']) {
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
