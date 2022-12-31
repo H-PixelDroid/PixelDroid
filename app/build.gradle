@@ -1,14 +1,16 @@
 import com.android.build.api.dsl.ManagedVirtualDevice
 
 plugins {
-    id "com.cookpad.android.plugin.license-tools" version "1.2.8"
+    id "com.mikepenz.aboutlibraries.plugin" version "10.5.2"
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 apply plugin: "kotlin-parcelize"
+
 
 
 // Force latest version of Jacoco, initially done to resolve https://github.com/jacoco/jacoco/issues/1155
@@ -25,6 +27,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
         freeCompilerArgs += ["-opt-in=kotlin.RequiresOptIn"]
@@ -235,6 +238,8 @@ dependencies {
     implementation 'com.github.ligi:tracedroid:4.1'
 
     implementation 'me.relex:circleindicator:2.1.6'
+
+    implementation "com.mikepenz:aboutlibraries-core:10.5.2"
 
     /**
      * Not in release, so not mentioned in licenses list
