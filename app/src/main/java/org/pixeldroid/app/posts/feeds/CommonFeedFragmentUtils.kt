@@ -86,7 +86,7 @@ internal fun <T: Any> initAdapter(
                     Gson().fromJson(s, org.pixeldroid.app.utils.api.objects.Error::class.java)?.error?.ifBlank { null }
                 } catch (exception: Exception) {
                     errorLayout.root.context.getString(
-                        R.string.server_down_error,
+                        R.string.unknown_error,
                         it.error.localizedMessage.orEmpty()
                     )
                 }
