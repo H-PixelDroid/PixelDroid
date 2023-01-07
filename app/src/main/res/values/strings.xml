@@ -123,6 +123,7 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <!-- Loading error messages -->
     <string name="loading_toast">Something went wrong while loading</string>
     <string name="feed_failed">Could not get feed</string>
+    <string name="unknown_error_in_error">Unknown error, check if server is down: %1$s</string>
     <!-- Post pop-up options -->
     <string name="share_picture">Share picture…</string>
     <string name="save_to_gallery">Save to Gallery…</string>
