@@ -1,14 +1,16 @@
 import com.android.build.api.dsl.ManagedVirtualDevice
 
 plugins {
-    id "com.cookpad.android.plugin.license-tools" version "1.2.8"
+    id "com.mikepenz.aboutlibraries.plugin" version "10.5.2"
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 apply plugin: "kotlin-parcelize"
+
 
 
 // Force latest version of Jacoco, initially done to resolve https://github.com/jacoco/jacoco/issues/1155
@@ -25,6 +27,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
         freeCompilerArgs += ["-opt-in=kotlin.RequiresOptIn"]
@@ -32,7 +35,7 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 21
+        versionCode 22
         versionName "1.0.beta" + versionCode
 
         //TODO add resConfigs("en", "fr", "ja",...) ?
@@ -111,6 +114,7 @@ android {
     buildFeatures {
         viewBinding true
         dataBinding = true
+        buildConfig = true
     }
 
     apply plugin: 'kotlin-kapt'
@@ -153,14 +157,14 @@ dependencies {
     implementation "androidx.annotation:annotation:1.5.0"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation "androidx.activity:activity-ktx:1.6.1"
-    implementation 'androidx.fragment:fragment-ktx:1.5.4'
+    implementation 'androidx.fragment:fragment-ktx:1.5.5'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
     implementation 'androidx.media2:media2-widget:1.2.1'
     implementation 'androidx.media2:media2-player:1.2.1'
 
 
     // Use the most recent version of CameraX
-    def cameraX_version = '1.1.0'
+    def cameraX_version = '1.2.0'
     implementation "androidx.camera:camera-core:$cameraX_version"
     implementation "androidx.camera:camera-camera2:$cameraX_version"
     // CameraX Lifecycle library
@@ -200,7 +204,7 @@ dependencies {
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
 
-    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.2'
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.4'
     implementation project(path: ':scrambler')
 
     implementation('com.github.bumptech.glide:glide:4.14.2') {
@@ -235,6 +239,8 @@ dependencies {
 
     implementation 'me.relex:circleindicator:2.1.6'
 
+    implementation "com.mikepenz:aboutlibraries-core:10.5.2"
+
     /**
      * Not in release, so not mentioned in licenses list
      */
@@ -253,13 +259,13 @@ dependencies {
 
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test:rules:1.4.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test:rules:1.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
+    androidTestImplementation 'androidx.test:runner:1.5.1'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test:runner:1.5.1'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.9.2'
 
@@ -274,8 +280,8 @@ tasks.withType(Test) {
 task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedStagingAndroidTest', 'testStagingUnitTest', 'createStagingCoverageReport']) {
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']

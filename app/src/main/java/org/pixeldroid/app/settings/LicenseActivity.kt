@@ -1,11 +1,9 @@
 package org.pixeldroid.app.settings
 
 import android.os.Bundle
-import com.google.gson.Gson
+import com.mikepenz.aboutlibraries.Libs
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.OpenSourceLicenseBinding
-import org.pixeldroid.app.settings.licenseObjects.Libraries
-import org.pixeldroid.app.settings.licenseObjects.OpenSourceItem
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 
 /**
@@ -30,12 +28,14 @@ class LicenseActivity: BaseThemedWithBarActivity() {
     }
 
     private fun setupRecyclerView() {
-        val text: String = applicationContext.assets.open("licenses.json")
+        val aboutLibsJson: String = applicationContext.resources.openRawResource(R.raw.aboutlibraries)
             .bufferedReader().use { it.readText() }
 
-        val listObj: List<OpenSourceItem> = Gson().fromJson(text, Libraries::class.java).libraries
+        val libs = Libs.Builder()
+            .withJson(aboutLibsJson)
+            .build()
 
-        val adapter = OpenSourceLicenseAdapter(listObj)
+        val adapter = OpenSourceLicenseAdapter(libs)
         binding.openSourceLicenseRecyclerView.adapter = adapter
     }
 }
