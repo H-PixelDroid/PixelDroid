@@ -98,7 +98,7 @@ data class PhotoData(
     var video: Boolean,
     var videoEncodeProgress: Int? = null,
     var videoEncodeStabilizationFirstPass: Boolean? = null,
-    var videoEncodeComplete: Boolean = false,
+    var videoEncodeComplete: Boolean = true,
     var videoEncodeError: Boolean = false,
 ) : Parcelable
 
@@ -212,7 +212,7 @@ class PostCreationViewModel(
             }
         }
 
-        if (sizeInkBytes > instance!!.maxPhotoSize || sizeInkBytes > instance.maxVideoSize) {
+        if ((!isVideo && sizeInkBytes > instance!!.maxPhotoSize) || (isVideo && sizeInkBytes > instance!!.maxVideoSize)) {
             val maxSize = if (isVideo) instance.maxVideoSize else instance.maxPhotoSize
             _uiState.update { currentUiState ->
                 currentUiState.copy(
@@ -250,8 +250,9 @@ class PostCreationViewModel(
                     sessionMap[imageUri]?.let { VideoEditActivity.cancelEncoding(it) }
 
                     videoEncodingArguments?.let {
-                        videoEncodeStabilizationFirstPass = videoEncodingArguments.videoStabilize > 0.01f
+                        videoEncodeStabilizationFirstPass = it.videoStabilize > 0.01f
                         videoEncodeProgress = 0
+                        videoEncodeComplete = false
 
                         VideoEditActivity.startEncoding(imageUri, it,
                             context = getApplication<PixelDroidApplication>(),
