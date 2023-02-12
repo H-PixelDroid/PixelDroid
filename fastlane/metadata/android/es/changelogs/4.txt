@@ -1,0 +1,8 @@
+- ¡Soporte para notificaciones! Aún algo básico, se irá mejorando :)
+- Arreglado un error que ignoraba la rotación de la imagen, haciendo que se viesen mal
+- Arreglado error #300
+- Arreglado el error que provocaba problemas de rendimiento y publicaciones vacías
+- Añadido checo, traducciones actualizadas
+- Arregladas las fotos de perfil
+- Arreglado que la cámara no funcionase al intercambiar pestañas
+- Dependencias actualizadas

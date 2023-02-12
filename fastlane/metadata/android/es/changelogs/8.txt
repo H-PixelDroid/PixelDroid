@@ -1,0 +1,4 @@
+* Añadido soporte para subida y reproducción de vídeos
+* Mejora en las notificaciones
+* Traducciones actualizadas
+* Dependencias actualizadas

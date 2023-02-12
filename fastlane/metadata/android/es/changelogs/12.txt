@@ -1,0 +1,3 @@
+* ¡Edición de vídeo! Recortar y quitar sonido a los vídeos
+* Abrir imágenes a pantalla completa y ampliarlas :)
+* Actualización de traducciones

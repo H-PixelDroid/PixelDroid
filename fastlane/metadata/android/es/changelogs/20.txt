@@ -1,0 +1,4 @@
+- Eliminar y editar publicaciones existentes
+- Ahora puedes ver y editar tus propias colecciones
+- La creación de publicaciones ahora tiene dos pasos, con soporte para marcar contenido sensible y cambio de cuenta
+- Otros cambios y mejoras varios :)

@@ -1,0 +1,11 @@
+PixelDroid es un cliente de Android libre y de código abierto para Pixelfed, la plataforma federada para compartir imágenes.
+
+Navega por publicaciones y perfiles, sube publicaciones, descubre publicaciones, interacciona con otros en el fediverso.
+
+• Soporte de varias cuentas
+• Temas claro y oscuro.
+• Aplica filtros, recorta y cambia el brillo/contraste/saturación
+• Tiene en cuenta la configuración de tu servidor de Pixelfed
+• 100% libre y de código abierto. Sin dependencias propietarias.
+
+Consulta https://pixelfed.org para saber más sobre Pixelfed.

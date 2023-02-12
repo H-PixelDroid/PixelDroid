@@ -1,0 +1,11 @@
+* Añadido error personalizado con panda rojo
+
+* Ahora se puede recortar libremente en el editor de imagen
+
+* Mejoras en los metadatos de F-Droid
+
+* Traducciones actualizadas
+
+* Dependencias actualizadas
+
+* Corrección de errores

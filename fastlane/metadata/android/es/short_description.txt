@@ -1,0 +1,1 @@
+Un cliente de Pixelfed, la plataforma federada para compartir imágenes

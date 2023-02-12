@@ -12,7 +12,7 @@
     <string name="shared_notification">%1$s compartió tu publicación</string>
     <string name="liked_notification">%1$s le gustó tu publicación</string>
     <string name="description">Descripción…</string>
-    <string name="post">enviar</string>
+    <string name="post">Publicar</string>
     <string name="whats_an_instance">¿Qué es una instancia\?</string>
     <string name="logout">Cerrar sesión</string>
     <string name="save_to_gallery">Guardar en la galería…</string>
@@ -86,11 +86,14 @@
     <plurals name="nb_following">
         <item quantity="one">%d
 \nSiguiendo</item>
+        <item quantity="many">%d
+\nSiguiendo</item>
         <item quantity="other">%d
 \nSiguiendo</item>
     </plurals>
     <plurals name="description_max_characters">
         <item quantity="one">La descripción debe contener por lo menos %d caracter.</item>
+        <item quantity="many">La descripción debe contener por lo menos %d caracteres.</item>
         <item quantity="other">La descripción debe contener por lo menos %d caracteres.</item>
     </plurals>
     <string name="delete_post_failed_io_except">No se pudo borrar la publicación, quizás sea tu conexión\?</string>
@@ -103,11 +106,11 @@
     <string name="delete">Borrar</string>
     <string name="panda_pull_to_refresh_to_try_again">Este panda está triste. Desliza hacia abajo para intentarlo de nuevo.</string>
     <string name="something_went_wrong">Algo fue mal…</string>
-    <string name="discover">DESCUBRE</string>
+    <string name="discover">Descubre</string>
     <string name="open_drawer_menu">Abrir el menú lateral</string>
     <string name="profile_picture">Imagen de perfil</string>
     <string name="report_error">No se pudo enviar el reporte</string>
-    <string name="reported">Reportado {gmd_check_circle}</string>
+    <string name="reported">Publicación reportada</string>
     <string name="report_target">Reportar la publicación de @%1$s</string>
     <string name="optional_report_comment">Mensaje opcional para moderadores/administradores</string>
     <string name="share_link">Compartir enlace</string>
@@ -130,12 +133,16 @@
     <plurals name="nb_followers">
         <item quantity="one">%d
 \nSeguidor</item>
+        <item quantity="many">%d
+\nSeguidores</item>
         <item quantity="other">%d
 \nSeguidores</item>
     </plurals>
     <plurals name="nb_posts">
         <item quantity="one">%d
 \nPublicación</item>
+        <item quantity="many">%d
+\nPublicaciones</item>
         <item quantity="other">%d
 \nPublicaciones</item>
     </plurals>
@@ -144,14 +151,17 @@
     <string name="add_comment">Añadir un comentario</string>
     <plurals name="number_comments">
         <item quantity="one">%d comentario</item>
+        <item quantity="many">%d comentarios</item>
         <item quantity="other">%d comentarios</item>
     </plurals>
     <plurals name="shares">
-        <item quantity="one">%d Compartido</item>
-        <item quantity="other">%d Compartidos</item>
+        <item quantity="one">Compartido %d vez</item>
+        <item quantity="many">Compartido %d veces</item>
+        <item quantity="other">Compartido %d veces</item>
     </plurals>
     <plurals name="likes">
         <item quantity="one">%d Me gusta</item>
+        <item quantity="many">%d Me gustas</item>
         <item quantity="other">%d Me gustas</item>
     </plurals>
     <string name="upload_error">Código de error devuelto por el servidor: %1$d</string>
@@ -192,4 +202,100 @@
     <string name="notifications_settings">Ajustes de notificaciones</string>
     <string name="notifications_settings_summary">Administra las notificaciones que deseas recibir</string>
     <string name="login_notifications">No se pudieron obtener las últimas notificaciones</string>
+    <string name="unknown_error_in_error">Error desconocido, comprueba si el servidor está caído: %1$s</string>
+    <string name="new_collection_link_failed">Fallo al abrir la página de creación de colecciones</string>
+    <string name="redraft_dialog_launch">Editar esta publicación te permite cambiar la foto y su descripción, pero borrará los comentarios y me gusta que tenga actualmente. ¿Quieres continuar\?</string>
+    <string name="bookmark_post_failed_error">No se pudo marcar/desmarcar la publicación, error %1$d</string>
+    <string name="analyzing_stabilization">Analizando la estabilización %1$d%%</string>
+    <string name="still_encoding">Aún se está codificando algún vídeo. Espera a que finalice antes de subirlos</string>
+    <string name="explore_hashtags">Explora etiquetas de actualidad en esta instancia</string>
+    <string name="collections">Colecciones</string>
+    <string name="delete_collection_warning">¿Seguro que quieres borrar esta colección\?</string>
+    <string name="error_remove_post_from_collection">Fallo al eliminar la publicación a la colección</string>
+    <plurals name="replies_count">
+        <item quantity="one">%d respuesta</item>
+        <item quantity="many">%d respuestas</item>
+        <item quantity="other">%d respuestas</item>
+    </plurals>
+    <string name="private_account_explanation">Cuando tu cuenta es privada, sólo la gente que tú aceptes podrá ver tus fotos y vídeos en pixelfed. Tus seguidores actuales no se verán afectados.</string>
+    <string name="fetching_profile">Buscando tu perfil…</string>
+    <string name="error_profile">Algo ha salido mal. Pulsa para volver a intentarlo</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s y %4$d otros</string>
+    <string name="notification_summary_medium">%1$s, %2$s y %3$s</string>
+    <string name="notification_summary_small">%1$s y %2$s</string>
+    <string name="add_images_error">Error al adjuntar imágenes</string>
+    <string name="notification_thumbnail">Miniatura de la imagen en la notificación de la publicación</string>
+    <string name="encode_error">Error al codificar</string>
+    <string name="encode_success">¡Codificación correcta!</string>
+    <string name="encode_progress">Codificación %1$d%%</string>
+    <string name="home_feed">Inicio</string>
+    <string name="search_discover_feed">Búsqueda</string>
+    <string name="create_feed">Crear</string>
+    <string name="notifications_feed">Novedades</string>
+    <string name="public_feed">Público</string>
+    <plurals name="items_load_success">
+        <item quantity="one">%d item cargado exitosamente</item>
+        <item quantity="many">%d items cargados exitosamente</item>
+        <item quantity="other">%d items cargados exitosamente</item>
+    </plurals>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nueva notificación</item>
+        <item quantity="many">%d nuevas notificaciones</item>
+        <item quantity="other">%d nuevas notificaciones</item>
+    </plurals>
+    <string name="upload_next_step">Siguiente paso</string>
+    <string name="add_details">Añadir algunos detalles</string>
+    <string name="from_other_domain">de %1$s</string>
+    <string name="video_not_supported">El servidor que estás utilizando no cuenta con soporte para subir videos, quizás no te sea posible subir los videos incluidos en esta publicación</string>
+    <string name="post_preview">Vista previa de la publicación</string>
+    <string name="post_is_video">Esta publicación es un vídeo</string>
+    <string name="collection_title">Colección de %1$s</string>
+    <string name="bookmark">Marcar</string>
+    <string name="unbookmark">Desmarcar</string>
+    <string name="redraft">Editar</string>
+    <string name="redraft_dialog_cancel">Si cancelas la edición, la publicación original no permanecerá en tu cuenta. ¿Continuas sin querer publicarla\?</string>
+    <string name="redraft_post_failed_error">No se pudo editar la publicación, error %1$d</string>
+    <string name="redraft_post_failed_io_except">No se pudo editar la publicación, ¿has comprobado tu conexión\?</string>
+    <string name="bookmark_post_failed_io_except">No se pudo marcar/desmarcar la publicación, ¿tienes conexión\?</string>
+    <string name="play_video">Reproducir vídeo</string>
+    <string name="new_post_shortcut_long">Crear nueva publicación</string>
+    <string name="new_post_shortcut_short">Nueva publicación</string>
+    <string name="follow_request">%1$s quiere seguirte</string>
+    <string name="status_notification">%1$s creó una publicación</string>
+    <string name="accentColorTitle">Color de acento</string>
+    <string name="accentColorSummary">Escoge un color de acento</string>
+    <string name="color_choice_button">Elegir este color de acento</string>
+    <string name="color_chosen">Color de acento elegido</string>
+    <string name="profile_error">No se pudo cargar el perfil</string>
+    <string name="description_template_summary">Añadir a la descripción de nuevas publicaciones esto</string>
+    <string name="description_template">Plantilla de descripción</string>
+    <string name="explore_accounts">Explora cuentas populares en esta instancia</string>
+    <string name="popular_accounts">Cuentas Populares</string>
+    <string name="trending_hashtags">Etiquetas Actuales</string>
+    <string name="daily_trending">Ver publicaciones diarias populares</string>
+    <string name="trending_posts">Publicaciones Populares</string>
+    <string name="explore_posts">Explora publicaciones diarias al azar</string>
+    <string name="grid_view">Vista de cuadrícula</string>
+    <string name="feed_view">Vista de lista</string>
+    <string name="bookmarks">Marcadores</string>
+    <string name="delete_collection">Borrar colección</string>
+    <string name="collection_add_post">Añadir publicación</string>
+    <string name="collection_remove_post">Eliminar publicación</string>
+    <string name="add_to_collection">Escoge una publicación para añadirla</string>
+    <string name="delete_from_collection">Escoge una publicación para eliminarla</string>
+    <string name="added_post_to_collection">Publicación añadida a la colección</string>
+    <string name="error_add_post_to_collection">Fallo al añadir la publicación a la colección</string>
+    <string name="removed_post_from_collection">Publicación eliminada de la colección</string>
+    <string name="save">Guardar</string>
+    <string name="use_dynamic_color">Usa el color de tu sistema</string>
+    <string name="more_profile_settings">Más ajustes del perfil</string>
+    <string name="private_account">Cuenta privada</string>
+    <string name="your_bio">Tu biografía</string>
+    <string name="your_name">Tu nombre</string>
+    <string name="profile_save_changes">No has guardado los cambios. ¿Quieres salir\?</string>
+    <string name="saving_profile">Guardando tu perfil</string>
+    <string name="profile_saved">¡Cambios guardados!</string>
+    <string name="change_profile_picture">Cambiar tu foto de perfil</string>
+    <string name="contains_nsfw">Contiene multimedia sensible (NSFW)</string>
+    <string name="switch_accounts">Cambiar cuentas</string>
 </resources>

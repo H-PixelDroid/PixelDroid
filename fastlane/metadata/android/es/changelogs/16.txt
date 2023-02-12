@@ -1,0 +1,4 @@
+* Añadidas reglas gson proguard para arreglar los errores en instancias de Mastodon
+* Añadidos colores de tema con 4 opciones diferentes
+* Ahora con Material 3
+* Mejorada la coherencia de la interfaz

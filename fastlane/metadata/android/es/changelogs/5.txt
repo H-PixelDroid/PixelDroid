@@ -1,0 +1,5 @@
+* Traducciones actualizadas
+* Es más sencillo ver la información de licencias
+* Arreglados los problemas de permisos en la pestaña de cámara
+* Arreglados problemas con enlaces
+* Arreglada la pestaña "Descubrir" (puede necesitar actualización de la instancia)

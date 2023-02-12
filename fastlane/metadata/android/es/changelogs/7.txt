@@ -1,0 +1,2 @@
+* Traducciones actualizadas
+* Se permite subir imágenes remotas (ej: Nextcloud)

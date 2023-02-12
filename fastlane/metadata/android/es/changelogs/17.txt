@@ -1,0 +1,6 @@
+* Mejoras en comentarios: Ahora muestran foto de perfil, se pueden ver respuestas, darles me gusta, etc.
+* Traducciones actualizadas: Gracias a los traductores :). Ayuda a traducir PixelDroid en weblate.pixeldroid.org
+* Seguridad: Ahora se verifican las dependencias y se rechazará cualquier conexión no segura
+* PixelDroid ahora utiliza un identificador de usuario propio en vez de la librería OkHttp.
+* Mejoras en el código
+* Arreglado el problema para guardar imágenes
