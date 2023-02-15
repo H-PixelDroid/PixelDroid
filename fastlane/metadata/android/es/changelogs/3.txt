@@ -1,0 +1,7 @@
+* Idioma añadido (Malayalam)
+
+* Solución de algunas respuestas erróneas de la API
+
+* Dependencias actualizadas
+
+* Traducciones actualizadas

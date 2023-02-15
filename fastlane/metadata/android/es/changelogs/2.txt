@@ -1,0 +1,7 @@
+* Traducciones actualizadas: Nuevas frases y reformulado de otras. ¡Gracias a los traductores ❤️! Ve a weblate.pixeldroid.org para ayudar con la traducción de tu idioma.
+
+* #️⃣Soporte de etiquetas. Ahora puedes explorar etiquetas.
+
+* Pulsa la pestaña en la que te encuentres para ir hasta arriba. Ya no te dejarás el dedo para deslizar hasta arriba del todo :)
+
+* He intentado solucionar un error que hacía cerrarse a la app. ¡Gracias a todos por vuestros informes! ❤️

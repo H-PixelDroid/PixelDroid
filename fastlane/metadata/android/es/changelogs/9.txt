@@ -1,0 +1,3 @@
+* Solucionado error al mostrar la lista de licencias
+* Mejora sustancial en el comportamiento de la página de perfil
+* Dependencias actualizadas

@@ -1,0 +1,9 @@
+* Se eliminan los metadatos de las fotos antes de subirlas
+* Marcadores
+* Vista de cuadrícula o de lista en los perfiles
+* Configura una plantilla para tus descripciones
+* Punto en el icono de notificación si tienes nuevas notificaciones
+* Más opciones de edición de vídeo: recorte, cambiar velocidad y añadir estabilización
+* Soporte para colores dinámicos: puedes configurar PixelDroid para utilizar el color de tu fondo (Android 12 y superiores)
+* Corrección de errores
+* Traducciones actualizadas
