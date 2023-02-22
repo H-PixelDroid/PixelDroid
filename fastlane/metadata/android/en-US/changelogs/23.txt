@@ -1,0 +1,4 @@
+* Less aggressive warning messages if you disable camera or file permissions
+* Update translations
+* Fix video upload breaking
+* Improved error handling
