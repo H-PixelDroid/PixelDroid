@@ -189,7 +189,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
 
     //Dagger (dependency injection)
-    implementation 'com.google.dagger:dagger-android:2.44'
+    implementation 'com.google.dagger:dagger-android:2.45'
     implementation 'com.google.dagger:dagger-android-support:2.44'
     // if you use the support libraries
     kapt 'com.google.dagger:dagger-android-processor:2.44'
@@ -199,7 +199,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
@@ -239,7 +239,7 @@ dependencies {
 
     implementation 'me.relex:circleindicator:2.1.6'
 
-    implementation "com.mikepenz:aboutlibraries-core:10.5.2"
+    implementation 'com.mikepenz:aboutlibraries-core:10.6.0'
 
     /**
      * Not in release, so not mentioned in licenses list
