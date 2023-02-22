@@ -29,11 +29,12 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
@@ -216,6 +217,7 @@ class CameraFragment : BaseFragment() {
         ) {
             updateGalleryThumbnail()
         }
+        //TODO check if we can get rid of this filePermissionDialogLaunched check (& the variable)
         else if (!filePermissionDialogLaunched) {
             // Ask for external storage permission.
             updateGalleryThumbnailPermissionLauncher.launch(
@@ -268,10 +270,8 @@ class CameraFragment : BaseFragment() {
         ) { isGranted: Boolean ->
             if (isGranted) {
                 updateGalleryThumbnail()
-            } else if(!filePermissionDialogLaunched){
-                MaterialAlertDialogBuilder(requireContext())
-                    .setMessage(getString(R.string.no_storage_permission))
-                    .setPositiveButton(android.R.string.ok) { _, _ ->}.show()
+            } else {
+                //TODO should we show the user some message like we did until 75ae26fa4755530794267041de1038f3302ec306 ?
                 filePermissionDialogLaunched = true
             }
         }
@@ -349,11 +349,10 @@ class CameraFragment : BaseFragment() {
     private val bindCameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
+            binding.cameraPermissionErrorCard.isVisible = false
             bindCameraUseCases()
         } else {
-            MaterialAlertDialogBuilder(requireContext())
-                .setMessage(R.string.no_camera_permission)
-                .setPositiveButton(android.R.string.ok) { _, _ ->}.show()
+            binding.cameraPermissionErrorCard.isVisible = true
         }
     }
 
