@@ -9,7 +9,7 @@
     <string name="save_to_gallery">Gorde galerian…</string>
     <string name="logout">Saioa Itxi</string>
     <string name="whats_an_instance">Zer da instantzia bat\?</string>
-    <string name="post">bidali</string>
+    <string name="post">Bidali</string>
     <string name="description">Deskribapena…</string>
     <string name="mention_notification">%1$s erabiltzaileak aipatu zaitu</string>
     <string name="followed_notification">%1$s jarraitzen hasi zaizu</string>
@@ -90,11 +90,11 @@
     <string name="delete">Ezabatu</string>
     <string name="panda_pull_to_refresh_to_try_again">Panda hau ez dago pozik. Tira freskatzeko berriz saiatzeko.</string>
     <string name="something_went_wrong">Arazoren bat izan da…</string>
-    <string name="discover">AURKITU</string>
+    <string name="discover">Aurkitu</string>
     <string name="open_drawer_menu">Ireki menu lerrakorra</string>
     <string name="profile_picture">Profileko irudia</string>
     <string name="report_error">Ezin izan da salaketa bidali</string>
-    <string name="reported">Salatua {gmd_check_circle}</string>
+    <string name="reported">Argitalpena salatua</string>
     <string name="report_target">Salatu @%1$s erabiltzailearen argitalpena</string>
     <string name="optional_report_comment">Moderatzaile/administratzaileentzako hautazko mezua</string>
     <string name="share_link">Partekatu esteka</string>
@@ -190,4 +190,42 @@
     <string name="notifications_settings">Jakinarazpenen ezarpenak</string>
     <string name="notifications_settings_summary">Kudeatu ze jakinarazpen jaso nahi dituzun</string>
     <string name="login_notifications">Ezin izan dira azken jakinarazpenak eskuratu</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s eta %4$d besteak</string>
+    <string name="notification_summary_medium">%1$s, %2$s eta %3$s</string>
+    <string name="notification_summary_small">%1$s eta %2$s</string>
+    <string name="no_camera_permission">Kamerarako baimenik ez da eman, eman baimena ezarpenetan PixelDroidek kamera erabiltzea nahi baduzu</string>
+    <string name="no_storage_permission">Biltegiratzerako baimenik ez da eman, eman baimena ezarpenetan PixelDroidek miniatura erakustea nahi baduzu</string>
+    <string name="new_post_shortcut_long">Sortu argitalpen berria</string>
+    <string name="new_post_shortcut_short">Argitalpen berria</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">Jakinarazpen berri %d</item>
+        <item quantity="other">%d jakinarazpen berri</item>
+    </plurals>
+    <string name="encode_error">Errorea kodetzean</string>
+    <string name="encode_success">Kodeketa zuzena!</string>
+    <string name="encode_progress">%1$d%% kodeketa</string>
+    <string name="still_encoding">Bideo bat edo gehiago oraindik kodetzen daude. Itxaron amaitu arte igo ahal izateko</string>
+    <string name="redraft">Editatu</string>
+    <plurals name="items_load_success">
+        <item quantity="one">Elementu %d arrakastaz kargatu da</item>
+        <item quantity="other">%d elementu arrakastaz kargatu dira</item>
+    </plurals>
+    <string name="video_not_supported">Erabiltzen ari zaren zerbitzaria ez da bateragarria bideoen igoerekin, ezin duzu bidalketa honetan gehitutako bideoa igo</string>
+    <string name="play_video">Erreproduzitu bideoa</string>
+    <string name="follow_request">Zu jarraitzeko %1$s eskaera</string>
+    <string name="upload_next_step">Hurrengo urratsa</string>
+    <string name="add_details">Gehitu xehetasun batzuk</string>
+    <string name="new_collection_link_failed">Huts egitea bildumak sortzeko orria irekitzean</string>
+    <string name="collection_title">%1$s-(r)en bilduma</string>
+    <string name="bookmark">Markatu</string>
+    <string name="unbookmark">Marka kendu</string>
+    <string name="redraft_post_failed_error">Ezin izan da argitalpena editatu, %1$d errorea</string>
+    <string name="unknown_error_in_error">Errore ezezaguna, begiratu zerbitzaria erori den: %1$s</string>
+    <string name="post_is_video">Argitalpen hau bideo bat da</string>
+    <string name="redraft_dialog_launch">Argitalpen hau editatzeak argazkia eta bere deskribapena editatzea baimentzen dizu, baina orain dituen iruzkin eta jasotako atsegiteak ezabatuko ditu. Jarraitu\?</string>
+    <string name="redraft_dialog_cancel">Editatze hau uzten baduzu, jatorrizko argitalpena ez da gehiago zure kontuan egongo. Bidali gabe utzi\?</string>
+    <string name="redraft_post_failed_io_except">Ezin izan da argitalpena editatu, zure konexioa egiaztatu duzu\?</string>
+    <string name="bookmark_post_failed_error">Ezin izan da argitalpena markatu edo honi marka kendu, %1$d errorea</string>
+    <string name="bookmark_post_failed_io_except">Ezin izan da argitalpena markatu edo honi marka kendu, zure konexioa egiaztatu duzu\?</string>
+    <string name="analyzing_stabilization">%1$d%% egonkortasun-analisia</string>
 </resources>
