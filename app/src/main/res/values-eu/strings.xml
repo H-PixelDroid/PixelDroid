@@ -234,4 +234,13 @@
     <string name="notifications_feed">Eguneraketak</string>
     <string name="public_feed">Publikoa</string>
     <string name="status_notification">%1$s-(e)k argitalpena bidali du</string>
+    <string name="accentColorTitle">Kolore-ñabardurak</string>
+    <string name="accentColorSummary">Aukeratu kolore-ñabardura bat</string>
+    <string name="color_choice_button">Aukeratu kolore-ñabardura hau</string>
+    <string name="color_chosen">Aukeratutako kolore-ñabardura</string>
+    <string name="profile_error">Ezin izan da profila kargatu</string>
+    <string name="from_other_domain">%1$s-(e)koa</string>
+    <string name="add_images_error">Errorea irudiak gehitzean</string>
+    <string name="notification_thumbnail">Irudiaren miniatura argitalpenaren jakinarazpen hontan</string>
+    <string name="post_preview">Argitalpen baten aurreikuspena</string>
 </resources>
