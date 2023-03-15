@@ -195,7 +195,7 @@
     <string name="comment_notification_channel">Comentários</string>
     <string name="other_notification_channel">Outro</string>
     <string name="mention_notification_channel">Menções</string>
-    <string name="comment_notification"></string>
+    <string name="comment_notification"/>
     <string name="notification_summary_small">%1$s e %2$s</string>
     <plurals name="notification_title_summary">
         <item quantity="one">%d nova notificação</item>
@@ -206,4 +206,5 @@
     <string name="upload_next_step">Próximo passo</string>
     <string name="add_details">Adicionar alguns detalhes</string>
     <string name="play_video">Tocar vídeo</string>
+    <string name="followed_notification_channel">Novos seguidores</string>
 </resources>
