@@ -25,7 +25,7 @@
     <string name="edit">EDITAR</string>
     <string name="logout">Sair</string>
     <string name="whats_an_instance">O que é uma instância\?</string>
-    <string name="post">publicar</string>
+    <string name="post">Publicar</string>
     <string name="description">Descrição…</string>
     <string name="liked_notification">%1$s curtiu sua postagem</string>
     <string name="shared_notification">%1$s compartilhou sua postagem</string>
@@ -39,7 +39,7 @@
     <string name="app_name">PixelDroid</string>
     <string name="help_translate">Ajude a traduzir o PixelDroid para o seu idioma:</string>
     <string name="delete">Excluir</string>
-    <string name="discover">DESCOBRIR</string>
+    <string name="discover">Descobrir</string>
     <string name="share_link">Compartilhar link</string>
     <string name="report">Denunciar</string>
     <string name="status_more_options">Mais opções</string>
@@ -104,7 +104,7 @@
     <string name="instance_not_pixelfed_warning">Esta não parece ser uma instância Pixelfed, então o aplicativo pode quebrar de forma inesperada.</string>
     <string name="api_not_enabled_dialog">A API não está ativada nesta instância. Contate o administrador para solicitar a ativação.</string>
     <string name="instance_not_pixelfed_cancel">Cancelar entrada</string>
-    <string name="reported">Denunciado {gmd_check_circle}</string>
+    <string name="reported">Publicação denunciada</string>
     <string name="report_target">Denunciar publicação de @%1$s</string>
     <string name="report_error">Não foi possível enviar a denúncia</string>
     <string name="optional_report_comment">Mensagem opcional para moderadores/administradores</string>
@@ -191,4 +191,19 @@
     <string name="search_discover_feed">Buscar</string>
     <string name="status_notification">%1$s criou uma publicação</string>
     <string name="follow_request">%1$s pediu para te seguir</string>
+    <string name="liked_notification_channel">Curtidas</string>
+    <string name="comment_notification_channel">Comentários</string>
+    <string name="other_notification_channel">Outro</string>
+    <string name="mention_notification_channel">Menções</string>
+    <string name="comment_notification"></string>
+    <string name="notification_summary_small">%1$s e %2$s</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nova notificação</item>
+        <item quantity="many">%d novas notificações</item>
+        <item quantity="other">%d nova notificação</item>
+    </plurals>
+    <string name="post_is_video">Esta publicação é um vídeo</string>
+    <string name="upload_next_step">Próximo passo</string>
+    <string name="add_details">Adicionar alguns detalhes</string>
+    <string name="play_video">Tocar vídeo</string>
 </resources>

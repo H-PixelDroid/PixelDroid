@@ -144,7 +144,7 @@
     <string name="share_link">Partilhar Link</string>
     <string name="reported">Publicação denunciada</string>
     <string name="profile_picture">Imagem de perfil</string>
-    <string name="discover">DESCOBRIR</string>
+    <string name="discover">Descobrir</string>
     <string name="something_went_wrong">Algo correu mal…</string>
     <string name="panda_pull_to_refresh_to_try_again">Este panda não está contente. Puxe para atualizar para tentar novamente.</string>
     <string name="delete_dialog">Eliminar esta publicação\?</string>
@@ -217,4 +217,8 @@
     <string name="media_upload_failed">Falhou o envio da media, tente novamente ou verifique a sua conectividade</string>
     <string name="delete_post_failed_io_except">Não foi possível eliminar a publicação, verifique a conectividade\?</string>
     <string name="total_exceeds_album_limit">Ultrapassou o limite de imagens que o seu servidor permite (%1$s). As imagens para além do limite serão ignoradas.</string>
+    <string name="more_profile_settings">Mais configurações de perfil</string>
+    <string name="upload_next_step">Próximo passo</string>
+    <string name="add_details">Adicionar alguns detalhes</string>
+    <string name="change_profile_picture">Trocar sua foto de perfil</string>
 </resources>
