@@ -207,4 +207,6 @@
     <string name="add_details">Adicionar alguns detalhes</string>
     <string name="play_video">Tocar vídeo</string>
     <string name="followed_notification_channel">Novos seguidores</string>
+    <string name="other_notification">Notificação de %1$s</string>
+    <string name="collection_title">Coleção de %1$s</string>
 </resources>
