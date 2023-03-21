@@ -32,7 +32,6 @@ class CameraLifecycleOwner : LifecycleOwner {
     fun stop() {
         lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
-    override fun getLifecycle(): Lifecycle {
-        return lifecycleRegistry
-    }
+    override val lifecycle: Lifecycle
+        get() = lifecycleRegistry
 }
