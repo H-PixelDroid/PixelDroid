@@ -73,6 +73,7 @@ debugTests:
 
 .connected-template: &connected-template
   extends: .base
+  interruptible: true
   allow_failure: true
   image: briar/ci-image-android-emulator:latest
   stage: test
