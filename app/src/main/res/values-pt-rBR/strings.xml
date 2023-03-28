@@ -212,4 +212,12 @@
     <string name="poll_notification_channel">Enquetes</string>
     <string name="notification_summary_large">%1$s, %2$s, %3$s e %4$d outros</string>
     <string name="profile_error">Não foi possível carregar o perfil</string>
+    <string name="popular_accounts">Contas populares</string>
+    <string name="bookmark">Favoritar</string>
+    <string name="unbookmark">Desfavoritar</string>
+    <string name="trending_hashtags">Hashtags em alta</string>
+    <string name="daily_trending">Veja publicações que estão em alta</string>
+    <string name="trending_posts">Posts em alta</string>
+    <string name="explore_accounts">Descubra contas populares nesta instância</string>
+    <string name="explore_hashtags">Descubra hashtags em alta nesta instância</string>
 </resources>
