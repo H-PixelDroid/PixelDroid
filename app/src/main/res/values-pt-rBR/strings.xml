@@ -195,7 +195,7 @@
     <string name="comment_notification_channel">Comentários</string>
     <string name="other_notification_channel">Outro</string>
     <string name="mention_notification_channel">Menções</string>
-    <string name="comment_notification"/>
+    <string name="comment_notification">%1$s comentou na sua publicação</string>
     <string name="notification_summary_small">%1$s e %2$s</string>
     <plurals name="notification_title_summary">
         <item quantity="one">%d nova notificação</item>
@@ -220,4 +220,6 @@
     <string name="trending_posts">Posts em alta</string>
     <string name="explore_accounts">Descubra contas populares nesta instância</string>
     <string name="explore_hashtags">Descubra hashtags em alta nesta instância</string>
+    <string name="shared_notification_channel">Compartilhamentos</string>
+    <string name="notification_summary_medium">%1$s, %2$s, e %3$s</string>
 </resources>
