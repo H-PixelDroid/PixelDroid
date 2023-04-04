@@ -1,0 +1,4 @@
+* Mensaxes de aviso menos agresivos se están desactivados os permisos de cámara e ficheiros
+* Actualizadas as traducións
+* Arranxado o problema coa subida de vídeo
+* Mellora na xestión dos erros
