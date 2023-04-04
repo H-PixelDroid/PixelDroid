@@ -1,0 +1,4 @@
+- Eliminar e rescribir publicacións existentes
+- Ver e editar as Coleccións propias
+- A creación da publicación faise en dous pasos, con soporte para: contido sensible NSFW, cambio de conta
+- Outros cambios e melloras :)
