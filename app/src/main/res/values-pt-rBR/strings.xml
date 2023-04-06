@@ -222,4 +222,21 @@
     <string name="explore_hashtags">Descubra hashtags em alta nesta instância</string>
     <string name="shared_notification_channel">Compartilhamentos</string>
     <string name="notification_summary_medium">%1$s, %2$s, e %3$s</string>
+    <plurals name="items_load_success">
+        <item quantity="one">%d item carregado com sucesso</item>
+        <item quantity="many">%d itens carregado com sucesso</item>
+        <item quantity="other">%d itens carregado com sucesso</item>
+    </plurals>
+    <string name="change_profile_picture">Mudar sua foto de perfil</string>
+    <string name="more_profile_settings">Mais configurações de perfil</string>
+    <string name="notifications_settings">Configurações de notificação</string>
+    <string name="bookmarks">Favoritos</string>
+    <string name="private_account">Conta Privada</string>
+    <string name="your_bio">Sua bio</string>
+    <string name="your_name">Seu nome</string>
+    <string name="profile_saved">Mudanças salvas!</string>
+    <string name="save">Salvar</string>
+    <string name="from_other_domain">de %1$s</string>
+    <string name="contains_nsfw">Contém conteúdo NSFW</string>
+    <string name="switch_accounts">Trocar contas</string>
 </resources>
