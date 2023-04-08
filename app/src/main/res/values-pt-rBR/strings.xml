@@ -239,4 +239,5 @@
     <string name="from_other_domain">de %1$s</string>
     <string name="contains_nsfw">Contém conteúdo NSFW</string>
     <string name="switch_accounts">Trocar contas</string>
+    <string name="unknown_error_in_error">Erro desconhecido, verifique se o servidor está fora do ar: %1$s</string>
 </resources>
