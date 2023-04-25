@@ -274,4 +274,15 @@
     <string name="analyzing_stabilization">تجزیه برای پایدارسازی %1$d٪</string>
     <string name="description_template_summary">پر کردن شرح فرسته‌های جدید با این</string>
     <string name="redraft_post_failed_error">نتوانست فرسته را بازپیش‌نویس کن. خطای %1$d</string>
+    <string name="still_encoding">یک یا چند ویدیو هنوز در حال رمزگذاری هستند. قبل از بارگذاری، منتظر پایان آن‌ها باشید</string>
+    <string name="video_not_supported">کارسازی که استفاده می‌کنید، بارگذاری ویدیو را پشتیبانی نمی‌کند، شما ممکن است نتوانید ویدیوهای موجود در این فرسته را بارگذاری کنید</string>
+    <string name="redraft_dialog_launch">پیش‌نویس کردن دوبارهٔ این فرسته به شما امکان می‌دهد تا عکس و توضیحاتش را ویرایش کنید، اما همهٔ نظرات و پسندهای فعلی حذف خواهند شد. ادامه می‌دهید؟</string>
+    <string name="redraft_dialog_cancel">اگر این پیش‌نویسی مجدد را لغو کنید، فرستهٔ اصلی دیگر در حساب شما وجود نخواهد داشت. بدون انتشار مجدد ادامه می‌دهید؟</string>
+    <string name="redraft_post_failed_io_except">پیش‌نویسی مجدد این فرسته، ناموفق بود، اتصال‌تان برقرار است؟</string>
+    <string name="bookmark_post_failed_error">نشان کردن (یا حذف نشان) فرسته، ناموفق بود، خطای %1$d</string>
+    <string name="bookmark_post_failed_io_except">نشان کردن (یا حذف نشان) فرسته، ناموفق بود، اتصال‌تان برقرار است؟</string>
+    <string name="unknown_error_in_error">خطای ناشناخته، روشن بودن کارساز را بررسی کنید: %1$s</string>
+    <string name="delete_collection_warning">برای پاک کردن این مجموعه اطمینان دارید؟</string>
+    <string name="private_account_explanation">وقتی حساب شما خصوصی است، تنها افرادی که توسط شما تأیید شده‌اند می‌توانند عکس‌ها و ویدیوهای شما را در پیکسل‌فد ببینند. دنبال‌کنندگان فعلی شما تحت تأثیر قرار نخواهند گرفت.</string>
+    <string name="profile_save_changes">تغییرات‌تان را ذخیره نکرده‌اید. خارج می‌شوید؟</string>
 </resources>
