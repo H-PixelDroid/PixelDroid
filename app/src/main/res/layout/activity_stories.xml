@@ -6,16 +6,59 @@
     android:background="@color/black"
     android:layout_height="match_parent">
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/storyErrorCard"
+        style="?attr/materialCardViewElevatedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:visibility="invisible"
+        app:cardBackgroundColor="?attr/colorSecondaryContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="48dp"
+            android:layout_marginEnd="8dp">
+
+            <ImageView
+                android:id="@+id/storyErrorIcon"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:src="@drawable/error"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?attr/colorOnSecondaryContainer" />
+
+            <TextView
+                android:id="@+id/storyErrorText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/storyErrorIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/storyErrorIcon"
+                app:layout_constraintTop_toTopOf="@id/storyErrorIcon"
+                tools:text="Something is wrong with stories" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <ImageView
         android:id="@+id/storyImage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:contentDescription="@string/story_image"
+        tools:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progressBarStory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressBarStory"
         tools:srcCompat="@tools:sample/backgrounds/scenic[10]" />
 
     <ImageButton
@@ -72,8 +115,23 @@
         app:layout_constraintBottom_toBottomOf="@+id/storyAuthorProfilePicture"
         app:layout_constraintStart_toEndOf="@+id/storyAuthor"
         app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
-        app:layout_constraintVertical_bias="0.517"
         tools:text="48m" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/storyReplyField"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:hint="Reply to PixelDroid"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/ic_send_blue"
+        app:endIconContentDescription="TODO">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -13,7 +15,9 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityStoriesBinding
 import org.pixeldroid.app.posts.setTextViewFromISO8601
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
@@ -42,6 +46,23 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
                     binding.pause.isSelected = uiState.paused
 
                     uiState.age?.let { setTextViewFromISO8601(it, binding.storyAge, false) }
+
+                    if (uiState.errorMessage != null) {
+                        binding.storyErrorText.text = uiState.errorMessage
+                        binding.storyErrorCard.isVisible = true
+                    } else binding.storyErrorCard.isVisible = false
+
+                    if (uiState.snackBar != null) {
+                        Snackbar.make(
+                            binding.root, uiState.snackBar,
+                            Snackbar.LENGTH_SHORT
+                        ).setAnchorView(binding.storyReplyField).show()
+                        model.shownSnackbar()
+                    }
+
+                    if (uiState.username != null) {
+                        binding.storyReplyField.hint = getString(R.string.replyToStory).format(uiState.username)
+                    } else binding.storyReplyField.hint = null
 
                     uiState.profilePicture?.let {
                         Glide.with(binding.storyAuthorProfilePicture)
@@ -79,6 +100,22 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
                 }
             }
         }
+        binding.storyReplyField.editText?.doAfterTextChanged {
+            it?.let { text ->
+                val string = text.toString()
+                if(string != model.uiState.value.reply) model.replyChanged(string)
+            }
+        }
+
+        binding.storyReplyField.setEndIconOnClickListener {
+            binding.storyReplyField.editText?.text?.let { text ->
+                model.sendReply(text)
+            }
+        }
+
+        binding.storyErrorCard.setOnClickListener{
+            model.dismissError()
+        }
 
         model.count.observe(this) { state ->
             // Render state in UI
@@ -96,11 +133,7 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
         binding.pause.setOnClickListener {
                 //Set the button's appearance
                 it.isSelected = !it.isSelected
-                if (it.isSelected) {
-                    //Handle selected state change
-                } else {
-                    //Handle de-select state change
-                }
+                model.pause()
             }
 
         binding.storyImage.setOnClickListener {

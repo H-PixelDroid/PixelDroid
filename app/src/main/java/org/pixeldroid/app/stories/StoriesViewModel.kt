@@ -2,16 +2,19 @@ package org.pixeldroid.app.stories
 
 import android.app.Application
 import android.os.CountDownTimer
+import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.R
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.StoryCarousel
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
@@ -27,6 +30,8 @@ data class StoriesUiState(
     val durationList: List<Int> = emptyList(),
     val paused: Boolean = false,
     val errorMessage: String? = null,
+    val snackBar: String? = null,
+    val reply: String = ""
 )
 
 class StoriesViewModel(
@@ -132,6 +137,44 @@ class StoriesViewModel(
         }
         _uiState.update { currentUiState ->
             currentUiState.copy(paused = !currentUiState.paused)
+        }
+    }
+
+    fun sendReply(text: Editable) {
+        viewModelScope.launch {
+            try {
+                val api = apiHolder.api ?: apiHolder.setToCurrentUser()
+                //TODO don't just take the first here, choose from activity input somehow?
+                val id = carousel?.nodes?.firstOrNull()?.nodes?.getOrNull(uiState.value.currentImage)?.id
+                id?.let { api.storyComment(it, text.toString()) }
+
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(snackBar = "Sent reply")
+                }
+            } catch (exception: Exception){
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(errorMessage = "Something went wrong sending reply")
+                }
+            }
+
+        }
+    }
+
+    fun replyChanged(text: String) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(reply = text)
+        }
+    }
+
+    fun dismissError() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(errorMessage = null)
+        }
+    }
+
+    fun shownSnackbar() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(snackBar = null)
         }
     }
 }

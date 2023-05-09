@@ -236,8 +236,14 @@ interface PixelfedAPI {
     ): StoryCarousel
 
     @POST("/api/v1.1/stories/seen")
-    suspend fun carouselSeen(
+    suspend fun storySeen(
         @Query("id") id: String //TODO figure out if this is the id of post or of user?
+    )
+
+    @POST("/api/v1.1/stories/comment")
+    suspend fun storyComment(
+        @Query("sid") sid: String,
+        @Query("caption") caption: String
     )
 
     @POST("/api/v1.1/stories/self-expire/{id}")

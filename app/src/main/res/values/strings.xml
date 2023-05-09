@@ -331,4 +331,5 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="switch_accounts">Switch accounts</string>
     <string name="summary_always_show_nsfw">NSFW/CW posts will not be blurred, and will be shown by default.</string>
     <string name="story_image">Story image</string>
+    <string name="replyToStory">Reply to %1$s</string>
 </resources>
