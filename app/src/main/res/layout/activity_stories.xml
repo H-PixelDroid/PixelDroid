@@ -54,11 +54,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:contentDescription="@string/story_image"
-        tools:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progressBarStory"
+        app:layout_constraintVertical_bias="1.0"
+        tools:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/backgrounds/scenic[10]" />
 
     <ImageButton
@@ -79,6 +81,7 @@
         android:id="@+id/progressBarStory"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:progress="0"
+        tools:progress="56"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -132,6 +135,46 @@
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/carouselProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/pause"
+        app:layout_constraintEnd_toStartOf="@+id/pause"
+        app:layout_constraintTop_toTopOf="@+id/pause"
+        tools:text="2/3" />
+
+    <View
+        android:id="@+id/viewRight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/viewMiddle"
+        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
+        app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
+
+
+    <View
+        android:id="@+id/viewMiddle"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toStartOf="@id/viewRight"
+        app:layout_constraintStart_toEndOf="@id/viewLeft"
+        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
+        app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
+
+
+    <View
+        android:id="@+id/viewLeft"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/viewMiddle"
+        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
+        app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

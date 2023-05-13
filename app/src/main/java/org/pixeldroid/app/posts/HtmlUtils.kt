@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.text.toSpanned
 import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account.Companion.openAccountFromId
@@ -106,7 +107,7 @@ fun parseHTMLText(
                         override fun onClick(widget: View) {
 
                             // Retrieve the account for the given profile
-                            lifecycleScope.launchWhenCreated {
+                            lifecycleScope.launch {
                                 val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                                 openAccountFromId(accountId, api, context)
                             }

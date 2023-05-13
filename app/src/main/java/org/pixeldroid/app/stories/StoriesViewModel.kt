@@ -3,13 +3,12 @@ package org.pixeldroid.app.stories
 import android.app.Application
 import android.os.CountDownTimer
 import android.text.Editable
-import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -29,40 +28,45 @@ data class StoriesUiState(
     val imageList: List<String> = emptyList(),
     val durationList: List<Int> = emptyList(),
     val paused: Boolean = false,
-    val errorMessage: String? = null,
-    val snackBar: String? = null,
+    @StringRes
+    val errorMessage: Int? = null,
+    @StringRes
+    val snackBar: Int? = null,
     val reply: String = ""
 )
 
 class StoriesViewModel(
     application: Application,
+    val carousel: StoryCarousel,
+    userId: String?
 ) : AndroidViewModel(application) {
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
 
-    private val _uiState: MutableStateFlow<StoriesUiState> = MutableStateFlow(StoriesUiState())
+    private var currentAccount = carousel.nodes?.firstOrNull { it?.user?.id == userId }
+
+    private val _uiState: MutableStateFlow<StoriesUiState> = MutableStateFlow(
+        newUiStateFromCurrentAccount()
+    )
 
     val uiState: StateFlow<StoriesUiState> = _uiState
 
-    var carousel: StoryCarousel? = null
-
-    val count = MutableLiveData<Long>()
+    val count = MutableLiveData<Float>()
 
     private var timer: CountDownTimer? = null
 
     init {
         (application as PixelDroidApplication).getAppComponent().inject(this)
-        loadStories()
+        startTimerForCurrent()
     }
 
-    private fun setTimer(timerLength: Long) {
+    private fun setTimer(timerLength: Float) {
         count.value = timerLength
-        timer = object: CountDownTimer(timerLength * 1000, 500){
+        timer = object: CountDownTimer((timerLength * 1000).toLong(), 100){
 
             override fun onTick(millisUntilFinished: Long) {
-                count.value = millisUntilFinished / 1000
-                Log.e("Timer second", "${count.value}")
+                count.value = millisUntilFinished.toFloat() / 1000
             }
 
             override fun onFinish() {
@@ -71,61 +75,61 @@ class StoriesViewModel(
         }
     }
 
-    private fun goToNext(){
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                currentImage = currentUiState.currentImage + 1,
-                //TODO don't just take the first here, choose from activity input somehow?
-                age = carousel?.nodes?.firstOrNull()?.nodes?.getOrNull(currentUiState.currentImage + 1)?.created_at
-            )
+    private fun newUiStateFromCurrentAccount(): StoriesUiState = StoriesUiState(
+        profilePicture = currentAccount?.user?.avatar,
+        age = currentAccount?.nodes?.getOrNull(0)?.created_at,
+        username = currentAccount?.user?.username, //TODO check if not username_acct, think about falling back on other option?
+        errorMessage = null,
+        currentImage = 0,
+        imageList = currentAccount?.nodes?.mapNotNull { it?.src } ?: emptyList(),
+        durationList = currentAccount?.nodes?.mapNotNull { it?.duration } ?: emptyList()
+    )
+
+    private fun goTo(index: Int){
+        if((0 until uiState.value.imageList.size).contains(index)) {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    currentImage = index,
+                    age = currentAccount?.nodes?.getOrNull(index)?.created_at,
+                    paused = false
+                )
+            }
+        } else {
+            val currentUserId = currentAccount?.user?.id
+            val currentAccountIndex = carousel.nodes?.indexOfFirst { it?.user?.id == currentUserId } ?: return
+            currentAccount = when (index) {
+                uiState.value.imageList.size -> {
+                    // Go to next user
+                    if(currentAccountIndex + 1 >= carousel.nodes.size) return
+                    carousel.nodes.getOrNull(currentAccountIndex + 1)
+
+                }
+
+                -1 -> {
+                    // Go to previous user
+                    if(currentAccountIndex <= 0) return
+                    carousel.nodes.getOrNull(currentAccountIndex - 1)
+                }
+                else -> return // Do nothing, given index does not make sense
+            }
+            _uiState.update { newUiStateFromCurrentAccount() }
         }
-        //TODO when done with viewing all stories, close activity and move to profile (?)
+
         timer?.cancel()
         startTimerForCurrent()
     }
 
-    private fun loadStories() {
-        viewModelScope.launch {
-            try{
-                val api = apiHolder.api ?: apiHolder.setToCurrentUser()
-                carousel = api.carousel()
+    fun goToNext() = goTo(uiState.value.currentImage + 1)
 
-                //TODO don't just take the first here, choose from activity input somehow?
-                val chosenAccount = carousel?.nodes?.firstOrNull()
-
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        profilePicture = chosenAccount?.user?.avatar,
-                        age = chosenAccount?.nodes?.getOrNull(0)?.created_at,
-                        username = chosenAccount?.user?.username, //TODO check if not username_acct, think about falling back on other option?
-                        errorMessage = null,
-                        currentImage = 0,
-                        imageList = chosenAccount?.nodes?.mapNotNull { it?.src } ?: emptyList(),
-                        durationList = chosenAccount?.nodes?.mapNotNull { it?.duration } ?: emptyList()
-                    )
-                }
-                startTimerForCurrent()
-            } catch (exception: Exception){
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(errorMessage = "Something went wrong fetching the carousel")
-                }
-            }
-        }
-    }
+    fun goToPrevious() = goTo(uiState.value.currentImage - 1)
 
     private fun startTimerForCurrent(){
         uiState.value.let {
             it.durationList.getOrNull(it.currentImage)?.toLong()?.let { time ->
-                setTimer(time)
+                setTimer(time.toFloat())
                 timer?.start()
             }
         }
-    }
-
-    fun imageLoaded() {/*
-        _uiState.update { currentUiState ->
-            currentUiState.copy(currentImage = currentUiState.currentImage + 1)
-        }*/
     }
 
     fun pause() {
@@ -144,16 +148,15 @@ class StoriesViewModel(
         viewModelScope.launch {
             try {
                 val api = apiHolder.api ?: apiHolder.setToCurrentUser()
-                //TODO don't just take the first here, choose from activity input somehow?
-                val id = carousel?.nodes?.firstOrNull()?.nodes?.getOrNull(uiState.value.currentImage)?.id
+                val id = currentAccount?.nodes?.getOrNull(uiState.value.currentImage)?.id
                 id?.let { api.storyComment(it, text.toString()) }
 
                 _uiState.update { currentUiState ->
-                    currentUiState.copy(snackBar = "Sent reply")
+                    currentUiState.copy(snackBar = R.string.sent_reply_story)
                 }
             } catch (exception: Exception){
                 _uiState.update { currentUiState ->
-                    currentUiState.copy(errorMessage = "Something went wrong sending reply")
+                    currentUiState.copy(errorMessage = R.string.story_reply_error)
                 }
             }
 
@@ -177,10 +180,17 @@ class StoriesViewModel(
             currentUiState.copy(snackBar = null)
         }
     }
+
+    fun currentProfileId(): String? = currentAccount?.user?.id
+
 }
 
-class StoriesViewModelFactory(val application: Application) : ViewModelProvider.Factory {
+class StoriesViewModelFactory(
+    val application: Application,
+    val carousel: StoryCarousel,
+    val userId: String?
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java).newInstance(application)
+        return modelClass.getConstructor(Application::class.java, StoryCarousel::class.java, String::class.java).newInstance(application, carousel, userId)
     }
 }

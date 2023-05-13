@@ -3,6 +3,9 @@ package org.pixeldroid.app.stories
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View.OnClickListener
+import android.view.View.OnTouchListener
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -21,9 +24,17 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityStoriesBinding
 import org.pixeldroid.app.posts.setTextViewFromISO8601
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.api.objects.Account
+import org.pixeldroid.app.utils.api.objects.StoryCarousel
 
 
 class StoriesActivity: BaseThemedWithoutBarActivity() {
+
+    companion object {
+        const val STORY_CAROUSEL = "LaunchStoryCarousel"
+        const val STORY_CAROUSEL_USER_ID = "LaunchStoryUserId"
+    }
+
 
     private lateinit var binding: ActivityStoriesBinding
 
@@ -32,11 +43,14 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val carousel = intent.getSerializableExtra(STORY_CAROUSEL) as StoryCarousel
+        val userId = intent.getStringExtra(STORY_CAROUSEL_USER_ID)
+
         binding = ActivityStoriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val _model: StoriesViewModel by viewModels {
-            StoriesViewModelFactory(application)
+            StoriesViewModelFactory(application, carousel, userId)
         }
         model = _model
 
@@ -48,7 +62,7 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
                     uiState.age?.let { setTextViewFromISO8601(it, binding.storyAge, false) }
 
                     if (uiState.errorMessage != null) {
-                        binding.storyErrorText.text = uiState.errorMessage
+                        binding.storyErrorText.setText(uiState.errorMessage)
                         binding.storyErrorCard.isVisible = true
                     } else binding.storyErrorCard.isVisible = false
 
@@ -73,6 +87,9 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
 
                     binding.storyAuthor.text = uiState.username
 
+                    binding.carouselProgress.text = getString(R.string.storyProgress)
+                            .format(uiState.currentImage + 1, uiState.imageList.size)
+
                     uiState.imageList.getOrNull(uiState.currentImage)?.let {
                         Glide.with(binding.storyImage)
                             .load(it)
@@ -91,7 +108,9 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
                                     dataSource: DataSource?,
                                     isFirstResource: Boolean,
                                 ): Boolean {
-                                    model.imageLoaded()
+                                        Glide.with(binding.storyImage)
+                                            .load(uiState.imageList.getOrNull(uiState.currentImage + 1))
+                                            .preload()
                                     return false
                                 }
                             })
@@ -100,6 +119,19 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
                 }
             }
         }
+
+        //Pause when clicked on text field
+        binding.storyReplyField.editText?.setOnFocusChangeListener { view, isFocused ->
+            if (view.isInTouchMode && isFocused) {
+                view.performClick()  // picks up first tap
+            }
+        }
+        binding.storyReplyField.editText?.setOnClickListener {
+            if (!model.uiState.value.paused) {
+                model.pause()
+            }
+        }
+
         binding.storyReplyField.editText?.doAfterTextChanged {
             it?.let { text ->
                 val string = text.toString()
@@ -134,10 +166,60 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
                 //Set the button's appearance
                 it.isSelected = !it.isSelected
                 model.pause()
+        }
+
+        val authorOnClickListener = OnClickListener {
+            if (!model.uiState.value.paused) {
+                model.pause()
+            }
+            model.currentProfileId()?.let {
+                lifecycleScope.launch {
+                    Account.openAccountFromId(
+                        it,
+                        apiHolder.api ?: apiHolder.setToCurrentUser(),
+                        this@StoriesActivity
+                    )
+                }
+            }
+        }
+        binding.storyAuthorProfilePicture.setOnClickListener(authorOnClickListener)
+        binding.storyAuthor.setOnClickListener(authorOnClickListener)
+
+        val onTouchListener = OnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> if (!model.uiState.value.paused) {
+                    model.pause()
+                }
+                MotionEvent.ACTION_UP -> if(event.eventTime - event.downTime < 500) {
+                    v.performClick()
+                    return@OnTouchListener false
+                } else model.pause()
             }
 
-        binding.storyImage.setOnClickListener {
-            model.pause()
+            true
+        }
+
+        binding.viewMiddle.setOnTouchListener{ v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN ->  model.pause()
+                MotionEvent.ACTION_UP -> if(event.eventTime - event.downTime < 500) {
+                    v.performClick()
+                    return@setOnTouchListener false
+                } else model.pause()
+            }
+
+            true
+        }
+        binding.viewLeft.setOnTouchListener(onTouchListener)
+        binding.viewRight.setOnTouchListener(onTouchListener)
+
+        //TODO implement hold to pause
+
+        binding.viewRight.setOnClickListener {
+            model.goToNext()
+        }
+        binding.viewLeft.setOnClickListener {
+            model.goToPrevious()
         }
     }
 }
