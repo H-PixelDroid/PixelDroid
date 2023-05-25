@@ -284,4 +284,5 @@
         <item quantity="one">%d Element erfolgreich geladen</item>
         <item quantity="other">%d Elemente erfolgreich geladen</item>
     </plurals>
+    <string name="unknown_error_in_error">Unbekannter Fehler, überprüfe, ob der Server offline ist: %1$s</string>
 </resources>

@@ -2,9 +2,9 @@ PixelDroid ist ein freier und quelloffener Android-Client für Pixelfed, die fö
 
 Stöbere durch Feeds und Profile, lade deine eigenen Beiträge hoch, entdecke die Beiträge anderer und tausche dich mit anderen im Fediverse aus.
 
-• Unterstützt mehrere Benutzerkonten
-• Lässt sich in dunklen und hellen Themen einstellen
-• Nutze Filter, schneide deine Bilder zu, und bearbeite Helligkeit/Kontrast/Sättigung
+• Unterstützung mehrerer Benutzerkonten
+• Dunkle und helle Themen
+• Nutze Filter, schneide Bilder zu, bearbeite Helligkeit/Kontrast/Sättigung
 • Beachtet die Konfiguration deines Pixelfed-Servers
 • 100% Freie und quelloffene Software. Keine proprietären Abhängigkeiten.
 
