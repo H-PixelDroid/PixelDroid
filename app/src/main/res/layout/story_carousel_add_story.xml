@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.carousel.MaskableFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/carousel_add_story"
+    android:layout_width="120dp"
+    android:layout_height="match_parent"
+    android:layout_marginStart="4dp"
+    tools:context="androidx.recyclerview.widget.RecyclerView"
+    android:layout_marginEnd="4dp"
+    android:background="?attr/colorSecondaryContainer"
+    android:foreground="?attr/selectableItemBackground"
+    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/carousel_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:contentDescription="@string/story_image"
+            android:scaleType="fitCenter"
+            android:src="@drawable/collection_add"
+            app:layout_constraintBottom_toTopOf="@id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnSecondaryContainer" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_story"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/carousel_image_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.carousel.MaskableFrameLayout>

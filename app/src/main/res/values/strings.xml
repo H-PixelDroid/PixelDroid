@@ -336,4 +336,5 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="story_reply_error">Something went wrong sending reply</string>
     <string name="error_fetch_story">Something went wrong fetching the carousel</string>
     <string name="sent_reply_story">Sent reply</string>
+    <string name="add_story">Add Story</string>
 </resources>

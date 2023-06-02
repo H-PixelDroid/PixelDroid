@@ -12,13 +12,14 @@ import androidx.paging.RemoteMediator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
 import org.pixeldroid.app.posts.StatusViewHolder
-import org.pixeldroid.app.posts.feeds.cachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
+import org.pixeldroid.app.posts.feeds.cachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.feeds.cachedFeeds.ViewModelFactory
+import org.pixeldroid.app.stories.StoryCarouselViewHolder
 import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
 import org.pixeldroid.app.utils.api.objects.Status
+import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
 import org.pixeldroid.app.utils.displayDimensionsInPx
 import kotlin.properties.Delegates
 
@@ -40,7 +41,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
 
         adapter = PostsAdapter(requireContext().displayDimensionsInPx())
 
-        home = requireArguments().get("home") as Boolean
+        home = requireArguments().getBoolean("home")
 
         @Suppress("UNCHECKED_CAST")
         if (home){
@@ -55,7 +56,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
@@ -78,17 +79,34 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
     ) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return StatusViewHolder.create(parent)
+            return if(viewType == R.layout.post_fragment){
+                StatusViewHolder.create(parent)
+            } else {
+                StoryCarouselViewHolder.create(parent)
+            }
         }
 
         override fun getItemViewType(position: Int): Int {
-            return R.layout.post_fragment
+            return if(home && position == 0) R.layout.story_carousel
+            else R.layout.post_fragment
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val uiModel = getItem(position) as Status?
-            uiModel?.let {
-                (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
+            if(home && position == 0){
+                holder.itemView.visibility = View.GONE
+                holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+                (holder as StoryCarouselViewHolder).bind(apiHolder, lifecycleScope, holder.itemView)
+            } else {
+                holder.itemView.visibility = View.VISIBLE
+                holder.itemView.layoutParams =
+                    RecyclerView.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+                val uiModel = getItem(if(home) position - 1 else position) as Status?
+                uiModel?.let {
+                    (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
+                }
             }
         }
     }

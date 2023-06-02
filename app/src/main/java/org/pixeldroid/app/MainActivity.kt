@@ -231,17 +231,12 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                 nameRes = R.string.logout
                 iconicsIcon = GoogleMaterial.Icon.gmd_close
             },
-            primaryDrawerItem {
-                nameRes = R.string.story_image
-                iconicsIcon = GoogleMaterial.Icon.gmd_auto_stories
-            },
         )
         binding.drawer.onDrawerItemClickListener = { v, drawerItem, position ->
             when (position){
                 1 -> launchActivity(ProfileActivity())
                 2 -> launchActivity(SettingsActivity())
                 3 -> logOut()
-                4 -> launchActivity(StoriesActivity())
             }
             false
         }
