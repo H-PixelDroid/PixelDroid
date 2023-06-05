@@ -23,6 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 
 /*
@@ -51,7 +52,9 @@ interface PixelfedAPI {
                 .client(
                     OkHttpClient().newBuilder().addNetworkInterceptor(headerInterceptor)
                         // Only do secure-ish TLS connections (no HTTP or very old SSL/TLS)
-                        .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS)).build()
+                        .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS))
+                        .readTimeout(20, TimeUnit.SECONDS)
+                        .build()
                 )
                 .build().create(PixelfedAPI::class.java)
         }
@@ -74,6 +77,7 @@ interface PixelfedAPI {
                     OkHttpClient().newBuilder().addNetworkInterceptor(headerInterceptor)
                             // Only do secure-ish TLS connections (no HTTP or very old SSL/TLS)
                         .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS))
+                        .readTimeout(20, TimeUnit.SECONDS)
                         .authenticator(TokenAuthenticator(user, db, pixelfedAPIHolder))
                         .addInterceptor {
                             it.request().newBuilder().run {

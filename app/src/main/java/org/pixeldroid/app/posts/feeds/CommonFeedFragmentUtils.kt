@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.gson.Gson
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -80,6 +81,11 @@ internal fun <T: Any> initAdapter(
             ?: loadState.append as? LoadState.Error
             ?: loadState.prepend as? LoadState.Error
             ?: loadState.refresh as? LoadState.Error
+
+        if(errorState?.error is CancellationException){
+            return@addLoadStateListener
+        }
+
         errorState?.let {
             val error: String = (it.error as? HttpException)?.response()?.errorBody()?.string()?.ifEmpty { null }?.let { s ->
                 try {
