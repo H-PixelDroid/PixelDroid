@@ -27,7 +27,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:localeConfig="@xml/locales_config"
-        android:theme="@style/AppTheme">
+        android:theme="@style/BaseAppTheme">
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
@@ -48,7 +48,7 @@
             android:name=".posts.MediaViewerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/BaseAppTheme.NoActionBar" />
         <activity android:name=".postCreation.camera.CameraActivity"/>
         <activity android:name=".postCreation.camera.CameraActivityShortcut"
             android:exported = "true"
@@ -68,7 +68,7 @@
             android:name=".postCreation.PostCreationActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/BaseAppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <action android:name="android.intent.action.SEND" />
@@ -125,7 +125,7 @@
             android:name=".LoginActivity"
             android:exported="true"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/BaseAppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
