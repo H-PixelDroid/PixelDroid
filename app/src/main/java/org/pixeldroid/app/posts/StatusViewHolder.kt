@@ -22,6 +22,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.viewbinding.ViewBinding
@@ -164,6 +165,9 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         binding: PostFragmentBinding,
         request: RequestBuilder<Drawable>,
     ) {
+        val alwaysShowNsfw =
+            PreferenceManager.getDefaultSharedPreferences(binding.root.context.applicationContext)
+                .getBoolean("always_show_nsfw", false)
 
         // Standard layout
         binding.postPager.visibility = View.VISIBLE
@@ -178,7 +182,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             binding.postIndicator.visibility = View.GONE
         }
 
-        if (status?.sensitive == true) {
+        if (status?.sensitive == true && !alwaysShowNsfw) {
             setupSensitiveLayout()
         } else {
             // GONE is the default, but have to set it again because of how RecyclerViews work
@@ -843,6 +847,10 @@ class AlbumViewPagerAdapter(
 
     override fun getItemCount() = media_attachments.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val alwaysShowNsfw =
+            PreferenceManager.getDefaultSharedPreferences(holder.binding.root.context)
+                .getBoolean("always_show_nsfw", false)
+
         media_attachments[position].apply {
             val video = type == Attachment.AttachmentType.video
             val blurhashBitMap = blurhash?.let {
@@ -853,7 +861,7 @@ class AlbumViewPagerAdapter(
                         meta?.original?.height
                 )
             }
-            if (sensitive == false) {
+            if (sensitive == false || alwaysShowNsfw) {
                 val imageUrl = if(video) preview_url else url
                 if(opened){
                     Glide.with(holder.binding.root)
