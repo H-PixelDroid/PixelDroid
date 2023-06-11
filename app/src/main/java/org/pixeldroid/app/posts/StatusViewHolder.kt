@@ -1,6 +1,7 @@
 package org.pixeldroid.app.posts
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
@@ -922,6 +923,7 @@ class AlbumViewPagerAdapter(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun uncensor(){
         sensitive = false
         notifyDataSetChanged()

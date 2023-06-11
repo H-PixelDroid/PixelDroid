@@ -1,9 +1,15 @@
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="BaseAppTheme" parent="Theme.Material3.Dark">
-        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">?attr/colorSecondaryContainer</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?attr/isLightTheme</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="o_mr1">true</item>
+        <item name="toolbarStyle">@style/Toolbar</item>
+        <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
+        <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
+
     </style>
 
     <style name="AppTheme2" parent="BaseAppTheme">
