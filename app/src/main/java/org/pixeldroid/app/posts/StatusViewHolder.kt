@@ -173,7 +173,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         binding.postPager.visibility = View.VISIBLE
 
         //Attach the given tabs to the view pager
-        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList(), status?.sensitive, false)
+        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList(), status?.sensitive, false, alwaysShowNsfw)
 
         if((status?.media_attachments?.size ?: 0) > 1) {
             binding.postIndicator.setViewPager(binding.postPager)
@@ -831,7 +831,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
 class AlbumViewPagerAdapter(
     private val media_attachments: List<Attachment>, private var sensitive: Boolean?,
-    private val opened: Boolean,
+    private val opened: Boolean, private val alwaysShowNsfw: Boolean,
 ) :
     RecyclerView.Adapter<AlbumViewPagerAdapter.ViewHolder>() {
 
@@ -847,10 +847,6 @@ class AlbumViewPagerAdapter(
 
     override fun getItemCount() = media_attachments.size
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val alwaysShowNsfw =
-            PreferenceManager.getDefaultSharedPreferences(holder.binding.root.context)
-                .getBoolean("always_show_nsfw", false)
-
         media_attachments[position].apply {
             val video = type == Attachment.AttachmentType.video
             val blurhashBitMap = blurhash?.let {

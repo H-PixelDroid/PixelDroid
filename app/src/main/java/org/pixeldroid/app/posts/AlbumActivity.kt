@@ -17,7 +17,9 @@ class AlbumActivity : BaseActivity() {
         val index = intent.getIntExtra("index", 0)
         binding.albumPager.adapter = AlbumViewPagerAdapter(mediaAttachments,
             sensitive = false,
-            opened = true
+            opened = true,
+            //In the activity, we assume we want to show everything
+            alwaysShowNsfw = true
         )
         binding.albumPager.currentItem = index
 
