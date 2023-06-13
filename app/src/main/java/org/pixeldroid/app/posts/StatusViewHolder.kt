@@ -22,6 +22,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.viewbinding.ViewBinding
@@ -164,12 +165,15 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         binding: PostFragmentBinding,
         request: RequestBuilder<Drawable>,
     ) {
+        val alwaysShowNsfw =
+            PreferenceManager.getDefaultSharedPreferences(binding.root.context.applicationContext)
+                .getBoolean("always_show_nsfw", false)
 
         // Standard layout
         binding.postPager.visibility = View.VISIBLE
 
         //Attach the given tabs to the view pager
-        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList(), status?.sensitive, false)
+        binding.postPager.adapter = AlbumViewPagerAdapter(status?.media_attachments ?: emptyList(), status?.sensitive, false, alwaysShowNsfw)
 
         if((status?.media_attachments?.size ?: 0) > 1) {
             binding.postIndicator.setViewPager(binding.postPager)
@@ -178,7 +182,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
             binding.postIndicator.visibility = View.GONE
         }
 
-        if (status?.sensitive == true) {
+        if (status?.sensitive == true && !alwaysShowNsfw) {
             setupSensitiveLayout()
         } else {
             // GONE is the default, but have to set it again because of how RecyclerViews work
@@ -827,7 +831,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
 class AlbumViewPagerAdapter(
     private val media_attachments: List<Attachment>, private var sensitive: Boolean?,
-    private val opened: Boolean,
+    private val opened: Boolean, private val alwaysShowNsfw: Boolean,
 ) :
     RecyclerView.Adapter<AlbumViewPagerAdapter.ViewHolder>() {
 
@@ -853,7 +857,7 @@ class AlbumViewPagerAdapter(
                         meta?.original?.height
                 )
             }
-            if (sensitive == false) {
+            if (sensitive == false || alwaysShowNsfw) {
                 val imageUrl = if(video) preview_url else url
                 if(opened){
                     Glide.with(holder.binding.root)
