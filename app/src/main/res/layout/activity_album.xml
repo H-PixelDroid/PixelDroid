@@ -17,6 +17,7 @@
     <me.relex.circleindicator.CircleIndicator3
         android:id="@+id/postIndicator"
         android:layout_width="wrap_content"
+        android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_height="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

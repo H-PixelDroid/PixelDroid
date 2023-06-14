@@ -78,7 +78,9 @@ class MainActivity : BaseThemedWithoutBarActivity() {
 
     @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        installSplashScreen().setOnExitAnimationListener {
+            it.remove()
+        }
 
         // Workaround for dynamic colors not applying due to splash screen?
         DynamicColors.applyToActivityIfAvailable(this)

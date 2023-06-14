@@ -2,7 +2,6 @@ package org.pixeldroid.app.posts
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import org.pixeldroid.app.databinding.ActivityAlbumBinding
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Attachment
@@ -33,11 +32,8 @@ class AlbumActivity : BaseActivity() {
             binding.postIndicator.visibility = View.GONE
         }
 
-
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setBackgroundDrawable(null)
-        window.statusBarColor = ContextCompat.getColor(this,android.R.color.transparent)
     }
 }
