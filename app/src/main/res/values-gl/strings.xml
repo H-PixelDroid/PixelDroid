@@ -285,4 +285,6 @@
     <string name="explore_hashtags">Descubre cancelos en voga nesta instancia</string>
     <string name="more_profile_settings">Máis axustes do perfil</string>
     <string name="private_account">Conta privada</string>
+    <string name="always_show_nsfw">Mostrar sempre o contido sensible</string>
+    <string name="summary_always_show_nsfw">As publicacións NSFW/CW non se difuminarán, por defecto serán visibles.</string>
 </resources>
