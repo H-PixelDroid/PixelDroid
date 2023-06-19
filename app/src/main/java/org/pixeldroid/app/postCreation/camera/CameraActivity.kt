@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
+import org.pixeldroid.app.postCreation.camera.CameraFragment.Companion.CAMERA_ACTIVITY
+import org.pixeldroid.app.postCreation.camera.CameraFragment.Companion.CAMERA_ACTIVITY_STORY
 import org.pixeldroid.app.utils.BaseThemedWithBarActivity
 
 
@@ -13,12 +15,17 @@ class CameraActivity : BaseThemedWithBarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.add_photo)
 
         val cameraFragment = CameraFragment()
 
+        val story: Boolean = intent.getBooleanExtra(CAMERA_ACTIVITY_STORY, false)
+
+        if(story) supportActionBar?.setTitle(R.string.add_story)
+        else supportActionBar?.setTitle(R.string.add_photo)
+
         val arguments = Bundle()
-        arguments.putBoolean("CameraActivity", true)
+        arguments.putBoolean(CAMERA_ACTIVITY, true)
+        arguments.putBoolean(CAMERA_ACTIVITY_STORY, story)
         cameraFragment.arguments = arguments
 
         supportFragmentManager.beginTransaction()

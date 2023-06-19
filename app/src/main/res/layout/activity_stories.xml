@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/black"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/storyErrorCard"
@@ -22,8 +22,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="48dp"
-            android:layout_marginEnd="8dp">
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp">
 
             <ImageView
                 android:id="@+id/storyErrorIcon"
@@ -65,39 +65,39 @@
 
     <ImageButton
         android:id="@+id/pause"
+        android:layout_marginEnd="12dp"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_margin="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/play_video"
+        android:contentDescription="@string/story_pause"
         android:src="@drawable/play_pause"
-        app:layout_constraintBottom_toBottomOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintBottom_toBottomOf="@+id/storyAuthor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintTop_toTopOf="@+id/carouselProgress"
         tools:visibility="visible" />
 
 
     <ProgressBar
         android:id="@+id/progressBarStory"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:progress="0"
-        tools:progress="56"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:progress="0"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:progress="56" />
 
     <ImageView
         android:id="@+id/storyAuthorProfilePicture"
-        android:layout_margin="12dp"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/profile_picture"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progressBarStory"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/profile_picture" />
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/storyAuthor"
@@ -105,7 +105,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/storyAuthorProfilePicture"
         app:layout_constraintStart_toEndOf="@+id/storyAuthorProfilePicture"
         app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
         tools:text="username" />
@@ -115,20 +114,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintBottom_toBottomOf="@+id/storyAuthor"
         app:layout_constraintStart_toEndOf="@+id/storyAuthor"
         app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
         tools:text="48m" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/storyReplyField"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:hint="Reply to PixelDroid"
-        app:endIconMode="custom"
+        app:endIconContentDescription="TODO"
         app:endIconDrawable="@drawable/ic_send_blue"
-        app:endIconContentDescription="TODO">
+        app:endIconMode="custom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:hint="Reply to PixelDroid">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -141,18 +140,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/pause"
+        app:layout_constraintBottom_toBottomOf="@+id/storyAuthor"
         app:layout_constraintEnd_toStartOf="@+id/pause"
-        app:layout_constraintTop_toTopOf="@+id/pause"
+        app:layout_constraintTop_toTopOf="@+id/storyAge"
         tools:text="2/3" />
 
     <View
         android:id="@+id/viewRight"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/viewMiddle"
-        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
         app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
 
 
@@ -160,9 +159,9 @@
         android:id="@+id/viewMiddle"
         android:layout_width="80dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
         app:layout_constraintEnd_toStartOf="@id/viewRight"
         app:layout_constraintStart_toEndOf="@id/viewLeft"
-        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
         app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
 
 
@@ -170,11 +169,10 @@
         android:id="@+id/viewLeft"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/viewMiddle"
         app:layout_constraintBottom_toTopOf="@id/storyReplyField"
+        app:layout_constraintEnd_toStartOf="@id/viewMiddle"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

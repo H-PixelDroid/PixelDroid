@@ -13,6 +13,8 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.StoryCarouselAddStoryBinding
 import org.pixeldroid.app.databinding.StoryCarouselBinding
 import org.pixeldroid.app.databinding.StoryCarouselItemBinding
+import org.pixeldroid.app.postCreation.camera.CameraActivity
+import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.postCreation.carousel.dpToPx
 import org.pixeldroid.app.utils.api.objects.CarouselUserContainer
 import org.pixeldroid.app.utils.api.objects.StoryCarousel
@@ -103,7 +105,9 @@ class StoriesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
         } else {
             holder.itemView.setOnClickListener {
-                //TODO support for adding a story
+                val intent = Intent(holder.itemView.context, CameraActivity::class.java)
+                intent.putExtra(CameraFragment.CAMERA_ACTIVITY_STORY, true)
+                holder.itemView.context.startActivity(intent)
             }
         }
     }

@@ -23,6 +23,7 @@
     <style name="AppTheme.PopupOverlay" parent="Theme.Material3.Light" />
 
     <style name="AppTheme.ActionBar.Transparent" parent="Theme.Material3.Dark">
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">always</item>
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="colorPrimaryVariant">@android:color/transparent</item>

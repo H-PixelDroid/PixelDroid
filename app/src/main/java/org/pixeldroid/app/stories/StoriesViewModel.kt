@@ -4,11 +4,14 @@ import android.app.Application
 import android.os.CountDownTimer
 import android.text.Editable
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -119,7 +122,20 @@ class StoriesViewModel(
         startTimerForCurrent()
     }
 
-    fun goToNext() = goTo(uiState.value.currentImage + 1)
+    fun goToNext() {
+        viewModelScope.launch {
+            try {
+                val api = apiHolder.api ?: apiHolder.setToCurrentUser()
+                currentStoryId()?.let { api.storySeen(it) }
+            } catch (exception: Exception){
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(errorMessage = R.string.story_could_not_see)
+                }
+            }
+
+        }
+        goTo(uiState.value.currentImage + 1)
+    }
 
     fun goToPrevious() = goTo(uiState.value.currentImage - 1)
 
@@ -148,8 +164,7 @@ class StoriesViewModel(
         viewModelScope.launch {
             try {
                 val api = apiHolder.api ?: apiHolder.setToCurrentUser()
-                val id = currentAccount?.nodes?.getOrNull(uiState.value.currentImage)?.id
-                id?.let { api.storyComment(it, text.toString()) }
+                currentStoryId()?.let { api.storyComment(it, text.toString()) }
 
                 _uiState.update { currentUiState ->
                     currentUiState.copy(snackBar = R.string.sent_reply_story)
@@ -162,6 +177,8 @@ class StoriesViewModel(
 
         }
     }
+
+    private fun currentStoryId(): String? = currentAccount?.nodes?.getOrNull(uiState.value.currentImage)?.id
 
     fun replyChanged(text: String) {
         _uiState.update { currentUiState ->

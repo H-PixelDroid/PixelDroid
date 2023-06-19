@@ -70,6 +70,7 @@ class CameraFragment : BaseFragment() {
     private var camera: Camera? = null
 
     private var inActivity by Delegates.notNull<Boolean>()
+    private var addToStory by Delegates.notNull<Boolean>()
 
     private var filePermissionDialogLaunched: Boolean = false
 
@@ -89,7 +90,8 @@ class CameraFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        inActivity = arguments?.getBoolean("CameraActivity") ?: false
+        inActivity = arguments?.getBoolean(CAMERA_ACTIVITY) ?: false
+        addToStory = arguments?.getBoolean(CAMERA_ACTIVITY_STORY) ?: false
 
         binding = FragmentCameraBinding.inflate(layoutInflater)
 
@@ -464,15 +466,20 @@ class CameraFragment : BaseFragment() {
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
-        if(inActivity){
+        if(inActivity && !addToStory){
             requireActivity().setResult(Activity.RESULT_OK, intent)
             requireActivity().finish()
         } else {
+            if(addToStory){
+                intent.putExtra(CAMERA_ACTIVITY_STORY, addToStory)
+            }
             startActivity(intent)
         }
     }
 
     companion object {
+        const val CAMERA_ACTIVITY = "CameraActivity"
+        const val CAMERA_ACTIVITY_STORY = "CameraActivityStory"
 
         private const val TAG = "CameraFragment"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0

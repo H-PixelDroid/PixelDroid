@@ -22,6 +22,7 @@ import androidx.preference.PreferenceManager
 import com.jarsilio.android.scrambler.exceptions.UnsupportedFileFormatException
 import com.jarsilio.android.scrambler.stripMetadata
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,7 +108,8 @@ class PostCreationViewModel(
     clipdata: ClipData? = null,
     val instance: InstanceDatabaseEntity? = null,
     existingDescription: String? = null,
-    existingNSFW: Boolean = false
+    existingNSFW: Boolean = false,
+    val storyCreation: Boolean = false,
 ) : AndroidViewModel(application) {
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
         MutableLiveData<MutableList<PhotoData>>().also {
@@ -444,7 +446,11 @@ class PostCreationViewModel(
                 apiHolder.setToCurrentUser(it)
             } ?:  apiHolder.api ?: apiHolder.setToCurrentUser()
 
-            val inter = api.mediaUpload(description, requestBody.parts[0])
+            val inter: Observable<Attachment> =
+                //TODO specify story duration
+                //TODO validate that image is correct (?) aspect ratio
+                if (storyCreation) api.storyUpload(requestBody.parts[0])
+                else api.mediaUpload(description, requestBody.parts[0])
 
             apiHolder.api = null
             postSub = inter
@@ -453,7 +459,11 @@ class PostCreationViewModel(
                 .subscribe(
                     { attachment: Attachment ->
                         data.progress = 0
-                        data.uploadId = attachment.id!!
+                        data.uploadId = if(storyCreation){
+                            attachment.media_id!!
+                        } else {
+                             attachment.id!!
+                        }
                     },
                     { e: Throwable ->
                         _uiState.update { currentUiState ->
@@ -509,11 +519,19 @@ class PostCreationViewModel(
                     apiHolder.setToCurrentUser(it)
                 } ?:  apiHolder.api ?: apiHolder.setToCurrentUser()
 
-                api.postStatus(
-                    statusText = description,
-                    media_ids = getPhotoData().value!!.mapNotNull { it.uploadId }.toList(),
-                    sensitive = nsfw
-                )
+                if(storyCreation){
+                    api.storyPublish(
+                        media_id = getPhotoData().value!!.firstNotNullOf { it.uploadId },
+                        can_react = "1", can_reply = "1",
+                        duration = 10
+                    )
+                } else{
+                    api.postStatus(
+                        statusText = description,
+                        media_ids = getPhotoData().value!!.mapNotNull { it.uploadId }.toList(),
+                        sensitive = nsfw
+                    )
+                }
                 Toast.makeText(getApplication(), getApplication<PixelDroidApplication>().getString(R.string.upload_post_success),
                     Toast.LENGTH_SHORT).show()
                 val intent = Intent(getApplication(), MainActivity::class.java)
@@ -555,8 +573,8 @@ class PostCreationViewModel(
     }
 }
 
-class PostCreationViewModelFactory(val application: Application, val clipdata: ClipData, val instance: InstanceDatabaseEntity, val existingDescription: String?, val existingNSFW: Boolean) : ViewModelProvider.Factory {
+class PostCreationViewModelFactory(val application: Application, val clipdata: ClipData, val instance: InstanceDatabaseEntity, val existingDescription: String?, val existingNSFW: Boolean, val storyCreation: Boolean) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java, ClipData::class.java, InstanceDatabaseEntity::class.java, String::class.java, Boolean::class.java).newInstance(application, clipdata, instance, existingDescription, existingNSFW)
+        return modelClass.getConstructor(Application::class.java, ClipData::class.java, InstanceDatabaseEntity::class.java, String::class.java, Boolean::class.java, Boolean::class.java).newInstance(application, clipdata, instance, existingDescription, existingNSFW, storyCreation)
     }
 }

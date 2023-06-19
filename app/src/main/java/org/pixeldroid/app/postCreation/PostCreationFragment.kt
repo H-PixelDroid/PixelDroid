@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentPostCreationBinding
 import org.pixeldroid.app.postCreation.camera.CameraActivity
+import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
@@ -83,10 +84,15 @@ class PostCreationFragment : BaseFragment() {
                 requireActivity().intent.clipData!!,
                 instance,
                 requireActivity().intent.getStringExtra(PostCreationActivity.PICTURE_DESCRIPTION),
-                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false)
+                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false),
+                requireActivity().intent.getBooleanExtra(CameraFragment.CAMERA_ACTIVITY_STORY, false),
             )
         }
         model = _model
+
+        if(model.storyCreation){
+            binding.carousel.showCaption = false
+        }
 
         model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData ->
             // update UI

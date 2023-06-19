@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View.OnClickListener
 import android.view.View.OnTouchListener
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
@@ -41,6 +42,9 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
     private lateinit var model: StoriesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //force night mode always
+        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+
         super.onCreate(savedInstanceState)
 
         val carousel = intent.getSerializableExtra(STORY_CAROUSEL) as StoryCarousel
@@ -212,8 +216,6 @@ class StoriesActivity: BaseThemedWithoutBarActivity() {
         }
         binding.viewLeft.setOnTouchListener(onTouchListener)
         binding.viewRight.setOnTouchListener(onTouchListener)
-
-        //TODO implement hold to pause
 
         binding.viewRight.setOnClickListener {
             model.goToNext()

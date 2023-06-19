@@ -40,7 +40,6 @@ class ImageCarousel(
     )
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var tvCaption: TextView
     private var snapHelper: SnapHelper = PagerSnapHelper()
 
     var indicator: CircleIndicator2? = null
@@ -103,11 +102,12 @@ class ImageCarousel(
      * ****************************************************************
      */
 
+    //FIXME this is modified a bunch of times all over the place, so it can't be set to false and stay there
     var showCaption = false
         set(value) {
             field = value
 
-            tvCaption.visibility = if (showCaption) View.VISIBLE else View.GONE
+            binding.tvCaption.visibility = if (showCaption) View.VISIBLE else View.GONE
         }
 
     @Dimension(unit = Dimension.PX)
@@ -115,7 +115,7 @@ class ImageCarousel(
         set(value) {
             field = value
 
-            tvCaption.setTextSize(TypedValue.COMPLEX_UNIT_PX, captionTextSize.toFloat())
+            binding.tvCaption.setTextSize(TypedValue.COMPLEX_UNIT_PX, captionTextSize.toFloat())
         }
 
     var showIndicator = false
@@ -245,14 +245,14 @@ class ImageCarousel(
                 showNavigationButtons = showNavigationButtons
 
                 binding.editMediaDescriptionLayout.visibility = if(editingMediaDescription) VISIBLE else INVISIBLE
-                tvCaption.visibility = if(editingMediaDescription) INVISIBLE else VISIBLE
+                showCaption = !editingMediaDescription
             } else {
                 recyclerView.layoutManager = GridLayoutManager(context, 3)
                 binding.btnNext.visibility = GONE
                 binding.btnPrevious.visibility = GONE
 
                 binding.editMediaDescriptionLayout.visibility = INVISIBLE
-                tvCaption.visibility = INVISIBLE
+                showCaption = false
             }
             showIndicator = value
 
@@ -279,7 +279,7 @@ class ImageCarousel(
                     updateDescriptionCallback?.invoke(currentPosition, description)
                 }
                 binding.editMediaDescriptionLayout.visibility = if(value) VISIBLE else INVISIBLE
-                tvCaption.visibility = if(value) INVISIBLE else VISIBLE
+                showCaption = !value
 
             }
 
@@ -289,10 +289,10 @@ class ImageCarousel(
         set(value) {
             if(!value.isNullOrEmpty()) {
                 field = value
-                tvCaption.text = value
+                binding.tvCaption.text = value
             } else {
                 field = null
-                tvCaption.text = context.getText(R.string.no_media_description)
+                binding.tvCaption.text = context.getText(R.string.no_media_description)
             }
 
         }
@@ -317,12 +317,11 @@ class ImageCarousel(
         binding = ImageCarouselBinding.inflate(LayoutInflater.from(context),this,  true)
 
         recyclerView = binding.recyclerView
-        tvCaption = binding.tvCaption
 
         recyclerView.setHasFixedSize(true)
 
         // For marquee effect
-        tvCaption.isSelected = true
+        binding.tvCaption.isSelected = true
     }
 
 
@@ -441,7 +440,7 @@ class ImageCarousel(
                             caption.apply {
                                 if(layoutCarousel){
                                     binding.editMediaDescriptionLayout.visibility = INVISIBLE
-                                    tvCaption.visibility = VISIBLE
+                                    showCaption = true
                                 }
                                 currentDescription = this
                             }
@@ -472,7 +471,7 @@ class ImageCarousel(
             }
         })
 
-        tvCaption.setOnClickListener {
+        binding.tvCaption.setOnClickListener {
             editingMediaDescription = true
         }
 

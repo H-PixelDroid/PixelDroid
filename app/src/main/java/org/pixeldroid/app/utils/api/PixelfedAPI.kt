@@ -236,18 +236,35 @@ interface PixelfedAPI {
     )
 
     @GET("/api/v1.1/stories/carousel")
-    suspend fun carousel(
-    ): StoryCarousel
+    suspend fun carousel(): StoryCarousel
 
     @POST("/api/v1.1/stories/seen")
     suspend fun storySeen(
-        @Query("id") id: String //TODO figure out if this is the id of post or of user?
+        @Query("id") id: String
     )
 
     @POST("/api/v1.1/stories/comment")
     suspend fun storyComment(
         @Query("sid") sid: String,
         @Query("caption") caption: String
+    )
+
+    @Multipart
+    @POST("/api/v1.1/stories/add")
+    fun storyUpload(
+        @Part file: MultipartBody.Part,
+        @Part duration: MultipartBody.Part? = null,
+    ): Observable<Attachment>
+
+    @POST("/api/v1.1/stories/publish")
+    suspend fun storyPublish(
+        @Query("media_id") media_id: String,
+        //From 0 to 30
+        //TODO figure out what this duration means
+        @Query("duration") duration: Int = 10,
+        //FIXME this should be able to take a boolean or at least "true"/"false" but only "0"/"1" works. Same issue as sensitive boolean in postStatus
+        @Query("can_reply") can_reply: String,
+        @Query("can_react") can_react: String,
     )
 
     @POST("/api/v1.1/stories/self-expire/{id}")

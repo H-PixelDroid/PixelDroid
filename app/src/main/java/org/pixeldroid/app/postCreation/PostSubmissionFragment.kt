@@ -20,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentPostSubmissionBinding
+import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
@@ -68,7 +69,8 @@ class PostSubmissionFragment : BaseFragment() {
                 requireActivity().intent.clipData!!,
                 instance,
                 requireActivity().intent.getStringExtra(PostCreationActivity.PICTURE_DESCRIPTION),
-                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false)
+                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false),
+                requireActivity().intent.getBooleanExtra(CameraFragment.CAMERA_ACTIVITY_STORY, false)
             )
         }
         model = _model
@@ -76,6 +78,14 @@ class PostSubmissionFragment : BaseFragment() {
         // Display the values from the view model
         binding.nsfwSwitch.isChecked = model.uiState.value.nsfw
         binding.newPostDescriptionInputField.setText(model.uiState.value.newPostDescriptionText)
+
+        if(model.storyCreation){
+            binding.nsfwSwitch.visibility = View.GONE
+            binding.postTextInputLayout.visibility = View.GONE
+            binding.privateTitle.visibility = View.GONE
+            binding.postPreview.visibility = View.GONE
+            //TODO show story specific stuff here
+        }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
