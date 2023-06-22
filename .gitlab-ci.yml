@@ -130,6 +130,7 @@ fdroid build:
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
     - set -x
     - apt-get install sudo
+    - fdroid fetchsrclibs --verbose
     # this builds the latest version of the app from its source dir, using the build recipe in .fdroid.yml
     - fdroid build --verbose --on-server --no-tarball
     # create a keystore if we don’t have one
