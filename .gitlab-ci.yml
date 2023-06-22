@@ -103,11 +103,6 @@ debugTests:
 connected 27 default x86_64:
   <<: *connected-template
 
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-      - .gradle
-      - .android
 
 #inspired from https://gitlab.com/mvglasow/satstat/-/blob/master/.gitlab-ci.yml
 fdroid build:
