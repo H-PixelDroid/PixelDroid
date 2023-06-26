@@ -285,4 +285,6 @@
     <string name="delete_collection_warning">برای پاک کردن این مجموعه اطمینان دارید؟</string>
     <string name="private_account_explanation">وقتی حساب شما خصوصی است، تنها افرادی که توسط شما تأیید شده‌اند می‌توانند عکس‌ها و ویدیوهای شما را در پیکسل‌فد ببینند. دنبال‌کنندگان فعلی شما تحت تأثیر قرار نخواهند گرفت.</string>
     <string name="profile_save_changes">تغییرات‌تان را ذخیره نکرده‌اید. خارج می‌شوید؟</string>
+    <string name="always_show_nsfw">همواره محتوای حساس را نمایش بده</string>
+    <string name="summary_always_show_nsfw">فرسته‌های NSFW/CW محو نشده و به طور پیش‌فرض نمایش داده خواهند شد.</string>
 </resources>
