@@ -13,7 +13,8 @@ import org.pixeldroid.app.utils.api.objects.Attachment
 
 data class AlbumUiState(
     val mediaAttachments: ArrayList<Attachment> = arrayListOf(),
-    val index: Int = 0
+    val index: Int = 0,
+    var isActionBarHidden: Boolean = false
 )
 
 class AlbumViewModel(application: Application, intent: Intent) : AndroidViewModel(application) {
