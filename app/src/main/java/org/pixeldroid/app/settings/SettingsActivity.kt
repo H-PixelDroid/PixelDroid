@@ -125,7 +125,8 @@ class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnShared
 class LanguageSettingFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val list: MutableList<String> = mutableListOf()
-        resources.getXml(R.xml.locales_config).use {
+        // IDE doesn't find it, but compiling works apparently?
+        resources.getXml(R.xml._generated_res_locale_config).use {
             var eventType = it.eventType
             while (eventType != XmlResourceParser.END_DOCUMENT) {
                 when (eventType) {

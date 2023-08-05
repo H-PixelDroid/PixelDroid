@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -20,6 +20,7 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
+        //noinspection JcenterRepositoryObsolete
         jcenter {
             content {
                 // info.androidhive:imagefilters is only available in JCenter
@@ -31,6 +32,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
