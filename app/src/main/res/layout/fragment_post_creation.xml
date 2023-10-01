@@ -11,7 +11,7 @@
         android:id="@+id/carousel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:showCaption="false"
+        app:showCaption="true"
         app:layout_constraintBottom_toTopOf="@+id/buttonConstraints"
         app:layout_constraintTop_toTopOf="parent"/>
 

@@ -99,7 +99,7 @@ data class PhotoData(
     var video: Boolean,
     var videoEncodeProgress: Int? = null,
     var videoEncodeStabilizationFirstPass: Boolean? = null,
-    var videoEncodeComplete: Boolean = true,
+    var videoEncodeComplete: Boolean? = null,
     var videoEncodeError: Boolean = false,
 ) : Parcelable
 

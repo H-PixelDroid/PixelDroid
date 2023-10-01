@@ -102,7 +102,6 @@ class ImageCarousel(
      * ****************************************************************
      */
 
-    //FIXME this is modified a bunch of times all over the place, so it can't be set to false and stay there
     var showCaption = false
         set(value) {
             field = value
@@ -245,14 +244,14 @@ class ImageCarousel(
                 showNavigationButtons = showNavigationButtons
 
                 binding.editMediaDescriptionLayout.visibility = if(editingMediaDescription) VISIBLE else INVISIBLE
-                showCaption = !editingMediaDescription
+                binding.tvCaption.visibility = if(editingMediaDescription || !showCaption) INVISIBLE else VISIBLE
             } else {
                 recyclerView.layoutManager = GridLayoutManager(context, 3)
                 binding.btnNext.visibility = GONE
                 binding.btnPrevious.visibility = GONE
 
                 binding.editMediaDescriptionLayout.visibility = INVISIBLE
-                showCaption = false
+                binding.tvCaption.visibility = INVISIBLE
             }
             showIndicator = value
 
@@ -279,8 +278,7 @@ class ImageCarousel(
                     updateDescriptionCallback?.invoke(currentPosition, description)
                 }
                 binding.editMediaDescriptionLayout.visibility = if(value) VISIBLE else INVISIBLE
-                showCaption = !value
-
+                binding.tvCaption.visibility = if(value || !showCaption) INVISIBLE else VISIBLE
             }
 
         }
@@ -561,7 +559,7 @@ class ImageCarousel(
                 binding.encodeInfoText.setText(R.string.encode_error)
                 binding.encodeInfoText.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.error),
                     null, null, null)
-            } else if(it.encodeComplete){
+            } else if(it.encodeComplete == true){
                 binding.encodeInfoCard.visibility = VISIBLE
                 binding.encodeProgress.visibility = GONE
                 binding.encodeInfoText.setText(R.string.encode_success)

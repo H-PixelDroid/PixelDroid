@@ -1,7 +1,6 @@
 package org.pixeldroid.app.postCreation
 
 import android.os.*
-import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import org.pixeldroid.app.R

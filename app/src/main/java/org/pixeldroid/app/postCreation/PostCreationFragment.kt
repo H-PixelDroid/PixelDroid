@@ -92,6 +92,7 @@ class PostCreationFragment : BaseFragment() {
 
         if(model.storyCreation){
             binding.carousel.showCaption = false
+            //TODO hide grid button, hide dot (indicator), hide arrows, limit photos to 1
         }
 
         model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData ->
@@ -281,14 +282,16 @@ class PostCreationFragment : BaseFragment() {
 
 
     private fun validatePost(): Boolean {
-        if (model.getPhotoData().value?.all { !it.video || it.videoEncodeComplete } == false) {
-            MaterialAlertDialogBuilder(requireActivity()).apply {
-                setMessage(R.string.still_encoding)
-                setNegativeButton(android.R.string.ok) { _, _ -> }
-            }.show()
-            return false
+        if (model.getPhotoData().value?.none { it.video && it.videoEncodeComplete == false } == true) {
+            // Encoding is done, i.e. none of the items are both a video and not done encoding
+            return true
         }
-        return true
+        // Encoding is not done, show a dialog and return false to indicate validation failed
+        MaterialAlertDialogBuilder(requireActivity()).apply {
+            setMessage(R.string.still_encoding)
+            setNegativeButton(android.R.string.ok) { _, _ -> }
+        }.show()
+        return false
     }
 
     private val editResultContract: ActivityResultLauncher<Intent> = registerForActivityResult(
