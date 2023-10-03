@@ -13,7 +13,7 @@
     <string name="followed_notification">%1$s ti ha seguito</string>
     <string name="mention_notification">%1$s ti ha menzionato</string>
     <string name="liked_notification">%1$s è piaciuto il tuo post</string>
-    <string name="post">invia</string>
+    <string name="post">Invia</string>
     <string name="description">Descrizione…</string>
     <string name="whats_an_instance">Cos\'è un\'istanza\?</string>
     <string name="logout">Disconnettersi</string>
@@ -188,4 +188,23 @@
     <string name="notifications_settings">Impostazioni di notifica</string>
     <string name="notifications_settings_summary">Gestisci quali notifiche vuoi ricevere</string>
     <string name="login_notifications">Impossibile recuperare le ultime notifiche</string>
+    <string name="always_show_nsfw">Mostra sempre i contenuti sensibili</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nuova notifica</item>
+        <item quantity="many">%d nuove notifiche</item>
+        <item quantity="other">%d nuove notifiche</item>
+    </plurals>
+    <plurals name="items_load_success">
+        <item quantity="one">%d oggetto caricato con successo</item>
+        <item quantity="many">%d oggetti caricati con successo</item>
+        <item quantity="other">%d oggetti caricati con successo</item>
+    </plurals>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s e %4$d altri</string>
+    <string name="notification_summary_medium">%1$s, %2$s, e %3$s</string>
+    <string name="notification_summary_small">%1$s e %2$s</string>
+    <string name="video_not_supported">Il server che utilizzi non supporta l\'upload di video, potresti non essere in grado di caricare i video inclusi in questo post</string>
+    <string name="post_is_video">Questo post è un video</string>
+    <string name="upload_next_step">Prossimo step</string>
+    <string name="add_details">Aggiungi qualche dettaglio</string>
+    <string name="unknown_error_in_error">Errore sconosciuto, controlla se il server è giù: %1$s</string>
 </resources>
