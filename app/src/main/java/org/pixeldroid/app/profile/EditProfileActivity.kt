@@ -19,10 +19,10 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityEditProfileBinding
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.openUrl
 
-class EditProfileActivity : BaseThemedWithBarActivity() {
+class EditProfileActivity : BaseActivity() {
 
     private lateinit var model: EditProfileViewModel
     private lateinit var binding: ActivityEditProfileBinding
@@ -31,8 +31,8 @@ class EditProfileActivity : BaseThemedWithBarActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.edit_profile)
 
         val _model: EditProfileViewModel by viewModels { EditProfileViewModelFactory(application) }
         model = _model

@@ -13,12 +13,12 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityCollectionBinding
 import org.pixeldroid.app.profile.ProfileFeedFragment.Companion.COLLECTION
 import org.pixeldroid.app.profile.ProfileFeedFragment.Companion.COLLECTION_ID
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Collection
 import java.lang.Exception
 
-class CollectionActivity : BaseThemedWithBarActivity() {
+class CollectionActivity : BaseActivity() {
     private lateinit var binding: ActivityCollectionBinding
 
     private lateinit var collection: Collection
@@ -37,6 +37,7 @@ class CollectionActivity : BaseThemedWithBarActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCollectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

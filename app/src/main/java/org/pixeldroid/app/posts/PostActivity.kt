@@ -11,7 +11,7 @@ import org.pixeldroid.app.databinding.ActivityPostBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment.Companion.COMMENT_DOMAIN
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment.Companion.COMMENT_STATUS_ID
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_COMMENT_TAG
@@ -19,7 +19,7 @@ import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_TAG
 import org.pixeldroid.app.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import org.pixeldroid.app.utils.displayDimensionsInPx
 
-class PostActivity : BaseThemedWithBarActivity() {
+class PostActivity : BaseActivity() {
     private lateinit var binding: ActivityPostBinding
 
     private var commentFragment = CommentFragment()
@@ -30,7 +30,7 @@ class PostActivity : BaseThemedWithBarActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         status = intent.getSerializableExtra(POST_TAG) as Status

@@ -16,23 +16,26 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.databinding.SettingsBinding
+import org.pixeldroid.app.utils.ThemedActivity
 import org.pixeldroid.app.utils.setThemeFromPreferences
 
 
-class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var restartMainOnExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = SettingsBinding.inflate(layoutInflater)
 
-        setContentView(R.layout.settings)
+        setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
+
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.settings, SettingsFragment())
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.menu_settings)
 
         restartMainOnExit = intent.getBooleanExtra("restartMain", false)
     }

@@ -5,10 +5,10 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityReportBinding
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Status
 
-class ReportActivity : BaseThemedWithBarActivity() {
+class ReportActivity : BaseActivity() {
 
     private lateinit var binding: ActivityReportBinding
 
@@ -16,9 +16,9 @@ class ReportActivity : BaseThemedWithBarActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityReportBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.report)
 
         val status = intent.getSerializableExtra(Status.POST_TAG) as Status?
 

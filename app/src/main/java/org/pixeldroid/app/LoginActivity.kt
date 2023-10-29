@@ -1,6 +1,5 @@
 package org.pixeldroid.app
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -16,7 +15,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.ActivityLoginBinding
-import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Application
 import org.pixeldroid.app.utils.api.objects.Instance
@@ -45,7 +44,7 @@ since they do not depend on each other)
 
  */
 
-class LoginActivity : BaseThemedWithoutBarActivity() {
+class LoginActivity : BaseActivity() {
 
     companion object {
         private const val PACKAGE_ID = BuildConfig.APPLICATION_ID

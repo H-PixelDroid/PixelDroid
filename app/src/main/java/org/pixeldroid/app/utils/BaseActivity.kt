@@ -6,7 +6,7 @@ import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import javax.inject.Inject
 
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : ThemedActivity() {
 
     @Inject
     lateinit var db: AppDatabase

@@ -24,12 +24,12 @@ import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityStoriesBinding
 import org.pixeldroid.app.posts.setTextViewFromISO8601
-import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.StoryCarousel
 
 
-class StoriesActivity: BaseThemedWithoutBarActivity() {
+class StoriesActivity: BaseActivity() {
 
     companion object {
         const val STORY_CAROUSEL = "LaunchStoryCarousel"

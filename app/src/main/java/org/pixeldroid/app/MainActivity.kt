@@ -50,8 +50,7 @@ import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
-import org.pixeldroid.app.stories.StoriesActivity
-import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Notification
 import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
@@ -66,7 +65,7 @@ import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFr
 import java.time.Instant
 
 
-class MainActivity : BaseThemedWithoutBarActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
