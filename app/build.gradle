@@ -91,8 +91,9 @@ android {
     /**
      * Make a string with the application_id (available in xml etc)
      */
-    android.applicationVariants.all { variant ->
+    android.applicationVariants.configureEach { variant ->
         variant.resValue 'string', 'application_id', variant.applicationId
+        variant.resValue "string", "versionName", variant.versionName
     }
 
     testOptions {
@@ -210,6 +211,7 @@ dependencies {
 
     implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.4'
     implementation project(path: ':scrambler')
+    implementation project(path: ':pixel_common')
 
     implementation('com.github.bumptech.glide:glide:4.14.2') {
         exclude group: "com.android.support"

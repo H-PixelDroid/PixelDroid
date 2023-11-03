@@ -1,12 +1,11 @@
 package org.pixeldroid.app.utils
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import javax.inject.Inject
 
-open class BaseActivity : ThemedActivity() {
+open class BaseActivity : org.pixeldroid.common.ThemedActivity() {
 
     @Inject
     lateinit var db: AppDatabase

@@ -17,7 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
-import org.pixeldroid.app.utils.ThemedActivity
+import org.pixeldroid.common.ThemedActivity
 import org.pixeldroid.app.utils.setThemeFromPreferences
 
 

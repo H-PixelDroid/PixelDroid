@@ -1,3 +1,6 @@
 [submodule "scrambler"]
 	path = scrambler
 	url = https://gitlab.com/artectrex/scrambler.git
+[submodule "pixel_common"]
+	path = pixel_common
+	url = git@gitlab.shinice.net:pixeldroid/pixel_common.git

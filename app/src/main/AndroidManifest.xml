@@ -157,17 +157,6 @@
         </activity>
         <activity android:name=".searchDiscover.TrendingActivity"
             android:theme="@style/BaseAppTheme.NoActionBar" />
-        <activity
-            android:name=".settings.AboutActivity"
-            android:parentActivityName=".settings.SettingsActivity"
-            android:theme="@style/BaseAppTheme.NoActionBar" />
-        <activity
-            android:name=".settings.LicenseActivity"
-            android:parentActivityName=".settings.AboutActivity"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity"
-            android:theme="@style/BaseAppTheme.NoActionBar" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
