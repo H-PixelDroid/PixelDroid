@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -238,6 +239,18 @@ class MainActivity : BaseActivity() {
                 3 -> logOut()
             }
             false
+        }
+
+        // Closes the drawer if it is open, when we press the back button
+        onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+            if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+            }
+            else {
+                this.isEnabled = false
+                super.onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
@@ -481,16 +494,4 @@ class MainActivity : BaseActivity() {
         }
         startActivity(intent)
     }
-
-    /**
-     * Closes the drawer if it is open, when we press the back button
-     */
-    override fun onBackPressed() {
-        if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
 }

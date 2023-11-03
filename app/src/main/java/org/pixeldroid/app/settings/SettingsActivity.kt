@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.res.XmlResourceParser
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.DialogFragment
@@ -37,6 +38,21 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+            // If a setting (for example language or theme) was changed, the main activity should be
+            // started without history so that the change is applied to the whole back stack
+            if (restartMainOnExit) {
+                val intent = Intent(this@SettingsActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                super.startActivity(intent)
+            } else {
+                super.onBackPressedDispatcher.onBackPressed()
+            }
+
+        }
+
+
         restartMainOnExit = intent.getBooleanExtra("restartMain", false)
     }
 
@@ -54,17 +70,6 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
         )
     }
 
-    override fun onBackPressed() {
-        // If a setting (for example language or theme) was changed, the main activity should be
-        // started without history so that the change is applied to the whole back stack
-        if (restartMainOnExit) {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            super.startActivity(intent)
-        } else {
-            super.onBackPressed()
-        }
-    }
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         sharedPreferences?.let {
             when (key) {
