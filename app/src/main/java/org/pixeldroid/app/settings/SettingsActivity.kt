@@ -65,14 +65,17 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
             super.onBackPressed()
         }
     }
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        when (key) {
-            "theme" -> {
-                setThemeFromPreferences(sharedPreferences, resources)
-                recreateWithRestartStatus()
-            }
-            "themeColor" -> {
-                recreateWithRestartStatus()
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        sharedPreferences?.let {
+            when (key) {
+                "theme" -> {
+                    setThemeFromPreferences(it, resources)
+                    recreateWithRestartStatus()
+                }
+
+                "themeColor" -> {
+                    recreateWithRestartStatus()
+                }
             }
         }
     }
