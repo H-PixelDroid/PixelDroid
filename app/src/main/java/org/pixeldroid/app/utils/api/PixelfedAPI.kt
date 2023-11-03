@@ -231,6 +231,20 @@ interface PixelfedAPI {
         @Query("post_id") post_id: String,
     )
 
+    @GET("/api/v1.1/stories/carousel")
+    suspend fun carousel(
+    ): StoryCarousel
+
+    @POST("/api/v1.1/stories/seen")
+    suspend fun carouselSeen(
+        @Query("id") id: String //TODO figure out if this is the id of post or of user?
+    )
+
+    @POST("/api/v1.1/stories/self-expire/{id}")
+    suspend fun deleteCarousel(
+        @Path("id") storyId: String
+    )
+
     //Used in our case to retrieve comments for a given status
     @GET("/api/v1/statuses/{id}/context")
     suspend fun statusComments(

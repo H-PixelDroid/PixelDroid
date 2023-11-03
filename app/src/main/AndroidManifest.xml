@@ -64,6 +64,9 @@
             android:name=".posts.ReportActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".stories.StoriesActivity" />
         <activity
             android:name=".postCreation.PostCreationActivity"
             android:exported="true"

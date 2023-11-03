@@ -131,14 +131,14 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
     /**
      * AndroidX dependencies:
      */
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.core:core-splashscreen:1.0.0'
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
@@ -156,8 +156,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:2.6.1"
     implementation "androidx.annotation:annotation:1.6.0"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation "androidx.activity:activity-ktx:1.7.0"
-    implementation 'androidx.fragment:fragment-ktx:1.5.6'
+    implementation "androidx.activity:activity-ktx:1.7.1"
+    implementation 'androidx.fragment:fragment-ktx:1.5.7'
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
     implementation 'androidx.media2:media2-widget:1.2.1'
     implementation 'androidx.media2:media2-player:1.2.1'

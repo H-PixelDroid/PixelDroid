@@ -221,8 +221,7 @@ class NotificationsFragment : CachedFeedFragment<Notification>() {
                 setTextViewFromISO8601(
                     it,
                     notificationTime,
-                    false,
-                    itemView.context
+                    false
                 )
             }
 

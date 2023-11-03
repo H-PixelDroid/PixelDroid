@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/black"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/storyImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:contentDescription="@string/story_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressBarStory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:srcCompat="@tools:sample/backgrounds/scenic[10]" />
+
+    <ImageButton
+        android:id="@+id/pause"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="12dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/play_video"
+        android:src="@drawable/play_pause"
+        app:layout_constraintBottom_toBottomOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
+        tools:visibility="visible" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBarStory"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progress="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/storyAuthorProfilePicture"
+        android:layout_margin="12dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressBarStory"
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/profile_picture" />
+
+    <TextView
+        android:id="@+id/storyAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintStart_toEndOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
+        tools:text="username" />
+
+    <TextView
+        android:id="@+id/storyAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintStart_toEndOf="@+id/storyAuthor"
+        app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintVertical_bias="0.517"
+        tools:text="48m" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

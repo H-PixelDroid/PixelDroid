@@ -195,8 +195,10 @@ class PostCreationViewModel(
                                          * and display it.
                                          */
                         val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-                        cursor.moveToFirst()
-                        cursor.getLong(sizeIndex)
+                        if(sizeIndex >= 0) {
+                            cursor.moveToFirst()
+                            cursor.getLong(sizeIndex)
+                        } else null
                     } ?: 0
             } else {
                 uri.toFile().length()

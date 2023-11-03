@@ -50,6 +50,7 @@ import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
+import org.pixeldroid.app.stories.StoriesActivity
 import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
 import org.pixeldroid.app.utils.api.objects.Notification
 import org.pixeldroid.app.utils.db.addUser
@@ -229,12 +230,18 @@ class MainActivity : BaseThemedWithoutBarActivity() {
             primaryDrawerItem {
                 nameRes = R.string.logout
                 iconicsIcon = GoogleMaterial.Icon.gmd_close
-            })
+            },
+            primaryDrawerItem {
+                nameRes = R.string.story_image
+                iconicsIcon = GoogleMaterial.Icon.gmd_auto_stories
+            },
+        )
         binding.drawer.onDrawerItemClickListener = { v, drawerItem, position ->
             when (position){
                 1 -> launchActivity(ProfileActivity())
                 2 -> launchActivity(SettingsActivity())
                 3 -> logOut()
+                4 -> launchActivity(StoriesActivity())
             }
             false
         }
