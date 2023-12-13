@@ -6,9 +6,11 @@ import android.widget.ProgressBar
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -21,6 +23,7 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ErrorLayoutBinding
 import org.pixeldroid.app.databinding.LoadStateFooterViewItemBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
+import org.pixeldroid.app.stories.StoriesAdapter
 import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.api.objects.Status
 import retrofit2.HttpException
@@ -49,14 +52,28 @@ private fun showError(
 internal fun <T: Any> initAdapter(
     progressBar: ProgressBar, swipeRefreshLayout: SwipeRefreshLayout,
     recyclerView: RecyclerView, motionLayout: MotionLayout, errorLayout: ErrorLayoutBinding,
-    adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>) {
+    adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>,
+    header: StoriesAdapter? = null
+) {
 
-    recyclerView.adapter = adapter.withLoadStateFooter(
-        footer = ReposLoadStateAdapter { adapter.retry() }
+
+    val footer = ReposLoadStateAdapter { adapter.retry() }
+
+    adapter.addLoadStateListener { loadStates: CombinedLoadStates ->
+        footer.loadState = loadStates.append
+    }
+
+    recyclerView.adapter = ConcatAdapter(
+        *listOfNotNull(
+            header, // need to filter it if null
+            adapter,
+            footer
+        ).toTypedArray()
     )
 
     swipeRefreshLayout.setOnRefreshListener {
         adapter.refresh()
+        header?.refreshStories()
     }
 
     adapter.addLoadStateListener { loadState ->
@@ -148,6 +165,8 @@ class ReposLoadStateAdapter(
         return ReposLoadStateViewHolder.create(parent, retry)
     }
 }
+
+
 
 /**
  * [RecyclerView.ViewHolder] that is shown at the end of the feed to indicate loading or errors

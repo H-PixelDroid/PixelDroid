@@ -10,6 +10,7 @@ import dagger.Component
 import org.pixeldroid.app.postCreation.PostCreationViewModel
 import org.pixeldroid.app.profile.EditProfileViewModel
 import org.pixeldroid.app.stories.StoriesViewModel
+import org.pixeldroid.app.stories.StoryCarouselViewHolder
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker
 import javax.inject.Singleton
 

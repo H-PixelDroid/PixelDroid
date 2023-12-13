@@ -61,8 +61,10 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
 
         binding = FragmentFeedBinding.inflate(layoutInflater)
 
-        initAdapter(binding.progressBar, binding.swipeRefreshLayout, binding.list,
-            binding.motionLayout, binding.errorLayout, adapter)
+        initAdapter(
+            binding.progressBar, binding.swipeRefreshLayout, binding.list,
+            binding.motionLayout, binding.errorLayout, adapter
+        )
 
         return binding.root
     }

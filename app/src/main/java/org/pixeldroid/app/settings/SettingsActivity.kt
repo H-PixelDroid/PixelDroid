@@ -38,20 +38,18 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        onBackPressedDispatcher.addCallback(this) {
+        onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
             // Handle the back button event
             // If a setting (for example language or theme) was changed, the main activity should be
             // started without history so that the change is applied to the whole back stack
             if (restartMainOnExit) {
                 val intent = Intent(this@SettingsActivity, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                super.startActivity(intent)
+                super@SettingsActivity.startActivity(intent)
             } else {
-                super.onBackPressedDispatcher.onBackPressed()
+                finish()
             }
-
         }
-
 
         restartMainOnExit = intent.getBooleanExtra("restartMain", false)
     }

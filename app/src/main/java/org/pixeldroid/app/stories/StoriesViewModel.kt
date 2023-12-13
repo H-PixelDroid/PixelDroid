@@ -126,7 +126,12 @@ class StoriesViewModel(
         viewModelScope.launch {
             try {
                 val api = apiHolder.api ?: apiHolder.setToCurrentUser()
-                currentStoryId()?.let { api.storySeen(it) }
+                val story = currentAccount?.nodes?.getOrNull(uiState.value.currentImage)
+
+                if (story?.seen == true){
+                    //TODO update seen when marked successfully as seen?
+                    story.id?.let { api.storySeen(it) }
+                }
             } catch (exception: Exception){
                 _uiState.update { currentUiState ->
                     currentUiState.copy(errorMessage = R.string.story_could_not_see)

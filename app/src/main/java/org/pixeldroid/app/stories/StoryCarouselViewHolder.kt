@@ -3,9 +3,9 @@ package org.pixeldroid.app.stories
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
@@ -15,51 +15,90 @@ import org.pixeldroid.app.databinding.StoryCarouselBinding
 import org.pixeldroid.app.databinding.StoryCarouselItemBinding
 import org.pixeldroid.app.postCreation.camera.CameraActivity
 import org.pixeldroid.app.postCreation.camera.CameraFragment
-import org.pixeldroid.app.postCreation.carousel.dpToPx
 import org.pixeldroid.app.utils.api.objects.CarouselUserContainer
 import org.pixeldroid.app.utils.api.objects.StoryCarousel
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 
-class StoryCarouselViewHolder(val binding: StoryCarouselBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(
-        pixelfedAPI: PixelfedAPIHolder,
-        lifecycleScope: LifecycleCoroutineScope,
-        itemView: View
-    ) {
-        val adapter = StoriesListAdapter()
-        binding.storyCarousel.adapter = adapter
+/**
+ * Adapter to the show the a [RecyclerView] item for a [LoadState]
+ */
+class StoriesAdapter(val lifecycleScope: LifecycleCoroutineScope, val apiHolder: PixelfedAPIHolder) : RecyclerView.Adapter<StoryCarouselViewHolder>() {
+    var carousel: StoryCarousel? = null
 
-        loadStories(adapter, lifecycleScope, pixelfedAPI, itemView)
+    /**
+     * Whether to show stories or not.
+     *
+     * Changing this property will immediately notify the Adapter to change the item it's
+     * presenting.
+     */
+    var showStories: Boolean = false
+        set(newValue) {
+            val oldValue = field
+
+            if (oldValue && !newValue) {
+                notifyItemRemoved(0)
+            } else if (newValue && !oldValue) {
+                notifyItemInserted(0)
+            } else if (oldValue && newValue) {
+                notifyItemChanged(0)
+            }
+            field = newValue
+
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoryCarouselViewHolder {
+        return StoryCarouselViewHolder.create(parent, ::noStories)
     }
 
-    private fun loadStories(
-        adapter: StoriesListAdapter,
-        lifecycleScope: LifecycleCoroutineScope,
-        apiHolder: PixelfedAPIHolder,
-        itemView: View
-    ) {
+    override fun onBindViewHolder(holder: StoryCarouselViewHolder, position: Int) {
+        holder.bind(carousel)
+    }
+
+    override fun getItemViewType(position: Int): Int = 0
+
+    override fun getItemCount(): Int = if (showStories) 1 else 0
+
+    private fun noStories(){
+        showStories = false
+    }
+
+    private fun gotStories(newCarousel: StoryCarousel) {
+        carousel = newCarousel
+        showStories = true
+    }
+
+    fun refreshStories(){
         lifecycleScope.launch {
             try{
                 val api = apiHolder.api ?: apiHolder.setToCurrentUser()
                 val carousel = api.carousel()
 
                 if (carousel.nodes?.isEmpty() != true) {
-                    itemView.visibility = View.VISIBLE
-                    itemView.layoutParams.height = 200.dpToPx(binding.root.context)
-                    itemView.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-
-                    adapter.initCarousel(carousel)
+                    // Pass carousel to adapter
+                    gotStories(carousel)
+                } else {
+                    noStories()
                 }
-
             } catch (exception: Exception){
-                //TODO
+                noStories()
             }
         }
     }
 
+}
+
+class StoryCarouselViewHolder(val binding: StoryCarouselBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(carousel: StoryCarousel?) {
+        val adapter = StoriesListAdapter()
+        binding.storyCarousel.adapter = adapter
+
+        carousel?.let { adapter.initCarousel(it) }
+    }
+
     companion object {
-        fun create(parent: ViewGroup): StoryCarouselViewHolder {
+        fun create(parent: ViewGroup, noStories: () -> Unit): StoryCarouselViewHolder {
             val itemBinding = StoryCarouselBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )

@@ -235,7 +235,7 @@ interface PixelfedAPI {
         @Query("post_id") post_id: String,
     )
 
-    @GET("/api/v1.1/stories/carousel")
+    @GET("/api/pixelfed/v1/stories/self-carousel")
     suspend fun carousel(): StoryCarousel
 
     @POST("/api/v1.1/stories/seen")

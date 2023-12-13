@@ -2,11 +2,11 @@ package org.pixeldroid.app.posts
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import org.pixeldroid.app.databinding.ActivityAlbumBinding
-import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Attachment
 
-class AlbumActivity : BaseActivity() {
+class AlbumActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityAlbumBinding.inflate(layoutInflater)
