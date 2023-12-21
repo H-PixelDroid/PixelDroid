@@ -105,15 +105,15 @@ class StoriesActivity: BaseActivity() {
                                 override fun onLoadFailed(
                                     e: GlideException?,
                                     model: Any?,
-                                    target: Target<Drawable>?,
+                                    target: Target<Drawable>,
                                     isFirstResource: Boolean,
                                 ): Boolean = false
 
                                 override fun onResourceReady(
-                                    resource: Drawable?,
-                                    m: Any?,
+                                    resource: Drawable,
+                                    model: Any,
                                     target: Target<Drawable>?,
-                                    dataSource: DataSource?,
+                                    dataSource: DataSource,
                                     isFirstResource: Boolean,
                                 ): Boolean {
                                         Glide.with(binding.storyImage)
