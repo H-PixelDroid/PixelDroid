@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progressBarStory"
+        app:layout_constraintTop_toBottomOf="@id/story_progress_image"
         app:layout_constraintVertical_bias="1.0"
         tools:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/backgrounds/scenic[10]" />
@@ -73,21 +73,21 @@
         android:src="@drawable/play_pause"
         app:layout_constraintBottom_toBottomOf="@+id/storyAuthor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/carouselProgress"
+        app:layout_constraintTop_toTopOf="@+id/storyAge"
         tools:visibility="visible" />
 
-
-    <ProgressBar
-        android:id="@+id/progressBarStory"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+    <ImageView
+        android:id="@+id/story_progress_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:progress="0"
-        android:visibility="visible"
+        android:layout_height="4dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:importantForAccessibility="no"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:progress="56" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/storyAuthorProfilePicture"
@@ -96,7 +96,7 @@
         android:layout_margin="12dp"
         android:contentDescription="@string/profile_picture"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progressBarStory"
+        app:layout_constraintTop_toBottomOf="@id/story_progress_image"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -134,16 +134,6 @@
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/carouselProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/storyAuthor"
-        app:layout_constraintEnd_toStartOf="@+id/pause"
-        app:layout_constraintTop_toTopOf="@+id/storyAge"
-        tools:text="2/3" />
 
     <View
         android:id="@+id/viewRight"

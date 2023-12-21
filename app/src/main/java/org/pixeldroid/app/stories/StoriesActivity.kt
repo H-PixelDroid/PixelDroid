@@ -39,6 +39,8 @@ class StoriesActivity: BaseActivity() {
 
     private lateinit var binding: ActivityStoriesBinding
 
+    private lateinit var storyProgress: StoryProgress
+
     private lateinit var model: StoriesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +59,9 @@ class StoriesActivity: BaseActivity() {
             StoriesViewModelFactory(application, carousel, userId)
         }
         model = _model
+
+        storyProgress = StoryProgress(model.uiState.value.imageList.size)
+        binding.storyProgressImage.setImageDrawable(storyProgress)
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -91,8 +96,7 @@ class StoriesActivity: BaseActivity() {
 
                     binding.storyAuthor.text = uiState.username
 
-                    binding.carouselProgress.text = getString(R.string.storyProgress)
-                            .format(uiState.currentImage + 1, uiState.imageList.size)
+                    storyProgress.currentStory = uiState.currentImage
 
                     uiState.imageList.getOrNull(uiState.currentImage)?.let {
                         Glide.with(binding.storyImage)
@@ -156,13 +160,8 @@ class StoriesActivity: BaseActivity() {
         model.count.observe(this) { state ->
             // Render state in UI
             model.uiState.value.durationList.getOrNull(model.uiState.value.currentImage)?.let {
-                val percent = 100 - ((state/it.toFloat())*100).toInt()
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    binding.progressBarStory.setProgress(percent, true)
-                } else {
-                    binding.progressBarStory.progress = percent
-                }
+                storyProgress.progress = 1 - (state/it.toFloat())
+                binding.storyProgressImage.postInvalidate()
             }
         }
 
