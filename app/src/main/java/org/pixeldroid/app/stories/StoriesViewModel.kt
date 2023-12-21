@@ -4,21 +4,21 @@ import android.app.Application
 import android.os.CountDownTimer
 import android.text.Editable
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.utils.PixelDroidApplication
+import org.pixeldroid.app.utils.api.objects.CarouselUserContainer
+import org.pixeldroid.app.utils.api.objects.Story
 import org.pixeldroid.app.utils.api.objects.StoryCarousel
+import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import java.time.Instant
 import javax.inject.Inject
@@ -40,20 +40,21 @@ data class StoriesUiState(
 
 class StoriesViewModel(
     application: Application,
-    val carousel: StoryCarousel,
-    userId: String?
+    val carousel: StoryCarousel?,
+    userId: String?,
+    val selfCarousel: List<Story>?
 ) : AndroidViewModel(application) {
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
+    @Inject
+    lateinit var db: AppDatabase
 
-    private var currentAccount = carousel.nodes?.firstOrNull { it?.user?.id == userId }
+    private var currentAccount: CarouselUserContainer?
 
-    private val _uiState: MutableStateFlow<StoriesUiState> = MutableStateFlow(
-        newUiStateFromCurrentAccount()
-    )
+    private val _uiState: MutableStateFlow<StoriesUiState>
 
-    val uiState: StateFlow<StoriesUiState> = _uiState
+    val uiState: StateFlow<StoriesUiState>
 
     val count = MutableLiveData<Float>()
 
@@ -61,12 +62,20 @@ class StoriesViewModel(
 
     init {
         (application as PixelDroidApplication).getAppComponent().inject(this)
+        currentAccount =
+        if (selfCarousel != null) {
+            db.userDao().getActiveUser()?.let { CarouselUserContainer(it, selfCarousel) }
+        } else carousel?.nodes?.firstOrNull { it?.user?.id == userId }
+
+        _uiState = MutableStateFlow(newUiStateFromCurrentAccount())
+        uiState = _uiState
+
         startTimerForCurrent()
     }
 
     private fun setTimer(timerLength: Float) {
         count.value = timerLength
-        timer = object: CountDownTimer((timerLength * 1000).toLong(), 100){
+        timer = object: CountDownTimer((timerLength * 1000).toLong(), 50){
 
             override fun onTick(millisUntilFinished: Long) {
                 count.value = millisUntilFinished.toFloat() / 1000
@@ -98,8 +107,9 @@ class StoriesViewModel(
                 )
             }
         } else {
+            if(selfCarousel != null) return
             val currentUserId = currentAccount?.user?.id
-            val currentAccountIndex = carousel.nodes?.indexOfFirst { it?.user?.id == currentUserId } ?: return
+            val currentAccountIndex = carousel?.nodes?.indexOfFirst { it?.user?.id == currentUserId } ?: return
             currentAccount = when (index) {
                 uiState.value.imageList.size -> {
                     // Go to next user
@@ -209,10 +219,11 @@ class StoriesViewModel(
 
 class StoriesViewModelFactory(
     val application: Application,
-    val carousel: StoryCarousel,
-    val userId: String?
+    val carousel: StoryCarousel?,
+    val userId: String?,
+    val selfCarousel: List<Story>?
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java, StoryCarousel::class.java, String::class.java).newInstance(application, carousel, userId)
+        return modelClass.getConstructor(Application::class.java, StoryCarousel::class.java, String::class.java, List::class.java).newInstance(application, carousel, userId, selfCarousel)
     }
 }

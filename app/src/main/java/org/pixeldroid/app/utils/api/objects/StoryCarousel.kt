@@ -1,5 +1,6 @@
 package org.pixeldroid.app.utils.api.objects
 
+import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import java.io.Serializable
 import java.time.Instant
 
@@ -23,7 +24,13 @@ data class CarouselUser(
 data class CarouselUserContainer(
     val user: CarouselUser?,
     val nodes: List<Story?>?,
-): Serializable
+): Serializable {
+    constructor(user: UserDatabaseEntity, nodes: List<Story?>?) : this(
+        CarouselUser(user.user_id, user.username, null, user.avatar_static,
+            local = true,
+            is_author = true
+        ), nodes)
+}
 
 data class Story(
     val id: String?,

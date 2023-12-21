@@ -338,4 +338,12 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="add_story">Add Story</string>
     <string name="story_could_not_see">Error: could not mark story as seen</string>
     <string name="story_pause">Start or pause the stories</string>
+    <string name="my_story">My story</string>
+    <!-- Type of new publication that is being created (as opposed to a traditional post, if this is chosen it would be a story) -->
+    <string name="type_story">Story</string>
+    <!-- Type of new publication that is being created (as opposed to a story, if this is chosen it would be a traditional post) -->
+    <string name="type_post">Post</string>
+    <string name="continue_post_creation">Continue</string>
+    <string name="extraneous_pictures_stories">Pictures after the first were removed but can be restored by switching back to creating a Post</string>
+    <string name="story_duration">Story Duration</string>
 </resources>

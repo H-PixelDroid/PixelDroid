@@ -1,7 +1,6 @@
 package org.pixeldroid.app.stories
 
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View.OnClickListener
@@ -26,6 +25,7 @@ import org.pixeldroid.app.databinding.ActivityStoriesBinding
 import org.pixeldroid.app.posts.setTextViewFromISO8601
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Account
+import org.pixeldroid.app.utils.api.objects.Story
 import org.pixeldroid.app.utils.api.objects.StoryCarousel
 
 
@@ -33,6 +33,7 @@ class StoriesActivity: BaseActivity() {
 
     companion object {
         const val STORY_CAROUSEL = "LaunchStoryCarousel"
+        const val STORY_CAROUSEL_SELF = "LaunchStoryCarouselSelf"
         const val STORY_CAROUSEL_USER_ID = "LaunchStoryUserId"
     }
 
@@ -49,14 +50,15 @@ class StoriesActivity: BaseActivity() {
 
         super.onCreate(savedInstanceState)
 
-        val carousel = intent.getSerializableExtra(STORY_CAROUSEL) as StoryCarousel
+        val carousel = intent.getSerializableExtra(STORY_CAROUSEL) as? StoryCarousel
         val userId = intent.getStringExtra(STORY_CAROUSEL_USER_ID)
+        val selfCarousel: Array<Story>? = intent.getSerializableExtra(STORY_CAROUSEL_SELF) as? Array<Story>
 
         binding = ActivityStoriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val _model: StoriesViewModel by viewModels {
-            StoriesViewModelFactory(application, carousel, userId)
+            StoriesViewModelFactory(application, carousel, userId, selfCarousel?.asList())
         }
         model = _model
 
