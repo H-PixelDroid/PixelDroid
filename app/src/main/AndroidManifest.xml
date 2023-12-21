@@ -12,8 +12,6 @@
     <uses-feature
         android:name="android.hardware.camera.any"
         android:required="false" />
-    <!--TODO remove this? Don't think we use it -->
-    <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
