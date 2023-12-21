@@ -41,6 +41,7 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentCameraBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
 import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -61,7 +62,7 @@ class CameraFragment : BaseFragment() {
 
     private val cameraLifecycleOwner = CameraLifecycleOwner()
 
-    private lateinit var binding: FragmentCameraBinding
+    private var binding: FragmentCameraBinding by bindingLifecycleAware()
 
     private var displayId: Int = -1
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK

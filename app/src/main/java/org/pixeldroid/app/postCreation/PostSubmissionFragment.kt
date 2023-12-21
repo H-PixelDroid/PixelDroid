@@ -22,6 +22,7 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentPostSubmissionBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.setSquareImageFromURL
@@ -35,7 +36,7 @@ class PostSubmissionFragment : BaseFragment() {
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
 
-    private lateinit var binding: FragmentPostSubmissionBinding
+    private var binding: FragmentPostSubmissionBinding by bindingLifecycleAware()
     private lateinit var model: PostCreationViewModel
 
     override fun onCreateView(

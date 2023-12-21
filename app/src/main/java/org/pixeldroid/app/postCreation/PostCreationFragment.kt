@@ -36,6 +36,7 @@ import org.pixeldroid.app.postCreation.camera.CameraActivity
 import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.fileExtension
@@ -53,7 +54,7 @@ class PostCreationFragment : BaseFragment() {
     private var user: UserDatabaseEntity? = null
     private var instance: InstanceDatabaseEntity = InstanceDatabaseEntity("", "")
 
-    private lateinit var binding: FragmentPostCreationBinding
+    private var binding: FragmentPostCreationBinding by bindingLifecycleAware()
     private lateinit var model: PostCreationViewModel
 
     override fun onCreateView(

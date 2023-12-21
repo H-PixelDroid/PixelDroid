@@ -21,6 +21,7 @@ import org.pixeldroid.app.posts.feeds.initAdapter
 import org.pixeldroid.app.stories.StoriesAdapter
 import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
 import org.pixeldroid.app.utils.limitedLengthSmoothScrollToPosition
@@ -34,7 +35,7 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
     internal lateinit var adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>
     internal var headerAdapter: StoriesAdapter? = null
 
-    private lateinit var binding: FragmentFeedBinding
+    private var binding: FragmentFeedBinding by bindingLifecycleAware()
 
 
     private var job: Job? = null
