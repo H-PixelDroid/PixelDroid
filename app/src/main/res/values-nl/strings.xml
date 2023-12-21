@@ -142,4 +142,6 @@
         <item quantity="other">%d
 \nVolgers</item>
     </plurals>
+    <string name="always_show_nsfw">Altijd gevoelig materiaal tonen</string>
+    <string name="comment_notification">%1$s heeft gereageerd op je bericht</string>
 </resources>
