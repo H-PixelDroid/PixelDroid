@@ -76,6 +76,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="@id/upload_error_text_view"
             app:layout_constraintTop_toBottomOf="@+id/upload_error_text_explanation" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -103,7 +104,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button
-            android:id="@+id/post_creation_send_button"
+            android:id="@+id/post_submission_send_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:enabled="true"
@@ -182,4 +183,84 @@
         app:layout_constraintStart_toEndOf="@+id/nsfwSwitch"
         app:layout_constraintTop_toTopOf="@+id/nsfwSwitch" />
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/storyOptions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/top_bar"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <TextView
+        android:id="@+id/story_duration_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/story_duration"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+         />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/story_duration_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:stepSize="1.0"
+        android:valueFrom="3.0"
+        android:valueTo="15.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/story_duration_title" />
+
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/storyRepliesSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/story_duration_slider"
+        app:layout_constraintTop_toBottomOf="@+id/story_duration_slider" />
+
+    <TextView
+        android:id="@+id/storyRepliesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Allow replies"
+        android:textStyle="bold"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/storyRepliesSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/storyRepliesSwitch"
+        app:layout_constraintTop_toTopOf="@+id/storyRepliesSwitch" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/storyReactionsSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/storyRepliesSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/storyRepliesSwitch" />
+
+    <TextView
+        android:id="@+id/storyReactionsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Allow reactions"
+        android:textStyle="bold"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/storyReactionsSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/storyReactionsSwitch"
+        app:layout_constraintTop_toTopOf="@+id/storyReactionsSwitch"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

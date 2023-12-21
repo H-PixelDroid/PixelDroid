@@ -340,7 +340,8 @@ class CameraFragment : BaseFragment() {
                 putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
                 action = Intent.ACTION_GET_CONTENT
                 addCategory(Intent.CATEGORY_OPENABLE)
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                // Don't allow multiple for story
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !addToStory)
                 uploadImageResultContract.launch(
                     Intent.createChooser(this, null)
                 )

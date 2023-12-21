@@ -65,6 +65,7 @@ class PostCreationFragment : BaseFragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentPostCreationBinding.inflate(layoutInflater)
+
         return binding.root
     }
 
@@ -91,11 +92,6 @@ class PostCreationFragment : BaseFragment() {
         }
         model = _model
 
-        if(model.storyCreation){
-            binding.carousel.showCaption = false
-            //TODO hide grid button, hide dot (indicator), hide arrows, limit photos to 1
-        }
-
         model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData ->
             // update UI
             binding.carousel.addData(
@@ -107,6 +103,7 @@ class PostCreationFragment : BaseFragment() {
                     )
                 }
             )
+            binding.postCreationNextButton.isEnabled = newPhotoData.isNotEmpty()
         }
 
         lifecycleScope.launch {
@@ -127,13 +124,26 @@ class PostCreationFragment : BaseFragment() {
                     binding.toolbarPostCreation.visibility =
                         if (uiState.isCarousel) View.VISIBLE else View.INVISIBLE
                     binding.carousel.layoutCarousel = uiState.isCarousel
+
+                    if(uiState.storyCreation){
+                        binding.toggleStoryPost.check(binding.buttonStory.id)
+                        binding.buttonStory.isPressed = true
+                        binding.carousel.showLayoutSwitchButton = false
+                        binding.carousel.showIndicator = false
+                    } else {
+                        binding.toggleStoryPost.check(binding.buttonPost.id)
+                        binding.carousel.showLayoutSwitchButton = true
+                        binding.carousel.showIndicator = true
+                    }
+                    binding.carousel.maxEntries = uiState.maxEntries
+
                 }
             }
         }
 
         binding.carousel.apply {
             layoutCarouselCallback = { model.becameCarousel(it)}
-            maxEntries = instance.albumLimit
+            maxEntries = if(model.uiState.value.storyCreation) 1 else instance.albumLimit
             addPhotoButtonCallback = {
                 addPhoto()
             }
@@ -141,9 +151,10 @@ class PostCreationFragment : BaseFragment() {
                 model.updateDescription(position, description)
             }
         }
-        // get the description and send the post
-        binding.postCreationSendButton.setOnClickListener {
-            if (validatePost() && model.isNotEmpty()) {
+
+        // Validate the post and go to the next step of the post creation process
+        binding.postCreationNextButton.setOnClickListener {
+            if (validatePost()) {
                 findNavController().navigate(R.id.action_postCreationFragment_to_postSubmissionFragment)
             }
         }
@@ -170,6 +181,23 @@ class PostCreationFragment : BaseFragment() {
                 model.cancelEncode(currentPosition)
             }
         }
+
+        binding.toggleStoryPost.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            // Only handle checked events
+            if (!isChecked) return@addOnButtonCheckedListener
+
+            when (checkedId) {
+                R.id.buttonStory -> {
+                    model.storyMode(true)
+                }
+                R.id.buttonPost -> {
+                    model.storyMode(false)
+                }
+            }
+
+        }
+
+        binding.backbutton.setOnClickListener{requireActivity().onBackPressedDispatcher.onBackPressed()}
 
         // Clean up temporary files, if any
         val tempFiles = requireActivity().intent.getStringArrayExtra(PostCreationActivity.TEMP_FILES)
@@ -284,8 +312,9 @@ class PostCreationFragment : BaseFragment() {
 
     private fun validatePost(): Boolean {
         if (model.getPhotoData().value?.none { it.video && it.videoEncodeComplete == false } == true) {
-            // Encoding is done, i.e. none of the items are both a video and not done encoding
-            return true
+            // Encoding is done, i.e. none of the items are both a video and not done encoding.
+            // We return true if the post is not empty, false otherwise.
+            return model.getPhotoData().value?.isNotEmpty() == true
         }
         // Encoding is not done, show a dialog and return false to indicate validation failed
         MaterialAlertDialogBuilder(requireActivity()).apply {
