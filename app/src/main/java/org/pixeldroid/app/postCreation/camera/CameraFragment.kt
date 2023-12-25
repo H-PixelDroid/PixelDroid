@@ -34,10 +34,8 @@ import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentCameraBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
 import org.pixeldroid.app.utils.BaseFragment
@@ -109,7 +107,7 @@ class CameraFragment : BaseFragment() {
             thumbnail.setPadding(10)
 
             // Load thumbnail into circular button using Glide
-            Glide.with(thumbnail)
+            if(activity?.isDestroyed == false) Glide.with(thumbnail)
                 .load(uri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(thumbnail)
