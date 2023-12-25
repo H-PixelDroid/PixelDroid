@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        android:background="?attr/colorSecondaryContainer"
+        app:titleTextColor="?attr/colorOnSecondaryContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,6 +32,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="4dp"
+            android:tint="?attr/colorOnSecondaryContainer"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@android:string/cancel"
             android:src="?attr/homeAsUpIndicator"
@@ -53,6 +56,8 @@
             <Button
                 android:id="@+id/buttonStory"
                 style="?attr/materialButtonOutlinedStyle"
+                app:backgroundTint="@color/selector_story_post"
+                android:textColor="@color/selector_story_post_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/type_story" />
@@ -60,6 +65,8 @@
             <Button
                 android:id="@+id/buttonPost"
                 style="?attr/materialButtonOutlinedStyle"
+                app:backgroundTint="@color/selector_story_post"
+                android:textColor="@color/selector_story_post_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/type_post" />
