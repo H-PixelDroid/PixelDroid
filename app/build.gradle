@@ -178,7 +178,7 @@ dependencies {
 
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.11.0'
 
     //Dagger (dependency injection)
     implementation 'com.google.dagger:dagger:2.48'
@@ -192,8 +192,7 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
-
-    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.4'
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:d316ce37e9'
     implementation project(path: ':scrambler')
     implementation project(path: ':pixel_common')
 
