@@ -1,6 +1,5 @@
 package org.pixeldroid.app.posts
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
@@ -36,10 +35,6 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.single.BasePermissionListener
 import kotlinx.coroutines.launch
 import okhttp3.*
 import okio.BufferedSink
@@ -401,50 +396,23 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                             true
                         }
                         R.id.post_more_menu_save_to_gallery -> {
-                            Dexter.withContext(binding.root.context)
-                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .withListener(object : BasePermissionListener() {
-                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                        Toast.makeText(
-                                            binding.root.context,
-                                            binding.root.context.getString(R.string.write_permission_download_pic),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-
-                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                        status?.downloadImage(
-                                            binding.root.context,
-                                            status?.media_attachments?.getOrNull(binding.postPager.currentItem)?.url
-                                                ?: "",
-                                            binding.root
-                                        )
-                                    }
-                                }).check()
+                            status?.downloadImage(
+                                binding.root.context,
+                                status?.media_attachments?.getOrNull(binding.postPager.currentItem)?.url
+                                    ?: "",
+                                binding.root
+                            )
                             true
                         }
-                        R.id.post_more_menu_share_picture -> {
-                            Dexter.withContext(binding.root.context)
-                                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .withListener(object : BasePermissionListener() {
-                                    override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                        Toast.makeText(
-                                            binding.root.context,
-                                            binding.root.context.getString(R.string.write_permission_share_pic),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
 
-                                    override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                        status?.downloadImage(
-                                            binding.root.context,
-                                            status?.media_attachments?.getOrNull(binding.postPager.currentItem)?.url
-                                                ?: "",
-                                            binding.root,
-                                            share = true,
-                                        )
-                                    }
-                                }).check()
+                        R.id.post_more_menu_share_picture -> {
+                            status?.downloadImage(
+                                binding.root.context,
+                                status?.media_attachments?.getOrNull(binding.postPager.currentItem)?.url
+                                    ?: "",
+                                binding.root,
+                                share = true,
+                            )
                             true
                         }
                         R.id.post_more_menu_delete -> {
