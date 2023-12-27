@@ -18,6 +18,12 @@ data class Attachment(
 
     //Deprecated attributes
     val text_url: String? = null, //URL
+
+    //Pixelfed's Story upload response... TODO make the server return a regular Attachment?
+    val msg: String? = null,
+    val media_id: String? = null,
+    val media_url: String? = null,
+    val media_type: String? = null,
 ) : Serializable {
     enum class AttachmentType: Serializable {
         unknown, image, gifv, video, audio

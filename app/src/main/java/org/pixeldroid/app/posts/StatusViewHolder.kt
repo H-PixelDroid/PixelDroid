@@ -139,8 +139,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         setTextViewFromISO8601(
             status?.created_at!!,
             binding.postDate,
-            isActivity,
-            binding.root.context
+            isActivity
         )
 
         binding.postDomain.text = status?.getStatusDomain(domain, binding.postDomain.context)

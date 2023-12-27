@@ -9,17 +9,21 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.pixeldroid.app.R
+import org.pixeldroid.app.databinding.ActivitySearchBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchAccountFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.SearchHashtagFragment
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Results
 
-class SearchActivity : BaseThemedWithBarActivity() {
+class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        val binding = ActivitySearchBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         var query = ""

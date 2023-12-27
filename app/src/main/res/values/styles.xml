@@ -10,11 +10,9 @@
         <!-- TODO get rid of duplicated mascot/mascot_small somehow -->
         <item name="windowSplashScreenAnimatedIcon">@drawable/mascot_small</item>
 
-
-
         <!-- Set the theme of the Activity that directly follows your splash screen. -->
         <!-- Required -->
-        <item name="postSplashScreenTheme">@style/BaseAppTheme.NoActionBar</item>
+        <item name="postSplashScreenTheme">@style/BaseAppTheme</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -23,6 +21,7 @@
     <style name="AppTheme.PopupOverlay" parent="Theme.Material3.Light" />
 
     <style name="AppTheme.ActionBar.Transparent" parent="Theme.Material3.Dark">
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">always</item>
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="colorPrimaryVariant">@android:color/transparent</item>
@@ -47,178 +46,5 @@
     <style name="ToolbarTransparent" parent="Widget.Material3.Toolbar">
         <item name="android:background">@android:color/transparent</item>
         <item name="background">@android:color/transparent</item>
-    </style>
-
-
-    <style name="BaseAppTheme" parent="Theme.Material3.Light">
-        <item name="android:navigationBarColor">?attr/colorSurface</item>
-        <item name="android:statusBarColor">?attr/colorSecondaryContainer</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?attr/isLightTheme</item>
-        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="o_mr1">true</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
-        <item name="toolbarStyle">@style/Toolbar</item>
-        <item name="android:toolbarStyle">@style/Toolbar</item>
-        <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
-        <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
-
-    </style>
-
-    <style name="Toolbar" parent="Widget.Material3.Toolbar">
-        <item name="android:background">?attr/colorSecondaryContainer</item>
-        <item name="background">?attr/colorSecondaryContainer</item>
-        <item name="titleTextColor">?attr/colorOnSecondaryContainer</item>
-        <item name="subtitleTextColor">?attr/colorOnSecondaryContainer</item>
-        <item name="navigationIconTint">?attr/colorOnSecondaryContainer</item>
-    </style>
-
-
-    <style name="AppTheme2" parent="BaseAppTheme">
-        <item name="colorPrimary">@color/md_theme_light_primary2</item>
-        <item name="colorOnPrimary">@color/md_theme_light_onPrimary2</item>
-        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer2</item>
-        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer2</item>
-        <item name="colorSecondary">@color/md_theme_light_secondary2</item>
-        <item name="colorOnSecondary">@color/md_theme_light_onSecondary2</item>
-        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer2</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer2</item>
-        <item name="colorTertiary">@color/md_theme_light_tertiary2</item>
-        <item name="colorOnTertiary">@color/md_theme_light_onTertiary2</item>
-        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer2</item>
-        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer2</item>
-        <item name="colorError">@color/md_theme_light_error2</item>
-        <item name="colorOnError">@color/md_theme_light_onError2</item>
-        <item name="colorErrorContainer">@color/md_theme_light_errorContainer2</item>
-        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer2</item>
-        <item name="android:colorBackground">@color/md_theme_light_background2</item>
-        <item name="colorOnBackground">@color/md_theme_light_onBackground2</item>
-        <item name="colorSurface">@color/md_theme_light_surface2</item>
-        <item name="colorOnSurface">@color/md_theme_light_onSurface2</item>
-        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant2</item>
-        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant2</item>
-        <item name="colorOutline">@color/md_theme_light_outline2</item>
-        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface2</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface2</item>
-        <item name="elevationOverlayColor">@color/md_theme_light_surfaceTint2</item>
-        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary2</item>
-    </style>
-
-    <style name="AppTheme3" parent="BaseAppTheme">
-        <item name="colorPrimary">@color/md_theme_light_primary3</item>
-        <item name="colorOnPrimary">@color/md_theme_light_onPrimary3</item>
-        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer3</item>
-        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer3</item>
-        <item name="colorSecondary">@color/md_theme_light_secondary3</item>
-        <item name="colorOnSecondary">@color/md_theme_light_onSecondary3</item>
-        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer3</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer3</item>
-        <item name="colorTertiary">@color/md_theme_light_tertiary3</item>
-        <item name="colorOnTertiary">@color/md_theme_light_onTertiary3</item>
-        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer3</item>
-        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer3</item>
-        <item name="colorError">@color/md_theme_light_error3</item>
-        <item name="colorOnError">@color/md_theme_light_onError3</item>
-        <item name="colorErrorContainer">@color/md_theme_light_errorContainer3</item>
-        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer3</item>
-        <item name="android:colorBackground">@color/md_theme_light_background3</item>
-        <item name="colorOnBackground">@color/md_theme_light_onBackground3</item>
-        <item name="colorSurface">@color/md_theme_light_surface3</item>
-        <item name="colorOnSurface">@color/md_theme_light_onSurface3</item>
-        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant3</item>
-        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant3</item>
-        <item name="colorOutline">@color/md_theme_light_outline3</item>
-        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface3</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface3</item>
-        <item name="elevationOverlayColor">@color/md_theme_light_surfaceTint3</item>
-        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary3</item>
-    </style>
-
-    <style name="AppTheme4" parent="BaseAppTheme">
-        <item name="colorPrimary">@color/md_theme_light_primary4</item>
-        <item name="colorOnPrimary">@color/md_theme_light_onPrimary4</item>
-        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer4</item>
-        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer4</item>
-        <item name="colorSecondary">@color/md_theme_light_secondary4</item>
-        <item name="colorOnSecondary">@color/md_theme_light_onSecondary4</item>
-        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer4</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer4</item>
-        <item name="colorTertiary">@color/md_theme_light_tertiary4</item>
-        <item name="colorOnTertiary">@color/md_theme_light_onTertiary4</item>
-        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer4</item>
-        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer4</item>
-        <item name="colorError">@color/md_theme_light_error4</item>
-        <item name="colorOnError">@color/md_theme_light_onError4</item>
-        <item name="colorErrorContainer">@color/md_theme_light_errorContainer4</item>
-        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer4</item>
-        <item name="android:colorBackground">@color/md_theme_light_background4</item>
-        <item name="colorOnBackground">@color/md_theme_light_onBackground4</item>
-        <item name="colorSurface">@color/md_theme_light_surface4</item>
-        <item name="colorOnSurface">@color/md_theme_light_onSurface4</item>
-        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant4</item>
-        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant4</item>
-        <item name="colorOutline">@color/md_theme_light_outline4</item>
-        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface4</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface4</item>
-        <item name="elevationOverlayColor">@color/md_theme_light_surfaceTint4</item>
-        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary4</item>
-    </style>
-
-    <style name="AppTheme5" parent="BaseAppTheme">
-        <item name="colorPrimary">@color/md_theme_light_primary</item>
-        <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
-        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>
-        <item name="colorSecondary">@color/md_theme_light_secondary</item>
-        <item name="colorOnSecondary">@color/md_theme_light_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_light_onSecondaryContainer</item>
-        <item name="colorTertiary">@color/md_theme_light_tertiary</item>
-        <item name="colorOnTertiary">@color/md_theme_light_onTertiary</item>
-        <item name="colorTertiaryContainer">@color/md_theme_light_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer</item>
-        <item name="colorError">@color/md_theme_light_error</item>
-        <item name="colorErrorContainer">@color/md_theme_light_errorContainer</item>
-        <item name="colorOnError">@color/md_theme_light_onError</item>
-        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer</item>
-        <item name="android:colorBackground">@color/md_theme_light_background</item>
-        <item name="colorOnBackground">@color/md_theme_light_onBackground</item>
-        <item name="colorSurface">@color/md_theme_light_surface</item>
-        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
-        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
-        <item name="colorOutline">@color/md_theme_light_outline</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
-        <item name="elevationOverlayColor">@color/md_theme_light_surfaceTint</item>
-        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
-    </style>
-
-    <style name="BaseAppTheme.NoActionBar" parent="BaseAppTheme">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme2.NoActionBar" parent="AppTheme2">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme3.NoActionBar" parent="AppTheme3">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme4.NoActionBar" parent="AppTheme4">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme5.NoActionBar" parent="AppTheme5">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
     </style>
 </resources>

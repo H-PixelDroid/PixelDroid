@@ -5,13 +5,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostCreationBinding
-import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 
 const val TAG = "Post Creation Activity"
 
-class PostCreationActivity : BaseThemedWithoutBarActivity() {
+class PostCreationActivity : BaseActivity() {
 
     companion object {
         internal const val PICTURE_DESCRIPTION = "picture_description"

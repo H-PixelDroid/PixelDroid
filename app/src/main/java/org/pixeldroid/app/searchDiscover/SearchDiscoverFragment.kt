@@ -11,22 +11,24 @@ import androidx.core.content.ContextCompat
 import org.pixeldroid.app.databinding.FragmentSearchBinding
 import org.pixeldroid.app.searchDiscover.TrendingActivity.Companion.TRENDING_TAG
 import org.pixeldroid.app.searchDiscover.TrendingActivity.Companion.TrendingType
-import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.bindingLifecycleAware
+
 
 /**
  * This fragment lets you search and use Pixelfed's Discover feature
  */
 
 class SearchDiscoverFragment : BaseFragment() {
+
     private lateinit var api: PixelfedAPI
 
     var binding: FragmentSearchBinding by bindingLifecycleAware()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 
@@ -56,4 +58,5 @@ class SearchDiscoverFragment : BaseFragment() {
         intent.putExtra(TRENDING_TAG, type)
         ContextCompat.startActivity(binding.root.context, intent, null)
     }
+
 }

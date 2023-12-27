@@ -11,14 +11,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.paging.RemoteMediator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
 import org.pixeldroid.app.posts.StatusViewHolder
-import org.pixeldroid.app.posts.feeds.cachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
+import org.pixeldroid.app.posts.feeds.cachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.feeds.cachedFeeds.ViewModelFactory
+import org.pixeldroid.app.stories.StoriesAdapter
 import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
 import org.pixeldroid.app.utils.api.objects.Status
+import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
 import org.pixeldroid.app.utils.displayDimensionsInPx
 import kotlin.properties.Delegates
 
@@ -38,14 +38,18 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = PostsAdapter(requireContext().displayDimensionsInPx())
+        home = requireArguments().getBoolean("home")
 
-        home = requireArguments().get("home") as Boolean
+        adapter = PostsAdapter(requireContext().displayDimensionsInPx())
 
         @Suppress("UNCHECKED_CAST")
         if (home){
             mediator = HomeFeedRemoteMediator(apiHolder, db) as RemoteMediator<Int, T>
             dao = db.homePostDao() as FeedContentDao<T>
+            headerAdapter = StoriesAdapter(lifecycleScope, apiHolder)
+            headerAdapter?.showStories = false
+
+            headerAdapter?.refreshStories()
         }
         else {
             mediator = PublicFeedRemoteMediator(apiHolder, db) as RemoteMediator<Int, T>
@@ -55,7 +59,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
@@ -81,15 +85,17 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
             return StatusViewHolder.create(parent)
         }
 
-        override fun getItemViewType(position: Int): Int {
-            return R.layout.post_fragment
-        }
-
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val uiModel = getItem(position) as Status?
-            uiModel?.let {
-                (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
-            }
+                holder.itemView.visibility = View.VISIBLE
+                holder.itemView.layoutParams =
+                    RecyclerView.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+                val uiModel = getItem(position) as Status?
+                uiModel?.let {
+                    (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
+                }
         }
     }
 }

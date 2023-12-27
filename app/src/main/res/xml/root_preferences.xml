@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidElementNotAllowed -->
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -48,7 +49,17 @@
         android:summary="@string/about_pixeldroid"
         app:icon="@drawable/info_black_24dp">
         <intent
+            android:action="android.intent.action.VIEW"
             android:targetPackage="@string/application_id"
-            android:targetClass="org.pixeldroid.app.settings.AboutActivity"/>
+            android:targetClass="org.pixeldroid.common.AboutActivity">
+            <extra android:name="buildVersion" android:value="@string/versionName" />
+            <extra android:name="appImage" android:value="@drawable/mascot" />
+            <extra android:name="appName" android:value="@string/app_name" />
+            <extra android:name="aboutAppDescription" android:value="@string/license_info" />
+            <extra android:name="website" android:value="@string/project_website" />
+            <extra android:name="translatePlatformUrl" android:value="https://weblate.pixeldroid.org" />
+            <extra android:name="contributeForgeUrl" android:value="https://gitlab.shinice.net/pixeldroid/PixelDroid" />
+        </intent>
+
     </Preference>
 </PreferenceScreen>
