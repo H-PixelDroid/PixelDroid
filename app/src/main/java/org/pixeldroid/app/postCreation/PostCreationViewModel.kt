@@ -532,12 +532,16 @@ class PostCreationViewModel(
                 } ?:  apiHolder.api ?: apiHolder.setToCurrentUser()
 
                 if(uiState.value.storyCreation){
+                    val canReact = if (uiState.value.storyReactions) "1" else "0"
+                    val canReply = if (uiState.value.storyReplies) "1" else "0"
+
                     api.storyPublish(
                         media_id = getPhotoData().value!!.firstNotNullOf { it.uploadId },
-                        can_react = "1", can_reply = "1",
+                        can_react = canReact,
+                        can_reply = canReply,
                         duration = uiState.value.storyDuration
                     )
-                } else{
+                } else {
                     api.postStatus(
                         statusText = description,
                         media_ids = getPhotoData().value!!.mapNotNull { it.uploadId }.toList(),
@@ -593,6 +597,10 @@ class PostCreationViewModel(
                 maxEntries = newMaxEntries,
                 addPhotoButtonEnabled = (photoData.value?.size ?: 0) < (newMaxEntries ?: 0),
                 )
+
+        // Carousel off if in story mode
+        if (storyMode) newUiState = newUiState.copy(isCarousel = false)
+
         // If switching to story, and there are too many pictures, keep the first and backup the rest
         if (storyMode && (photoData.value?.size ?: 0) > 1){
             storyPhotoDataBackup = photoData.value
