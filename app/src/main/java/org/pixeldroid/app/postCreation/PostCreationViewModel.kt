@@ -598,8 +598,8 @@ class PostCreationViewModel(
                 addPhotoButtonEnabled = (photoData.value?.size ?: 0) < (newMaxEntries ?: 0),
                 )
 
-        // Carousel off if in story mode
-        if (storyMode) newUiState = newUiState.copy(isCarousel = false)
+        // Carousel on if in story mode
+        if (storyMode) newUiState = newUiState.copy(isCarousel = true)
 
         // If switching to story, and there are too many pictures, keep the first and backup the rest
         if (storyMode && (photoData.value?.size ?: 0) > 1){
