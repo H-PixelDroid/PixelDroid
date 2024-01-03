@@ -53,7 +53,12 @@
             android:targetPackage="@string/application_id"
             android:targetClass="org.pixeldroid.common.AboutActivity">
             <extra android:name="buildVersion" android:value="@string/versionName" />
-            <extra android:name="appImage" android:value="@drawable/mascot" />
+            <extra android:name="appImage" android:value="mascot" />
+            <extra android:name="appImageWidth" android:value="508" />
+            <extra android:name="appImageTopMargin" android:value="-130" />
+            <extra android:name="appImageBottomMargin" android:value="-130" />
+            <extra android:name="appImageLeftMargin" android:value="0" />
+            <extra android:name="appImageRightMargin" android:value="0" />
             <extra android:name="appName" android:value="@string/app_name" />
             <extra android:name="aboutAppDescription" android:value="@string/license_info" />
             <extra android:name="website" android:value="@string/project_website" />

@@ -74,6 +74,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
         return view
     }
 
+
     inner class PostsAdapter(private val displayDimensionsInPx: Pair<Int, Int>) : PagingDataAdapter<T, RecyclerView.ViewHolder>(
         object : DiffUtil.ItemCallback<T>() {
             override fun areItemsTheSame   (oldItem: T, newItem: T): Boolean = oldItem.id == newItem.id
@@ -94,7 +95,9 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
                     )
                 val uiModel = getItem(position) as Status?
                 uiModel?.let {
-                    (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
+                    (holder as StatusViewHolder).bind(
+                        it, apiHolder, db, lifecycleScope, displayDimensionsInPx, requestPermissionDownloadPic
+                    )
                 }
         }
     }

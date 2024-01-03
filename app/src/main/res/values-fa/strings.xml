@@ -56,7 +56,6 @@
     <string name="posted_on">منتشر شده در %1$s</string>
     <string name="empty_comment">نظر نمی‌تواند خالی باشد!</string>
     <string name="write_permission_download_pic">برای بارگیری تصاویر بایستی مجوز نوشتن را بدهید!</string>
-    <string name="write_permission_share_pic">برای هم‌رسانی تصاویر باید مجوز نوشتن را بدهید!</string>
     <string name="share_image">هم‌رسانی تصویر</string>
     <string name="comment_error">خطا در درج نظر!</string>
     <string name="comment_posted">نظر: %1$s منتشر کرد!</string>

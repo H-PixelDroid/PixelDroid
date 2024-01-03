@@ -53,7 +53,6 @@
     <string name="no_description">Nessuna descrizione</string>
     <string name="posted_on">Postato su %1$s</string>
     <string name="empty_comment">Il commento non deve essere vuoto!</string>
-    <string name="write_permission_share_pic">È necessario concedere i permessi di scrittura per condividere le immagini!</string>
     <string name="share_image">Condividi immagine</string>
     <string name="comment_error">Errore nel commento!</string>
     <string name="comment_posted">Commento: %1$s postato!</string>

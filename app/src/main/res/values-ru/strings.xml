@@ -42,7 +42,6 @@
     <string name="comment_error">Ошибка комментирования!</string>
     <string name="share_image">Поделиться изображением</string>
     <string name="write_permission_download_pic">Вам необходимо предоставить разрешение на запись чтобы скачивать фотографии!</string>
-    <string name="write_permission_share_pic">Вы должны дать разрешение на запись чтобы делиться фотографиями!</string>
     <string name="empty_comment">Комментарий не должен быть пустым!</string>
     <string name="posted_on">Опубликовано в %1$s</string>
     <string name="no_description">Описание отсутствует</string>

@@ -150,7 +150,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="NoCommentsToShow">No comments on this post…</string>
     <string name="empty_comment">Comment must not be empty!</string>
     <string name="write_permission_download_pic">You need to grant write permission to download pictures!</string>
-    <string name="write_permission_share_pic">You need to grant write permission to share pictures!</string>
     <string name="share_image">Share Image</string>
     <string name="comment_error">Comment error!</string>
     <string name="comment_posted">"Comment: %1$s posted!"</string>

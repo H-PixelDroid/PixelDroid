@@ -39,7 +39,6 @@
     <string name="instance_error">インスタンス情報が取得できませんでした</string>
     <string name="posted_on">%1$s の投稿</string>
     <string name="accounts">アカウント</string>
-    <string name="write_permission_share_pic">画像を共有するためには書き込みの権限を更新する必要があります</string>
     <string name="write_permission_download_pic">画像をダウンロードするには書き込みの権限を更新する必要があります</string>
     <string name="empty_comment">コメントは空欄にできません</string>
     <string name="comment_posted">コメント: %1$s が投稿されました</string>

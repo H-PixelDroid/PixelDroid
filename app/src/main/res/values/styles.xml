@@ -1,50 +1,17 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-
+<resources>
     <!-- Splash screen theme. -->
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <!-- Set the splash screen background, animated icon, and animation duration. -->
         <item name="windowSplashScreenBackground">?android:attr/colorBackground</item>
 
         <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an
-             animated drawable. One of these is required. -->
-        <!-- TODO get rid of duplicated mascot/mascot_small somehow -->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/mascot_small</item>
+             animated drawable. One of these is required.-->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/mascot</item>
 
         <!-- Set the theme of the Activity that directly follows your splash screen. -->
         <!-- Required -->
         <item name="postSplashScreenTheme">@style/BaseAppTheme</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-    </style>
-
-
-    <style name="AppTheme.PopupOverlay" parent="Theme.Material3.Light" />
-
-    <style name="AppTheme.ActionBar.Transparent" parent="Theme.Material3.Dark">
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">always</item>
-        <item name="colorPrimary">@android:color/transparent</item>
-        <item name="colorPrimaryDark">@android:color/transparent</item>
-        <item name="colorPrimaryVariant">@android:color/transparent</item>
-        <item name="colorAccent">@android:color/transparent</item>
-        <item name="colorSecondary">@android:color/transparent</item>
-        <item name="statusBarForeground">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:toolbarStyle">@style/ToolbarTransparent</item>
-        <item name="toolbarStyle">@style/ToolbarTransparent</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="statusBarBackground">@android:color/transparent</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:backgroundDimEnabled">false</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-    </style>
-    <style name="ToolbarTransparent" parent="Widget.Material3.Toolbar">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="background">@android:color/transparent</item>
     </style>
 </resources>

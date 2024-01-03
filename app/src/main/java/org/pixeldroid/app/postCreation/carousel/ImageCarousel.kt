@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.*
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ImageCarouselBinding
 import me.relex.circleindicator.CircleIndicator2
+import org.pixeldroid.common.dpToPx
+import org.pixeldroid.common.getSnapPosition
+import org.pixeldroid.common.spToPx
 
 class ImageCarousel(
         context: Context,

@@ -27,7 +27,7 @@ android {
     }
     defaultConfig {
         minSdkVersion 23
-        versionCode 25
+        versionCode 26
         targetSdkVersion 34
         versionName "1.0.beta" + versionCode
 
@@ -220,9 +220,6 @@ dependencies {
     implementation 'com.mikepenz:materialdrawer-iconics:9.0.1'
     implementation 'com.mikepenz:iconics-views:5.4.0'
     implementation 'com.mikepenz:google-material-typeface:4.0.0.2-kotlin@aar'
-
-
-    implementation 'com.karumi:dexter:6.2.3'
 
     implementation 'com.github.ligi:tracedroid:4.1'
 

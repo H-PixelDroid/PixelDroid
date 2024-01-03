@@ -1,10 +1,12 @@
 package org.pixeldroid.app.posts
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import org.pixeldroid.app.databinding.ActivityAlbumBinding
 import org.pixeldroid.app.utils.api.objects.Attachment
+
 
 class AlbumActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,5 +37,18 @@ class AlbumActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setBackgroundDrawable(null)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // Handle up arrow manually,
+                // since "up" isn't defined for this activity
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
