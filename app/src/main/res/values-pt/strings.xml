@@ -84,7 +84,6 @@
     <string name="share_image">Partilhar imagem</string>
     <string name="comment_error">Erro ao comentar!</string>
     <string name="write_permission_download_pic">Precisa adicionar a permissão para transferir imagens!</string>
-    <string name="write_permission_share_pic">Precisa adicionar permissão para partilhar imagens!</string>
     <string name="comment_posted">Comentário: %1$s publicou!</string>
     <string name="comment">Comentário</string>
     <string name="add_comment">Adicionar um comentário</string>

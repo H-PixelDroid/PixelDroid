@@ -64,7 +64,6 @@
     <string name="comment_posted">¡Comentario: %1$s publicado!</string>
     <string name="comment_error">¡Error al comentar!</string>
     <string name="share_image">Compartir imagen</string>
-    <string name="write_permission_share_pic">¡Tienes que dar permiso de escritura para compartir fotos!</string>
     <string name="write_permission_download_pic">¡Tienes que dar permiso de escritura para descargar fotos!</string>
     <string name="empty_comment">¡Los comentarios no deben estar vacíos!</string>
     <string name="posted_on">Publicado en %1$s</string>

@@ -69,7 +69,6 @@
     <string name="posted_on">Zveřejněno na %1$s</string>
     <string name="NoCommentsToShow">U tohoto příspěvku nejsou žádné komentáře…</string>
     <string name="empty_comment">Komentář nesmí být prázdný!</string>
-    <string name="write_permission_share_pic">Pro sdílení obrázků musíte udělit práva k zápisu!</string>
     <string name="share_image">Sdílet obrázek</string>
     <string name="comment_error">Chyba komentáře!</string>
     <string name="comment_posted">Komentář: %1$s zveřejněn!</string>

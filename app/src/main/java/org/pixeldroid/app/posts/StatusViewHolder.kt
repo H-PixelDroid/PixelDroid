@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_DENIED
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Looper
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -16,6 +19,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -70,7 +74,11 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
     private var status: Status? = null
 
-    fun bind(status: Status?, pixelfedAPI: PixelfedAPIHolder, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>, isActivity: Boolean = false) {
+    fun bind(
+        status: Status?, pixelfedAPI: PixelfedAPIHolder, db: AppDatabase,
+        lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>,
+        requestPermissionDownloadPic: ActivityResultLauncher<String>, isActivity: Boolean = false
+    ) {
 
         this.itemView.visibility = View.VISIBLE
         this.status = status
@@ -99,7 +107,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
         setupPost(picRequest, user.instance_uri, isActivity)
 
-        activateButtons(pixelfedAPI, db, lifecycleScope, isActivity)
+        activateButtons(pixelfedAPI, db, lifecycleScope, isActivity, requestPermissionDownloadPic)
 
     }
 
@@ -227,6 +235,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         db: AppDatabase,
         lifecycleScope: LifecycleCoroutineScope,
         isActivity: Boolean,
+        requestPermissionDownloadPic: ActivityResultLauncher<String>,
     ){
         //Set the special HTML text
         setDescription(apiHolder, lifecycleScope)
@@ -256,7 +265,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
         showComments(lifecycleScope, isActivity)
 
-        activateMoreButton(apiHolder, db, lifecycleScope)
+        activateMoreButton(apiHolder, db, lifecycleScope, requestPermissionDownloadPic)
     }
 
     private fun activateReblogger(
@@ -358,7 +367,12 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         return null
     }
 
-    private fun activateMoreButton(apiHolder: PixelfedAPIHolder, db: AppDatabase, lifecycleScope: LifecycleCoroutineScope){
+    private fun activateMoreButton(
+        apiHolder: PixelfedAPIHolder,
+        db: AppDatabase,
+        lifecycleScope: LifecycleCoroutineScope,
+        requestPermissionDownloadPic: ActivityResultLauncher<String>
+    ){
         var bookmarked: Boolean? = null
         binding.statusMore.setOnClickListener {
             PopupMenu(it.context, it).apply {
@@ -396,12 +410,18 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                             true
                         }
                         R.id.post_more_menu_save_to_gallery -> {
+                            // Check permissions on old Android versions: on new versions it is not
+                            // needed when storing a file.
+                            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && ContextCompat.checkSelfPermission(binding.root.context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_DENIED) {
+                                requestPermissionDownloadPic.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            } else {
                             status?.downloadImage(
                                 binding.root.context,
                                 status?.media_attachments?.getOrNull(binding.postPager.currentItem)?.url
                                     ?: "",
                                 binding.root
                             )
+                            }
                             true
                         }
 

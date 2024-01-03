@@ -40,7 +40,6 @@
     <string name="no_description">Bez opisu</string>
     <string name="posted_on">Opublikowano %1$s</string>
     <string name="empty_comment">Komentarz nie może być pusty!</string>
-    <string name="write_permission_share_pic">Musisz nadać uprawnienia do zapisu, aby móc udostępniać obrazki!</string>
     <string name="share_image">Udostępnij</string>
     <string name="comment_error">Błąd komentarza!</string>
     <string name="comment_posted">Komentarz: %1$s opublikowany!</string>

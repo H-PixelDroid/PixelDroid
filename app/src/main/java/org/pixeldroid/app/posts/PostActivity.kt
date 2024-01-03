@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment
@@ -43,7 +45,10 @@ class PostActivity : BaseActivity() {
 
         val holder = StatusViewHolder(binding.postFragmentSingle)
 
-        holder.bind(status, apiHolder, db, lifecycleScope, displayDimensionsInPx(), isActivity = true)
+        holder.bind(
+            status, apiHolder, db, lifecycleScope, displayDimensionsInPx(),
+            requestPermissionDownloadPic, isActivity = true
+        )
 
         activateCommenter()
         initCommentsFragment(domain = user?.instance_uri.orEmpty())
@@ -60,6 +65,17 @@ class PostActivity : BaseActivity() {
         }
     }
 
+    private val requestPermissionDownloadPic =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (!isGranted) {
+                    MaterialAlertDialogBuilder(this)
+                        .setMessage(R.string.write_permission_download_pic)
+                        .setNegativeButton(android.R.string.ok) { _, _ -> }
+                        .show()
+            }
+        }
     private fun activateCommenter() {
         //Activate commenter
         binding.submitComment.setOnClickListener {

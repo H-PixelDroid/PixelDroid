@@ -178,8 +178,10 @@ class ProfileFeedFragment : UncachedFeedFragment<FeedContent>() {
                         deleteFromCollection
                     )
                 } else {
-                    (holder as StatusViewHolder).bind(it as Status, apiHolder, db,
-                        lifecycleScope, requireContext().displayDimensionsInPx())
+                    (holder as StatusViewHolder).bind(
+                        it as Status, apiHolder, db, lifecycleScope,
+                        requireContext().displayDimensionsInPx(), requestPermissionDownloadPic
+                    )
                 }
             }
 
