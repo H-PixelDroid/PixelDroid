@@ -6,9 +6,8 @@
         <item name="windowSplashScreenBackground">?android:attr/colorBackground</item>
 
         <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an
-             animated drawable. One of these is required. -->
-        <!-- TODO get rid of duplicated mascot/mascot_small somehow -->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/mascot_small</item>
+             animated drawable. One of these is required.-->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/mascot</item>
 
         <!-- Set the theme of the Activity that directly follows your splash screen. -->
         <!-- Required -->

@@ -1,8 +1,11 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt"
-    android:viewportWidth="201.8771"
-    android:viewportHeight="218.8104"
-    android:width="254dp"
-    android:height="275dp">
+    android:viewportWidth="403.75"
+    android:viewportHeight="437.6"
+    android:width="100dp"
+    android:height="108dp">
+    <group android:translateX="100"
+        android:translateY="115">
+
     <group
         android:translateX="-1.41459"
         android:translateY="-24.00768">
@@ -808,4 +811,5 @@
         android:strokeColor="#000000"
         android:strokeWidth="1.32292"
         android:strokeLineCap="round" />
+    </group>
 </vector>
