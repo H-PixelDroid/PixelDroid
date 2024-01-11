@@ -24,10 +24,14 @@
         android:name=".utils.PixelDroidApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:localeConfig="@xml/locales_config"
         android:theme="@style/BaseAppTheme">
+        <activity
+            android:name=".directMessages.ConversationsActivity"
+            android:exported="false" />
+
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
@@ -40,22 +44,24 @@
         <activity
             android:name=".posts.AlbumActivity"
             android:exported="false"
-            android:theme="@style/AppTheme.ActionBar.Transparent"/>
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".profile.EditProfileActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".posts.MediaViewerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:theme="@style/BaseAppTheme.NoActionBar" />
-        <activity android:name=".postCreation.camera.CameraActivity"/>
-        <activity android:name=".postCreation.camera.CameraActivityShortcut"
-            android:exported = "true"
+        <activity android:name=".postCreation.camera.CameraActivity" />
+        <activity
+            android:name=".postCreation.camera.CameraActivityShortcut"
+            android:exported="true"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
@@ -67,8 +73,8 @@
         <activity
             android:name=".postCreation.PostCreationActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/BaseAppTheme.NoActionBar">
+            android:theme="@style/BaseAppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <action android:name="android.intent.action.SEND" />
@@ -95,7 +101,7 @@
             android:name=".profile.ProfileActivity"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".profile.CollectionActivity"/>
+        <activity android:name=".profile.CollectionActivity" />
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings2"
@@ -105,8 +111,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.App.Starting"
             android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.App.Starting"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -118,7 +124,8 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="org.pixeldroid.app.searchDiscover.SearchActivity" />
-            <meta-data android:name="android.app.shortcuts"
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
@@ -153,7 +160,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".searchDiscover.TrendingActivity"/>
+        <activity android:name=".searchDiscover.TrendingActivity" />
         <activity
             android:name=".settings.AboutActivity"
             android:parentActivityName=".settings.SettingsActivity"

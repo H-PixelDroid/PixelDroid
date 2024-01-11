@@ -290,6 +290,24 @@ interface PixelfedAPI {
         @Query("account_id") account_id: Boolean? = null
     ): List<Notification>
 
+    @GET("/api/v1/conversations")
+    suspend fun viewAllConversations(
+        @Query("max_id") max_id: String? = null,
+        @Query("since_id") since_id: String? = null,
+        @Query("min_id") min_id: String? = null,
+        @Query("limit") limit: String? = null
+    ): List<Conversation>
+
+    @DELETE("/api/v1/conversations/{id}")
+    suspend fun deleteConversation(
+        @Path("id") id: String
+    )
+
+    @POST("/api/v1/conversations/{id}/read")
+    suspend fun markConversationAsRead(
+        @Path("id") id: String
+    ): Conversation
+
     @GET("/api/v1/accounts/verify_credentials")
     suspend fun verifyCredentials(
         //The authorization header needs to be of the form "Bearer <token>"

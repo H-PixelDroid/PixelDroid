@@ -7,6 +7,7 @@ import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.BaseFragment
 import dagger.Component
+import org.pixeldroid.app.directMessages.ui.main.ConversationsViewModel
 import org.pixeldroid.app.postCreation.PostCreationViewModel
 import org.pixeldroid.app.profile.EditProfileViewModel
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker
@@ -22,6 +23,7 @@ interface ApplicationComponent {
     fun inject(notificationsWorker: NotificationsWorker)
     fun inject(postCreationViewModel: PostCreationViewModel)
     fun inject(editProfileViewModel: EditProfileViewModel)
+    fun inject(editProfileViewModel: ConversationsViewModel)
 
     val context: Context?
     val application: Application?

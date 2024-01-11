@@ -42,6 +42,7 @@ import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import kotlinx.coroutines.launch
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.databinding.ActivityMainBinding
+import org.pixeldroid.app.directMessages.ConversationsActivity
 import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.posts.NestedScrollableHost
 import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
@@ -229,12 +230,17 @@ class MainActivity : BaseThemedWithoutBarActivity() {
             primaryDrawerItem {
                 nameRes = R.string.logout
                 iconicsIcon = GoogleMaterial.Icon.gmd_close
+            },
+            primaryDrawerItem {
+                nameRes = R.string.logout
+                iconicsIcon = GoogleMaterial.Icon.gmd_close
             })
         binding.drawer.onDrawerItemClickListener = { v, drawerItem, position ->
             when (position){
                 1 -> launchActivity(ProfileActivity())
                 2 -> launchActivity(SettingsActivity())
                 3 -> logOut()
+                4 -> launchActivity(ConversationsActivity())
             }
             false
         }
