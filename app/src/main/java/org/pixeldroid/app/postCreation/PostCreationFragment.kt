@@ -33,8 +33,10 @@ import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentPostCreationBinding
 import org.pixeldroid.app.postCreation.camera.CameraActivity
+import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.fileExtension
@@ -52,7 +54,7 @@ class PostCreationFragment : BaseFragment() {
     private var user: UserDatabaseEntity? = null
     private var instance: InstanceDatabaseEntity = InstanceDatabaseEntity("", "")
 
-    private lateinit var binding: FragmentPostCreationBinding
+    private var binding: FragmentPostCreationBinding by bindingLifecycleAware()
     private lateinit var model: PostCreationViewModel
 
     override fun onCreateView(
@@ -63,6 +65,7 @@ class PostCreationFragment : BaseFragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentPostCreationBinding.inflate(layoutInflater)
+
         return binding.root
     }
 
@@ -83,7 +86,8 @@ class PostCreationFragment : BaseFragment() {
                 requireActivity().intent.clipData!!,
                 instance,
                 requireActivity().intent.getStringExtra(PostCreationActivity.PICTURE_DESCRIPTION),
-                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false)
+                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false),
+                requireActivity().intent.getBooleanExtra(CameraFragment.CAMERA_ACTIVITY_STORY, false),
             )
         }
         model = _model
@@ -99,6 +103,7 @@ class PostCreationFragment : BaseFragment() {
                     )
                 }
             )
+            binding.postCreationNextButton.isEnabled = newPhotoData.isNotEmpty()
         }
 
         lifecycleScope.launch {
@@ -119,13 +124,26 @@ class PostCreationFragment : BaseFragment() {
                     binding.toolbarPostCreation.visibility =
                         if (uiState.isCarousel) View.VISIBLE else View.INVISIBLE
                     binding.carousel.layoutCarousel = uiState.isCarousel
+
+                    if(uiState.storyCreation){
+                        binding.toggleStoryPost.check(binding.buttonStory.id)
+                        binding.buttonStory.isPressed = true
+                        binding.carousel.showLayoutSwitchButton = false
+                        binding.carousel.showIndicator = false
+                    } else {
+                        binding.toggleStoryPost.check(binding.buttonPost.id)
+                        binding.carousel.showLayoutSwitchButton = true
+                        binding.carousel.showIndicator = true
+                    }
+                    binding.carousel.maxEntries = uiState.maxEntries
+
                 }
             }
         }
 
         binding.carousel.apply {
             layoutCarouselCallback = { model.becameCarousel(it)}
-            maxEntries = instance.albumLimit
+            maxEntries = if(model.uiState.value.storyCreation) 1 else instance.albumLimit
             addPhotoButtonCallback = {
                 addPhoto()
             }
@@ -133,9 +151,10 @@ class PostCreationFragment : BaseFragment() {
                 model.updateDescription(position, description)
             }
         }
-        // get the description and send the post
-        binding.postCreationSendButton.setOnClickListener {
-            if (validatePost() && model.isNotEmpty()) {
+
+        // Validate the post and go to the next step of the post creation process
+        binding.postCreationNextButton.setOnClickListener {
+            if (validatePost()) {
                 findNavController().navigate(R.id.action_postCreationFragment_to_postSubmissionFragment)
             }
         }
@@ -162,6 +181,23 @@ class PostCreationFragment : BaseFragment() {
                 model.cancelEncode(currentPosition)
             }
         }
+
+        binding.toggleStoryPost.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            // Only handle checked events
+            if (!isChecked) return@addOnButtonCheckedListener
+
+            when (checkedId) {
+                R.id.buttonStory -> {
+                    model.storyMode(true)
+                }
+                R.id.buttonPost -> {
+                    model.storyMode(false)
+                }
+            }
+
+        }
+
+        binding.backbutton.setOnClickListener{requireActivity().onBackPressedDispatcher.onBackPressed()}
 
         // Clean up temporary files, if any
         val tempFiles = requireActivity().intent.getStringArrayExtra(PostCreationActivity.TEMP_FILES)
@@ -275,14 +311,17 @@ class PostCreationFragment : BaseFragment() {
 
 
     private fun validatePost(): Boolean {
-        if (model.getPhotoData().value?.all { !it.video || it.videoEncodeComplete } == false) {
-            MaterialAlertDialogBuilder(requireActivity()).apply {
-                setMessage(R.string.still_encoding)
-                setNegativeButton(android.R.string.ok) { _, _ -> }
-            }.show()
-            return false
+        if (model.getPhotoData().value?.none { it.video && it.videoEncodeComplete == false } == true) {
+            // Encoding is done, i.e. none of the items are both a video and not done encoding.
+            // We return true if the post is not empty, false otherwise.
+            return model.getPhotoData().value?.isNotEmpty() == true
         }
-        return true
+        // Encoding is not done, show a dialog and return false to indicate validation failed
+        MaterialAlertDialogBuilder(requireActivity()).apply {
+            setMessage(R.string.still_encoding)
+            setNegativeButton(android.R.string.ok) { _, _ -> }
+        }.show()
+        return false
     }
 
     private val editResultContract: ActivityResultLauncher<Intent> = registerForActivityResult(

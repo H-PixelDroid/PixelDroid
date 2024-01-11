@@ -24,6 +24,7 @@ fun setProfileImageFromURL(view : View, url : String?, image : ImageView) {
  * @param image, the imageView into which we will load the image
  */
 fun setSquareImageFromURL(view : View, url : String?, image : ImageView, blurhash: String? = null) {
+    //TODO performance: placeholder here takes a lot of time to compute and this is not async!
     Glide.with(view).load(url).placeholder(
         blurhash?.let { BlurHashDecoder.blurHashBitmap(view.resources, it, 32, 32) }
     ).apply(RequestOptions().centerCrop()).into(image)

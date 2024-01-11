@@ -11,29 +11,81 @@
         android:id="@+id/carousel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:showCaption="true"
-        app:layout_constraintBottom_toTopOf="@+id/buttonConstraints"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar"
+        app:showCaption="true" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buttonConstraints"
-        android:layout_width="wrap_content"
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:background="?attr/colorSecondaryContainer"
+        app:titleTextColor="?attr/colorOnSecondaryContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/post_creation_send_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:enabled="true"
-            android:text="@string/upload_next_step"
-            android:visibility="visible"
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/backbutton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:tint="?attr/colorOnSecondaryContainer"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@android:string/cancel"
+            android:src="?attr/homeAsUpIndicator"
+            android:tooltipText='@android:string/cancel'
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleStoryPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:checkedButton="@+id/buttonPost"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/post_creation_next_button"
+            app:layout_constraintStart_toEndOf="@id/backbutton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <Button
+                android:id="@+id/buttonStory"
+                style="?attr/materialButtonOutlinedStyle"
+                app:backgroundTint="@color/selector_story_post"
+                android:textColor="@color/selector_story_post_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type_story" />
+
+            <Button
+                android:id="@+id/buttonPost"
+                style="?attr/materialButtonOutlinedStyle"
+                app:backgroundTint="@color/selector_story_post"
+                android:textColor="@color/selector_story_post_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type_post" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <Button
+            style="@style/Widget.Material3.Button.TextButton.Icon"
+            app:icon="@drawable/arrow_forward"
+            app:iconGravity="end"
+            android:id="@+id/post_creation_next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:text="@string/continue_post_creation"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +96,7 @@
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/savePhotoButton"
@@ -53,8 +105,8 @@
             android:layout_marginStart="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/save_to_gallery"
-            android:tooltipText='@string/save_to_gallery'
             android:src="@drawable/download_file_30dp"
+            android:tooltipText='@string/save_to_gallery'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -66,8 +118,8 @@
             android:layout_marginStart="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/delete"
-            android:tooltipText='@string/delete'
             android:src="@drawable/delete_30dp"
+            android:tooltipText='@string/delete'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/savePhotoButton"
             app:layout_constraintTop_toTopOf="parent" />
@@ -79,8 +131,8 @@
             android:layout_marginStart="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/edit"
-            android:tooltipText='@string/edit'
             android:src="@drawable/ic_baseline_edit_30"
+            android:tooltipText='@string/edit'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/removePhotoButton"
             app:layout_constraintTop_toTopOf="parent" />
@@ -92,8 +144,8 @@
             android:layout_marginEnd="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/add_photo"
-            android:tooltipText='@string/add_photo'
             android:src="@drawable/add_photo_button"
+            android:tooltipText='@string/add_photo'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

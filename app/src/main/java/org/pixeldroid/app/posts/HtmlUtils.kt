@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.text.toSpanned
 import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account.Companion.openAccountFromId
@@ -106,7 +107,7 @@ fun parseHTMLText(
                         override fun onClick(widget: View) {
 
                             // Retrieve the account for the given profile
-                            lifecycleScope.launchWhenCreated {
+                            lifecycleScope.launch {
                                 val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
                                 openAccountFromId(accountId, api, context)
                             }
@@ -130,7 +131,7 @@ fun parseHTMLText(
 }
 
 
-fun setTextViewFromISO8601(date: Instant, textView: TextView, absoluteTime: Boolean, context: Context) {
+fun setTextViewFromISO8601(date: Instant, textView: TextView, absoluteTime: Boolean) {
     val now = Date.from(Instant.now()).time
 
     try {
@@ -140,7 +141,7 @@ fun setTextViewFromISO8601(date: Instant, textView: TextView, absoluteTime: Bool
                 android.text.format.DateUtils.SECOND_IN_MILLIS,
                 android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE).toString()
 
-        textView.text = if(absoluteTime) context.getString(R.string.posted_on).format(date)
+        textView.text = if(absoluteTime) textView.context.getString(R.string.posted_on).format(date)
         else formattedDate
 
     } catch (e: ParseException) {

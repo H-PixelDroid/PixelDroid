@@ -15,7 +15,7 @@ import org.pixeldroid.app.posts.PostActivity
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.accountLists.AccountViewHolder
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.search.HashTagViewHolder
 import org.pixeldroid.app.profile.ProfilePostViewHolder
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.Attachment
@@ -24,7 +24,7 @@ import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.api.objects.Tag
 import org.pixeldroid.app.utils.setSquareImageFromURL
 
-class TrendingActivity : BaseThemedWithBarActivity() {
+class TrendingActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTrendingBinding
     private lateinit var trendingAdapter : TrendingRecyclerViewAdapter
@@ -33,6 +33,7 @@ class TrendingActivity : BaseThemedWithBarActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTrendingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
 
         val recycler = binding.list
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

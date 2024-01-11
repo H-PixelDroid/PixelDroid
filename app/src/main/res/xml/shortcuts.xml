@@ -8,7 +8,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="org.pixeldroid.app"
-            android:targetClass="org.pixeldroid.app.postCreation.camera.CameraActivityShortcut" />
+            android:targetClass="org.pixeldroid.app.postCreation.camera.CameraActivity" />
         <categories android:name="android.shortcut.conversation" />
         <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
     </shortcut>

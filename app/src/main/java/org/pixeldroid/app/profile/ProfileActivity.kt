@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
 import org.pixeldroid.app.posts.parseHTMLText
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
@@ -25,7 +25,7 @@ import org.pixeldroid.app.utils.setProfileImageFromURL
 import retrofit2.HttpException
 import java.io.IOException
 
-class ProfileActivity : BaseThemedWithBarActivity() {
+class ProfileActivity : BaseActivity() {
 
     private lateinit var domain : String
     private lateinit var accountId : String
@@ -36,7 +36,10 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
+
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

@@ -62,7 +62,7 @@ class PublicFeedRemoteMediator @Inject constructor(
             val dbObjects = apiResponse.map{
                 PublicFeedStatusDatabaseEntity(user.user_id, user.instance_uri, it)
             }
-            val endOfPaginationReached = apiResponse.isEmpty()
+            val endOfPaginationReached = apiResponse.isEmpty() || maxId == apiResponse.sortedBy { it.created_at }.last().id
 
             db.withTransaction {
                 // Clear table in the database

@@ -18,8 +18,10 @@ import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import org.pixeldroid.app.databinding.FragmentFeedBinding
 import org.pixeldroid.app.posts.feeds.initAdapter
+import org.pixeldroid.app.stories.StoriesAdapter
 import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
 import org.pixeldroid.app.utils.limitedLengthSmoothScrollToPosition
@@ -31,8 +33,9 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
 
     internal lateinit var viewModel: FeedViewModel<T>
     internal lateinit var adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>
+    internal var headerAdapter: StoriesAdapter? = null
 
-    private lateinit var binding: FragmentFeedBinding
+    private var binding: FragmentFeedBinding by bindingLifecycleAware()
 
 
     private var job: Job? = null
@@ -49,6 +52,7 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
         }
     }
 
+    //TODO rename function to something that makes sense
     internal fun initSearch() {
         // Scroll to top when the list is refreshed from network.
         lifecycleScope.launchWhenStarted {
@@ -73,7 +77,9 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
         binding = FragmentFeedBinding.inflate(layoutInflater)
 
         initAdapter(binding.progressBar, binding.swipeRefreshLayout,
-            binding.list, binding.motionLayout, binding.errorLayout, adapter)
+            binding.list, binding.motionLayout, binding.errorLayout, adapter,
+            headerAdapter
+        )
 
         return binding.root
     }

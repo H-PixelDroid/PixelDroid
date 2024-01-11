@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -51,7 +52,7 @@ import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
-import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Notification
 import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
@@ -66,7 +67,7 @@ import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFr
 import java.time.Instant
 
 
-class MainActivity : BaseThemedWithoutBarActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
@@ -231,10 +232,7 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                 nameRes = R.string.logout
                 iconicsIcon = GoogleMaterial.Icon.gmd_close
             },
-            primaryDrawerItem {
-                nameRes = R.string.logout
-                iconicsIcon = GoogleMaterial.Icon.gmd_close
-            })
+        )
         binding.drawer.onDrawerItemClickListener = { v, drawerItem, position ->
             when (position){
                 1 -> launchActivity(ProfileActivity())
@@ -243,6 +241,18 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                 4 -> launchActivity(ConversationsActivity())
             }
             false
+        }
+
+        // Closes the drawer if it is open, when we press the back button
+        onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+            if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+            }
+            else {
+                this.isEnabled = false
+                super.onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
@@ -486,16 +496,4 @@ class MainActivity : BaseThemedWithoutBarActivity() {
         }
         startActivity(intent)
     }
-
-    /**
-     * Closes the drawer if it is open, when we press the back button
-     */
-    override fun onBackPressed() {
-        if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
 }

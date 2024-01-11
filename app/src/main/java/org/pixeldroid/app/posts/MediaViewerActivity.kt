@@ -14,9 +14,9 @@ import androidx.media2.common.MediaMetadata
 import androidx.media2.common.UriMediaItem
 import androidx.media2.player.MediaPlayer
 import org.pixeldroid.app.databinding.ActivityMediaviewerBinding
-import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 
-class MediaViewerActivity : BaseThemedWithoutBarActivity() {
+class MediaViewerActivity : BaseActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var binding: ActivityMediaviewerBinding

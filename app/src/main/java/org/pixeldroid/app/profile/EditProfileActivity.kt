@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
@@ -19,10 +20,10 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityEditProfileBinding
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.openUrl
 
-class EditProfileActivity : BaseThemedWithBarActivity() {
+class EditProfileActivity : BaseActivity() {
 
     private lateinit var model: EditProfileViewModel
     private lateinit var binding: ActivityEditProfileBinding
@@ -31,11 +32,28 @@ class EditProfileActivity : BaseThemedWithBarActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.edit_profile)
 
         val _model: EditProfileViewModel by viewModels { EditProfileViewModelFactory(application) }
         model = _model
+
+        onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+            if(model.madeChanges()){
+                MaterialAlertDialogBuilder(binding.root.context).apply {
+                    setMessage(getString(R.string.profile_save_changes))
+                    setNegativeButton(android.R.string.cancel) { _, _ -> }
+                    setPositiveButton(android.R.string.ok) { _, _ ->
+                        this@addCallback.isEnabled = false
+                        super.onBackPressedDispatcher.onBackPressed()
+                    }
+                }.show()
+            } else {
+                this.isEnabled = false
+                super.onBackPressedDispatcher.onBackPressed()
+            }
+        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -130,18 +148,6 @@ class EditProfileActivity : BaseThemedWithBarActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.edit_profile_menu, menu)
         return true
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        if(model.madeChanges()){
-            MaterialAlertDialogBuilder(binding.root.context).apply {
-                setMessage(getString(R.string.profile_save_changes))
-                setNegativeButton(android.R.string.cancel) { _, _ -> }
-                setPositiveButton(android.R.string.ok) { _, _ -> super.onBackPressed()}
-            }.show()
-        }
-        else super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

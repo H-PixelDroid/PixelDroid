@@ -34,13 +34,12 @@ import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentCameraBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
 import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -61,7 +60,7 @@ class CameraFragment : BaseFragment() {
 
     private val cameraLifecycleOwner = CameraLifecycleOwner()
 
-    private lateinit var binding: FragmentCameraBinding
+    private var binding: FragmentCameraBinding by bindingLifecycleAware()
 
     private var displayId: Int = -1
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
@@ -70,6 +69,7 @@ class CameraFragment : BaseFragment() {
     private var camera: Camera? = null
 
     private var inActivity by Delegates.notNull<Boolean>()
+    private var addToStory by Delegates.notNull<Boolean>()
 
     private var filePermissionDialogLaunched: Boolean = false
 
@@ -89,7 +89,8 @@ class CameraFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        inActivity = arguments?.getBoolean("CameraActivity") ?: false
+        inActivity = arguments?.getBoolean(CAMERA_ACTIVITY) ?: false
+        addToStory = arguments?.getBoolean(CAMERA_ACTIVITY_STORY) ?: false
 
         binding = FragmentCameraBinding.inflate(layoutInflater)
 
@@ -106,7 +107,7 @@ class CameraFragment : BaseFragment() {
             thumbnail.setPadding(10)
 
             // Load thumbnail into circular button using Glide
-            Glide.with(thumbnail)
+            if(activity?.isDestroyed == false) Glide.with(thumbnail)
                 .load(uri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(thumbnail)
@@ -337,7 +338,8 @@ class CameraFragment : BaseFragment() {
                 putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
                 action = Intent.ACTION_GET_CONTENT
                 addCategory(Intent.CATEGORY_OPENABLE)
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                // Don't allow multiple for story
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !addToStory)
                 uploadImageResultContract.launch(
                     Intent.createChooser(this, null)
                 )
@@ -464,15 +466,20 @@ class CameraFragment : BaseFragment() {
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
-        if(inActivity){
+        if(inActivity && !addToStory){
             requireActivity().setResult(Activity.RESULT_OK, intent)
             requireActivity().finish()
         } else {
+            if(addToStory){
+                intent.putExtra(CAMERA_ACTIVITY_STORY, addToStory)
+            }
             startActivity(intent)
         }
     }
 
     companion object {
+        const val CAMERA_ACTIVITY = "CameraActivity"
+        const val CAMERA_ACTIVITY_STORY = "CameraActivityStory"
 
         private const val TAG = "CameraFragment"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0

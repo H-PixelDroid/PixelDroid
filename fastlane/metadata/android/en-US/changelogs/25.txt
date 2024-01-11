@@ -1,0 +1,4 @@
+* Stories support!
+* Dependencies updates
+* Hardware accelerated video encoding
+* Lots of behind-the-scenes work :)

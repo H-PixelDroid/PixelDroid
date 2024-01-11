@@ -64,7 +64,6 @@
     <string name="comment_posted">评论： %1$s 已发布！</string>
     <string name="comment_error">评论错误！</string>
     <string name="share_image">分享图像</string>
-    <string name="write_permission_share_pic">您需要允许读写权限才能共享图片！</string>
     <string name="write_permission_download_pic">您需要允许读写权限才能下载图片！</string>
     <string name="empty_comment">评论不能为空！</string>
     <string name="posted_on">发表于 %1$s</string>

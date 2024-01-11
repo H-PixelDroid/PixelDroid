@@ -60,7 +60,6 @@
     <string name="comment_posted">Comentari: %1$s publicat!</string>
     <string name="comment_error">Error de comentari!</string>
     <string name="share_image">Compartir imatge</string>
-    <string name="write_permission_share_pic">Necessites concedir permís d’escriptura per compartir imatges!</string>
     <string name="write_permission_download_pic">Has de concedir permís d’escriptura per baixar imatges!</string>
     <string name="empty_comment">El comentari no ha de estar buit!</string>
     <string name="posted_on">Publica\'t el %1$s</string>

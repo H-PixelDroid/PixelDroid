@@ -2,20 +2,25 @@ package org.pixeldroid.app.profile
 
 import android.os.Bundle
 import org.pixeldroid.app.R
+import org.pixeldroid.app.databinding.ActivityFollowersBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.accountLists.AccountListFragment
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.api.objects.Account.Companion.ACCOUNT_ID_TAG
 import org.pixeldroid.app.utils.api.objects.Account.Companion.ACCOUNT_TAG
 import org.pixeldroid.app.utils.api.objects.Account.Companion.FOLLOWERS_TAG
 
 
-class FollowsActivity : BaseThemedWithBarActivity() {
+class FollowsActivity : BaseActivity() {
     private var followsFragment = AccountListFragment()
+    private lateinit var binding: ActivityFollowersBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_followers)
+        binding = ActivityFollowersBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 

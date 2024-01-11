@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal">
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search"
@@ -26,10 +29,10 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/trendingCardView"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            style="?attr/materialCardViewElevatedStyle"
             app:cardBackgroundColor="?attr/colorSecondaryContainer"
             app:layout_constraintBottom_toTopOf="@+id/hashtagsCardView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,28 +48,28 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
                     android:text="@string/trending_posts"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
-                    android:drawablePadding="4dp"
                     android:textColor="?attr/colorOnSecondaryContainer"
                     app:drawableLeftCompat="@drawable/baseline_auto_graph_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/daily_trending"
-                    android:textColor="?attr/colorOnSecondaryContainer"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:layout_marginTop="8dp" />
+                    android:textColor="?attr/colorOnSecondaryContainer" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/hashtagsCardView"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            style="?attr/materialCardViewElevatedStyle"
             app:cardBackgroundColor="?attr/colorSecondaryContainer"
             app:layout_constraintBottom_toTopOf="@id/accountsCardView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,33 +85,33 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
                     android:text="@string/trending_hashtags"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
-                    android:drawablePadding="4dp"
                     android:textColor="?attr/colorOnSecondaryContainer"
                     app:drawableStartCompat="@drawable/baseline_tag" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/explore_hashtags"
-                    android:textColor="?attr/colorOnSecondaryContainer"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:layout_marginTop="8dp" />
+                    android:textColor="?attr/colorOnSecondaryContainer" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/accountsCardView"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            style="?attr/materialCardViewElevatedStyle"
             app:cardBackgroundColor="?attr/colorSecondaryContainer"
-            app:layout_constraintTop_toBottomOf="@id/hashtagsCardView"
+            app:layout_constraintBottom_toTopOf="@id/discoverCardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/discoverCardView">
+            app:layout_constraintTop_toBottomOf="@id/hashtagsCardView">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -119,33 +122,33 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
                     android:text="@string/popular_accounts"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
-                    android:drawablePadding="4dp"
                     android:textColor="?attr/colorOnSecondaryContainer"
                     app:drawableStartCompat="@drawable/baseline_person_add" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/explore_accounts"
-                    android:textColor="?attr/colorOnSecondaryContainer"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:layout_marginTop="8dp" />
+                    android:textColor="?attr/colorOnSecondaryContainer" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/discoverCardView"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            style="?attr/materialCardViewElevatedStyle"
             app:cardBackgroundColor="?attr/colorSecondaryContainer"
-            app:layout_constraintTop_toBottomOf="@id/accountsCardView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/accountsCardView">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -156,22 +159,23 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
                     android:text="@string/discover"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
-                    android:drawablePadding="4dp"
                     android:textColor="?attr/colorOnSecondaryContainer"
                     app:drawableStartCompat="@drawable/explore_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/explore_posts"
-                    android:textColor="?attr/colorOnSecondaryContainer"
                     android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:layout_marginTop="8dp" />
+                    android:textColor="?attr/colorOnSecondaryContainer" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

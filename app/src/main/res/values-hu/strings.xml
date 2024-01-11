@@ -106,7 +106,6 @@
     <string name="comment_posted">Hozzászólás: %1$s közzétéve!</string>
     <string name="comment_error">Hozzászólási hiba!</string>
     <string name="share_image">Kép megosztása</string>
-    <string name="write_permission_share_pic">Írási engedélyt kell adnia a képek megosztásához!</string>
     <string name="write_permission_download_pic">Írási engedélyt kell adnia a képek letöltéséhez!</string>
     <string name="empty_comment">A hozzászólás nem lehet üres!</string>
     <string name="NoCommentsToShow">Nincsenek hozzászólások a bejegyzésnél…</string>
