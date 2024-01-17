@@ -3,3 +3,5 @@ include ':app'
 include ':scrambler'
 project(':scrambler').projectDir = new File(rootDir, 'scrambler/scrambler/')
 include ':pixel_common'
+include ':media_editor'
+project(':media_editor').projectDir = new File(rootDir, '../android-media-editor/mediaEditor/')
