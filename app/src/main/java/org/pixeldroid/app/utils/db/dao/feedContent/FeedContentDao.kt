@@ -13,7 +13,4 @@ interface FeedContentDao<T: FeedContentDatabase>{
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(feedContent: List<T>)
-
-    suspend fun delete(id: String, userId: String, instanceUri: String)
-
 }

@@ -16,7 +16,7 @@ interface HomePostDao: FeedContentDao<HomeStatusDatabaseEntity> {
     override suspend fun clearFeedContent(userId: String, instanceUri: String)
 
     @Query("DELETE FROM homePosts WHERE user_id=:userId AND instance_uri=:instanceUri AND id=:id")
-    override suspend fun delete(id: String, userId: String, instanceUri: String)
+    suspend fun delete(id: String, userId: String, instanceUri: String)
 
     @Query("UPDATE homePosts SET bookmarked=:bookmarked WHERE user_id=:id AND instance_uri=:instanceUri AND id=:statusId")
     fun bookmarkStatus(id: String, instanceUri: String, statusId: String, bookmarked: Boolean)

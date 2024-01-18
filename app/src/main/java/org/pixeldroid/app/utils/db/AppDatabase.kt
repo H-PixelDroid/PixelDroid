@@ -14,13 +14,16 @@ import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.api.objects.Notification
+import org.pixeldroid.app.utils.api.objects.Conversation
+import org.pixeldroid.app.utils.db.dao.feedContent.DirectMessagesDao
 
 @Database(entities = [
         InstanceDatabaseEntity::class,
         UserDatabaseEntity::class,
         HomeStatusDatabaseEntity::class,
         PublicFeedStatusDatabaseEntity::class,
-        Notification::class
+        Notification::class,
+        Conversation::class
     ],
     version = 5
 )
@@ -31,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun homePostDao(): HomePostDao
     abstract fun publicPostDao(): PublicPostDao
     abstract fun notificationDao(): NotificationDao
+    abstract fun directMessagesDao(): DirectMessagesDao
 }
 
 val MIGRATION_3_4 = object : Migration(3, 4) {
