@@ -37,7 +37,7 @@
     <string name="add_account_description">Добавить другой аккаунт Pixelfed</string>
     <string name="add_account_name">Добавить аккаунт</string>
     <string name="instance_error">Не удалось получить информацию об экземпляре</string>
-    <string name="comment">Комментировать</string>
+    <string name="comment_verb">Комментировать</string>
     <string name="comment_posted">Комментарий: %1$s опубликован!</string>
     <string name="comment_error">Ошибка комментирования!</string>
     <string name="share_image">Поделиться изображением</string>

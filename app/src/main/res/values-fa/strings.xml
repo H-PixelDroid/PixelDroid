@@ -59,7 +59,7 @@
     <string name="share_image">هم‌رسانی تصویر</string>
     <string name="comment_error">خطا در درج نظر!</string>
     <string name="comment_posted">نظر: %1$s منتشر کرد!</string>
-    <string name="comment">نظر</string>
+    <string name="comment_verb">نظر</string>
     <string name="follow_status_failed">نتوانستیم وضعیت پی‌گیری را دریافت کنیم</string>
     <string name="follow_button_failed">نتوانستیم دکمه پی‌گیری را نمایش دهیم</string>
     <string name="follow_error">نتوانستیم پی‌گیری کنیم</string>

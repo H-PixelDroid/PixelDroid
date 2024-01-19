@@ -80,7 +80,7 @@
     <string name="instance_not_pixelfed_cancel">Скасувати вхід</string>
     <string name="request_format_error">Помилка вивантаження: хибний формат запиту</string>
     <string name="connect_to_pixelfed">З\'єднатися з Pixelfed</string>
-    <string name="comment">Коментар</string>
+    <string name="comment_verb">Коментар</string>
     <plurals name="nb_posts">
         <item quantity="one">%d
 \nдопис</item>

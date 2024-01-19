@@ -43,7 +43,7 @@
     <string name="share_image">Udostępnij</string>
     <string name="comment_error">Błąd komentarza!</string>
     <string name="comment_posted">Komentarz: %1$s opublikowany!</string>
-    <string name="comment">Komentarz</string>
+    <string name="comment_verb">Komentarz</string>
     <string name="menu_account">Mój profil</string>
     <string name="registration_failed">Nie udało się zarejestrować aplikacji na tym serwerze</string>
     <string name="instance_error">Nie udało się pobrać informacji o instancji</string>

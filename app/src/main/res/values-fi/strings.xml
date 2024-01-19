@@ -108,7 +108,7 @@
     <string name="search">Hae</string>
     <string name="unfollow">Seurataan</string>
     <string name="follow">Seuraa</string>
-    <string name="comment">Kommentti</string>
+    <string name="comment_verb">Kommentti</string>
     <string name="image_download_downloading">Ladataan…</string>
     <string name="gallery_button_alt">Galleria</string>
     <string name="edit">Muokkaa</string>
