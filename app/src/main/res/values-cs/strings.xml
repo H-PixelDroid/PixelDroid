@@ -72,7 +72,7 @@
     <string name="share_image">Sdílet obrázek</string>
     <string name="comment_error">Chyba komentáře!</string>
     <string name="comment_posted">Komentář: %1$s zveřejněn!</string>
-    <string name="comment">Komentář</string>
+    <string name="comment_verb">Komentář</string>
     <plurals name="number_comments">
         <item quantity="one">%d komentář</item>
         <item quantity="few">%d komentáře</item>

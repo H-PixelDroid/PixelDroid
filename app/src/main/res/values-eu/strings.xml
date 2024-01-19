@@ -75,7 +75,7 @@
     <string name="follow_error">Ezin izan da jarraitu</string>
     <string name="follow_button_failed">Ezin izan da jarraipen-botoia erakutsi</string>
     <string name="follow_status_failed">Ezin izan da segimendu-egoera lortu</string>
-    <string name="comment">Iruzkin</string>
+    <string name="comment_verb">Iruzkin</string>
     <string name="posted_on">%1$s(e)n argitaratua</string>
     <string name="hashtags">TRAOLAK</string>
     <string name="accounts">KONTUAK</string>

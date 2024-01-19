@@ -153,7 +153,10 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="share_image">Share Image</string>
     <string name="comment_error">Comment error!</string>
     <string name="comment_posted">"Comment: %1$s posted!"</string>
-    <string name="comment">Comment</string>
+    <!-- This is shown on the button, it is a verb and refers to the action of commenting -->
+    <string name="comment_verb">Comment</string>
+    <!-- This is shown in the text field as a hint, it is a noun -->
+    <string name="comment_noun">Comment</string>
     <plurals name="number_comments">
         <item quantity="one">%d comment</item>
         <item quantity="other">%d comments</item>

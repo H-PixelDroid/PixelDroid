@@ -60,7 +60,7 @@
     <string name="follow_error">无法关注</string>
     <string name="follow_button_failed">无法显示关注按钮</string>
     <string name="follow_status_failed">无法获得关注状态</string>
-    <string name="comment">评论</string>
+    <string name="comment_verb">评论</string>
     <string name="comment_posted">评论： %1$s 已发布！</string>
     <string name="comment_error">评论错误！</string>
     <string name="share_image">分享图像</string>

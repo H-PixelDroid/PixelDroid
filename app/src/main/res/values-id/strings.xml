@@ -38,7 +38,7 @@
     <string name="empty_comment">Komentar tidak boleh kosong!</string>
     <string name="share_image">Bagikan Gambar</string>
     <string name="comment_posted">Komentar: %1$s diposting!</string>
-    <string name="comment">Komentar</string>
+    <string name="comment_verb">Komentar</string>
     <plurals name="number_comments">
         <item quantity="other">%d komentar</item>
     </plurals>

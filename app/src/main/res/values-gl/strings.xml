@@ -57,7 +57,7 @@
     <string name="follow_error">Non se puido seguir</string>
     <string name="follow_button_failed">Non se pode mostrar o botón para seguir</string>
     <string name="follow_status_failed">Non se obtivo o estado de relacións</string>
-    <string name="comment">Comentar</string>
+    <string name="comment_verb">Comentar</string>
     <string name="comment_posted">Comentario: %1$s publicado!</string>
     <string name="comment_error">Fallo ao comentar!</string>
     <string name="share_image">Compartir Imaxe</string>

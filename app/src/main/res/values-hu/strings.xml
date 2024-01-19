@@ -102,7 +102,7 @@
         <item quantity="one">%d hozzászólás</item>
         <item quantity="other">%d hozzászólás</item>
     </plurals>
-    <string name="comment">Hozzászólás</string>
+    <string name="comment_verb">Hozzászólás</string>
     <string name="comment_posted">Hozzászólás: %1$s közzétéve!</string>
     <string name="comment_error">Hozzászólási hiba!</string>
     <string name="share_image">Kép megosztása</string>

@@ -64,7 +64,7 @@
     <string name="follow_error">フォローできませんでした</string>
     <string name="follow_button_failed">フォローボタンを表示できませんでした</string>
     <string name="follow_status_failed">フォローステータスを取得できませんでした</string>
-    <string name="comment">コメント</string>
+    <string name="comment_verb">コメント</string>
     <string name="comment_error">コメントエラー</string>
     <string name="share_image">画像を共有</string>
     <string name="no_description">説明はありません</string>

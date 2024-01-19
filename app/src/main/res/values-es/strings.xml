@@ -60,7 +60,7 @@
     <string name="follow_error">No pudo seguir</string>
     <string name="follow_button_failed">No se pudo mostrar el botón de seguimiento</string>
     <string name="follow_status_failed">No se pudo obtener el estado de seguidores</string>
-    <string name="comment">Comentar</string>
+    <string name="comment_verb">Comentar</string>
     <string name="comment_posted">¡Comentario: %1$s publicado!</string>
     <string name="comment_error">¡Error al comentar!</string>
     <string name="share_image">Compartir imagen</string>

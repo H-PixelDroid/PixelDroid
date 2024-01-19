@@ -59,7 +59,7 @@
     <string name="share_image">Partager image</string>
     <string name="comment_error">Erreur de commentaire !</string>
     <string name="comment_posted">Commentaire : %1$s publié !</string>
-    <string name="comment">Commenter</string>
+    <string name="comment_verb">Commenter</string>
     <string name="follow_status_failed">Impossible d\'obtenir l\'état de suivi</string>
     <string name="follow_button_failed">Impossible d\'afficher le bouton de suivi</string>
     <string name="follow_error">Impossible de suivre</string>

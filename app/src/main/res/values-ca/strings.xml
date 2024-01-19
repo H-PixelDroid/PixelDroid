@@ -56,7 +56,7 @@
     <string name="follow_error">No s\'ha pogut seguir</string>
     <string name="follow_button_failed">No s\'ha pogut mostrar el botó de seguir</string>
     <string name="follow_status_failed">No s\'ha pogut obtenir l\'estat de seguiment</string>
-    <string name="comment">Comentari</string>
+    <string name="comment_verb">Comentari</string>
     <string name="comment_posted">Comentari: %1$s publicat!</string>
     <string name="comment_error">Error de comentari!</string>
     <string name="share_image">Compartir imatge</string>

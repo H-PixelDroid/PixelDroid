@@ -56,7 +56,7 @@
     <string name="share_image">Condividi immagine</string>
     <string name="comment_error">Errore nel commento!</string>
     <string name="comment_posted">Commento: %1$s postato!</string>
-    <string name="comment">Commento</string>
+    <string name="comment_verb">Commento</string>
     <string name="follow_error">Impossibile seguire</string>
     <string name="unfollow_error">Impossibile smettere di seguire</string>
     <string name="access_token_invalid">Il token di accesso non è valido</string>
