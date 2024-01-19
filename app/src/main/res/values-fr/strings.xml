@@ -191,7 +191,7 @@
     <string name="file_not_found">Le fichier %1$s n’a pas été trouvé</string>
     <string name="notifications_settings">Paramètres des notifications</string>
     <string name="post_is_video">Cette publication est une vidéo</string>
-    <string name="dialog_message_cancel_follow_request">Annuler la demande d’abonnement \?</string>
+    <string name="dialog_message_cancel_follow_request">Annuler la demande de suivi ?</string>
     <string name="unbookmark">Retirer des signets</string>
     <string name="delete_collection">Supprimer la collection</string>
     <string name="your_name">Votre nom</string>
@@ -223,4 +223,6 @@
     <string name="profile_saved">Modifications enregistrées !</string>
     <string name="change_profile_picture">Changer votre image de profil</string>
     <string name="switch_accounts">Permutation de comptes</string>
+    <string name="edit_link_failed">Échec de l\'ouverture de la page de modifications</string>
+    <string name="follow_requested">Abonnement demandé</string>
 </resources>
