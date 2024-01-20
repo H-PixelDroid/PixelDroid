@@ -33,7 +33,7 @@
     <string name="domain_of_your_instance">Dominio della tua istanza</string>
     <string name="login_connection_required_once">Devi essere online per poter aggiungere il primo account e utilizzare PixelDroid :(</string>
     <string name="invalid_domain">Dominio non valido</string>
-    <string name="edit">MODIFICA</string>
+    <string name="edit">Modifica</string>
     <string name="instance_error">Impossibile ottenere informazioni sull\'istanza</string>
     <string name="save_image_failed">Impossibile salvare l\'immagine</string>
     <string name="light_theme">Chiaro</string>
@@ -85,11 +85,11 @@
     <string name="instance_not_pixelfed_warning">Questa non sembra essere un\'istanza di Pixelfed, quindi l\'app potrebbe interrompersi in modi inaspettati.</string>
     <string name="instance_not_pixelfed_cancel">Annullare l\'accesso</string>
     <string name="instance_not_pixelfed_continue">OK, continua comunque</string>
-    <string name="discover">SCOPRI</string>
+    <string name="discover">Scopri</string>
     <string name="open_drawer_menu">Apri il menu a scomparsa</string>
     <string name="profile_picture">Foto profilo</string>
     <string name="report_error">Impossibile inviare la segnalazione</string>
-    <string name="reported">Segnalato {gmd_check_circle}</string>
+    <string name="reported">Post segnalato</string>
     <string name="report_target">Segnala @%1$s\'s post</string>
     <string name="optional_report_comment">Messaggio facoltativo per moderatori/amministratori</string>
     <string name="share_link">Condividi il Link</string>
@@ -132,25 +132,32 @@
     <plurals name="nb_followers">
         <item quantity="one">%d
 \nSeguace</item>
+        <item quantity="many">%d
+\nSeguaci</item>
         <item quantity="other">%d
 \nSeguaci</item>
     </plurals>
     <plurals name="nb_posts">
         <item quantity="one">%d
 \nPost</item>
+        <item quantity="many">%d
+\nPost</item>
         <item quantity="other">%d
 \nPost</item>
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d commento</item>
+        <item quantity="many">%d commenti</item>
         <item quantity="other">%d commenti</item>
     </plurals>
     <plurals name="shares">
         <item quantity="one">%d Condivisione</item>
+        <item quantity="many">%d Condivisioni</item>
         <item quantity="other">%d Condivisioni</item>
     </plurals>
     <plurals name="likes">
         <item quantity="one">%d Mi piace</item>
+        <item quantity="many">%d Mi piace</item>
         <item quantity="other">%d Mi piace</item>
     </plurals>
     <string name="upload_error">Codice di errore restituito dal server: %1$d</string>
@@ -168,6 +175,8 @@
     <plurals name="nb_following">
         <item quantity="one">%d
 \nUtente che stai seguendo</item>
+        <item quantity="many">%d
+\nUtenti che stai seguendo</item>
         <item quantity="other">%d
 \nUtenti che stai seguendo</item>
     </plurals>
@@ -255,4 +264,44 @@
     <string name="explore_posts">Scopri post casuali di oggi</string>
     <string name="grid_view">Vista a griglia</string>
     <string name="bookmarks">Preferiti</string>
+    <string name="comment_noun">Commento</string>
+    <string name="delete_collection_warning">Vuoi davvero eliminare questa raccolta?</string>
+    <string name="removed_post_from_collection">Post rimosso dalla raccolta</string>
+    <string name="new_collection_link_failed">Impossibile aprire la pagina per aggiungere una raccolta</string>
+    <string name="private_account_explanation">Se il tuo account è privato, solo le persone che approvi possono vedere le tue foto e i tuoi video su Pixelfed. I tuoi seguaci esistenti non subiranno modifiche.</string>
+    <plurals name="replies_count">
+        <item quantity="one">%d risposta</item>
+        <item quantity="many">%d risposte</item>
+        <item quantity="other">%d risposte</item>
+    </plurals>
+    <string name="collection_title">La raccolta di %1$s</string>
+    <string name="story_image">Immagine della storia</string>
+    <string name="replyToStory">Rispondi a %1$s</string>
+    <string name="story_reply_error">Qualcosa è andato storto nell\'invio della risposta</string>
+    <string name="error_fetch_story">Qualcosa è andato storto nel recupero del carosello</string>
+    <string name="sent_reply_story">Risposta inviata</string>
+    <string name="fetching_profile">Recupero del tuo profilo…</string>
+    <string name="collection_remove_post">Rimuovi post</string>
+    <string name="add_to_collection">Scegli un post da aggiungere</string>
+    <string name="delete_from_collection">Scegli un post da rimuovere</string>
+    <string name="added_post_to_collection">Post aggiunto alla raccolta</string>
+    <string name="error_add_post_to_collection">Impossibile aggiungere il post alla raccolta</string>
+    <string name="error_remove_post_from_collection">Impossibile rimuovere il post dalla raccolta</string>
+    <string name="save">Salva</string>
+    <string name="use_dynamic_color">Usa il colore dinamico dal tuo sistema</string>
+    <string name="more_profile_settings">Altre impostazioni del profilo</string>
+    <string name="private_account">Account privato</string>
+    <string name="your_bio">La tua bio</string>
+    <string name="your_name">Il tuo nome</string>
+    <string name="profile_save_changes">Non hai salvato le modifiche. Uscire?</string>
+    <string name="saving_profile">Salvataggio del tuo profilo</string>
+    <string name="profile_saved">Modifiche salvate!</string>
+    <string name="error_profile">Qualcosa è andato storto. Tocca per riprovare</string>
+    <string name="change_profile_picture">Cambia la tua immagine del profilo</string>
+    <string name="contains_nsfw">Contiene media sensibili</string>
+    <string name="switch_accounts">Cambia account</string>
+    <string name="summary_always_show_nsfw">I post con contenuti sensibili non verranno oscurati e saranno mostrati di default.</string>
+    <string name="collection_add_post">Aggiungi post</string>
+    <string name="collections">Raccolte</string>
+    <string name="delete_collection">Elimina raccolta</string>
 </resources>
