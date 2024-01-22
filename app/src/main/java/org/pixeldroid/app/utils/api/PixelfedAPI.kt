@@ -348,7 +348,7 @@ interface PixelfedAPI {
     ): Account
 
     @Multipart
-    @PATCH("/api/v1/accounts/update_credentials")
+    @POST("/api/v1/accounts/update_credentials")
     fun updateProfilePicture(
         @Part avatar: MultipartBody.Part?
     ): Observable<Account>

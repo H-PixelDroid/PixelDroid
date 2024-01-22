@@ -112,18 +112,18 @@ class EditProfileActivity : BaseActivity() {
             }
         }
 
-//        binding.changeImageButton.setOnClickListener {
-//            Intent(Intent.ACTION_GET_CONTENT).apply {
-//                type = "*/*"
-//                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*"))
-//                action = Intent.ACTION_GET_CONTENT
-//                addCategory(Intent.CATEGORY_OPENABLE)
-//                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
-//                uploadImageResultContract.launch(
-//                    Intent.createChooser(this, null)
-//                )
-//            }
-//        }
+        binding.profilePic.setOnClickListener {
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*"))
+                action = Intent.ACTION_GET_CONTENT
+                addCategory(Intent.CATEGORY_OPENABLE)
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
+                uploadImageResultContract.launch(
+                    Intent.createChooser(this, null)
+                )
+            }
+        }
     }
 
     private val uploadImageResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -137,10 +137,10 @@ class EditProfileActivity : BaseActivity() {
                     val imageUri: String = clipData.getItemAt(i).uri.toString()
                     images.add(imageUri)
                 }
-                model.uploadImage(images.first())
+                model.updateImage(images.first())
             } else if (data.data != null) {
                 images.add(data.data!!.toString())
-                model.uploadImage(images.first())
+                model.updateImage(images.first())
             }
         }
     }

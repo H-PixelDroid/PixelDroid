@@ -97,12 +97,19 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                         note = bio,
                         locked = privateAccount,
                     )
+                    val newAvatarUri = if (profilePictureChanged) {
+                        uploadImage()
+                        profilePictureUri
+                    } else {
+                        account.anyAvatar()?.toUri()
+                    }
                     oldProfile = account
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            bio = account.source?.note ?: account.note?.let {fromHtml(it).toString()},
+                            bio = account.source?.note
+                                ?: account.note?.let { fromHtml(it).toString() },
                             name = account.display_name,
-                            profilePictureUri = account.anyAvatar()?.toUri(),
+                            profilePictureUri = newAvatarUri,
                             privateAccount = account.locked,
                             sendingProfile = false,
                             profileSent = true,
@@ -153,12 +160,13 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
 
     fun madeChanges(): Boolean =
         with(uiState.value) {
-            val bioUnchanged: Boolean = oldProfile?.source?.note?.let { it != bio }
-                // If source note is null, check note
+            val privateChanged = oldProfile?.locked != privateAccount
+            val displayNameChanged = oldProfile?.display_name != name
+            val bioChanged: Boolean = oldProfile?.source?.note?.let { it != bio }
+            // If source note is null, check note
                 ?: oldProfile?.note?.let { fromHtml(it).toString() != bio }
                 ?: true
-            oldProfile?.locked != privateAccount || oldProfile?.display_name != name
-                    || bioUnchanged
+            profilePictureChanged || privateChanged || displayNameChanged || bioChanged
         }
 
     fun clickedCard() {
@@ -178,16 +186,26 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun uploadImage(image: String) {
-        //TODO fix
+    fun updateImage(image: String) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                profilePictureUri = image.toUri(),
+                profilePictureChanged = true
+            )
+        }
+    }
+
+    private fun uploadImage() {
+        val image = uiState.value.profilePictureUri!!
+
         val inputStream =
-            getApplication<PixelDroidApplication>().contentResolver.openInputStream(image.toUri())
+            getApplication<PixelDroidApplication>().contentResolver.openInputStream(image)
                 ?: return
 
         val size: Long =
-            if (image.toUri().scheme == "content") {
+            if (image.scheme == "content") {
                 getApplication<PixelDroidApplication>().contentResolver.query(
-                    image.toUri(),
+                    image,
                     null,
                     null,
                     null,
@@ -203,7 +221,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                         cursor.getLong(sizeIndex)
                     } ?: 0
             } else {
-                image.toUri().toFile().length()
+                image.toFile().length()
             }
 
         val imagePart = ProgressRequestBody(inputStream, size, "image/*")
@@ -232,8 +250,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { it: Account ->
-                    Log.e("qsdfqsdfs", it.toString())
-
+                    Log.i("ACCOUNT", it.toString())
                 },
                 { e: Throwable ->
                     _uiState.update { currentUiState ->
@@ -250,6 +267,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                 {
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
+                            profilePictureChanged = false,
                             uploadProgress = 100,
                             uploadingPicture = false
                         )
@@ -265,7 +283,8 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
 data class EditProfileActivityUiState(
     val name: String? = null,
     val bio: String? = null,
-    val profilePictureUri: Uri?= null,
+    val profilePictureUri: Uri? = null,
+    val profilePictureChanged: Boolean = false,
     val privateAccount: Boolean? = null,
     val loadingProfile: Boolean = true,
     val profileLoaded: Boolean = false,
