@@ -58,23 +58,24 @@ class EditProfileActivity : BaseActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.uiState.collect { uiState ->
-                    if(uiState.profileLoaded){
-                        binding.bioEditText.setText(uiState.bio)
-                        binding.nameEditText.setText(uiState.name)
-                        model.changesApplied()
-                    }
-                    binding.progressCard.visibility = if(uiState.loadingProfile || uiState.sendingProfile || uiState.profileSent || uiState.error) View.VISIBLE else View.INVISIBLE
+                    if(binding.bioEditText.text.toString() != uiState.bio) binding.bioEditText.setText(uiState.bio)
+                    if(binding.nameEditText.text.toString() != uiState.name) binding.nameEditText.setText(uiState.name)
+
+                    binding.progressCard.visibility = if(uiState.loadingProfile || uiState.sendingProfile || uiState.uploadingPicture || uiState.profileSent || uiState.error) View.VISIBLE else View.INVISIBLE
+
                     if(uiState.loadingProfile) binding.progressText.setText(R.string.fetching_profile)
                     else if(uiState.sendingProfile) binding.progressText.setText(R.string.saving_profile)
+
                     binding.privateSwitch.isChecked = uiState.privateAccount == true
                     Glide.with(binding.profilePic).load(uiState.profilePictureUri)
                         .apply(RequestOptions.circleCropTransform())
                         .into(binding.profilePic)
 
-                    binding.savingProgressBar.visibility = if(uiState.error || uiState.profileSent) View.GONE
-                    else  View.VISIBLE
+                    binding.savingProgressBar.visibility =
+                        if(uiState.error || (uiState.profileSent && !uiState.uploadingPicture)) View.GONE
+                    else View.VISIBLE
 
-                    if(uiState.profileSent){
+                    if(uiState.profileSent && !uiState.uploadingPicture && !uiState.error){
                         binding.progressText.setText(R.string.profile_saved)
                         binding.done.visibility = View.VISIBLE
                     } else {

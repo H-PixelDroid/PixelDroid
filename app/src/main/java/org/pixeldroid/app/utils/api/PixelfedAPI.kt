@@ -338,18 +338,31 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String? = null
     ): Account
 
-    //@Multipart
     @PATCH("/api/v1/accounts/update_credentials")
     suspend fun updateCredentials(
         @Query(value = "display_name") displayName: String?,
         @Query(value = "note") note: String?,
         @Query(value = "locked") locked: Boolean?,
-      //  @Part avatar: MultipartBody.Part?,
     ): Account
 
+    /**
+     * Pixelfed uses PHP, multipart uploads don't work through PATCH so we use POST as suggested
+     * here: https://github.com/pixelfed/pixelfed/issues/4250
+     * However, changing to POST breaks the upload on Mastodon.
+     *
+     * To have this work on Pixelfed and Mastodon without special logic to distinguish the two,
+     * we'll have to wait for PHP 8.4 and https://wiki.php.net/rfc/rfc1867-non-post
+     * which should come out end of 2024
+     */
     @Multipart
     @POST("/api/v1/accounts/update_credentials")
     fun updateProfilePicture(
+        @Part avatar: MultipartBody.Part?
+    ): Observable<Account>
+
+    @Multipart
+    @PATCH("/api/v1/accounts/update_credentials")
+    fun updateProfilePictureMastodon(
         @Part avatar: MultipartBody.Part?
     ): Observable<Account>
 

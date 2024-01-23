@@ -11,6 +11,10 @@ interface InstanceDao {
     @Query("SELECT * FROM instances WHERE uri=:instanceUri")
     fun getInstance(instanceUri: String): InstanceDatabaseEntity
 
+
+    @Query("SELECT * FROM instances WHERE uri=(SELECT users.instance_uri FROM users WHERE isActive=1)")
+    fun getActiveInstance(): InstanceDatabaseEntity
+
     /**
      * Insert an instance, if it already exists return -1
      */

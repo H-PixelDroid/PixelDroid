@@ -37,17 +37,21 @@ fun storeInstance(db: AppDatabase, nodeInfo: NodeInfo?, instance: Instance? = nu
             uri = normalizeDomain(metadata?.config?.site?.url!!),
             title = metadata.config.site.name!!,
             maxStatusChars = metadata.config.uploader?.max_caption_length!!.toInt(),
-            maxPhotoSize = metadata.config.uploader.max_photo_size?.toIntOrNull() ?: DEFAULT_MAX_PHOTO_SIZE,
+            maxPhotoSize = metadata.config.uploader.max_photo_size?.toIntOrNull()
+                ?: DEFAULT_MAX_PHOTO_SIZE,
             // Pixelfed doesn't distinguish between max photo and video size
-            maxVideoSize = metadata.config.uploader.max_photo_size?.toIntOrNull() ?: DEFAULT_MAX_VIDEO_SIZE,
+            maxVideoSize = metadata.config.uploader.max_photo_size?.toIntOrNull()
+                ?: DEFAULT_MAX_VIDEO_SIZE,
             albumLimit = metadata.config.uploader.album_limit?.toIntOrNull() ?: DEFAULT_ALBUM_LIMIT,
-            videoEnabled = metadata.config.features?.video ?: DEFAULT_VIDEO_ENABLED
+            videoEnabled = metadata.config.features?.video ?: DEFAULT_VIDEO_ENABLED,
+            pixelfed = metadata.software?.repo?.contains("pixelfed", ignoreCase = true) == true
         )
     } ?: instance?.run {
         InstanceDatabaseEntity(
-                uri = normalizeDomain(uri.orEmpty()),
-                title = title.orEmpty(),
-                maxStatusChars = max_toot_chars?.toInt() ?: DEFAULT_MAX_TOOT_CHARS,
+            uri = normalizeDomain(uri.orEmpty()),
+            title = title.orEmpty(),
+            maxStatusChars = max_toot_chars?.toInt() ?: DEFAULT_MAX_TOOT_CHARS,
+            pixelfed = false
         )
     } ?: throw IllegalArgumentException("Cannot store instance where both are null")
 

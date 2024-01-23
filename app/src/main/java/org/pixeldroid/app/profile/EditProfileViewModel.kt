@@ -23,6 +23,7 @@ import org.pixeldroid.app.postCreation.ProgressRequestBody
 import org.pixeldroid.app.posts.fromHtml
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Account
+import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import javax.inject.Inject
 
@@ -31,10 +32,13 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
 
+    @Inject
+    lateinit var db: AppDatabase
+
     private val _uiState = MutableStateFlow(EditProfileActivityUiState())
     val uiState: StateFlow<EditProfileActivityUiState> = _uiState
 
-    var oldProfile: Account? = null
+    private var oldProfile: Account? = null
 
     init {
         (application as PixelDroidApplication).getAppComponent().inject(this)
@@ -76,15 +80,10 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
     fun sendProfile() {
         val api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
-        val requestBody =
-            null //MultipartBody.Part.createFormData("avatar", System.currentTimeMillis().toString(), avatarBody)
-
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 sendingProfile = true,
                 profileSent = false,
-                loadingProfile = false,
-                profileLoaded = false,
                 error = false
             )
         }
@@ -97,19 +96,16 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                         note = bio,
                         locked = privateAccount,
                     )
-                    val newAvatarUri = if (profilePictureChanged) {
-                        uploadImage()
-                        profilePictureUri
-                    } else {
-                        account.anyAvatar()?.toUri()
-                    }
                     oldProfile = account
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             bio = account.source?.note
                                 ?: account.note?.let { fromHtml(it).toString() },
                             name = account.display_name,
-                            profilePictureUri = newAvatarUri,
+                            profilePictureUri = if (profilePictureChanged) profilePictureUri
+                                else account.anyAvatar()?.toUri(),
+                            uploadProgress = 0,
+                            uploadingPicture = profilePictureChanged,
                             privateAccount = account.locked,
                             sendingProfile = false,
                             profileSent = true,
@@ -118,14 +114,13 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                             error = false
                         )
                     }
+                    if(profilePictureChanged) uploadImage()
                 } catch (exception: Exception) {
                     Log.e("TAG", exception.toString())
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             sendingProfile = false,
                             profileSent = false,
-                            loadingProfile = false,
-                            profileLoaded = false,
                             error = true
                         )
                     }
@@ -152,12 +147,6 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun changesApplied() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(profileLoaded = false)
-        }
-    }
-
     fun madeChanges(): Boolean =
         with(uiState.value) {
             val privateChanged = oldProfile?.locked != privateAccount
@@ -166,6 +155,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
             // If source note is null, check note
                 ?: oldProfile?.note?.let { fromHtml(it).toString() != bio }
                 ?: true
+
             profilePictureChanged || privateChanged || displayNameChanged || bioChanged
         }
 
@@ -243,20 +233,31 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         var postSub: Disposable? = null
 
         val api = apiHolder.api ?: apiHolder.setToCurrentUser()
-        val inter = api.updateProfilePicture(requestBody.parts[0])
+
+        val pixelfed = db.instanceDao().getActiveInstance().pixelfed
+
+        val inter =
+            if(pixelfed) api.updateProfilePicture(requestBody.parts[0])
+            else api.updateProfilePictureMastodon((requestBody.parts[0]))
 
         postSub = inter
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { it: Account ->
-                    Log.i("ACCOUNT", it.toString())
+                /* onNext = */ { account: Account ->
+                    account.anyAvatar()?.let {
+                        _uiState.update { currentUiState ->
+                            currentUiState.copy(
+                                profilePictureUri = it.toUri()
+                            )
+                        }
+                    }
                 },
-                { e: Throwable ->
+                /* onError = */ { e: Throwable ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             uploadProgress = 0,
-                            uploadingPicture = true,
+                            uploadingPicture = false,
                             error = true
                         )
                     }
@@ -264,7 +265,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                     postSub?.dispose()
                     sub.dispose()
                 },
-                {
+                /* onComplete = */ {
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             profilePictureChanged = false,
