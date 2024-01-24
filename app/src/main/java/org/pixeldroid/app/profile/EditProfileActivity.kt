@@ -51,6 +51,7 @@ class EditProfileActivity : BaseActivity() {
                 }.show()
             } else {
                 this.isEnabled = false
+                if (model.submittedChanges) setResult(RESULT_OK)
                 super.onBackPressedDispatcher.onBackPressed()
             }
         }

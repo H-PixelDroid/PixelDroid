@@ -6,6 +6,7 @@ import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -16,11 +17,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedFeedFragment
 import org.pixeldroid.app.posts.parseHTMLText
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
+import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.setProfileImageFromURL
 import retrofit2.HttpException
 import java.io.IOException
@@ -56,7 +60,7 @@ class ProfileActivity : BaseActivity() {
         setContent(account)
     }
 
-    private fun createProfileTabs(account: Account?): Array<Fragment>{
+    private fun createProfileTabs(account: Account?): Array<UncachedFeedFragment<FeedContent>> {
 
         val profileFeedFragment = ProfileFeedFragment()
         profileFeedFragment.arguments = Bundle().apply {
@@ -80,7 +84,7 @@ class ProfileActivity : BaseActivity() {
             putSerializable(ProfileFeedFragment.COLLECTIONS, true)
         }
 
-        val returnArray: Array<Fragment> = arrayOf(
+        val returnArray: Array<UncachedFeedFragment<FeedContent>> = arrayOf(
             profileGridFragment,
             profileFeedFragment,
             profileCollectionsFragment
@@ -100,7 +104,7 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun setupTabs(
-        tabs: Array<Fragment>
+        tabs: Array<UncachedFeedFragment<FeedContent>>
     ){
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
@@ -134,7 +138,6 @@ class ProfileActivity : BaseActivity() {
         }.attach()
     }
 
-
     private fun setContent(account: Account?) {
         if(account != null) {
             setViews(account)
@@ -152,6 +155,9 @@ class ProfileActivity : BaseActivity() {
                     ).show()
                     return@launchWhenResumed
                 }
+
+                updateUserInfoDb(db, myAccount)
+
                 setViews(myAccount)
             }
         }
@@ -217,9 +223,15 @@ class ProfileActivity : BaseActivity() {
         )
     }
 
+    private val editResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            // Profile was edited, reload
+            setContent(null)
+        }
+    }
+
     private fun onClickEditButton() {
-        val intent = Intent(this, EditProfileActivity::class.java)
-        ContextCompat.startActivity(this, intent, null)
+        editResult.launch(Intent(this, EditProfileActivity::class.java))
     }
 
     private fun onClickFollowers(account: Account?) {

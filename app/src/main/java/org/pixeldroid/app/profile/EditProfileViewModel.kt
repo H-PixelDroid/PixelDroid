@@ -24,7 +24,9 @@ import org.pixeldroid.app.posts.fromHtml
 import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.db.AppDatabase
+import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class EditProfileViewModel(application: Application) : AndroidViewModel(application) {
@@ -40,6 +42,9 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
 
     private var oldProfile: Account? = null
 
+    var submittedChanges = false
+        private set
+
     init {
         (application as PixelDroidApplication).getAppComponent().inject(this)
         loadProfile()
@@ -50,6 +55,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
             val api = apiHolder.api ?: apiHolder.setToCurrentUser()
             try {
                 val profile = api.verifyCredentials()
+                updateUserInfoDb(db, profile)
                 if (oldProfile == null) oldProfile = profile
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
@@ -96,6 +102,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                         note = bio,
                         locked = privateAccount,
                     )
+                    if (madeChanges()) submittedChanges = true
                     oldProfile = account
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
@@ -180,7 +187,8 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 profilePictureUri = image.toUri(),
-                profilePictureChanged = true
+                profilePictureChanged = true,
+                profileSent = false
             )
         }
     }
@@ -238,7 +246,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
 
         val inter =
             if(pixelfed) api.updateProfilePicture(requestBody.parts[0])
-            else api.updateProfilePictureMastodon((requestBody.parts[0]))
+            else api.updateProfilePictureMastodon(requestBody.parts[0])
 
         postSub = inter
             .subscribeOn(Schedulers.io())
@@ -254,6 +262,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
                     }
                 },
                 /* onError = */ { e: Throwable ->
+                    Log.e("error", (e as? HttpException)?.message().orEmpty())
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             uploadProgress = 0,

@@ -13,21 +13,34 @@ import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity.Companion.DEF
 import org.pixeldroid.app.utils.normalizeDomain
 import java.lang.IllegalArgumentException
 
-fun addUser(db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true,
-            accessToken: String, refreshToken: String?, clientId: String, clientSecret: String) {
+suspend fun addUser(
+    db: AppDatabase, account: Account, instance_uri: String, activeUser: Boolean = true,
+    accessToken: String, refreshToken: String?, clientId: String, clientSecret: String,
+) {
     db.userDao().insertOrUpdate(
-            UserDatabaseEntity(
-                    user_id = account.id!!,
-                    instance_uri = normalizeDomain(instance_uri),
-                    username = account.username!!,
-                    display_name = account.getDisplayName(),
-                    avatar_static = account.anyAvatar().orEmpty(),
-                    isActive = activeUser,
-                    accessToken = accessToken,
-                    refreshToken = refreshToken,
-                    clientId = clientId,
-                    clientSecret = clientSecret
-            )
+        UserDatabaseEntity(
+            user_id = account.id!!,
+            instance_uri = normalizeDomain(instance_uri),
+            username = account.username!!,
+            display_name = account.getDisplayName(),
+            avatar_static = account.anyAvatar().orEmpty(),
+            isActive = activeUser,
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            clientId = clientId,
+            clientSecret = clientSecret
+        )
+    )
+}
+
+suspend fun updateUserInfoDb(db: AppDatabase, account: Account) {
+    val user = db.userDao().getActiveUser()!!
+    db.userDao().updateUserAccountDetails(
+        account.username.orEmpty(),
+        account.display_name.orEmpty(),
+        account.anyAvatar().orEmpty(),
+        user.user_id,
+        user.instance_uri
     )
 }
 

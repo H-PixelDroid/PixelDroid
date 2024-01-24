@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -36,7 +37,12 @@ import com.mikepenz.materialdrawer.iconics.iconicsIcon
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.*
+import com.mikepenz.materialdrawer.model.interfaces.IProfile
+import com.mikepenz.materialdrawer.model.interfaces.descriptionRes
+import com.mikepenz.materialdrawer.model.interfaces.descriptionText
+import com.mikepenz.materialdrawer.model.interfaces.iconUrl
+import com.mikepenz.materialdrawer.model.interfaces.nameRes
+import com.mikepenz.materialdrawer.model.interfaces.nameText
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
@@ -53,10 +59,10 @@ import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Notification
-import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.hasInternet
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
@@ -70,6 +76,8 @@ class MainActivity : BaseActivity() {
 
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
+
+    private lateinit var model: MainActivityViewModel
 
     companion object {
         const val ADD_ACCOUNT_IDENTIFIER: Long = -13
@@ -101,6 +109,12 @@ class MainActivity : BaseActivity() {
             launchActivity(LoginActivity(), firstTime = true)
         } else {
             sendTraceDroidStackTracesIfExist("contact@pixeldroid.org", this)
+
+            val _model: MainActivityViewModel by viewModels {
+                MainActivityViewModelFactory(application)
+            }
+            model = _model
+
 
             setupDrawer()
             val tabs: List<() -> Fragment> = listOf(
@@ -281,16 +295,12 @@ class MainActivity : BaseActivity() {
 
             lifecycleScope.launchWhenCreated {
                 try {
-                    val domain = user?.instance_uri.orEmpty()
-                    val accessToken = user?.accessToken.orEmpty()
-                    val refreshToken = user?.refreshToken
-                    val clientId = user?.clientId.orEmpty()
-                    val clientSecret = user?.clientSecret.orEmpty()
                     val api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
                     val account = api.verifyCredentials()
-                    addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
-                    fillDrawerAccountInfo(account.id!!)
+                    updateUserInfoDb(db, account)
+
+                    //No need to update drawer account info here, the ViewModel listens to db updates
                 } catch (exception: Exception) {
                     Log.e("ACCOUNT UPDATE:", exception.toString())
                 }
@@ -337,35 +347,41 @@ class MainActivity : BaseActivity() {
     }
 
     private fun fillDrawerAccountInfo(account: String) {
-        val users = db.userDao().getAll().toMutableList()
-        users.sortWith { l, r ->
-            when {
-                l.isActive && !r.isActive -> -1
-                r.isActive && !l.isActive -> 1
-                else -> 0
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                model.users.collect { list ->
+                    val users = list.toMutableList()
+                    users.sortWith { l, r ->
+                        when {
+                            l.isActive && !r.isActive -> -1
+                            r.isActive && !l.isActive -> 1
+                            else -> 0
+                        }
+                    }
+                    val profiles: MutableList<IProfile> = users.map { user ->
+                        ProfileDrawerItem().apply {
+                            isSelected = user.isActive
+                            nameText = user.display_name
+                            iconUrl = user.avatar_static
+                            isNameShown = true
+                            identifier = user.user_id.toLong()
+                            descriptionText = user.fullHandle
+                            tag = user.instance_uri
+                        }
+                    }.toMutableList()
+
+                    // reuse the already existing "add account" item
+                    header.profiles.orEmpty()
+                        .filter { it.identifier == ADD_ACCOUNT_IDENTIFIER }
+                        .take(1)
+                        .forEach { profiles.add(it) }
+
+                    header.clear()
+                    header.profiles = profiles
+                    header.setActiveProfile(account.toLong())
+                }
             }
         }
-        val profiles: MutableList<IProfile> = users.map { user ->
-            ProfileDrawerItem().apply {
-                isSelected = user.isActive
-                nameText = user.display_name
-                iconUrl = user.avatar_static
-                isNameShown = true
-                identifier = user.user_id.toLong()
-                descriptionText = user.fullHandle
-                tag = user.instance_uri
-            }
-        }.toMutableList()
-
-        // reuse the already existing "add account" item
-        header.profiles.orEmpty()
-            .filter { it.identifier == ADD_ACCOUNT_IDENTIFIER }
-            .take(1)
-            .forEach { profiles.add(it) }
-
-        header.clear()
-        header.profiles = profiles
-        header.setActiveProfile(account.toLong())
     }
 
     /**
