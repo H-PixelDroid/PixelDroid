@@ -30,6 +30,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
@@ -210,6 +211,7 @@ class MainActivity : BaseActivity() {
                     Glide.with(this@MainActivity)
                         .load(uri)
                         .placeholder(placeholder)
+                        .apply(RequestOptions.circleCropTransform())
                         .into(imageView)
             }
 
