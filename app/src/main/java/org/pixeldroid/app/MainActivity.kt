@@ -211,7 +211,7 @@ class MainActivity : BaseActivity() {
                     Glide.with(this@MainActivity)
                         .load(uri)
                         .placeholder(placeholder)
-                        .apply(RequestOptions.circleCropTransform())
+                        .circleCrop()
                         .into(imageView)
             }
 
