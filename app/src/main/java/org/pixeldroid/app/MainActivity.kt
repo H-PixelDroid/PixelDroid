@@ -16,6 +16,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -86,7 +87,6 @@ class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    @OptIn(ExperimentalPagingApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().setOnExitAnimationListener {
             it.remove()
@@ -112,24 +112,8 @@ class MainActivity : BaseActivity() {
             sendTraceDroidStackTracesIfExist("contact@pixeldroid.org", this)
 
             setupDrawer()
-            val tabs: List<() -> Fragment> = listOf(
-                {
-                    PostFeedFragment<HomeStatusDatabaseEntity>()
-                        .apply {
-                            arguments = Bundle().apply { putBoolean("home", true) }
-                        }
-                },
-                { SearchDiscoverFragment() },
-                { CameraFragment() },
-                { NotificationsFragment() },
-                {
-                    PostFeedFragment<PublicFeedStatusDatabaseEntity>()
-                        .apply {
-                            arguments = Bundle().apply { putBoolean("home", false) }
-                        }
-                }
-            )
-            setupTabs(tabs)
+
+            setupTabs()
 
             val showNotification: Boolean = intent.getBooleanExtra(SHOW_NOTIFICATION_TAG, false)
 
@@ -396,15 +380,46 @@ class MainActivity : BaseActivity() {
         touchSlopField.set(recyclerView, touchSlop*NestedScrollableHost.touchSlopModifier)
     }
 
-    private fun setupTabs(tab_array: List<() -> Fragment>){
+    @OptIn(ExperimentalPagingApi::class)
+    private fun setupTabs() {
+        // TODO: Get current visibility and order from settings
+        // TODO: Otherwise, load default menu
+
+        val bottomNavigationView: BottomNavigationView = binding.tabs
+        bottomNavigationView.menu.clear()
+
+        bottomNavigationView.menu.add(0, R.id.page_1, 0, getString(R.string.home_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.selector_home_feed))
+        bottomNavigationView.menu.add(0, R.id.page_2, 0, getString(R.string.search_discover_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.ic_search_white_24dp))
+        bottomNavigationView.menu.add(0, R.id.page_3, 0, getString(R.string.create_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.selector_camera))
+        bottomNavigationView.menu.add(0, R.id.page_4, 0, getString(R.string.notifications_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.selector_notifications))
+        bottomNavigationView.menu.add(0, R.id.page_5, 0, getString(R.string.public_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.ic_filter_black_24dp))
+
+        val tabArray: List<() -> Fragment> = listOf(
+            {
+                PostFeedFragment<HomeStatusDatabaseEntity>()
+                    .apply {
+                        arguments = Bundle().apply { putBoolean("home", true) }
+                    }
+            },
+            { SearchDiscoverFragment() },
+            { CameraFragment() },
+            { NotificationsFragment() },
+            {
+                PostFeedFragment<PublicFeedStatusDatabaseEntity>()
+                    .apply {
+                        arguments = Bundle().apply { putBoolean("home", false) }
+                    }
+            }
+        )
+
         binding.viewPager.reduceDragSensitivity()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                return tab_array[position]()
+                return tabArray[position]()
             }
 
             override fun getItemCount(): Int {
-                return tab_array.size
+                return tabArray.size
             }
         }
 
