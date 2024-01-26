@@ -350,4 +350,5 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="story_duration">Story Duration</string>
     <string name="arrange_tabs_summary">Arrange tabs</string>
     <string name="arrange_tabs_description">Change visibility and order of tabs</string>
+    <string name="content_header">Content</string>
 </resources>

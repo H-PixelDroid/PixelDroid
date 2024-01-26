@@ -17,61 +17,64 @@
             android:title="@string/accentColorTitle"
             android:key="themeColor"
             android:defaultValue="0"
-            android:summary="@string/accentColorSummary" />
+            android:summary="@string/accentColorSummary"
+            app:icon="@drawable/rounded_colors"/>
+
+        <ListPreference
+            app:key="language"
+            app:title="@string/language"
+            app:icon="@drawable/translate_black_24dp" />
     </PreferenceCategory>
 
-    <ListPreference
-        app:key="language"
-        app:title="@string/language"
-        app:icon="@drawable/translate_black_24dp" />
+    <PreferenceCategory app:title="@string/content_header">
+        <ListPreference
+            android:key="arrange_tabs"
+            android:title="@string/arrange_tabs_summary"
+            android:summary="@string/arrange_tabs_description"
+            android:icon="@drawable/outline_bottom_navigation" />
 
-    <CheckBoxPreference app:key="always_show_nsfw" app:title="@string/always_show_nsfw"
-        app:icon="@drawable/eye_black_24dp" android:defaultValue="false"
-        android:summary="@string/summary_always_show_nsfw"/>
+        <CheckBoxPreference app:key="always_show_nsfw" app:title="@string/always_show_nsfw"
+            app:icon="@drawable/eye_black_24dp" android:defaultValue="false"
+            android:summary="@string/summary_always_show_nsfw"/>
 
-    <Preference android:title="@string/notifications_settings"
-        android:key="notification"
-        android:summary="@string/notifications_settings_summary"
-        app:icon="@drawable/ic_baseline_notifications_active_24">
-        <intent android:action="android.settings.APP_NOTIFICATION_SETTINGS">
-            <extra android:name="android.provider.extra.APP_PACKAGE"
-                android:value="@string/application_id" />
-        </intent>
-    </Preference>
+        <EditTextPreference android:title="@string/description_template"
+            android:key="prefill_description"
+            android:summary="@string/description_template_summary"
+            app:icon="@drawable/note" />
 
-    <EditTextPreference android:title="@string/description_template"
-        android:key="prefill_description"
-        android:summary="@string/description_template_summary"
-        app:icon="@drawable/note" />
+        <Preference android:title="@string/notifications_settings"
+            android:key="notification"
+            android:summary="@string/notifications_settings_summary"
+            app:icon="@drawable/ic_baseline_notifications_active_24">
+            <intent android:action="android.settings.APP_NOTIFICATION_SETTINGS">
+                <extra android:name="android.provider.extra.APP_PACKAGE"
+                    android:value="@string/application_id" />
+            </intent>
+        </Preference>
+    </PreferenceCategory>
 
-    <ListPreference
-        android:key="arrange_tabs"
-        android:title="@string/arrange_tabs_summary"
-        android:summary="@string/arrange_tabs_description"
-        android:icon="@drawable/outline_bottom_navigation"
-        />
-
-    <Preference android:title="@string/about"
-        android:key="about"
-        android:summary="@string/about_pixeldroid"
-        app:icon="@drawable/info_black_24dp">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="@string/application_id"
-            android:targetClass="org.pixeldroid.common.AboutActivity">
-            <extra android:name="buildVersion" android:value="@string/versionName" />
-            <extra android:name="appImage" android:value="mascot" />
-            <extra android:name="appImageWidth" android:value="508" />
-            <extra android:name="appImageTopMargin" android:value="-130" />
-            <extra android:name="appImageBottomMargin" android:value="-130" />
-            <extra android:name="appImageLeftMargin" android:value="0" />
-            <extra android:name="appImageRightMargin" android:value="0" />
-            <extra android:name="appName" android:value="@string/app_name" />
-            <extra android:name="aboutAppDescription" android:value="@string/license_info" />
-            <extra android:name="website" android:value="@string/project_website" />
-            <extra android:name="translatePlatformUrl" android:value="https://weblate.pixeldroid.org" />
-            <extra android:name="contributeForgeUrl" android:value="https://gitlab.shinice.net/pixeldroid/PixelDroid" />
-        </intent>
-
-    </Preference>
+    <PreferenceCategory app:title="@string/about">
+        <Preference android:title="@string/about"
+            android:key="about"
+            android:summary="@string/about_pixeldroid"
+            app:icon="@drawable/info_black_24dp">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="@string/application_id"
+                android:targetClass="org.pixeldroid.common.AboutActivity">
+                <extra android:name="buildVersion" android:value="@string/versionName" />
+                <extra android:name="appImage" android:value="mascot" />
+                <extra android:name="appImageWidth" android:value="508" />
+                <extra android:name="appImageTopMargin" android:value="-130" />
+                <extra android:name="appImageBottomMargin" android:value="-130" />
+                <extra android:name="appImageLeftMargin" android:value="0" />
+                <extra android:name="appImageRightMargin" android:value="0" />
+                <extra android:name="appName" android:value="@string/app_name" />
+                <extra android:name="aboutAppDescription" android:value="@string/license_info" />
+                <extra android:name="website" android:value="@string/project_website" />
+                <extra android:name="translatePlatformUrl" android:value="https://weblate.pixeldroid.org" />
+                <extra android:name="contributeForgeUrl" android:value="https://gitlab.shinice.net/pixeldroid/PixelDroid" />
+            </intent>
+        </Preference>
+    </PreferenceCategory>
 </PreferenceScreen>
