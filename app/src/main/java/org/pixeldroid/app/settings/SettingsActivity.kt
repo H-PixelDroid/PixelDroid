@@ -1,11 +1,18 @@
 package org.pixeldroid.app.settings
 
+import android.annotation.SuppressLint
+import androidx.appcompat.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.XmlResourceParser
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
@@ -14,12 +21,17 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
-import org.pixeldroid.common.ThemedActivity
 import org.pixeldroid.app.utils.setThemeFromPreferences
+import org.pixeldroid.common.ThemedActivity
 
 
 class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -103,6 +115,8 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
                 dialogFragment = ColorPreferenceDialog((preference as ColorPreference?)!!)
             } else if(preference.key == "language"){
                 dialogFragment = LanguageSettingFragment()
+            } else if (preference.key == "arrange_tabs") {
+                dialogFragment = ArrangeTabsFragment()
             }
             if (dialogFragment != null) {
                 dialogFragment.setTargetFragment(this, 0)
@@ -132,6 +146,7 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
 
 }
 class LanguageSettingFragment : DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val list: MutableList<String> = mutableListOf()
         // IDE doesn't find it, but compiling works apparently?
@@ -173,5 +188,107 @@ class LanguageSettingFragment : DialogFragment() {
             }
             setNegativeButton(android.R.string.ok) { _, _ -> }
         }.create()
+    }
+}
+
+class ArrangeTabsFragment: DialogFragment() {
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        val inflater: LayoutInflater = requireActivity().layoutInflater
+        val dialogView: View = inflater.inflate(R.layout.layout_tabs_arrange, null)
+
+        // TODO: Get values from preferences instead of hard-coding them
+        val list: List<String> = listOf("Home", "Search", "Create", "Updates", "Public")
+        val map: MutableList<Pair<String, Boolean>> = list.zip(List(list.size){true}.toTypedArray()).toMutableList()
+
+        val listFeed: RecyclerView = dialogView.findViewById(R.id.tabs)
+        val listAdapter = ListViewAdapter(map)
+        listFeed.adapter = listAdapter
+        listFeed.layoutManager = LinearLayoutManager(requireActivity())
+        val callback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                source: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                listAdapter.onItemMove(source.bindingAdapterPosition, target.bindingAdapterPosition)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                // Do nothing for now, all items should remain in the list
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(listFeed)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
+            setIcon(R.drawable.outline_bottom_navigation)
+            setTitle(R.string.arrange_tabs_summary)
+            setView(dialogView)
+            setNegativeButton(android.R.string.cancel) { _, _ -> }
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                // TODO: Save values into preferences instead of doing nothing
+            }
+        }.create()
+
+        return dialog
+    }
+
+    inner class ListViewAdapter(private val tabsChecked: MutableList<Pair<String, Boolean>>):
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            val view = FrameLayout.inflate(context, R.layout.layout_tab, null)
+
+            // Make sure the layout occupies full width
+            view.layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            return object: RecyclerView.ViewHolder(view) {}
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val textView: MaterialButton = holder.itemView.findViewById(R.id.textView)
+            val checkBox: MaterialCheckBox = holder.itemView.findViewById(R.id.checkBox)
+            val dragHandle: ImageView = holder.itemView.findViewById(R.id.dragHandle)
+
+            // Set content of each entry
+            textView.text = tabsChecked[position].first
+            checkBox.isChecked = tabsChecked[position].second
+
+            // Also interact with checkbox when button is clicked
+            textView.setOnClickListener {
+                checkBox.isChecked = !checkBox.isChecked
+                tabsChecked[position] = Pair(tabsChecked[position].first, !tabsChecked[position].second)
+
+                // Disable OK button when no tab is selected
+                (requireDialog() as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled =
+                    tabsChecked.any { (_, v) -> v }
+            }
+
+            // Also highlight button when checkbox is clicked
+            checkBox.setOnTouchListener { _, motionEvent ->
+                textView.dispatchTouchEvent(motionEvent)
+            }
+
+            // Do not highlight the button when the drag handle is touched
+            dragHandle.setOnTouchListener { _, _ -> true }
+        }
+
+        override fun getItemCount(): Int {
+            return tabsChecked.size
+        }
+
+        fun onItemMove(from: Int, to: Int) {
+            val previous = tabsChecked.removeAt(from)
+            tabsChecked.add(if (to > from) to - 1 else to, previous)
+            notifyItemMoved(from, to)
+        }
     }
 }

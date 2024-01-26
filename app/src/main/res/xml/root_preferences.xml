@@ -44,6 +44,13 @@
         android:summary="@string/description_template_summary"
         app:icon="@drawable/note" />
 
+    <ListPreference
+        android:key="arrange_tabs"
+        android:title="@string/arrange_tabs_summary"
+        android:summary="@string/arrange_tabs_description"
+        android:icon="@drawable/outline_bottom_navigation"
+        />
+
     <Preference android:title="@string/about"
         android:key="about"
         android:summary="@string/about_pixeldroid"
