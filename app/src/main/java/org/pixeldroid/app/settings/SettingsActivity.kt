@@ -9,12 +9,15 @@ import android.content.res.XmlResourceParser
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.DialogFragment
 import androidx.preference.ListPreference
@@ -24,13 +27,19 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.json.JSONArray
+import org.json.JSONObject
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
+import org.pixeldroid.app.utils.loadDefaultMenuTabs
+import org.pixeldroid.app.utils.loadJsonMenuTabs
 import org.pixeldroid.app.utils.setThemeFromPreferences
+import org.pixeldroid.app.utils.toList
 import org.pixeldroid.common.ThemedActivity
 
 
@@ -198,10 +207,18 @@ class ArrangeTabsFragment: DialogFragment() {
 
         val inflater: LayoutInflater = requireActivity().layoutInflater
         val dialogView: View = inflater.inflate(R.layout.layout_tabs_arrange, null)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        // TODO: Get values from preferences instead of hard-coding them
-        val list: List<String> = listOf("Home", "Search", "Create", "Updates", "Public")
-        val map: MutableList<Pair<String, Boolean>> = list.zip(List(list.size){true}.toTypedArray()).toMutableList()
+        val tabsCheckedString = sharedPreferences.getString("tabsChecked", null)
+
+        val map = if (tabsCheckedString == null) {
+            // Load default menu
+            val list = loadDefaultMenuTabs(requireContext(), dialogView)
+            list.zip(List(list.size){true}.toTypedArray()).toMutableList()
+        } else {
+            // Get current menu visibility and order from settings
+            loadJsonMenuTabs(tabsCheckedString).toMutableList()
+        }
 
         val listFeed: RecyclerView = dialogView.findViewById(R.id.tabs)
         val listAdapter = ListViewAdapter(map)
@@ -218,7 +235,7 @@ class ArrangeTabsFragment: DialogFragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // Do nothing for now, all items should remain in the list
+                // Do nothing, all items should remain in the list
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)
@@ -230,14 +247,29 @@ class ArrangeTabsFragment: DialogFragment() {
             setView(dialogView)
             setNegativeButton(android.R.string.cancel) { _, _ -> }
             setPositiveButton(android.R.string.ok) { _, _ ->
-                // TODO: Save values into preferences instead of doing nothing
+                // Save values into preferences
+                val tabsChecked = listAdapter.tabsChecked.toList()
+                val tabsJson = JSONArray()
+                val checkedJson = JSONArray()
+
+                tabsChecked.forEach { (k, v) ->
+                    tabsJson.put(k)
+                    checkedJson.put(v.toString())
+                }
+
+                val tabsCheckedJson = JSONObject().apply {
+                    put("tabs", tabsJson)
+                    put("checked", checkedJson)
+                }.toString()
+
+                sharedPreferences.edit().putString("tabsChecked", tabsCheckedJson).apply()
             }
         }.create()
 
         return dialog
     }
 
-    inner class ListViewAdapter(private val tabsChecked: MutableList<Pair<String, Boolean>>):
+    inner class ListViewAdapter(val tabsChecked: MutableList<Pair<String, Boolean>>):
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -264,12 +296,14 @@ class ArrangeTabsFragment: DialogFragment() {
 
             // Also interact with checkbox when button is clicked
             textView.setOnClickListener {
-                checkBox.isChecked = !checkBox.isChecked
-                tabsChecked[position] = Pair(tabsChecked[position].first, !tabsChecked[position].second)
+                val isCheckedNew = !tabsChecked[position].second
+                tabsChecked[position] = Pair(tabsChecked[position].first, isCheckedNew)
+                checkBox.isChecked = isCheckedNew
 
-                // Disable OK button when no tab is selected
+                // Disable OK button when no tab is selected or when strictly more than 5 tabs are selected
+                val maxItemCount = BottomNavigationView(requireContext()).maxItemCount // = 5
                 (requireDialog() as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled =
-                    tabsChecked.any { (_, v) -> v }
+                    with (tabsChecked.count { (_, v) -> v }) { this in 1..maxItemCount}
             }
 
             // Also highlight button when checkbox is clicked
@@ -287,8 +321,9 @@ class ArrangeTabsFragment: DialogFragment() {
 
         fun onItemMove(from: Int, to: Int) {
             val previous = tabsChecked.removeAt(from)
-            tabsChecked.add(if (to > from) to - 1 else to, previous)
+            tabsChecked.add(to, previous)
             notifyItemMoved(from, to)
+            notifyItemChanged(to) // necessary to avoid checkBox issues
         }
     }
 }

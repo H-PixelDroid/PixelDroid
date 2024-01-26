@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -17,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -26,6 +28,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.ExperimentalPagingApi
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -49,6 +52,8 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.databinding.ActivityMainBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment
@@ -66,11 +71,14 @@ import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.hasInternet
+import org.pixeldroid.app.utils.loadDefaultMenuTabs
+import org.pixeldroid.app.utils.loadJsonMenuTabs
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
+import org.pixeldroid.app.utils.toList
 import java.time.Instant
 
 
@@ -382,35 +390,70 @@ class MainActivity : BaseActivity() {
 
     @OptIn(ExperimentalPagingApi::class)
     private fun setupTabs() {
-        // TODO: Get current visibility and order from settings
-        // TODO: Otherwise, load default menu
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val tabsCheckedString = sharedPreferences.getString("tabsChecked", null)
+        val pageIds = listOf(R.id.page_1, R.id.page_2, R.id.page_3, R.id.page_4, R.id.page_5)
 
-        val bottomNavigationView: BottomNavigationView = binding.tabs
-        bottomNavigationView.menu.clear()
-
-        bottomNavigationView.menu.add(0, R.id.page_1, 0, getString(R.string.home_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.selector_home_feed))
-        bottomNavigationView.menu.add(0, R.id.page_2, 0, getString(R.string.search_discover_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.ic_search_white_24dp))
-        bottomNavigationView.menu.add(0, R.id.page_3, 0, getString(R.string.create_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.selector_camera))
-        bottomNavigationView.menu.add(0, R.id.page_4, 0, getString(R.string.notifications_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.selector_notifications))
-        bottomNavigationView.menu.add(0, R.id.page_5, 0, getString(R.string.public_feed)).setIcon(AppCompatResources.getDrawable(applicationContext, R.drawable.ic_filter_black_24dp))
-
-        val tabArray: List<() -> Fragment> = listOf(
-            {
-                PostFeedFragment<HomeStatusDatabaseEntity>()
-                    .apply {
-                        arguments = Bundle().apply { putBoolean("home", true) }
-                    }
-            },
-            { SearchDiscoverFragment() },
-            { CameraFragment() },
-            { NotificationsFragment() },
-            {
-                PostFeedFragment<PublicFeedStatusDatabaseEntity>()
-                    .apply {
-                        arguments = Bundle().apply { putBoolean("home", false) }
-                    }
+        fun getDrawable(title: String): Drawable? {
+            val resId = when (title) {
+                getString(R.string.home_feed) -> R.drawable.selector_home_feed
+                getString(R.string.search_discover_feed) -> R.drawable.ic_search_white_24dp
+                getString(R.string.create_feed) -> R.drawable.selector_camera
+                getString(R.string.notifications_feed) -> R.drawable.selector_notifications
+                getString(R.string.public_feed) -> R.drawable.ic_filter_black_24dp
+                else -> 0
             }
-        )
+            if (resId == 0) {
+                return null
+            } else {
+                return AppCompatResources.getDrawable(applicationContext, resId)
+            }
+        }
+
+        fun getFragment(title: String): (() -> Fragment)? {
+            return when (title) {
+                getString(R.string.home_feed) -> { {
+                    PostFeedFragment<HomeStatusDatabaseEntity>()
+                        .apply {
+                            arguments = Bundle().apply { putBoolean("home", true) }
+                        }
+                } }
+                getString(R.string.search_discover_feed) -> { { SearchDiscoverFragment() } }
+                getString(R.string.create_feed) -> { { CameraFragment() } }
+                getString(R.string.notifications_feed) -> { { NotificationsFragment() } }
+                getString(R.string.public_feed) -> { {
+                    PostFeedFragment<PublicFeedStatusDatabaseEntity>()
+                        .apply {
+                            arguments = Bundle().apply { putBoolean("home", false) }
+                        }
+                } }
+                else -> null
+            }
+        }
+
+        val tabs = if (tabsCheckedString == null) {
+            // Load default menu
+            loadDefaultMenuTabs(applicationContext, binding.root)
+        } else {
+            // Get current menu visibility and order from settings
+            val tabsChecked = loadJsonMenuTabs(tabsCheckedString).filter { it.second }.map { it.first }
+
+            val bottomNavigationMenu: Menu = binding.tabs.menu
+            bottomNavigationMenu.clear()
+
+            tabsChecked.zip(pageIds).forEach { (tabTitle, pageId) ->
+                with(bottomNavigationMenu.add(0, pageId, Menu.NONE, tabTitle)) {
+                    val tabIcon = getDrawable(tabTitle)
+                    if (tabIcon != null) {
+                        icon = tabIcon
+                    }
+                }
+            }
+
+            tabsChecked
+        }
+
+        val tabArray: List<() -> Fragment> = tabs.map { getFragment(it)!! }
 
         binding.viewPager.reduceDragSensitivity()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
@@ -423,17 +466,25 @@ class MainActivity : BaseActivity() {
             }
         }
 
+        val notificationId = tabs.zip(pageIds).find {
+            it.first == getString(R.string.notifications_feed)
+        }?.second
+
+        fun doAtPageId(pageId: Int): Int {
+            if (notificationId != null && pageId == notificationId) {
+                setNotificationBadge(false)
+            }
+            return pageId
+        }
+
         binding.viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 val selected = when(position){
-                    0 -> R.id.page_1
-                    1 -> R.id.page_2
-                    2 -> R.id.page_3
-                    3 -> {
-                        setNotificationBadge(false)
-                        R.id.page_4
-                    }
-                    4 -> R.id.page_5
+                    0 -> doAtPageId(R.id.page_1)
+                    1 -> doAtPageId(R.id.page_2)
+                    2 -> doAtPageId(R.id.page_3)
+                    3 -> doAtPageId(R.id.page_4)
+                    4 -> doAtPageId(R.id.page_5)
                     else -> null
                 }
                 if (selected != null) {

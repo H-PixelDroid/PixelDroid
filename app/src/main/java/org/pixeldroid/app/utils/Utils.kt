@@ -11,11 +11,13 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
+import android.view.View
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.PopupMenu
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -28,6 +30,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
 import okhttp3.HttpUrl
+import org.json.JSONArray
+import org.json.JSONObject
 import org.pixeldroid.app.R
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -193,3 +197,23 @@ fun <T> Fragment.bindingLifecycleAware(): ReadWriteProperty<Fragment, T> =
             this@bindingLifecycleAware.viewLifecycleOwner.lifecycle.addObserver(this)
         }
     }
+
+
+fun JSONArray.toList(): List<String> {
+    return (0 until this.length()).map { this.get(it).toString() }
+}
+
+fun loadDefaultMenuTabs(context: Context, anchor: View): List<String> {
+    return with(PopupMenu(context, anchor)) {
+        val menu = this.menu
+        menuInflater.inflate(R.menu.bottom_navigation_main, menu)
+        (0 until menu.size()).map { menu.getItem(it).title.toString() }
+    }
+}
+
+fun loadJsonMenuTabs(jsonString: String): List<Pair<String, Boolean>> {
+    val tabsCheckedJson = JSONObject(jsonString)
+    val tabs = tabsCheckedJson.getJSONArray("tabs").toList()
+    val checked = tabsCheckedJson.getJSONArray("checked").toList().map { v -> v.toBoolean() }
+    return tabs.zip(checked)
+}
