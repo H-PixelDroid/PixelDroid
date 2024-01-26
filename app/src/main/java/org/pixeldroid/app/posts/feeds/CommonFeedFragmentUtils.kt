@@ -73,6 +73,7 @@ internal fun <T: Any> initAdapter(
 
     swipeRefreshLayout.setOnRefreshListener {
         adapter.refresh()
+        adapter.notifyDataSetChanged()
         header?.refreshStories()
     }
 

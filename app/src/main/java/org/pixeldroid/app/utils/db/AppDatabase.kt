@@ -22,7 +22,7 @@ import org.pixeldroid.app.utils.api.objects.Notification
         PublicFeedStatusDatabaseEntity::class,
         Notification::class
     ],
-    version = 5
+    version = 6
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -43,5 +43,10 @@ val MIGRATION_3_4 = object : Migration(3, 4) {
 val MIGRATION_4_5 = object : Migration(4, 5) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE instances ADD COLUMN videoEnabled INTEGER NOT NULL DEFAULT 1")
+    }
+}
+val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE instances ADD COLUMN pixelfed INTEGER NOT NULL DEFAULT 1")
     }
 }

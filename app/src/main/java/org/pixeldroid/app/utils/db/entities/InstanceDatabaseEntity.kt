@@ -4,20 +4,22 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "instances")
-data class InstanceDatabaseEntity (
-        @PrimaryKey var uri: String,
-        var title: String,
-        var maxStatusChars: Int = DEFAULT_MAX_TOOT_CHARS,
-        // Per-file file-size limit in KB. Defaults to 15000 (15MB). Default limit for Mastodon is 8MB
-        var maxPhotoSize: Int = DEFAULT_MAX_PHOTO_SIZE,
-        // Mastodon has different file limits for videos, default of 40MB
-        var maxVideoSize: Int = DEFAULT_MAX_VIDEO_SIZE,
-        // How many photos can go into an album. Default limit for Pixelfed and Mastodon is 4
-        var albumLimit: Int = DEFAULT_ALBUM_LIMIT,
-        // Is video functionality enabled on this instance?
-        var videoEnabled: Boolean = DEFAULT_VIDEO_ENABLED,
+data class InstanceDatabaseEntity(
+    @PrimaryKey var uri: String,
+    var title: String,
+    var maxStatusChars: Int = DEFAULT_MAX_TOOT_CHARS,
+    // Per-file file-size limit in KB. Defaults to 15000 (15MB). Default limit for Mastodon is 8MB
+    var maxPhotoSize: Int = DEFAULT_MAX_PHOTO_SIZE,
+    // Mastodon has different file limits for videos, default of 40MB
+    var maxVideoSize: Int = DEFAULT_MAX_VIDEO_SIZE,
+    // How many photos can go into an album. Default limit for Pixelfed and Mastodon is 4
+    var albumLimit: Int = DEFAULT_ALBUM_LIMIT,
+    // Is video functionality enabled on this instance?
+    var videoEnabled: Boolean = DEFAULT_VIDEO_ENABLED,
+    // Is this Pixelfed instance?
+    var pixelfed: Boolean = true,
 ) {
-    companion object{
+    companion object {
         // Default max number of chars for Mastodon: used when their is no other value supplied by
         // either NodeInfo or the instance endpoint
         const val DEFAULT_MAX_TOOT_CHARS = 500
