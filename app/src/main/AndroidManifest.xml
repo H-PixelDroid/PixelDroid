@@ -38,7 +38,7 @@
         <activity
             android:name=".posts.AlbumActivity"
             android:exported="false"
-            android:theme="@style/AppTheme.ActionBar.Transparent"/>
+            android:theme="@style/TransparentAlbumActivity"/>
         <activity
             android:name=".profile.EditProfileActivity"
             android:exported="false"
