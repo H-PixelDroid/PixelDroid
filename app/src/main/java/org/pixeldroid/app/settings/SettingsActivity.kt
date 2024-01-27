@@ -9,15 +9,12 @@ import android.content.res.XmlResourceParser
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.DialogFragment
 import androidx.preference.ListPreference
@@ -39,7 +36,6 @@ import org.pixeldroid.app.databinding.SettingsBinding
 import org.pixeldroid.app.utils.loadDefaultMenuTabs
 import org.pixeldroid.app.utils.loadJsonMenuTabs
 import org.pixeldroid.app.utils.setThemeFromPreferences
-import org.pixeldroid.app.utils.toList
 import org.pixeldroid.common.ThemedActivity
 
 
