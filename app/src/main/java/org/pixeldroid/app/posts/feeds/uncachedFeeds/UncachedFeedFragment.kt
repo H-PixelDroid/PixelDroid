@@ -11,6 +11,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
@@ -20,6 +21,7 @@ import org.pixeldroid.app.posts.feeds.initAdapter
 import org.pixeldroid.app.posts.feeds.launch
 import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.api.objects.FeedContent
+import org.pixeldroid.app.utils.limitedLengthSmoothScrollToPosition
 
 
 /**
@@ -30,8 +32,7 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
     internal lateinit var viewModel: FeedViewModel<T>
     internal lateinit var adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>
 
-    lateinit var binding: FragmentFeedBinding
-
+    var binding: FragmentFeedBinding? = null
 
     private var job: Job? = null
 
@@ -48,25 +49,35 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
                 .distinctUntilChangedBy { it.refresh }
                 // Only react to cases where Remote REFRESH completes i.e., NotLoading.
                 .filter { it.refresh is LoadState.NotLoading }
-                .collect { binding.list.scrollToPosition(0) }
+                .collect { binding?.list?.scrollToPosition(0) }
         }
     }
 
-    override fun onCreateView(
+    fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
+        savedInstanceState: Bundle?, swipeRefreshLayout: SwipeRefreshLayout?
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = FragmentFeedBinding.inflate(layoutInflater)
 
-        initAdapter(
-            binding.progressBar, binding.swipeRefreshLayout, binding.list,
-            binding.motionLayout, binding.errorLayout, adapter
-        )
+        binding!!.let {
+            initAdapter(
+                it.progressBar, swipeRefreshLayout ?: it.swipeRefreshLayout, it.list,
+                it.motionLayout, it.errorLayout, adapter
+            )
 
-        return binding.root
+        }
+        return binding!!.root
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return onCreateView(inflater, container, savedInstanceState, null)
+    }
+    fun onTabReClicked() {
+        binding?.list?.limitedLengthSmoothScrollToPosition(0)
     }
 }
 

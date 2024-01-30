@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,14 +7,6 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
     xmlns:sparkbutton="http://schemas.android.com/apk/res-auto">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:clipChildren="false"
-            android:clipToPadding="false">
-
 
             <ImageView
                 android:id="@+id/profilePic"
@@ -243,6 +235,4 @@
                 app:layout_constraintTop_toBottomOf="@+id/postDate"
                 tools:text="3 comments" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

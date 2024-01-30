@@ -3,88 +3,104 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollview"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSecondaryContainer"
+    android:fitsSystemWindows="true"
     tools:context=".posts.PostActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
-        android:background="?attr/colorSecondaryContainer"
-        android:fitsSystemWindows="true"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/top_bar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:background="?attr/colorSurface"
-            android:id="@+id/collapsing_toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <include
-                    android:id="@+id/postFragmentSingle"
-                    layout="@layout/post_fragment" />
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/commentIn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/postFragmentSingle"
-                    tools:layout_editor_absoluteX="10dp">
+                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout2"
-                        android:layout_width="0dp"
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/top_bar"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/submitComment"
-                        app:layout_constraintStart_toStartOf="parent">
-
-                        <EditText
-                            android:id="@+id/editComment"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/comment_noun"
-                            android:importantForAutofill="no"
-                            android:inputType="text|textCapSentences|textMultiLine" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <Button
-                        android:id="@+id/submitComment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:contentDescription="@string/submit_comment"
-                        android:text="@string/comment_verb"
-                        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout2"
+                        android:background="?attr/colorSecondaryContainer"
+                        android:minHeight="?attr/actionBarSize"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/textInputLayout2"
-                        app:layout_constraintTop_toTopOf="@+id/textInputLayout2" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintPost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+                        <include
+                            android:id="@+id/postFragmentSingle"
+                            layout="@layout/post_fragment" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/commentIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/constraintPost"
+                        tools:layout_editor_absoluteX="10dp">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputLayout2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/submitComment"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <EditText
+                                android:id="@+id/editComment"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/comment_noun"
+                                android:importantForAutofill="no"
+                                android:inputType="text|textCapSentences|textMultiLine" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/submitComment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:contentDescription="@string/submit_comment"
+                            android:text="@string/comment_verb"
+                            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textInputLayout2"
+                            app:layout_constraintTop_toTopOf="@+id/textInputLayout2" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.core.widget.NestedScrollView
+                        android:id="@+id/commentFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="500dp"
+                        android:fillViewport="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/commentIn" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/commentFragment"
-        />
-
+            </androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

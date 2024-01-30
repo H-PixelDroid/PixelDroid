@@ -7,16 +7,19 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
+import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedFeedFragment
 import org.pixeldroid.app.posts.parseHTMLText
 import org.pixeldroid.app.utils.BaseActivity
@@ -58,6 +61,29 @@ class ProfileActivity : BaseActivity() {
         val tabs = createProfileTabs(account)
         setupTabs(tabs)
         setContent(account)
+
+        binding.profileMotion.setTransitionListener(
+            object : MotionLayout.TransitionListener {
+                override fun onTransitionStarted(
+                    motionLayout: MotionLayout?, startId: Int, endId: Int,
+                ) {}
+
+                override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
+
+                override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                    if (currentId == R.id.hideProfile && motionLayout?.startState == R.id.start) {
+                        // If the 1st transition has been made go to the second one
+                        motionLayout.setTransition(R.id.second)
+                    } else if(currentId == R.id.hideProfile && motionLayout?.startState == R.id.hideProfile){
+                        motionLayout.setTransition(R.id.first)
+                    }
+                }
+
+                override fun onTransitionTrigger(
+                    motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float,
+                ) {}
+            }
+        )
     }
 
     private fun createProfileTabs(account: Account?): Array<UncachedFeedFragment<FeedContent>> {
@@ -104,7 +130,7 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun setupTabs(
-        tabs: Array<UncachedFeedFragment<FeedContent>>
+        tabs: Array<UncachedFeedFragment<FeedContent>>,
     ){
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
@@ -136,6 +162,14 @@ class ProfileActivity : BaseActivity() {
                 }
             }
         }.attach()
+
+        binding.profileTabs.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {}
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                tabs[tab.position].onTabReClicked()
+            }
+        })
     }
 
     private fun setContent(account: Account?) {

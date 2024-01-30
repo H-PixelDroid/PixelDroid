@@ -101,7 +101,7 @@ class ProfileFeedFragment : UncachedFeedFragment<FeedContent>() {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
         if(grid || bookmarks || collections || addCollection) {
-            binding.list.layoutManager = GridLayoutManager(context, 3)
+            binding?.list?.layoutManager = GridLayoutManager(context, 3)
         }
 
         // Get the view model
@@ -191,8 +191,11 @@ class ProfileFeedFragment : UncachedFeedFragment<FeedContent>() {
                     val url = "$domain/i/collections/create"
 
                     if(domain.isNullOrEmpty() || !requireContext().openUrl(url)) {
-                        Snackbar.make(binding.root, getString(R.string.new_collection_link_failed),
-                            Snackbar.LENGTH_LONG).show()
+                        binding?.let { binding ->
+                            Snackbar.make(
+                                binding.root, getString(R.string.new_collection_link_failed),
+                                Snackbar.LENGTH_LONG).show()
+                        }
                     }
                 }
 
