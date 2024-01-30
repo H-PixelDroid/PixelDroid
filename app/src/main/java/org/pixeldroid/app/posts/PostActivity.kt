@@ -6,6 +6,7 @@ import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.R
@@ -24,13 +25,16 @@ import org.pixeldroid.app.utils.displayDimensionsInPx
 class PostActivity : BaseActivity() {
     private lateinit var binding: ActivityPostBinding
 
-    private var commentFragment = CommentFragment()
+    private lateinit var commentFragment: CommentFragment
 
     private lateinit var status: Status
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
+
+        commentFragment = CommentFragment(binding.swipeRefreshLayout)
+
         setContentView(binding.root)
         setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -105,6 +109,11 @@ class PostActivity : BaseActivity() {
 
         supportFragmentManager.beginTransaction()
             .add(R.id.commentFragment, commentFragment).commit()
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            commentFragment.adapter.refresh()
+            commentFragment.adapter.notifyDataSetChanged()
+        }
     }
 
     private suspend fun postComment(

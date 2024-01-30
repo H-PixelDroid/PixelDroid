@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.NestedScrollingChild
+import androidx.core.view.NestedScrollingChildHelper
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.CommentBinding
 import org.pixeldroid.app.posts.PostActivity
@@ -25,7 +28,7 @@ import org.pixeldroid.app.utils.setProfileImageFromURL
 /**
  * Fragment to show a list of [Status]s, in form of comments
  */
-class CommentFragment : UncachedFeedFragment<Status>() {
+class CommentFragment(val swipeRefreshLayout: SwipeRefreshLayout): UncachedFeedFragment<Status>() {
 
     private lateinit var id: String
     private lateinit var domain: String
@@ -42,11 +45,11 @@ class CommentFragment : UncachedFeedFragment<Status>() {
     @OptIn(ExperimentalPagingApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
 
-        val view = super.onCreateView(inflater, container, savedInstanceState)
+        val view = super.onCreateView(inflater, container, savedInstanceState, swipeRefreshLayout)
 
         // Get the view model
         @Suppress("UNCHECKED_CAST")
@@ -62,6 +65,7 @@ class CommentFragment : UncachedFeedFragment<Status>() {
         launch()
         initSearch()
 
+        binding?.swipeRefreshLayout?.isEnabled = false
         return view
     }
     companion object {
