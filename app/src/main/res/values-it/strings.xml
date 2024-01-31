@@ -304,4 +304,13 @@
     <string name="collection_add_post">Aggiungi post</string>
     <string name="collections">Raccolte</string>
     <string name="delete_collection">Elimina raccolta</string>
+    <string name="add_story">Aggiungi Storia</string>
+    <string name="story_pause">Riproduci o ferma le storie</string>
+    <string name="story_could_not_see">Errore: impossibile segnare la storia come visualizzata</string>
+    <string name="my_story">La mia storia</string>
+    <string name="type_story">Storia</string>
+    <string name="type_post">Post</string>
+    <string name="continue_post_creation">Continua</string>
+    <string name="extraneous_pictures_stories">Le immagini successive alla prima sono state rimosse, ma possono essere ripristinate tornando indietro alla creazione di un Post</string>
+    <string name="story_duration">Durata della Storia</string>
 </resources>

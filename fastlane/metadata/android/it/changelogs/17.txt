@@ -1,0 +1,8 @@
+* Migliorati i commenti: adesso si può aprire un commento per vedere le risposte, mettere mi piace, i commenti mostrano l'avatar dell'autore, ecc.
+* Aggiornate le traduzioni. Grazie traduttori :). Aiutaci a tradurre PixelDroid nella tua lingua su weblate.pixeldroid.org
+* Sicurezza: la verifica delle dipendenze assicura che quelle incluse nell'app non siano state manomesse, da adesso PixelDroid rifiuterà ogni connessione non-HTTPS
+* PixelDroid adesso usa lo User Agent personalizzato "PixelDroid" al posto di quello della libreria OkHttp
+* Tutte le stringhe presenti nel codice sono state rese traducibili
+* Alcuni miglioramenti al codice
+* Corretto il salvataggio di immagini prese dalla libreria o condivise con l'app
+* Corretto un altro crash nell'utilizzo delle istanze Mastodon
