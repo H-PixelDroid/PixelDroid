@@ -1,28 +1,25 @@
 package org.pixeldroid.app.utils
 
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ContentResolver
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.ImageDecoder
-import android.graphics.Matrix
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
@@ -34,7 +31,7 @@ import okhttp3.HttpUrl
 import org.pixeldroid.app.R
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
