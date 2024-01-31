@@ -23,15 +23,6 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
-        //noinspection JcenterRepositoryObsolete
-        jcenter {
-            content {
-                // info.androidhive:imagefilters is only available in JCenter
-                //TODO remove JCenter repo:
-                // see issue https://gitlab.shinice.net/pixeldroid/PixelDroid/-/issues/278
-                includeGroup("info.androidhive")
-            }
-        }
     }
 }
 

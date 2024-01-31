@@ -145,7 +145,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.7.0"
     implementation "androidx.annotation:annotation:1.7.1"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation "androidx.activity:activity-ktx:1.8.2"
@@ -192,7 +192,7 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
-    implementation project(path: ':media_editor')
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.6'
     implementation project(path: ':scrambler')
     implementation project(path: ':pixel_common')
 
