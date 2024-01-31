@@ -1,0 +1,1 @@
+Correzione per i crash durante l'attività di modifica che si sono verificati solo nella modalità release

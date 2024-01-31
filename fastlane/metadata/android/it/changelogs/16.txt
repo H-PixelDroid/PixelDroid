@@ -1,0 +1,4 @@
+* Aggiunte regole gson proguard per sistemare i crash nelle istanze Mastodon
+* Aggiunto color theming con 4 temi differenti
+* Passaggio a Material 3
+* Migliorata la coerenza dell'UI
