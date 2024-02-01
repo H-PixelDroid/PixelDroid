@@ -38,7 +38,7 @@ class PostSubmissionFragment : BaseFragment() {
     private lateinit var instance: InstanceDatabaseEntity
 
     private var binding: FragmentPostSubmissionBinding by bindingLifecycleAware()
-    private lateinit var model: PostCreationViewModel
+    private val model: PostCreationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,18 +64,6 @@ class PostSubmissionFragment : BaseFragment() {
                 instanceDatabaseEntity.uri.contains(instance_uri)
             }
         } ?: InstanceDatabaseEntity("", "")
-
-        val _model: PostCreationViewModel by activityViewModels {
-            PostCreationViewModelFactory(
-                requireActivity().application,
-                requireActivity().intent.clipData!!,
-                instance,
-                requireActivity().intent.getStringExtra(PostCreationActivity.PICTURE_DESCRIPTION),
-                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false),
-                requireActivity().intent.getBooleanExtra(CameraFragment.CAMERA_ACTIVITY_STORY, false)
-            )
-        }
-        model = _model
 
         // Display the values from the view model
         binding.nsfwSwitch.isChecked = model.uiState.value.nsfw

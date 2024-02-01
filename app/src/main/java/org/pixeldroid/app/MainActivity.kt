@@ -78,7 +78,7 @@ class MainActivity : BaseActivity() {
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
 
-    private lateinit var model: MainActivityViewModel
+    private val model: MainActivityViewModel by viewModels()
 
     companion object {
         const val ADD_ACCOUNT_IDENTIFIER: Long = -13
@@ -110,12 +110,6 @@ class MainActivity : BaseActivity() {
             launchActivity(LoginActivity(), firstTime = true)
         } else {
             sendTraceDroidStackTracesIfExist("contact@pixeldroid.org", this)
-
-            val _model: MainActivityViewModel by viewModels {
-                MainActivityViewModelFactory(application)
-            }
-            model = _model
-
 
             setupDrawer()
             val tabs: List<() -> Fragment> = listOf(

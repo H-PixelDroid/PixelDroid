@@ -1,10 +1,13 @@
 import com.android.build.api.dsl.ManagedVirtualDevice
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'jacoco'
-apply plugin: "kotlin-parcelize"
-apply plugin: 'com.google.devtools.ksp'
+plugins {
+    id("com.android.application")
+    id("com.google.dagger.hilt.android")
+    id("kotlin-android")
+    id("jacoco")
+    id("kotlin-parcelize")
+    id("com.google.devtools.ksp")
+}
 
 android {
 
@@ -183,6 +186,9 @@ dependencies {
     //Dagger (dependency injection)
     implementation 'com.google.dagger:dagger:2.50'
     ksp 'com.google.dagger:dagger-compiler:2.50'
+
+    implementation("com.google.dagger:hilt-android:2.50")
+    ksp "com.google.dagger:hilt-compiler:2.50"
 
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

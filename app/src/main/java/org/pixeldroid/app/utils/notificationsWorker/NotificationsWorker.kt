@@ -46,9 +46,6 @@ class NotificationsWorker(
     lateinit var apiHolder: PixelfedAPIHolder
 
     override suspend fun doWork(): Result {
-
-        (applicationContext as PixelDroidApplication).getAppComponent().inject(this)
-
         val users: List<UserDatabaseEntity> = db.userDao().getAll()
 
         for (user in users){

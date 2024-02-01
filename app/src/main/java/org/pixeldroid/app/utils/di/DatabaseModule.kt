@@ -5,17 +5,24 @@ import androidx.room.Room
 import org.pixeldroid.app.utils.db.AppDatabase
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import org.pixeldroid.app.utils.db.MIGRATION_3_4
 import org.pixeldroid.app.utils.db.MIGRATION_4_5
 import org.pixeldroid.app.utils.db.MIGRATION_5_6
+import javax.inject.Inject
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
-class DatabaseModule(private val context: Context) {
+class DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesDatabase(): AppDatabase {
+    fun providesDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java, "pixeldroid"

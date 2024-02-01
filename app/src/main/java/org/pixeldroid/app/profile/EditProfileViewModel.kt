@@ -1,6 +1,7 @@
 package org.pixeldroid.app.profile
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.text.Editable
@@ -11,6 +12,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -29,7 +31,9 @@ import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class EditProfileViewModel(application: Application) : AndroidViewModel(application) {
+class EditProfileViewModel(
+    @ApplicationContext private val context: Context
+): ViewModel() {
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -46,7 +50,6 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         private set
 
     init {
-        (application as PixelDroidApplication).getAppComponent().inject(this)
         loadProfile()
     }
 
@@ -197,12 +200,12 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         val image = uiState.value.profilePictureUri!!
 
         val inputStream =
-            getApplication<PixelDroidApplication>().contentResolver.openInputStream(image)
+            context.contentResolver.openInputStream(image)
                 ?: return
 
         val size: Long =
             if (image.scheme == "content") {
-                getApplication<PixelDroidApplication>().contentResolver.query(
+                context.contentResolver.query(
                     image,
                     null,
                     null,

@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -55,7 +56,7 @@ class PostCreationFragment : BaseFragment() {
     private var instance: InstanceDatabaseEntity = InstanceDatabaseEntity("", "")
 
     private var binding: FragmentPostCreationBinding by bindingLifecycleAware()
-    private lateinit var model: PostCreationViewModel
+    private val model: PostCreationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,18 +80,6 @@ class PostCreationFragment : BaseFragment() {
                 instanceDatabaseEntity.uri.contains(instance_uri)
             }
         } ?: InstanceDatabaseEntity("", "")
-
-        val _model: PostCreationViewModel by activityViewModels {
-            PostCreationViewModelFactory(
-                requireActivity().application,
-                requireActivity().intent.clipData!!,
-                instance,
-                requireActivity().intent.getStringExtra(PostCreationActivity.PICTURE_DESCRIPTION),
-                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false),
-                requireActivity().intent.getBooleanExtra(CameraFragment.CAMERA_ACTIVITY_STORY, false),
-            )
-        }
-        model = _model
 
         model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData ->
             // update UI

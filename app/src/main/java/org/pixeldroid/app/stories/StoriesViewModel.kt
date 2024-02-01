@@ -61,7 +61,6 @@ class StoriesViewModel(
     private var timer: CountDownTimer? = null
 
     init {
-        (application as PixelDroidApplication).getAppComponent().inject(this)
         currentAccount =
         if (selfCarousel != null) {
             db.userDao().getActiveUser()?.let { CarouselUserContainer(it, selfCarousel) }

@@ -6,13 +6,16 @@ import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import org.pixeldroid.app.utils.api.PixelfedAPI.Companion.apiForUser
 import javax.inject.Singleton
 
 @Module
-class APIModule{
+@InstallIn(SingletonComponent::class)
+class APIModule {
 
     @Provides
     @Singleton
