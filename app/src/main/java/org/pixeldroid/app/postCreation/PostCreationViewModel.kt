@@ -1,8 +1,6 @@
 package org.pixeldroid.app.postCreation
 
-import android.app.Application
-import android.content.ClipData
-import android.content.Context
+    import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
@@ -13,16 +11,15 @@ import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.jarsilio.android.scrambler.exceptions.UnsupportedFileFormatException
 import com.jarsilio.android.scrambler.stripMetadata
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -36,10 +33,10 @@ import kotlinx.parcelize.Parcelize
 import okhttp3.MultipartBody
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.PixelDroidApplication
-import org.pixeldroid.app.utils.api.objects.Attachment
-import org.pixeldroid.app.utils.api.objects.Instance
-import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
+    import org.pixeldroid.app.postCreation.camera.CameraFragment
+    import org.pixeldroid.app.utils.api.objects.Attachment
+    import org.pixeldroid.app.utils.db.AppDatabase
+    import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.fileExtension
@@ -51,21 +48,10 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URI
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
-import kotlin.collections.arrayListOf
-import kotlin.collections.forEach
-import kotlin.collections.get
-import kotlin.collections.getOrNull
-import kotlin.collections.indexOfFirst
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
-import kotlin.collections.plus
 import kotlin.collections.set
-import kotlin.collections.toMutableList
 import kotlin.math.ceil
 
+const val TAG = "Post Creation ViewModel"
 
 // Models the UI state for the PostCreationActivity
 data class PostCreationActivityUiState(
@@ -112,18 +98,28 @@ data class PhotoData(
     var videoEncodeError: Boolean = false,
 ) : Parcelable
 
-class PostCreationViewModel(
+@HiltViewModel
+class PostCreationViewModel @Inject constructor(
     private val state: SavedStateHandle,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    db: AppDatabase
 ): ViewModel() {
     private var storyPhotoDataBackup: MutableList<PhotoData>? = null
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
-        MutableLiveData<MutableList<PhotoData>>().apply {
-            value =  state.get<ClipData>("clipData")?.let { addPossibleImages(it, mutableListOf()) }
-        }
+        MutableLiveData<MutableList<PhotoData>>(
+            addPossibleImages(
+                state.get<ArrayList<Uri>>(Intent.EXTRA_STREAM),
+                state.get<ArrayList<String>>(PostCreationActivity.PICTURE_DESCRIPTIONS),
+                mutableListOf()
+            )
+        )
     }
 
-    private val instance = state.get<InstanceDatabaseEntity>("instance")
+    private val instance = db.userDao().getActiveUser()?.run {
+        db.instanceDao().getAll().first { instanceDatabaseEntity ->
+            instanceDatabaseEntity.uri.contains(instance_uri)
+        }
+    }
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -135,11 +131,11 @@ class PostCreationViewModel(
             PreferenceManager.getDefaultSharedPreferences(context)
         val templateDescription = sharedPreferences.getString("prefill_description", "") ?: ""
 
-        val storyCreation: Boolean = state["storyCreation"] ?: false
+        val storyCreation: Boolean = state[CameraFragment.CAMERA_ACTIVITY_STORY] ?: false
 
         _uiState = MutableStateFlow(PostCreationActivityUiState(
-            newPostDescriptionText = state["existingDescription"] ?: templateDescription,
-            nsfw = state["existingNSFW"] ?: false,
+            newPostDescriptionText = state[PostCreationActivity.POST_DESCRIPTION] ?: templateDescription,
+            nsfw = state[PostCreationActivity.POST_NSFW] ?: false,
             maxEntries = if(storyCreation) 1 else instance?.albumLimit,
             storyCreation = storyCreation
         ))
@@ -164,32 +160,41 @@ class PostCreationViewModel(
     fun getPhotoData(): LiveData<MutableList<PhotoData>> = photoData
 
     /**
-     * Will add as many images as possible to [photoData], from the [clipData], and if
-     * ([photoData].size + [clipData].itemCount) > uiState.value.maxEntries then it will only add as many images
+     * Will add as many images as possible to [photoData], from the [uris], and if
+     * ([photoData].size + [uris].size) > uiState.value.maxEntries then it will only add as many images
      * as are legal (if any) and a dialog will be shown to the user alerting them of this fact.
      */
-    fun addPossibleImages(clipData: ClipData, previousList: MutableList<PhotoData>? = photoData.value): MutableList<PhotoData> {
+    fun addPossibleImages(
+        uris: ArrayList<Uri>?,
+        descriptions: List<String>?,
+        previousList: MutableList<PhotoData>? = photoData.value,
+    ): MutableList<PhotoData> {
         val dataToAdd: ArrayList<PhotoData> = arrayListOf()
-        var count = clipData.itemCount
-        uiState.value.maxEntries?.let {
-            if(count + (previousList?.size ?: 0) > it){
+        var count = uris?.size ?: 0
+        uiState.value.maxEntries?.let { maxEntries ->
+            if(count + (previousList?.size ?: 0) > maxEntries){
                 _uiState.update { currentUiState ->
-                    currentUiState.copy(userMessage = context.getString(R.string.total_exceeds_album_limit).format(it))
+                    currentUiState.copy(userMessage = context.getString(R.string.total_exceeds_album_limit).format(maxEntries))
                 }
-                count = count.coerceAtMost(it - (previousList?.size ?: 0))
+                count = count.coerceAtMost(maxEntries - (previousList?.size ?: 0))
             }
-            if (count + (previousList?.size ?: 0) >= it) {
+            if (count + (previousList?.size ?: 0) >= maxEntries) {
                 // Disable buttons to add more images
                 _uiState.update { currentUiState ->
                     currentUiState.copy(addPhotoButtonEnabled = false)
                 }
             }
-            for (i in 0 until count) {
-                clipData.getItemAt(i).let {
-                    val sizeAndVideoPair: Pair<Long, Boolean> =
-                        getSizeAndVideoValidate(it.uri, (previousList?.size ?: 0) + dataToAdd.size + 1)
-                    dataToAdd.add(PhotoData(imageUri = it.uri, size = sizeAndVideoPair.first, video = sizeAndVideoPair.second, imageDescription = it.text?.toString()))
-                }
+            for ((i, uri) in uris.orEmpty().withIndex()) {
+                val sizeAndVideoPair: Pair<Long, Boolean> =
+                    getSizeAndVideoValidate(uri, (previousList?.size ?: 0) + dataToAdd.size + 1)
+                dataToAdd.add(
+                    PhotoData(
+                        imageUri = uri,
+                        size = sizeAndVideoPair.first,
+                        video = sizeAndVideoPair.second,
+                        imageDescription = descriptions?.getOrNull(i)
+                    )
+                )
             }
         }
 
