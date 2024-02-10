@@ -36,8 +36,7 @@ import org.pixeldroid.app.R
     import org.pixeldroid.app.postCreation.camera.CameraFragment
     import org.pixeldroid.app.utils.api.objects.Attachment
     import org.pixeldroid.app.utils.db.AppDatabase
-    import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
-import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+    import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
@@ -101,7 +100,7 @@ data class PhotoData(
 @HiltViewModel
 class PostCreationViewModel @Inject constructor(
     private val state: SavedStateHandle,
-    @ApplicationContext private val context: Context,
+    @ApplicationContext private val applicationContext: Context,
     db: AppDatabase
 ): ViewModel() {
     private var storyPhotoDataBackup: MutableList<PhotoData>? = null
@@ -124,7 +123,7 @@ class PostCreationViewModel @Inject constructor(
 
     init {
         val sharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(context)
+            PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val templateDescription = sharedPreferences.getString("prefill_description", "") ?: ""
 
         val storyCreation: Boolean = state[CameraFragment.CAMERA_ACTIVITY_STORY] ?: false
@@ -170,7 +169,7 @@ class PostCreationViewModel @Inject constructor(
         uiState.value.maxEntries?.let { maxEntries ->
             if(count + (previousList?.size ?: 0) > maxEntries){
                 _uiState.update { currentUiState ->
-                    currentUiState.copy(userMessage = context.getString(R.string.total_exceeds_album_limit).format(maxEntries))
+                    currentUiState.copy(userMessage = applicationContext.getString(R.string.total_exceeds_album_limit).format(maxEntries))
                 }
                 count = count.coerceAtMost(maxEntries - (previousList?.size ?: 0))
             }
@@ -208,7 +207,7 @@ class PostCreationViewModel @Inject constructor(
     private fun getSizeAndVideoValidate(uri: Uri, editPosition: Int): Pair<Long, Boolean> {
         val size: Long =
             if (uri.scheme =="content") {
-                context.contentResolver.query(uri, null, null, null, null)
+                applicationContext.contentResolver.query(uri, null, null, null, null)
                     ?.use { cursor ->
                         /* Get the column indexes of the data in the Cursor,
                          * move to the first row in the Cursor, get the data,
@@ -225,12 +224,12 @@ class PostCreationViewModel @Inject constructor(
             }
 
         val sizeInkBytes = ceil(size.toDouble() / 1000).toLong()
-        val type = uri.getMimeType(context.contentResolver)
+        val type = uri.getMimeType(applicationContext.contentResolver)
         val isVideo = type.startsWith("video/")
 
         if (isVideo && !instance!!.videoEnabled) {
             _uiState.update { currentUiState ->
-                currentUiState.copy(userMessage = context.getString(R.string.video_not_supported))
+                currentUiState.copy(userMessage = applicationContext.getString(R.string.video_not_supported))
             }
         }
 
@@ -239,7 +238,7 @@ class PostCreationViewModel @Inject constructor(
             val maxSize = if (isVideo) instance.maxVideoSize else instance.maxPhotoSize
             _uiState.update { currentUiState ->
                 currentUiState.copy(
-                    userMessage = context.getString(R.string.size_exceeds_instance_limit, editPosition, sizeInkBytes, maxSize)
+                    userMessage = applicationContext.getString(R.string.size_exceeds_instance_limit, editPosition, sizeInkBytes, maxSize)
                 )
             }
         }
@@ -276,7 +275,7 @@ class PostCreationViewModel @Inject constructor(
                         videoEncodeComplete = false
 
                         VideoEditActivity.startEncoding(imageUri, null, it,
-                            context = context,
+                            context = applicationContext,
                             registerNewFFmpegSession = ::registerNewFFmpegSession,
                             trackTempFile = ::trackTempFile,
                             videoEncodeProgress = ::videoEncodeProgress
@@ -391,17 +390,17 @@ class PostCreationViewModel @Inject constructor(
         }
 
         for (data: PhotoData in getPhotoData().value ?: emptyList()) {
-            val extension = data.imageUri.fileExtension(context.contentResolver)
+            val extension = data.imageUri.fileExtension(applicationContext.contentResolver)
 
-            val strippedImage = File.createTempFile("temp_img", ".$extension", context.cacheDir)
+            val strippedImage = File.createTempFile("temp_img", ".$extension", applicationContext.cacheDir)
 
             val imageUri = data.imageUri
 
             val (strippedOrNot, size) = try {
-                val orientation = ExifInterface(context.contentResolver.openInputStream(imageUri)!!).getAttributeInt(
+                val orientation = ExifInterface(applicationContext.contentResolver.openInputStream(imageUri)!!).getAttributeInt(
                     ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
 
-                stripMetadata(imageUri, strippedImage, context.contentResolver)
+                stripMetadata(imageUri, strippedImage, applicationContext.contentResolver)
 
                 // Restore EXIF orientation
                 val exifInterface = ExifInterface(strippedImage)
@@ -413,11 +412,11 @@ class PostCreationViewModel @Inject constructor(
                 strippedImage.delete()
                 if(imageUri != data.imageUri) File(URI(imageUri.toString())).delete()
                 val imageInputStream = try {
-                    context.contentResolver.openInputStream(imageUri)!!
+                    applicationContext.contentResolver.openInputStream(imageUri)!!
                 } catch (e: FileNotFoundException){
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            userMessage = context.getString(R.string.file_not_found,
+                            userMessage = applicationContext.getString(R.string.file_not_found,
                                 data.imageUri)
                         )
                     }
@@ -429,14 +428,14 @@ class PostCreationViewModel @Inject constructor(
                 if(imageUri != data.imageUri) File(URI(imageUri.toString())).delete()
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        userMessage = context.getString(R.string.file_not_found,
+                        userMessage = applicationContext.getString(R.string.file_not_found,
                             data.imageUri)
                     )
                 }
                 return
             }
 
-            val type = data.imageUri.getMimeType(context.contentResolver)
+            val type = data.imageUri.getMimeType(applicationContext.contentResolver)
             val imagePart = ProgressRequestBody(strippedOrNot, size, type)
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -486,7 +485,7 @@ class PostCreationViewModel @Inject constructor(
                             currentUiState.copy(
                                 uploadErrorVisible = true,
                                 uploadErrorExplanationText = if(e is HttpException){
-                                    context.getString(R.string.upload_error, e.code())
+                                    applicationContext.getString(R.string.upload_error, e.code())
                                 } else "",
                                 uploadErrorExplanationVisible = e is HttpException,
                             )
@@ -552,14 +551,14 @@ class PostCreationViewModel @Inject constructor(
                         sensitive = nsfw
                     )
                 }
-                Toast.makeText(context, context.getString(R.string.upload_post_success),
+                Toast.makeText(applicationContext, applicationContext.getString(R.string.upload_post_success),
                     Toast.LENGTH_SHORT).show()
-                val intent = Intent(context, MainActivity::class.java)
+                val intent = Intent(applicationContext, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 //TODO make the activity launch this instead (and surrounding toasts too)
-                context.startActivity(intent)
+                applicationContext.startActivity(intent)
             } catch (exception: IOException) {
-                Toast.makeText(context, context.getString(R.string.upload_post_error),
+                Toast.makeText(applicationContext, applicationContext.getString(R.string.upload_post_error),
                     Toast.LENGTH_SHORT).show()
                 Log.e(TAG, exception.toString())
                 _uiState.update { currentUiState ->
@@ -568,7 +567,7 @@ class PostCreationViewModel @Inject constructor(
                     )
                 }
             } catch (exception: HttpException) {
-                Toast.makeText(context, context.getString(R.string.upload_post_failed),
+                Toast.makeText(applicationContext, applicationContext.getString(R.string.upload_post_failed),
                     Toast.LENGTH_SHORT).show()
                 Log.e(TAG, exception.response().toString() + exception.message().toString())
                 _uiState.update { currentUiState ->
@@ -613,7 +612,7 @@ class PostCreationViewModel @Inject constructor(
 
             //Show message saying extraneous pictures were removed but can be restored
             newUiState = newUiState.copy(
-                userMessage = context.getString(R.string.extraneous_pictures_stories)
+                userMessage = applicationContext.getString(R.string.extraneous_pictures_stories)
             )
         }
         // Restore if backup not null and first value is unchanged

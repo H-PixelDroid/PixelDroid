@@ -11,7 +11,6 @@ import dagger.hilt.components.SingletonComponent
 import org.pixeldroid.app.utils.db.MIGRATION_3_4
 import org.pixeldroid.app.utils.db.MIGRATION_4_5
 import org.pixeldroid.app.utils.db.MIGRATION_5_6
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -21,10 +20,10 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun providesDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext applicationContext: Context
     ): AppDatabase {
         return Room.databaseBuilder(
-            context,
+            applicationContext,
             AppDatabase::class.java, "pixeldroid"
         ).addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
             .allowMainThreadQueries().build()

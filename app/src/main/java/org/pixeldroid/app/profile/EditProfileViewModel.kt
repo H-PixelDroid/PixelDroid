@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val applicationContext: Context
 ): ViewModel() {
 
     @Inject
@@ -198,12 +198,12 @@ class EditProfileViewModel @Inject constructor(
         val image = uiState.value.profilePictureUri!!
 
         val inputStream =
-            context.contentResolver.openInputStream(image)
+            applicationContext.contentResolver.openInputStream(image)
                 ?: return
 
         val size: Long =
             if (image.scheme == "content") {
-                context.contentResolver.query(
+                applicationContext.contentResolver.query(
                     image,
                     null,
                     null,
