@@ -1,16 +1,16 @@
 package org.pixeldroid.app.profile
 
-import android.app.Application
+import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.text.Editable
 import android.util.Log
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import org.pixeldroid.app.postCreation.ProgressRequestBody
 import org.pixeldroid.app.posts.fromHtml
-import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.Account
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.updateUserInfoDb
@@ -29,7 +28,10 @@ import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class EditProfileViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class EditProfileViewModel @Inject constructor(
+    @ApplicationContext private val applicationContext: Context
+): ViewModel() {
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -46,7 +48,6 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         private set
 
     init {
-        (application as PixelDroidApplication).getAppComponent().inject(this)
         loadProfile()
     }
 
@@ -197,12 +198,12 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
         val image = uiState.value.profilePictureUri!!
 
         val inputStream =
-            getApplication<PixelDroidApplication>().contentResolver.openInputStream(image)
+            applicationContext.contentResolver.openInputStream(image)
                 ?: return
 
         val size: Long =
             if (image.scheme == "content") {
-                getApplication<PixelDroidApplication>().contentResolver.query(
+                applicationContext.contentResolver.query(
                     image,
                     null,
                     null,
@@ -304,9 +305,3 @@ data class EditProfileActivityUiState(
     val uploadingPicture: Boolean = false,
     val uploadProgress: Int = 0,
 )
-
-class EditProfileViewModelFactory(val application: Application) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java).newInstance(application)
-    }
-}

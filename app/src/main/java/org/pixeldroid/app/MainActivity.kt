@@ -78,7 +78,7 @@ class MainActivity : BaseActivity() {
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
 
-    private lateinit var model: MainActivityViewModel
+    private val model: MainActivityViewModel by viewModels()
 
     companion object {
         const val ADD_ACCOUNT_IDENTIFIER: Long = -13
@@ -110,12 +110,6 @@ class MainActivity : BaseActivity() {
             launchActivity(LoginActivity(), firstTime = true)
         } else {
             sendTraceDroidStackTracesIfExist("contact@pixeldroid.org", this)
-
-            val _model: MainActivityViewModel by viewModels {
-                MainActivityViewModelFactory(application)
-            }
-            model = _model
-
 
             setupDrawer()
             val tabs: List<() -> Fragment> = listOf(
@@ -280,13 +274,13 @@ class MainActivity : BaseActivity() {
 
             val remainingUsers = db.userDao().getAll()
             if (remainingUsers.isEmpty()){
-                //no more users, start first-time login flow
+                // No more users, start first-time login flow
                 launchActivity(LoginActivity(), firstTime = true)
             } else {
                 val newActive = remainingUsers.first()
                 db.userDao().activateUser(newActive.user_id, newActive.instance_uri)
                 apiHolder.setToCurrentUser()
-                //relaunch the app
+                // Relaunch the app
                 launchActivity(MainActivity(), firstTime = true)
             }
         }
@@ -334,9 +328,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun switchUser(userId: String, instance_uri: String) {
-        db.userDao().deActivateActiveUsers()
-        db.userDao().activateUser(userId, instance_uri)
-        apiHolder.setToCurrentUser()
+        db.runInTransaction{
+            db.userDao().deActivateActiveUsers()
+            db.userDao().activateUser(userId, instance_uri)
+            apiHolder.setToCurrentUser()
+        }
     }
 
     private inline fun primaryDrawerItem(block: PrimaryDrawerItem.() -> Unit): PrimaryDrawerItem {

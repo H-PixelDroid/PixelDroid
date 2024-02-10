@@ -16,18 +16,20 @@
 
 package org.pixeldroid.app.posts.feeds.cachedFeeds
 
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.RemoteMediator
+import kotlinx.coroutines.flow.Flow
+import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
-import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
-import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
 /**
  * Repository class that works with local and remote data sources.
  */
-class FeedContentRepository<T: FeedContentDatabase> @ExperimentalPagingApi
-@Inject constructor(
+class FeedContentRepository<T: FeedContentDatabase> @ExperimentalPagingApi constructor(
     private val db: AppDatabase,
     private val dao: FeedContentDao<T>,
     private val mediator: RemoteMediator<Int, T>

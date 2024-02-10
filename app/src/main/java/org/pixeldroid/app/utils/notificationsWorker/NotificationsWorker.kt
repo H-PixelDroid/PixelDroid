@@ -32,9 +32,6 @@ import java.io.IOException
 import java.time.Instant
 import javax.inject.Inject
 
-
-
-
 class NotificationsWorker(
     context: Context,
     params: WorkerParameters
@@ -46,9 +43,6 @@ class NotificationsWorker(
     lateinit var apiHolder: PixelfedAPIHolder
 
     override suspend fun doWork(): Result {
-
-        (applicationContext as PixelDroidApplication).getAppComponent().inject(this)
-
         val users: List<UserDatabaseEntity> = db.userDao().getAll()
 
         for (user in users){
@@ -306,8 +300,7 @@ fun removeNotificationChannelsFromAccount(context: Context, user: UserDatabaseEn
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             notificationManager.deleteNotificationChannelGroup(channelGroupId.hashCode().toString())
         } else {
-            val types: MutableList<Notification.NotificationType?> =
-                Notification.NotificationType.values().toMutableList()
+            val types: MutableList<Notification.NotificationType?> = entries.toMutableList()
             types += null
 
             types.forEach {

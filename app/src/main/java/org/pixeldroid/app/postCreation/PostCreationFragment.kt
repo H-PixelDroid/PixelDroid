@@ -33,12 +33,10 @@ import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentPostCreationBinding
 import org.pixeldroid.app.postCreation.camera.CameraActivity
-import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.utils.BaseFragment
 import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
-import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
 import org.pixeldroid.media_editor.photoEdit.PhotoEditActivity
@@ -48,14 +46,10 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 class PostCreationFragment : BaseFragment() {
 
-    private var user: UserDatabaseEntity? = null
-    private var instance: InstanceDatabaseEntity = InstanceDatabaseEntity("", "")
-
     private var binding: FragmentPostCreationBinding by bindingLifecycleAware()
-    private lateinit var model: PostCreationViewModel
+    private val model: PostCreationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,30 +66,16 @@ class PostCreationFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        user = db.userDao().getActiveUser()
+        val user = db.userDao().getActiveUser()
 
-        instance = user?.run {
-            db.instanceDao().getAll().first { instanceDatabaseEntity ->
-                instanceDatabaseEntity.uri.contains(instance_uri)
-            }
+        val instance = user?.run {
+            db.instanceDao().getInstance(instance_uri)
         } ?: InstanceDatabaseEntity("", "")
 
-        val _model: PostCreationViewModel by activityViewModels {
-            PostCreationViewModelFactory(
-                requireActivity().application,
-                requireActivity().intent.clipData!!,
-                instance,
-                requireActivity().intent.getStringExtra(PostCreationActivity.PICTURE_DESCRIPTION),
-                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false),
-                requireActivity().intent.getBooleanExtra(CameraFragment.CAMERA_ACTIVITY_STORY, false),
-            )
-        }
-        model = _model
-
-        model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData ->
+        model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData: MutableList<PhotoData>? ->
             // update UI
             binding.carousel.addData(
-                newPhotoData.map {
+                newPhotoData.orEmpty().map {
                     CarouselItem(
                         it.imageUri, it.imageDescription, it.video,
                         it.videoEncodeProgress, it.videoEncodeStabilizationFirstPass,
@@ -103,7 +83,7 @@ class PostCreationFragment : BaseFragment() {
                     )
                 }
             )
-            binding.postCreationNextButton.isEnabled = newPhotoData.isNotEmpty()
+            binding.postCreationNextButton.isEnabled = newPhotoData?.isNotEmpty() ?: false
         }
 
         lifecycleScope.launch {
@@ -227,10 +207,9 @@ class PostCreationFragment : BaseFragment() {
     }
 
     private val addPhotoResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK && result.data?.clipData != null) {
-            result.data?.clipData?.let {
-                model.setImages(model.addPossibleImages(it))
-            }
+        val uris = result.data?.extras?.getParcelableArrayList<Uri>(Intent.EXTRA_STREAM)
+        if (result.resultCode == Activity.RESULT_OK && uris != null) {
+            model.setImages(model.addPossibleImages(uris, emptyList()))
         } else if (result.resultCode != Activity.RESULT_CANCELED) {
             Toast.makeText(requireActivity(), R.string.add_images_error, Toast.LENGTH_SHORT).show()
         }
