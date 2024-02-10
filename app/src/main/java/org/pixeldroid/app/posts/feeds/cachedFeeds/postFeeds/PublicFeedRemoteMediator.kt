@@ -16,13 +16,15 @@
 
 package org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds
 
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadType
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
-import java.lang.NullPointerException
-import javax.inject.Inject
 
 /**
  * RemoteMediator for the public feed.
@@ -32,7 +34,7 @@ import javax.inject.Inject
  * a local db cache.
  */
 @OptIn(ExperimentalPagingApi::class)
-class PublicFeedRemoteMediator @Inject constructor(
+class PublicFeedRemoteMediator(
     private val apiHolder: PixelfedAPIHolder,
     private val db: AppDatabase
 ) : RemoteMediator<Int, PublicFeedStatusDatabaseEntity>() {

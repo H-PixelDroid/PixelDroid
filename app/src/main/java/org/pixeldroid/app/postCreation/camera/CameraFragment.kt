@@ -38,6 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.FragmentCameraBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
+import org.pixeldroid.app.posts.fromHtml
 import org.pixeldroid.app.utils.BaseFragment
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -326,7 +327,7 @@ class CameraFragment : BaseFragment() {
     }
 
     private fun setupUploadImage() {
-        val videoEnabled: Boolean = db.instanceDao().getInstance(db.userDao().getActiveUser()!!.instance_uri).videoEnabled
+        val videoEnabled: Boolean = db.instanceDao().getActiveInstance().videoEnabled
         var mimeTypes: Array<String> = arrayOf("image/*")
         if(videoEnabled) mimeTypes += "video/*"
 
@@ -449,21 +450,16 @@ class CameraFragment : BaseFragment() {
 
     private fun startAlbumCreation(uris: ArrayList<String>) {
 
-        val intent = Intent(requireActivity(), PostCreationActivity::class.java)
-            .apply {
-                uris.forEach{
-                    //Why are we using ClipData here? Because the FLAG_GRANT_READ_URI_PERMISSION
-                    //needs to be applied to the URIs, and this flag only applies to the
-                    //Intent's data and any URIs specified in its ClipData.
-                    if(clipData == null){
-                        clipData = ClipData("", emptyArray(), ClipData.Item(it.toUri()))
-                    } else {
-                        clipData!!.addItem(ClipData.Item(it.toUri()))
-                    }
-                }
-                addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
+        val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+            // Pass downloaded images to new post creation activity
+            putParcelableArrayListExtra(
+                Intent.EXTRA_STREAM, ArrayList(uris.map { it.toUri() })
+            )
+            setClass(requireContext(), PostCreationActivity::class.java)
+
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        }
 
         if(inActivity && !addToStory){
             requireActivity().setResult(Activity.RESULT_OK, intent)

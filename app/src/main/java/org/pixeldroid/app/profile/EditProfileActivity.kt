@@ -25,7 +25,7 @@ import org.pixeldroid.app.utils.openUrl
 
 class EditProfileActivity : BaseActivity() {
 
-    private lateinit var model: EditProfileViewModel
+    private val model: EditProfileViewModel by viewModels()
     private lateinit var binding: ActivityEditProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,9 +34,6 @@ class EditProfileActivity : BaseActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val _model: EditProfileViewModel by viewModels { EditProfileViewModelFactory(application) }
-        model = _model
 
         onBackPressedDispatcher.addCallback(this) {
             // Handle the back button event

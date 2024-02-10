@@ -2,10 +2,8 @@ package org.pixeldroid.app.posts
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ClipData
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_DENIED
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
@@ -77,7 +75,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
     fun bind(
         status: Status?, pixelfedAPI: PixelfedAPIHolder, db: AppDatabase,
         lifecycleScope: LifecycleCoroutineScope, displayDimensionsInPx: Pair<Int, Int>,
-        requestPermissionDownloadPic: ActivityResultLauncher<String>, isActivity: Boolean = false
+        requestPermissionDownloadPic: ActivityResultLauncher<String>, isActivity: Boolean = false,
     ) {
 
         this.itemView.visibility = View.VISIBLE
@@ -371,7 +369,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         apiHolder: PixelfedAPIHolder,
         db: AppDatabase,
         lifecycleScope: LifecycleCoroutineScope,
-        requestPermissionDownloadPic: ActivityResultLauncher<String>
+        requestPermissionDownloadPic: ActivityResultLauncher<String>,
     ){
         var bookmarked: Boolean? = null
         binding.statusMore.setOnClickListener {
@@ -449,178 +447,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 
                             true
                         }
-                        R.id.post_more_menu_redraft -> {
-                            MaterialAlertDialogBuilder(binding.root.context).apply {
-                                setMessage(R.string.redraft_dialog_launch)
-                                setPositiveButton(android.R.string.ok) { _, _ ->
-
-                                    lifecycleScope.launch {
-                                        try {
-                                            // Create new post creation activity
-                                            val intent =
-                                                Intent(context, PostCreationActivity::class.java)
-
-                                            // Get descriptions and images from original post
-                                            val postDescription = status?.content ?: ""
-                                            val postAttachments =
-                                                status?.media_attachments!!  // Catch possible exception from !! (?)
-                                            val postNSFW = status?.sensitive
-
-                                            val imageUriStrings = postAttachments.map { postAttachment ->
-                                                postAttachment.url ?: ""
-                                            }
-                                            val imageNames = imageUriStrings.map { imageUriString ->
-                                                Uri.parse(imageUriString).lastPathSegment.toString()
-                                            }
-                                            val downloadedFiles = imageNames.map { imageName ->
-                                                File(context.cacheDir, imageName)
-                                            }
-                                            val imageUris = downloadedFiles.map { downloadedFile ->
-                                                Uri.fromFile(downloadedFile)
-                                            }
-                                            val imageDescriptions = postAttachments.map { postAttachment ->
-                                                fromHtml(postAttachment.description ?: "").toString()
-                                            }
-                                            val downloadRequests: List<Request> = imageUriStrings.map { imageUriString ->
-                                                Request.Builder().url(imageUriString).build()
-                                            }
-
-                                            val counter = AtomicInteger(0)
-
-                                            // Define callback function for after downloading the images
-                                            fun continuation() {
-                                                // Wait for all outstanding downloads to finish
-                                                if (counter.incrementAndGet() == imageUris.size) {
-                                                    if (allFilesExist(imageNames)) {
-                                                        // Delete original post
-                                                        lifecycleScope.launch {
-                                                            deletePost(apiHolder.api ?: apiHolder.setToCurrentUser(), db)
-                                                        }
-
-                                                        val counterInt = counter.get()
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            binding.root.context.resources.getQuantityString(
-                                                                R.plurals.items_load_success,
-                                                                counterInt,
-                                                                counterInt
-                                                            ),
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        // Pass downloaded images to new post creation activity
-                                                        intent.apply {
-                                                            imageUris.zip(imageDescriptions).map { (imageUri, imageDescription) ->
-                                                                ClipData.Item(imageDescription, null, imageUri)
-                                                            }.forEach { imageItem ->
-                                                                if (clipData == null) {
-                                                                    clipData = ClipData(
-                                                                        "",
-                                                                        emptyArray(),
-                                                                        imageItem
-                                                                    )
-                                                                } else {
-                                                                    clipData!!.addItem(imageItem)
-                                                                }
-                                                            }
-                                                            addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                                                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                                        }
-
-                                                        // Pass post description of existing post to new post creation activity
-                                                        intent.putExtra(
-                                                            PostCreationActivity.PICTURE_DESCRIPTION,
-                                                            fromHtml(postDescription).toString()
-                                                        )
-                                                        if (imageNames.isNotEmpty()) {
-                                                            intent.putExtra(
-                                                                PostCreationActivity.TEMP_FILES,
-                                                                imageNames.toTypedArray()
-                                                            )
-                                                        }
-                                                        intent.putExtra(
-                                                            PostCreationActivity.POST_REDRAFT,
-                                                            true
-                                                        )
-                                                        intent.putExtra(
-                                                            PostCreationActivity.POST_NSFW,
-                                                            postNSFW
-                                                        )
-
-                                                        // Launch post creation activity
-                                                        binding.root.context.startActivity(intent)
-                                                    }
-                                                }
-                                            }
-
-                                            if (!allFilesExist(imageNames)) {
-                                                // Track download progress
-                                                Toast.makeText(
-                                                    binding.root.context,
-                                                    binding.root.context.getString(R.string.image_download_downloading),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-
-                                            // Iterate through all pictures of the original post
-                                            downloadRequests.zip(downloadedFiles).forEach { (downloadRequest, downloadedFile) ->
-                                                // Check whether image is in cache directory already (maybe rather do so using Glide in the future?)
-                                                if (!downloadedFile.exists()) {
-                                                    OkHttpClient().newCall(downloadRequest)
-                                                        .enqueue(object : Callback {
-                                                            override fun onFailure(
-                                                                call: Call,
-                                                                e: IOException
-                                                            ) {
-                                                                Looper.prepare()
-                                                                downloadedFile.delete()
-                                                                Toast.makeText(
-                                                                    binding.root.context,
-                                                                    binding.root.context.getString(R.string.redraft_post_failed_io_except),
-                                                                    Toast.LENGTH_SHORT
-                                                                ).show()
-                                                            }
-
-                                                            @Throws(IOException::class)
-                                                            override fun onResponse(
-                                                                call: Call,
-                                                                response: Response
-                                                            ) {
-                                                                val sink: BufferedSink =
-                                                                    downloadedFile.sink().buffer()
-                                                                sink.writeAll(response.body!!.source())
-                                                                sink.close()
-                                                                Looper.prepare()
-                                                                continuation()
-                                                            }
-                                                        })
-                                                } else {
-                                                    continuation()
-                                                }
-                                            }
-                                        } catch (exception: HttpException) {
-                                            Toast.makeText(
-                                                binding.root.context,
-                                                binding.root.context.getString(
-                                                    R.string.redraft_post_failed_error,
-                                                    exception.code()
-                                                ),
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        } catch (exception: IOException) {
-                                            Toast.makeText(
-                                                binding.root.context,
-                                                binding.root.context.getString(R.string.redraft_post_failed_io_except),
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    }
-                                }
-                                setNegativeButton(android.R.string.cancel) { _, _ -> }
-                                show()
-                            }
-
-                            true
-                        }
+                        R.id.post_more_menu_redraft -> launchRedraftDialog(lifecycleScope, apiHolder, db)
                         else -> false
                     }
                 }
@@ -643,6 +470,176 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                 show()
             }
         }
+    }
+
+    private fun launchRedraftDialog(
+        lifecycleScope: LifecycleCoroutineScope,
+        apiHolder: PixelfedAPIHolder,
+        db: AppDatabase
+    ): Boolean {
+        MaterialAlertDialogBuilder(binding.root.context).apply {
+            setMessage(R.string.redraft_dialog_launch)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+
+                lifecycleScope.launch {
+                    try {
+                        // Get descriptions and images from original post
+                        val postDescription = status?.content ?: ""
+                        val postAttachments =
+                            status?.media_attachments!!  // TODO Catch possible exception from !! (?)
+                        val postNSFW = status?.sensitive
+
+                        val imageUriStrings = postAttachments.map { postAttachment ->
+                            postAttachment.url ?: ""
+                        }
+                        val imageNames = imageUriStrings.map { imageUriString ->
+                            Uri.parse(imageUriString).lastPathSegment.toString()
+                        }
+                        val downloadedFiles = imageNames.map { imageName ->
+                            File(context.cacheDir, imageName)
+                        }
+                        val imageDescriptions = postAttachments.map { postAttachment ->
+                            fromHtml(
+                                postAttachment.description ?: ""
+                            ).toString()
+                        }
+                        val downloadRequests: List<Request> =
+                            imageUriStrings.map { imageUriString ->
+                                Request.Builder().url(imageUriString).build()
+                            }
+
+                        val imageUris = downloadedFiles.map { downloadedFile ->
+                            Uri.fromFile(downloadedFile)
+                        }
+
+                        val counter = AtomicInteger(0)
+
+                        // Define callback function for after downloading the images
+                        fun continuation() {
+                            // Wait for all outstanding downloads to finish
+                            if (counter.incrementAndGet() == imageUris.size) {
+                                if (allFilesExist(imageNames)) {
+                                    // Delete original post
+                                    lifecycleScope.launch {
+                                        deletePost(
+                                            apiHolder.api ?: apiHolder.setToCurrentUser(), db
+                                        )
+                                    }
+
+                                    val counterInt = counter.get()
+                                    Toast.makeText(
+                                        binding.root.context,
+                                        binding.root.context.resources.getQuantityString(
+                                            R.plurals.items_load_success, counterInt, counterInt
+                                        ),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    // Create new post creation activity
+
+                                    //TODO use this instead of clipdata (everywhere)
+                                    val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                                        // Pass downloaded images to new post creation activity
+                                        putParcelableArrayListExtra(
+                                            Intent.EXTRA_STREAM, ArrayList(imageUris)
+                                        )
+                                        setClass(context, PostCreationActivity::class.java)
+
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                        addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+
+                                        putExtra(
+                                            PostCreationActivity.PICTURE_DESCRIPTIONS,
+                                            ArrayList(imageDescriptions)
+                                        )
+                                        // Pass post description of existing post to new post creation activity
+                                        putExtra(
+                                            PostCreationActivity.POST_DESCRIPTION,
+                                            fromHtml(postDescription).toString()
+                                        )
+                                        if (imageNames.isNotEmpty()) {
+                                            putExtra(
+                                                PostCreationActivity.TEMP_FILES,
+                                                imageNames.toTypedArray()
+                                            )
+                                        }
+                                        putExtra(PostCreationActivity.POST_REDRAFT, true)
+                                        putExtra(PostCreationActivity.POST_NSFW, postNSFW)
+                                    }
+
+                                    // Launch post creation activity
+                                    binding.root.context.startActivity(intent)
+                                }
+                            }
+                        }
+
+                        if (!allFilesExist(imageNames)) {
+                            // Track download progress
+                            Toast.makeText(
+                                binding.root.context,
+                                binding.root.context.getString(R.string.image_download_downloading),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        // Iterate through all pictures of the original post
+                        downloadRequests.zip(downloadedFiles)
+                            .forEach { (downloadRequest, downloadedFile) ->
+                                // Check whether image is in cache directory already (maybe rather do so using Glide in the future?)
+                                if (!downloadedFile.exists()) {
+                                    OkHttpClient().newCall(downloadRequest)
+                                        .enqueue(object : Callback {
+                                            override fun onFailure(
+                                                call: Call,
+                                                e: IOException,
+                                            ) {
+                                                Looper.prepare()
+                                                downloadedFile.delete()
+                                                Toast.makeText(
+                                                    binding.root.context,
+                                                    binding.root.context.getString(
+                                                        R.string.redraft_post_failed_io_except
+                                                    ),
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+
+                                            @Throws(IOException::class)
+                                            override fun onResponse(
+                                                call: Call,
+                                                response: Response,
+                                            ) {
+                                                val sink: BufferedSink =
+                                                    downloadedFile.sink().buffer()
+                                                sink.writeAll(response.body!!.source())
+                                                sink.close()
+                                                Looper.prepare()
+                                                continuation()
+                                            }
+                                        })
+                                } else {
+                                    continuation()
+                                }
+                            }
+                    } catch (exception: HttpException) {
+                        Toast.makeText(
+                            binding.root.context, binding.root.context.getString(
+                                R.string.redraft_post_failed_error, exception.code()
+                            ), Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (exception: IOException) {
+                        Toast.makeText(
+                            binding.root.context,
+                            binding.root.context.getString(R.string.redraft_post_failed_io_except),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+            setNegativeButton(android.R.string.cancel) { _, _ -> }
+            show()
+        }
+        return true
     }
 
     private fun activateLiker(
