@@ -327,7 +327,7 @@ class CameraFragment : BaseFragment() {
     }
 
     private fun setupUploadImage() {
-        val videoEnabled: Boolean = db.instanceDao().getInstance(db.userDao().getActiveUser()!!.instance_uri).videoEnabled
+        val videoEnabled: Boolean = db.instanceDao().getActiveInstance().videoEnabled
         var mimeTypes: Array<String> = arrayOf("image/*")
         if(videoEnabled) mimeTypes += "video/*"
 

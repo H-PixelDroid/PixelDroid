@@ -115,11 +115,7 @@ class PostCreationViewModel @Inject constructor(
         )
     }
 
-    private val instance = db.userDao().getActiveUser()?.run {
-        db.instanceDao().getAll().first { instanceDatabaseEntity ->
-            instanceDatabaseEntity.uri.contains(instance_uri)
-        }
-    }
+    private val instance = db.instanceDao().getActiveInstance()
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder

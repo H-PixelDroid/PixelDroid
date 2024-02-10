@@ -69,9 +69,7 @@ class PostCreationFragment : BaseFragment() {
         val user = db.userDao().getActiveUser()
 
         val instance = user?.run {
-            db.instanceDao().getAll().first { instanceDatabaseEntity ->
-                instanceDatabaseEntity.uri.contains(instance_uri)
-            }
+            db.instanceDao().getInstance(instance_uri)
         } ?: InstanceDatabaseEntity("", "")
 
         model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData: MutableList<PhotoData>? ->

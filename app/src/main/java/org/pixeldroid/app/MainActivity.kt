@@ -274,13 +274,13 @@ class MainActivity : BaseActivity() {
 
             val remainingUsers = db.userDao().getAll()
             if (remainingUsers.isEmpty()){
-                //no more users, start first-time login flow
+                // No more users, start first-time login flow
                 launchActivity(LoginActivity(), firstTime = true)
             } else {
                 val newActive = remainingUsers.first()
                 db.userDao().activateUser(newActive.user_id, newActive.instance_uri)
                 apiHolder.setToCurrentUser()
-                //relaunch the app
+                // Relaunch the app
                 launchActivity(MainActivity(), firstTime = true)
             }
         }
@@ -328,9 +328,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun switchUser(userId: String, instance_uri: String) {
-        db.userDao().deActivateActiveUsers()
-        db.userDao().activateUser(userId, instance_uri)
-        apiHolder.setToCurrentUser()
+        db.runInTransaction{
+            db.userDao().deActivateActiveUsers()
+            db.userDao().activateUser(userId, instance_uri)
+            apiHolder.setToCurrentUser()
+        }
     }
 
     private inline fun primaryDrawerItem(block: PrimaryDrawerItem.() -> Unit): PrimaryDrawerItem {

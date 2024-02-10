@@ -44,7 +44,7 @@ suspend fun updateUserInfoDb(db: AppDatabase, account: Account) {
     )
 }
 
-fun storeInstance(db: AppDatabase, nodeInfo: NodeInfo?, instance: Instance? = null) {
+suspend fun storeInstance(db: AppDatabase, nodeInfo: NodeInfo?, instance: Instance? = null) {
     val dbInstance: InstanceDatabaseEntity = nodeInfo?.run {
         InstanceDatabaseEntity(
             uri = normalizeDomain(metadata?.config?.site?.url!!),

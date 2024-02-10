@@ -57,7 +57,7 @@ class TokenAuthenticator(val user: UserDatabaseEntity, val db: AppDatabase, val 
                     client_secret = user.clientSecret
                 )
             }
-        }catch (e: Exception){
+        } catch (e: Exception){
             return null
         }
 

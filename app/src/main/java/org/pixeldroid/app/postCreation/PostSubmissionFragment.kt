@@ -60,9 +60,7 @@ class PostSubmissionFragment : BaseFragment() {
         accounts = db.userDao().getAll()
 
         instance = user?.run {
-            db.instanceDao().getAll().first { instanceDatabaseEntity ->
-                instanceDatabaseEntity.uri.contains(instance_uri)
-            }
+            db.instanceDao().getInstance(instance_uri)
         } ?: InstanceDatabaseEntity("", "")
 
         // Display the values from the view model

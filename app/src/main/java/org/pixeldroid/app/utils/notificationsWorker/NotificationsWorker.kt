@@ -32,9 +32,6 @@ import java.io.IOException
 import java.time.Instant
 import javax.inject.Inject
 
-
-
-
 class NotificationsWorker(
     context: Context,
     params: WorkerParameters
@@ -303,8 +300,7 @@ fun removeNotificationChannelsFromAccount(context: Context, user: UserDatabaseEn
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             notificationManager.deleteNotificationChannelGroup(channelGroupId.hashCode().toString())
         } else {
-            val types: MutableList<Notification.NotificationType?> =
-                Notification.NotificationType.values().toMutableList()
+            val types: MutableList<Notification.NotificationType?> = entries.toMutableList()
             types += null
 
             types.forEach {
