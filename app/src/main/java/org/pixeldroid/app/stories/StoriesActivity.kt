@@ -25,9 +25,6 @@ import org.pixeldroid.app.databinding.ActivityStoriesBinding
 import org.pixeldroid.app.posts.setTextViewFromISO8601
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Account
-import org.pixeldroid.app.utils.api.objects.Story
-import org.pixeldroid.app.utils.api.objects.StoryCarousel
-
 
 class StoriesActivity: BaseActivity() {
 
@@ -37,12 +34,11 @@ class StoriesActivity: BaseActivity() {
         const val STORY_CAROUSEL_USER_ID = "LaunchStoryUserId"
     }
 
-
     private lateinit var binding: ActivityStoriesBinding
 
     private lateinit var storyProgress: StoryProgress
 
-    private lateinit var model: StoriesViewModel
+    private val model: StoriesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //force night mode always
@@ -50,17 +46,8 @@ class StoriesActivity: BaseActivity() {
 
         super.onCreate(savedInstanceState)
 
-        val carousel = intent.getSerializableExtra(STORY_CAROUSEL) as? StoryCarousel
-        val userId = intent.getStringExtra(STORY_CAROUSEL_USER_ID)
-        val selfCarousel: Array<Story>? = intent.getSerializableExtra(STORY_CAROUSEL_SELF) as? Array<Story>
-
         binding = ActivityStoriesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val _model: StoriesViewModel by viewModels {
-            StoriesViewModelFactory(application, carousel, userId, selfCarousel?.asList())
-        }
-        model = _model
 
         storyProgress = StoryProgress(model.uiState.value.imageList.size)
         binding.storyProgressImage.setImageDrawable(storyProgress)

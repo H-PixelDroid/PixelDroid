@@ -1,20 +1,18 @@
 package org.pixeldroid.app.stories
 
-import android.app.Application
 import android.os.CountDownTimer
 import android.text.Editable
 import androidx.annotation.StringRes
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.objects.CarouselUserContainer
 import org.pixeldroid.app.utils.api.objects.Story
 import org.pixeldroid.app.utils.api.objects.StoryCarousel
@@ -37,18 +35,13 @@ data class StoriesUiState(
     val snackBar: Int? = null,
     val reply: String = ""
 )
-
-class StoriesViewModel(
-    application: Application,
-    val carousel: StoryCarousel?,
-    userId: String?,
-    val selfCarousel: List<Story>?
-) : AndroidViewModel(application) {
-
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
-    @Inject
-    lateinit var db: AppDatabase
+@HiltViewModel
+class StoriesViewModel @Inject constructor(state: SavedStateHandle,
+                                           db: AppDatabase,
+                                           private val apiHolder: PixelfedAPIHolder) : ViewModel() {
+    private val carousel: StoryCarousel? = state[StoriesActivity.STORY_CAROUSEL]
+    private val userId: String? = state[StoriesActivity.STORY_CAROUSEL_USER_ID]
+    private val selfCarousel: Array<Story>? = state[StoriesActivity.STORY_CAROUSEL_SELF]
 
     private var currentAccount: CarouselUserContainer?
 
@@ -63,7 +56,7 @@ class StoriesViewModel(
     init {
         currentAccount =
         if (selfCarousel != null) {
-            db.userDao().getActiveUser()?.let { CarouselUserContainer(it, selfCarousel) }
+            db.userDao().getActiveUser()?.let { CarouselUserContainer(it, selfCarousel.toList()) }
         } else carousel?.nodes?.firstOrNull { it?.user?.id == userId }
 
         _uiState = MutableStateFlow(newUiStateFromCurrentAccount())
@@ -214,15 +207,4 @@ class StoriesViewModel(
 
     fun currentProfileId(): String? = currentAccount?.user?.id
 
-}
-
-class StoriesViewModelFactory(
-    val application: Application,
-    val carousel: StoryCarousel?,
-    val userId: String?,
-    val selfCarousel: List<Story>?
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java, StoryCarousel::class.java, String::class.java, List::class.java).newInstance(application, carousel, userId, selfCarousel)
-    }
 }
