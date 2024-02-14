@@ -198,7 +198,7 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
-    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.6'
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.7'
     implementation project(path: ':scrambler')
     implementation project(path: ':pixel_common')
 
