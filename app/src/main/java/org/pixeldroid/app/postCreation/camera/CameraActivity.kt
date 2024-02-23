@@ -32,7 +32,7 @@ class CameraActivity : BaseActivity() {
         // If this CameraActivity wasn't started from the shortcut,
         // tell the fragment it's in an activity (so that it sends back the result instead of
         // starting a new post creation process)
-        if (intent.action != "android.intent.action.VIEW") {
+        if (intent.action != Intent.ACTION_VIEW) {
             val arguments = Bundle()
             arguments.putBoolean(CAMERA_ACTIVITY, true)
             arguments.putBoolean(CAMERA_ACTIVITY_STORY, story)
@@ -47,7 +47,7 @@ class CameraActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // If this CameraActivity wasn't started from the shortcut, behave as usual
-        if (intent.action != "android.intent.action.VIEW") return super.onOptionsItemSelected(item)
+        if (intent.action != Intent.ACTION_VIEW) return super.onOptionsItemSelected(item)
 
         // Else, start a new MainActivity when "going back" on this activity
         when (item.itemId) {
