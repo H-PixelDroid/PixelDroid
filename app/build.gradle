@@ -30,8 +30,8 @@ android {
     }
     defaultConfig {
         minSdkVersion 23
-        versionCode 30
         targetSdkVersion 34
+        versionCode 31
         versionName "1.0.beta" + versionCode
 
         //TODO add resConfigs("en", "fr", "ja",...) ?
