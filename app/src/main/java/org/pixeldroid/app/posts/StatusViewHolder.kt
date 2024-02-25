@@ -536,18 +536,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
                                     ).show()
 
                                     // Create new post creation activity
-
-                                    //TODO use this instead of clipdata (everywhere)
-                                    val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-                                        // Pass downloaded images to new post creation activity
-                                        putParcelableArrayListExtra(
-                                            Intent.EXTRA_STREAM, ArrayList(imageUris)
-                                        )
-                                        setClass(context, PostCreationActivity::class.java)
-
-                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                        addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-
+                                    val intent = PostCreationActivity.intentForUris(context, imageUris).apply {
                                         putExtra(
                                             PostCreationActivity.PICTURE_DESCRIPTIONS,
                                             ArrayList(imageDescriptions)

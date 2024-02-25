@@ -2,7 +2,6 @@ package org.pixeldroid.app.postCreation.camera
 
 import android.Manifest
 import android.app.Activity
-import android.content.ClipData
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -38,7 +37,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.FragmentCameraBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
-import org.pixeldroid.app.posts.fromHtml
 import org.pixeldroid.app.utils.BaseFragment
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -450,16 +448,7 @@ class CameraFragment : BaseFragment() {
 
     private fun startAlbumCreation(uris: ArrayList<String>) {
 
-        val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-            // Pass downloaded images to new post creation activity
-            putParcelableArrayListExtra(
-                Intent.EXTRA_STREAM, ArrayList(uris.map { it.toUri() })
-            )
-            setClass(requireContext(), PostCreationActivity::class.java)
-
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-        }
+        val intent = PostCreationActivity.intentForUris(requireContext(), uris.map { it.toUri() })
 
         if(inActivity && !addToStory){
             requireActivity().setResult(Activity.RESULT_OK, intent)

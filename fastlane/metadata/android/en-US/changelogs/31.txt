@@ -1,0 +1,3 @@
+* Fix crash when sharing an image from gallery etc to the app
+
+* Fix permission issue causing images to throw a permission denied error

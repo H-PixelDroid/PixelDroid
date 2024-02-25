@@ -1,6 +1,6 @@
 package org.pixeldroid.app.postCreation
 
-    import android.content.Context
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
@@ -33,10 +33,10 @@ import kotlinx.parcelize.Parcelize
 import okhttp3.MultipartBody
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-    import org.pixeldroid.app.postCreation.camera.CameraFragment
-    import org.pixeldroid.app.utils.api.objects.Attachment
-    import org.pixeldroid.app.utils.db.AppDatabase
-    import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+import org.pixeldroid.app.postCreation.camera.CameraFragment
+import org.pixeldroid.app.utils.api.objects.Attachment
+import org.pixeldroid.app.utils.db.AppDatabase
+import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
@@ -101,15 +101,31 @@ data class PhotoData(
 class PostCreationViewModel @Inject constructor(
     private val state: SavedStateHandle,
     @ApplicationContext private val applicationContext: Context,
-    db: AppDatabase
+    db: AppDatabase,
 ): ViewModel() {
     private var storyPhotoDataBackup: MutableList<PhotoData>? = null
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
+        //FIXME We should be able to access the Intent action somehow, to determine if there are
+        // 1 or multiple Uris instead of relying on the ClassCastException
+
+        // This should not work like this (reading its source code, get() function should return null
+        // if it's the wrong type but instead throws ClassCastException).
+        // Lucky for us that it does though: we first try to get a single Uri (which we could be
+        // getting from a share of a single picture to the app), when the cast to Uri fails
+        // we try to get a list of Uris instead (casting ourselves from Parcelable as suggested
+        // in get() documentation)
+        val uris = try {
+            val singleUri: Uri? = state[Intent.EXTRA_STREAM]
+            listOfNotNull(singleUri)
+        } catch (e: ClassCastException) {
+            state.get<ArrayList<Parcelable>>(Intent.EXTRA_STREAM)?.map { it as Uri }
+        }
+
         MutableLiveData<MutableList<PhotoData>>(
             addPossibleImages(
-                state.get<ArrayList<Uri>>(Intent.EXTRA_STREAM),
+                uris,
                 state.get<ArrayList<String>>(PostCreationActivity.PICTURE_DESCRIPTIONS),
-                mutableListOf()
+                previousList = mutableListOf()
             )
         )
     }
@@ -160,7 +176,7 @@ class PostCreationViewModel @Inject constructor(
      * as are legal (if any) and a dialog will be shown to the user alerting them of this fact.
      */
     fun addPossibleImages(
-        uris: ArrayList<Uri>?,
+        uris: List<Uri>?,
         descriptions: List<String>?,
         previousList: MutableList<PhotoData>? = photoData.value,
     ): MutableList<PhotoData> {
