@@ -9,13 +9,16 @@ Free (as in freedom) Android client for Pixelfed, the federated image sharing pl
 	<img src="https://pixeldroid.org/badge-fdroid.png" alt="Get it on F-Droid" width="206">
 </a>
 
+Come talk to us on Matrix, at <a href="https://matrix.to/#/#pixeldroid:gnugen.ch">#pixeldroid:gnugen.ch</a> !
+
 ## 🔧 Compiling the code yourself  
 If you want to try out PixelDroid on your own device, you can compile the source code yourself. To do that you can install [Android Studio](https://developer.android.com/studio/).  
 
 ## 🎨 Art attribution  
 Our mascot was commissioned using funds from NLnet. The original file is `pixeldroid_mascot.svg` and it is adapted to work as an Android Drawable. This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) (CC BY-SA).
 
-Various works have been used from the pixelfed branding repository ( https://github.com/pixelfed/brand-assets ). In addition, a drawing of a red panda is used for some error messages ( https://thenounproject.com/search/?q=red+panda&i=2877785 ).
+Various works have been used from the pixelfed branding repository ( https://github.com/pixelfed/brand-assets ).
+
 ## 🤝 Contribute  
 If you want to contribute, you can check out [CONTRIBUTING.md](CONTRIBUTING.md) and/or [TRANSLATION.md](TRANSLATION.md)
 
