@@ -1,0 +1,1 @@
+Split APKs per CPU architecture, makes the APKs a lot smaller (100MB to 25MB)
