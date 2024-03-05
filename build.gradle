@@ -1,13 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
-    ext.kotlin_version = '1.7.20'
+    ext.kotlin_version = '1.9.20'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -15,22 +14,19 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.google.devtools.ksp' version '1.9.20-1.0.14' apply false
+    id("com.google.dagger.hilt.android") version "2.50" apply false
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
-        jcenter {
-            content {
-                // info.androidhive:imagefilters is only available in JCenter
-                //TODO remove JCenter repo:
-                // see issue https://gitlab.shinice.net/pixeldroid/PixelDroid/-/issues/278
-                includeGroup("info.androidhive")
-            }
-        }
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

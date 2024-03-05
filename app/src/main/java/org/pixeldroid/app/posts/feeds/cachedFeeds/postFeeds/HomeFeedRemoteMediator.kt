@@ -1,12 +1,14 @@
 package org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds
 
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadType
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import org.pixeldroid.app.utils.db.AppDatabase
-import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
-import java.lang.NullPointerException
-import javax.inject.Inject
+import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 
 
 /**
@@ -17,7 +19,7 @@ import javax.inject.Inject
  * a local db cache.
  */
 @OptIn(ExperimentalPagingApi::class)
-class HomeFeedRemoteMediator @Inject constructor(
+class HomeFeedRemoteMediator(
     private val apiHolder: PixelfedAPIHolder,
     private val db: AppDatabase,
 ) : RemoteMediator<Int, HomeStatusDatabaseEntity>() {
@@ -47,7 +49,7 @@ class HomeFeedRemoteMediator @Inject constructor(
                 HomeStatusDatabaseEntity(user.user_id, user.instance_uri, it)
             }
 
-            val endOfPaginationReached = apiResponse.isEmpty()
+            val endOfPaginationReached = apiResponse.isEmpty() || maxId == apiResponse.sortedBy { it.created_at }.last().id
 
             db.withTransaction {
                 // Clear table in the database

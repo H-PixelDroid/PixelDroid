@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
@@ -19,44 +20,60 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityEditProfileBinding
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.openUrl
 
-class EditProfileActivity : BaseThemedWithBarActivity() {
+class EditProfileActivity : BaseActivity() {
 
-    private lateinit var model: EditProfileViewModel
+    private val model: EditProfileViewModel by viewModels()
     private lateinit var binding: ActivityEditProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.edit_profile)
 
-        val _model: EditProfileViewModel by viewModels { EditProfileViewModelFactory(application) }
-        model = _model
+        onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+            if(model.madeChanges()){
+                MaterialAlertDialogBuilder(binding.root.context).apply {
+                    setMessage(getString(R.string.profile_save_changes))
+                    setNegativeButton(android.R.string.cancel) { _, _ -> }
+                    setPositiveButton(android.R.string.ok) { _, _ ->
+                        this@addCallback.isEnabled = false
+                        super.onBackPressedDispatcher.onBackPressed()
+                    }
+                }.show()
+            } else {
+                this.isEnabled = false
+                if (model.submittedChanges) setResult(RESULT_OK)
+                super.onBackPressedDispatcher.onBackPressed()
+            }
+        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.uiState.collect { uiState ->
-                    if(uiState.profileLoaded){
-                        binding.bioEditText.setText(uiState.bio)
-                        binding.nameEditText.setText(uiState.name)
-                        model.changesApplied()
-                    }
-                    binding.progressCard.visibility = if(uiState.loadingProfile || uiState.sendingProfile || uiState.profileSent || uiState.error) View.VISIBLE else View.INVISIBLE
+                    if(binding.bioEditText.text.toString() != uiState.bio) binding.bioEditText.setText(uiState.bio)
+                    if(binding.nameEditText.text.toString() != uiState.name) binding.nameEditText.setText(uiState.name)
+
+                    binding.progressCard.visibility = if(uiState.loadingProfile || uiState.sendingProfile || uiState.uploadingPicture || uiState.profileSent || uiState.error) View.VISIBLE else View.INVISIBLE
+
                     if(uiState.loadingProfile) binding.progressText.setText(R.string.fetching_profile)
                     else if(uiState.sendingProfile) binding.progressText.setText(R.string.saving_profile)
+
                     binding.privateSwitch.isChecked = uiState.privateAccount == true
                     Glide.with(binding.profilePic).load(uiState.profilePictureUri)
                         .apply(RequestOptions.circleCropTransform())
                         .into(binding.profilePic)
 
-                    binding.savingProgressBar.visibility = if(uiState.error || uiState.profileSent) View.GONE
-                    else  View.VISIBLE
+                    binding.savingProgressBar.visibility =
+                        if(uiState.error || (uiState.profileSent && !uiState.uploadingPicture)) View.GONE
+                    else View.VISIBLE
 
-                    if(uiState.profileSent){
+                    if(uiState.profileSent && !uiState.uploadingPicture && !uiState.error){
                         binding.progressText.setText(R.string.profile_saved)
                         binding.done.visibility = View.VISIBLE
                     } else {
@@ -94,18 +111,18 @@ class EditProfileActivity : BaseThemedWithBarActivity() {
             }
         }
 
-//        binding.changeImageButton.setOnClickListener {
-//            Intent(Intent.ACTION_GET_CONTENT).apply {
-//                type = "*/*"
-//                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*"))
-//                action = Intent.ACTION_GET_CONTENT
-//                addCategory(Intent.CATEGORY_OPENABLE)
-//                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
-//                uploadImageResultContract.launch(
-//                    Intent.createChooser(this, null)
-//                )
-//            }
-//        }
+        binding.profilePic.setOnClickListener {
+            Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*"))
+                action = Intent.ACTION_GET_CONTENT
+                addCategory(Intent.CATEGORY_OPENABLE)
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
+                uploadImageResultContract.launch(
+                    Intent.createChooser(this, null)
+                )
+            }
+        }
     }
 
     private val uploadImageResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -119,10 +136,10 @@ class EditProfileActivity : BaseThemedWithBarActivity() {
                     val imageUri: String = clipData.getItemAt(i).uri.toString()
                     images.add(imageUri)
                 }
-                model.uploadImage(images.first())
+                model.updateImage(images.first())
             } else if (data.data != null) {
                 images.add(data.data!!.toString())
-                model.uploadImage(images.first())
+                model.updateImage(images.first())
             }
         }
     }
@@ -130,18 +147,6 @@ class EditProfileActivity : BaseThemedWithBarActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.edit_profile_menu, menu)
         return true
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        if(model.madeChanges()){
-            MaterialAlertDialogBuilder(binding.root.context).apply {
-                setMessage(getString(R.string.profile_save_changes))
-                setNegativeButton(android.R.string.cancel) { _, _ -> }
-                setPositiveButton(android.R.string.ok) { _, _ -> super.onBackPressed()}
-            }.show()
-        }
-        else super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

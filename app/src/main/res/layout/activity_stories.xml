@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/storyErrorCard"
+        style="?attr/materialCardViewElevatedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:visibility="invisible"
+        app:cardBackgroundColor="?attr/colorSecondaryContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp">
+
+            <ImageView
+                android:id="@+id/storyErrorIcon"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:src="@drawable/error"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?attr/colorOnSecondaryContainer" />
+
+            <TextView
+                android:id="@+id/storyErrorText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/storyErrorIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/storyErrorIcon"
+                app:layout_constraintTop_toTopOf="@id/storyErrorIcon"
+                tools:text="Something is wrong with stories" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <ImageView
+        android:id="@+id/storyImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:contentDescription="@string/story_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/story_progress_image"
+        app:layout_constraintVertical_bias="1.0"
+        tools:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/backgrounds/scenic[10]" />
+
+    <ImageButton
+        android:id="@+id/pause"
+        android:layout_marginEnd="12dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/story_pause"
+        android:src="@drawable/play_pause"
+        app:layout_constraintBottom_toBottomOf="@+id/storyAuthor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/storyAge"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/story_progress_image"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:importantForAccessibility="no"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/storyAuthorProfilePicture"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/profile_picture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/story_progress_image"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/storyAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/storyAuthorProfilePicture"
+        app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
+        tools:text="username" />
+
+    <TextView
+        android:id="@+id/storyAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/storyAuthor"
+        app:layout_constraintStart_toEndOf="@+id/storyAuthor"
+        app:layout_constraintTop_toTopOf="@+id/storyAuthorProfilePicture"
+        tools:text="48m" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/storyReplyField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:endIconContentDescription="TODO"
+        app:endIconDrawable="@drawable/ic_send_blue"
+        app:endIconMode="custom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:hint="Reply to PixelDroid">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/viewRight"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/viewMiddle"
+        app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
+
+
+    <View
+        android:id="@+id/viewMiddle"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
+        app:layout_constraintEnd_toStartOf="@id/viewRight"
+        app:layout_constraintStart_toEndOf="@id/viewLeft"
+        app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
+
+
+    <View
+        android:id="@+id/viewLeft"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/storyReplyField"
+        app:layout_constraintEnd_toStartOf="@id/viewMiddle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storyAuthorProfilePicture" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

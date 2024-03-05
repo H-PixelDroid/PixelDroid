@@ -1,7 +1,6 @@
 package org.pixeldroid.app.postCreation
 
-import android.app.Application
-import android.content.ClipData
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
@@ -12,16 +11,18 @@ import android.widget.Toast
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.jarsilio.android.scrambler.exceptions.UnsupportedFileFormatException
 import com.jarsilio.android.scrambler.stripMetadata
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,36 +33,24 @@ import kotlinx.parcelize.Parcelize
 import okhttp3.MultipartBody
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.PixelDroidApplication
+import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.utils.api.objects.Attachment
-import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
+import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
-import org.pixeldroid.media_editor.photoEdit.VideoEditActivity
+import org.pixeldroid.media_editor.videoEdit.VideoEditActivity
 import retrofit2.HttpException
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URI
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
-import kotlin.collections.arrayListOf
-import kotlin.collections.forEach
-import kotlin.collections.get
-import kotlin.collections.getOrNull
-import kotlin.collections.indexOfFirst
-import kotlin.collections.isNotEmpty
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
-import kotlin.collections.plus
 import kotlin.collections.set
-import kotlin.collections.toMutableList
 import kotlin.math.ceil
 
+const val TAG = "Post Creation ViewModel"
 
 // Models the UI state for the PostCreationActivity
 data class PostCreationActivityUiState(
@@ -70,6 +59,7 @@ data class PostCreationActivityUiState(
     val addPhotoButtonEnabled: Boolean = true,
     val editPhotoButtonEnabled: Boolean = true,
     val removePhotoButtonEnabled: Boolean = true,
+    val maxEntries: Int?,
 
     val isCarousel: Boolean = true,
 
@@ -86,6 +76,11 @@ data class PostCreationActivityUiState(
     val uploadErrorVisible: Boolean = false,
     val uploadErrorExplanationText: String = "",
     val uploadErrorExplanationVisible: Boolean = false,
+
+    val storyCreation: Boolean,
+    val storyDuration: Int = 10,
+    val storyReplies: Boolean = true,
+    val storyReactions: Boolean = true,
 )
 
 @Parcelize
@@ -98,22 +93,44 @@ data class PhotoData(
     var video: Boolean,
     var videoEncodeProgress: Int? = null,
     var videoEncodeStabilizationFirstPass: Boolean? = null,
-    var videoEncodeComplete: Boolean = true,
+    var videoEncodeComplete: Boolean? = null,
     var videoEncodeError: Boolean = false,
 ) : Parcelable
 
-class PostCreationViewModel(
-    application: Application,
-    clipdata: ClipData? = null,
-    val instance: InstanceDatabaseEntity? = null,
-    existingDescription: String? = null,
-    existingNSFW: Boolean = false
-) : AndroidViewModel(application) {
+@HiltViewModel
+class PostCreationViewModel @Inject constructor(
+    private val state: SavedStateHandle,
+    @ApplicationContext private val applicationContext: Context,
+    db: AppDatabase,
+): ViewModel() {
+    private var storyPhotoDataBackup: MutableList<PhotoData>? = null
     private val photoData: MutableLiveData<MutableList<PhotoData>> by lazy {
-        MutableLiveData<MutableList<PhotoData>>().also {
-            it.value =  clipdata?.let { it1 -> addPossibleImages(it1, mutableListOf()) }
+        //FIXME We should be able to access the Intent action somehow, to determine if there are
+        // 1 or multiple Uris instead of relying on the ClassCastException
+
+        // This should not work like this (reading its source code, get() function should return null
+        // if it's the wrong type but instead throws ClassCastException).
+        // Lucky for us that it does though: we first try to get a single Uri (which we could be
+        // getting from a share of a single picture to the app), when the cast to Uri fails
+        // we try to get a list of Uris instead (casting ourselves from Parcelable as suggested
+        // in get() documentation)
+        val uris = try {
+            val singleUri: Uri? = state[Intent.EXTRA_STREAM]
+            listOfNotNull(singleUri)
+        } catch (e: ClassCastException) {
+            state.get<ArrayList<Parcelable>>(Intent.EXTRA_STREAM)?.map { it as Uri }
         }
+
+        MutableLiveData<MutableList<PhotoData>>(
+            addPossibleImages(
+                uris,
+                state.get<ArrayList<String>>(PostCreationActivity.PICTURE_DESCRIPTIONS),
+                previousList = mutableListOf()
+            )
+        )
     }
+
+    private val instance = db.instanceDao().getActiveInstance()
 
     @Inject
     lateinit var apiHolder: PixelfedAPIHolder
@@ -121,14 +138,17 @@ class PostCreationViewModel(
     private val _uiState: MutableStateFlow<PostCreationActivityUiState>
 
     init {
-        (application as PixelDroidApplication).getAppComponent().inject(this)
         val sharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(application)
+            PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val templateDescription = sharedPreferences.getString("prefill_description", "") ?: ""
 
+        val storyCreation: Boolean = state[CameraFragment.CAMERA_ACTIVITY_STORY] ?: false
+
         _uiState = MutableStateFlow(PostCreationActivityUiState(
-            newPostDescriptionText = existingDescription ?: templateDescription,
-            nsfw = existingNSFW
+            newPostDescriptionText = state[PostCreationActivity.POST_DESCRIPTION] ?: templateDescription,
+            nsfw = state[PostCreationActivity.POST_NSFW] ?: false,
+            maxEntries = if(storyCreation) 1 else instance?.albumLimit,
+            storyCreation = storyCreation
         ))
     }
 
@@ -145,35 +165,50 @@ class PostCreationViewModel(
         }
     }
 
+    /**
+     * Read-only public view on [photoData]
+     */
     fun getPhotoData(): LiveData<MutableList<PhotoData>> = photoData
 
     /**
-     * Will add as many images as possible to [photoData], from the [clipData], and if
-     * ([photoData].size + [clipData].itemCount) > [InstanceDatabaseEntity.albumLimit] then it will only add as many images
+     * Will add as many images as possible to [photoData], from the [uris], and if
+     * ([photoData].size + [uris].size) > uiState.value.maxEntries then it will only add as many images
      * as are legal (if any) and a dialog will be shown to the user alerting them of this fact.
      */
-    fun addPossibleImages(clipData: ClipData, previousList: MutableList<PhotoData>? = photoData.value): MutableList<PhotoData> {
+    fun addPossibleImages(
+        uris: List<Uri>?,
+        descriptions: List<String>?,
+        previousList: MutableList<PhotoData>? = photoData.value,
+    ): MutableList<PhotoData> {
         val dataToAdd: ArrayList<PhotoData> = arrayListOf()
-        var count = clipData.itemCount
-        if(count + (previousList?.size ?: 0) > instance!!.albumLimit){
-            _uiState.update { currentUiState ->
-                currentUiState.copy(userMessage = getApplication<PixelDroidApplication>().getString(R.string.total_exceeds_album_limit).format(instance.albumLimit))
+        var count = uris?.size ?: 0
+        uiState.value.maxEntries?.let { maxEntries ->
+            if(count + (previousList?.size ?: 0) > maxEntries){
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(userMessage = applicationContext.getString(R.string.total_exceeds_album_limit).format(maxEntries))
+                }
+                count = count.coerceAtMost(maxEntries - (previousList?.size ?: 0))
             }
-            count = count.coerceAtMost(instance.albumLimit - (previousList?.size ?: 0))
-        }
-        if (count + (previousList?.size ?: 0) >= instance.albumLimit) {
-            // Disable buttons to add more images
-            _uiState.update { currentUiState ->
-                currentUiState.copy(addPhotoButtonEnabled = false)
+            if (count + (previousList?.size ?: 0) >= maxEntries) {
+                // Disable buttons to add more images
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(addPhotoButtonEnabled = false)
+                }
             }
-        }
-        for (i in 0 until count) {
-            clipData.getItemAt(i).let {
+            for ((i, uri) in uris.orEmpty().withIndex()) {
                 val sizeAndVideoPair: Pair<Long, Boolean> =
-                    getSizeAndVideoValidate(it.uri, (previousList?.size ?: 0) + dataToAdd.size + 1)
-                dataToAdd.add(PhotoData(imageUri = it.uri, size = sizeAndVideoPair.first, video = sizeAndVideoPair.second, imageDescription = it.text?.toString()))
+                    getSizeAndVideoValidate(uri, (previousList?.size ?: 0) + dataToAdd.size + 1)
+                dataToAdd.add(
+                    PhotoData(
+                        imageUri = uri,
+                        size = sizeAndVideoPair.first,
+                        video = sizeAndVideoPair.second,
+                        imageDescription = descriptions?.getOrNull(i)
+                    )
+                )
             }
         }
+
         return previousList?.plus(dataToAdd)?.toMutableList() ?: mutableListOf()
     }
 
@@ -185,45 +220,46 @@ class PostCreationViewModel(
      * Returns the size of the file of the Uri, and whether it is a video,
      * and opens a dialog in case it is too big or in case the file is unsupported.
      */
-    fun getSizeAndVideoValidate(uri: Uri, editPosition: Int): Pair<Long, Boolean> {
+    private fun getSizeAndVideoValidate(uri: Uri, editPosition: Int): Pair<Long, Boolean> {
         val size: Long =
             if (uri.scheme =="content") {
-                getApplication<PixelDroidApplication>().contentResolver.query(uri, null, null, null, null)
+                applicationContext.contentResolver.query(uri, null, null, null, null)
                     ?.use { cursor ->
                         /* Get the column indexes of the data in the Cursor,
-                                         * move to the first row in the Cursor, get the data,
-                                         * and display it.
-                                         */
+                         * move to the first row in the Cursor, get the data,
+                         * and display it.
+                         */
                         val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-                        cursor.moveToFirst()
-                        cursor.getLong(sizeIndex)
+                        if(sizeIndex >= 0) {
+                            cursor.moveToFirst()
+                            cursor.getLong(sizeIndex)
+                        } else null
                     } ?: 0
             } else {
                 uri.toFile().length()
             }
 
         val sizeInkBytes = ceil(size.toDouble() / 1000).toLong()
-        val type = uri.getMimeType(getApplication<PixelDroidApplication>().contentResolver)
+        val type = uri.getMimeType(applicationContext.contentResolver)
         val isVideo = type.startsWith("video/")
 
         if (isVideo && !instance!!.videoEnabled) {
             _uiState.update { currentUiState ->
-                currentUiState.copy(userMessage = getApplication<PixelDroidApplication>().getString(R.string.video_not_supported))
+                currentUiState.copy(userMessage = applicationContext.getString(R.string.video_not_supported))
             }
         }
 
         if ((!isVideo && sizeInkBytes > instance!!.maxPhotoSize) || (isVideo && sizeInkBytes > instance!!.maxVideoSize)) {
+            //TODO Offer remedy for too big file: re-compress it
             val maxSize = if (isVideo) instance.maxVideoSize else instance.maxPhotoSize
             _uiState.update { currentUiState ->
                 currentUiState.copy(
-                    userMessage = getApplication<PixelDroidApplication>().getString(R.string.size_exceeds_instance_limit, editPosition, sizeInkBytes, maxSize)
+                    userMessage = applicationContext.getString(R.string.size_exceeds_instance_limit, editPosition, sizeInkBytes, maxSize)
                 )
             }
         }
         return Pair(size, isVideo)
     }
-
-    fun isNotEmpty(): Boolean = photoData.value?.isNotEmpty() ?: false
 
     fun updateDescription(position: Int, description: String) {
         photoData.value?.getOrNull(position)?.imageDescription = description
@@ -234,8 +270,8 @@ class PostCreationViewModel(
         photoData.value?.removeAt(currentPosition)
         _uiState.update {
             it.copy(
-                addPhotoButtonEnabled = true
-            )
+                addPhotoButtonEnabled = (photoData.value?.size ?: 0) < (uiState.value.maxEntries ?: 0),
+                )
         }
         photoData.value = photoData.value
     }
@@ -254,8 +290,8 @@ class PostCreationViewModel(
                         videoEncodeProgress = 0
                         videoEncodeComplete = false
 
-                        VideoEditActivity.startEncoding(imageUri, it,
-                            context = getApplication<PixelDroidApplication>(),
+                        VideoEditActivity.startEncoding(imageUri, null, it,
+                            context = applicationContext,
                             registerNewFFmpegSession = ::registerNewFFmpegSession,
                             trackTempFile = ::trackTempFile,
                             videoEncodeProgress = ::videoEncodeProgress
@@ -370,17 +406,17 @@ class PostCreationViewModel(
         }
 
         for (data: PhotoData in getPhotoData().value ?: emptyList()) {
-            val extension = data.imageUri.fileExtension(getApplication<PixelDroidApplication>().contentResolver)
+            val extension = data.imageUri.fileExtension(applicationContext.contentResolver)
 
-            val strippedImage = File.createTempFile("temp_img", ".$extension", getApplication<PixelDroidApplication>().cacheDir)
+            val strippedImage = File.createTempFile("temp_img", ".$extension", applicationContext.cacheDir)
 
             val imageUri = data.imageUri
 
             val (strippedOrNot, size) = try {
-                val orientation = ExifInterface(getApplication<PixelDroidApplication>().contentResolver.openInputStream(imageUri)!!).getAttributeInt(
+                val orientation = ExifInterface(applicationContext.contentResolver.openInputStream(imageUri)!!).getAttributeInt(
                     ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
 
-                stripMetadata(imageUri, strippedImage, getApplication<PixelDroidApplication>().contentResolver)
+                stripMetadata(imageUri, strippedImage, applicationContext.contentResolver)
 
                 // Restore EXIF orientation
                 val exifInterface = ExifInterface(strippedImage)
@@ -392,11 +428,11 @@ class PostCreationViewModel(
                 strippedImage.delete()
                 if(imageUri != data.imageUri) File(URI(imageUri.toString())).delete()
                 val imageInputStream = try {
-                    getApplication<PixelDroidApplication>().contentResolver.openInputStream(imageUri)!!
+                    applicationContext.contentResolver.openInputStream(imageUri)!!
                 } catch (e: FileNotFoundException){
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            userMessage = getApplication<PixelDroidApplication>().getString(R.string.file_not_found,
+                            userMessage = applicationContext.getString(R.string.file_not_found,
                                 data.imageUri)
                         )
                     }
@@ -408,14 +444,14 @@ class PostCreationViewModel(
                 if(imageUri != data.imageUri) File(URI(imageUri.toString())).delete()
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        userMessage = getApplication<PixelDroidApplication>().getString(R.string.file_not_found,
+                        userMessage = applicationContext.getString(R.string.file_not_found,
                             data.imageUri)
                     )
                 }
                 return
             }
 
-            val type = data.imageUri.getMimeType(getApplication<PixelDroidApplication>().contentResolver)
+            val type = data.imageUri.getMimeType(applicationContext.contentResolver)
             val imagePart = ProgressRequestBody(strippedOrNot, size, type)
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -442,7 +478,10 @@ class PostCreationViewModel(
                 apiHolder.setToCurrentUser(it)
             } ?:  apiHolder.api ?: apiHolder.setToCurrentUser()
 
-            val inter = api.mediaUpload(description, requestBody.parts[0])
+            val inter: Observable<Attachment> =
+                //TODO validate that image is correct (?) aspect ratio
+                if (uiState.value.storyCreation) api.storyUpload(requestBody.parts[0])
+                else api.mediaUpload(description, requestBody.parts[0])
 
             apiHolder.api = null
             postSub = inter
@@ -451,14 +490,18 @@ class PostCreationViewModel(
                 .subscribe(
                     { attachment: Attachment ->
                         data.progress = 0
-                        data.uploadId = attachment.id!!
+                        data.uploadId = if(uiState.value.storyCreation){
+                            attachment.media_id!!
+                        } else {
+                             attachment.id!!
+                        }
                     },
                     { e: Throwable ->
                         _uiState.update { currentUiState ->
                             currentUiState.copy(
                                 uploadErrorVisible = true,
                                 uploadErrorExplanationText = if(e is HttpException){
-                                    getApplication<PixelDroidApplication>().getString(R.string.upload_error, e.code())
+                                    applicationContext.getString(R.string.upload_error, e.code())
                                 } else "",
                                 uploadErrorExplanationVisible = e is HttpException,
                             )
@@ -507,19 +550,31 @@ class PostCreationViewModel(
                     apiHolder.setToCurrentUser(it)
                 } ?:  apiHolder.api ?: apiHolder.setToCurrentUser()
 
-                api.postStatus(
-                    statusText = description,
-                    media_ids = getPhotoData().value!!.mapNotNull { it.uploadId }.toList(),
-                    sensitive = nsfw
-                )
-                Toast.makeText(getApplication(), getApplication<PixelDroidApplication>().getString(R.string.upload_post_success),
+                if(uiState.value.storyCreation){
+                    val canReact = if (uiState.value.storyReactions) "1" else "0"
+                    val canReply = if (uiState.value.storyReplies) "1" else "0"
+
+                    api.storyPublish(
+                        media_id = getPhotoData().value!!.firstNotNullOf { it.uploadId },
+                        can_react = canReact,
+                        can_reply = canReply,
+                        duration = uiState.value.storyDuration
+                    )
+                } else {
+                    api.postStatus(
+                        statusText = description,
+                        media_ids = getPhotoData().value!!.mapNotNull { it.uploadId }.toList(),
+                        sensitive = nsfw
+                    )
+                }
+                Toast.makeText(applicationContext, applicationContext.getString(R.string.upload_post_success),
                     Toast.LENGTH_SHORT).show()
-                val intent = Intent(getApplication(), MainActivity::class.java)
+                val intent = Intent(applicationContext, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 //TODO make the activity launch this instead (and surrounding toasts too)
-                getApplication<PixelDroidApplication>().startActivity(intent)
+                applicationContext.startActivity(intent)
             } catch (exception: IOException) {
-                Toast.makeText(getApplication(), getApplication<PixelDroidApplication>().getString(R.string.upload_post_error),
+                Toast.makeText(applicationContext, applicationContext.getString(R.string.upload_post_error),
                     Toast.LENGTH_SHORT).show()
                 Log.e(TAG, exception.toString())
                 _uiState.update { currentUiState ->
@@ -528,7 +583,7 @@ class PostCreationViewModel(
                     )
                 }
             } catch (exception: HttpException) {
-                Toast.makeText(getApplication(), getApplication<PixelDroidApplication>().getString(R.string.upload_post_failed),
+                Toast.makeText(applicationContext, applicationContext.getString(R.string.upload_post_failed),
                     Toast.LENGTH_SHORT).show()
                 Log.e(TAG, exception.response().toString() + exception.message().toString())
                 _uiState.update { currentUiState ->
@@ -551,10 +606,46 @@ class PostCreationViewModel(
     fun chooseAccount(which: UserDatabaseEntity) {
         _uiState.update { it.copy(chosenAccount = which) }
     }
-}
 
-class PostCreationViewModelFactory(val application: Application, val clipdata: ClipData, val instance: InstanceDatabaseEntity, val existingDescription: String?, val existingNSFW: Boolean) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java, ClipData::class.java, InstanceDatabaseEntity::class.java, String::class.java, Boolean::class.java).newInstance(application, clipdata, instance, existingDescription, existingNSFW)
+    fun storyMode(storyMode: Boolean) {
+        //TODO check ratio of files in story mode? What is acceptable?
+
+        val newMaxEntries = if (storyMode) 1 else instance?.albumLimit
+        var newUiState = _uiState.value.copy(
+                storyCreation = storyMode,
+                maxEntries = newMaxEntries,
+                addPhotoButtonEnabled = (photoData.value?.size ?: 0) < (newMaxEntries ?: 0),
+                )
+
+        // Carousel on if in story mode
+        if (storyMode) newUiState = newUiState.copy(isCarousel = true)
+
+        // If switching to story, and there are too many pictures, keep the first and backup the rest
+        if (storyMode && (photoData.value?.size ?: 0) > 1){
+            storyPhotoDataBackup = photoData.value
+
+            photoData.value = photoData.value?.let { mutableListOf(it.firstOrNull()).filterNotNull().toMutableList() }
+
+            //Show message saying extraneous pictures were removed but can be restored
+            newUiState = newUiState.copy(
+                userMessage = applicationContext.getString(R.string.extraneous_pictures_stories)
+            )
+        }
+        // Restore if backup not null and first value is unchanged
+        else if (storyPhotoDataBackup != null && storyPhotoDataBackup?.firstOrNull() == photoData.value?.firstOrNull()){
+            photoData.value = storyPhotoDataBackup
+            storyPhotoDataBackup = null
+        }
+        _uiState.update { newUiState }
     }
+
+    fun storyDuration(value: Int) {
+        _uiState.update {
+            it.copy(storyDuration = value)
+        }
+    }
+
+    fun updateStoryReactions(checked: Boolean) { _uiState.update { it.copy(storyReactions = checked) }    }
+
+    fun updateStoryReplies(checked: Boolean) { _uiState.update { it.copy(storyReplies = checked) }    }
 }

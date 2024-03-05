@@ -2,6 +2,7 @@ image: registry.gitlab.com/fdroid/fdroidserver:buildserver-bullseye
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SUBMODULE_FORCE_HTTPS: "true"
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -19,7 +20,7 @@ before_script:
     - test -e $cmdline_tools_latest && export PATH="$cmdline_tools_latest:$PATH"
 
     - export GRADLE_USER_HOME=$PWD/.gradle
-    - export ANDROID_COMPILE_SDK=`sed -n 's,.*compileSdkVersion\s*\([0-9][0-9]*\).*,\1,p' app/build.gradle`
+    - export ANDROID_COMPILE_SDK=`sed -n 's,.*compileSdk\s*\([0-9][0-9]*\).*,\1,p' app/build.gradle`
     - echo y | sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" > /dev/null
 
     - apt-get update || apt-get update

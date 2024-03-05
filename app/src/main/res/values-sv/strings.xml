@@ -60,11 +60,10 @@
     <string name="follow_error">Kunde inte följa</string>
     <string name="follow_button_failed">Kunde inte visa följarknapp</string>
     <string name="follow_status_failed">Kunde inte hämta status för följare</string>
-    <string name="comment">Kommentera</string>
+    <string name="comment_verb">Kommentera</string>
     <string name="comment_posted">Kommentar: %1$s inlagd!</string>
     <string name="comment_error">Kommentarsfel!</string>
     <string name="share_image">Dela bild</string>
-    <string name="write_permission_share_pic">Du måste tillåta skrivrättigheter för att dela bilder!</string>
     <string name="write_permission_download_pic">Du måste tillåta skrivrättigheter för att ladda ned bilder!</string>
     <string name="empty_comment">Kommentaren får inte vara tom!</string>
     <string name="posted_on">Inlagt på %1$s</string>

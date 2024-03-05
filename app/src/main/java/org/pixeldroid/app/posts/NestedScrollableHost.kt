@@ -88,19 +88,20 @@ class NestedScrollableHost(context: Context, attrs: AttributeSet? = null) :
             }
             val intent = Intent(context, AlbumActivity::class.java)
 
-            intent.putExtra("images", images)
-            intent.putExtra("index", (child as ViewPager2).currentItem)
+            intent.putExtra(AlbumViewModel.ALBUM_IMAGES, images)
+            intent.putExtra(AlbumViewModel.ALBUM_INDEX, (child as ViewPager2).currentItem)
 
             context.startActivity(intent)
 
             return super.onSingleTapConfirmed(e)
         }
         override fun onScroll(
-            e1: MotionEvent,
+            e1: MotionEvent?,
             e2: MotionEvent,
             distanceX: Float,
             distanceY: Float
         ): Boolean {
+            if (e1 == null) return false
             val orientation = parentViewPager?.orientation ?: return true
 
             val dx = e2.x - e1.x

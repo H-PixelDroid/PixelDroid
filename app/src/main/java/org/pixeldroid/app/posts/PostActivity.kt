@@ -5,13 +5,16 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment.Companion.COMMENT_DOMAIN
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.comments.CommentFragment.Companion.COMMENT_STATUS_ID
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_COMMENT_TAG
@@ -19,18 +22,21 @@ import org.pixeldroid.app.utils.api.objects.Status.Companion.POST_TAG
 import org.pixeldroid.app.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import org.pixeldroid.app.utils.displayDimensionsInPx
 
-class PostActivity : BaseThemedWithBarActivity() {
+class PostActivity : BaseActivity() {
     private lateinit var binding: ActivityPostBinding
 
-    private var commentFragment = CommentFragment()
+    private lateinit var commentFragment: CommentFragment
 
     private lateinit var status: Status
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
+        commentFragment = CommentFragment(binding.swipeRefreshLayout)
+
+        setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         status = intent.getSerializableExtra(POST_TAG) as Status
@@ -43,7 +49,10 @@ class PostActivity : BaseThemedWithBarActivity() {
 
         val holder = StatusViewHolder(binding.postFragmentSingle)
 
-        holder.bind(status, apiHolder, db, lifecycleScope, displayDimensionsInPx(), isActivity = true)
+        holder.bind(
+            status, apiHolder, db, lifecycleScope, displayDimensionsInPx(),
+            requestPermissionDownloadPic, isActivity = true
+        )
 
         activateCommenter()
         initCommentsFragment(domain = user?.instance_uri.orEmpty())
@@ -60,6 +69,17 @@ class PostActivity : BaseThemedWithBarActivity() {
         }
     }
 
+    private val requestPermissionDownloadPic =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (!isGranted) {
+                    MaterialAlertDialogBuilder(this)
+                        .setMessage(R.string.write_permission_download_pic)
+                        .setNegativeButton(android.R.string.ok) { _, _ -> }
+                        .show()
+            }
+        }
     private fun activateCommenter() {
         //Activate commenter
         binding.submitComment.setOnClickListener {
@@ -89,6 +109,11 @@ class PostActivity : BaseThemedWithBarActivity() {
 
         supportFragmentManager.beginTransaction()
             .add(R.id.commentFragment, commentFragment).commit()
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            commentFragment.adapter.refresh()
+            commentFragment.adapter.notifyDataSetChanged()
+        }
     }
 
     private suspend fun postComment(

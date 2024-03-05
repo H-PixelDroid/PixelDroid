@@ -1,28 +1,25 @@
 package org.pixeldroid.app.utils
 
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ContentResolver
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.ImageDecoder
-import android.graphics.Matrix
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
@@ -34,7 +31,7 @@ import okhttp3.HttpUrl
 import org.pixeldroid.app.R
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -158,30 +155,6 @@ fun setThemeFromPreferences(preferences: SharedPreferences, resources: Resources
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
             }
         }
-    }
-}
-
-@StyleRes
-fun Context.themeNoActionBar(): Int? {
-    return when(PreferenceManager.getDefaultSharedPreferences(this).getInt("themeColor", 0)) {
-        // No theme was chosen: the user wants to use the system dynamic color (from wallpaper for example)
-        -1 -> null
-        1 -> R.style.AppTheme2_NoActionBar
-        2 -> R.style.AppTheme3_NoActionBar
-        3 -> R.style.AppTheme4_NoActionBar
-        else -> R.style.AppTheme5_NoActionBar
-    }
-}
-
-@StyleRes
-fun Context.themeActionBar(): Int? {
-    return when(PreferenceManager.getDefaultSharedPreferences(this).getInt("themeColor", 0)) {
-        // No theme was chosen: the user wants to use the system dynamic color (from wallpaper for example)
-        -1 -> null
-        1 -> R.style.AppTheme2
-        2 -> R.style.AppTheme3
-        3 -> R.style.AppTheme4
-        else -> R.style.AppTheme5
     }
 }
 

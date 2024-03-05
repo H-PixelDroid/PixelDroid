@@ -8,6 +8,6 @@ data class CarouselItem constructor(
         val video: Boolean,
         var encodeProgress: Int?,
         var stabilizationFirstPass: Boolean?,
-        var encodeComplete: Boolean = false,
+        var encodeComplete: Boolean? = null,
         var encodeError: Boolean = false,
 )

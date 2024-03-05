@@ -1,32 +1,36 @@
 package org.pixeldroid.app.posts
 
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.ActivityAlbumBinding
-import org.pixeldroid.app.utils.BaseActivity
 
-class AlbumActivity : BaseActivity() {
 
-    private lateinit var model: AlbumViewModel
+class AlbumActivity : AppCompatActivity() {
+    private val model: AlbumViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val binding = ActivityAlbumBinding.inflate(layoutInflater)
-
-        val _model: AlbumViewModel by viewModels { AlbumViewModelFactory(application, intent) }
-        model = _model
-
         setContentView(binding.root)
 
         binding.albumPager.adapter = AlbumViewPagerAdapter(model.uiState.value.mediaAttachments,
             sensitive = false,
             opened = true,
             //In the activity, we assume we want to show everything
-            alwaysShowNsfw = true
+            alwaysShowNsfw = true,
+            clickCallback = ::clickCallback
         )
         binding.albumPager.currentItem = model.uiState.value.index
 
@@ -44,29 +48,48 @@ class AlbumActivity : BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setBackgroundDrawable(null)
 
-        // TODO: Remove from StatusViewHolder (877-893)
-        // TODO: Issue is that albumPager does not listen to the clicks here
-        binding.albumPager.setOnClickListener {
-            val windowInsetsController =
-                WindowCompat.getInsetsController(this.window, it)
-            // Configure the behavior of the hidden system bars
-            if (model.uiState.value.isActionBarHidden) {
-                windowInsetsController.systemBarsBehavior =
-                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                // Hide both the status bar and the navigation bar
-                supportActionBar?.show()
-                windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
-                model.uiState.value.isActionBarHidden = false
-            } else {
-                // Configure the behavior of the hidden system bars
-                windowInsetsController.systemBarsBehavior =
-                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                // Hide both the status bar and the navigation bar
-                supportActionBar?.hide()
-                windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-                model.uiState.value.isActionBarHidden = true
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                model.isActionBarHidden.collect { isActionBarHidden ->
+                    val windowInsetsController =
+                        WindowCompat.getInsetsController(this@AlbumActivity.window, binding.albumPager)
+                    if (isActionBarHidden) {
+                        // Configure the behavior of the hidden system bars
+                        windowInsetsController.systemBarsBehavior =
+                            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                        // Hide both the status bar and the navigation bar
+                        supportActionBar?.hide()
+                        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                    } else {
+                        // Configure the behavior of the hidden system bars
+                        windowInsetsController.systemBarsBehavior =
+                            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                        // Show both the status bar and the navigation bar
+                        supportActionBar?.show()
+                        windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+                    }
+                }
             }
         }
+    }
 
+    /**
+     * Callback passed to the AlbumViewPagerAdapter to signal a single click on the image
+     */
+    private fun clickCallback(){
+        model.barHide()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // Handle up arrow manually,
+                // since "up" isn't defined for this activity
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

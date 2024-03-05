@@ -1,0 +1,11 @@
+* Aggiunta grafica di errore personalizzata del panda rosso
+
+* Supporto per il ritaglio libero nella modifica dell'immagine
+
+* Migliorati i metadati di F-Droid
+
+* Aggiornamento delle traduzioni
+
+* Aggiornamenti delle dipendenze
+
+* Correzione bug

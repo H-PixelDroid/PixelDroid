@@ -5,14 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
 
     <uses-feature
         android:name="android.hardware.camera.any"
         android:required="false" />
-    <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -26,7 +25,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:localeConfig="@xml/locales_config"
         android:theme="@style/BaseAppTheme">
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
@@ -40,35 +38,32 @@
         <activity
             android:name=".posts.AlbumActivity"
             android:exported="false"
-            android:theme="@style/AppTheme.ActionBar.Transparent"/>
+            android:theme="@style/TransparentAlbumActivity"/>
         <activity
             android:name=".profile.EditProfileActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:theme="@style/BaseAppTheme" />
+
         <activity
             android:name=".posts.MediaViewerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
-            android:theme="@style/BaseAppTheme.NoActionBar" />
-        <activity android:name=".postCreation.camera.CameraActivity"/>
-        <activity android:name=".postCreation.camera.CameraActivityShortcut"
-            android:exported = "true"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/BaseAppTheme" />
+        <activity android:name=".postCreation.camera.CameraActivity"
+            android:theme="@style/BaseAppTheme"/>
         <activity
             android:name=".posts.ReportActivity"
             android:screenOrientation="sensorPortrait"
+            android:theme="@style/BaseAppTheme"
             tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".stories.StoriesActivity" />
         <activity
             android:name=".postCreation.PostCreationActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/BaseAppTheme.NoActionBar">
+            android:theme="@style/BaseAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <action android:name="android.intent.action.SEND" />
@@ -81,27 +76,32 @@
         </activity>
         <activity
             android:name=".profile.FollowsActivity"
+            android:theme="@style/BaseAppTheme"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".posts.feeds.uncachedFeeds.hashtags.HashTagActivity"
+            android:theme="@style/BaseAppTheme"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".posts.PostActivity"
             android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/BaseAppTheme" />
+
         <activity
             android:name=".profile.ProfileActivity"
             android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".profile.CollectionActivity"/>
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/BaseAppTheme"/>
+        <activity android:name=".profile.CollectionActivity"
+            android:theme="@style/BaseAppTheme"/>
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings2"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:theme="@style/BaseAppTheme" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -125,7 +125,7 @@
             android:name=".LoginActivity"
             android:exported="true"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/BaseAppTheme.NoActionBar"
+            android:theme="@style/BaseAppTheme"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -142,6 +142,7 @@
         <activity
             android:name=".searchDiscover.SearchActivity"
             android:exported="true"
+            android:theme="@style/BaseAppTheme"
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity">
@@ -153,17 +154,8 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".searchDiscover.TrendingActivity"/>
-        <activity
-            android:name=".settings.AboutActivity"
-            android:parentActivityName=".settings.SettingsActivity"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".settings.LicenseActivity"
-            android:parentActivityName=".settings.AboutActivity"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".searchDiscover.TrendingActivity"
+            android:theme="@style/BaseAppTheme" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -23,6 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import retrofit2.http.Field
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 
 /*
@@ -51,7 +52,9 @@ interface PixelfedAPI {
                 .client(
                     OkHttpClient().newBuilder().addNetworkInterceptor(headerInterceptor)
                         // Only do secure-ish TLS connections (no HTTP or very old SSL/TLS)
-                        .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS)).build()
+                        .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS))
+                        .readTimeout(20, TimeUnit.SECONDS)
+                        .build()
                 )
                 .build().create(PixelfedAPI::class.java)
         }
@@ -74,6 +77,7 @@ interface PixelfedAPI {
                     OkHttpClient().newBuilder().addNetworkInterceptor(headerInterceptor)
                             // Only do secure-ish TLS connections (no HTTP or very old SSL/TLS)
                         .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS))
+                        .readTimeout(20, TimeUnit.SECONDS)
                         .authenticator(TokenAuthenticator(user, db, pixelfedAPIHolder))
                         .addInterceptor {
                             it.request().newBuilder().run {
@@ -161,6 +165,7 @@ interface PixelfedAPI {
         @Field("poll[expires_in]") poll_expires: List<String>? = null,
         @Field("poll[multiple]") poll_multiple: List<String>? = null,
         @Field("poll[hide_totals]") poll_hideTotals: List<String>? = null,
+        //FIXME this should be able to take a boolean or at least "true"/"false" but only "0"/"1" works
         @Field("sensitive") sensitive: Int? = null,
         @Field("spoiler_text") spoiler_text: String? = null,
         @Field("visibility") visibility: String = "public",
@@ -231,6 +236,43 @@ interface PixelfedAPI {
         @Query("post_id") post_id: String,
     )
 
+    @GET("/api/pixelfed/v1/stories/self-carousel")
+    suspend fun carousel(): StoryCarousel
+
+    @POST("/api/v1.1/stories/seen")
+    suspend fun storySeen(
+        @Query("id") id: String
+    )
+
+    @POST("/api/v1.1/stories/comment")
+    suspend fun storyComment(
+        @Query("sid") sid: String,
+        @Query("caption") caption: String
+    )
+
+    @Multipart
+    @POST("/api/v1.1/stories/add")
+    fun storyUpload(
+        @Part file: MultipartBody.Part,
+        // The API takes this value but then overwrites it in /api/v1.1/stories/publish, so ignore this
+        @Part duration: MultipartBody.Part? = null,
+    ): Observable<Attachment>
+
+    @POST("/api/v1.1/stories/publish")
+    suspend fun storyPublish(
+        @Query("media_id") media_id: String,
+        //From 0 to 30, duration in seconds of the story
+        @Query("duration") duration: Int = 10,
+        //FIXME this should be able to take a boolean or at least "true"/"false" but only "0"/"1" works. Same issue as sensitive boolean in postStatus
+        @Query("can_reply") can_reply: String,
+        @Query("can_react") can_react: String,
+    )
+
+    @POST("/api/v1.1/stories/self-expire/{id}")
+    suspend fun deleteCarousel(
+        @Path("id") storyId: String
+    )
+
     //Used in our case to retrieve comments for a given status
     @GET("/api/v1/statuses/{id}/context")
     suspend fun statusComments(
@@ -296,18 +338,31 @@ interface PixelfedAPI {
         @Header("Authorization") authorization: String? = null
     ): Account
 
-    //@Multipart
     @PATCH("/api/v1/accounts/update_credentials")
     suspend fun updateCredentials(
         @Query(value = "display_name") displayName: String?,
         @Query(value = "note") note: String?,
         @Query(value = "locked") locked: Boolean?,
-      //  @Part avatar: MultipartBody.Part?,
     ): Account
+
+    /**
+     * Pixelfed uses PHP, multipart uploads don't work through PATCH so we use POST as suggested
+     * here: https://github.com/pixelfed/pixelfed/issues/4250
+     * However, changing to POST breaks the upload on Mastodon.
+     *
+     * To have this work on Pixelfed and Mastodon without special logic to distinguish the two,
+     * we'll have to wait for PHP 8.4 and https://wiki.php.net/rfc/rfc1867-non-post
+     * which should come out end of 2024
+     */
+    @Multipart
+    @POST("/api/v1/accounts/update_credentials")
+    fun updateProfilePicture(
+        @Part avatar: MultipartBody.Part?
+    ): Observable<Account>
 
     @Multipart
     @PATCH("/api/v1/accounts/update_credentials")
-    fun updateProfilePicture(
+    fun updateProfilePictureMastodon(
         @Part avatar: MultipartBody.Part?
     ): Observable<Account>
 

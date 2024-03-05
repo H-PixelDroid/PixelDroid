@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.res.XmlResourceParser
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.DialogFragment
@@ -16,23 +17,39 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.databinding.SettingsBinding
+import org.pixeldroid.common.ThemedActivity
 import org.pixeldroid.app.utils.setThemeFromPreferences
 
 
-class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var restartMainOnExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = SettingsBinding.inflate(layoutInflater)
 
-        setContentView(R.layout.settings)
+        setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
+
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.settings, SettingsFragment())
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(R.string.menu_settings)
+
+        onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
+            // Handle the back button event
+            // If a setting (for example language or theme) was changed, the main activity should be
+            // started without history so that the change is applied to the whole back stack
+            if (restartMainOnExit) {
+                val intent = Intent(this@SettingsActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                super@SettingsActivity.startActivity(intent)
+            } else {
+                finish()
+            }
+        }
 
         restartMainOnExit = intent.getBooleanExtra("restartMain", false)
     }
@@ -51,25 +68,17 @@ class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnShared
         )
     }
 
-    override fun onBackPressed() {
-        // If a setting (for example language or theme) was changed, the main activity should be
-        // started without history so that the change is applied to the whole back stack
-        if (restartMainOnExit) {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            super.startActivity(intent)
-        } else {
-            super.onBackPressed()
-        }
-    }
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        when (key) {
-            "theme" -> {
-                setThemeFromPreferences(sharedPreferences, resources)
-                recreateWithRestartStatus()
-            }
-            "themeColor" -> {
-                recreateWithRestartStatus()
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        sharedPreferences?.let {
+            when (key) {
+                "theme" -> {
+                    setThemeFromPreferences(it, resources)
+                    recreateWithRestartStatus()
+                }
+
+                "themeColor" -> {
+                    recreateWithRestartStatus()
+                }
             }
         }
     }
@@ -125,7 +134,8 @@ class SettingsActivity : BaseThemedWithBarActivity(), SharedPreferences.OnShared
 class LanguageSettingFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val list: MutableList<String> = mutableListOf()
-        resources.getXml(R.xml.locales_config).use {
+        // IDE doesn't find it, but compiling works apparently?
+        resources.getXml(R.xml._generated_res_locale_config).use {
             var eventType = it.eventType
             while (eventType != XmlResourceParser.END_DOCUMENT) {
                 when (eventType) {

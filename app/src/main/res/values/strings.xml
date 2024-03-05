@@ -150,11 +150,13 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="NoCommentsToShow">No comments on this post…</string>
     <string name="empty_comment">Comment must not be empty!</string>
     <string name="write_permission_download_pic">You need to grant write permission to download pictures!</string>
-    <string name="write_permission_share_pic">You need to grant write permission to share pictures!</string>
     <string name="share_image">Share Image</string>
     <string name="comment_error">Comment error!</string>
     <string name="comment_posted">"Comment: %1$s posted!"</string>
-    <string name="comment">Comment</string>
+    <!-- This is shown on the button, it is a verb and refers to the action of commenting -->
+    <string name="comment_verb">Comment</string>
+    <!-- This is shown in the text field as a hint, it is a noun -->
+    <string name="comment_noun">Comment</string>
     <plurals name="number_comments">
         <item quantity="one">%d comment</item>
         <item quantity="other">%d comments</item>
@@ -330,4 +332,20 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="contains_nsfw">Contains NSFW media</string>
     <string name="switch_accounts">Switch accounts</string>
     <string name="summary_always_show_nsfw">NSFW/CW posts will not be blurred, and will be shown by default.</string>
+    <string name="story_image">Story image</string>
+    <string name="replyToStory">Reply to %1$s</string>
+    <string name="story_reply_error">Something went wrong sending reply</string>
+    <string name="error_fetch_story">Something went wrong fetching the carousel</string>
+    <string name="sent_reply_story">Sent reply</string>
+    <string name="add_story">Add Story</string>
+    <string name="story_could_not_see">Error: could not mark story as seen</string>
+    <string name="story_pause">Start or pause the stories</string>
+    <string name="my_story">My story</string>
+    <!-- Type of new publication that is being created (as opposed to a traditional post, if this is chosen it would be a story) -->
+    <string name="type_story">Story</string>
+    <!-- Type of new publication that is being created (as opposed to a story, if this is chosen it would be a traditional post) -->
+    <string name="type_post">Post</string>
+    <string name="continue_post_creation">Continue</string>
+    <string name="extraneous_pictures_stories">Pictures after the first were removed but can be restored by switching back to creating a Post</string>
+    <string name="story_duration">Story Duration</string>
 </resources>

@@ -49,8 +49,7 @@
     <string name="upload_post_success">Téléversement de la publication avec succès</string>
     <string name="posted_on">Publié le %1$s</string>
     <string name="empty_comment">Le commentaire ne doit pas être vide !</string>
-    <string name="write_permission_share_pic">Vous devez accorder une autorisation d\'écriture pour partager des photos !</string>
-    <string name="default_nfollowers">- 
+    <string name="default_nfollowers">-
 \nAbonné·e·s</string>
     <string name="upload_post_error">Le téléversement de la publication a échoué</string>
     <string name="loading_toast">Une erreur s\'est produite lors du chargement</string>
@@ -60,7 +59,7 @@
     <string name="share_image">Partager image</string>
     <string name="comment_error">Erreur de commentaire !</string>
     <string name="comment_posted">Commentaire : %1$s publié !</string>
-    <string name="comment">Commenter</string>
+    <string name="comment_verb">Commenter</string>
     <string name="follow_status_failed">Impossible d\'obtenir l\'état de suivi</string>
     <string name="follow_button_failed">Impossible d\'afficher le bouton de suivi</string>
     <string name="follow_error">Impossible de suivre</string>
@@ -192,7 +191,7 @@
     <string name="file_not_found">Le fichier %1$s n’a pas été trouvé</string>
     <string name="notifications_settings">Paramètres des notifications</string>
     <string name="post_is_video">Cette publication est une vidéo</string>
-    <string name="dialog_message_cancel_follow_request">Annuler la demande d’abonnement \?</string>
+    <string name="dialog_message_cancel_follow_request">Annuler la demande de suivi ?</string>
     <string name="unbookmark">Retirer des signets</string>
     <string name="delete_collection">Supprimer la collection</string>
     <string name="your_name">Votre nom</string>
@@ -224,4 +223,6 @@
     <string name="profile_saved">Modifications enregistrées !</string>
     <string name="change_profile_picture">Changer votre image de profil</string>
     <string name="switch_accounts">Permutation de comptes</string>
+    <string name="edit_link_failed">Échec de l\'ouverture de la page de modifications</string>
+    <string name="follow_requested">Abonnement demandé</string>
 </resources>

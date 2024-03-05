@@ -2,7 +2,6 @@ package org.pixeldroid.app.postCreation.camera
 
 import android.Manifest
 import android.app.Activity
-import android.content.ClipData
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -34,10 +33,8 @@ import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentCameraBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
 import org.pixeldroid.app.utils.BaseFragment
@@ -70,6 +67,7 @@ class CameraFragment : BaseFragment() {
     private var camera: Camera? = null
 
     private var inActivity by Delegates.notNull<Boolean>()
+    private var addToStory by Delegates.notNull<Boolean>()
 
     private var filePermissionDialogLaunched: Boolean = false
 
@@ -89,7 +87,8 @@ class CameraFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        inActivity = arguments?.getBoolean("CameraActivity") ?: false
+        inActivity = arguments?.getBoolean(CAMERA_ACTIVITY) ?: false
+        addToStory = arguments?.getBoolean(CAMERA_ACTIVITY_STORY) ?: false
 
         binding = FragmentCameraBinding.inflate(layoutInflater)
 
@@ -106,7 +105,7 @@ class CameraFragment : BaseFragment() {
             thumbnail.setPadding(10)
 
             // Load thumbnail into circular button using Glide
-            Glide.with(thumbnail)
+            if(activity?.isDestroyed == false) Glide.with(thumbnail)
                 .load(uri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(thumbnail)
@@ -326,7 +325,7 @@ class CameraFragment : BaseFragment() {
     }
 
     private fun setupUploadImage() {
-        val videoEnabled: Boolean = db.instanceDao().getInstance(db.userDao().getActiveUser()!!.instance_uri).videoEnabled
+        val videoEnabled: Boolean = db.instanceDao().getActiveInstance().videoEnabled
         var mimeTypes: Array<String> = arrayOf("image/*")
         if(videoEnabled) mimeTypes += "video/*"
 
@@ -337,7 +336,8 @@ class CameraFragment : BaseFragment() {
                 putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
                 action = Intent.ACTION_GET_CONTENT
                 addCategory(Intent.CATEGORY_OPENABLE)
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                // Don't allow multiple for story
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, !addToStory)
                 uploadImageResultContract.launch(
                     Intent.createChooser(this, null)
                 )
@@ -448,31 +448,22 @@ class CameraFragment : BaseFragment() {
 
     private fun startAlbumCreation(uris: ArrayList<String>) {
 
-        val intent = Intent(requireActivity(), PostCreationActivity::class.java)
-            .apply {
-                uris.forEach{
-                    //Why are we using ClipData here? Because the FLAG_GRANT_READ_URI_PERMISSION
-                    //needs to be applied to the URIs, and this flag only applies to the
-                    //Intent's data and any URIs specified in its ClipData.
-                    if(clipData == null){
-                        clipData = ClipData("", emptyArray(), ClipData.Item(it.toUri()))
-                    } else {
-                        clipData!!.addItem(ClipData.Item(it.toUri()))
-                    }
-                }
-                addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
+        val intent = PostCreationActivity.intentForUris(requireContext(), uris.map { it.toUri() })
 
-        if(inActivity){
+        if(inActivity && !addToStory){
             requireActivity().setResult(Activity.RESULT_OK, intent)
             requireActivity().finish()
         } else {
+            if(addToStory){
+                intent.putExtra(CAMERA_ACTIVITY_STORY, addToStory)
+            }
             startActivity(intent)
         }
     }
 
     companion object {
+        const val CAMERA_ACTIVITY = "CameraActivity"
+        const val CAMERA_ACTIVITY_STORY = "CameraActivityStory"
 
         private const val TAG = "CameraFragment"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0

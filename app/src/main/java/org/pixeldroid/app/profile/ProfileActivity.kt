@@ -6,26 +6,33 @@ import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityProfileBinding
+import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedFeedFragment
 import org.pixeldroid.app.posts.parseHTMLText
-import org.pixeldroid.app.utils.BaseThemedWithBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Account
+import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.setProfileImageFromURL
 import retrofit2.HttpException
 import java.io.IOException
 
-class ProfileActivity : BaseThemedWithBarActivity() {
+class ProfileActivity : BaseActivity() {
 
     private lateinit var domain : String
     private lateinit var accountId : String
@@ -36,7 +43,10 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
+        setSupportActionBar(binding.topBar)
+
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -51,9 +61,32 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         val tabs = createProfileTabs(account)
         setupTabs(tabs)
         setContent(account)
+
+        binding.profileMotion.setTransitionListener(
+            object : MotionLayout.TransitionListener {
+                override fun onTransitionStarted(
+                    motionLayout: MotionLayout?, startId: Int, endId: Int,
+                ) {}
+
+                override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
+
+                override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                    if (currentId == R.id.hideProfile && motionLayout?.startState == R.id.start) {
+                        // If the 1st transition has been made go to the second one
+                        motionLayout.setTransition(R.id.second)
+                    } else if(currentId == R.id.hideProfile && motionLayout?.startState == R.id.hideProfile){
+                        motionLayout.setTransition(R.id.first)
+                    }
+                }
+
+                override fun onTransitionTrigger(
+                    motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float,
+                ) {}
+            }
+        )
     }
 
-    private fun createProfileTabs(account: Account?): Array<Fragment>{
+    private fun createProfileTabs(account: Account?): Array<UncachedFeedFragment<FeedContent>> {
 
         val profileFeedFragment = ProfileFeedFragment()
         profileFeedFragment.arguments = Bundle().apply {
@@ -77,7 +110,7 @@ class ProfileActivity : BaseThemedWithBarActivity() {
             putSerializable(ProfileFeedFragment.COLLECTIONS, true)
         }
 
-        val returnArray: Array<Fragment> = arrayOf(
+        val returnArray: Array<UncachedFeedFragment<FeedContent>> = arrayOf(
             profileGridFragment,
             profileFeedFragment,
             profileCollectionsFragment
@@ -97,7 +130,7 @@ class ProfileActivity : BaseThemedWithBarActivity() {
     }
 
     private fun setupTabs(
-        tabs: Array<Fragment>
+        tabs: Array<UncachedFeedFragment<FeedContent>>,
     ){
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
@@ -129,8 +162,15 @@ class ProfileActivity : BaseThemedWithBarActivity() {
                 }
             }
         }.attach()
-    }
 
+        binding.profileTabs.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {}
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                tabs[tab.position].onTabReClicked()
+            }
+        })
+    }
 
     private fun setContent(account: Account?) {
         if(account != null) {
@@ -149,6 +189,9 @@ class ProfileActivity : BaseThemedWithBarActivity() {
                     ).show()
                     return@launchWhenResumed
                 }
+
+                updateUserInfoDb(db, myAccount)
+
                 setViews(myAccount)
             }
         }
@@ -214,9 +257,15 @@ class ProfileActivity : BaseThemedWithBarActivity() {
         )
     }
 
+    private val editResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            // Profile was edited, reload
+            setContent(null)
+        }
+    }
+
     private fun onClickEditButton() {
-        val intent = Intent(this, EditProfileActivity::class.java)
-        ContextCompat.startActivity(this, intent, null)
+        editResult.launch(Intent(this, EditProfileActivity::class.java))
     }
 
     private fun onClickFollowers(account: Account?) {

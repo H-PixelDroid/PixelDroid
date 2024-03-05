@@ -12,8 +12,8 @@
     <string name="shared_notification">%1$s ha condiviso il tuo post</string>
     <string name="followed_notification">%1$s ti ha seguito</string>
     <string name="mention_notification">%1$s ti ha menzionato</string>
-    <string name="liked_notification">%1$s è piaciuto il tuo post</string>
-    <string name="post">invia</string>
+    <string name="liked_notification">A %1$s è piaciuto il tuo post</string>
+    <string name="post">Invia</string>
     <string name="description">Descrizione…</string>
     <string name="whats_an_instance">Cos\'è un\'istanza\?</string>
     <string name="logout">Disconnettersi</string>
@@ -33,7 +33,7 @@
     <string name="domain_of_your_instance">Dominio della tua istanza</string>
     <string name="login_connection_required_once">Devi essere online per poter aggiungere il primo account e utilizzare PixelDroid :(</string>
     <string name="invalid_domain">Dominio non valido</string>
-    <string name="edit">MODIFICA</string>
+    <string name="edit">Modifica</string>
     <string name="instance_error">Impossibile ottenere informazioni sull\'istanza</string>
     <string name="save_image_failed">Impossibile salvare l\'immagine</string>
     <string name="light_theme">Chiaro</string>
@@ -53,11 +53,10 @@
     <string name="no_description">Nessuna descrizione</string>
     <string name="posted_on">Postato su %1$s</string>
     <string name="empty_comment">Il commento non deve essere vuoto!</string>
-    <string name="write_permission_share_pic">È necessario concedere i permessi di scrittura per condividere le immagini!</string>
     <string name="share_image">Condividi immagine</string>
     <string name="comment_error">Errore nel commento!</string>
     <string name="comment_posted">Commento: %1$s postato!</string>
-    <string name="comment">Commento</string>
+    <string name="comment_verb">Commento</string>
     <string name="follow_error">Impossibile seguire</string>
     <string name="unfollow_error">Impossibile smettere di seguire</string>
     <string name="access_token_invalid">Il token di accesso non è valido</string>
@@ -86,11 +85,11 @@
     <string name="instance_not_pixelfed_warning">Questa non sembra essere un\'istanza di Pixelfed, quindi l\'app potrebbe interrompersi in modi inaspettati.</string>
     <string name="instance_not_pixelfed_cancel">Annullare l\'accesso</string>
     <string name="instance_not_pixelfed_continue">OK, continua comunque</string>
-    <string name="discover">SCOPRI</string>
+    <string name="discover">Scopri</string>
     <string name="open_drawer_menu">Apri il menu a scomparsa</string>
     <string name="profile_picture">Foto profilo</string>
     <string name="report_error">Impossibile inviare la segnalazione</string>
-    <string name="reported">Segnalato {gmd_check_circle}</string>
+    <string name="reported">Post segnalato</string>
     <string name="report_target">Segnala @%1$s\'s post</string>
     <string name="optional_report_comment">Messaggio facoltativo per moderatori/amministratori</string>
     <string name="share_link">Condividi il Link</string>
@@ -133,25 +132,32 @@
     <plurals name="nb_followers">
         <item quantity="one">%d
 \nSeguace</item>
+        <item quantity="many">%d
+\nSeguaci</item>
         <item quantity="other">%d
 \nSeguaci</item>
     </plurals>
     <plurals name="nb_posts">
         <item quantity="one">%d
 \nPost</item>
+        <item quantity="many">%d
+\nPost</item>
         <item quantity="other">%d
 \nPost</item>
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d commento</item>
+        <item quantity="many">%d commenti</item>
         <item quantity="other">%d commenti</item>
     </plurals>
     <plurals name="shares">
         <item quantity="one">%d Condivisione</item>
+        <item quantity="many">%d Condivisioni</item>
         <item quantity="other">%d Condivisioni</item>
     </plurals>
     <plurals name="likes">
         <item quantity="one">%d Mi piace</item>
+        <item quantity="many">%d Mi piace</item>
         <item quantity="other">%d Mi piace</item>
     </plurals>
     <string name="upload_error">Codice di errore restituito dal server: %1$d</string>
@@ -164,11 +170,13 @@
         <item quantity="other">La descrizione deve contenere al massimo %d caratteri.</item>
     </plurals>
     <string name="api_not_enabled_dialog">L\'API non è attivata su questa istanza. Contatta l\'amministratore per chiedergli di attivarlo.</string>
-    <string name="delete_post_failed_io_except">Impossibile eliminare il post, controlla la tua connesione\?</string>
+    <string name="delete_post_failed_io_except">Impossibile eliminare il post, controllare la connessione?</string>
     <string name="delete_post_failed_error">Impossibile eliminare il post, errore %1$d</string>
     <plurals name="nb_following">
         <item quantity="one">%d
 \nUtente che stai seguendo</item>
+        <item quantity="many">%d
+\nUtenti che stai seguendo</item>
         <item quantity="other">%d
 \nUtenti che stai seguendo</item>
     </plurals>
@@ -188,4 +196,121 @@
     <string name="notifications_settings">Impostazioni di notifica</string>
     <string name="notifications_settings_summary">Gestisci quali notifiche vuoi ricevere</string>
     <string name="login_notifications">Impossibile recuperare le ultime notifiche</string>
+    <string name="always_show_nsfw">Mostra sempre i contenuti sensibili</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nuova notifica</item>
+        <item quantity="many">%d nuove notifiche</item>
+        <item quantity="other">%d nuove notifiche</item>
+    </plurals>
+    <plurals name="items_load_success">
+        <item quantity="one">%d oggetto caricato con successo</item>
+        <item quantity="many">%d oggetti caricati con successo</item>
+        <item quantity="other">%d oggetti caricati con successo</item>
+    </plurals>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s e %4$d altri</string>
+    <string name="notification_summary_medium">%1$s, %2$s, e %3$s</string>
+    <string name="notification_summary_small">%1$s e %2$s</string>
+    <string name="video_not_supported">Il server che utilizzi non supporta l\'upload di video, potresti non essere in grado di caricare i video inclusi in questo post</string>
+    <string name="post_is_video">Questo post è un video</string>
+    <string name="upload_next_step">Prossimo step</string>
+    <string name="add_details">Aggiungi qualche dettaglio</string>
+    <string name="unknown_error_in_error">Errore sconosciuto, controlla se il server è giù: %1$s</string>
+    <string name="feed_view">Vista a elenco</string>
+    <string name="follow_requested">Follow Richiesto</string>
+    <string name="bookmark">Aggiungi ai preferiti</string>
+    <string name="unbookmark">Rimuovi dai preferiti</string>
+    <string name="redraft">Rielabora</string>
+    <string name="from_other_domain">da %1$s</string>
+    <string name="redraft_dialog_launch">Rielaborare questo post ti permetterà di modificare la foto e la sua descrizione, ma eliminerà tutti i commenti e i mi piace attualmente presenti. Continuare?</string>
+    <string name="bookmark_post_failed_io_except">Non è stato possibile aggiungere/rimuovere il post dai preferiti, controllare la connessione?</string>
+    <string name="no_storage_permission">Accesso all\'archiviazione non autorizzato, aggiungi l\'autorizzazione nelle impostazioni se vuoi permettere a PixelDroid di mostrare le miniature</string>
+    <string name="description_template_summary">Inserisci questo nella descrizione dei post</string>
+    <string name="dialog_message_cancel_follow_request">Cancellare la richiesta di follow?</string>
+    <string name="home_feed">Home</string>
+    <string name="search_discover_feed">Cerca</string>
+    <string name="create_feed">Aggiungi</string>
+    <string name="notifications_feed">Aggiornamenti</string>
+    <string name="public_feed">Pubblico</string>
+    <string name="accentColorTitle">Colore secondario</string>
+    <string name="accentColorSummary">Scegli un colore secondario</string>
+    <string name="color_choice_button">Scegli questo colore secondario</string>
+    <string name="color_chosen">Colore secondario scelto</string>
+    <string name="redraft_dialog_cancel">Se elimini questa rielaborazione, il post originale non sarà più sul tuo profilo. Continuare senza ripubblicare?</string>
+    <string name="redraft_post_failed_error">Impossibile rielaborare il post, errore %1$d</string>
+    <string name="redraft_post_failed_io_except">Non è stato possibile rielaborare il post, controllare la connessione?</string>
+    <string name="bookmark_post_failed_error">Non è stato possibile aggiungere/rimuovere il post dai preferiti, errore %1$d</string>
+    <string name="no_camera_permission">Accesso alla fotocamera non autorizzato, aggiungi l\'autorizzazione nelle impostazioni se vuoi permettere a PixelDroid di usare la fotocamera</string>
+    <string name="play_video">Riproduci video</string>
+    <string name="encode_error">Errore durante la codifica</string>
+    <string name="encode_success">Codifica completata!</string>
+    <string name="encode_progress">Codifica %1$d%%</string>
+    <string name="analyzing_stabilization">Analisi per la stabilizzazione %1$d%%</string>
+    <string name="still_encoding">Uno o più video sono ancora in fase di codifica. Aspetta che siano pronti prima di caricare</string>
+    <string name="new_post_shortcut_short">Nuovo post</string>
+    <string name="follow_request">%1$s vorrebbe seguirti</string>
+    <string name="status_notification">%1$s ha aggiunto un post</string>
+    <string name="new_post_shortcut_long">Aggiungi un nuovo post</string>
+    <string name="profile_error">Impossibile caricare il profilo</string>
+    <string name="add_images_error">Errore durante l\'aggiunto delle immagini</string>
+    <string name="notification_thumbnail">Miniatura dell\'immagine nella notifica di questo post</string>
+    <string name="post_preview">Anteprima di un post</string>
+    <string name="description_template">Modello di descrizione</string>
+    <string name="explore_accounts">Scopri profili popolari in questa istanza</string>
+    <string name="popular_accounts">Profili popolari</string>
+    <string name="explore_hashtags">Scopri gli hashtag di tendenza in questa istanza</string>
+    <string name="trending_hashtags">Hashtag di tendenza</string>
+    <string name="daily_trending">Vedi i post di tendenza oggi</string>
+    <string name="trending_posts">Post di tendenza</string>
+    <string name="explore_posts">Scopri post casuali di oggi</string>
+    <string name="grid_view">Vista a griglia</string>
+    <string name="bookmarks">Preferiti</string>
+    <string name="comment_noun">Commento</string>
+    <string name="delete_collection_warning">Vuoi davvero eliminare questa raccolta?</string>
+    <string name="removed_post_from_collection">Post rimosso dalla raccolta</string>
+    <string name="new_collection_link_failed">Impossibile aprire la pagina per aggiungere una raccolta</string>
+    <string name="private_account_explanation">Se il tuo account è privato, solo le persone che approvi possono vedere le tue foto e i tuoi video su Pixelfed. I tuoi seguaci esistenti non subiranno modifiche.</string>
+    <plurals name="replies_count">
+        <item quantity="one">%d risposta</item>
+        <item quantity="many">%d risposte</item>
+        <item quantity="other">%d risposte</item>
+    </plurals>
+    <string name="collection_title">La raccolta di %1$s</string>
+    <string name="story_image">Immagine della storia</string>
+    <string name="replyToStory">Rispondi a %1$s</string>
+    <string name="story_reply_error">Qualcosa è andato storto nell\'invio della risposta</string>
+    <string name="error_fetch_story">Qualcosa è andato storto nel recupero del carosello</string>
+    <string name="sent_reply_story">Risposta inviata</string>
+    <string name="fetching_profile">Recupero del tuo profilo…</string>
+    <string name="collection_remove_post">Rimuovi post</string>
+    <string name="add_to_collection">Scegli un post da aggiungere</string>
+    <string name="delete_from_collection">Scegli un post da rimuovere</string>
+    <string name="added_post_to_collection">Post aggiunto alla raccolta</string>
+    <string name="error_add_post_to_collection">Impossibile aggiungere il post alla raccolta</string>
+    <string name="error_remove_post_from_collection">Impossibile rimuovere il post dalla raccolta</string>
+    <string name="save">Salva</string>
+    <string name="use_dynamic_color">Usa il colore dinamico dal tuo sistema</string>
+    <string name="more_profile_settings">Altre impostazioni del profilo</string>
+    <string name="private_account">Account privato</string>
+    <string name="your_bio">La tua bio</string>
+    <string name="your_name">Il tuo nome</string>
+    <string name="profile_save_changes">Non hai salvato le modifiche. Uscire?</string>
+    <string name="saving_profile">Salvataggio del tuo profilo</string>
+    <string name="profile_saved">Modifiche salvate!</string>
+    <string name="error_profile">Qualcosa è andato storto. Tocca per riprovare</string>
+    <string name="change_profile_picture">Cambia la tua immagine del profilo</string>
+    <string name="contains_nsfw">Contiene media sensibili</string>
+    <string name="switch_accounts">Cambia account</string>
+    <string name="summary_always_show_nsfw">I post con contenuti sensibili non verranno oscurati e saranno mostrati di default.</string>
+    <string name="collection_add_post">Aggiungi post</string>
+    <string name="collections">Raccolte</string>
+    <string name="delete_collection">Elimina raccolta</string>
+    <string name="add_story">Aggiungi Storia</string>
+    <string name="story_pause">Riproduci o ferma le storie</string>
+    <string name="story_could_not_see">Errore: impossibile segnare la storia come visualizzata</string>
+    <string name="my_story">La mia storia</string>
+    <string name="type_story">Storia</string>
+    <string name="type_post">Post</string>
+    <string name="continue_post_creation">Continua</string>
+    <string name="extraneous_pictures_stories">Le immagini successive alla prima sono state rimosse, ma possono essere ripristinate tornando indietro alla creazione di un Post</string>
+    <string name="story_duration">Durata della Storia</string>
 </resources>

@@ -57,11 +57,13 @@ data class Account(
         suspend fun openAccountFromId(id: String, api : PixelfedAPI, context: Context) {
                 val account = try {
                     api.getAccount(id)
-                } catch (exception: IOException) {
-                    Log.e("GET ACCOUNT ERROR", exception.toString())
-                    return
-                } catch (exception: HttpException) {
-                    Log.e("ERROR CODE", exception.code().toString())
+                } catch (exception: Exception) {
+                    val toLog = if (exception is HttpException) {
+                        exception.code().toString()
+                    } else {
+                        exception.toString()
+                    }
+                    Log.e("GET ACCOUNT ERROR", toLog)
                     return
                 }
                 //Open the account page in a separate activity

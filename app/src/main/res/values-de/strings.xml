@@ -45,7 +45,7 @@
     <string name="add_account_description">Weiteres Pixelfed-Konto hinzufügen</string>
     <string name="light_theme">Hell</string>
     <string name="dark_theme">Dunkel</string>
-    <string name="comment">Kommentieren</string>
+    <string name="comment_verb">Kommentieren</string>
     <string name="share_image">Bild teilen</string>
     <string name="empty_comment">Der Kommentar darf nicht leer sein!</string>
     <string name="no_description">Keine Beschreibung</string>
@@ -79,7 +79,6 @@
     <string name="feed_failed">Feed konnte nicht geladen werden</string>
     <string name="posted_on">Erstellt am %1$s</string>
     <string name="write_permission_download_pic">Für das Herunterladen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
-    <string name="write_permission_share_pic">Für die Teilen von Bildern müssen Sie eine Schreibgenehmigung erteilen!</string>
     <string name="follow_status_failed">Konnte den Folgestatus nicht erhalten</string>
     <string name="retry">Wiederholen</string>
     <string name="nothing_to_see_here">Hier gibt\'s nichts zu sehen!</string>

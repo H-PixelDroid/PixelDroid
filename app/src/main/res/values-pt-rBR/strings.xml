@@ -146,7 +146,6 @@
     <string name="switch_to_grid">Mudar para visualização em grade</string>
     <string name="comment_posted">Comentário: %1$s publicado!</string>
     <string name="comment_error">Erro no comentário!</string>
-    <string name="write_permission_share_pic">Você precisa conceder permissão de gravação para compartilhar imagens!</string>
     <string name="language">Idioma</string>
     <string name="delete_dialog">Excluir esta publicação\?</string>
     <string name="something_went_wrong">Algo deu errado…</string>
@@ -159,7 +158,7 @@
     <string name="unfollow_error">Não foi possível deixar de seguir</string>
     <string name="action_not_allowed">Esta ação não é permitida</string>
     <string name="follow_error">Não foi possível seguir</string>
-    <string name="comment">Comentar</string>
+    <string name="comment_verb">Comentar</string>
     <plurals name="description_max_characters">
         <item quantity="one">A descrição precisa ter pelo menos %d carácter.</item>
         <item quantity="other">A descrição precisa ter pelo menos %d caracteres.</item>

@@ -48,11 +48,10 @@
     <string name="loading_toast">حدث خلل اثناء التحميل</string>
     <string name="upload_post_error">فشل في تحميل المنشور</string>
 
-    <string name="comment">تعليق</string>
+    <string name="comment_verb">تعليق</string>
     <string name="comment_posted">التعليق: تم نشر%1$s!</string>
     <string name="comment_error">خطأ في التعليق!</string>
     <string name="share_image">مشاركة الصورة</string>
-    <string name="write_permission_share_pic">يجب عليك منح تصريح للكتابة قصد مشاركة الصور!</string>
     <string name="write_permission_download_pic">تحتاج إلى منح إذن الكتابة لتنزيل الصور!</string>
     <string name="empty_comment">لا يجب ان يكون التعليق فارغًا!</string>
     <string name="posted_on">نُشِر في %1$s</string>

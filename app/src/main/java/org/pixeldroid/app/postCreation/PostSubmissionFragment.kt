@@ -20,10 +20,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.FragmentPostSubmissionBinding
+import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.setSquareImageFromURL
+import kotlin.math.roundToInt
 
 
 class PostSubmissionFragment : BaseFragment() {
@@ -34,8 +37,8 @@ class PostSubmissionFragment : BaseFragment() {
     private var user: UserDatabaseEntity? = null
     private lateinit var instance: InstanceDatabaseEntity
 
-    private lateinit var binding: FragmentPostSubmissionBinding
-    private lateinit var model: PostCreationViewModel
+    private var binding: FragmentPostSubmissionBinding by bindingLifecycleAware()
+    private val model: PostCreationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,25 +60,24 @@ class PostSubmissionFragment : BaseFragment() {
         accounts = db.userDao().getAll()
 
         instance = user?.run {
-            db.instanceDao().getAll().first { instanceDatabaseEntity ->
-                instanceDatabaseEntity.uri.contains(instance_uri)
-            }
+            db.instanceDao().getInstance(instance_uri)
         } ?: InstanceDatabaseEntity("", "")
-
-        val _model: PostCreationViewModel by activityViewModels {
-            PostCreationViewModelFactory(
-                requireActivity().application,
-                requireActivity().intent.clipData!!,
-                instance,
-                requireActivity().intent.getStringExtra(PostCreationActivity.PICTURE_DESCRIPTION),
-                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false)
-            )
-        }
-        model = _model
 
         // Display the values from the view model
         binding.nsfwSwitch.isChecked = model.uiState.value.nsfw
         binding.newPostDescriptionInputField.setText(model.uiState.value.newPostDescriptionText)
+
+        if(model.uiState.value.storyCreation){
+            binding.nsfwSwitch.visibility = View.GONE
+            binding.postTextInputLayout.visibility = View.GONE
+            binding.privateTitle.visibility = View.GONE
+            binding.postPreview.visibility = View.GONE
+
+            binding.storyOptions.visibility = View.VISIBLE
+            binding.storyDurationSlider.value = model.uiState.value.storyDuration.toFloat()
+            binding.storyRepliesSwitch.isChecked = model.uiState.value.storyReplies
+            binding.storyReactionsSwitch.isChecked = model.uiState.value.storyReactions
+        }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -114,13 +116,24 @@ class PostSubmissionFragment : BaseFragment() {
         binding.nsfwSwitch.setOnCheckedChangeListener { _, isChecked ->
             model.updateNSFW(isChecked)
         }
+        binding.storyRepliesSwitch.setOnCheckedChangeListener { _, isChecked ->
+            model.updateStoryReplies(isChecked)
+        }
+        binding.storyReactionsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            model.updateStoryReactions(isChecked)
+        }
 
         binding.postTextInputLayout.counterMaxLength = instance.maxStatusChars
+
+        binding.storyDurationSlider.addOnChangeListener { _, value, _ ->
+            // Responds to when slider's value is changed
+            model.storyDuration(value.roundToInt())
+        }
 
         setSquareImageFromURL(View(requireActivity()), model.getPhotoData().value?.get(0)?.imageUri.toString(), binding.postPreview)
 
         // Get the description and send the post
-        binding.postCreationSendButton.setOnClickListener {
+        binding.postSubmissionSendButton.setOnClickListener {
             if (validatePost()) model.upload()
         }
 
@@ -179,13 +192,13 @@ class PostSubmissionFragment : BaseFragment() {
     }
 
     private fun enableButton(enable: Boolean = true){
-        binding.postCreationSendButton.isEnabled = enable
+        binding.postSubmissionSendButton.isEnabled = enable
         if(enable){
             binding.postingProgressBar.visibility = View.GONE
-            binding.postCreationSendButton.visibility = View.VISIBLE
+            binding.postSubmissionSendButton.visibility = View.VISIBLE
         } else {
             binding.postingProgressBar.visibility = View.VISIBLE
-            binding.postCreationSendButton.visibility = View.GONE
+            binding.postSubmissionSendButton.visibility = View.GONE
         }
     }
 

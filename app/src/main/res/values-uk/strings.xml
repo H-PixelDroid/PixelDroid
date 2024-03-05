@@ -80,7 +80,7 @@
     <string name="instance_not_pixelfed_cancel">Скасувати вхід</string>
     <string name="request_format_error">Помилка вивантаження: хибний формат запиту</string>
     <string name="connect_to_pixelfed">З\'єднатися з Pixelfed</string>
-    <string name="comment">Коментар</string>
+    <string name="comment_verb">Коментар</string>
     <plurals name="nb_posts">
         <item quantity="one">%d
 \nдопис</item>
@@ -165,7 +165,6 @@
     <string name="share_image">Поширити зображення</string>
     <string name="liked_notification">%1$s хвалить ваш допис</string>
     <string name="file_not_found">Файлу %1$s не знайдено</string>
-    <string name="write_permission_share_pic">Для поширення зображень потрібен дозвіл на запис!</string>
     <string name="picture_format_error">Помилка вивантаження: хибний формат зображення.</string>
     <string name="unfollow">Відписатись</string>
     <string name="media_upload_failed">Не вдалося вивантажити медіа, повторіть спробу чи перевірте мережне з\'єднання</string>

@@ -66,11 +66,10 @@
     <string name="instance_error">Kon instance-informatie niet ophalen</string>
     <string name="request_format_error">Fout bij het uploaden: slecht verzoekformaat</string>
     <string name="posted_on">Gepost op %1$s</string>
-    <string name="comment">Commentaar maken</string>
+    <string name="comment_verb">Commentaar maken</string>
     <string name="comment_posted">Commentaar: %1$s gepost!</string>
     <string name="comment_error">Fout met commentaar!</string>
     <string name="share_image">Afbeelding delen</string>
-    <string name="write_permission_share_pic">Je moet schrijven toestaan om afbeeldingen te delen!</string>
     <string name="write_permission_download_pic">Je moet schrijven toestaan om afbeeldingen te downloaden!</string>
     <string name="follow_status_failed">Kon volgstatus niet ophalen</string>
     <string name="follow_error">Kon niet volgen</string>
@@ -142,4 +141,6 @@
         <item quantity="other">%d
 \nVolgers</item>
     </plurals>
+    <string name="always_show_nsfw">Altijd gevoelig materiaal tonen</string>
+    <string name="comment_notification">%1$s heeft gereageerd op je bericht</string>
 </resources>

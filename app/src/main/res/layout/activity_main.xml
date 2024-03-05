@@ -27,7 +27,7 @@
                 android:id="@+id/main_drawer_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="?attr/colorSurface"
+                android:background="?attr/colorSurfaceContainer"
                 android:contentDescription="@string/open_drawer_menu"
                 android:padding="12dp"
                 android:src="@drawable/ic_baseline_menu_24" />

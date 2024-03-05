@@ -35,25 +35,21 @@ import org.pixeldroid.app.databinding.FragmentPostCreationBinding
 import org.pixeldroid.app.postCreation.camera.CameraActivity
 import org.pixeldroid.app.postCreation.carousel.CarouselItem
 import org.pixeldroid.app.utils.BaseFragment
+import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
-import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
 import org.pixeldroid.media_editor.photoEdit.PhotoEditActivity
-import org.pixeldroid.media_editor.photoEdit.VideoEditActivity
+import org.pixeldroid.media_editor.videoEdit.VideoEditActivity
 import java.io.File
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 class PostCreationFragment : BaseFragment() {
 
-    private var user: UserDatabaseEntity? = null
-    private var instance: InstanceDatabaseEntity = InstanceDatabaseEntity("", "")
-
-    private lateinit var binding: FragmentPostCreationBinding
-    private lateinit var model: PostCreationViewModel
+    private var binding: FragmentPostCreationBinding by bindingLifecycleAware()
+    private val model: PostCreationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,35 +59,23 @@ class PostCreationFragment : BaseFragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentPostCreationBinding.inflate(layoutInflater)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        user = db.userDao().getActiveUser()
+        val user = db.userDao().getActiveUser()
 
-        instance = user?.run {
-            db.instanceDao().getAll().first { instanceDatabaseEntity ->
-                instanceDatabaseEntity.uri.contains(instance_uri)
-            }
+        val instance = user?.run {
+            db.instanceDao().getInstance(instance_uri)
         } ?: InstanceDatabaseEntity("", "")
 
-        val _model: PostCreationViewModel by activityViewModels {
-            PostCreationViewModelFactory(
-                requireActivity().application,
-                requireActivity().intent.clipData!!,
-                instance,
-                requireActivity().intent.getStringExtra(PostCreationActivity.PICTURE_DESCRIPTION),
-                requireActivity().intent.getBooleanExtra(PostCreationActivity.POST_NSFW, false)
-            )
-        }
-        model = _model
-
-        model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData ->
+        model.getPhotoData().observe(viewLifecycleOwner) { newPhotoData: MutableList<PhotoData>? ->
             // update UI
             binding.carousel.addData(
-                newPhotoData.map {
+                newPhotoData.orEmpty().map {
                     CarouselItem(
                         it.imageUri, it.imageDescription, it.video,
                         it.videoEncodeProgress, it.videoEncodeStabilizationFirstPass,
@@ -99,6 +83,7 @@ class PostCreationFragment : BaseFragment() {
                     )
                 }
             )
+            binding.postCreationNextButton.isEnabled = newPhotoData?.isNotEmpty() ?: false
         }
 
         lifecycleScope.launch {
@@ -119,13 +104,26 @@ class PostCreationFragment : BaseFragment() {
                     binding.toolbarPostCreation.visibility =
                         if (uiState.isCarousel) View.VISIBLE else View.INVISIBLE
                     binding.carousel.layoutCarousel = uiState.isCarousel
+
+                    if(uiState.storyCreation){
+                        binding.toggleStoryPost.check(binding.buttonStory.id)
+                        binding.buttonStory.isPressed = true
+                        binding.carousel.showLayoutSwitchButton = false
+                        binding.carousel.showIndicator = false
+                    } else {
+                        binding.toggleStoryPost.check(binding.buttonPost.id)
+                        binding.carousel.showLayoutSwitchButton = true
+                        binding.carousel.showIndicator = true
+                    }
+                    binding.carousel.maxEntries = uiState.maxEntries
+
                 }
             }
         }
 
         binding.carousel.apply {
             layoutCarouselCallback = { model.becameCarousel(it)}
-            maxEntries = instance.albumLimit
+            maxEntries = if(model.uiState.value.storyCreation) 1 else instance.albumLimit
             addPhotoButtonCallback = {
                 addPhoto()
             }
@@ -133,9 +131,10 @@ class PostCreationFragment : BaseFragment() {
                 model.updateDescription(position, description)
             }
         }
-        // get the description and send the post
-        binding.postCreationSendButton.setOnClickListener {
-            if (validatePost() && model.isNotEmpty()) {
+
+        // Validate the post and go to the next step of the post creation process
+        binding.postCreationNextButton.setOnClickListener {
+            if (validatePost()) {
                 findNavController().navigate(R.id.action_postCreationFragment_to_postSubmissionFragment)
             }
         }
@@ -162,6 +161,23 @@ class PostCreationFragment : BaseFragment() {
                 model.cancelEncode(currentPosition)
             }
         }
+
+        binding.toggleStoryPost.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            // Only handle checked events
+            if (!isChecked) return@addOnButtonCheckedListener
+
+            when (checkedId) {
+                R.id.buttonStory -> {
+                    model.storyMode(true)
+                }
+                R.id.buttonPost -> {
+                    model.storyMode(false)
+                }
+            }
+
+        }
+
+        binding.backbutton.setOnClickListener{requireActivity().onBackPressedDispatcher.onBackPressed()}
 
         // Clean up temporary files, if any
         val tempFiles = requireActivity().intent.getStringArrayExtra(PostCreationActivity.TEMP_FILES)
@@ -191,10 +207,9 @@ class PostCreationFragment : BaseFragment() {
     }
 
     private val addPhotoResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK && result.data?.clipData != null) {
-            result.data?.clipData?.let {
-                model.setImages(model.addPossibleImages(it))
-            }
+        val uris = result.data?.extras?.getParcelableArrayList<Uri>(Intent.EXTRA_STREAM)
+        if (result.resultCode == Activity.RESULT_OK && uris != null) {
+            model.setImages(model.addPossibleImages(uris, emptyList()))
         } else if (result.resultCode != Activity.RESULT_CANCELED) {
             Toast.makeText(requireActivity(), R.string.add_images_error, Toast.LENGTH_SHORT).show()
         }
@@ -275,14 +290,17 @@ class PostCreationFragment : BaseFragment() {
 
 
     private fun validatePost(): Boolean {
-        if (model.getPhotoData().value?.all { !it.video || it.videoEncodeComplete } == false) {
-            MaterialAlertDialogBuilder(requireActivity()).apply {
-                setMessage(R.string.still_encoding)
-                setNegativeButton(android.R.string.ok) { _, _ -> }
-            }.show()
-            return false
+        if (model.getPhotoData().value?.none { it.video && it.videoEncodeComplete == false } == true) {
+            // Encoding is done, i.e. none of the items are both a video and not done encoding.
+            // We return true if the post is not empty, false otherwise.
+            return model.getPhotoData().value?.isNotEmpty() == true
         }
-        return true
+        // Encoding is not done, show a dialog and return false to indicate validation failed
+        MaterialAlertDialogBuilder(requireActivity()).apply {
+            setMessage(R.string.still_encoding)
+            setNegativeButton(android.R.string.ok) { _, _ -> }
+        }.show()
+        return false
     }
 
     private val editResultContract: ActivityResultLauncher<Intent> = registerForActivityResult(

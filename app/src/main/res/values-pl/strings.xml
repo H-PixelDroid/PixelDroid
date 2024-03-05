@@ -40,11 +40,10 @@
     <string name="no_description">Bez opisu</string>
     <string name="posted_on">Opublikowano %1$s</string>
     <string name="empty_comment">Komentarz nie może być pusty!</string>
-    <string name="write_permission_share_pic">Musisz nadać uprawnienia do zapisu, aby móc udostępniać obrazki!</string>
     <string name="share_image">Udostępnij</string>
     <string name="comment_error">Błąd komentarza!</string>
     <string name="comment_posted">Komentarz: %1$s opublikowany!</string>
-    <string name="comment">Komentarz</string>
+    <string name="comment_verb">Komentarz</string>
     <string name="menu_account">Mój profil</string>
     <string name="registration_failed">Nie udało się zarejestrować aplikacji na tym serwerze</string>
     <string name="instance_error">Nie udało się pobrać informacji o instancji</string>
@@ -294,7 +293,7 @@
     <string name="private_account_explanation">Kiedy Twoje konto jest prywatne, Twoje fotografie i filmy mogą zobaczyć na pixelfed tylko osoby którym na to pozwolisz. Ustawienie nie ma zastosowania do osób które już Cię obserwują.</string>
     <string name="your_name">Imię</string>
     <string name="profile_save_changes">Nie zapisano zmian! Na pewno chcesz wyjść\?</string>
-    <string name="fetching_profile">Pobieranie Twojego profilu...</string>
+    <string name="fetching_profile">Pobieranie Twojego profilu…</string>
     <string name="saving_profile">Zapisywanie Twojego profilu</string>
     <string name="profile_saved">Zapisano zmiany!</string>
     <string name="error_profile">Coś poszło nie tak. Tapnij by powtórzyć</string>
@@ -310,4 +309,7 @@
     <string name="explore_posts">Eksploruj losowe wpisy z dnia</string>
     <string name="feed_view">Widok strumienia wpisów</string>
     <string name="your_bio">Kilka słów o sobie</string>
+    <string name="always_show_nsfw">Zawsze wyświetlaj wrażliwą zawartość</string>
+    <string name="summary_always_show_nsfw">Posty NSFW/CW nie zostaną rozmyte i będą domyślnie w pełni wyświetlane.</string>
+    <string name="unknown_error_in_error">Nieznany błąd, sprawdź czy serwer nie padł: %1$s</string>
 </resources>

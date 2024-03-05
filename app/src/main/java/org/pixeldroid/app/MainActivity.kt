@@ -12,7 +12,9 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -28,6 +30,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
@@ -35,7 +38,12 @@ import com.mikepenz.materialdrawer.iconics.iconicsIcon
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.*
+import com.mikepenz.materialdrawer.model.interfaces.IProfile
+import com.mikepenz.materialdrawer.model.interfaces.descriptionRes
+import com.mikepenz.materialdrawer.model.interfaces.descriptionText
+import com.mikepenz.materialdrawer.model.interfaces.iconUrl
+import com.mikepenz.materialdrawer.model.interfaces.nameRes
+import com.mikepenz.materialdrawer.model.interfaces.nameText
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
@@ -50,12 +58,12 @@ import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
-import org.pixeldroid.app.utils.BaseThemedWithoutBarActivity
+import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Notification
-import org.pixeldroid.app.utils.db.addUser
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
+import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.hasInternet
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
@@ -65,10 +73,12 @@ import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFr
 import java.time.Instant
 
 
-class MainActivity : BaseThemedWithoutBarActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
+
+    private val model: MainActivityViewModel by viewModels()
 
     companion object {
         const val ADD_ACCOUNT_IDENTIFIER: Long = -13
@@ -195,6 +205,7 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                     Glide.with(this@MainActivity)
                         .load(uri)
                         .placeholder(placeholder)
+                        .circleCrop()
                         .into(imageView)
             }
 
@@ -229,7 +240,8 @@ class MainActivity : BaseThemedWithoutBarActivity() {
             primaryDrawerItem {
                 nameRes = R.string.logout
                 iconicsIcon = GoogleMaterial.Icon.gmd_close
-            })
+            },
+        )
         binding.drawer.onDrawerItemClickListener = { v, drawerItem, position ->
             when (position){
                 1 -> launchActivity(ProfileActivity())
@@ -237,6 +249,18 @@ class MainActivity : BaseThemedWithoutBarActivity() {
                 3 -> logOut()
             }
             false
+        }
+
+        // Closes the drawer if it is open, when we press the back button
+        onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+            if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+            }
+            else {
+                this.isEnabled = false
+                super.onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
@@ -250,13 +274,13 @@ class MainActivity : BaseThemedWithoutBarActivity() {
 
             val remainingUsers = db.userDao().getAll()
             if (remainingUsers.isEmpty()){
-                //no more users, start first-time login flow
+                // No more users, start first-time login flow
                 launchActivity(LoginActivity(), firstTime = true)
             } else {
                 val newActive = remainingUsers.first()
                 db.userDao().activateUser(newActive.user_id, newActive.instance_uri)
                 apiHolder.setToCurrentUser()
-                //relaunch the app
+                // Relaunch the app
                 launchActivity(MainActivity(), firstTime = true)
             }
         }
@@ -267,16 +291,12 @@ class MainActivity : BaseThemedWithoutBarActivity() {
 
             lifecycleScope.launchWhenCreated {
                 try {
-                    val domain = user?.instance_uri.orEmpty()
-                    val accessToken = user?.accessToken.orEmpty()
-                    val refreshToken = user?.refreshToken
-                    val clientId = user?.clientId.orEmpty()
-                    val clientSecret = user?.clientSecret.orEmpty()
                     val api = apiHolder.api ?: apiHolder.setToCurrentUser()
 
                     val account = api.verifyCredentials()
-                    addUser(db, account, domain, accessToken = accessToken, refreshToken = refreshToken, clientId = clientId, clientSecret = clientSecret)
-                    fillDrawerAccountInfo(account.id!!)
+                    updateUserInfoDb(db, account)
+
+                    //No need to update drawer account info here, the ViewModel listens to db updates
                 } catch (exception: Exception) {
                     Log.e("ACCOUNT UPDATE:", exception.toString())
                 }
@@ -308,9 +328,11 @@ class MainActivity : BaseThemedWithoutBarActivity() {
     }
 
     private fun switchUser(userId: String, instance_uri: String) {
-        db.userDao().deActivateActiveUsers()
-        db.userDao().activateUser(userId, instance_uri)
-        apiHolder.setToCurrentUser()
+        db.runInTransaction{
+            db.userDao().deActivateActiveUsers()
+            db.userDao().activateUser(userId, instance_uri)
+            apiHolder.setToCurrentUser()
+        }
     }
 
     private inline fun primaryDrawerItem(block: PrimaryDrawerItem.() -> Unit): PrimaryDrawerItem {
@@ -323,35 +345,41 @@ class MainActivity : BaseThemedWithoutBarActivity() {
     }
 
     private fun fillDrawerAccountInfo(account: String) {
-        val users = db.userDao().getAll().toMutableList()
-        users.sortWith { l, r ->
-            when {
-                l.isActive && !r.isActive -> -1
-                r.isActive && !l.isActive -> 1
-                else -> 0
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                model.users.collect { list ->
+                    val users = list.toMutableList()
+                    users.sortWith { l, r ->
+                        when {
+                            l.isActive && !r.isActive -> -1
+                            r.isActive && !l.isActive -> 1
+                            else -> 0
+                        }
+                    }
+                    val profiles: MutableList<IProfile> = users.map { user ->
+                        ProfileDrawerItem().apply {
+                            isSelected = user.isActive
+                            nameText = user.display_name
+                            iconUrl = user.avatar_static
+                            isNameShown = true
+                            identifier = user.user_id.toLong()
+                            descriptionText = user.fullHandle
+                            tag = user.instance_uri
+                        }
+                    }.toMutableList()
+
+                    // reuse the already existing "add account" item
+                    header.profiles.orEmpty()
+                        .filter { it.identifier == ADD_ACCOUNT_IDENTIFIER }
+                        .take(1)
+                        .forEach { profiles.add(it) }
+
+                    header.clear()
+                    header.profiles = profiles
+                    header.setActiveProfile(account.toLong())
+                }
             }
         }
-        val profiles: MutableList<IProfile> = users.map { user ->
-            ProfileDrawerItem().apply {
-                isSelected = user.isActive
-                nameText = user.display_name
-                iconUrl = user.avatar_static
-                isNameShown = true
-                identifier = user.user_id.toLong()
-                descriptionText = user.fullHandle
-                tag = user.instance_uri
-            }
-        }.toMutableList()
-
-        // reuse the already existing "add account" item
-        header.profiles.orEmpty()
-            .filter { it.identifier == ADD_ACCOUNT_IDENTIFIER }
-            .take(1)
-            .forEach { profiles.add(it) }
-
-        header.clear()
-        header.profiles = profiles
-        header.setActiveProfile(account.toLong())
     }
 
     /**
@@ -480,16 +508,4 @@ class MainActivity : BaseThemedWithoutBarActivity() {
         }
         startActivity(intent)
     }
-
-    /**
-     * Closes the drawer if it is open, when we press the back button
-     */
-    override fun onBackPressed() {
-        if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
 }

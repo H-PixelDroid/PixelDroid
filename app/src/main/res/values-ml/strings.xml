@@ -100,7 +100,6 @@
     <string name="api_not_enabled_dialog">എപിഐ ഈ ഇൻസ്റ്റൻസിൽ സജീവമല്ലാ.ഇത് സജീവമാക്കാൻ നിങ്ങളുടെ അഡ്മിനിസ്ട്രേറ്ററെ ബന്ധപ്പെടുക.</string>
     <string name="feed_failed">ഫീഡ് ലഭ്യമാക്കാൻ സാധിച്ചില്ല</string>
     <string name="write_permission_download_pic">ചിത്രങ്ങൾ ഡൗൺലോഡ് ചെയ്യാൻ നിങ്ങൾ എഴുത്ത് അനുമതി നൽകണം!</string>
-    <string name="write_permission_share_pic">ചിത്രങ്ങൾ പങ്കിടാൻ നിങ്ങൾ എഴുത്ത് അനുമതി നൽകണം!</string>
     <plurals name="number_comments">
         <item quantity="one">%d</item>
         <item quantity="other"></item>

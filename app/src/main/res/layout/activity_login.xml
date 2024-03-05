@@ -21,7 +21,9 @@
 
             <ImageView
                 android:id="@+id/mascotImage"
-                android:layout_width="match_parent"
+                android:layout_width="508dp"
+                android:layout_marginTop="-130dp"
+                android:adjustViewBounds="true"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:contentDescription="@string/mascot_description"
@@ -30,6 +32,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/login_activity_instance_input_layout"
                 android:layout_width="250dp"
+                android:layout_marginTop="-130dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:hint="@string/domain_of_your_instance"

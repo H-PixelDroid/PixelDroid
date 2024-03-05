@@ -85,7 +85,9 @@ class UncachedPostsFragment : UncachedFeedFragment<Status>() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             getItem(position)?.let {
-                (holder as StatusViewHolder).bind(it, apiHolder, db, lifecycleScope, displayDimensionsInPx)
+                (holder as StatusViewHolder).bind(
+                    it, apiHolder, db, lifecycleScope, displayDimensionsInPx, requestPermissionDownloadPic
+                )
             }
         }
     }

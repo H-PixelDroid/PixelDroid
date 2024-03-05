@@ -56,11 +56,10 @@
     <string name="follow_error">No s\'ha pogut seguir</string>
     <string name="follow_button_failed">No s\'ha pogut mostrar el botó de seguir</string>
     <string name="follow_status_failed">No s\'ha pogut obtenir l\'estat de seguiment</string>
-    <string name="comment">Comentari</string>
+    <string name="comment_verb">Comentari</string>
     <string name="comment_posted">Comentari: %1$s publicat!</string>
     <string name="comment_error">Error de comentari!</string>
     <string name="share_image">Compartir imatge</string>
-    <string name="write_permission_share_pic">Necessites concedir permís d’escriptura per compartir imatges!</string>
     <string name="write_permission_download_pic">Has de concedir permís d’escriptura per baixar imatges!</string>
     <string name="empty_comment">El comentari no ha de estar buit!</string>
     <string name="posted_on">Publica\'t el %1$s</string>

@@ -1,0 +1,7 @@
+Bug fix for opening album full-screen crashing
+
+Use hardware acceleration (OpenGL! Shaders!) for image editing. Currently just trying to mimic the previous implementation, but this will provide building blocks for much cooler things later on :)
+
+Tell us if something doesn't work right! (email, Mastodon)
+
+There are also translation updates in this release :)
