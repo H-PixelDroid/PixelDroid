@@ -17,10 +17,6 @@ data class AlbumUiState(
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(state: SavedStateHandle) : ViewModel() {
-    fun barHide() {
-        _isActionBarHidden.update { !it }
-    }
-
     companion object {
         const val ALBUM_IMAGES = "AlbumViewImages"
         const val ALBUM_INDEX = "AlbumViewIndex"
@@ -39,4 +35,12 @@ class AlbumViewModel @Inject constructor(state: SavedStateHandle) : ViewModel() 
 
     val uiState: StateFlow<AlbumUiState> = _uiState.asStateFlow()
     val isActionBarHidden: StateFlow<Boolean> = _isActionBarHidden
+
+    fun barHide() {
+        _isActionBarHidden.update { !it }
+    }
+
+    fun positionSelected(position: Int) {
+        _uiState.update { it.copy(index = position) }
+    }
 }
