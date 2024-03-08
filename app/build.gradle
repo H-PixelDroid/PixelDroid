@@ -31,7 +31,7 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 31
+        versionCode 32
         versionName "1.0.beta" + versionCode
 
         //TODO add resConfigs("en", "fr", "ja",...) ?
@@ -80,6 +80,29 @@ android {
             proguardFiles 'proguard-rules.pro'
         }
     }
+
+    splits {
+        // Configures multiple APKs based on ABI.
+        abi {
+
+            // Enables building multiple APKs per ABI.
+            enable true
+
+            // By default all ABIs are included, so use reset() and include to specify that we only
+            // want APKs for "x86", "x86_64", "arm64-v8a" and "armeabi-v7a".
+
+            // Resets the list of ABIs for Gradle to create APKs for to none.
+            reset()
+
+            // Specifies a list of ABIs for Gradle to create APKs for.
+            include "x86", "x86_64", "arm64-v8a", "armeabi-v7a"
+
+            // Specifies that we don't want to also generate a universal APK that includes all ABIs.
+            universalApk false
+        }
+
+    }
+
     /**
      * Make a string with the application_id (available in xml etc)
      */
