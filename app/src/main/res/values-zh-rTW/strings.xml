@@ -1,2 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_settings">設定</string>
+    <string name="menu_account">關於我</string>
+    <string name="invalid_domain">無效的網域</string>
+    <string name="registration_failed">無法在此伺服器上註冊</string>
+    <string name="auth_failed">無法認證</string>
+    <string name="verify_credentials">無法獲取使用者資訊</string>
+    <string name="token_error">獲取Token的時候發生錯誤</string>
+    <string name="instance_error">無法獲取實例資訊</string>
+    <string name="instance_not_pixelfed_continue">無論如何繼續</string>
+    <string name="instance_not_pixelfed_cancel">取消登入</string>
+    <string name="title_activity_settings2">設定</string>
+    <string name="theme_title">應用主題</string>
+    <string name="theme_header">主題</string>
+    <string name="default_system">默認(跟隨系統)</string>
+    <string name="light_theme">明亮</string>
+    <string name="dark_theme">黑暗</string>
+    <string name="always_show_nsfw">總是展示敏感內容</string>
+    <string name="followed_notification">%1$s 追蹤了你</string>
+    <string name="mention_notification">%1$s 提及了你</string>
+    <string name="shared_notification">%1$s 分享了你的貼文</string>
+    <string name="comment_notification">%1$s 在你的貼文下留言了</string>
+    <string name="poll_notification">%1$s的投票已經結束</string>
+    <string name="other_notification">從%1$s的通知</string>
+    <string name="followed_notification_channel">新的追蹤者</string>
+    <string name="mention_notification_channel">提及</string>
+    <string name="shared_notification_channel">分享</string>
+    <string name="liked_notification_channel">喜歡</string>
+    <string name="comment_notification_channel">留言</string>
+    <string name="poll_notification_channel">投票</string>
+    <string name="other_notification_channel">其他</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s 和 %4$d 更多</string>
+    <string name="notification_summary_medium">%1$s, %2$s, 和 %3$s</string>
+    <string name="notification_summary_small">%1$s 和 %2$s</string>
+    <string name="whats_an_instance">「實例」是什麼？</string>
+    <string name="domain_of_your_instance">你所在實例的網域</string>
+    <string name="connect_to_pixelfed">連接至Pixelfed</string>
+    <string name="login_connection_required_once">你需要連上網際網路才能新增第一個賬戶來使用PixelDroid :(</string>
+    <string name="api_not_enabled_dialog">這個實例上的API並沒有被啟用。請與你的管理員聯絡。</string>
+    <string name="logout">登出</string>
+    <plurals name="description_max_characters">
+        <item quantity="other">介紹必須含有最少%d個字元。</item>
+    </plurals>
+    <string name="upload_picture_failed">上載圖片失敗！</string>
+    <string name="picture_format_error">上載失敗：錯誤的圖片格式。</string>
+    <string name="request_format_error">上載失敗：請求格式錯誤</string>
+    <string name="upload_post_failed">貼文上載失敗</string>
+    <string name="upload_post_error">貼文上載錯誤</string>
+    <string name="description">介紹……</string>
+    <string name="post">貼文</string>
+    <string name="upload_next_step">下一步</string>
+    <string name="add_details">新增點細節</string>
+    <string name="add_photo">新增圖片</string>
+    <string name="post_image">本貼文中的一個圖片</string>
+    <string name="switch_to_grid">切換到網格視圖</string>
+    <string name="save_image_description">保存圖片介紹</string>
+    <string name="no_media_description">在這裡新增媒體描述……</string>
+    <string name="size_exceeds_instance_limit">第%1$d個圖片超過了實例所允許的最大大小(%2$dkB，限制為%3$dkB)，你可能無法上載。</string>
+    <string name="upload_error">伺服器返回了「%1$d」的錯誤碼</string>
+    <string name="capture_button_alt">拍照</string>
+    <string name="switch_camera_button_alt">切換攝像頭</string>
+    <string name="gallery_button_alt">相簿</string>
+    <string name="loading_toast">載入時發生錯誤</string>
+    <string name="feed_failed">無法獲得Feed</string>
+    <string name="unknown_error_in_error">未知錯誤，看看伺服器是否停運:%1$s</string>
+    <string name="browser_launch_failed">無法拉起瀏覽器，你有安裝嗎？</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="instance_not_pixelfed_warning">這看起來不是個Pixelfed實例，應用可能會以意想不到的方式崩潰。</string>
+    <string name="liked_notification">%1$s 喜歡了你的貼文</string>
+    <string name="upload_post_success">成功上載了貼文</string>
+    <string name="switch_to_carousel">切換到輪播</string>
+    <string name="video_not_supported">你選擇的伺服器不支援上載影片，你可能無法在此貼文中新增影片</string>
+    <plurals name="notification_title_summary">
+        <item quantity="other">%d 則新通知</item>
+    </plurals>
+    <string name="whats_an_instance_explanation">你可能因被要求填入「實例」而困惑。
+\n
+\nPixelfed是個聯邦平台，「聯邦宇宙」的一員，可以和其他平台上相同語言的使用者相互交談，就像Mastodon(去https://joinmastodon.org看看)
+\n
+\n也就是說你必須選擇一個伺服器，或者是Pixelfed的「實例」來使用。如果沒有的話請訪問https://pixelfed.org/join
+\n
+\n欲瞭解Pixelfed的更多資訊，請訪問https://pixelfed.org</string>
+    <string name="add_account_name">新增賬戶</string>
+    <string name="add_account_description">新增另一個Pixelfed賬戶</string>
+    <string name="total_exceeds_album_limit">你可以選擇該伺服器最多允許的圖片數量(%1$s個)。超過限制的會被忽略。</string>
+</resources>
