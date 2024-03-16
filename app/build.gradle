@@ -8,6 +8,21 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
 }
+// Map for the version code that gives each ABI a value.
+ext.abiCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, x86: 3, x86_64: 4]
+
+//Different version codes per architecture (for F-Droid support)
+android.applicationVariants.configureEach { variant ->
+    variant.outputs.each { output ->
+        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(com.android.build.OutputFile.ABI))
+        if (baseAbiVersionCode != null) {
+            output.versionCodeOverride = (100 * project.android.defaultConfig.versionCode) + baseAbiVersionCode
+        } else {
+            output.versionCodeOverride = 100 * project.android.defaultConfig.versionCode
+        }
+    }
+
+}
 
 android {
 
@@ -285,21 +300,6 @@ dependencies {
 
 }
 
-// Map for the version code that gives each ABI a value.
-ext.abiCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, x86: 3, x86_64: 4]
-
-//Different version codes per architecture (for F-Droid support)
-android.applicationVariants.configureEach { variant ->
-    variant.outputs.each { output ->
-        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(com.android.build.OutputFile.ABI))
-        if (baseAbiVersionCode != null) {
-            output.versionCodeOverride = (100 * project.android.defaultConfig.versionCode) + baseAbiVersionCode
-        } else {
-            output.versionCodeOverride = 100 * project.android.defaultConfig.versionCode
-        }
-    }
-
-}
 
 
 tasks.withType(Test).configureEach {
