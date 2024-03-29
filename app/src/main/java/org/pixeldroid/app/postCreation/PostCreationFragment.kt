@@ -39,6 +39,8 @@ import org.pixeldroid.app.utils.bindingLifecycleAware
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
+import org.pixeldroid.media_editor.common.PICTURE_POSITION
+import org.pixeldroid.media_editor.common.PICTURE_URI
 import org.pixeldroid.media_editor.photoEdit.PhotoEditActivity
 import org.pixeldroid.media_editor.videoEdit.VideoEditActivity
 import java.io.File
@@ -47,7 +49,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PostCreationFragment : BaseFragment() {
-
     private var binding: FragmentPostCreationBinding by bindingLifecycleAware()
     private val model: PostCreationViewModel by activityViewModels()
 
@@ -307,7 +308,7 @@ class PostCreationFragment : BaseFragment() {
         ActivityResultContracts.StartActivityForResult()){
             result: ActivityResult? ->
         if (result?.resultCode == Activity.RESULT_OK && result.data != null) {
-            val position: Int = result.data!!.getIntExtra(PhotoEditActivity.PICTURE_POSITION, 0)
+            val position: Int = result.data!!.getIntExtra(PICTURE_POSITION, 0)
             model.modifyAt(position, result.data!!)
                 ?: Toast.makeText(requireActivity(), R.string.error_editing, Toast.LENGTH_SHORT).show()
         } else if(result?.resultCode != Activity.RESULT_CANCELED){
@@ -320,8 +321,8 @@ class PostCreationFragment : BaseFragment() {
             requireActivity(),
             if (model.getPhotoData().value!![position].video) VideoEditActivity::class.java else PhotoEditActivity::class.java
         )
-            .putExtra(PhotoEditActivity.PICTURE_URI, model.getPhotoData().value!![position].imageUri)
-            .putExtra(PhotoEditActivity.PICTURE_POSITION, position)
+            .putExtra(PICTURE_URI, model.getPhotoData().value!![position].imageUri)
+            .putExtra(PICTURE_POSITION, position)
 
         editResultContract.launch(intent)
     }
