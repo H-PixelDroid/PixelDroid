@@ -40,6 +40,7 @@ import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.fileExtension
 import org.pixeldroid.app.utils.getMimeType
+import org.pixeldroid.media_editor.common.PICTURE_URI
 import org.pixeldroid.media_editor.videoEdit.VideoEditActivity
 import retrofit2.HttpException
 import java.io.File
@@ -299,7 +300,7 @@ class PostCreationViewModel @Inject constructor(
                     }
                 }
             } else {
-                imageUri = data.getStringExtra(org.pixeldroid.media_editor.photoEdit.PhotoEditActivity.PICTURE_URI)!!.toUri()
+                imageUri = data.getStringExtra(PICTURE_URI)!!.toUri()
                 val (imageSize, imageVideo) = getSizeAndVideoValidate(imageUri, position)
                 size = imageSize
                 video = imageVideo
