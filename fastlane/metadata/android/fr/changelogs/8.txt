@@ -1,0 +1,4 @@
+* Ajout d'un support pour la lecture et l'envoi de vidéos
+* Amélioration des notifications
+* Mise à jour des traductions
+* Mise à jour des dépendances

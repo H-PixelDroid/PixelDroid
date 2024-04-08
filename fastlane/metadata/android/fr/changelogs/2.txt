@@ -1,0 +1,7 @@
+* Mises à jour des traductions : Merci aux traducteurs ❤️ ! Allez sur notre weblate pour nous aider à la traduction.
+
+#️⃣ Prise en charge des hashtags. Possibilité de parcourir les hashtags, au lieu d'afficher un "toast" message 😜
+
+* Cliquez sur l'onglet pour revenir au début. Une fois dans la page, il suffit de cliquer sur l'onglet dans lequel vous vous trouvez pour revenir en haut :)
+
+* Essai de correction d'un bug qui faisait planter l'application. Merci pour vos rapports de crash ! ❤️

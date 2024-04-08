@@ -1,0 +1,1 @@
+Correction d'un bug qui cassait la fonction d'édition d'images en mode release

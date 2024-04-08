@@ -1,0 +1,11 @@
+* Ajout d'un graphique d'erreur personnalisé panda rouge
+
+* Autoriser le recadrage libre dans l'édition d'image
+ 
+* Amélioration des métadonnées pour F-Droid
+
+* Mises à jour des traductions
+
+* Mise à jour des dépendances
+
+* Correction de bugs

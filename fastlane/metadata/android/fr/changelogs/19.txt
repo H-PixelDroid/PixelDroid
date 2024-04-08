@@ -1,0 +1,9 @@
+* Métadonnées des photos supprimées avant de les envoyer
+* Favoris !
+* Voir un profil comme un flux ou une grille
+* Définir un modèle pour vos descriptions
+* Badge sur l'icône de notification pour indiquer les nouvelles notifications
+* Fonctionnalités d'édition vidéo : recadrer, changer la vitesse, stabilisation
+* Implémentation de couleurs dynamiques : PixelDroid peut suive la couleur de votre arrière-plan (Android 12 et plus)
+* Correction de bugs
+* Mise à jour des traductions

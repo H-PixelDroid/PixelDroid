@@ -1,0 +1,4 @@
+* Prise en charge des Stories !
+* Mises à jour des dépendances
+* Accélération matériel pour l'encodage vidéo
+* Beaucoup de travail en coulisse :)
