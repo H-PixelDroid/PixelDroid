@@ -1,0 +1,1 @@
+Correctif pour les plantages dans l'activité d'édition qui ne se produisaient qu'en mode release

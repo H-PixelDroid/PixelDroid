@@ -1,0 +1,2 @@
+* Mises à jour des traductions
+* Autoriser l'envoi d'images distantes (ex. Nextcloud)

@@ -1,0 +1,7 @@
+* Ajout d'une langue (Malayalam)
+
+* Correction de quelques mauvaises réponses de l'API
+
+* Mise à jour des dépendances
+
+* Mise à jour des traductions

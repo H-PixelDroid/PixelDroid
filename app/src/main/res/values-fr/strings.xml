@@ -138,35 +138,45 @@
     <plurals name="nb_following">
         <item quantity="one">%d
 \nAbonnement</item>
+        <item quantity="many">%d
+\nAbonnements</item>
         <item quantity="other">%d
 \nAbonnements</item>
     </plurals>
     <plurals name="nb_followers">
         <item quantity="one">%d
 \nAbonné·e</item>
+        <item quantity="many">%d
+\nAbonné·e·s</item>
         <item quantity="other">%d
 \nAbonné·e·s</item>
     </plurals>
     <plurals name="nb_posts">
         <item quantity="one">%d
 \nPublication</item>
+        <item quantity="many">%d
+\nPublications</item>
         <item quantity="other">%d
 \nPublications</item>
     </plurals>
     <plurals name="number_comments">
         <item quantity="one">%d commentaire</item>
+        <item quantity="many">%d commentaires</item>
         <item quantity="other">%d commentaires</item>
     </plurals>
     <plurals name="shares">
         <item quantity="one">%d Partage</item>
+        <item quantity="many">%d Partages</item>
         <item quantity="other">%d Partages</item>
     </plurals>
     <plurals name="likes">
         <item quantity="one">%d J\'aime</item>
+        <item quantity="many">%d J\'aime</item>
         <item quantity="other">%d J\'aime</item>
     </plurals>
     <plurals name="description_max_characters">
         <item quantity="one">La description doit contenir au moins %d lettre.</item>
+        <item quantity="many">La description doit contenir au moins %d lettres.</item>
         <item quantity="other">La description doit contenir au moins %d lettres.</item>
     </plurals>
     <string name="delete_post_failed_error">Impossible de supprimer la publication, erreur %1$d</string>
@@ -184,7 +194,7 @@
     <string name="followed_notification_channel">Nouveaux·elles abonné·e·s</string>
     <string name="mention_notification_channel">Mentions</string>
     <string name="shared_notification_channel">Partages</string>
-    <string name="liked_notification_channel">Favoris</string>
+    <string name="liked_notification_channel">J\'aime</string>
     <string name="comment_notification_channel">Commentaires</string>
     <string name="poll_notification_channel">Sondages</string>
     <string name="other_notification_channel">Autre</string>
@@ -223,6 +233,85 @@
     <string name="profile_saved">Modifications enregistrées !</string>
     <string name="change_profile_picture">Changer votre image de profil</string>
     <string name="switch_accounts">Permutation de comptes</string>
-    <string name="edit_link_failed">Échec de l\'ouverture de la page de modifications</string>
+    <string name="edit_link_failed">Impossible d\'ouvrir la page d\'édition</string>
     <string name="follow_requested">Abonnement demandé</string>
+    <string name="comment_noun">Commentaire</string>
+    <string name="redraft_dialog_launch">La reformulation de cet article vous permettra de modifier la photo et sa description, mais supprimera tous les commentaires et les mentions \"J\'aime\". Poursuivre ?</string>
+    <string name="notification_thumbnail">Vignette de l\'image dans ce message</string>
+    <string name="always_show_nsfw">Toujours afficher les contenus sensibles</string>
+    <string name="post_preview">Aperçu d\'un message</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d nouvelle notification</item>
+        <item quantity="many">%d nouvelles notifications</item>
+        <item quantity="other">%d nouvelles notifications</item>
+    </plurals>
+    <plurals name="items_load_success">
+        <item quantity="one">%d article chargé avec succès</item>
+        <item quantity="many">%d articles chargés avec succès</item>
+        <item quantity="other">%d articles chargés avec succès</item>
+    </plurals>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s et %4$d autres</string>
+    <string name="notification_summary_medium">%1$s, %2$s, et %3$s</string>
+    <string name="video_not_supported">Le serveur que vous utilisez ne prend pas en charge les téléchargements de vidéos, il se peut que vous ne puissiez pas télécharger les vidéos incluses dans cet article</string>
+    <string name="new_collection_link_failed">Échec de l\'ouverture de la page de création d\'une collection</string>
+    <string name="bookmark">Favori</string>
+    <string name="unknown_error_in_error">Erreur inconnue, vérifiez si le serveur est en panne : %1$s</string>
+    <string name="profile_error">Impossible de charger le profil</string>
+    <string name="add_images_error">Erreur lors de l\'ajout des images</string>
+    <string name="description_template_summary">Remplir la description des nouveaux messages avec ceci</string>
+    <string name="description_template">Modèle de description</string>
+    <string name="explore_accounts">Explorer les comptes populaires de cette instance</string>
+    <string name="explore_hashtags">Explorer les hashtags en vogue sur cette instance</string>
+    <string name="daily_trending">Voir les messages populaires de la journée</string>
+    <string name="notification_summary_small">%1$s et %2$s</string>
+    <string name="extraneous_pictures_stories">Les images après la première ont été supprimées mais peuvent être restaurées en revenant à la création d\'un message</string>
+    <string name="summary_always_show_nsfw">Les messages NSFW/CW ne seront pas floutés et seront affichés par défaut.</string>
+    <string name="encode_progress">Encodage de %1$d%%</string>
+    <string name="still_encoding">Une ou plusieurs vidéos sont en cours d\'encodage. Attendez qu\'elles soient terminées avant d\'envoyer</string>
+    <string name="notifications_settings_summary">Gérer les notifications que vous souhaitez recevoir</string>
+    <string name="login_notifications">Impossible de récupérer les dernières notifications</string>
+    <string name="no_camera_permission">L\'autorisation pour l\'appareil photo n\'est pas accordée, accordez cette autorisation dans les paramètres si vous voulez permettre à PixelDroid d\'utiliser l\'appareil photo</string>
+    <string name="play_video">Lire la vidéo</string>
+    <string name="public_feed">Publique</string>
+    <string name="accentColorTitle">Couleur d\'accentuation</string>
+    <string name="accentColorSummary">Choisir une couleur d\'accentuation</string>
+    <string name="color_choice_button">Choisir cette couleur d\'accentuation</string>
+    <string name="explore_posts">Explorer aléatoirement les messages d\'aujourd\'hui</string>
+    <string name="grid_view">Vue en grille</string>
+    <string name="feed_view">Vue du flux</string>
+    <string name="encode_error">Erreur d\'encodage</string>
+    <string name="encode_success">Encodage réussi !</string>
+    <string name="more_profile_settings">Autres paramètres du profil</string>
+    <string name="private_account_explanation">Quand votre compte est privé, seules les personnes que vous autorisez peuvent voir vos photos et vidéos sur PixelFed. Les personnes qui vous suivent déjà ne seront pas affectées.</string>
+    <string name="saving_profile">Sauvegarde de votre profil</string>
+    <string name="use_dynamic_color">Utiliser la couleur dynamique de votre système</string>
+    <string name="type_story">Story</string>
+    <string name="story_image">Image de la Story</string>
+    <string name="replyToStory">Répondre à %1$s</string>
+    <string name="story_reply_error">Un problème s\'est produit lors de l\'envoi de la réponse</string>
+    <string name="error_fetch_story">Un problème s\'est produit lors de la récupération du carrousel</string>
+    <string name="sent_reply_story">Envoyer la réponse</string>
+    <string name="fetching_profile">Recherche de votre profil…</string>
+    <string name="redraft_dialog_cancel">Si vous annulez ce remaniement, le message original ne figurera plus sur votre compte. Poursuivre sans réécrire ?</string>
+    <string name="redraft_post_failed_error">Impossible de réécrire le message, erreur %1$d</string>
+    <string name="redraft_post_failed_io_except">Impossible de réécrire le message, vérifiez votre connexion ?</string>
+    <string name="bookmark_post_failed_error">Impossible de mettre/enlever le message en favoris, erreur %1$d</string>
+    <string name="bookmark_post_failed_io_except">Impossible de mettre/enlever le message des favoris, vérifiez votre connexion ?</string>
+    <string name="no_storage_permission">L\'autorisation pour le stockage n\'est pas accordée, accordez l\'autorisation dans les paramètres si vous voulez permettre à PixelDroid d\'afficher la vignette</string>
+    <string name="analyzing_stabilization">Analyse pour stabiliser %1$d%%</string>
+    <string name="color_chosen">Couleur d\'accentuation choisie</string>
+    <string name="error_profile">Un problème s\'est produit. Appuyez pour réessayer</string>
+    <string name="delete_collection_warning">Êtes-vous sûr de vouloir supprimer cette collection ?</string>
+    <string name="added_post_to_collection">Ajouter le message à la collection</string>
+    <string name="error_add_post_to_collection">Échec de l\'ajout du message à la collection</string>
+    <string name="removed_post_from_collection">Enlever le message de la collection</string>
+    <string name="error_remove_post_from_collection">Échec pour retirer le message de la collection</string>
+    <string name="contains_nsfw">Contient des médias NSFW</string>
+    <string name="add_story">Ajouter une Story</string>
+    <string name="story_could_not_see">Erreur : Impossible de marquer la Story comme vu</string>
+    <string name="story_pause">Démarrer ou interrompre les Stories</string>
+    <string name="my_story">Ma Story</string>
+    <string name="type_post">Message</string>
+    <string name="continue_post_creation">Continuer</string>
+    <string name="story_duration">Durée de la Story</string>
 </resources>

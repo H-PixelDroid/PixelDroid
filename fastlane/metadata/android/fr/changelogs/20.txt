@@ -1,0 +1,4 @@
+- Suppression et reformulation des messages existants
+- Les collections d'articles peuvent désormais être visualisées et modifiées.
+- La création d'un message se fait désormais en deux étapes, avec une nouvelle prise en charge des éléments suivants : sensibilité NSFW, changement de compte, etc
+- Beaucoup d'autres changements et améliorations :)

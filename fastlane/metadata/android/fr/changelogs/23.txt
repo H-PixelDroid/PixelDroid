@@ -1,0 +1,4 @@
+* Messages d'avertissement moins agressifs si vous désactivez la caméra ou les permissions de fichiers
+* Mise à jour des traductions
+* Correction de l'interruption de l'envoi de vidéos
+* Amélioration de la gestion des erreurs
