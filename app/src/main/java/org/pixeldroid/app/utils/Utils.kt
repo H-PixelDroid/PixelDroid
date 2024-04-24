@@ -10,6 +10,8 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
@@ -33,6 +35,12 @@ import okhttp3.HttpUrl
 import org.json.JSONArray
 import org.json.JSONObject
 import org.pixeldroid.app.R
+import org.pixeldroid.app.postCreation.camera.CameraFragment
+import org.pixeldroid.app.posts.feeds.cachedFeeds.notifications.NotificationsFragment
+import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
+import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
+import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
+import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -207,7 +215,7 @@ fun loadDefaultMenuTabs(context: Context, anchor: View): List<String> {
     return with(PopupMenu(context, anchor)) {
         val menu = this.menu
         menuInflater.inflate(R.menu.bottom_navigation_main, menu)
-        (0 until menu.size()).map { menu.getItem(it).title.toString() }
+        (0 until menu.size()).map { getResIdFromString(context, menu.getItem(it).title.toString()).toString() }
     }
 }
 
@@ -216,4 +224,15 @@ fun loadJsonMenuTabs(jsonString: String): List<Pair<String, Boolean>> {
     val tabs = tabsCheckedJson.getJSONArray("tabs").toList()
     val checked = tabsCheckedJson.getJSONArray("checked").toList().map { v -> v.toBoolean() }
     return tabs.zip(checked)
+}
+
+fun getResIdFromString(ctx: Context, title: String): Int {
+    return when (title) {
+        ctx.getString(R.string.home_feed) -> R.string.home_feed
+        ctx.getString(R.string.search_discover_feed) -> R.string.search_discover_feed
+        ctx.getString(R.string.create_feed) -> R.string.create_feed
+        ctx.getString(R.string.notifications_feed) -> R.string.notifications_feed
+        ctx.getString(R.string.public_feed) -> R.string.public_feed
+        else -> 0
+    }
 }

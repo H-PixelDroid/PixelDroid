@@ -394,13 +394,13 @@ class MainActivity : BaseActivity() {
         val tabsCheckedString = sharedPreferences.getString("tabsChecked", null)
         val pageIds = listOf(R.id.page_1, R.id.page_2, R.id.page_3, R.id.page_4, R.id.page_5)
 
-        fun getDrawable(title: String): Drawable? {
+        fun getDrawable(title: Int): Drawable? {
             val resId = when (title) {
-                getString(R.string.home_feed) -> R.drawable.selector_home_feed
-                getString(R.string.search_discover_feed) -> R.drawable.ic_search_white_24dp
-                getString(R.string.create_feed) -> R.drawable.selector_camera
-                getString(R.string.notifications_feed) -> R.drawable.selector_notifications
-                getString(R.string.public_feed) -> R.drawable.ic_filter_black_24dp
+                R.string.home_feed -> R.drawable.selector_home_feed
+                R.string.search_discover_feed -> R.drawable.ic_search_white_24dp
+                R.string.create_feed -> R.drawable.selector_camera
+                R.string.notifications_feed -> R.drawable.selector_notifications
+                R.string.public_feed -> R.drawable.ic_filter_black_24dp
                 else -> 0
             }
             if (resId == 0) {
@@ -410,18 +410,18 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        fun getFragment(title: String): (() -> Fragment)? {
+        fun getFragment(title: Int): (() -> Fragment)? {
             return when (title) {
-                getString(R.string.home_feed) -> { {
+                R.string.home_feed -> { {
                     PostFeedFragment<HomeStatusDatabaseEntity>()
                         .apply {
                             arguments = Bundle().apply { putBoolean("home", true) }
                         }
                 } }
-                getString(R.string.search_discover_feed) -> { { SearchDiscoverFragment() } }
-                getString(R.string.create_feed) -> { { CameraFragment() } }
-                getString(R.string.notifications_feed) -> { { NotificationsFragment() } }
-                getString(R.string.public_feed) -> { {
+                R.string.search_discover_feed -> { { SearchDiscoverFragment() } }
+                R.string.create_feed -> { { CameraFragment() } }
+                R.string.notifications_feed -> { { NotificationsFragment() } }
+                R.string.public_feed -> { {
                     PostFeedFragment<PublicFeedStatusDatabaseEntity>()
                         .apply {
                             arguments = Bundle().apply { putBoolean("home", false) }
@@ -433,17 +433,17 @@ class MainActivity : BaseActivity() {
 
         val tabs = if (tabsCheckedString == null) {
             // Load default menu
-            loadDefaultMenuTabs(applicationContext, binding.root)
+            loadDefaultMenuTabs(applicationContext, binding.root).map { it.toInt() }
         } else {
             // Get current menu visibility and order from settings
-            val tabsChecked = loadJsonMenuTabs(tabsCheckedString).filter { it.second }.map { it.first }
+            val tabsChecked = loadJsonMenuTabs(tabsCheckedString).filter { it.second }.map { it.first.toInt() }
 
             val bottomNavigationMenu: Menu = binding.tabs.menu
             bottomNavigationMenu.clear()
 
-            tabsChecked.zip(pageIds).forEach { (tabTitle, pageId) ->
-                with(bottomNavigationMenu.add(0, pageId, Menu.NONE, tabTitle)) {
-                    val tabIcon = getDrawable(tabTitle)
+            tabsChecked.zip(pageIds).forEach { (tabId, pageId) ->
+                with(bottomNavigationMenu.add(0, pageId, Menu.NONE, getString(tabId))) {
+                    val tabIcon = getDrawable(tabId)
                     if (tabIcon != null) {
                         icon = tabIcon
                     }
@@ -467,7 +467,7 @@ class MainActivity : BaseActivity() {
         }
 
         val notificationId = tabs.zip(pageIds).find {
-            it.first == getString(R.string.notifications_feed)
+            it.first == R.string.notifications_feed
         }?.second
 
         fun doAtPageId(pageId: Int): Int {

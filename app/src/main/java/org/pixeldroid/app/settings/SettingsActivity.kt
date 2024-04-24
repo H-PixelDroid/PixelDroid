@@ -287,7 +287,7 @@ class ArrangeTabsFragment: DialogFragment() {
             val dragHandle: ImageView = holder.itemView.findViewById(R.id.dragHandle)
 
             // Set content of each entry
-            textView.text = tabsChecked[position].first
+            textView.text = getString(tabsChecked[position].first.toInt())
             checkBox.isChecked = tabsChecked[position].second
 
             // Also interact with checkbox when button is clicked
