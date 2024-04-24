@@ -394,8 +394,8 @@ class MainActivity : BaseActivity() {
         val tabsCheckedString = sharedPreferences.getString("tabsChecked", null)
         val pageIds = listOf(R.id.page_1, R.id.page_2, R.id.page_3, R.id.page_4, R.id.page_5)
 
-        fun getDrawable(title: Int): Drawable? {
-            val resId = when (title) {
+        fun getDrawable(titleId: Int): Drawable? {
+            val resId = when (titleId) {
                 R.string.home_feed -> R.drawable.selector_home_feed
                 R.string.search_discover_feed -> R.drawable.ic_search_white_24dp
                 R.string.create_feed -> R.drawable.selector_camera
@@ -410,8 +410,8 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        fun getFragment(title: Int): (() -> Fragment)? {
-            return when (title) {
+        fun getFragment(titleId: Int): (() -> Fragment)? {
+            return when (titleId) {
                 R.string.home_feed -> { {
                     PostFeedFragment<HomeStatusDatabaseEntity>()
                         .apply {
