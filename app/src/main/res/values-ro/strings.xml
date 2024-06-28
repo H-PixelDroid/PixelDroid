@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_account">Profilul meu</string>
+    <string name="menu_settings">Setări</string>
+    <string name="invalid_domain">Domeniu nevalid</string>
+    <string name="registration_failed">Nu s-a putut înregistra aplicația pe acest server</string>
+    <string name="browser_launch_failed">Nu s-a putut lansa un browser, aveți unul?</string>
+    <string name="auth_failed">Nu s-a putut autentifica</string>
+    <string name="instance_error">Nu s-au putut obține informații despre sesiune</string>
+    <string name="instance_not_pixelfed_continue">OK, continuă oricum</string>
+    <string name="token_error">Eroare la obținerea simbolului (token-ului)</string>
+    <string name="title_activity_settings2">Setări</string>
+    <string name="theme_header">Tema</string>
+    <string name="default_system">Implicit (urmează sistemul)</string>
+    <string name="light_theme">Luminoasă</string>
+    <string name="dark_theme">Întunecată</string>
+    <string name="always_show_nsfw">Afișează întotdeauna conținut sensibil</string>
+    <string name="comment_notification">%1$s a comentat postarea ta</string>
+    <string name="liked_notification">%1$s a apreciat postarea ta</string>
+    <string name="mention_notification">%1$s ți s-a adresat</string>
+    <string name="followed_notification">%1$s te urmărește</string>
+    <string name="followed_notification_channel">Urmăritori noi</string>
+    <string name="mention_notification_channel">Mențiuni</string>
+    <string name="shared_notification_channel">Partajări</string>
+    <string name="liked_notification_channel">Aprecieri</string>
+    <string name="comment_notification_channel">Comentarii</string>
+    <string name="poll_notification_channel">Voturi</string>
+    <string name="other_notification_channel">Altele</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">Notificare nouă</item>
+        <item quantity="few">Notificări noi</item>
+        <item quantity="other">Notificări noi</item>
+    </plurals>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s și %4$d alții</string>
+    <string name="notification_summary_medium">%1$s, %2$s, și %3$s</string>
+    <string name="notification_summary_small">%1$s și %2$s</string>
+    <string name="whats_an_instance">Care este modelul?</string>
+    <string name="domain_of_your_instance">Domeniul „instantei” tale</string>
+    <string name="connect_to_pixelfed">Conectează-te la Pixelfed</string>
+    <string name="logout">Deconectare</string>
+    <string name="add_account_name">Adaugă cont</string>
+    <string name="upload_picture_failed">Eroare la încărcarea imaginii!</string>
+    <string name="picture_format_error">Eroare la încărcare: formatul imaginii neacceptat.</string>
+    <string name="request_format_error">Eroare la încărcare: formatul cererii greșit</string>
+    <string name="upload_post_failed">Încărcarea postării nu a reușit</string>
+    <string name="upload_post_success">Postare încărcată cu succes</string>
+    <string name="upload_post_error">Eroare la încărcarea postării</string>
+    <string name="description">Descriere…</string>
+    <string name="post">Postare</string>
+    <string name="upload_next_step">Pasul următor</string>
+    <string name="add_details">Adaugă detalii</string>
+    <string name="switch_to_grid">Schimbă la vizualizare tip grilă</string>
+    <string name="switch_to_carousel">Schimbă la vizualizare tip carusel</string>
+    <string name="save_image_description">Salvează descrierea imaginii</string>
+    <string name="app_name">PixelDroid</string>
+    <string name="verify_credentials">Nu s-au putut obține informații despre utilizator</string>
+    <string name="poll_notification">Votul lui %1$s s-a încheiat</string>
+    <string name="instance_not_pixelfed_warning">Aceasta nu pare a fi o sesiune Pixelfed, aplicația ar putea avea erori neașteptate.</string>
+    <string name="instance_not_pixelfed_cancel">Anulează autentificarea</string>
+    <string name="theme_title">Tema aplicației</string>
+    <string name="shared_notification">%1$s ți-a distribuit postarea</string>
+    <string name="other_notification">Notificare de la %1$s</string>
+    <string name="whats_an_instance_explanation">S-ar putea să fii derutat de câmpul de text care solicită domeniul „instanței” tale.
+\n
+\nPixelfed este o platformă federată și face parte din „fediverse”, ceea ce înseamnă că poate comunica cu alte platforme care vorbesc aceeași limbă, cum ar fi Mastodon (vezi https://joinmastodon.org).
+\n
+\nDe asemenea, înseamnă că trebuie să alegi ce server sau „instanță” Pixelfed vei utiliza. Dacă nu știi niciunul/niciuna, poți căuta aici: https://pixelfed.org/join
+\n
+\nPentru mai multe informații despre Pixelfed, verifica aici: https://pixelfed.org</string>
+    <string name="login_connection_required_once">Trebuie să fii online pentru a adăuga primul cont și a folosi PixelDroid :(</string>
+    <string name="api_not_enabled_dialog">Interfața API nu este activată în această „instanță”. Contactează administratorul pentru activare.</string>
+    <string name="add_account_description">Adaugă un alt cont Pixelfed</string>
+    <plurals name="description_max_characters">
+        <item quantity="one">Descrierea trebuie să conțină %d caracter cel mult.</item>
+        <item quantity="few">Descrierea trebuie să conțină %d caractere cel mult.</item>
+        <item quantity="other">Descrierea trebuie să conțină %d caractere cel mult.</item>
+    </plurals>
+    <string name="add_photo">Adaugă o fotografie</string>
+    <string name="post_image">Una dintre imaginile din postare</string>
+    <string name="no_media_description">Adaugă o descriere media aici…</string>
+</resources>
