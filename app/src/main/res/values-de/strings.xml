@@ -284,4 +284,8 @@
         <item quantity="other">%d Elemente erfolgreich geladen</item>
     </plurals>
     <string name="unknown_error_in_error">Unbekannter Fehler, überprüfe, ob der Server offline ist: %1$s</string>
+    <string name="always_show_nsfw">Immer sensible Inhalte anzeigen</string>
+    <string name="comment_noun">Kommentar</string>
+    <string name="my_story">Meine Story</string>
+    <string name="summary_always_show_nsfw">NSFW/CW-Beiträge werden nicht unscharf dargestellt und werden standardmäßig angezeigt.</string>
 </resources>
