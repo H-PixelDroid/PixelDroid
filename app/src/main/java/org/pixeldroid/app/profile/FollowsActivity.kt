@@ -1,6 +1,8 @@
 package org.pixeldroid.app.profile
 
 import android.os.Bundle
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityFollowersBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.accountLists.AccountListFragment
@@ -12,9 +14,7 @@ import org.pixeldroid.app.utils.api.objects.Account.Companion.FOLLOWERS_TAG
 
 
 class FollowsActivity : BaseActivity() {
-    private var followsFragment = AccountListFragment()
     private lateinit var binding: ActivityFollowersBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +47,10 @@ class FollowsActivity : BaseActivity() {
         val arguments = Bundle()
         arguments.putSerializable(ACCOUNT_ID_TAG, id)
         arguments.putSerializable(FOLLOWERS_TAG, followers)
-        followsFragment.arguments = arguments
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.followsFragment, followsFragment).commit()
-
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            add<AccountListFragment>(R.id.followsFragment, args = arguments)
+        }
     }
 }

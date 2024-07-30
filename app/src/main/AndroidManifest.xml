@@ -77,7 +77,6 @@
         <activity
             android:name=".profile.FollowsActivity"
             android:theme="@style/BaseAppTheme"
-            android:screenOrientation="sensorPortrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".posts.feeds.uncachedFeeds.hashtags.HashTagActivity"
