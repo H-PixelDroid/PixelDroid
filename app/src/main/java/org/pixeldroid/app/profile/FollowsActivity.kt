@@ -1,8 +1,8 @@
 package org.pixeldroid.app.profile
 
 import android.os.Bundle
-import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityFollowersBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.accountLists.AccountListFragment
@@ -50,7 +50,7 @@ class FollowsActivity : BaseActivity() {
 
         supportFragmentManager.commit {
             setReorderingAllowed(true)
-            add<AccountListFragment>(R.id.followsFragment, args = arguments)
+            replace<AccountListFragment>(R.id.followsFragment, args = arguments)
         }
     }
 }

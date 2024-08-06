@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
+import com.google.android.material.navigation.NavigationBarView
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.materialdrawer.iconics.iconicsIcon
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
@@ -422,7 +423,7 @@ class MainActivity : BaseActivity() {
                     else -> null
                 }
                 if (selected != null) {
-                    binding.tabs.selectedItemId = selected
+                    (binding.tabs as NavigationBarView).selectedItemId = selected
                 }
                 super.onPageSelected(position)
             }
@@ -438,15 +439,14 @@ class MainActivity : BaseActivity() {
                 else -> null
             }
         }
-
-        binding.tabs.setOnItemSelectedListener {item ->
+        (binding.tabs as NavigationBarView).setOnItemSelectedListener { item ->
             item.itemPos()?.let {
                 binding.viewPager.currentItem = it
                 true
             } ?: false
         }
 
-        binding.tabs.setOnItemReselectedListener { item ->
+        (binding.tabs as NavigationBarView).setOnItemReselectedListener { item ->
             item.itemPos()?.let { position ->
                 val page =
                     //No clue why this works but it does. F to pay respects
@@ -481,10 +481,11 @@ class MainActivity : BaseActivity() {
 
     private fun setNotificationBadge(show: Boolean, count: Int? = null){
         if(show){
-            val badge = binding.tabs.getOrCreateBadge(R.id.page_4)
+
+            val badge = (binding.tabs as NavigationBarView).getOrCreateBadge(R.id.page_4)
             if (count != null) badge.number = count
         }
-        else binding.tabs.removeBadge(R.id.page_4)
+        else (binding.tabs as NavigationBarView).removeBadge(R.id.page_4)
     }
 
     fun BottomNavigationView.uncheckAllItems() {

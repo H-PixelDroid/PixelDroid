@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -53,9 +52,7 @@
             android:theme="@style/BaseAppTheme"/>
         <activity
             android:name=".posts.ReportActivity"
-            android:screenOrientation="sensorPortrait"
-            android:theme="@style/BaseAppTheme"
-            tools:ignore="LockedOrientationActivity" />
+            android:theme="@style/BaseAppTheme" />
 
         <activity
             android:name=".stories.StoriesActivity" />
@@ -76,23 +73,16 @@
         </activity>
         <activity
             android:name=".profile.FollowsActivity"
-            android:theme="@style/BaseAppTheme"
-            tools:ignore="LockedOrientationActivity" />
+            android:theme="@style/BaseAppTheme" />
         <activity
             android:name=".posts.feeds.uncachedFeeds.hashtags.HashTagActivity"
-            android:theme="@style/BaseAppTheme"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:theme="@style/BaseAppTheme" />
         <activity
             android:name=".posts.PostActivity"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity"
             android:theme="@style/BaseAppTheme" />
 
         <activity
             android:name=".profile.ProfileActivity"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity"
             android:theme="@style/BaseAppTheme"/>
         <activity android:name=".profile.CollectionActivity"
             android:theme="@style/BaseAppTheme"/>
@@ -105,9 +95,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Starting"
-            android:screenOrientation="sensorPortrait"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="LockedOrientationActivity">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -123,10 +111,8 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:screenOrientation="sensorPortrait"
             android:theme="@style/BaseAppTheme"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="LockedOrientationActivity">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -142,9 +128,7 @@
             android:name=".searchDiscover.SearchActivity"
             android:exported="true"
             android:theme="@style/BaseAppTheme"
-            android:launchMode="singleTop"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="LockedOrientationActivity">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

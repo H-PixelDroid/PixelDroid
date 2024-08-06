@@ -6,7 +6,7 @@ import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.R
@@ -48,9 +48,10 @@ class PostActivity : BaseActivity() {
         supportActionBar?.title = getString(R.string.post_title).format(status.account?.getDisplayName())
 
         val holder = StatusViewHolder(binding.postFragmentSingle)
+        val (width, height) = displayDimensionsInPx()
 
         holder.bind(
-            status, apiHolder, db, lifecycleScope, displayDimensionsInPx(),
+            status, apiHolder, db, lifecycleScope, Pair((width*.7).toInt(), height),
             requestPermissionDownloadPic, isActivity = true
         )
 
@@ -107,8 +108,10 @@ class PostActivity : BaseActivity() {
         arguments.putSerializable(COMMENT_DOMAIN, domain)
         commentFragment.arguments = arguments
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.commentFragment, commentFragment).commit()
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(R.id.commentFragment, commentFragment)
+        }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             commentFragment.adapter.refresh()
