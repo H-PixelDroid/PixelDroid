@@ -9,27 +9,17 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.ActivityLoginBinding
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
-import org.pixeldroid.app.utils.api.objects.Application
-import org.pixeldroid.app.utils.api.objects.Instance
-import org.pixeldroid.app.utils.api.objects.NodeInfo
-import org.pixeldroid.app.utils.db.addUser
-import org.pixeldroid.app.utils.db.storeInstance
-import org.pixeldroid.app.utils.hasInternet
-import org.pixeldroid.app.utils.normalizeDomain
-import org.pixeldroid.app.utils.notificationsWorker.makeChannelGroupId
-import org.pixeldroid.app.utils.notificationsWorker.makeNotificationChannels
 import org.pixeldroid.app.utils.openUrl
-import org.pixeldroid.app.utils.validDomain
 
 /**
 Overview of the flow of the login process: (boxes are requests done in parallel,
@@ -57,8 +47,6 @@ class LoginActivity : BaseActivity() {
     private lateinit var oauthScheme: String
     private lateinit var preferences: SharedPreferences
 
-    private lateinit var pixelfedAPI: PixelfedAPI
-
     private lateinit var binding: ActivityLoginBinding
     val model: LoginActivityViewModel by viewModels()
 
@@ -67,15 +55,16 @@ class LoginActivity : BaseActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadingAnimation(true)
         oauthScheme = getString(R.string.auth_scheme)
         preferences = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 
         binding.connectInstanceButton.setOnClickListener {
-            registerAppToServer(normalizeDomain(binding.editText.text.toString()))
+            hideKeyboard()
+            model.registerAppToServer(binding.editText.text.toString())
         }
         binding.whatsAnInstanceTextView.setOnClickListener{ whatsAnInstance() }
 
+        // Enter button on keyboard should press the connect button
         binding.editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.connectInstanceButton.performClick()
@@ -84,7 +73,39 @@ class LoginActivity : BaseActivity() {
             false
         }
 
-        loadingAnimation(false)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                model.promptOauth.collectLatest {
+                    it?.let {
+                        if (it.launch) promptOAuth(it.normalizedDomain, it.clientId)
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                model.finishedLogin.collectLatest {
+                    if (it) {
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                model.loadingState.collectLatest {
+                    when(it.loginState){
+                        LoginActivityViewModel.LoginState.LoadingState.Resting -> loadingAnimation(false)
+                        LoginActivityViewModel.LoginState.LoadingState.Busy -> loadingAnimation(true)
+                        LoginActivityViewModel.LoginState.LoadingState.Error -> failedRegistration(it.error!!)
+                    }
+                }
+            }
+        }
     }
 
     override fun onStart() {
@@ -93,17 +114,10 @@ class LoginActivity : BaseActivity() {
 
         //Check if the activity was started after the authentication
         if (url == null || !url.toString().startsWith("$oauthScheme://$PACKAGE_ID")) return
-        loadingAnimation(true)
 
         val code = url.getQueryParameter("code")
-        authenticate(code)
+        model.authenticate(code)
     }
-
-    override fun onStop() {
-        super.onStop()
-        loadingAnimation(false)
-    }
-
 
     private fun whatsAnInstance() {
         MaterialAlertDialogBuilder(this)
@@ -123,167 +137,39 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun registerAppToServer(normalizedDomain: String) {
-
-        if(!validDomain(normalizedDomain)) return failedRegistration(getString(R.string.invalid_domain))
-
-        hideKeyboard()
-        loadingAnimation(true)
-
-        pixelfedAPI = PixelfedAPI.createFromUrl(normalizedDomain)
-
-        lifecycleScope.launch {
-            try {
-                val credentialsDeferred: Deferred<Application?> = async {
-                    try {
-                        pixelfedAPI.registerApplication(
-                            getString(R.string.app_name), "$oauthScheme://$PACKAGE_ID", SCOPE, "https://pixeldroid.org"
-                        )
-                    } catch (exception: Exception) {
-                        return@async null
-                    }
-                }
-
-                val nodeInfoJRD = pixelfedAPI.wellKnownNodeInfo()
-
-                val credentials = credentialsDeferred.await()
-
-                val clientId = credentials?.client_id ?: return@launch failedRegistration()
-                preferences.edit()
-                    .putString("clientID", clientId)
-                    .putString("clientSecret", credentials.client_secret)
-                    .apply()
-
-
-                // c.f. https://nodeinfo.diaspora.software/protocol.html for more info
-                val nodeInfoSchemaUrl = nodeInfoJRD.links.firstOrNull {
-                    it.rel == "http://nodeinfo.diaspora.software/ns/schema/2.0"
-                }?.href ?: return@launch failedRegistration(getString(R.string.instance_error))
-
-                nodeInfoSchema(normalizedDomain, clientId, nodeInfoSchemaUrl)
-            } catch (exception: Exception) {
-                return@launch failedRegistration()
-            }
-        }
-    }
-
-    private suspend fun nodeInfoSchema(
-        normalizedDomain: String,
-        clientId: String,
-        nodeInfoSchemaUrl: String
-    ) = coroutineScope {
-
-        val nodeInfo: NodeInfo = try {
-            pixelfedAPI.nodeInfoSchema(nodeInfoSchemaUrl)
-        } catch (exception: Exception) {
-            return@coroutineScope failedRegistration(getString(R.string.instance_error))
-        }
-        val domain: String = try {
-            if (nodeInfo.hasInstanceEndpointInfo()) {
-                preferences.edit().putString("nodeInfo", Gson().toJson(nodeInfo)).remove("instance").apply()
-                nodeInfo.metadata?.config?.site?.url
-            } else {
-                val instance: Instance = try {
-                    pixelfedAPI.instance()
-                } catch (exception: Exception) {
-                    return@coroutineScope failedRegistration(getString(R.string.instance_error))
-                }
-                preferences.edit().putString("instance", Gson().toJson(instance)).remove("nodeInfo").apply()
-                instance.uri
-            }
-        } catch (e: IllegalArgumentException){ null }
-                ?: return@coroutineScope failedRegistration(getString(R.string.instance_error))
-
-        preferences.edit()
-            .putString("domain", normalizeDomain(domain))
-            .apply()
-
-
-        if (!nodeInfo.software?.name.orEmpty().contains("pixelfed")) {
-            MaterialAlertDialogBuilder(this@LoginActivity).apply {
-                setMessage(R.string.instance_not_pixelfed_warning)
-                setPositiveButton(R.string.instance_not_pixelfed_continue) { _, _ ->
-                    promptOAuth(normalizedDomain, clientId)
-                }
-                setNegativeButton(R.string.instance_not_pixelfed_cancel) { _, _ ->
-                    loadingAnimation(false)
-                    wipeSharedSettings()
-                }
-            }.show()
-        } else if (nodeInfo.metadata?.config?.features?.mobile_apis != true) {
-            MaterialAlertDialogBuilder(this@LoginActivity).apply {
-                setMessage(R.string.api_not_enabled_dialog)
-                setNegativeButton(android.R.string.ok) { _, _ ->
-                    loadingAnimation(false)
-                    wipeSharedSettings()
-                }
-            }.show()
-        } else {
-            promptOAuth(normalizedDomain, clientId)
-        }
-    }
-
-
     private fun promptOAuth(normalizedDomain: String, client_id: String) {
-
         val url = "$normalizedDomain/oauth/authorize?" +
                 "client_id" + "=" + client_id + "&" +
                 "redirect_uri" + "=" + "$oauthScheme://$PACKAGE_ID" + "&" +
                 "response_type=code" + "&" +
                 "scope=${SCOPE.replace(" ", "%20")}"
 
-        if (!openUrl(url)) return failedRegistration(getString(R.string.browser_launch_failed))
+        if (!openUrl(url)) model.oauthLaunchFailed()
+        else model.oauthLaunched()
     }
 
-    private fun authenticate(code: String?) {
-
-        // Get previous values from preferences
-        val domain = preferences.getString("domain", "") as String
-        val clientId = preferences.getString("clientID", "") as String
-        val clientSecret = preferences.getString("clientSecret", "") as String
-
-        if (code.isNullOrBlank() || domain.isBlank() || clientId.isBlank() || clientSecret.isBlank()) {
-            return failedRegistration(getString(R.string.auth_failed))
-        }
-
-        //Successful authorization
-        pixelfedAPI = PixelfedAPI.createFromUrl(domain)
-        val gson = Gson()
-        val nodeInfo: NodeInfo? = gson.fromJson(preferences.getString("nodeInfo", null), NodeInfo::class.java)
-        val instance: Instance? = gson.fromJson(preferences.getString("instance", null), Instance::class.java)
-
-        lifecycleScope.launch {
-            try {
-                val token = pixelfedAPI.obtainToken(
-                    clientId, clientSecret, "$oauthScheme://$PACKAGE_ID", SCOPE, code,
-                    "authorization_code"
-                )
-                if (token.access_token == null) {
-                    return@launch failedRegistration(getString(R.string.token_error))
+    private fun failedRegistration(@StringRes message: Int = R.string.registration_failed) {
+        when (message) {
+            R.string.instance_not_pixelfed_warning -> MaterialAlertDialogBuilder(this@LoginActivity).apply {
+                setMessage(R.string.instance_not_pixelfed_warning)
+                setPositiveButton(R.string.instance_not_pixelfed_continue) { _, _ ->
+                    model.dialogAckedContinueAnyways()
                 }
-                storeInstance(db, nodeInfo, instance)
-                storeUser(
-                    token.access_token,
-                    token.refresh_token,
-                    clientId,
-                    clientSecret,
-                    domain
-                )
-                wipeSharedSettings()
-            } catch (exception: Exception) {
-                return@launch failedRegistration(getString(R.string.token_error))
-            }
+                setNegativeButton(R.string.instance_not_pixelfed_cancel) { _, _ ->
+                    model.dialogNegativeButtonClicked()
+                }
+            }.show()
+
+            R.string.api_not_enabled_dialog -> MaterialAlertDialogBuilder(this@LoginActivity).apply {
+                setMessage(R.string.api_not_enabled_dialog)
+                setNegativeButton(android.R.string.ok) { _, _ ->
+                    model.dialogNegativeButtonClicked()
+                }
+            }.show()
+
+            else -> binding.editText.error = getString(message)
         }
-    }
-
-    private fun failedRegistration(message: String = getString(R.string.registration_failed)) {
         loadingAnimation(false)
-        binding.editText.error = message
-        wipeSharedSettings()
-    }
-
-    private fun wipeSharedSettings(){
-        preferences.edit().clear().apply()
     }
 
     private fun loadingAnimation(on: Boolean){
@@ -295,51 +181,6 @@ class LoginActivity : BaseActivity() {
             binding.loginActivityInstanceInputLayout.visibility = View.VISIBLE
             binding.progressLayout.visibility = View.GONE
         }
-    }
-
-    private suspend fun storeUser(accessToken: String, refreshToken: String?, clientId: String, clientSecret: String, instance: String) {
-        try {
-            val user = pixelfedAPI.verifyCredentials("Bearer $accessToken")
-            db.userDao().deActivateActiveUsers()
-            addUser(
-                db,
-                user,
-                instance,
-                activeUser = true,
-                accessToken = accessToken,
-                refreshToken = refreshToken,
-                clientId = clientId,
-                clientSecret = clientSecret
-            )
-            apiHolder.setToCurrentUser()
-        } catch (exception: Exception) {
-            return failedRegistration(getString(R.string.verify_credentials))
-        }
-
-        fetchNotifications()
-        val intent = Intent(this@LoginActivity,  MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-    }
-
-    // Fetch the latest notifications of this account, to avoid launching old notifications
-    private suspend fun fetchNotifications() {
-        val user = db.userDao().getActiveUser()!!
-        try {
-            val notifications = apiHolder.api!!.notifications()
-
-            notifications.forEach{it.user_id = user.user_id; it.instance_uri = user.instance_uri}
-
-            db.notificationDao().insertAll(notifications)
-        } catch (exception: Exception) {
-            return failedRegistration(getString(R.string.login_notifications))
-        }
-
-        makeNotificationChannels(
-            applicationContext,
-            user.fullHandle,
-            makeChannelGroupId(user)
-        )
     }
 
 }

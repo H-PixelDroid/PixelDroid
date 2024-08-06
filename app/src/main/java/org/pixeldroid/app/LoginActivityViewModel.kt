@@ -1,11 +1,10 @@
 package org.pixeldroid.app
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -31,8 +30,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginActivityViewModel @Inject constructor(
-    val apiHolder: PixelfedAPIHolder,
-    val db: AppDatabase,
+    private val apiHolder: PixelfedAPIHolder,
+    private val db: AppDatabase,
     @ApplicationContext private val applicationContext: Context,
 ) : ViewModel() {
     companion object {
@@ -45,21 +44,41 @@ class LoginActivityViewModel @Inject constructor(
     private lateinit var pixelfedAPI: PixelfedAPI
     private val preferences: SharedPreferences = applicationContext.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 
-    private val _error: MutableStateFlow<Int?> = MutableStateFlow(null)
-    val error = _error.asStateFlow()
+    private val _loadingState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState(LoginState.LoadingState.Resting))
+    val loadingState = _loadingState.asStateFlow()
 
-    private val _state: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.busy)
-    val state = _state.asStateFlow()
+    private val _finishedLogin = MutableStateFlow(false)
+    val finishedLogin = _finishedLogin.asStateFlow()
 
-    enum class LoginState {
-        resting, busy, error
+    private val _promptOauth: MutableStateFlow<PromptOAuth?> = MutableStateFlow(null)
+    val promptOauth = _promptOauth.asStateFlow()
+
+    data class PromptOAuth(
+        val launch: Boolean,
+        val normalizedDomain: String,
+        val clientId: String,
+    )
+
+    data class LoginState(
+        val loginState: LoadingState,
+        @StringRes
+        val error: Int? = null,
+    ) {
+        init {
+            if (loginState == LoadingState.Error && error == null) throw IllegalArgumentException()
+        }
+
+        enum class LoadingState {
+            Resting, Busy, Error
+        }
     }
 
-    private fun registerAppToServer(normalizedDomain: String) {
+    fun registerAppToServer(rawDomain: String) {
+        val normalizedDomain = normalizeDomain(rawDomain)
 
         if(!validDomain(normalizedDomain)) return failedRegistration(R.string.invalid_domain)
 
-        _state.value = LoginState.busy
+        _loadingState.value = LoginState(LoginState.LoadingState.Busy)
 
         pixelfedAPI = PixelfedAPI.createFromUrl(normalizedDomain)
 
@@ -130,33 +149,19 @@ class LoginActivityViewModel @Inject constructor(
             .putString("domain", normalizeDomain(domain))
             .apply()
 
-
         if (!nodeInfo.software?.name.orEmpty().contains("pixelfed")) {
-            MaterialAlertDialogBuilder(this@LoginActivity).apply {
-                setMessage(R.string.instance_not_pixelfed_warning)
-                setPositiveButton(R.string.instance_not_pixelfed_continue) { _, _ ->
-                    promptOAuth(normalizedDomain, clientId)
-                }
-                setNegativeButton(R.string.instance_not_pixelfed_cancel) { _, _ ->
-                    _state.value = LoginState.resting
-                    wipeSharedSettings()
-                }
-            }.show()
+            _loadingState.value = LoginState(LoginState.LoadingState.Error, R.string.instance_not_pixelfed_warning)
+            _promptOauth.value = PromptOAuth(false, normalizedDomain,  clientId)
         } else if (nodeInfo.metadata?.config?.features?.mobile_apis != true) {
-            MaterialAlertDialogBuilder(this@LoginActivity).apply {
-                setMessage(R.string.api_not_enabled_dialog)
-                setNegativeButton(android.R.string.ok) { _, _ ->
-                    _state.value = LoginState.resting
-                    wipeSharedSettings()
-                }
-            }.show()
+            _loadingState.value = LoginState(LoginState.LoadingState.Error, R.string.api_not_enabled_dialog)
         } else {
-            promptOAuth(normalizedDomain, clientId)
+            _promptOauth.value = PromptOAuth(true, normalizedDomain,  clientId)
+            _loadingState.value = LoginState(LoginState.LoadingState.Busy)
         }
     }
 
-    private fun authenticate(code: String?) {
-
+    fun authenticate(code: String?) {
+        _loadingState.value = LoginState(LoginState.LoadingState.Busy)
         // Get previous values from preferences
         val domain = preferences.getString("domain", "") as String
         val clientId = preferences.getString("clientID", "") as String
@@ -217,9 +222,7 @@ class LoginActivityViewModel @Inject constructor(
         }
 
         fetchNotifications()
-        val intent = Intent(this@LoginActivity,  MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        _finishedLogin.value = true
     }
 
     // Fetch the latest notifications of this account, to avoid launching old notifications
@@ -247,10 +250,31 @@ class LoginActivityViewModel @Inject constructor(
         preferences.edit().clear().apply()
     }
 
-    private fun failedRegistration(message: Int = R.string.registration_failed) {
-        _state.value = LoginState.error
-        _error.value = message //TODO binding.editText.error = message
+    private fun failedRegistration(@StringRes message: Int = R.string.registration_failed) {
+        _loadingState.value = LoginState(LoginState.LoadingState.Error, message)
+        when (message) {
+            R.string.instance_not_pixelfed_warning, R.string.api_not_enabled_dialog -> return
+            else -> wipeSharedSettings()
+        }
+    }
+
+    fun oauthLaunched() {
+        _promptOauth.value = null
+    }
+
+    fun oauthLaunchFailed() {
+        _promptOauth.value = null
+        _loadingState.value = LoginState(LoginState.LoadingState.Error, R.string.browser_launch_failed)
+    }
+
+    fun dialogAckedContinueAnyways() {
+        _promptOauth.value = _promptOauth.value?.copy(launch = true)
+        _loadingState.value = LoginState(LoginState.LoadingState.Busy)
+    }
+
+    fun dialogNegativeButtonClicked() {
         wipeSharedSettings()
+        _loadingState.value = LoginState(LoginState.LoadingState.Resting)
     }
 
 }
