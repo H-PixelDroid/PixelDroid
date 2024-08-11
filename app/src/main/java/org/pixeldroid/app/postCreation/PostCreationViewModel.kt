@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import okhttp3.MultipartBody
-import org.pixeldroid.app.MainActivity
+import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.utils.api.objects.Attachment

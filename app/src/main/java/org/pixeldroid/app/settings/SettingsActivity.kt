@@ -15,7 +15,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.pixeldroid.app.MainActivity
+import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
 import org.pixeldroid.common.ThemedActivity

@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.pixeldroid.app.MainActivity">
+    tools:context="org.pixeldroid.app.main.MainActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,4 +56,3 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true" />
 </androidx.drawerlayout.widget.DrawerLayout>
-

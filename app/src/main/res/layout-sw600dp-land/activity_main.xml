@@ -5,17 +5,33 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.pixeldroid.app.MainActivity">
+    tools:context="org.pixeldroid.app.main.MainActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainConstraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/accountList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/colorSurfaceContainerLow"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:elevation="10dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/navigation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/tabs"
+            android:id="@+id/navigation"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            app:headerLayout="@layout/header_navigation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -28,15 +44,8 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tabs"
+            app:layout_constraintStart_toEndOf="@+id/navigation"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
-        android:id="@+id/drawer"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true" />
 </androidx.drawerlayout.widget.DrawerLayout>

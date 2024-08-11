@@ -1,4 +1,4 @@
-package org.pixeldroid.app
+package org.pixeldroid.app.main
 
 import android.Manifest
 import android.content.Context
@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,11 +23,15 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.core.view.marginEnd
+import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.ExperimentalPagingApi
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -52,6 +55,8 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import kotlinx.coroutines.launch
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
+import org.pixeldroid.app.login.LoginActivity
+import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityMainBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.posts.NestedScrollableHost
@@ -73,6 +78,7 @@ import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companio
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
+import org.pixeldroid.common.dpToPx
 import java.time.Instant
 
 
@@ -189,7 +195,7 @@ class MainActivity : BaseActivity() {
         val navigationHeader = binding.navigation?.getHeaderView(0) as? AccountHeaderView
         val headerview =  navigationHeader ?: AccountHeaderView(this)
 
-        navigationHeader?.onAccountHeaderSelectionViewClickListener = { view: View, iProfile: IProfile ->
+        navigationHeader?.onAccountHeaderSelectionViewClickListener = { _: View, _: IProfile ->
             // update the arrow image within the drawer
             navigationHeader!!.accountSwitcherArrow.clearAnimation()
 
@@ -198,9 +204,10 @@ class MainActivity : BaseActivity() {
             } else {
                 navigationHeader.accountSwitcherArrow.animate().rotation(180f).start()
 
-                val values = arrayOf("Item 1", "Item 2", "Item 3", "Item 4")
-
-                val adapter = ArrayAdapter(this, R.layout.list_item, R.id.textView, values)
+                fun onAccountClick(user: UserDatabaseEntity?){
+                    clickProfile(user?.user_id, user?.instance_uri, false)
+                }
+                val adapter = AccountListAdapter(model.users, lifecycleScope, ::onAccountClick)
                 binding.accountList?.adapter = adapter
 
                 val location = IntArray(2)
@@ -208,7 +215,7 @@ class MainActivity : BaseActivity() {
 
                 // Set the position of textView within constraintLayout2
                 val textViewLayoutParams = binding.accountList?.layoutParams as? ConstraintLayout.LayoutParams
-                textViewLayoutParams?.topMargin = location[1] + (navigationHeader as ConstraintLayout).height
+                textViewLayoutParams?.topMargin = location[1] + (navigationHeader as ConstraintLayout).height - 6.dpToPx(this)
                 binding.accountList?.layoutParams = textViewLayoutParams
             }
             binding.accountList?.isVisible = !(binding.accountList?.isVisible ?: false)
@@ -220,7 +227,8 @@ class MainActivity : BaseActivity() {
             headerBackgroundScaleType = ImageView.ScaleType.CENTER_CROP
             currentHiddenInList = true
             onAccountHeaderListener = { _: View?, profile: IProfile, current: Boolean ->
-                clickProfile(profile, current)
+                val userId: String? = if (profile.identifier == ADD_ACCOUNT_IDENTIFIER) null else profile.identifier.toString()
+                clickProfile(userId, profile.tag?.toString(), current)
             }
             addProfile(ProfileSettingDrawerItem().apply {
                 identifier = ADD_ACCOUNT_IDENTIFIER
@@ -338,18 +346,18 @@ class MainActivity : BaseActivity() {
 
     //called when switching profiles, or when clicking on current profile
     @Suppress("SameReturnValue")
-    private fun clickProfile(profile: IProfile, current: Boolean): Boolean {
+    private fun clickProfile(id: String?, instance: String?, current: Boolean): Boolean {
         if(current){
             launchActivity(ProfileActivity())
             return false
         }
         //Clicked on add new account
-        if(profile.identifier == ADD_ACCOUNT_IDENTIFIER){
+        if(id == null || instance == null){
             launchActivity(LoginActivity())
             return false
         }
 
-        switchUser(profile.identifier.toString(), profile.tag as String)
+        switchUser(id, instance)
 
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -436,6 +444,27 @@ class MainActivity : BaseActivity() {
         }
     }
 
+
+    private fun MenuItem.itemPos(): Int? {
+        return when(itemId){
+            R.id.page_1 -> 0
+            R.id.page_2 -> 1
+            R.id.page_3 -> 2
+            R.id.page_4 -> 3
+            R.id.page_5 -> 4
+            else -> null
+        }
+    }
+
+    private fun reclick(item: MenuItem) {
+        item.itemPos()?.let { position ->
+            val page =
+                //No clue why this works but it does. F to pay respects
+                supportFragmentManager.findFragmentByTag("f$position")
+            (page as? CachedFeedFragment<*>)?.onTabReClicked()
+        }
+    }
+
     private fun setupTabs(tab_array: List<() -> Fragment>){
         binding.viewPager.reduceDragSensitivity()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
@@ -462,7 +491,11 @@ class MainActivity : BaseActivity() {
                     else -> null
                 }
                 if (selected != null) {
+                    // Disable and re-enable reselected listener so that it's not triggered by this
+                    (binding.tabs as? NavigationBarView)?.setOnItemReselectedListener(null)
                     (binding.tabs as? NavigationBarView)?.selectedItemId = selected
+                    (binding.tabs as? NavigationBarView)?.setOnItemReselectedListener(::reclick)
+
                     binding.navigation?.unSelectAll()
                     binding.navigation?.menu?.getItem(position)?.setChecked(true)
                 }
@@ -470,31 +503,12 @@ class MainActivity : BaseActivity() {
             }
         })
 
-        fun MenuItem.itemPos(): Int? {
-            return when(itemId){
-                R.id.page_1 -> 0
-                R.id.page_2 -> 1
-                R.id.page_3 -> 2
-                R.id.page_4 -> 3
-                R.id.page_5 -> 4
-                else -> null
-            }
-        }
 
         fun MenuItem.buttonPos() {
             when(itemId){
                 R.id.my_profile -> launchActivity(ProfileActivity())
                 R.id.settings -> launchActivity(SettingsActivity())
                 R.id.log_out -> logOut()
-            }
-        }
-
-        fun reclick(item: MenuItem) {
-            item.itemPos()?.let { position ->
-                val page =
-                    //No clue why this works but it does. F to pay respects
-                    supportFragmentManager.findFragmentByTag("f$position")
-                (page as? CachedFeedFragment<*>)?.onTabReClicked()
             }
         }
 
@@ -505,9 +519,7 @@ class MainActivity : BaseActivity() {
             } ?: false
         }
 
-        (binding.tabs as? NavigationBarView)?.setOnItemReselectedListener { item ->
-            reclick(item)
-        }
+        (binding.tabs as? NavigationBarView)?.setOnItemReselectedListener(::reclick)
 
         binding.navigation?.setNavigationItemSelectedListener { item ->
             if (binding.navigation?.menu?.children?.find { it.itemId == item.itemId }?.isChecked == true) {

@@ -1,4 +1,4 @@
-package org.pixeldroid.app
+package org.pixeldroid.app.login
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -14,6 +14,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.BuildConfig
+import org.pixeldroid.app.R
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.Application
 import org.pixeldroid.app.utils.api.objects.Instance
@@ -42,7 +44,8 @@ class LoginActivityViewModel @Inject constructor(
     private val oauthScheme = applicationContext.getString(R.string.auth_scheme)
 
     private lateinit var pixelfedAPI: PixelfedAPI
-    private val preferences: SharedPreferences = applicationContext.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+    private val preferences: SharedPreferences = applicationContext.getSharedPreferences(
+        PREFERENCE_NAME, Context.MODE_PRIVATE)
 
     private val _loadingState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState(LoginState.LoadingState.Resting))
     val loadingState = _loadingState.asStateFlow()
@@ -180,7 +183,7 @@ class LoginActivityViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val token = pixelfedAPI.obtainToken(
-                    clientId, clientSecret, "$oauthScheme://${PACKAGE_ID}",
+                    clientId, clientSecret, "$oauthScheme://$PACKAGE_ID",
                     SCOPE, code,
                     "authorization_code"
                 )

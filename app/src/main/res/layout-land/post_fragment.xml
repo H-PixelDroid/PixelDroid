@@ -56,15 +56,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/postConstraint"
         android:layout_width="0dp"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.7"
-        app:layout_constraintHorizontal_chainStyle="packed"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toStartOf="@+id/postDetails"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilePic">
+        app:layout_constraintTop_toBottomOf="@+id/profilePic"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.7">
 
         <org.pixeldroid.app.posts.NestedScrollableHost
             android:id="@+id/postPagerHost"
@@ -238,8 +238,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="#b3b3b3"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/description"
+            app:layout_constraintStart_toStartOf="@+id/usernameDesc"
             app:layout_constraintTop_toBottomOf="@+id/description"
             tools:text="Yesterday" />
 

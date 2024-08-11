@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+   <group android:id="@+id/tabsId">
     <item
         android:id="@+id/page_1"
         android:enabled="true"
@@ -25,4 +26,21 @@
         android:enabled="true"
         android:icon="@drawable/ic_filter_black_24dp"
         android:title="@string/public_feed"/>
+   </group>
+
+    <item
+        android:id="@+id/my_profile"
+        android:enabled="true"
+        android:icon="@drawable/person"
+        android:title="@string/menu_account"/>
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:icon="@drawable/settings"
+        android:title="@string/menu_settings"/>
+    <item
+        android:id="@+id/log_out"
+        android:enabled="true"
+        android:icon="@drawable/logout"
+        android:title="@string/logout"/>
 </menu>

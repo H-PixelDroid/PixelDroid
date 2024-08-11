@@ -23,7 +23,7 @@ import org.pixeldroid.app.utils.api.objects.Status.Companion.VIEW_COMMENTS_TAG
 import org.pixeldroid.app.utils.displayDimensionsInPx
 
 class PostActivity : BaseActivity() {
-    private lateinit var binding: ActivityPostBinding
+    lateinit var binding: ActivityPostBinding
 
     private lateinit var commentFragment: CommentFragment
 
@@ -33,7 +33,7 @@ class PostActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
 
-        commentFragment = CommentFragment(binding.swipeRefreshLayout)
+        commentFragment = CommentFragment()
 
         setContentView(binding.root)
         setSupportActionBar(binding.topBar)
@@ -56,7 +56,7 @@ class PostActivity : BaseActivity() {
         )
 
         activateCommenter()
-        initCommentsFragment(domain = user?.instance_uri.orEmpty())
+        initCommentsFragment(domain = user?.instance_uri.orEmpty(), savedInstanceState)
 
         if(viewComments || postComment){
             //Scroll already down as much as possible (since comments are not loaded yet)
@@ -101,16 +101,20 @@ class PostActivity : BaseActivity() {
         }
     }
 
-    private fun initCommentsFragment(domain: String) {
+    private fun initCommentsFragment(domain: String, savedInstanceState: Bundle?) {
 
         val arguments = Bundle()
         arguments.putSerializable(COMMENT_STATUS_ID, status.id)
         arguments.putSerializable(COMMENT_DOMAIN, domain)
         commentFragment.arguments = arguments
 
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.commentFragment, commentFragment)
+        //TODO finish work here! commentFragment needs the swiperefreshlayout.. how??
+        //Maybe read https://archive.ph/G9VHW#selection-1324.2-1322.3 or further research
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.commentFragment, commentFragment)
+            }
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {

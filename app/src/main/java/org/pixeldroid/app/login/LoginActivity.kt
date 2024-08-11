@@ -1,4 +1,4 @@
-package org.pixeldroid.app
+package org.pixeldroid.app.login
 
 import android.content.Context
 import android.content.Intent
@@ -16,6 +16,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.pixeldroid.app.BuildConfig
+import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityLoginBinding
 import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.utils.BaseActivity

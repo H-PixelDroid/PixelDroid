@@ -42,15 +42,15 @@ open class UncachedFeedFragment<T: FeedContent> : BaseFragment() {
     }
 
     internal fun initSearch() {
-        // Scroll to top when the list is refreshed from network.
-        lifecycleScope.launch {
-            adapter.loadStateFlow
-                // Only emit when REFRESH LoadState for RemoteMediator changes.
-                .distinctUntilChangedBy { it.refresh }
-                // Only react to cases where Remote REFRESH completes i.e., NotLoading.
-                .filter { it.refresh is LoadState.NotLoading }
-                .collect { binding?.list?.scrollToPosition(0) }
-        }
+//        // Scroll to top when the list is refreshed from network.
+//        lifecycleScope.launch {
+//            adapter.loadStateFlow
+//                // Only emit when REFRESH LoadState for RemoteMediator changes.
+//                .distinctUntilChangedBy { it.refresh }
+//                // Only react to cases where Remote REFRESH completes i.e., NotLoading.
+//                .filter { it.refresh is LoadState.NotLoading }
+//                .collect { binding?.list?.scrollToPosition(0) }
+//        }
     }
 
     fun onCreateView(
