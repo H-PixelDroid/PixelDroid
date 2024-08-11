@@ -12,35 +12,40 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import org.pixeldroid.app.MainActivity
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.PostActivity
 import org.pixeldroid.app.posts.fromHtml
-import org.pixeldroid.app.utils.PixelDroidApplication
 import org.pixeldroid.app.utils.api.PixelfedAPI.Companion.apiForUser
 import org.pixeldroid.app.utils.api.objects.Notification
-import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.*
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.comment
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.entries
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.favourite
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.follow
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.follow_request
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.mention
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.poll
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.reblog
+import org.pixeldroid.app.utils.api.objects.Notification.NotificationType.status
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 import org.pixeldroid.app.utils.getColorFromAttr
-import retrofit2.HttpException
-import java.io.IOException
 import java.time.Instant
-import javax.inject.Inject
 
-class NotificationsWorker(
-    context: Context,
-    params: WorkerParameters
+@HiltWorker
+class NotificationsWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    private val db: AppDatabase,
+    private val apiHolder: PixelfedAPIHolder
 ) : CoroutineWorker(context, params) {
-
-    @Inject
-    lateinit var db: AppDatabase
-    @Inject
-    lateinit var apiHolder: PixelfedAPIHolder
 
     override suspend fun doWork(): Result {
         val users: List<UserDatabaseEntity> = db.userDao().getAll()

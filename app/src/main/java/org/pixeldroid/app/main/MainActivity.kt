@@ -1,4 +1,4 @@
-package org.pixeldroid.app
+package org.pixeldroid.app.main
 
 import android.Manifest
 import android.content.Context
@@ -16,31 +16,37 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
+import androidx.core.view.children
+import androidx.core.view.isVisible
+import androidx.core.view.marginEnd
+import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.ExperimentalPagingApi
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
-import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
-import com.mikepenz.materialdrawer.iconics.iconicsIcon
+import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.navigation.NavigationView
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import com.mikepenz.materialdrawer.model.interfaces.descriptionRes
 import com.mikepenz.materialdrawer.model.interfaces.descriptionText
+import com.mikepenz.materialdrawer.model.interfaces.iconRes
 import com.mikepenz.materialdrawer.model.interfaces.iconUrl
 import com.mikepenz.materialdrawer.model.interfaces.nameRes
 import com.mikepenz.materialdrawer.model.interfaces.nameText
@@ -49,6 +55,8 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import kotlinx.coroutines.launch
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
+import org.pixeldroid.app.login.LoginActivity
+import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityMainBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.posts.NestedScrollableHost
@@ -70,6 +78,7 @@ import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companio
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
+import org.pixeldroid.common.dpToPx
 import java.time.Instant
 
 
@@ -179,22 +188,53 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupDrawer() {
-       binding.mainDrawerButton.setOnClickListener{
-            binding.drawerLayout.openDrawer(binding.drawer)
+        binding.mainDrawerButton?.setOnClickListener {
+            binding.drawer?.let { drawer -> binding.drawerLayout.openDrawer(drawer) }
         }
 
-        header = AccountHeaderView(this).apply {
-            attachToSliderView(binding.drawer)
+        val navigationHeader = binding.navigation?.getHeaderView(0) as? AccountHeaderView
+        val headerview =  navigationHeader ?: AccountHeaderView(this)
+
+        navigationHeader?.onAccountHeaderSelectionViewClickListener = { _: View, _: IProfile ->
+            // update the arrow image within the drawer
+            navigationHeader!!.accountSwitcherArrow.clearAnimation()
+
+            if(binding.accountList?.isVisible == true) {
+                navigationHeader.accountSwitcherArrow.animate().rotation(0f).start()
+            } else {
+                navigationHeader.accountSwitcherArrow.animate().rotation(180f).start()
+
+                fun onAccountClick(user: UserDatabaseEntity?){
+                    clickProfile(user?.user_id, user?.instance_uri, false)
+                }
+                val adapter = AccountListAdapter(model.users, lifecycleScope, ::onAccountClick)
+                binding.accountList?.adapter = adapter
+
+                val location = IntArray(2)
+                navigationHeader.getLocationOnScreen(location)
+
+                // Set the position of textView within constraintLayout2
+                val textViewLayoutParams = binding.accountList?.layoutParams as? ConstraintLayout.LayoutParams
+                textViewLayoutParams?.topMargin = location[1] + (navigationHeader as ConstraintLayout).height - 6.dpToPx(this)
+                binding.accountList?.layoutParams = textViewLayoutParams
+            }
+            binding.accountList?.isVisible = !(binding.accountList?.isVisible ?: false)
+            true
+        }
+
+        header = headerview.apply {
+            binding.drawer?.let { attachToSliderView(it) }
             headerBackgroundScaleType = ImageView.ScaleType.CENTER_CROP
             currentHiddenInList = true
             onAccountHeaderListener = { _: View?, profile: IProfile, current: Boolean ->
-                clickProfile(profile, current)
+                val userId: String? = if (profile.identifier == ADD_ACCOUNT_IDENTIFIER) null else profile.identifier.toString()
+                clickProfile(userId, profile.tag?.toString(), current)
             }
             addProfile(ProfileSettingDrawerItem().apply {
                 identifier = ADD_ACCOUNT_IDENTIFIER
                 nameRes = R.string.add_account_name
                 descriptionRes = R.string.add_account_description
-                iconicsIcon = GoogleMaterial.Icon.gmd_add
+                iconRes = R.drawable.add
             }, 0)
             dividerBelowHeader = false
             closeDrawerOnProfileListClick = true
@@ -202,11 +242,11 @@ class MainActivity : BaseActivity() {
 
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable, tag: String?) {
-                    Glide.with(this@MainActivity)
-                        .load(uri)
-                        .placeholder(placeholder)
-                        .circleCrop()
-                        .into(imageView)
+                Glide.with(this@MainActivity)
+                    .load(uri)
+                    .placeholder(placeholder)
+                    .circleCrop()
+                    .into(imageView)
             }
 
             override fun cancel(imageView: ImageView) {
@@ -228,22 +268,23 @@ class MainActivity : BaseActivity() {
         //with the received one. This happens asynchronously.
         getUpdatedAccount()
 
-        binding.drawer.itemAdapter.add(
+        binding.drawer?.itemAdapter?.add(
             primaryDrawerItem {
                 nameRes = R.string.menu_account
-                iconicsIcon = GoogleMaterial.Icon.gmd_person
+                iconRes = R.drawable.person
             },
             primaryDrawerItem {
                 nameRes = R.string.menu_settings
-                iconicsIcon = GoogleMaterial.Icon.gmd_settings
+                iconRes = R.drawable.settings
             },
             primaryDrawerItem {
                 nameRes = R.string.logout
-                iconicsIcon = GoogleMaterial.Icon.gmd_close
+                iconRes = R.drawable.logout
             },
         )
-        binding.drawer.onDrawerItemClickListener = { v, drawerItem, position ->
-            when (position){
+
+        binding.drawer?.onDrawerItemClickListener = { v, drawerItem, position ->
+            when (position) {
                 1 -> launchActivity(ProfileActivity())
                 2 -> launchActivity(SettingsActivity())
                 3 -> logOut()
@@ -254,10 +295,9 @@ class MainActivity : BaseActivity() {
         // Closes the drawer if it is open, when we press the back button
         onBackPressedDispatcher.addCallback(this) {
             // Handle the back button event
-            if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
-            }
-            else {
+            } else {
                 this.isEnabled = false
                 super.onBackPressedDispatcher.onBackPressed()
             }
@@ -305,18 +345,19 @@ class MainActivity : BaseActivity() {
     }
 
     //called when switching profiles, or when clicking on current profile
-    private fun clickProfile(profile: IProfile, current: Boolean): Boolean {
+    @Suppress("SameReturnValue")
+    private fun clickProfile(id: String?, instance: String?, current: Boolean): Boolean {
         if(current){
             launchActivity(ProfileActivity())
             return false
         }
         //Clicked on add new account
-        if(profile.identifier == ADD_ACCOUNT_IDENTIFIER){
+        if(id == null || instance == null){
             launchActivity(LoginActivity())
             return false
         }
 
-        switchUser(profile.identifier.toString(), profile.tag as String)
+        switchUser(id, instance)
 
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -396,6 +437,34 @@ class MainActivity : BaseActivity() {
         touchSlopField.set(recyclerView, touchSlop*NestedScrollableHost.touchSlopModifier)
     }
 
+    private fun NavigationView.unSelectAll() {
+        for (i in 0 until menu.size()) {
+            val menuItem = menu.getItem(i)
+            menuItem.isChecked = false
+        }
+    }
+
+
+    private fun MenuItem.itemPos(): Int? {
+        return when(itemId){
+            R.id.page_1 -> 0
+            R.id.page_2 -> 1
+            R.id.page_3 -> 2
+            R.id.page_4 -> 3
+            R.id.page_5 -> 4
+            else -> null
+        }
+    }
+
+    private fun reclick(item: MenuItem) {
+        item.itemPos()?.let { position ->
+            val page =
+                //No clue why this works but it does. F to pay respects
+                supportFragmentManager.findFragmentByTag("f$position")
+            (page as? CachedFeedFragment<*>)?.onTabReClicked()
+        }
+    }
+
     private fun setupTabs(tab_array: List<() -> Fragment>){
         binding.viewPager.reduceDragSensitivity()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
@@ -422,37 +491,49 @@ class MainActivity : BaseActivity() {
                     else -> null
                 }
                 if (selected != null) {
-                    binding.tabs.selectedItemId = selected
+                    // Disable and re-enable reselected listener so that it's not triggered by this
+                    (binding.tabs as? NavigationBarView)?.setOnItemReselectedListener(null)
+                    (binding.tabs as? NavigationBarView)?.selectedItemId = selected
+                    (binding.tabs as? NavigationBarView)?.setOnItemReselectedListener(::reclick)
+
+                    binding.navigation?.unSelectAll()
+                    binding.navigation?.menu?.getItem(position)?.setChecked(true)
                 }
                 super.onPageSelected(position)
             }
         })
 
-        fun MenuItem.itemPos(): Int? {
-            return when(itemId){
-                R.id.page_1 -> 0
-                R.id.page_2 -> 1
-                R.id.page_3 -> 2
-                R.id.page_4 -> 3
-                R.id.page_5 -> 4
-                else -> null
+
+        fun MenuItem.buttonPos() {
+            when(itemId){
+                R.id.my_profile -> launchActivity(ProfileActivity())
+                R.id.settings -> launchActivity(SettingsActivity())
+                R.id.log_out -> logOut()
             }
         }
 
-        binding.tabs.setOnItemSelectedListener {item ->
+        (binding.tabs as? NavigationBarView)?.setOnItemSelectedListener { item ->
             item.itemPos()?.let {
                 binding.viewPager.currentItem = it
                 true
             } ?: false
         }
 
-        binding.tabs.setOnItemReselectedListener { item ->
-            item.itemPos()?.let { position ->
-                val page =
-                    //No clue why this works but it does. F to pay respects
-                    supportFragmentManager.findFragmentByTag("f$position")
-                (page as? CachedFeedFragment<*>)?.onTabReClicked()
+        (binding.tabs as? NavigationBarView)?.setOnItemReselectedListener(::reclick)
+
+        binding.navigation?.setNavigationItemSelectedListener { item ->
+            if (binding.navigation?.menu?.children?.find { it.itemId == item.itemId }?.isChecked == true) {
+                reclick(item)
+            } else {
+                item.itemPos()?.let {
+                    binding.navigation?.unSelectAll()
+                    item.isChecked = true
+                    binding.viewPager.currentItem = it
+                    true
+                } ?: item.buttonPos()
             }
+
+            true
         }
 
         // Fetch one notification to show a badge if there are new notifications
@@ -479,20 +560,13 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun setNotificationBadge(show: Boolean, count: Int? = null){
+    private fun setNotificationBadge(show: Boolean, count: Int? = null) {
+        //TODO add badge to NavigationView... not implemented yet: https://github.com/material-components/material-components-android/issues/2860
         if(show){
-            val badge = binding.tabs.getOrCreateBadge(R.id.page_4)
-            if (count != null) badge.number = count
+            val badge = (binding.tabs as? NavigationBarView)?.getOrCreateBadge(R.id.page_4)
+            if (count != null) badge?.number = count
         }
-        else binding.tabs.removeBadge(R.id.page_4)
-    }
-
-    fun BottomNavigationView.uncheckAllItems() {
-        menu.setGroupCheckable(0, true, false)
-        for (i in 0 until menu.size()) {
-            menu.getItem(i).isChecked = false
-        }
-        menu.setGroupCheckable(0, true, true)
+        else (binding.tabs as? NavigationBarView)?.removeBadge(R.id.page_4)
     }
 
     /**

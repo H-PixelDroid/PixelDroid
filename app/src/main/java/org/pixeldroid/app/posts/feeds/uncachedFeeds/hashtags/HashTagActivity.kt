@@ -1,17 +1,19 @@
 package org.pixeldroid.app.posts.feeds.uncachedFeeds.hashtags
 
 import android.os.Bundle
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityFollowersBinding
 import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.accountLists.AccountListFragment
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.objects.Tag.Companion.HASHTAG_TAG
 
 
 class HashTagActivity : BaseActivity() {
-    private var tagFragment = UncachedPostsFragment()
     private lateinit var binding: ActivityFollowersBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +34,10 @@ class HashTagActivity : BaseActivity() {
 
         val arguments = Bundle()
         arguments.putSerializable(HASHTAG_TAG, tag)
-        tagFragment.arguments = arguments
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.followsFragment, tagFragment).commit()
-
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<UncachedPostsFragment>(R.id.followsFragment, args = arguments)
+        }
     }
 }

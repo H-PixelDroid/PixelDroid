@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sparkbutton="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
+
+    <ImageView
+        android:id="@+id/profilePic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/profile_picture"
+        android:src="@drawable/ic_default_user"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+        app:layout_constraintStart_toEndOf="@+id/profilePic"
+        app:layout_constraintTop_toTopOf="@+id/profilePic"
+        tools:text="username" />
+
+    <TextView
+        android:id="@+id/postDomain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="#b3b3b3"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+        app:layout_constraintStart_toEndOf="@+id/username"
+        app:layout_constraintTop_toTopOf="@+id/profilePic"
+        tools:text="from domain.tld" />
+
+    <ImageButton
+        android:id="@+id/status_more"
+        style="?android:attr/actionOverflowButtonStyle"
+        android:layout_width="24dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/status_more_options"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profilePic" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/postConstraint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/postDetails"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePic"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.7">
+
+        <org.pixeldroid.app.posts.NestedScrollableHost
+            android:id="@+id/postPagerHost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/postPager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </org.pixeldroid.app.posts.NestedScrollableHost>
+
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/postIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/postPagerHost"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/like_animation"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/heart_anim"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/postPagerHost"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/postPagerHost"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible" />
+
+        <FrameLayout
+            android:id="@+id/post_fragment_image_popup_menu_anchor"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="@+id/postPagerHost"
+            app:layout_constraintEnd_toEndOf="@+id/postPagerHost"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="@+id/postPagerHost"
+            app:layout_constraintTop_toTopOf="@+id/postPagerHost"
+            app:layout_constraintVertical_bias="0.1" />
+
+        <TextView
+            android:id="@+id/sensitiveWarning"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@drawable/rounded_corner"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:text="@string/cw_nsfw_hidden_media_n_click_to_show"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/ic_launcher_background"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/postPagerHost"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/postPagerHost"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/postDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/postConstraint"
+        app:layout_constraintTop_toTopOf="@id/postConstraint">
+
+        <ImageView
+            android:id="@+id/commenter"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="@string/add_comment"
+            android:padding="4dp"
+            android:src="@drawable/selector_commenter"
+            app:layout_constraintBottom_toBottomOf="@+id/liker"
+            app:layout_constraintEnd_toStartOf="@id/reblogger"
+            app:layout_constraintStart_toEndOf="@id/liker"
+            app:layout_constraintTop_toTopOf="@id/liker" />
+
+        <at.connyduck.sparkbutton.SparkButton
+            android:id="@+id/liker"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:clipToPadding="false"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/commenter"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.20"
+            sparkbutton:activeImage="@drawable/ic_like_full"
+            sparkbutton:iconSize="28dp"
+            sparkbutton:inactiveImage="@drawable/ic_like_empty"
+            sparkbutton:primaryColor="@color/heart_red"
+            sparkbutton:secondaryColor="@color/black" />
+
+        <at.connyduck.sparkbutton.SparkButton
+            android:id="@+id/reblogger"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:clipToPadding="false"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/commenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/commenter"
+            app:layout_constraintTop_toTopOf="@+id/commenter"
+            sparkbutton:activeImage="@drawable/ic_reblog_blue"
+            sparkbutton:iconSize="28dp"
+            sparkbutton:inactiveImage="@drawable/ic_reblog"
+            sparkbutton:primaryColor="@color/share_blue"
+            sparkbutton:secondaryColor="@color/black" />
+
+        <TextView
+            android:id="@+id/nlikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            app:layout_constraintEnd_toEndOf="@+id/liker"
+            app:layout_constraintStart_toStartOf="@+id/liker"
+            app:layout_constraintTop_toBottomOf="@+id/liker"
+            tools:text="2 Likes" />
+
+        <TextView
+            android:id="@+id/nshares"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:gravity="end"
+            app:layout_constraintEnd_toEndOf="@+id/reblogger"
+            app:layout_constraintStart_toStartOf="@+id/reblogger"
+            app:layout_constraintTop_toBottomOf="@+id/reblogger"
+            tools:text="3 Shares" />
+
+        <TextView
+            android:id="@+id/usernameDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nlikes"
+            tools:text="Account" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hyphenationFrequency="full"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/usernameDesc"
+            app:layout_constraintTop_toBottomOf="@+id/usernameDesc"
+            tools:text="This is a description, describing stuff.\nIt contains multiple lines, and that's okay. It's also got some really long lines, and we love it for it." />
+
+        <TextView
+            android:id="@+id/postDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="#b3b3b3"
+            app:layout_constraintStart_toStartOf="@+id/usernameDesc"
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            tools:text="Yesterday" />
+
+        <TextView
+            android:id="@+id/viewComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/postDate"
+            app:layout_constraintTop_toBottomOf="@+id/postDate"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="3 comments" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
