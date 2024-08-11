@@ -1,3 +1,4 @@
 * Support for tablets, and rotation of all screens. There could still be some issues, please send us a message if there are
+* Bug fixes: notably, fix notifications which broke a couple releases back.
 * Translation updates
 * Update dependencies
