@@ -17,6 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.ActivityLoginBinding
+import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.openUrl
