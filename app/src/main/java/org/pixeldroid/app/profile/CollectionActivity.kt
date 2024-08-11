@@ -87,7 +87,7 @@ class CollectionActivity : BaseActivity() {
         return true
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         // Relaunch same activity, to avoid duplicates in history
         super.onNewIntent(intent)
         finish()

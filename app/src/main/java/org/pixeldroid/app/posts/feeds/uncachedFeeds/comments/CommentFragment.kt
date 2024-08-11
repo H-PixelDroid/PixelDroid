@@ -28,7 +28,7 @@ import org.pixeldroid.app.utils.setProfileImageFromURL
 /**
  * Fragment to show a list of [Status]s, in form of comments
  */
-class CommentFragment(val swipeRefreshLayout: SwipeRefreshLayout): UncachedFeedFragment<Status>() {
+class CommentFragment: UncachedFeedFragment<Status>() {
 
     private lateinit var id: String
     private lateinit var domain: String
@@ -48,8 +48,10 @@ class CommentFragment(val swipeRefreshLayout: SwipeRefreshLayout): UncachedFeedF
         savedInstanceState: Bundle?,
     ): View? {
 
-
-        val view = super.onCreateView(inflater, container, savedInstanceState, swipeRefreshLayout)
+        val view = super.onCreateView(
+            inflater, container, savedInstanceState,
+            (activity as? PostActivity)?.binding?.swipeRefreshLayout
+        )
 
         // Get the view model
         @Suppress("UNCHECKED_CAST")

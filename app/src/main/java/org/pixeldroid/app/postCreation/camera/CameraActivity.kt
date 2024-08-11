@@ -3,7 +3,7 @@ package org.pixeldroid.app.postCreation.camera
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import org.pixeldroid.app.MainActivity
+import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityCameraBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment.Companion.CAMERA_ACTIVITY

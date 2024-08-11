@@ -152,8 +152,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         if(!status?.media_attachments.isNullOrEmpty()) {
             setupPostPics(binding, request)
         } else {
-            binding.postPager.visibility = View.GONE
-            binding.postIndicator.visibility = View.GONE
+            binding.postConstraint.visibility = View.GONE
         }
     }
 
