@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -28,13 +27,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.ExperimentalPagingApi
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.color.DynamicColors
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
@@ -52,8 +49,6 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONObject
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.databinding.ActivityMainBinding
 import org.pixeldroid.app.postCreation.camera.CameraFragment
@@ -65,6 +60,7 @@ import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
 import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.Tab
 import org.pixeldroid.app.utils.api.objects.Notification
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
@@ -72,13 +68,12 @@ import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.hasInternet
 import org.pixeldroid.app.utils.loadDefaultMenuTabs
-import org.pixeldroid.app.utils.loadJsonMenuTabs
+import org.pixeldroid.app.utils.loadDbMenuTabs
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.enablePullNotifications
 import org.pixeldroid.app.utils.notificationsWorker.removeNotificationChannelsFromAccount
-import org.pixeldroid.app.utils.toList
 import java.time.Instant
 
 
@@ -390,60 +385,42 @@ class MainActivity : BaseActivity() {
 
     @OptIn(ExperimentalPagingApi::class)
     private fun setupTabs() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val tabsCheckedString = sharedPreferences.getString("tabsChecked", null)
+        val tabsCheckedDbEntry = db.tabsDao().getTabsChecked()
         val pageIds = listOf(R.id.page_1, R.id.page_2, R.id.page_3, R.id.page_4, R.id.page_5)
 
-        fun getDrawable(titleId: Int): Drawable? {
-            val resId = when (titleId) {
-                R.string.home_feed -> R.drawable.selector_home_feed
-                R.string.search_discover_feed -> R.drawable.ic_search_white_24dp
-                R.string.create_feed -> R.drawable.selector_camera
-                R.string.notifications_feed -> R.drawable.selector_notifications
-                R.string.public_feed -> R.drawable.ic_filter_black_24dp
-                else -> 0
-            }
-            if (resId == 0) {
-                return null
-            } else {
-                return AppCompatResources.getDrawable(applicationContext, resId)
-            }
-        }
-
-        fun getFragment(titleId: Int): (() -> Fragment)? {
-            return when (titleId) {
-                R.string.home_feed -> { {
+        fun Tab.getFragment(): (() -> Fragment)? {
+            return when (this) {
+                Tab.HOME_FEED -> { {
                     PostFeedFragment<HomeStatusDatabaseEntity>()
                         .apply {
                             arguments = Bundle().apply { putBoolean("home", true) }
                         }
                 } }
-                R.string.search_discover_feed -> { { SearchDiscoverFragment() } }
-                R.string.create_feed -> { { CameraFragment() } }
-                R.string.notifications_feed -> { { NotificationsFragment() } }
-                R.string.public_feed -> { {
+                Tab.SEARCH_DISCOVER_FEED -> { { SearchDiscoverFragment() } }
+                Tab.CREATE_FEED -> { { CameraFragment() } }
+                Tab.NOTIFICATIONS_FEED -> { { NotificationsFragment() } }
+                Tab.PUBLIC_FEED -> { {
                     PostFeedFragment<PublicFeedStatusDatabaseEntity>()
                         .apply {
                             arguments = Bundle().apply { putBoolean("home", false) }
                         }
                 } }
-                else -> null
             }
         }
 
-        val tabs = if (tabsCheckedString == null) {
+        val tabs = if (tabsCheckedDbEntry.isEmpty()) {
             // Load default menu
-            loadDefaultMenuTabs(applicationContext, binding.root).map { it.toInt() }
+            loadDefaultMenuTabs(applicationContext, binding.root)
         } else {
             // Get current menu visibility and order from settings
-            val tabsChecked = loadJsonMenuTabs(tabsCheckedString).filter { it.second }.map { it.first.toInt() }
+            val tabsChecked = loadDbMenuTabs(applicationContext, tabsCheckedDbEntry).filter { it.second }.map { it.first }
 
             val bottomNavigationMenu: Menu = binding.tabs.menu
             bottomNavigationMenu.clear()
 
             tabsChecked.zip(pageIds).forEach { (tabId, pageId) ->
-                with(bottomNavigationMenu.add(0, pageId, Menu.NONE, getString(tabId))) {
-                    val tabIcon = getDrawable(tabId)
+                with(bottomNavigationMenu.add(0, pageId, Menu.NONE, tabId.toLanguageString(applicationContext))) {
+                    val tabIcon = tabId.getDrawable(applicationContext)
                     if (tabIcon != null) {
                         icon = tabIcon
                     }
@@ -453,7 +430,7 @@ class MainActivity : BaseActivity() {
             tabsChecked
         }
 
-        val tabArray: List<() -> Fragment> = tabs.map { getFragment(it)!! }
+        val tabArray: List<() -> Fragment> = tabs.map { it.getFragment()!! }
 
         binding.viewPager.reduceDragSensitivity()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
@@ -467,7 +444,7 @@ class MainActivity : BaseActivity() {
         }
 
         val notificationId = tabs.zip(pageIds).find {
-            it.first == R.string.notifications_feed
+            it.first == Tab.NOTIFICATIONS_FEED
         }?.second
 
         fun doAtPageId(pageId: Int): Int {

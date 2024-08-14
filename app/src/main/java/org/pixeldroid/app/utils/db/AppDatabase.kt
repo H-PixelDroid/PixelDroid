@@ -14,15 +14,17 @@ import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.api.objects.Notification
+import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 
 @Database(entities = [
         InstanceDatabaseEntity::class,
         UserDatabaseEntity::class,
         HomeStatusDatabaseEntity::class,
         PublicFeedStatusDatabaseEntity::class,
-        Notification::class
+        Notification::class,
+        TabsDatabaseEntity::class
     ],
-    version = 6
+    version = 7
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -31,6 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun homePostDao(): HomePostDao
     abstract fun publicPostDao(): PublicPostDao
     abstract fun notificationDao(): NotificationDao
+    abstract fun tabsDao(): TabsDao
 }
 
 val MIGRATION_3_4 = object : Migration(3, 4) {
@@ -48,5 +51,11 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
 val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE instances ADD COLUMN pixelfed INTEGER NOT NULL DEFAULT 1")
+    }
+}
+val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        // TODO: Migrate database
+        //database.execSQL("ADD TABLE ")
     }
 }

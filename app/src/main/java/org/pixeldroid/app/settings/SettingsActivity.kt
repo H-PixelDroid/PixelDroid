@@ -1,7 +1,6 @@
 package org.pixeldroid.app.settings
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
@@ -14,9 +13,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -28,18 +29,23 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.json.JSONArray
-import org.json.JSONObject
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
+import org.pixeldroid.app.utils.Tab
+import org.pixeldroid.app.utils.db.AppDatabase
+import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
+import org.pixeldroid.app.utils.loadDbMenuTabs
 import org.pixeldroid.app.utils.loadDefaultMenuTabs
-import org.pixeldroid.app.utils.loadJsonMenuTabs
 import org.pixeldroid.app.utils.setThemeFromPreferences
 import org.pixeldroid.common.ThemedActivity
+import javax.inject.Inject
 
 
 class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+
     private var restartMainOnExit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -196,7 +202,11 @@ class LanguageSettingFragment : DialogFragment() {
     }
 }
 
+@AndroidEntryPoint
 class ArrangeTabsFragment: DialogFragment() {
+
+    @Inject
+    lateinit var db: AppDatabase
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -206,14 +216,15 @@ class ArrangeTabsFragment: DialogFragment() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         val tabsCheckedString = sharedPreferences.getString("tabsChecked", null)
+        val tabsDbEntities = db.tabsDao().getTabsChecked()
 
-        val map = if (tabsCheckedString == null) {
+        val map = if (tabsDbEntities.isEmpty()) {
             // Load default menu
             val list = loadDefaultMenuTabs(requireContext(), dialogView)
             list.zip(List(list.size){true}.toTypedArray()).toMutableList()
         } else {
             // Get current menu visibility and order from settings
-            loadJsonMenuTabs(tabsCheckedString).toMutableList()
+            loadDbMenuTabs(requireContext(), tabsDbEntities).toMutableList()
         }
 
         val listFeed: RecyclerView = dialogView.findViewById(R.id.tabs)
@@ -245,27 +256,19 @@ class ArrangeTabsFragment: DialogFragment() {
             setPositiveButton(android.R.string.ok) { _, _ ->
                 // Save values into preferences
                 val tabsChecked = listAdapter.tabsChecked.toList()
-                val tabsJson = JSONArray()
-                val checkedJson = JSONArray()
-
-                tabsChecked.forEach { (k, v) ->
-                    tabsJson.put(k)
-                    checkedJson.put(v.toString())
+                val tabsDbEntity = tabsChecked.mapIndexed { index, (tab, checked) ->
+                    TabsDatabaseEntity(db.userDao().getActiveUser()!!.user_id, db.instanceDao().getActiveInstance().uri, index, tab.name, checked)
                 }
-
-                val tabsCheckedJson = JSONObject().apply {
-                    put("tabs", tabsJson)
-                    put("checked", checkedJson)
-                }.toString()
-
-                sharedPreferences.edit().putString("tabsChecked", tabsCheckedJson).apply()
+                lifecycleScope.launch {
+                    db.tabsDao().clearAndRefill(tabsDbEntity)
+                }
             }
         }.create()
 
         return dialog
     }
 
-    inner class ListViewAdapter(val tabsChecked: MutableList<Pair<String, Boolean>>):
+    inner class ListViewAdapter(val tabsChecked: MutableList<Pair<Tab, Boolean>>):
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -287,7 +290,7 @@ class ArrangeTabsFragment: DialogFragment() {
             val dragHandle: ImageView = holder.itemView.findViewById(R.id.dragHandle)
 
             // Set content of each entry
-            textView.text = getString(tabsChecked[position].first.toInt())
+            textView.text = tabsChecked[position].first.toLanguageString(requireContext())
             checkBox.isChecked = tabsChecked[position].second
 
             // Also interact with checkbox when button is clicked
