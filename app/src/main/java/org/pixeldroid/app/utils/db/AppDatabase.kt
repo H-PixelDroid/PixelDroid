@@ -1,5 +1,6 @@
 package org.pixeldroid.app.utils.db
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -24,7 +25,10 @@ import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
         Notification::class,
         TabsDatabaseEntity::class
     ],
-    version = 7
+    version = 7,
+    autoMigrations = [
+        AutoMigration(from = 6, to = 7)
+    ],
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -51,11 +55,5 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
 val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE instances ADD COLUMN pixelfed INTEGER NOT NULL DEFAULT 1")
-    }
-}
-val MIGRATION_6_7 = object : Migration(6, 7) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        // TODO: Migrate database
-        //database.execSQL("ADD TABLE ")
     }
 }

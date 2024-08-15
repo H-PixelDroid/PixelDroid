@@ -11,6 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import org.pixeldroid.app.utils.db.MIGRATION_3_4
 import org.pixeldroid.app.utils.db.MIGRATION_4_5
 import org.pixeldroid.app.utils.db.MIGRATION_5_6
+import org.pixeldroid.app.utils.db.MIGRATION_6_7
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

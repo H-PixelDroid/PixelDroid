@@ -17,9 +17,9 @@ import androidx.room.Index
     indices = [Index(value = ["user_id", "instance_uri"])]
 )
 data class TabsDatabaseEntity(
+    var index: Int,
     var user_id: String,
     var instance_uri: String,
-    var index: Int,
     var tab: String,
     var checked: Boolean = true,
 )

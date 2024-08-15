@@ -35,6 +35,9 @@ android {
         versionName "1.0.beta" + versionCode
 
         //TODO add resConfigs("en", "fr", "ja",...) ?
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
 
         testInstrumentationRunner "org.pixeldroid.app.testUtility.TestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'

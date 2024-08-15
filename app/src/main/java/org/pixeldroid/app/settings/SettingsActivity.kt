@@ -43,7 +43,7 @@ import org.pixeldroid.app.utils.setThemeFromPreferences
 import org.pixeldroid.common.ThemedActivity
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var restartMainOnExit = false
@@ -257,10 +257,11 @@ class ArrangeTabsFragment: DialogFragment() {
                 // Save values into preferences
                 val tabsChecked = listAdapter.tabsChecked.toList()
                 val tabsDbEntity = tabsChecked.mapIndexed { index, (tab, checked) ->
-                    TabsDatabaseEntity(db.userDao().getActiveUser()!!.user_id, db.instanceDao().getActiveInstance().uri, index, tab.name, checked)
+                    TabsDatabaseEntity(index, db.userDao().getActiveUser()!!.user_id, db.instanceDao().getActiveInstance().uri, tab.name, checked)
                 }
                 lifecycleScope.launch {
                     db.tabsDao().clearAndRefill(tabsDbEntity)
+                    // TODO: restartMainOnExit = true
                 }
             }
         }.create()
