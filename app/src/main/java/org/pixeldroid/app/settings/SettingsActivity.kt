@@ -215,7 +215,6 @@ class ArrangeTabsFragment: DialogFragment() {
         val dialogView: View = inflater.inflate(R.layout.layout_tabs_arrange, null)
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        val tabsCheckedString = sharedPreferences.getString("tabsChecked", null)
         val tabsDbEntities = db.tabsDao().getTabsChecked()
 
         val map = if (tabsDbEntities.isEmpty()) {
@@ -261,7 +260,6 @@ class ArrangeTabsFragment: DialogFragment() {
                 }
                 lifecycleScope.launch {
                     db.tabsDao().clearAndRefill(tabsDbEntity)
-                    // TODO: restartMainOnExit = true
                 }
             }
         }.create()

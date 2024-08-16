@@ -388,7 +388,7 @@ class MainActivity : BaseActivity() {
         val tabsCheckedDbEntry = db.tabsDao().getTabsChecked()
         val pageIds = listOf(R.id.page_1, R.id.page_2, R.id.page_3, R.id.page_4, R.id.page_5)
 
-        fun Tab.getFragment(): (() -> Fragment)? {
+        fun Tab.getFragment(): (() -> Fragment) {
             return when (this) {
                 Tab.HOME_FEED -> { {
                     PostFeedFragment<HomeStatusDatabaseEntity>()
@@ -419,7 +419,7 @@ class MainActivity : BaseActivity() {
             bottomNavigationMenu.clear()
 
             tabsChecked.zip(pageIds).forEach { (tabId, pageId) ->
-                with(bottomNavigationMenu.add(0, pageId, Menu.NONE, tabId.toLanguageString(applicationContext))) {
+                with(bottomNavigationMenu.add(0, pageId, Menu.NONE, tabId.toLanguageString(baseContext))) {
                     val tabIcon = tabId.getDrawable(applicationContext)
                     if (tabIcon != null) {
                         icon = tabIcon
@@ -430,7 +430,7 @@ class MainActivity : BaseActivity() {
             tabsChecked
         }
 
-        val tabArray: List<() -> Fragment> = tabs.map { it.getFragment()!! }
+        val tabArray: List<() -> Fragment> = tabs.map { it.getFragment() }
 
         binding.viewPager.reduceDragSensitivity()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
