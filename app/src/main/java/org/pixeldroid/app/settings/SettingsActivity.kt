@@ -213,9 +213,10 @@ class ArrangeTabsFragment: DialogFragment() {
 
         val inflater: LayoutInflater = requireActivity().layoutInflater
         val dialogView: View = inflater.inflate(R.layout.layout_tabs_arrange, null)
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val userId = db.userDao().getActiveUser()!!.user_id
+        val instanceUri = db.instanceDao().getActiveInstance().uri
 
-        val tabsDbEntities = db.tabsDao().getTabsChecked()
+        val tabsDbEntities = db.tabsDao().getTabsChecked(userId, instanceUri)
 
         val map = if (tabsDbEntities.isEmpty()) {
             // Load default menu
@@ -259,7 +260,7 @@ class ArrangeTabsFragment: DialogFragment() {
                     TabsDatabaseEntity(index, db.userDao().getActiveUser()!!.user_id, db.instanceDao().getActiveInstance().uri, tab.name, checked)
                 }
                 lifecycleScope.launch {
-                    db.tabsDao().clearAndRefill(tabsDbEntity)
+                    db.tabsDao().clearAndRefill(tabsDbEntity, userId, instanceUri)
                 }
             }
         }.create()

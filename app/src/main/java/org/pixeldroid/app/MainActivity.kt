@@ -17,7 +17,6 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -385,7 +384,9 @@ class MainActivity : BaseActivity() {
 
     @OptIn(ExperimentalPagingApi::class)
     private fun setupTabs() {
-        val tabsCheckedDbEntry = db.tabsDao().getTabsChecked()
+        val userId = db.userDao().getActiveUser()!!.user_id
+        val instanceId = db.instanceDao().getActiveInstance().uri
+        val tabsCheckedDbEntry = db.tabsDao().getTabsChecked(userId, instanceId)
         val pageIds = listOf(R.id.page_1, R.id.page_2, R.id.page_3, R.id.page_4, R.id.page_5)
 
         fun Tab.getFragment(): (() -> Fragment) {

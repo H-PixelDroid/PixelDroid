@@ -10,17 +10,17 @@ import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 
 @Dao
 interface TabsDao {
-    @Query("SELECT * FROM tabsChecked WHERE `index`=:index")
-    fun getTabChecked(index: Int): TabsDatabaseEntity
+    @Query("SELECT * FROM tabsChecked WHERE `index`=:index AND `user_id`=:userId AND `instance_uri`=:instanceUri")
+    fun getTabChecked(index: Int, userId: String, instanceUri: String): TabsDatabaseEntity
 
-    @Query("SELECT * FROM tabsChecked")
-    fun getTabsChecked(): List<TabsDatabaseEntity>
+    @Query("SELECT * FROM tabsChecked WHERE `user_id`=:userId AND `instance_uri`=:instanceUri")
+    fun getTabsChecked(userId: String, instanceUri: String): List<TabsDatabaseEntity>
 
-    @Query("DELETE FROM tabsChecked WHERE `index`=:index")
-    fun deleteTabChecked(index: Int)
+    @Query("DELETE FROM tabsChecked WHERE `index`=:index AND `user_id`=:userId AND `instance_uri`=:instanceUri")
+    fun deleteTabChecked(index: Int, userId: String, instanceUri: String)
 
-    @Query("DELETE FROM tabsChecked")
-    fun deleteTabsChecked()
+    @Query("DELETE FROM tabsChecked WHERE `user_id`=:userId AND `instance_uri`=:instanceUri")
+    fun deleteTabsChecked(userId: String, instanceUri: String)
 
     /**
      * Insert an instance, if it already exists return -1
@@ -39,8 +39,8 @@ interface TabsDao {
     }
 
     @Transaction
-    suspend fun clearAndRefill(tabsChecked: List<TabsDatabaseEntity>) {
-        deleteTabsChecked()
+    suspend fun clearAndRefill(tabsChecked: List<TabsDatabaseEntity>, userId: String, instanceUri: String) {
+        deleteTabsChecked(userId, instanceUri)
         tabsChecked.forEach { insertTabChecked(it) }
     }
 }
