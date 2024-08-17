@@ -2,6 +2,7 @@ package org.pixeldroid.app.settings
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.XmlResourceParser
@@ -17,7 +18,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -30,10 +35,16 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
 import org.pixeldroid.app.utils.Tab
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
@@ -42,6 +53,7 @@ import org.pixeldroid.app.utils.loadDefaultMenuTabs
 import org.pixeldroid.app.utils.setThemeFromPreferences
 import org.pixeldroid.common.ThemedActivity
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -208,27 +220,18 @@ class ArrangeTabsFragment: DialogFragment() {
     @Inject
     lateinit var db: AppDatabase
 
+    private val model: ArrangeTabsViewModel by viewModels { ArrangeTabsViewModelFactory(requireContext(), db) }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val inflater: LayoutInflater = requireActivity().layoutInflater
         val dialogView: View = inflater.inflate(R.layout.layout_tabs_arrange, null)
-        val userId = db.userDao().getActiveUser()!!.user_id
-        val instanceUri = db.instanceDao().getActiveInstance().uri
 
-        val tabsDbEntities = db.tabsDao().getTabsChecked(userId, instanceUri)
-
-        val map = if (tabsDbEntities.isEmpty()) {
-            // Load default menu
-            val list = loadDefaultMenuTabs(requireContext(), dialogView)
-            list.zip(List(list.size){true}.toTypedArray()).toMutableList()
-        } else {
-            // Get current menu visibility and order from settings
-            loadDbMenuTabs(requireContext(), tabsDbEntities).toMutableList()
-        }
+        model.initTabsChecked(dialogView)
 
         val listFeed: RecyclerView = dialogView.findViewById(R.id.tabs)
-        val listAdapter = ListViewAdapter(map)
+        val listAdapter = ListViewAdapter(model)
         listFeed.adapter = listAdapter
         listFeed.layoutManager = LinearLayoutManager(requireActivity())
         val callback = object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
@@ -255,12 +258,12 @@ class ArrangeTabsFragment: DialogFragment() {
             setNegativeButton(android.R.string.cancel) { _, _ -> }
             setPositiveButton(android.R.string.ok) { _, _ ->
                 // Save values into preferences
-                val tabsChecked = listAdapter.tabsChecked.toList()
+                val tabsChecked = listAdapter.model.uiState.value.tabsChecked.toList()
                 val tabsDbEntity = tabsChecked.mapIndexed { index, (tab, checked) ->
                     TabsDatabaseEntity(index, db.userDao().getActiveUser()!!.user_id, db.instanceDao().getActiveInstance().uri, tab.name, checked)
                 }
                 lifecycleScope.launch {
-                    db.tabsDao().clearAndRefill(tabsDbEntity, userId, instanceUri)
+                    db.tabsDao().clearAndRefill(tabsDbEntity, model.uiState.value.userId, model.uiState.value.instanceUri)
                 }
             }
         }.create()
@@ -268,7 +271,7 @@ class ArrangeTabsFragment: DialogFragment() {
         return dialog
     }
 
-    inner class ListViewAdapter(val tabsChecked: MutableList<Pair<Tab, Boolean>>):
+    inner class ListViewAdapter(val model: ArrangeTabsViewModel):
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -290,19 +293,19 @@ class ArrangeTabsFragment: DialogFragment() {
             val dragHandle: ImageView = holder.itemView.findViewById(R.id.dragHandle)
 
             // Set content of each entry
-            textView.text = tabsChecked[position].first.toLanguageString(requireContext())
-            checkBox.isChecked = tabsChecked[position].second
+            textView.text = model.uiState.value.tabsChecked[position].first.toLanguageString(requireContext())
+            checkBox.isChecked = model.uiState.value.tabsChecked[position].second
 
             // Also interact with checkbox when button is clicked
             textView.setOnClickListener {
-                val isCheckedNew = !tabsChecked[position].second
-                tabsChecked[position] = Pair(tabsChecked[position].first, isCheckedNew)
+                val isCheckedNew = !model.uiState.value.tabsChecked[position].second
+                model.tabsCheckReplace(position, Pair(model.uiState.value.tabsChecked[position].first, isCheckedNew))
                 checkBox.isChecked = isCheckedNew
 
                 // Disable OK button when no tab is selected or when strictly more than 5 tabs are selected
                 val maxItemCount = BottomNavigationView(requireContext()).maxItemCount // = 5
                 (requireDialog() as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled =
-                    with (tabsChecked.count { (_, v) -> v }) { this in 1..maxItemCount}
+                    with (model.uiState.value.tabsChecked.count { (_, v) -> v }) { this in 1..maxItemCount}
             }
 
             // Also highlight button when checkbox is clicked
@@ -315,14 +318,113 @@ class ArrangeTabsFragment: DialogFragment() {
         }
 
         override fun getItemCount(): Int {
-            return tabsChecked.size
+            return model.uiState.value.tabsChecked.size
         }
 
         fun onItemMove(from: Int, to: Int) {
-            val previous = tabsChecked.removeAt(from)
-            tabsChecked.add(to, previous)
+            val previous = model.tabsCheckedRemove(from)
+            model.tabsCheckedAdd(to, previous)
             notifyItemMoved(from, to)
             notifyItemChanged(to) // necessary to avoid checkBox issues
         }
     }
 }
+
+class ArrangeTabsViewModelFactory constructor(
+    private val applicationContext: Context, private val db: AppDatabase
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ArrangeTabsViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return ArrangeTabsViewModel(applicationContext, db) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+@HiltViewModel
+class ArrangeTabsViewModel @Inject constructor(
+    @ApplicationContext private val applicationContext: Context,
+    private val db: AppDatabase
+): ViewModel() {
+
+    private val _uiState = MutableStateFlow(ArrangeTabsUiState())
+    val uiState: StateFlow<ArrangeTabsUiState> = _uiState
+
+    private var oldTabsChecked: MutableList<Pair<Tab, Boolean>> = mutableListOf()
+
+    init {
+        initTabsDbEntities()
+    }
+
+    private fun initTabsDbEntities() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                userId = db.userDao().getActiveUser()!!.user_id,
+                instanceUri = db.instanceDao().getActiveInstance().uri,
+            )
+        }
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                tabsDbEntities = db.tabsDao().getTabsChecked(_uiState.value.userId, _uiState.value.instanceUri)
+            )
+        }
+    }
+
+    fun initTabsChecked(view: View) {
+        if (oldTabsChecked.isEmpty()) {
+            // Only load tabsChecked if the model has not been updated
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    tabsChecked = if (_uiState.value.tabsDbEntities.isEmpty()) {
+                        // Load default menu
+                        val list = loadDefaultMenuTabs(applicationContext, view)
+                        list.zip(List(list.size){true}.toTypedArray()).toList()
+                    } else {
+                        // Get current menu visibility and order from settings
+                        loadDbMenuTabs(applicationContext, _uiState.value.tabsDbEntities).toList()
+                    }
+                )
+            }
+        }
+    }
+
+    fun tabsCheckReplace(position: Int, pair: Pair<Tab, Boolean>) {
+        oldTabsChecked = _uiState.value.tabsChecked.toMutableList()
+        oldTabsChecked[position] = pair
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                tabsChecked = oldTabsChecked.toList()
+            )
+        }
+    }
+
+    fun tabsCheckedRemove(position: Int): Pair<Tab, Boolean> {
+        oldTabsChecked = _uiState.value.tabsChecked.toMutableList()
+        val removedPair = oldTabsChecked.removeAt(position)
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                tabsChecked = oldTabsChecked.toList()
+            )
+        }
+        return removedPair
+    }
+
+    fun tabsCheckedAdd(position: Int, pair: Pair<Tab, Boolean>) {
+        oldTabsChecked = _uiState.value.tabsChecked.toMutableList()
+        oldTabsChecked.add(position, pair)
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                tabsChecked = oldTabsChecked.toList()
+            )
+        }
+    }
+}
+
+data class ArrangeTabsUiState(
+    val userId: String = "",
+    val instanceUri: String = "",
+    val tabsDbEntities: List<TabsDatabaseEntity> = listOf(),
+    val tabsChecked: List<Pair<Tab, Boolean>> = listOf()
+)
