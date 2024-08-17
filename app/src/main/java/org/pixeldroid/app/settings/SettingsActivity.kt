@@ -22,7 +22,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ExperimentalPagingApi
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -44,7 +43,6 @@ import kotlinx.coroutines.launch
 import org.pixeldroid.app.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
-import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
 import org.pixeldroid.app.utils.Tab
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
@@ -222,7 +220,6 @@ class ArrangeTabsFragment: DialogFragment() {
 
     private val model: ArrangeTabsViewModel by viewModels { ArrangeTabsViewModelFactory(requireContext(), db) }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val inflater: LayoutInflater = requireActivity().layoutInflater
