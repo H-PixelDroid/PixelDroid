@@ -256,9 +256,9 @@ class ArrangeTabsFragment: DialogFragment() {
             setPositiveButton(android.R.string.ok) { _, _ ->
                 // Save values into preferences
                 val tabsChecked = listAdapter.model.uiState.value.tabsChecked.toList()
-                val tabsDbEntity = tabsChecked.mapIndexed { index, (tab, checked) ->
-                    TabsDatabaseEntity(index, db.userDao().getActiveUser()!!.user_id, db.instanceDao().getActiveInstance().uri, tab.name, checked)
-                }
+                val tabsDbEntity = tabsChecked.mapIndexed { index, (tab, checked) -> with (db.userDao().getActiveUser()!!) {
+                    TabsDatabaseEntity(index, user_id, instance_uri, tab.name, checked)
+                } }
                 lifecycleScope.launch {
                     db.tabsDao().clearAndRefill(tabsDbEntity, model.uiState.value.userId, model.uiState.value.instanceUri)
                 }
