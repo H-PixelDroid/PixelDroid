@@ -11,8 +11,6 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
-import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
@@ -34,15 +32,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
 import okhttp3.HttpUrl
-import org.json.JSONArray
-import org.json.JSONObject
 import org.pixeldroid.app.R
-import org.pixeldroid.app.postCreation.camera.CameraFragment
-import org.pixeldroid.app.posts.feeds.cachedFeeds.notifications.NotificationsFragment
-import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
-import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
-import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
-import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 import java.time.Instant
 import java.time.format.DateTimeFormatter
