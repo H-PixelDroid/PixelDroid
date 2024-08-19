@@ -1,0 +1,4 @@
+* Messaggi di avviso meno aggressivi se disabiliti la fotocamera o permessi ai file
+* Traduzioni aggiornate
+* Correzione del caricamento video rotto
+* Miglioria nella gestione di errori

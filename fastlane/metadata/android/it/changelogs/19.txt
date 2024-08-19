@@ -1,0 +1,9 @@
+* Rimuovi i metadati delle foto prima di caricarle
+* Bookmarks
+* See a profile as a feed or grid
+* Set a template for your descriptions
+* Badge on the notification icon if you got a new notification
+* Più opzioni per modificare i video: ritagliare, cambiare velocità, aggiungere stabilizzazione
+* Implementa colori dinamici: puoi rendere PixelDroid seguire il colore del tuo sfondo (da Android 12 in su)
+* Correzione di bug
+* Traduzioni aggiornate
