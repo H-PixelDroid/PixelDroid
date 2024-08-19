@@ -40,8 +40,6 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
 
         home = requireArguments().getBoolean("home")
 
-        adapter = PostsAdapter(requireContext().displayDimensionsInPx())
-
         @Suppress("UNCHECKED_CAST")
         if (home){
             mediator = HomeFeedRemoteMediator(apiHolder, db) as RemoteMediator<Int, T>
@@ -61,6 +59,7 @@ class PostFeedFragment<T: FeedContentDatabase>: CachedFeedFragment<T>() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        adapter = PostsAdapter(requireContext().displayDimensionsInPx())
 
         val view = super.onCreateView(inflater, container, savedInstanceState)
 

@@ -1,0 +1,7 @@
+- Support des notifications ! Encore un peu rudimentaire :)
+- Correction : rotation EXIF ignorée, photos tournées dans le mauvais sens
+- Correction #300
+- Correction : navigateurs webview affichant une erreur à la connexion quand l'URL contenait des espaces
+- Correction : vidage des caches, flux vides aux lancements, performance, photos de profil et appareil photo en erreur après changement d'onglet
+- Traduction : ajout du Tchèque et mise à jour des autres langues
+- Dépendances mises à jour

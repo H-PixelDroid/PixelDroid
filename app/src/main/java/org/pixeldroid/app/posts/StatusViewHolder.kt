@@ -1,7 +1,6 @@
 package org.pixeldroid.app.posts
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.graphics.Typeface
@@ -18,11 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
@@ -157,8 +152,7 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
         if(!status?.media_attachments.isNullOrEmpty()) {
             setupPostPics(binding, request)
         } else {
-            binding.postPager.visibility = View.GONE
-            binding.postIndicator.visibility = View.GONE
+            binding.postConstraint.visibility = View.GONE
         }
     }
 
@@ -806,17 +800,15 @@ class StatusViewHolder(val binding: PostFragmentBinding) : RecyclerView.ViewHold
 class AlbumViewPagerAdapter(
     private val media_attachments: List<Attachment>, private var sensitive: Boolean?,
     private val opened: Boolean, private val alwaysShowNsfw: Boolean,
-) :
-    RecyclerView.Adapter<AlbumViewPagerAdapter.ViewHolder>() {
-
-    private var isActionBarHidden: Boolean = false
+    private val clickCallback: (() -> Unit)? = null
+) : RecyclerView.Adapter<AlbumViewPagerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return if(!opened) ViewHolderClosed(AlbumImageViewBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )) else ViewHolderOpen(OpenedAlbumBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
-        ))
+        ), clickCallback!!)
     }
 
     override fun getItemCount() = media_attachments.size
@@ -846,24 +838,6 @@ class AlbumViewPagerAdapter(
                         setMinimumDpi(80)
                         setDoubleTapZoomDpi(240)
                         resetScaleAndCenter()
-                    }
-                    holder.image.setOnClickListener {
-                        val windowInsetsController = WindowCompat.getInsetsController((it.context as Activity).window, it)
-                        // Configure the behavior of the hidden system bars
-                        if (isActionBarHidden) {
-                            windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                            // Hide both the status bar and the navigation bar
-                            (it.context as AppCompatActivity).supportActionBar?.show()
-                            windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
-                            isActionBarHidden = false
-                        } else {
-                            // Configure the behavior of the hidden system bars
-                            windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                            // Hide both the status bar and the navigation bar
-                            (it.context as AppCompatActivity).supportActionBar?.hide()
-                            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-                            isActionBarHidden = true
-                        }
                     }
                 }
                 else Glide.with(holder.binding.root)
@@ -910,9 +884,13 @@ class AlbumViewPagerAdapter(
         abstract val videoPlayButton: ImageView
     }
 
-    class ViewHolderOpen(override val binding: OpenedAlbumBinding) : ViewHolder(binding) {
+    class ViewHolderOpen(override val binding: OpenedAlbumBinding, clickCallback: () -> Unit) : ViewHolder(binding) {
         override val image: SubsamplingScaleImageView = binding.imageImageView
         override val videoPlayButton: ImageView = binding.videoPlayButton
+
+        init {
+            image.setOnClickListener { clickCallback() }
+        }
     }
     class ViewHolderClosed(override val binding: AlbumImageViewBinding) : ViewHolder(binding) {
         override val image: ImageView = binding.imageImageView

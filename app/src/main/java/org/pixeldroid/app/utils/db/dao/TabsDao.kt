@@ -23,7 +23,7 @@ interface TabsDao {
     fun deleteTabsChecked(userId: String, instanceUri: String)
 
     /**
-     * Insert an instance, if it already exists return -1
+     * Insert a tab, if it already exists return -1
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTabChecked(tabChecked: TabsDatabaseEntity): Long

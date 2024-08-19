@@ -1,0 +1,3 @@
+* Correction d'un crash lors du partage d'une image (de la galerie, etc.) vers l'application
+
+* Correction d'un problème de permission qui causait de la part des images une erreur "permission refusée"

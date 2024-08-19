@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.pixeldroid.app.MainActivity">
+    tools:context="org.pixeldroid.app.main.MainActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
                 app:elevation="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:menu="@menu/bottom_navigation_main" />
+                app:menu="@menu/navigation_main" />
         </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2

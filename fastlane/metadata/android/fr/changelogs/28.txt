@@ -1,0 +1,7 @@
+Correction d'un bug lors de l'ouverture d'un album en plein écran.
+
+Utiliser l'accélération matérielle (OpenGL ! Shaders !) pour l'édition d'images. Pour l'instant, nous essayons juste d'imiter l'implémentation précédente, mais cela fournira des blocs de construction pour des choses bien plus cool par la suite :)
+
+Dites-nous si quelque chose ne fonctionne pas correctement ! (email, Mastodon)
+
+Il y a aussi des mises à jour de traduction dans cette version :)

@@ -1,0 +1,7 @@
+* Commentaires : leur ouverture permet de voir les réponses et l'avatar de l'auteur, l'aimer, etc
+* MAJ des traductions. Merci aux traducteurs :) Aidez à la traduction sur weblate.pixeldroid.org
+* Sécurité : altération des dépendances vérifiée, refus des connexions HTTP
+* Utilisation du User Agent "PixelDroid" 
+* Suppression des chaînes codées en dur, tout est maintenant traduisible
+* Quelques améliorations du code
+* Correction de la sauvegarde des images et d'un crash sur des instances Mastodon

@@ -1,0 +1,5 @@
+* Mises à jour des traductions
+* Amélioration de l'affichage des informations sur les licences
+* Correction des problèmes de permission dans l'onglet caméra
+* Correction de l'analyseur de liens
+* Correction de la vue découverte (peut nécessiter des mises à jour de l'instance)

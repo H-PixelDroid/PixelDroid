@@ -8,6 +8,21 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
 }
+// Map for the version code that gives each ABI a value.
+ext.abiCodes = ['armeabi-v7a': 1, 'arm64-v8a': 2, x86: 3, x86_64: 4]
+
+//Different version codes per architecture (for F-Droid support)
+android.applicationVariants.configureEach { variant ->
+    variant.outputs.each { output ->
+        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(com.android.build.OutputFile.ABI))
+        if (baseAbiVersionCode != null) {
+            output.versionCodeOverride = (100 * project.android.defaultConfig.versionCode) + baseAbiVersionCode
+        } else {
+            output.versionCodeOverride = 100 * project.android.defaultConfig.versionCode
+        }
+    }
+
+}
 
 android {
 
@@ -31,7 +46,7 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 32
+        versionCode 34
         versionName "1.0.beta" + versionCode
 
         //TODO add resConfigs("en", "fr", "ja",...) ?
@@ -98,7 +113,8 @@ android {
             reset()
 
             // Specifies a list of ABIs for Gradle to create APKs for.
-            include "x86", "x86_64", "arm64-v8a", "armeabi-v7a"
+            //noinspection ChromeOsAbiSupport
+            include project.ext.abiCodes.keySet() as String[]
 
             // Specifies that we don't want to also generate a universal APK that includes all ABIs.
             universalApk false
@@ -151,41 +167,43 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.hilt:hilt-common:1.2.0'
+    implementation 'androidx.hilt:hilt-work:1.2.0'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
     /**
      * AndroidX dependencies:
      */
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
-    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
-    implementation "androidx.browser:browser:1.7.0"
+    implementation "androidx.browser:browser:1.8.0"
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
-    implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.7.0"
-    implementation "androidx.annotation:annotation:1.7.1"
+    implementation 'androidx.paging:paging-runtime-ktx:3.3.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.4'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.4'
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.8.4"
+    implementation "androidx.annotation:annotation:1.8.2"
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation "androidx.activity:activity-ktx:1.8.2"
-    implementation 'androidx.fragment:fragment-ktx:1.6.2'
-    implementation 'androidx.work:work-runtime-ktx:2.9.0'
+    implementation "androidx.activity:activity-ktx:1.9.1"
+    implementation 'androidx.fragment:fragment-ktx:1.8.2'
+    implementation 'androidx.work:work-runtime-ktx:2.9.1'
     implementation 'androidx.media2:media2-widget:1.3.0'
     implementation 'androidx.media2:media2-player:1.3.0'
 
 
     // Use the most recent version of CameraX
-    def cameraX_version = '1.3.1'
+    def cameraX_version = '1.3.4'
     implementation "androidx.camera:camera-core:$cameraX_version"
     implementation "androidx.camera:camera-camera2:$cameraX_version"
     // CameraX Lifecycle library
@@ -207,24 +225,24 @@ dependencies {
 
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'com.google.android.material:material:1.12.0'
 
     //Dagger (dependency injection)
-    implementation 'com.google.dagger:dagger:2.50'
-    ksp 'com.google.dagger:dagger-compiler:2.50'
+    implementation 'com.google.dagger:dagger:2.51.1'
+    ksp 'com.google.dagger:dagger-compiler:2.51.1'
 
-    implementation("com.google.dagger:hilt-android:2.50")
-    ksp "com.google.dagger:hilt-compiler:2.50"
+    implementation('com.google.dagger:hilt-android:2.51')
+    ksp 'com.google.dagger:hilt-compiler:2.51'
 
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.10.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.10.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.10.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.1.8'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
-    implementation 'org.pixeldroid.pixeldroid:android-media-editor:1.7'
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:3.1'
     implementation project(path: ':scrambler')
     implementation project(path: ':pixel_common')
 
@@ -247,12 +265,6 @@ dependencies {
     // Add for NavController support
     implementation 'com.mikepenz:materialdrawer-nav:9.0.2'
 
-    //iconics
-    implementation 'com.mikepenz:iconics-core:5.4.0'
-    implementation 'com.mikepenz:materialdrawer-iconics:9.0.2'
-    implementation 'com.mikepenz:iconics-views:5.4.0'
-    implementation 'com.mikepenz:google-material-typeface:4.0.0.2-kotlin@aar'
-
     implementation 'com.github.ligi:tracedroid:4.1'
 
     implementation 'me.relex:circleindicator:2.1.6'
@@ -267,25 +279,27 @@ dependencies {
     androidTestImplementation 'com.linkedin.testbutler:test-butler-library:2.2.1'
     androidTestUtil 'com.linkedin.testbutler:test-butler-app:2.2.1'
 
-    androidTestImplementation 'androidx.work:work-testing:2.9.0'
+    androidTestImplementation 'androidx.work:work-testing:2.9.1'
     testImplementation 'com.github.tomakehurst:wiremock-jre8:2.34.0'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$room_version"
 
 
-    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
+    androidTestImplementation 'androidx.test:runner:1.6.1'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test:runner:1.6.1'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
 
 }
+
+
 
 tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true

@@ -202,7 +202,8 @@ fun <T> Fragment.bindingLifecycleAware(): ReadWriteProperty<Fragment, T> =
 fun loadDefaultMenuTabs(context: Context, anchor: View): List<Tab> {
     return with(PopupMenu(context, anchor)) {
         val menu = this.menu
-        menuInflater.inflate(R.menu.bottom_navigation_main, menu)
+        menuInflater.inflate(R.menu.navigation_main, menu)
+        menu.removeGroup(R.id.bottomNavigationGroup)
         (0 until menu.size()).map { Tab.fromLanguageString(context, menu.getItem(it).title.toString()) }
     }
 }

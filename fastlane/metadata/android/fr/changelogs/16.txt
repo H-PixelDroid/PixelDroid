@@ -1,0 +1,4 @@
+* Ajout de règles gson proguard pour corriger les crashs sur les instances Mastodon
+* Ajout de thèmes de couleur avec 4 thèmes différents
+* Passage à Material 3
+* Améliorer la cohérence de l'interface utilisateur

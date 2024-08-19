@@ -1,4 +1,4 @@
-package org.pixeldroid.app
+package org.pixeldroid.app.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+   <group android:id="@+id/tabsId">
+    <item
+        android:id="@+id/page_1"
+        android:enabled="true"
+        android:icon="@drawable/selector_home_feed"
+        android:title="@string/home_feed"/>
+   <item
+        android:id="@+id/page_2"
+        android:enabled="true"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/search_discover_feed"/>
+   <item
+        android:id="@+id/page_3"
+        android:enabled="true"
+        android:icon="@drawable/selector_camera"
+        android:title="@string/create_feed"/>
+   <item
+        android:id="@+id/page_4"
+        android:enabled="true"
+        android:icon="@drawable/selector_notifications"
+        android:title="@string/notifications_feed"/>
+    <item
+        android:id="@+id/page_5"
+        android:enabled="true"
+        android:icon="@drawable/ic_filter_black_24dp"
+        android:title="@string/public_feed"/>
+   </group>
+   <group
+       android:id="@+id/bottomNavigationGroup"
+       android:orderInCategory="3">
+    <item
+        android:id="@+id/my_profile"
+        android:enabled="true"
+        android:icon="@drawable/person"
+        android:title="@string/menu_account"/>
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:icon="@drawable/settings"
+        android:title="@string/menu_settings"/>
+    <item
+        android:id="@+id/log_out"
+        android:enabled="true"
+        android:icon="@drawable/logout"
+        android:title="@string/logout"/>
+   </group>
+
+</menu>

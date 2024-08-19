@@ -11,7 +11,7 @@
     <string name="post">Запостить</string>
     <string name="logout">Выйти</string>
     <string name="whats_an_instance">Что такое экземпляр?</string>
-    <string name="edit">Править</string>
+    <string name="edit">Редактировать</string>
     <string name="save_to_gallery">Сохранить в Галерею…</string>
     <string name="image_download_downloading">Загрузка…</string>
     <string name="image_download_success">Изображение успешно загружено</string>
@@ -54,7 +54,7 @@
     <string name="picture_format_error">Ошибка загрузки: неверный формат изображения.</string>
     <string name="upload_picture_failed">Ошибка загрузки изображения!</string>
     <string name="save_image_success">Изображение успешно сохранено</string>
-    <string name="save_image_failed">Не могу сохранить изображение</string>
+    <string name="save_image_failed">Не удалось сохранить изображение</string>
     <string name="dark_theme">Тёмная</string>
     <string name="light_theme">Светлая</string>
     <string name="default_system">По умолчанию (как в системе)</string>
@@ -312,4 +312,19 @@
     <string name="change_profile_picture">Измените фотографию профиля</string>
     <string name="contains_nsfw">Содержит материалы NSFW</string>
     <string name="switch_accounts">Сменить аккаунт</string>
+    <string name="my_story">Моя история</string>
+    <string name="type_story">История</string>
+    <string name="continue_post_creation">Продолжить</string>
+    <string name="type_post">Пост</string>
+    <string name="comment_noun">Комментарий</string>
+    <string name="story_image">Изображение в истории</string>
+    <string name="replyToStory">Ответить %1$s</string>
+    <string name="story_reply_error">Произошла ошибка при отправке ответа</string>
+    <string name="error_fetch_story">Произошла ошибка при загрузке карусели</string>
+    <string name="sent_reply_story">Ответ отправлен</string>
+    <string name="add_story">Добавить историю</string>
+    <string name="story_could_not_see">Ошибка: не удалось отметить историю как просмотренную</string>
+    <string name="story_pause">Запустить или приостановить истории</string>
+    <string name="extraneous_pictures_stories">Картинки после первой были удалены, но их можно восстановить, переключившись обратно на создание поста</string>
+    <string name="story_duration">Длительность истории</string>
 </resources>

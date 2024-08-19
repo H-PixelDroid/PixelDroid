@@ -1,0 +1,4 @@
+* Unterstützung von Stories!
+* Aktualisierungen der Abhängigkeiten
+* Hardwarebeschleunigte Videokodierung
+* Jede Menge Arbeit hinter den Kulissen :)

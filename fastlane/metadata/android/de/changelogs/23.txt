@@ -1,0 +1,4 @@
+* Weniger aggressive Warnmeldungen beim Deaktivieren von Kamera- oder Dateirechten
+* Update der Übersetzungen
+* Fehler beim Video-Upload behoben
+* Verbesserte Fehlerbehandlung

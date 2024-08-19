@@ -1,0 +1,1 @@
+Séparation des APKs par architecture CPU, rendant les APKs beaucoup plus petits (passage de 100Mo à 25Mo)
