@@ -1,5 +1,6 @@
 package org.pixeldroid.app.utils.db
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -14,15 +15,20 @@ import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.api.objects.Notification
+import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 
 @Database(entities = [
         InstanceDatabaseEntity::class,
         UserDatabaseEntity::class,
         HomeStatusDatabaseEntity::class,
         PublicFeedStatusDatabaseEntity::class,
-        Notification::class
+        Notification::class,
+        TabsDatabaseEntity::class
     ],
-    version = 6
+    version = 7,
+    autoMigrations = [
+        AutoMigration(from = 6, to = 7)
+    ],
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -31,6 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun homePostDao(): HomePostDao
     abstract fun publicPostDao(): PublicPostDao
     abstract fun notificationDao(): NotificationDao
+    abstract fun tabsDao(): TabsDao
 }
 
 val MIGRATION_3_4 = object : Migration(3, 4) {

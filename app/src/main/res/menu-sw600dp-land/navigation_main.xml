@@ -27,7 +27,9 @@
         android:icon="@drawable/ic_filter_black_24dp"
         android:title="@string/public_feed"/>
    </group>
-
+   <group
+       android:id="@+id/bottomNavigationGroup"
+       android:orderInCategory="3">
     <item
         android:id="@+id/my_profile"
         android:enabled="true"
@@ -43,4 +45,6 @@
         android:enabled="true"
         android:icon="@drawable/logout"
         android:title="@string/logout"/>
+   </group>
+
 </menu>

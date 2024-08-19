@@ -7,15 +7,19 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
+import android.view.View
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.PopupMenu
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -29,6 +33,7 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
 import okhttp3.HttpUrl
 import org.pixeldroid.app.R
+import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -193,3 +198,66 @@ fun <T> Fragment.bindingLifecycleAware(): ReadWriteProperty<Fragment, T> =
             this@bindingLifecycleAware.viewLifecycleOwner.lifecycle.addObserver(this)
         }
     }
+
+fun loadDefaultMenuTabs(context: Context, anchor: View): List<Tab> {
+    return with(PopupMenu(context, anchor)) {
+        val menu = this.menu
+        menuInflater.inflate(R.menu.navigation_main, menu)
+        menu.removeGroup(R.id.bottomNavigationGroup)
+        (0 until menu.size()).map { Tab.fromLanguageString(context, menu.getItem(it).title.toString()) }
+    }
+}
+
+fun loadDbMenuTabs(ctx: Context, tabsDbEntry: List<TabsDatabaseEntity>): List<Pair<Tab, Boolean>> {
+    return tabsDbEntry.map {
+        Pair(Tab.fromName(it.tab), it.checked)
+    }
+}
+
+enum class Tab {
+    HOME_FEED, SEARCH_DISCOVER_FEED, CREATE_FEED, NOTIFICATIONS_FEED, PUBLIC_FEED;
+
+    fun toLanguageString(ctx: Context): String {
+        return ctx.getString(
+            when (this) {
+                HOME_FEED -> R.string.home_feed
+                SEARCH_DISCOVER_FEED -> R.string.search_discover_feed
+                CREATE_FEED -> R.string.create_feed
+                NOTIFICATIONS_FEED -> R.string.notifications_feed
+                PUBLIC_FEED -> R.string.public_feed
+            }
+        )
+    }
+
+    fun toName(): String {
+        return this.name
+    }
+
+    fun getDrawable(ctx: Context): Drawable? {
+        val resId = when (this) {
+            HOME_FEED -> R.drawable.selector_home_feed
+            SEARCH_DISCOVER_FEED -> R.drawable.ic_search_white_24dp
+            CREATE_FEED -> R.drawable.selector_camera
+            NOTIFICATIONS_FEED -> R.drawable.selector_notifications
+            PUBLIC_FEED -> R.drawable.ic_filter_black_24dp
+        }
+        return AppCompatResources.getDrawable(ctx, resId)
+    }
+
+    companion object {
+        fun fromLanguageString(ctx: Context, name: String): Tab {
+            return when (name) {
+                ctx.getString(R.string.home_feed) -> HOME_FEED
+                ctx.getString(R.string.search_discover_feed) -> SEARCH_DISCOVER_FEED
+                ctx.getString(R.string.create_feed) -> CREATE_FEED
+                ctx.getString(R.string.notifications_feed) -> NOTIFICATIONS_FEED
+                ctx.getString(R.string.public_feed) -> PUBLIC_FEED
+                else -> HOME_FEED
+            }
+        }
+
+        fun fromName(name: String): Tab {
+            return entries.filter { it.name == name }.getOrElse(0) { HOME_FEED }
+        }
+    }
+}
