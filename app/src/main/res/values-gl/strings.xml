@@ -37,7 +37,7 @@
     <string name="add_account_description">Engadir outra conta Pixelfed</string>
     <string name="add_account_name">Engadir Conta</string>
     <string name="instance_error">Non se obtivo a información da instancia</string>
-    <string name="save_image_success">Imaxe gardada</string>
+    <string name="save_image_success">Gardada correctamente</string>
     <string name="hashtags">CANCELOS</string>
     <string name="accounts">CONTAS</string>
     <string name="posts">POSTS</string>
@@ -73,7 +73,7 @@
     <string name="request_format_error">Erro na subida: formato da solicitude non válido</string>
     <string name="picture_format_error">Erro na subida: formato de imaxe non válido.</string>
     <string name="upload_picture_failed">Erro ao subir a foto!</string>
-    <string name="save_image_failed">Non se gardou a imaxe</string>
+    <string name="save_image_failed">Non se gardou</string>
     <string name="dark_theme">Escuro</string>
     <string name="light_theme">Claro</string>
     <string name="default_system">Por omisión (do sistema)</string>
@@ -240,7 +240,7 @@
     <string name="redraft_post_failed_io_except">Non se editou a publicación, tes conexión á rede\?</string>
     <string name="bookmark_post_failed_error">Non se puido (des)marcar a publicación, erro %1$d</string>
     <string name="bookmark_post_failed_io_except">Non se puido (des)marcar a publicación, tes conexión á rede\?</string>
-    <string name="analyzing_stabilization">Análise da estabilización %1$d%%</string>
+    <string name="analyzing_stabilization">Análise para estabilidade %1$d%%</string>
     <plurals name="replies_count">
         <item quantity="one">%d resposta</item>
         <item quantity="other">%d respostas</item>
@@ -286,4 +286,22 @@
     <string name="private_account">Conta privada</string>
     <string name="always_show_nsfw">Mostrar sempre o contido sensible</string>
     <string name="summary_always_show_nsfw">As publicacións NSFW/CW non se difuminarán, por defecto serán visibles.</string>
+    <string name="story_image">Imaxe da Historia</string>
+    <string name="replyToStory">Responder a %1$s</string>
+    <string name="story_reply_error">Produciuse un erro ao responder</string>
+    <string name="error_fetch_story">Produciuse un erro ao obter o carrusel</string>
+    <string name="sent_reply_story">Resposta enviada</string>
+    <string name="add_story">Engadir Historia</string>
+    <string name="story_pause">Iniciar ou deter as historias</string>
+    <string name="continue_post_creation">Continuar</string>
+    <string name="comment_noun">Comentario</string>
+    <string name="story_could_not_see">Erro: non se marcou a historia como vista</string>
+    <string name="my_story">A miña Historia</string>
+    <string name="type_story">Historia</string>
+    <string name="type_post">Publicación</string>
+    <string name="story_duration">Duración da Historia</string>
+    <string name="arrange_tabs_summary">Ordenar pestanas</string>
+    <string name="arrange_tabs_description">Cambiar a visibilidade e ordenar as pestanas</string>
+    <string name="content_header">Contido</string>
+    <string name="extraneous_pictures_stories">Desbotáronse as imaxes que seguen á primeira pero poden restablecerse volvendo atras e creando unha Publicación</string>
 </resources>

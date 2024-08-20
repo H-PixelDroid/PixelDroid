@@ -1,0 +1,3 @@
+Intento de volver a separar as apks
+
+Actualizadas as dependencias

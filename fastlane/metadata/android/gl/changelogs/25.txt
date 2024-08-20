@@ -1,0 +1,4 @@
+* Compatibilidade con Historias
+* Actualización das dependencias
+* Codificación de vídeo acelerada por hardware
+* Moitas melloras non visibles :)
