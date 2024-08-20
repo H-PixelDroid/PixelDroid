@@ -102,7 +102,7 @@
     <string name="write_permission_download_pic">ചിത്രങ്ങൾ ഡൗൺലോഡ് ചെയ്യാൻ നിങ്ങൾ എഴുത്ത് അനുമതി നൽകണം!</string>
     <plurals name="number_comments">
         <item quantity="one">%d</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="registration_failed">ഈ സെർവറിൽ ആപ്ലിക്കേഷൻ രജിസ്റ്റർ ചെയ്യാനായില്ല</string>
     <plurals name="description_max_characters">
