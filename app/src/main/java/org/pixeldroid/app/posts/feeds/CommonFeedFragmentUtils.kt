@@ -50,7 +50,7 @@ private fun showError(
  * Makes the UI respond to various [LoadState]s, including errors when an error message is shown.
  */
 internal fun <T: Any> initAdapter(
-    progressBar: ProgressBar, swipeRefreshLayout: SwipeRefreshLayout,
+    progressBar: ProgressBar, swipeRefreshLayout: SwipeRefreshLayout?,
     recyclerView: RecyclerView, motionLayout: MotionLayout, errorLayout: ErrorLayoutBinding,
     adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>,
     header: StoriesAdapter? = null
@@ -71,7 +71,7 @@ internal fun <T: Any> initAdapter(
         ).toTypedArray()
     )
 
-    swipeRefreshLayout.setOnRefreshListener {
+    swipeRefreshLayout?.setOnRefreshListener {
         adapter.refresh()
         adapter.notifyDataSetChanged()
         header?.refreshStories()
@@ -79,7 +79,7 @@ internal fun <T: Any> initAdapter(
 
     adapter.addLoadStateListener { loadState ->
 
-        if(!progressBar.isVisible && swipeRefreshLayout.isRefreshing) {
+        if(!progressBar.isVisible && swipeRefreshLayout?.isRefreshing == true) {
             // Stop loading spinner when loading is done
             swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
         }

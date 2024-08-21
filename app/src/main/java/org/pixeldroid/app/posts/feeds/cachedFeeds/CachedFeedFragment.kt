@@ -1,22 +1,23 @@
 package org.pixeldroid.app.posts.feeds.cachedFeeds
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadState.NotLoading
 import androidx.paging.PagingDataAdapter
 import androidx.paging.RemoteMediator
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
 import org.pixeldroid.app.databinding.FragmentFeedBinding
+import org.pixeldroid.app.posts.feeds.BounceEdgeEffectFactory
 import org.pixeldroid.app.posts.feeds.initAdapter
 import org.pixeldroid.app.stories.StoriesAdapter
 import org.pixeldroid.app.utils.BaseFragment
@@ -67,26 +68,52 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
 //        }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
+    fun createView(inflater: LayoutInflater, container: ViewGroup?,
+                   savedInstanceState: Bundle?, reverseLayout: Boolean = false): ConstraintLayout {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = FragmentFeedBinding.inflate(layoutInflater)
 
-        initAdapter(binding.progressBar, binding.swipeRefreshLayout,
+        val callback: () -> Unit = {
+            adapter.refresh()
+            adapter.notifyDataSetChanged()
+        }
+
+        val swipeRefreshLayout = if(reverseLayout) {
+            binding.swipeRefreshLayout.isEnabled = false
+            binding.list.apply {
+                layoutManager = LinearLayoutManager(context).apply {
+                    stackFromEnd = false
+                    this.reverseLayout = true
+                }
+                edgeEffectFactory = BounceEdgeEffectFactory(callback)
+            }
+            null
+        } else binding.swipeRefreshLayout
+
+        initAdapter(binding.progressBar, swipeRefreshLayout,
             binding.list, binding.motionLayout, binding.errorLayout, adapter,
             headerAdapter
         )
 
         return binding.root
     }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return createView(inflater, container, savedInstanceState, false)
+    }
 
     fun onTabReClicked() {
         binding.list.limitedLengthSmoothScrollToPosition(0)
     }
+
+    private fun onPullUp() {
+        // Handle the pull-up action
+        Log.e("bottom", "reached")
+    }
+
 }
 
 

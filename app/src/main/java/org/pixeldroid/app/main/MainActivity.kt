@@ -54,6 +54,8 @@ import kotlinx.coroutines.launch
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityMainBinding
+import org.pixeldroid.app.directmessages.ConversationFragment
+import org.pixeldroid.app.directmessages.DirectMessagesFragment
 import org.pixeldroid.app.login.LoginActivity
 import org.pixeldroid.app.postCreation.camera.CameraFragment
 import org.pixeldroid.app.posts.NestedScrollableHost
@@ -458,10 +460,7 @@ class MainActivity : BaseActivity() {
         fun Tab.getFragment(): (() -> Fragment) {
             return when (this) {
                 Tab.HOME_FEED -> { {
-                    PostFeedFragment<HomeStatusDatabaseEntity>()
-                        .apply {
-                            arguments = Bundle().apply { putBoolean("home", true) }
-                        }
+                    DirectMessagesFragment()
                 } }
                 Tab.SEARCH_DISCOVER_FEED -> { { SearchDiscoverFragment() } }
                 Tab.CREATE_FEED -> { { CameraFragment() } }

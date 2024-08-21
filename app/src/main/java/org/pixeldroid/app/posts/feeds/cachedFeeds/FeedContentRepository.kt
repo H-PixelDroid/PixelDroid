@@ -32,7 +32,8 @@ import org.pixeldroid.app.utils.db.dao.feedContent.FeedContentDao
 class FeedContentRepository<T: FeedContentDatabase> @ExperimentalPagingApi constructor(
     private val db: AppDatabase,
     private val dao: FeedContentDao<T>,
-    private val mediator: RemoteMediator<Int, T>
+    private val mediator: RemoteMediator<Int, T>,
+    private val conversationsId: String = "",
 ) {
 
     /**
@@ -44,7 +45,7 @@ class FeedContentRepository<T: FeedContentDatabase> @ExperimentalPagingApi const
         val user = db.userDao().getActiveUser()!!
 
         val pagingSourceFactory = {
-            dao.feedContent(user.user_id, user.instance_uri)
+            dao.feedContent(user.user_id, user.instance_uri, conversationsId)
         }
 
         return Pager(

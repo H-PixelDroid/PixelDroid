@@ -137,6 +137,15 @@ class Converters {
         Status.Visibility::class.java
     )
 
+    @TypeConverter
+    fun accountListToJson(type: List<Account>?): String {
+        val listType = object : TypeToken<List<Account?>?>() {}.type
+        return gson.toJson(type, listType)
+    }
 
-
+    @TypeConverter
+    fun jsonToAccountList(json: String): List<Account>? {
+        val listType = object : TypeToken<List<Account?>?>() {}.type
+        return gson.fromJson(json, listType)
+    }
 }

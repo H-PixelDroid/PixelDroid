@@ -56,6 +56,10 @@ android {
 
         testInstrumentationRunner "org.pixeldroid.app.testUtility.TestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
     sourceSets {
         main.java.srcDirs += 'src/main/java'

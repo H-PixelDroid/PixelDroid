@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_margin="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/dm_username"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="July 23" />
+
+        <TextView
+            android:id="@+id/dm_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="6dp"
+            android:paddingStart="38dp"
+            android:textColor="?android:textColorTertiary"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/message_time"
+            app:layout_constraintStart_toStartOf="@+id/dm_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlSymmetry"
+            tools:text="fdsqfdsfsqdfdsfqdsfsdfsfddsfqsdsdfsqdf liked your post" />
+
+        <ImageView
+            android:id="@+id/dm_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="14dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dm_username"
+            tools:src="@drawable/ic_default_user"
+            android:contentDescription="@string/profile_picture" />
+
+        <TextView
+            android:id="@+id/dm_last_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.164"
+            app:layout_constraintStart_toEndOf="@+id/dm_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/dm_username"
+            app:layout_constraintVertical_bias="0.408"
+            tools:text="Post description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

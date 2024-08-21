@@ -7,13 +7,14 @@ import org.pixeldroid.app.utils.api.objects.FeedContentDatabase
 
 interface FeedContentDao<T: FeedContentDatabase>{
 
-    fun feedContent(userId: String, instanceUri: String): PagingSource<Int, T>
+    fun feedContent(userId: String, instanceUri: String, conversationsId: String): PagingSource<Int, T>
 
-    suspend fun clearFeedContent(userId: String, instanceUri: String)
+    suspend fun clearFeedContent(userId: String, instanceUri: String, conversationsId: String)
+    suspend fun clearFeedContent(userId: String, instanceUri: String) = clearFeedContent(userId, instanceUri, "")
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(feedContent: List<T>)
 
-    suspend fun delete(id: String, userId: String, instanceUri: String)
-
+    suspend fun delete(id: String, userId: String, instanceUri: String, conversationsId: String)
+    suspend fun delete(id: String, userId: String, instanceUri: String) = delete(id, userId, instanceUri, "")
 }

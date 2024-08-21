@@ -6,15 +6,21 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import org.pixeldroid.app.utils.db.dao.*
+import org.pixeldroid.app.utils.api.objects.Conversation
+import org.pixeldroid.app.utils.api.objects.Notification
+import org.pixeldroid.app.utils.db.dao.InstanceDao
+import org.pixeldroid.app.utils.db.dao.TabsDao
+import org.pixeldroid.app.utils.db.dao.UserDao
+import org.pixeldroid.app.utils.db.dao.feedContent.DirectMessagesConversationDao
+import org.pixeldroid.app.utils.db.dao.feedContent.DirectMessagesDao
 import org.pixeldroid.app.utils.db.dao.feedContent.NotificationDao
 import org.pixeldroid.app.utils.db.dao.feedContent.posts.HomePostDao
 import org.pixeldroid.app.utils.db.dao.feedContent.posts.PublicPostDao
+import org.pixeldroid.app.utils.db.entities.DirectMessageDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.InstanceDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
-import org.pixeldroid.app.utils.api.objects.Notification
 import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 
 @Database(entities = [
@@ -23,13 +29,17 @@ import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
         HomeStatusDatabaseEntity::class,
         PublicFeedStatusDatabaseEntity::class,
         Notification::class,
-        TabsDatabaseEntity::class
+        TabsDatabaseEntity::class,
+        Conversation::class,
+        DirectMessageDatabaseEntity::class,
     ],
-    version = 7,
     autoMigrations = [
-        AutoMigration(from = 6, to = 7)
+        AutoMigration(from = 6, to = 7),
+        AutoMigration(from = 7, to = 8)
     ],
+    version = 8
 )
+
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun instanceDao(): InstanceDao
@@ -38,6 +48,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun publicPostDao(): PublicPostDao
     abstract fun notificationDao(): NotificationDao
     abstract fun tabsDao(): TabsDao
+    abstract fun directMessagesDao(): DirectMessagesDao
+    abstract fun directMessagesConversationDao(): DirectMessagesConversationDao
 }
 
 val MIGRATION_3_4 = object : Migration(3, 4) {

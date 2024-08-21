@@ -141,6 +141,9 @@
         <activity android:name=".searchDiscover.TrendingActivity"
             android:theme="@style/BaseAppTheme" />
 
+        <activity android:name=".directmessages.ConversationActivity"
+            android:theme="@style/BaseAppTheme"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
