@@ -28,7 +28,7 @@ class ConversationActivity : BaseActivity() {
         setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        supportActionBar?.title = getString(R.string.post_title)
+        //supportActionBar?.title = getString(R.string.dm_title, userName)
         val conversationId = intent?.getSerializableExtra(CONVERSATION_ID) as String
 
         //TODO conversationId is not pid and sending a DM to it will not work :see-no-evil:
@@ -81,7 +81,6 @@ class ConversationActivity : BaseActivity() {
         val nonNullText = textIn.toString()
         try {
             api.sendDirectMessage(pid, nonNullText)
-            binding.commentIn.visibility = View.GONE
 
             //Reload to add the comment to the comment section
             conversationFragment.adapter.refresh()

@@ -65,9 +65,9 @@ class DirectMessagesFragment : CachedFeedFragment<Conversation>() {
 
         init {
             itemView.setOnClickListener {
-                conversation?.id?.let {
+                conversation?.accounts?.firstOrNull()?.let {
                     val intent = Intent(itemView.context, ConversationActivity::class.java).apply {
-                        putExtra(CONVERSATION_ID, it)
+                        putExtra(CONVERSATION_ID, it.id)
                     }
                     itemView.context.startActivity(intent)
                 }

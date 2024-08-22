@@ -29,7 +29,7 @@ data class Conversation(
     val last_status: Status?,
 
     //Database values (not from API)
-    //TODO do we find this approach acceptable? Preferable to a semi-duplicate NotificationDataBaseEntity?
+    //TODO do we find this approach acceptable? Preferable to a semi-duplicate ConversationDataBaseEntity?
     override var user_id: String,
     override var instance_uri: String,
 ): FeedContent, FeedContentDatabase, Serializable
