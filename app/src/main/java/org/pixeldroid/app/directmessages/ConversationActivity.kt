@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityConversationBinding
 import org.pixeldroid.app.directmessages.ConversationFragment.Companion.CONVERSATION_ID
+import org.pixeldroid.app.directmessages.ConversationFragment.Companion.PROFILE_ID
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 
@@ -35,11 +36,11 @@ class ConversationActivity : BaseActivity() {
         supportActionBar?.title = getString(R.string.dm_title, userName)
 
         val conversationId = intent?.getSerializableExtra(CONVERSATION_ID) as String
+        val pid = intent?.getSerializableExtra(PROFILE_ID) as String
 
-        //TODO conversationId is not pid and sending a DM to it will not work :see-no-evil:
-        activateCommenter(conversationId)
+        activateCommenter(pid)
 
-        initConversationFragment(conversationId, savedInstanceState)
+        initConversationFragment(pid, conversationId, savedInstanceState)
     }
 
     private fun activateCommenter(pid: String) {
@@ -62,10 +63,11 @@ class ConversationActivity : BaseActivity() {
         }
     }
 
-    private fun initConversationFragment(conversationId: String, savedInstanceState: Bundle?) {
+    private fun initConversationFragment(profileId: String, conversationId: String, savedInstanceState: Bundle?) {
 
         val arguments = Bundle()
         arguments.putSerializable(CONVERSATION_ID, conversationId)
+        arguments.putSerializable(PROFILE_ID, profileId)
         conversationFragment.arguments = arguments
 
         //TODO finish work here! commentFragment needs the swiperefreshlayout.. how??
@@ -85,16 +87,16 @@ class ConversationActivity : BaseActivity() {
         val textIn = binding.editComment.text
         val nonNullText = textIn.toString()
         try {
+            binding.submitComment.isEnabled = false
+            binding.editComment.isEnabled = false
             api.sendDirectMessage(pid, nonNullText)
 
             //Reload to add the comment to the comment section
             conversationFragment.adapter.refresh()
 
-            Toast.makeText(
-                binding.root.context,
-                binding.root.context.getString(R.string.comment_posted).format(textIn),
-                Toast.LENGTH_SHORT
-            ).show()
+            binding.editComment.isEnabled = true
+            binding.editComment.text = null
+            binding.submitComment.isEnabled = true
         } catch (exception: Exception) {
             Log.e("DM SEND ERROR", exception.toString())
             Toast.makeText(

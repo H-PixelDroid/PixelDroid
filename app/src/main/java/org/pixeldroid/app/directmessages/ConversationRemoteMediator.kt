@@ -1,21 +1,6 @@
-/*
- * Copyright (C) 2020 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.pixeldroid.app.directmessages
 
+import android.util.Log
 import androidx.paging.*
 import androidx.room.withTransaction
 import org.pixeldroid.app.utils.db.AppDatabase
@@ -36,7 +21,8 @@ import javax.inject.Inject
 class ConversationRemoteMediator @Inject constructor(
     private val apiHolder: PixelfedAPIHolder,
     private val db: AppDatabase,
-    private val pid: String
+    private val pid: String,
+    private val conversationId: String
 ) : RemoteMediator<Int, DirectMessageDatabaseEntity>() {
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, DirectMessageDatabaseEntity>): MediatorResult {
@@ -48,7 +34,7 @@ class ConversationRemoteMediator @Inject constructor(
                 LoadType.REFRESH -> null
                 LoadType.PREPEND -> {
                     // No prepend for the moment, might be nice to add later
-                    state.lastItemOrNull()?.id?.toIntOrNull()
+                    db.directMessagesConversationDao().lastMessageId(user.user_id, user.instance_uri, conversationId)
                         ?: return MediatorResult.Success(endOfPaginationReached = true)
                 }
                 LoadType.APPEND ->
@@ -59,14 +45,14 @@ class ConversationRemoteMediator @Inject constructor(
             val apiResponse =
                     api.directMessagesConversation(
                         pid = pid,
-                        max_id = nextPage?.toString(),
+                        max_id = nextPage,
                     )
             //TODO prepend
 
-            val messages = apiResponse.messages.map{
+            val messages = apiResponse.messages.map {
                 DirectMessageDatabaseEntity(
                     it,
-                    apiResponse.id,
+                    conversationId,
                     user
                 )
             }
@@ -76,7 +62,7 @@ class ConversationRemoteMediator @Inject constructor(
             db.withTransaction {
                 // Clear table in the database
                 if (loadType == LoadType.REFRESH) {
-                    db.directMessagesConversationDao().clearFeedContent(user.user_id, user.instance_uri, apiResponse.id)
+                    db.directMessagesConversationDao().clearFeedContent(user.user_id, user.instance_uri, conversationId)
                 }
                 db.directMessagesConversationDao().insertAll(messages)
             }

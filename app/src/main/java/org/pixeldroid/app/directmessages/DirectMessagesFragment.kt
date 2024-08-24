@@ -17,6 +17,7 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.DirectMessagesListItemBinding
 import org.pixeldroid.app.directmessages.ConversationActivity.Companion.USERNAME
 import org.pixeldroid.app.directmessages.ConversationFragment.Companion.CONVERSATION_ID
+import org.pixeldroid.app.directmessages.ConversationFragment.Companion.PROFILE_ID
 import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
 import org.pixeldroid.app.posts.feeds.cachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.feeds.cachedFeeds.ViewModelFactory
@@ -68,7 +69,8 @@ class DirectMessagesFragment : CachedFeedFragment<Conversation>() {
             itemView.setOnClickListener {
                 conversation?.accounts?.firstOrNull()?.let {
                     val intent = Intent(itemView.context, ConversationActivity::class.java).apply {
-                        putExtra(CONVERSATION_ID, it.id)
+                        putExtra(PROFILE_ID, it.id)
+                        putExtra(CONVERSATION_ID, conversation?.id)
                         putExtra(USERNAME, it.getDisplayName())
                     }
                     itemView.context.startActivity(intent)

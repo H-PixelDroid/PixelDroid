@@ -230,7 +230,7 @@ enum class Tab {
             CREATE_FEED -> R.drawable.selector_camera
             NOTIFICATIONS_FEED -> R.drawable.selector_notifications
             PUBLIC_FEED -> R.drawable.ic_filter_black_24dp
-            DIRECT_MESSAGES -> R.drawable.message
+            DIRECT_MESSAGES -> R.drawable.selector_dm
         }
         return AppCompatResources.getDrawable(ctx, resId)
     }

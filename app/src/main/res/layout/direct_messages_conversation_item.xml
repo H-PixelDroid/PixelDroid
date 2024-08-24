@@ -5,37 +5,79 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text_message_incoming"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/message_incoming"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/message_bubble_incoming"
-        android:lineSpacingExtra="2dp"
         android:paddingStart="20dp"
         android:paddingTop="4dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/black"
-        android:textSize="13.5sp"
+        app:layout_constraintHeight_max="wrap"
+        app:layout_constraintHeight_percent="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="500dp"
-        tools:text="Hi, How are you?\nqsdfqsdf" />
+        app:layout_constraintWidth_max="500dp">
 
-    <TextView
-        android:id="@+id/text_message_outgoing"
+        <TextView
+            android:id="@+id/text_message_incoming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/black"
+            android:textSize="13.5sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Hi, How are you?\nqsdfqsdf" />
+
+        <ImageView
+            android:id="@+id/image_message_incoming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/message_outgoing"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/message_bubble_outgoing"
-        android:lineSpacingExtra="2dp"
         android:paddingStart="20dp"
         android:paddingTop="4dp"
         android:paddingEnd="30dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/black"
-        android:textSize="13.5sp"
+        app:layout_constraintHeight_max="wrap"
+        app:layout_constraintHeight_percent="0.8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="500dp"
-        tools:text="Fire, and you? 🔥" />
+        app:layout_constraintWidth_max="500dp">
+
+        <TextView
+            android:id="@+id/text_message_outgoing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/black"
+            android:textSize="13.5sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Fire, and you? 🔥" />
+
+        <ImageView
+            android:id="@+id/image_message_outgoing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

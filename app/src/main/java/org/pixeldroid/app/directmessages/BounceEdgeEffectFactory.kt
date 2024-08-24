@@ -1,4 +1,4 @@
-package org.pixeldroid.app.posts.feeds
+package org.pixeldroid.app.directmessages
 
 import android.content.Context
 import android.graphics.Canvas
@@ -16,12 +16,11 @@ private const val OVERSCROLL_TRANSLATION_MAGNITUDE = 0.4f
 /** The magnitude of translation distance when the list reaches the edge on fling. */
 private const val FLING_TRANSLATION_MAGNITUDE = 0.5f
 
+
 /**
  * Replace edge effect by a bounce
  */
 class BounceEdgeEffectFactory(val refreshCallback: () -> Unit, val context: Context) : RecyclerView.EdgeEffectFactory() {
-    var times = 0
-
     override fun createEdgeEffect(recyclerView: RecyclerView, direction: Int): EdgeEffect {
 
         return object : EdgeEffect(recyclerView.context) {

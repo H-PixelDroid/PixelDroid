@@ -19,4 +19,7 @@ interface DirectMessagesConversationDao: FeedContentDao<DirectMessageDatabaseEnt
 
     @Query("DELETE FROM directMessagesThreads WHERE user_id=:userId AND instance_uri=:instanceUri AND id=:id AND conversationsId=:conversationsId")
     override suspend fun delete(id: String, userId: String, instanceUri: String, conversationsId: String)
+
+    @Query("SELECT id FROM directMessagesThreads WHERE user_id=:userId AND instance_uri=:instanceUri AND conversationsId=:conversationsId ORDER BY datetime(created_at) ASC LIMIT 1")
+    suspend fun lastMessageId(userId: String, instanceUri: String, conversationsId: String): String?
 }

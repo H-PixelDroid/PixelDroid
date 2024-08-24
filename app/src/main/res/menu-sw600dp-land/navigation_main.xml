@@ -9,7 +9,7 @@
         <item
             android:id="@+id/dms"
             android:enabled="true"
-            android:icon="@drawable/message"
+            android:icon="@drawable/selector_dm"
             android:title="@string/direct_messages" />
     </group>
     <group

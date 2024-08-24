@@ -21,7 +21,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.FragmentFeedBinding
-import org.pixeldroid.app.posts.feeds.BounceEdgeEffectFactory
+import org.pixeldroid.app.directmessages.BounceEdgeEffectFactory
 import org.pixeldroid.app.posts.feeds.initAdapter
 import org.pixeldroid.app.stories.StoriesAdapter
 import org.pixeldroid.app.utils.BaseFragment

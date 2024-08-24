@@ -1,5 +1,6 @@
 package org.pixeldroid.app.directmessages
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +14,18 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.DirectMessagesConversationItemBinding
+import org.pixeldroid.app.posts.AlbumActivity
+import org.pixeldroid.app.posts.AlbumViewModel
 import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
 import org.pixeldroid.app.posts.feeds.cachedFeeds.FeedContentRepository
 import org.pixeldroid.app.posts.feeds.cachedFeeds.FeedViewModel
 import org.pixeldroid.app.posts.feeds.cachedFeeds.ViewModelFactory
 import org.pixeldroid.app.utils.api.objects.Conversation
+import org.pixeldroid.app.utils.api.objects.Message
 import org.pixeldroid.app.utils.db.entities.DirectMessageDatabaseEntity
 import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 
@@ -30,7 +36,8 @@ import org.pixeldroid.app.utils.di.PixelfedAPIHolder
 class ConversationFragment : CachedFeedFragment<DirectMessageDatabaseEntity>() {
 
     companion object {
-        const val CONVERSATION_ID = "ConversationFragmentId"
+        const val CONVERSATION_ID = "ConversationFragmentConversationId"
+        const val PROFILE_ID = "ConversationFragmentProfileId"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,17 +52,18 @@ class ConversationFragment : CachedFeedFragment<DirectMessageDatabaseEntity>() {
     ): View? {
         val view = super.createView(inflater, container, savedInstanceState, true)
 
-        val pid = arguments?.getSerializable(CONVERSATION_ID) as String
+        val pid = arguments?.getSerializable(PROFILE_ID) as String
+        val conversationId = arguments?.getSerializable(CONVERSATION_ID) as String
 
         val dao = db.directMessagesConversationDao()
-        val remoteMediator = ConversationRemoteMediator(apiHolder, db, pid)
+        val remoteMediator = ConversationRemoteMediator(apiHolder, db, pid, conversationId)
         // get the view model
         @Suppress("UNCHECKED_CAST")
         viewModel = ViewModelProvider(
             requireActivity(),
             ViewModelFactory(
                 db, dao, remoteMediator,
-                FeedContentRepository(db, dao, remoteMediator, pid)
+                FeedContentRepository(db, dao, remoteMediator, conversationId)
             )
         )["directMessagesConversation", FeedViewModel::class.java] as FeedViewModel<DirectMessageDatabaseEntity>
 
@@ -73,7 +81,16 @@ class ConversationFragment : CachedFeedFragment<DirectMessageDatabaseEntity>() {
 
         init {
             itemView.setOnClickListener {
-                //TODO
+                message?.let {
+                    if (it.type == "photo") {
+                        val intent = Intent(itemView.context, AlbumActivity::class.java)
+
+                        intent.putExtra(AlbumViewModel.ALBUM_IMAGES, ArrayList(it.carousel.orEmpty()))
+                        intent.putExtra(AlbumViewModel.ALBUM_INDEX, 0)
+
+                        itemView.context.startActivity(intent)
+                    }
+                }
             }
         }
 
@@ -82,17 +99,31 @@ class ConversationFragment : CachedFeedFragment<DirectMessageDatabaseEntity>() {
             api: PixelfedAPIHolder,
             lifecycleScope: LifecycleCoroutineScope,
         ) {
-
             this.message = message
 
             if(message?.isAuthor == true) {
-                binding.textMessageIncoming.visibility = GONE
-                binding.textMessageOutgoing.visibility = VISIBLE
+                binding.messageIncoming.visibility = GONE
+                binding.messageOutgoing.visibility = VISIBLE
                 binding.textMessageOutgoing.text = message.text
             } else {
-                binding.textMessageOutgoing.visibility = GONE
-                binding.textMessageIncoming.visibility = VISIBLE
+                binding.messageIncoming.visibility = VISIBLE
+                binding.messageOutgoing.visibility = GONE
                 binding.textMessageIncoming.text = message?.text ?: ""
+            }
+
+            if (message?.type == "photo"){
+                binding.imageMessageIncoming.visibility = VISIBLE
+                binding.imageMessageOutgoing.visibility = VISIBLE
+                binding.textMessageOutgoing.visibility = GONE
+                binding.textMessageOutgoing.visibility = GONE
+                Glide.with(if(message.isAuthor == true) binding.imageMessageOutgoing else binding.imageMessageIncoming)
+                    .load(message.media)
+                    .into(if(message.isAuthor == true) binding.imageMessageOutgoing else binding.imageMessageIncoming)
+            } else {
+                binding.imageMessageIncoming.visibility = GONE
+                binding.imageMessageOutgoing.visibility = GONE
+                binding.textMessageOutgoing.visibility = VISIBLE
+                binding.textMessageIncoming.visibility = VISIBLE
             }
 
             message?.created_at.let {
