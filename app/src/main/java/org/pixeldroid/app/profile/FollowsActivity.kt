@@ -50,7 +50,7 @@ class FollowsActivity : BaseActivity() {
 
         supportFragmentManager.commit {
             setReorderingAllowed(true)
-            replace<AccountListFragment>(R.id.followsFragment, args = arguments)
+            replace<AccountListFragment>(R.id.conversationFragment, args = arguments)
         }
     }
 }

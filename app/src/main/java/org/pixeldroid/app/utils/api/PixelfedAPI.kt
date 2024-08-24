@@ -429,6 +429,30 @@ interface PixelfedAPI {
     @GET("/api/v1.1/discover/posts/hashtags")
     suspend fun trendingHashtags() : List<Tag>
 
+    @GET("/api/v1/conversations")
+    suspend fun directMessagesList(
+//        @Query("max_id") max_id: String? = null,
+//        @Query("since_id") since_id: String? = null,
+    //        @Query("min_id") min_id: String? = null,
+        @Query("page") page: Int? = null,
+        @Query("limit") limit: String? = null,
+    ): List<Conversation>
+
+    @GET("/api/v1.1/direct/thread")
+    suspend fun directMessagesConversation(
+        @Query("pid") pid: String? = null,
+        @Query("max_id") max_id: String? = null,
+        @Query("min_id") min_id: String? = null,
+    ): DMThread
+
+    @POST("/api/v1.1/direct/thread/send")
+    suspend fun sendDirectMessage(
+        @Query("to_id") to_id: String? = null,
+        @Query("message") message: String? = null,
+        // text or emoji
+        @Query("type") min_id: String = "text",
+    ): DMThread
+
     @FormUrlEncoded
     @POST("/api/v1/reports")
     @JvmSuppressWildcards

@@ -1,9 +1,7 @@
 package org.pixeldroid.app.settings
 
-import android.content.Context
-import android.view.View
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -11,24 +9,10 @@ import org.pixeldroid.app.utils.Tab
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 import org.pixeldroid.app.utils.loadDbMenuTabs
-import org.pixeldroid.app.utils.loadDefaultMenuTabs
+import javax.inject.Inject
 
-
-class ArrangeTabsViewModelFactory(
-    private val context: Context, private val db: AppDatabase
-) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ArrangeTabsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ArrangeTabsViewModel(context, db) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
-class ArrangeTabsViewModel(
-    private val fragmentContext: Context,
+@HiltViewModel
+class ArrangeTabsViewModel @Inject constructor(
     private val db: AppDatabase
 ): ViewModel() {
 
@@ -56,18 +40,17 @@ class ArrangeTabsViewModel(
         }
     }
 
-    fun initTabsChecked(view: View) {
+    fun initTabsChecked() {
         if (oldTabsChecked.isEmpty()) {
             // Only load tabsChecked if the model has not been updated
             _uiState.update { currentUiState ->
                 currentUiState.copy(
                     tabsChecked = if (_uiState.value.tabsDbEntities.isEmpty()) {
                         // Load default menu
-                        val list = loadDefaultMenuTabs(fragmentContext, view)
-                        list.zip(List(list.size){true}.toTypedArray()).toList()
+                        Tab.defaultTabs.zip(List(Tab.defaultTabs.size){true}) + Tab.otherTabs.zip(List(Tab.otherTabs.size){false})
                     } else {
                         // Get current menu visibility and order from settings
-                        loadDbMenuTabs(fragmentContext, _uiState.value.tabsDbEntities).toList()
+                        loadDbMenuTabs(_uiState.value.tabsDbEntities).toList()
                     }
                 )
             }

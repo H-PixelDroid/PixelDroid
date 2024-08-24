@@ -35,7 +35,7 @@
                 android:id="@+id/tabs"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:menu="@menu/navigation_main" />
+                tools:menu="@menu/navigation_main" />
         </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2

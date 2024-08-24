@@ -37,7 +37,7 @@
                 app:elevation="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:menu="@menu/navigation_main" />
+                tools:menu="@menu/navigation_main" />
         </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2
