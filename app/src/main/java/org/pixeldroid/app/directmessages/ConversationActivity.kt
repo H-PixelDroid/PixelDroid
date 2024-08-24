@@ -17,6 +17,9 @@ class ConversationActivity : BaseActivity() {
 
     private lateinit var conversationFragment: ConversationFragment
 
+    companion object {
+        const val USERNAME = "ConversationActivityUsername"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,9 @@ class ConversationActivity : BaseActivity() {
         setSupportActionBar(binding.topBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        //supportActionBar?.title = getString(R.string.dm_title, userName)
+        val userName = intent?.getSerializableExtra(USERNAME) as? String?
+        supportActionBar?.title = getString(R.string.dm_title, userName)
+
         val conversationId = intent?.getSerializableExtra(CONVERSATION_ID) as String
 
         //TODO conversationId is not pid and sending a DM to it will not work :see-no-evil:

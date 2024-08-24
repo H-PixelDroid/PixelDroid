@@ -54,7 +54,7 @@ import kotlinx.coroutines.launch
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityMainBinding
-import org.pixeldroid.app.directmessages.ConversationFragment
+import org.pixeldroid.app.directmessages.DirectMessagesActivity
 import org.pixeldroid.app.directmessages.DirectMessagesFragment
 import org.pixeldroid.app.login.LoginActivity
 import org.pixeldroid.app.postCreation.camera.CameraFragment
@@ -74,7 +74,6 @@ import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.hasInternet
 import org.pixeldroid.app.utils.loadDbMenuTabs
-import org.pixeldroid.app.utils.loadDefaultMenuTabs
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.USER_NOTIFICATION_TAG
@@ -255,6 +254,10 @@ class MainActivity : BaseActivity() {
 
         binding.drawer?.itemAdapter?.add(
             primaryDrawerItem {
+                nameRes = R.string.direct_messages
+                iconRes = R.drawable.message
+            },
+            primaryDrawerItem {
                 nameRes = R.string.menu_account
                 iconRes = R.drawable.person
             },
@@ -270,9 +273,10 @@ class MainActivity : BaseActivity() {
 
         binding.drawer?.onDrawerItemClickListener = { v, drawerItem, position ->
             when (position) {
-                1 -> launchActivity(ProfileActivity())
-                2 -> launchActivity(SettingsActivity())
-                3 -> logOut()
+                1 -> launchActivity(DirectMessagesActivity())
+                2 -> launchActivity(ProfileActivity())
+                3 -> launchActivity(SettingsActivity())
+                4 -> logOut()
             }
             false
         }
@@ -452,15 +456,16 @@ class MainActivity : BaseActivity() {
 
     @OptIn(ExperimentalPagingApi::class)
     private fun setupTabs() {
-        val tabsCheckedDbEntry = with (db.userDao().getActiveUser()!!) {
-            db.tabsDao().getTabsChecked(user_id, instance_uri)
-        }
+        val tabsCheckedDbEntry = db.tabsDao().getTabsChecked(user!!.user_id, user!!.instance_uri)
         val pageIds = listOf(R.id.page_1, R.id.page_2, R.id.page_3, R.id.page_4, R.id.page_5)
 
         fun Tab.getFragment(): (() -> Fragment) {
             return when (this) {
                 Tab.HOME_FEED -> { {
-                    DirectMessagesFragment()
+                    PostFeedFragment<HomeStatusDatabaseEntity>()
+                        .apply {
+                            arguments = Bundle().apply { putBoolean("home", true) }
+                        }
                 } }
                 Tab.SEARCH_DISCOVER_FEED -> { { SearchDiscoverFragment() } }
                 Tab.CREATE_FEED -> { { CameraFragment() } }
@@ -471,33 +476,34 @@ class MainActivity : BaseActivity() {
                             arguments = Bundle().apply { putBoolean("home", false) }
                         }
                 } }
+                Tab.DIRECT_MESSAGES -> {{
+                    DirectMessagesFragment()
+                }}
             }
         }
 
         val tabs = if (tabsCheckedDbEntry.isEmpty()) {
-            // Load default menu
-            loadDefaultMenuTabs(applicationContext, binding.root)
+            // Default menu
+            Tab.defaultTabs
         } else {
             // Get current menu visibility and order from settings
-            val tabsChecked = loadDbMenuTabs(applicationContext, tabsCheckedDbEntry).filter { it.second }.map { it.first }
+            loadDbMenuTabs(tabsCheckedDbEntry).filter { it.second }.map { it.first }
+        }
 
-            val bottomNavigationMenu: Menu? = (binding.tabs as? NavigationBarView)?.menu?.apply {
-                clear()
-            }
-                ?: binding.navigation?.menu?.apply {
-                removeGroup(R.id.tabsId)
+        val bottomNavigationMenu: Menu? = (binding.tabs as? NavigationBarView)?.menu?.apply {
+            clear()
+        }
+            ?: binding.navigation?.menu?.apply {
+                if(tabs.contains(Tab.DIRECT_MESSAGES)) removeGroup(R.id.dmNavigationGroup)
             }
 
-            tabsChecked.zip(pageIds).forEach { (tabId, pageId) ->
-                with(bottomNavigationMenu?.add(R.id.tabsId, pageId, 1, tabId.toLanguageString(baseContext))) {
-                    val tabIcon = tabId.getDrawable(applicationContext)
-                    if (tabIcon != null) {
-                        this?.icon = tabIcon
-                    }
+        tabs.zip(pageIds).forEach { (tabId, pageId) ->
+            with(bottomNavigationMenu?.add(R.id.tabsId, pageId, 1, tabId.toLanguageString(baseContext))) {
+                val tabIcon = tabId.getDrawable(applicationContext)
+                if (tabIcon != null) {
+                    this?.icon = tabIcon
                 }
             }
-
-            tabsChecked
         }
 
         val tabArray: List<() -> Fragment> = tabs.map { it.getFragment() }
@@ -549,6 +555,7 @@ class MainActivity : BaseActivity() {
 
         fun MenuItem.buttonPos() {
             when(itemId){
+                R.id.dms -> launchActivity(DirectMessagesActivity())
                 R.id.my_profile -> launchActivity(ProfileActivity())
                 R.id.settings -> launchActivity(SettingsActivity())
                 R.id.log_out -> logOut()

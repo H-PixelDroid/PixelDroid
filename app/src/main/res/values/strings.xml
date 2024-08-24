@@ -353,4 +353,5 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="content_header">Content</string>
 
     <string name="dm_title">DM to %1$s</string>
+    <string name="direct_messages">Direct Messages</string>
 </resources>

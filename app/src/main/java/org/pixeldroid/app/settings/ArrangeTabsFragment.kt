@@ -32,14 +32,14 @@ class ArrangeTabsFragment: DialogFragment() {
     @Inject
     lateinit var db: AppDatabase
 
-    private val model: ArrangeTabsViewModel by viewModels { ArrangeTabsViewModelFactory(requireContext(), db) }
+    private val model: ArrangeTabsViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val inflater: LayoutInflater = requireActivity().layoutInflater
         val dialogView: View = inflater.inflate(R.layout.layout_tabs_arrange, null)
 
-        model.initTabsChecked(dialogView)
+        model.initTabsChecked()
 
         val listFeed: RecyclerView = dialogView.findViewById(R.id.tabs)
         val listAdapter = ListViewAdapter(model)

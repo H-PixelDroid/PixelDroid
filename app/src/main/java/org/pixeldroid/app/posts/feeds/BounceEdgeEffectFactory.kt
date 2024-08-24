@@ -1,10 +1,13 @@
 package org.pixeldroid.app.posts.feeds
 
+import android.content.Context
 import android.graphics.Canvas
 import android.widget.EdgeEffect
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.recyclerview.widget.RecyclerView
+import org.pixeldroid.common.pxToDp
+import kotlin.math.absoluteValue
 
 
 /** The magnitude of translation distance while the list is over-scrolled. */
@@ -16,7 +19,7 @@ private const val FLING_TRANSLATION_MAGNITUDE = 0.5f
 /**
  * Replace edge effect by a bounce
  */
-class BounceEdgeEffectFactory(val callback: () -> Unit) : RecyclerView.EdgeEffectFactory() {
+class BounceEdgeEffectFactory(val refreshCallback: () -> Unit, val context: Context) : RecyclerView.EdgeEffectFactory() {
     var times = 0
 
     override fun createEdgeEffect(recyclerView: RecyclerView, direction: Int): EdgeEffect {
@@ -51,6 +54,10 @@ class BounceEdgeEffectFactory(val callback: () -> Unit) : RecyclerView.EdgeEffec
                 super.onRelease()
                 // The finger is lifted. Start the animation to bring translation back to the resting state.
                 if (recyclerView.translationY != 0f) {
+                    if (direction == DIRECTION_BOTTOM && recyclerView.translationY.toInt().absoluteValue.pxToDp(context) > 50) {
+                        refreshCallback()
+                    }
+
                     translationAnim = createAnim()?.also { it.start() }
                 }
             }
@@ -59,15 +66,7 @@ class BounceEdgeEffectFactory(val callback: () -> Unit) : RecyclerView.EdgeEffec
                 super.onAbsorb(velocity)
 
                 // The list has reached the edge on fling.
-                val sign = if (direction == DIRECTION_BOTTOM) {
-                    times++
-                    // Don't do the callback every time
-                    if(times % 2 == 0) {
-                        times = 0
-                        callback()
-                    }
-                    -1
-                } else 1
+                val sign = if (direction == DIRECTION_BOTTOM) -1 else 1
 
                 val translationVelocity = sign * velocity * FLING_TRANSLATION_MAGNITUDE
                 translationAnim?.cancel()

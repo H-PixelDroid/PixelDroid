@@ -142,7 +142,10 @@
             android:theme="@style/BaseAppTheme" />
 
         <activity android:name=".directmessages.ConversationActivity"
-            android:theme="@style/BaseAppTheme"/>
+            android:theme="@style/BaseAppTheme"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name="org.pixeldroid.app.directmessages.DirectMessagesActivity"
+            android:theme="@style/BaseAppTheme" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

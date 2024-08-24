@@ -14,8 +14,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.paging.RemoteMediator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.FragmentFeedBinding
 import org.pixeldroid.app.posts.feeds.BounceEdgeEffectFactory
 import org.pixeldroid.app.posts.feeds.initAdapter
@@ -75,6 +79,11 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
         binding = FragmentFeedBinding.inflate(layoutInflater)
 
         val callback: () -> Unit = {
+            binding.bottomLoadingBar.visibility = View.VISIBLE
+            GlobalScope.launch(Dispatchers.Main) {
+                delay(1000) // Wait 1 second
+                binding.bottomLoadingBar.visibility = View.GONE
+            }
             adapter.refresh()
             adapter.notifyDataSetChanged()
         }
@@ -86,7 +95,7 @@ open class CachedFeedFragment<T: FeedContentDatabase> : BaseFragment() {
                     stackFromEnd = false
                     this.reverseLayout = true
                 }
-                edgeEffectFactory = BounceEdgeEffectFactory(callback)
+                edgeEffectFactory = BounceEdgeEffectFactory(callback, context)
             }
             null
         } else binding.swipeRefreshLayout

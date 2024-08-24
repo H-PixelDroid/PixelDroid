@@ -12,14 +12,12 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
-import android.view.View
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.PopupMenu
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -199,23 +197,14 @@ fun <T> Fragment.bindingLifecycleAware(): ReadWriteProperty<Fragment, T> =
         }
     }
 
-fun loadDefaultMenuTabs(context: Context, anchor: View): List<Tab> {
-    return with(PopupMenu(context, anchor)) {
-        val menu = this.menu
-        menuInflater.inflate(R.menu.navigation_main, menu)
-        menu.removeGroup(R.id.bottomNavigationGroup)
-        (0 until menu.size()).map { Tab.fromLanguageString(context, menu.getItem(it).title.toString()) }
-    }
-}
-
-fun loadDbMenuTabs(ctx: Context, tabsDbEntry: List<TabsDatabaseEntity>): List<Pair<Tab, Boolean>> {
+fun loadDbMenuTabs(tabsDbEntry: List<TabsDatabaseEntity>): List<Pair<Tab, Boolean>> {
     return tabsDbEntry.map {
         Pair(Tab.fromName(it.tab), it.checked)
     }
 }
 
 enum class Tab {
-    HOME_FEED, SEARCH_DISCOVER_FEED, CREATE_FEED, NOTIFICATIONS_FEED, PUBLIC_FEED;
+    HOME_FEED, SEARCH_DISCOVER_FEED, CREATE_FEED, NOTIFICATIONS_FEED, PUBLIC_FEED, DIRECT_MESSAGES;
 
     fun toLanguageString(ctx: Context): String {
         return ctx.getString(
@@ -225,6 +214,7 @@ enum class Tab {
                 CREATE_FEED -> R.string.create_feed
                 NOTIFICATIONS_FEED -> R.string.notifications_feed
                 PUBLIC_FEED -> R.string.public_feed
+                DIRECT_MESSAGES -> R.string.direct_messages
             }
         )
     }
@@ -240,6 +230,7 @@ enum class Tab {
             CREATE_FEED -> R.drawable.selector_camera
             NOTIFICATIONS_FEED -> R.drawable.selector_notifications
             PUBLIC_FEED -> R.drawable.ic_filter_black_24dp
+            DIRECT_MESSAGES -> R.drawable.message
         }
         return AppCompatResources.getDrawable(ctx, resId)
     }
@@ -252,6 +243,7 @@ enum class Tab {
                 ctx.getString(R.string.create_feed) -> CREATE_FEED
                 ctx.getString(R.string.notifications_feed) -> NOTIFICATIONS_FEED
                 ctx.getString(R.string.public_feed) -> PUBLIC_FEED
+                ctx.getString(R.string.direct_messages) -> DIRECT_MESSAGES
                 else -> HOME_FEED
             }
         }
@@ -259,5 +251,18 @@ enum class Tab {
         fun fromName(name: String): Tab {
             return entries.filter { it.name == name }.getOrElse(0) { HOME_FEED }
         }
+
+        val defaultTabs: List<Tab>
+            get() = listOf(
+                HOME_FEED,
+                SEARCH_DISCOVER_FEED,
+                CREATE_FEED,
+                NOTIFICATIONS_FEED,
+                PUBLIC_FEED
+            )
+        val otherTabs: List<Tab>
+            get() = listOf(
+                DIRECT_MESSAGES
+            )
     }
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.DirectMessagesListItemBinding
+import org.pixeldroid.app.directmessages.ConversationActivity.Companion.USERNAME
 import org.pixeldroid.app.directmessages.ConversationFragment.Companion.CONVERSATION_ID
 import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
 import org.pixeldroid.app.posts.feeds.cachedFeeds.FeedViewModel
@@ -68,6 +69,7 @@ class DirectMessagesFragment : CachedFeedFragment<Conversation>() {
                 conversation?.accounts?.firstOrNull()?.let {
                     val intent = Intent(itemView.context, ConversationActivity::class.java).apply {
                         putExtra(CONVERSATION_ID, it.id)
+                        putExtra(USERNAME, it.getDisplayName())
                     }
                     itemView.context.startActivity(intent)
                 }
