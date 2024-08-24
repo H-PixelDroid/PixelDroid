@@ -1,0 +1,3 @@
+* Arranxo do fallo ao compartir unha imaxe desde a galería na app
+
+* Arranxo do problema cos permisos que producía o erro de perminso non concedido

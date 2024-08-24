@@ -1,0 +1,4 @@
+* Compatibilidade con tablets, e rotación de todas as pantallas. Podería haber aínda fallos, por favor avísanos se así fose
+* Arranxo de problemas: principalmente coas notificacións que se estragaron hai un par de versións
+* Actualización das traducións
+* Actualización das dependencias

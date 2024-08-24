@@ -47,7 +47,6 @@
     <string name="upload_picture_failed">خطأ في تحميل الصورة!</string>
     <string name="loading_toast">حدث خلل اثناء التحميل</string>
     <string name="upload_post_error">فشل في تحميل المنشور</string>
-
     <string name="comment_verb">تعليق</string>
     <string name="comment_posted">التعليق: تم نشر%1$s!</string>
     <string name="comment_error">خطأ في التعليق!</string>

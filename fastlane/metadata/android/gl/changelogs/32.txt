@@ -1,0 +1,1 @@
+Separar APKs por arquitectura da CPU, reduce significativamente as APKs (de 100MB a 25 MB)

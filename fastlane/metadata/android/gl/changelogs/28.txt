@@ -1,0 +1,7 @@
+Arranxo do problema ao abrir un album en pantalla completa
+
+Uso de aceleración por hardware (OpenGL! Shaders!) para editar imaxes. Actualmente intento imitar a implementación anterior, pero é o fundamento para melloras no futuro :)
+
+Avísame se non funciona ben! (email, Mastodon)
+
+Actualizamos as traducións para esta versión publicada :)
