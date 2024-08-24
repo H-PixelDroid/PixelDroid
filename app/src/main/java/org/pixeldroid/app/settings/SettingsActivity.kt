@@ -18,7 +18,6 @@ import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.utils.setThemeFromPreferences
 import org.pixeldroid.common.ThemedActivity
 
-
 @AndroidEntryPoint
 class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -41,7 +40,11 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
             // Handle the back button event
             // If a setting (for example language or theme) was changed, the main activity should be
             // started without history so that the change is applied to the whole back stack
-            if (restartMainOnExit) {
+            //TODO restore behaviour without true here, so that MainActivity is not destroyed when not necessary
+            // The true is a "temporary" (lol) fix so that tab changes are always taken into account
+            // Also, consider making the up button (arrow in action bar) also take this codepath!
+            // It recreates the activity by default
+            if (true || restartMainOnExit) {
                 val intent = Intent(this@SettingsActivity, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 super@SettingsActivity.startActivity(intent)
