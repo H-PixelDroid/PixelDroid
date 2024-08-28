@@ -138,6 +138,12 @@ interface PixelfedAPI {
         @Field("reblogs") reblogs : Boolean = true
     ) : Relationship
 
+    @POST("/api/v1.1/direct/lookup")
+    suspend fun lookupUser(
+        @Query("q") q: String,
+        @Query("remote") remote : Boolean = false
+    ) : List<LookupUser>
+
     @POST("/api/v1/accounts/{id}/unfollow")
     suspend fun unfollow(
         @Path("id") statusId: String,

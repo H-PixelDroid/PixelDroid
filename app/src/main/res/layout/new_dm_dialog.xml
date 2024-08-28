@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+   <EditText
+       android:id="@+id/dm_target"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:importantForAutofill="no"
+       android:inputType="text"
+       android:hint="@string/dm_target"
+       app:layout_constraintTop_toTopOf="parent"/>
+    <EditText
+        android:id="@+id/dm_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:hint="@string/new_dm"
+        app:layout_constraintTop_toBottomOf="@id/dm_target"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
