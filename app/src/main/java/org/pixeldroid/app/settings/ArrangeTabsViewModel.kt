@@ -1,6 +1,10 @@
 package org.pixeldroid.app.settings
 
+import android.content.Context
+import android.widget.EditText
 import androidx.lifecycle.ViewModel
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +24,7 @@ class ArrangeTabsViewModel @Inject constructor(
     val uiState: StateFlow<ArrangeTabsUiState> = _uiState
 
     private var oldTabsChecked: MutableList<Pair<Tab, Boolean>> = mutableListOf()
+    private var oldTabsButtons: MutableList<String?> = mutableListOf()
 
     init {
         initTabsDbEntities()
@@ -40,7 +45,7 @@ class ArrangeTabsViewModel @Inject constructor(
         }
     }
 
-    fun initTabsChecked() {
+    fun initTabsChecked(): Int {
         if (oldTabsChecked.isEmpty()) {
             // Only load tabsChecked if the model has not been updated
             _uiState.update { currentUiState ->
@@ -52,6 +57,18 @@ class ArrangeTabsViewModel @Inject constructor(
                         // Get current menu visibility and order from settings
                         loadDbMenuTabs(_uiState.value.tabsDbEntities).toList()
                     }
+                )
+            }
+        }
+        return _uiState.value.tabsChecked.size
+    }
+
+    fun initTabsButtons(itemCount: Int, ctx: Context) {
+        oldTabsChecked = _uiState.value.tabsChecked.toMutableList()
+        if (oldTabsButtons.isEmpty()) {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    tabsButtons = (0 until itemCount).map { null }
                 )
             }
         }
@@ -87,11 +104,26 @@ class ArrangeTabsViewModel @Inject constructor(
             )
         }
     }
+
+    fun updateTabsButtons(position: Int, text: String) {
+        oldTabsButtons = _uiState.value.tabsButtons.toMutableList()
+        oldTabsButtons[position] = text
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                tabsButtons = oldTabsButtons.toList()
+            )
+        }
+    }
+
+    fun getTabsButtons(position: Int): String? {
+        return _uiState.value.tabsButtons[position]
+    }
 }
 
 data class ArrangeTabsUiState(
     val userId: String = "",
     val instanceUri: String = "",
     val tabsDbEntities: List<TabsDatabaseEntity> = listOf(),
-    val tabsChecked: List<Pair<Tab, Boolean>> = listOf()
+    val tabsChecked: List<Pair<Tab, Boolean>> = listOf(),
+    val tabsButtons: List<String?> = listOf()
 )

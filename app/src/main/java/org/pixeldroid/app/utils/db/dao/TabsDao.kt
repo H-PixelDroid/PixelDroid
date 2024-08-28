@@ -11,7 +11,7 @@ import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 @Dao
 interface TabsDao {
     @Query("SELECT * FROM tabsChecked WHERE `index`=:index AND `user_id`=:userId AND `instance_uri`=:instanceUri")
-    fun getTabChecked(index: Int, userId: String, instanceUri: String): TabsDatabaseEntity
+    fun getTabChecked(index: Int, userId: String, instanceUri: String): TabsDatabaseEntity?
 
     @Query("SELECT * FROM tabsChecked WHERE `user_id`=:userId AND `instance_uri`=:instanceUri")
     fun getTabsChecked(userId: String, instanceUri: String): List<TabsDatabaseEntity>
@@ -27,16 +27,6 @@ interface TabsDao {
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTabChecked(tabChecked: TabsDatabaseEntity): Long
-
-    @Update
-    suspend fun updateTabChecked(tabChecked: TabsDatabaseEntity)
-
-    @Transaction
-    suspend fun insertOrUpdate(tabChecked: TabsDatabaseEntity) {
-        if (insertTabChecked(tabChecked) == -1L) {
-            updateTabChecked(tabChecked)
-        }
-    }
 
     @Transaction
     suspend fun clearAndRefill(tabsChecked: List<TabsDatabaseEntity>, userId: String, instanceUri: String) {

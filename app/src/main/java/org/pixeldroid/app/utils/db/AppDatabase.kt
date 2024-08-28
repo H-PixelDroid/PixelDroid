@@ -35,9 +35,10 @@ import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
     ],
     autoMigrations = [
         AutoMigration(from = 6, to = 7),
-        AutoMigration(from = 7, to = 8)
+        AutoMigration(from = 7, to = 8),
+        AutoMigration(from = 8, to = 9),
     ],
-    version = 8
+    version = 10
 )
 
 @TypeConverters(Converters::class)
@@ -67,5 +68,12 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
 val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE instances ADD COLUMN pixelfed INTEGER NOT NULL DEFAULT 1")
+    }
+}
+
+val MIGRATION_9_10 = object : Migration(9, 10) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        // Sorry users, this was just easier
+        database.execSQL("DELETE FROM tabsChecked")
     }
 }

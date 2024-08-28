@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.pixeldroid.app.R
 import org.pixeldroid.app.posts.StatusViewHolder
 import org.pixeldroid.app.posts.feeds.UIMODEL_STATUS_COMPARATOR
@@ -18,6 +22,7 @@ import org.pixeldroid.app.utils.api.objects.Results
 import org.pixeldroid.app.utils.api.objects.Status
 import org.pixeldroid.app.utils.api.objects.Tag.Companion.HASHTAG_TAG
 import org.pixeldroid.app.utils.displayDimensionsInPx
+
 
 /**
  * Fragment to show a list of [Status]es, as a result of a search or a hashtag.
@@ -33,7 +38,7 @@ class UncachedPostsFragment : UncachedFeedFragment<Status>() {
 
         hashtagOrQuery = arguments?.getString(HASHTAG_TAG)
 
-        if(hashtagOrQuery == null){
+        if (hashtagOrQuery == null) {
             search = true
             hashtagOrQuery = arguments?.getString("searchFeed")!!
         }

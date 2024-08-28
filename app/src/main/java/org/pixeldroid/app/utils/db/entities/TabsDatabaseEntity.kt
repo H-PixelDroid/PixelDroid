@@ -22,4 +22,5 @@ data class TabsDatabaseEntity(
     var instance_uri: String,
     var tab: String,
     var checked: Boolean = true,
+    var filter: String? = null
 )

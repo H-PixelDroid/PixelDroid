@@ -354,6 +354,8 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
 
     <string name="dm_title">DM to %1$s</string>
     <string name="direct_messages">Direct Messages</string>
+    <string name="feed_hashtag">Hashtag Feed</string>
+    <string name="feed_hashtag_description">Write a single hashtag below</string>
     <string name="new_dm_conversation">Create new DM conversation</string>
     <string name="dm_instruction">Fill in the target username and the message to send</string>
     <string name="dm_target">Target username</string>
