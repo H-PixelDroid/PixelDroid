@@ -118,7 +118,7 @@ class ArrangeTabsFragment: DialogFragment() {
             checkBox.isChecked = model.uiState.value.tabsChecked[position].second
 
             fun callbackOnClickListener(tabNew: Tab, isCheckedNew: Boolean, hashtag: String? = null) {
-                tabNew.filter = hashtag?.split("#")?.filter { it.isNotBlank() }?.get(0)
+                tabNew.filter = hashtag?.split("#")?.filter { it.isNotBlank() }?.get(0)?.trim()
                 model.tabsCheckReplace(position, Pair(tabNew, isCheckedNew))
                 checkBox.isChecked = isCheckedNew
 
