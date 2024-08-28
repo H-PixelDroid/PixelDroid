@@ -492,12 +492,27 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        val tabs = if (tabsCheckedDbEntry.isEmpty()) {
+        val (tabs, hashtagIndices) = if (tabsCheckedDbEntry.isEmpty()) {
             // Default menu
-            Tab.defaultTabs
+            Pair(
+                Tab.defaultTabs,
+                Tab.defaultTabs.map { 0 }
+            )
         } else {
-            // Get current menu visibility and order from settings
-            loadDbMenuTabs(tabsCheckedDbEntry).filter { it.second }.map { it.first }
+            Pair(
+                // Get current menu visibility and order from settings
+                loadDbMenuTabs(tabsCheckedDbEntry).filter { it.second }.map { it.first },
+                // Get all hashtag feed indices
+                db.tabsDao().getTabsChecked(user!!.user_id, user!!.instance_uri).filter {
+                    it.checked
+                }.map {
+                    if (Tab.fromName(it.tab) == Tab.HASHTAG_FEED) {
+                        it.index
+                    } else {
+                        0
+                    }
+                }
+            )
         }
 
         val bottomNavigationMenu: Menu? = (binding.tabs as? NavigationBarView)?.menu?.apply {
@@ -508,17 +523,6 @@ class MainActivity : BaseActivity() {
             }
 
         val user = db.userDao().getActiveUser()!!
-
-        // Get all hashtag feed indices
-        val hashtagIndices = db.tabsDao().getTabsChecked(user.user_id, user.instance_uri).filter {
-            it.checked
-        }.map {
-            if (Tab.fromName(it.tab) == Tab.HASHTAG_FEED) {
-                it.index
-            } else {
-                0
-            }
-        }
 
         hashtagIndices.zip(tabs).zip(pageIds).forEach { (indexPageId, pageId) ->
             val index = indexPageId.first

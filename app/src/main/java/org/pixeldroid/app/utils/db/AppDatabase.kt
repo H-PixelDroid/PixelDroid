@@ -36,9 +36,9 @@ import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
     autoMigrations = [
         AutoMigration(from = 6, to = 7),
         AutoMigration(from = 7, to = 8),
-        AutoMigration(from = 8, to = 9)
+        AutoMigration(from = 8, to = 9),
     ],
-    version = 9
+    version = 10
 )
 
 @TypeConverters(Converters::class)
@@ -71,4 +71,9 @@ val MIGRATION_5_6 = object : Migration(5, 6) {
     }
 }
 
-// TODO: Manually add missing HASHTAG_FEED entry
+val MIGRATION_9_10 = object : Migration(9, 10) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        // Sorry users, this was just easier
+        database.execSQL("DELETE FROM tabsChecked")
+    }
+}
