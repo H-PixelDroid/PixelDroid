@@ -80,7 +80,7 @@ class ConversationActivity : BaseActivity() {
         }
     }
 
-    private suspend fun sendMessage(
+    suspend fun sendMessage(
         api: PixelfedAPI,
         pid: String,
     ) {
