@@ -143,7 +143,6 @@ class ArrangeTabsFragment: DialogFragment() {
                     // Ask which hashtag should filter
                     val textField = EditText(requireContext())
 
-                    // Set the default text to a link of the Queen
                     textField.hint = "hashtag"
 
                     MaterialAlertDialogBuilder(requireContext())
