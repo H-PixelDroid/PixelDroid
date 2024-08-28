@@ -62,12 +62,14 @@ import org.pixeldroid.app.posts.NestedScrollableHost
 import org.pixeldroid.app.posts.feeds.cachedFeeds.CachedFeedFragment
 import org.pixeldroid.app.posts.feeds.cachedFeeds.notifications.NotificationsFragment
 import org.pixeldroid.app.posts.feeds.cachedFeeds.postFeeds.PostFeedFragment
+import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.Tab
 import org.pixeldroid.app.utils.api.objects.Notification
+import org.pixeldroid.app.utils.api.objects.Tag
 import org.pixeldroid.app.utils.db.entities.HomeStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
@@ -476,9 +478,17 @@ class MainActivity : BaseActivity() {
                             arguments = Bundle().apply { putBoolean("home", false) }
                         }
                 } }
-                Tab.DIRECT_MESSAGES -> {{
+                Tab.DIRECT_MESSAGES -> { {
                     DirectMessagesFragment()
-                }}
+                } }
+                Tab.HASHTAG_FEED -> { {
+                    UncachedPostsFragment()
+                        .apply {
+                            arguments = Bundle().apply {
+                                putString(Tag.HASHTAG_TAG, this@getFragment.filter)
+                            }
+                        }
+                } }
             }
         }
 
@@ -497,9 +507,25 @@ class MainActivity : BaseActivity() {
                 if(tabs.contains(Tab.DIRECT_MESSAGES)) removeGroup(R.id.dmNavigationGroup)
             }
 
-        tabs.zip(pageIds).forEach { (tabId, pageId) ->
-            with(bottomNavigationMenu?.add(R.id.tabsId, pageId, 1, tabId.toLanguageString(baseContext))) {
-                val tabIcon = tabId.getDrawable(applicationContext)
+        val user = db.userDao().getActiveUser()!!
+
+        // Get all hashtag feed indices
+        val hashtagIndices = db.tabsDao().getTabsChecked(user.user_id, user.instance_uri).filter {
+            it.checked
+        }.map {
+            if (Tab.fromName(it.tab) == Tab.HASHTAG_FEED) {
+                it.index
+            } else {
+                0
+            }
+        }
+
+        hashtagIndices.zip(tabs).zip(pageIds).forEach { (indexPageId, pageId) ->
+            val index = indexPageId.first
+            val tabId = indexPageId.second
+
+            with(bottomNavigationMenu?.add(R.id.tabsId, pageId, 1, tabId.toLanguageString(this@MainActivity, db, index, true))) {
+                val tabIcon = tabId.getDrawable(this@MainActivity)
                 if (tabIcon != null) {
                     this?.icon = tabIcon
                 }

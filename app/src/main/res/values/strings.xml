@@ -354,4 +354,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
 
     <string name="dm_title">DM to %1$s</string>
     <string name="direct_messages">Direct Messages</string>
+    <string name="feed_hashtag">Hashtag Feed</string>
+    <string name="feed_hashtag_description">Write a single hashtag below</string>
 </resources>

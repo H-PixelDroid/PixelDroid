@@ -31,6 +31,7 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
 import okhttp3.HttpUrl
 import org.pixeldroid.app.R
+import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -199,24 +200,35 @@ fun <T> Fragment.bindingLifecycleAware(): ReadWriteProperty<Fragment, T> =
 
 fun loadDbMenuTabs(tabsDbEntry: List<TabsDatabaseEntity>): List<Pair<Tab, Boolean>> {
     return tabsDbEntry.map {
-        Pair(Tab.fromName(it.tab), it.checked)
+        val tab = Tab.fromName(it.tab)
+        if (tab == Tab.HASHTAG_FEED) {
+            tab.filter = it.filter
+        }
+        Pair(tab, it.checked)
     }
 }
 
-enum class Tab {
-    HOME_FEED, SEARCH_DISCOVER_FEED, CREATE_FEED, NOTIFICATIONS_FEED, PUBLIC_FEED, DIRECT_MESSAGES;
+enum class Tab(var filter: String? = null) {
+    HOME_FEED, SEARCH_DISCOVER_FEED, CREATE_FEED, NOTIFICATIONS_FEED, PUBLIC_FEED, DIRECT_MESSAGES, HASHTAG_FEED;
 
-    fun toLanguageString(ctx: Context): String {
-        return ctx.getString(
-            when (this) {
-                HOME_FEED -> R.string.home_feed
-                SEARCH_DISCOVER_FEED -> R.string.search_discover_feed
-                CREATE_FEED -> R.string.create_feed
-                NOTIFICATIONS_FEED -> R.string.notifications_feed
-                PUBLIC_FEED -> R.string.public_feed
-                DIRECT_MESSAGES -> R.string.direct_messages
+    fun toLanguageString(ctx: Context, db: AppDatabase, index: Int, lookForFilter: Boolean = false): String {
+        return when (this) {
+            HOME_FEED -> ctx.getString(R.string.home_feed)
+            SEARCH_DISCOVER_FEED -> ctx.getString(R.string.search_discover_feed)
+            CREATE_FEED -> ctx.getString(R.string.create_feed)
+            NOTIFICATIONS_FEED -> ctx.getString(R.string.notifications_feed)
+            PUBLIC_FEED -> ctx.getString(R.string.public_feed)
+            DIRECT_MESSAGES -> ctx.getString(R.string.direct_messages)
+            HASHTAG_FEED -> {
+                val user = db.userDao().getActiveUser()!!
+                val hashtag = db.tabsDao().getTabChecked(index, user.user_id, user.instance_uri)?.filter
+                if (lookForFilter && hashtag != null) {
+                    StringBuilder("#").append(hashtag).toString()
+                } else {
+                    ctx.getString(R.string.feed_hashtag)
+                }
             }
-        )
+        }
     }
 
     fun toName(): String {
@@ -231,6 +243,7 @@ enum class Tab {
             NOTIFICATIONS_FEED -> R.drawable.selector_notifications
             PUBLIC_FEED -> R.drawable.ic_filter_black_24dp
             DIRECT_MESSAGES -> R.drawable.selector_dm
+            HASHTAG_FEED -> R.drawable.feed_hashtag
         }
         return AppCompatResources.getDrawable(ctx, resId)
     }
@@ -244,6 +257,7 @@ enum class Tab {
                 ctx.getString(R.string.notifications_feed) -> NOTIFICATIONS_FEED
                 ctx.getString(R.string.public_feed) -> PUBLIC_FEED
                 ctx.getString(R.string.direct_messages) -> DIRECT_MESSAGES
+                ctx.getString(R.string.feed_hashtag) -> HASHTAG_FEED
                 else -> HOME_FEED
             }
         }
@@ -262,7 +276,8 @@ enum class Tab {
             )
         val otherTabs: List<Tab>
             get() = listOf(
-                DIRECT_MESSAGES
+                DIRECT_MESSAGES,
+                HASHTAG_FEED
             )
     }
 }

@@ -35,9 +35,10 @@ import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
     ],
     autoMigrations = [
         AutoMigration(from = 6, to = 7),
-        AutoMigration(from = 7, to = 8)
+        AutoMigration(from = 7, to = 8),
+        AutoMigration(from = 8, to = 9)
     ],
-    version = 8
+    version = 9
 )
 
 @TypeConverters(Converters::class)
@@ -69,3 +70,5 @@ val MIGRATION_5_6 = object : Migration(5, 6) {
         database.execSQL("ALTER TABLE instances ADD COLUMN pixelfed INTEGER NOT NULL DEFAULT 1")
     }
 }
+
+// TODO: Manually add missing HASHTAG_FEED entry
