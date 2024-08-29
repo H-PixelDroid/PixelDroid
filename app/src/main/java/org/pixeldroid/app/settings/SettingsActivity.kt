@@ -107,6 +107,8 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
                 dialogFragment = LanguageSettingFragment()
             } else if (preference.key == "arrange_tabs") {
                 dialogFragment = ArrangeTabsFragment()
+            } else if (preference.key == "tutorial") {
+                dialogFragment = TutorialSettingsDialog()
             }
             if (dialogFragment != null) {
                 dialogFragment.setTargetFragment(this, 0)

@@ -66,6 +66,7 @@ import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
+import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.Tab
 import org.pixeldroid.app.utils.api.objects.Notification
@@ -128,9 +129,14 @@ class MainActivity : BaseActivity() {
 
             val showNotification: Boolean = intent.getBooleanExtra(SHOW_NOTIFICATION_TAG, false)
 
+            val showTutorial: Int = intent.getIntExtra(START_TUTORIAL, -1)
+
             if(showNotification){
                 binding.viewPager.currentItem = 3
+            } else if(showTutorial > 0) {
+
             }
+
             if (ActivityCompat.checkSelfPermission(applicationContext,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED

@@ -361,4 +361,9 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="dm_target">Target username</string>
     <string name="new_dm">Message you want to write. Say hello!</string>
     <string name="new_dm_error">Error sending your message! Check the username</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="tutorial_explanation">Explanations on how to use PixelDroid and Pixelfed</string>
+    <string name="feeds_tutorial">Feeds, how do they work? Where do they come from?</string>
+    <string name="create_tutorial">A little walk through creating posts</string>
+    <string name="tutorial_choice">What could you use some help with?</string>
 </resources>
