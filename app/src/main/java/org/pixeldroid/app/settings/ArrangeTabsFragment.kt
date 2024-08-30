@@ -3,7 +3,6 @@ package org.pixeldroid.app.settings
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -16,13 +15,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
+import org.pixeldroid.app.databinding.LayoutTabsArrangeBinding
 import org.pixeldroid.app.utils.Tab
 import org.pixeldroid.app.utils.db.AppDatabase
 import org.pixeldroid.app.utils.db.entities.TabsDatabaseEntity
@@ -31,20 +34,23 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ArrangeTabsFragment: DialogFragment() {
 
+    private lateinit var binding: LayoutTabsArrangeBinding
+
     @Inject
     lateinit var db: AppDatabase
 
     private val model: ArrangeTabsViewModel by viewModels()
 
+    var showTutorial = false
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val inflater: LayoutInflater = requireActivity().layoutInflater
-        val dialogView: View = inflater.inflate(R.layout.layout_tabs_arrange, null)
+        binding = LayoutTabsArrangeBinding.inflate(layoutInflater)
 
         val itemCount = model.initTabsChecked()
         model.initTabsButtons(itemCount, requireContext())
 
-        val listFeed: RecyclerView = dialogView.findViewById(R.id.tabs)
+        val listFeed: RecyclerView = binding.tabs
         val listAdapter = ListViewAdapter(model)
         listFeed.adapter = listAdapter
         listFeed.layoutManager = LinearLayoutManager(requireActivity())
@@ -68,7 +74,7 @@ class ArrangeTabsFragment: DialogFragment() {
         val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
             setIcon(R.drawable.outline_bottom_navigation)
             setTitle(R.string.arrange_tabs_summary)
-            setView(dialogView)
+            setView(binding.root)
             setNegativeButton(android.R.string.cancel) { _, _ -> }
             setPositiveButton(android.R.string.ok) { _, _ ->
                 // Save values into preferences
@@ -81,8 +87,75 @@ class ArrangeTabsFragment: DialogFragment() {
                 }
             }
         }.create()
-
+        if (showTutorial) showTutorial(dialog)
         return dialog
+    }
+
+    private fun showTutorial(dialog: Dialog){
+        lifecycleScope.launch {
+            var handle = binding.tabs.findViewHolderForLayoutPosition(0)?.itemView?.findViewById<ImageView>(R.id.dragHandle)
+            while (handle == null) {
+                handle = binding.tabs.findViewHolderForLayoutPosition(0)?.itemView?.findViewById(R.id.dragHandle)
+                delay(100)
+            }
+            TapTargetView.showFor(
+                dialog,
+                TapTarget.forView(handle, getString(R.string.drag_customtabs_tutorial))
+                    .transparentTarget(true)
+                    .targetRadius(60),  // Specify the target radius (in dp)
+                object : TapTargetView.Listener() {
+                    // The listener can listen for regular clicks, long clicks or cancels
+                    override fun onTargetClick(view: TapTargetView?) {
+                        super.onTargetClick(view) // This call is optional
+                        // Perform action for the current target
+                        val checkBox = binding.tabs.findViewHolderForLayoutPosition(0)?.itemView?.findViewById<View>(R.id.checkBox)
+                        TapTargetView.showFor(
+                            dialog,
+                            TapTarget.forView(checkBox,
+                                getString(R.string.de_activate_tabs_tutorial))
+                                .transparentTarget(true)
+                                .targetRadius(60),  // Specify the target radius (in dp)
+                            object : TapTargetView.Listener() {
+                                // The listener can listen for regular clicks, long clicks or cancels
+                                override fun onTargetClick(view: TapTargetView?) {
+                                    super.onTargetClick(view) // This call is optional
+                                    // Perform action for the current target
+                                    val index = (Tab.defaultTabs + Tab.otherTabs).size - 1
+                                    binding.tabs.scrollToPosition(index)
+                                    lifecycleScope.launch {
+                                        var hashtag =
+                                            binding.tabs.findViewHolderForLayoutPosition(index)?.itemView?.findViewById<View>(
+                                                R.id.textView
+                                            )
+                                        while (hashtag == null) {
+                                            hashtag =
+                                                binding.tabs.findViewHolderForLayoutPosition(index)?.itemView?.findViewById(
+                                                    R.id.textView
+                                                )
+                                            delay(100)
+                                        }
+                                        TapTargetView.showFor(
+                                            dialog,
+                                            TapTarget.forView(
+                                                hashtag,
+                                                getString(R.string.custom_feed_tutorial_title),
+                                                getString(R.string.custom_feed_tutorial_explanation)
+                                            )
+                                                .transparentTarget(true)
+                                                .targetRadius(60),  // Specify the target radius (in dp)
+                                            object : TapTargetView.Listener() {
+                                                // The listener can listen for regular clicks, long clicks or cancels
+                                                override fun onTargetClick(view: TapTargetView?) {
+                                                    super.onTargetClick(view) // This call is optional
+                                                    // Perform action for the current target
+                                                }
+                                            })
+                                    }
+                                }
+                            })
+                    }
+                })
+        }
     }
 
     inner class ListViewAdapter(val model: ArrangeTabsViewModel):

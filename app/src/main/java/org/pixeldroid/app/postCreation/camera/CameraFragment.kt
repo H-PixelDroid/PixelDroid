@@ -37,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.databinding.FragmentCameraBinding
 import org.pixeldroid.app.postCreation.PostCreationActivity
+import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.BaseFragment
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -68,6 +69,7 @@ class CameraFragment : BaseFragment() {
 
     private var inActivity by Delegates.notNull<Boolean>()
     private var addToStory by Delegates.notNull<Boolean>()
+    private var tutorial by Delegates.notNull<Int>()
 
     private var filePermissionDialogLaunched: Boolean = false
 
@@ -89,6 +91,8 @@ class CameraFragment : BaseFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         inActivity = arguments?.getBoolean(CAMERA_ACTIVITY) ?: false
         addToStory = arguments?.getBoolean(CAMERA_ACTIVITY_STORY) ?: false
+
+        tutorial = arguments?.getInt(START_TUTORIAL) ?: -1
 
         binding = FragmentCameraBinding.inflate(layoutInflater)
 
@@ -456,6 +460,9 @@ class CameraFragment : BaseFragment() {
         } else {
             if(addToStory){
                 intent.putExtra(CAMERA_ACTIVITY_STORY, addToStory)
+            }
+            if(!inActivity && tutorial != -1){
+                intent.putExtra(START_TUTORIAL, true)
             }
             startActivity(intent)
         }

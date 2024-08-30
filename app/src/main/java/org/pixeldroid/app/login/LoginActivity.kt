@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -20,6 +21,8 @@ import org.pixeldroid.app.BuildConfig
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityLoginBinding
 import org.pixeldroid.app.main.MainActivity
+import org.pixeldroid.app.settings.SettingsActivity
+import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.openUrl
@@ -89,11 +92,25 @@ class LoginActivity : BaseActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.finishedLogin.collectLatest {
-                    if (it) {
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
+                    when (it) {
+                        LoginActivityViewModel.FinishedLogin.Finished -> {
+                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                        }
+                        LoginActivityViewModel.FinishedLogin.FinishedFirstTime -> MaterialAlertDialogBuilder(binding.root.context)
+                            .setMessage(R.string.first_time_question)
+                            .setPositiveButton(android.R.string.ok) { _, _ ->
+                                val intent = Intent(this@LoginActivity, SettingsActivity::class.java)
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                intent.putExtra(START_TUTORIAL, true)
+                                startActivity(intent)
+                            }
+                            .setNegativeButton(R.string.skip_tutorial) { _, _ -> model.finishLogin()}
+                            .show()
+                        LoginActivityViewModel.FinishedLogin.NotFinished -> {}
                     }
                 }
             }

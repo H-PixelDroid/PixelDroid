@@ -54,6 +54,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/about">
+        <ListPreference
+            android:key="tutorial"
+            android:title="@string/tutorial"
+            android:summary="@string/tutorial_explanation"
+            android:icon="@drawable/help" />
         <Preference android:title="@string/about"
             android:key="about"
             android:summary="@string/about_pixeldroid"
