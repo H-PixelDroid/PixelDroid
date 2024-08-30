@@ -42,14 +42,14 @@ class EditProfileActivity : BaseActivity() {
                     setMessage(getString(R.string.profile_save_changes))
                     setNegativeButton(android.R.string.cancel) { _, _ -> }
                     setPositiveButton(android.R.string.ok) { _, _ ->
-                        this@addCallback.isEnabled = false
-                        super.onBackPressedDispatcher.onBackPressed()
+                        this@addCallback.remove()
+                        onBackPressedDispatcher.onBackPressed()
                     }
                 }.show()
             } else {
-                this.isEnabled = false
+                this@addCallback.remove()
                 if (model.submittedChanges) setResult(RESULT_OK)
-                super.onBackPressedDispatcher.onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
             }
         }
 
