@@ -46,7 +46,7 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 35
+        versionCode 36
         versionName "1.0.beta" + versionCode
 
         //TODO add resConfigs("en", "fr", "ja",...) ?
@@ -232,17 +232,17 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
 
     //Dagger (dependency injection)
-    implementation 'com.google.dagger:dagger:2.51.1'
-    ksp 'com.google.dagger:dagger-compiler:2.51.1'
+    implementation 'com.google.dagger:dagger:2.52'
+    ksp 'com.google.dagger:dagger-compiler:2.52'
 
-    implementation('com.google.dagger:hilt-android:2.51')
-    ksp 'com.google.dagger:hilt-compiler:2.51'
+    implementation('com.google.dagger:hilt-android:2.52')
+    ksp 'com.google.dagger:hilt-compiler:2.52'
 
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.10.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.10.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.10.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.8'
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.11.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.9'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
@@ -284,17 +284,17 @@ dependencies {
     androidTestUtil 'com.linkedin.testbutler:test-butler-app:2.2.1'
 
     androidTestImplementation 'androidx.work:work-testing:2.9.1'
-    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.34.0'
+    testImplementation 'org.wiremock:wiremock:3.9.1'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$room_version"
 
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
-    androidTestImplementation 'androidx.test:runner:1.6.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
     androidTestImplementation 'androidx.test:rules:1.6.1'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test:runner:1.6.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
     androidTestImplementation 'androidx.test:rules:1.6.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'
