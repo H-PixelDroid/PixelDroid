@@ -126,7 +126,7 @@ fdroid build:
       - .gradle
   script:
       # Put the correct versionName and versionCode in the .fdroid.yml
-    - sed -e "s/\${versionName}/$(grep "versionName " app/build.gradle | awk '{print $2}' | tr -d \")$(grep "versionCode" app/build.gradle -m 1 | awk '{print $2}')/" -e "s/\${versionCode}/$(grep "versionCode" app/build.gradle -m 1 | awk '{print $2}')/" .fdroid.yml.template > .fdroid.yml
+    - sed -e "s/\${versionName}/$(./gradlew -q printVersionName)/" -e "s/\${versionCode}/$(./gradlew -q printVersionCode)/" .fdroid.yml.template > .fdroid.yml
     - rm .fdroid.yml.template
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
     - set -x
