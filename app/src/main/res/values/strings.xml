@@ -366,4 +366,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="feeds_tutorial">Feeds, how do they work? Where do they come from?</string>
     <string name="create_tutorial">A little walk through creating posts</string>
     <string name="tutorial_choice">What could you use some help with?</string>
+    <string name="dm_tutorial">Direct Messages: keep in touch!</string>
+    <string name="custom_tabs_tutorial">Customize what tabs show up on the main PixelDroid screen!</string>
 </resources>

@@ -12,7 +12,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -34,6 +37,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigation.NavigationView
@@ -50,6 +55,7 @@ import com.mikepenz.materialdrawer.model.interfaces.nameText
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ligi.tracedroid.sending.sendTraceDroidStackTracesIfExist
 import org.pixeldroid.app.R
@@ -66,6 +72,7 @@ import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
+import org.pixeldroid.app.settings.SettingsActivity.SettingsFragment
 import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.Tab
@@ -88,6 +95,7 @@ import java.time.Instant
 
 class MainActivity : BaseActivity() {
 
+    private lateinit var tabStored: List<Tab>
     private lateinit var header: AccountHeaderView
     private var user: UserDatabaseEntity? = null
 
@@ -128,13 +136,12 @@ class MainActivity : BaseActivity() {
             setupTabs()
 
             val showNotification: Boolean = intent.getBooleanExtra(SHOW_NOTIFICATION_TAG, false)
-
             val showTutorial: Int = intent.getIntExtra(START_TUTORIAL, -1)
 
             if(showNotification){
                 binding.viewPager.currentItem = 3
-            } else if(showTutorial > 0) {
-
+            } else if(showTutorial >= 0) {
+                showTutorial(showTutorial)
             }
 
             if (ActivityCompat.checkSelfPermission(applicationContext,
@@ -145,6 +152,216 @@ class MainActivity : BaseActivity() {
                 notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+    }
+
+    private fun showTutorial(showTutorial: Int) {
+        when(showTutorial){
+            0 -> tutorialOnTabs(Tab.HOME_FEED)
+            1 -> tutorialOnTabs(Tab.CREATE_FEED)
+            2 -> dmTutorial()
+            else -> return
+        }
+    }
+
+    private fun tutorialOnTabs(tab: Tab) {
+        val target = (binding.tabs as? NavigationBarView)?.let{ findTab(it, tab) } ?: return //TODO tablet landscape not supported
+
+        when(tab){
+            Tab.HOME_FEED -> homeTutorial(target)
+            Tab.SEARCH_DISCOVER_FEED -> homeTutorialSearch(target)
+            Tab.PUBLIC_FEED -> homeTutorialPublic(target)
+            Tab.NOTIFICATIONS_FEED -> homeTutorialNotifications(target)
+            Tab.CREATE_FEED -> createTutorial(target)
+            else -> return
+        }
+    }
+
+    private fun dmTutorial(){
+        val target = (binding.tabs as? NavigationBarView)?.let{ findTab(it, Tab.DIRECT_MESSAGES) } ?: binding.mainDrawerButton ?: return //TODO tablet landscape not supported
+
+        if(target is ImageButton) {
+            TapTargetView.showFor(
+                this@MainActivity,
+                TapTarget.forView(target, "First open the drawer menu")
+                    .transparentTarget(true)
+                    .targetRadius(60),  // Specify the target radius (in dp)
+                object : TapTargetView.Listener() {
+                    // The listener can listen for regular clicks, long clicks or cancels
+                    override fun onTargetClick(view: TapTargetView?) {
+                        super.onTargetClick(view) // This call is optional
+                        // Perform action for the current target
+                        target.performClick()
+                        dmTutorial2(null)
+                    }
+                })
+        } else dmTutorial2(target)
+    }
+    private fun findViewWithText(root: ViewGroup, text: String?): View? {
+        for (i in 0 until root.childCount) {
+            val child = root.getChildAt(i)
+            if (child is TextView) {
+                if (child.text.toString().contains(text!!)) {
+                    return child
+                }
+            }
+            if (child is ViewGroup) {
+                val result = findViewWithText(child, text)
+                if (result != null) {
+                    return result
+                }
+            }
+        }
+        return null
+    }
+
+
+    private fun dmTutorial2(target: View?) {
+        lifecycleScope.launch {
+            var target = target ?: findViewWithText(binding.drawer as ViewGroup, getString(R.string.direct_messages))
+            while (target == null) {
+                target = findViewWithText(binding.drawer as ViewGroup, getString(R.string.direct_messages))
+                delay(100)
+            }
+            TapTargetView.showFor(
+                this@MainActivity,
+                TapTarget.forView(target, "Direct Messages",
+                    "Send messages to other Pixelfed users: on your instance or on others")
+                    .transparentTarget(true)
+                    .targetRadius(60),  // Specify the target radius (in dp)
+                object : TapTargetView.Listener() {
+                    // The listener can listen for regular clicks, long clicks or cancels
+                    override fun onTargetClick(view: TapTargetView?) {
+                        super.onTargetClick(view) // This call is optional
+                        // Perform action for the current target
+                        target.performClick()
+                        //tutorialOnTabs(Tab.NOTIFICATIONS_FEED)
+                    }
+                })
+        }
+    }
+
+    private fun homeTutorialPublic(target: View) {
+        TapTargetView.showFor(
+            this@MainActivity,
+            TapTarget.forView(target, "Public feed",
+                "This feed contains all the posts on your instance! Maybe you can find some interesting posts here :)")
+                .transparentTarget(true)
+                .targetRadius(60),  // Specify the target radius (in dp)
+            object : TapTargetView.Listener() {
+                // The listener can listen for regular clicks, long clicks or cancels
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view) // This call is optional
+                    // Perform action for the current target
+                    target.performClick()
+                    tutorialOnTabs(Tab.NOTIFICATIONS_FEED)
+                }
+            })
+    }
+
+    private fun homeTutorialNotifications(target: View) {
+        TapTargetView.showFor(
+            this@MainActivity,
+            TapTarget.forView(target, "Notifications keep you in the loop",
+                "PixelDroid will also send you push notifications to make sure you don't miss anything!")
+                .transparentTarget(true)
+                .targetRadius(60),  // Specify the target radius (in dp)
+            object : TapTargetView.Listener() {
+                // The listener can listen for regular clicks, long clicks or cancels
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view) // This call is optional
+                    // Perform action for the current target
+                    target.performClick()
+                }
+            })
+    }
+
+    private fun homeTutorialSearch(target: View) {
+        TapTargetView.showFor(
+            this@MainActivity,
+            TapTarget.forView(target, "This tab can get you started finding interesting accounts to follow",
+                "Maybe take a look at the trending posts \uD83D\uDCC8, or discover some random posts every day to broaden your horizons and find the real gems! \uD83D\uDC8E")
+                .transparentTarget(true)
+                .targetRadius(60),  // Specify the target radius (in dp)
+            object : TapTargetView.Listener() {
+                // The listener can listen for regular clicks, long clicks or cancels
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view) // This call is optional
+                    // Perform action for the current target
+                    target.performClick()
+                    tutorialOnTabs(Tab.PUBLIC_FEED)
+                }
+            })
+    }
+
+    private fun homeTutorial(target: View) {
+        TapTargetView.showFor(
+            this@MainActivity,
+            TapTarget.forView(target, "This is your home feed",
+                "The posts of the people you follow will show up here. No algorithms, just chronological goodness. Only you decide what you want to see!")
+                .transparentTarget(true)
+                .targetRadius(60),  // Specify the target radius (in dp)
+            object : TapTargetView.Listener() {
+                // The listener can listen for regular clicks, long clicks or cancels
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view) // This call is optional
+                    // Perform action for the current target
+                    target.performClick()
+                    tutorialOnTabs(Tab.SEARCH_DISCOVER_FEED)
+                }
+            })
+    }
+
+    private fun createTutorial(target: View) {
+        TapTargetView.showFor(
+            this@MainActivity,
+            TapTarget.forView(target, "This is where everything begins",
+                "First, let's navigate to the create tab. Click here")
+                .transparentTarget(true)
+                .targetRadius(60),  // Specify the target radius (in dp)
+            object : TapTargetView.Listener() {
+                // The listener can listen for regular clicks, long clicks or cancels
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view) // This call is optional
+                    // Perform action for the current target
+                    target.performClick()
+                    lifecycleScope.launch {
+                        var targetCamera = findViewById<View>(R.id.camera_capture_button)
+                        while (targetCamera == null) {
+                            targetCamera = findViewById(R.id.camera_capture_button)
+                            delay(100)
+                        }
+                        TapTargetView.showFor(
+                            this@MainActivity,
+                            TapTarget.forView(targetCamera, "Take a picture to share",
+                                "It doesn't have to be very good for now")
+                                .transparentTarget(true)
+                                .targetRadius(60),
+                            object : TapTargetView.Listener() {
+                                // The listener can listen for regular clicks, long clicks or cancels
+                                override fun onTargetClick(view: TapTargetView?) {
+                                    super.onTargetClick(view) // This call is optional
+                                    targetCamera.performClick()
+                                }
+
+                                override fun onTargetCancel(view: TapTargetView?) {
+                                    super.onTargetCancel(view)
+                                    intent.removeExtra(START_TUTORIAL)
+                                }
+                            })
+                    }
+                }
+            })
+    }
+
+    private fun findTab(navBar: NavigationBarView, tab: Tab): View? {
+        val index = tabStored.indexOf(tab)
+        for (i in 0 until navBar.childCount) {
+            val child = navBar.getChildAt(i)
+            if (child is ViewGroup) {
+                return child.getChildAt(index)
+            }
+        }
+        return null
     }
 
     private val notificationPermissionLauncher = registerForActivityResult(
@@ -520,6 +737,8 @@ class MainActivity : BaseActivity() {
                 }
             )
         }
+
+        tabStored = tabs
 
         val bottomNavigationMenu: Menu? = (binding.tabs as? NavigationBarView)?.menu?.apply {
             clear()
