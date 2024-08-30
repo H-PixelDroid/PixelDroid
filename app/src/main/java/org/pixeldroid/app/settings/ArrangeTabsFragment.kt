@@ -3,7 +3,6 @@ package org.pixeldroid.app.settings
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -101,7 +100,7 @@ class ArrangeTabsFragment: DialogFragment() {
             }
             TapTargetView.showFor(
                 dialog,
-                TapTarget.forView(handle, """Drag this to change the order of the tabs""")
+                TapTarget.forView(handle, getString(R.string.drag_customtabs_tutorial))
                     .transparentTarget(true)
                     .targetRadius(60),  // Specify the target radius (in dp)
                 object : TapTargetView.Listener() {
@@ -112,7 +111,8 @@ class ArrangeTabsFragment: DialogFragment() {
                         val checkBox = binding.tabs.findViewHolderForLayoutPosition(0)?.itemView?.findViewById<View>(R.id.checkBox)
                         TapTargetView.showFor(
                             dialog,
-                            TapTarget.forView(checkBox, """De-activate tabs you don't need""")
+                            TapTarget.forView(checkBox,
+                                getString(R.string.de_activate_tabs_tutorial))
                                 .transparentTarget(true)
                                 .targetRadius(60),  // Specify the target radius (in dp)
                             object : TapTargetView.Listener() {
@@ -138,8 +138,8 @@ class ArrangeTabsFragment: DialogFragment() {
                                             dialog,
                                             TapTarget.forView(
                                                 hashtag,
-                                                """Create a custom feed with a hashtag you like""",
-                                                "You really like cats? Try #caturday! Lakes? #lake! Or #hiking? And it will be right there in a tab"
+                                                getString(R.string.custom_feed_tutorial_title),
+                                                getString(R.string.custom_feed_tutorial_explanation)
                                             )
                                                 .transparentTarget(true)
                                                 .targetRadius(60),  // Specify the target radius (in dp)

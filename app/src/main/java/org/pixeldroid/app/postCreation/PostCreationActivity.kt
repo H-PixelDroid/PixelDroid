@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,7 +16,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostCreationBinding
-import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.BaseActivity
 
 class PostCreationActivity : BaseActivity() {
@@ -76,8 +74,9 @@ class PostCreationActivity : BaseActivity() {
             }
             TapTargetView.showFor(
                 this@PostCreationActivity,  // `this` is an Activity
-                TapTarget.forView(targetCamera, "Story or Post?",
-                    "Stories are short-lived: engage your followers and keep them coming back for more. Try them out!")
+                TapTarget.forView(targetCamera,
+                    getString(R.string.story_tutorial_title),
+                    getString(R.string.story_tutorial_explanation))
                     .transparentTarget(true)
                     .targetRadius(60),
                 object : TapTargetView.Listener() {
@@ -87,8 +86,9 @@ class PostCreationActivity : BaseActivity() {
                         findViewById<View>(R.id.buttonStory)?.performClick()
                         TapTargetView.showFor(
                             this@PostCreationActivity,  // `this` is an Activity
-                            TapTarget.forView(findViewById(R.id.editPhotoButton), "Edit your picture to make it shine ✨",
-                                "You can add filters, draw or add text, edit video, and more! \uD83D\uDCF7")
+                            TapTarget.forView(findViewById(R.id.editPhotoButton),
+                                getString(R.string.edit_tutorial_title),
+                                getString(R.string.edit_tutorial_explanation))
                                 .transparentTarget(true)
                                 .targetRadius(60),
                             object : TapTargetView.Listener() {
@@ -98,8 +98,9 @@ class PostCreationActivity : BaseActivity() {
                                     findViewById<View>(R.id.editPhotoButton)?.performClick()
                                     TapTargetView.showFor(
                                         this@PostCreationActivity,  // `this` is an Activity
-                                        TapTarget.forView(findViewById(R.id.tv_caption), "Don't forget to add a media description!",
-                                            "This helps make Pixelfed accessible to everyone, and also lets you clarify what we're supposed to see in your pretty image ;)")
+                                        TapTarget.forView(findViewById(R.id.tv_caption),
+                                            getString(R.string.media_description_tutorial_title),
+                                            getString(R.string.media_description_tutorial_explanation))
                                             .transparentTarget(true)
                                             .targetRadius(60),
                                         object : TapTargetView.Listener() {
@@ -116,8 +117,11 @@ class PostCreationActivity : BaseActivity() {
                                                     }
                                                     TapTargetView.showFor(
                                                         this@PostCreationActivity,  // `this` is an Activity
-                                                        TapTarget.forView(findViewById(R.id.post_creation_next_button), "Take a picture to share",
-                                                            "It doesn't have to be very good for now")
+                                                        TapTarget.forView(findViewById(R.id.post_creation_next_button),
+                                                            getString(
+                                                                R.string.picture_tutorial_title
+                                                            ),
+                                                            getString(R.string.picture_tutorial_explanation))
                                                             .transparentTarget(true)
                                                             .targetRadius(60),
                                                         object : TapTargetView.Listener() {
@@ -151,8 +155,8 @@ class PostCreationActivity : BaseActivity() {
                 TapTarget.forToolbarMenuItem(
                     toolbar,
                     R.id.action_switch_accounts,
-                    "Switch accounts!",
-                    "PixelDroid supports using multiple Pixelfed accounts. Make sure you don't post those cat pics on the dog-only instance! \uD83D\uDE31"
+                    getString(R.string.switch_accounts_tutorial_title),
+                    getString(R.string.switch_accounts_tutorial_explanation)
                 )
                     .transparentTarget(true)
                     .targetRadius(60),
@@ -169,8 +173,9 @@ class PostCreationActivity : BaseActivity() {
     private fun showPostButton() {
         TapTargetView.showFor(
             this@PostCreationActivity,  // `this` is an Activity
-            TapTarget.forView(findViewById(R.id.post_submission_send_button), "Final stretch! Post that picture",
-                "Have fun sharing your pictures with the world! Click anywhere else to cancel and keep looking around :)")
+            TapTarget.forView(findViewById(R.id.post_submission_send_button),
+                getString(R.string.post_button_tutorial_title),
+                getString(R.string.post_button_tutorial_explanation))
                 .transparentTarget(true)
                 .targetRadius(60),
             object : TapTargetView.Listener() {

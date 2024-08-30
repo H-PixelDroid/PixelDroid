@@ -182,7 +182,7 @@ class MainActivity : BaseActivity() {
         if(target is ImageButton) {
             TapTargetView.showFor(
                 this@MainActivity,
-                TapTarget.forView(target, "First open the drawer menu")
+                TapTarget.forView(target, getString(R.string.dm_tutorial_drawer))
                     .transparentTarget(true)
                     .targetRadius(60),  // Specify the target radius (in dp)
                 object : TapTargetView.Listener() {
@@ -224,8 +224,8 @@ class MainActivity : BaseActivity() {
             }
             TapTargetView.showFor(
                 this@MainActivity,
-                TapTarget.forView(target, "Direct Messages",
-                    "Send messages to other Pixelfed users: on your instance or on others")
+                TapTarget.forView(target, getString(R.string.direct_messages),
+                    getString(R.string.dm_tutorial_text))
                     .transparentTarget(true)
                     .targetRadius(60),  // Specify the target radius (in dp)
                 object : TapTargetView.Listener() {
@@ -243,8 +243,8 @@ class MainActivity : BaseActivity() {
     private fun homeTutorialPublic(target: View) {
         TapTargetView.showFor(
             this@MainActivity,
-            TapTarget.forView(target, "Public feed",
-                "This feed contains all the posts on your instance! Maybe you can find some interesting posts here :)")
+            TapTarget.forView(target, getString(R.string.public_feed),
+                getString(R.string.public_feed_tutorial_explanation))
                 .transparentTarget(true)
                 .targetRadius(60),  // Specify the target radius (in dp)
             object : TapTargetView.Listener() {
@@ -261,8 +261,9 @@ class MainActivity : BaseActivity() {
     private fun homeTutorialNotifications(target: View) {
         TapTargetView.showFor(
             this@MainActivity,
-            TapTarget.forView(target, "Notifications keep you in the loop",
-                "PixelDroid will also send you push notifications to make sure you don't miss anything!")
+            TapTarget.forView(target,
+                getString(R.string.notifications_tutorial_title),
+                getString(R.string.notifications_tutorial_explanation))
                 .transparentTarget(true)
                 .targetRadius(60),  // Specify the target radius (in dp)
             object : TapTargetView.Listener() {
@@ -278,8 +279,9 @@ class MainActivity : BaseActivity() {
     private fun homeTutorialSearch(target: View) {
         TapTargetView.showFor(
             this@MainActivity,
-            TapTarget.forView(target, "This tab can get you started finding interesting accounts to follow",
-                "Maybe take a look at the trending posts \uD83D\uDCC8, or discover some random posts every day to broaden your horizons and find the real gems! \uD83D\uDC8E")
+            TapTarget.forView(target,
+                getString(R.string.discover_tutorial_title),
+                getString(R.string.discover_tutorial_explanation))
                 .transparentTarget(true)
                 .targetRadius(60),  // Specify the target radius (in dp)
             object : TapTargetView.Listener() {
@@ -296,8 +298,9 @@ class MainActivity : BaseActivity() {
     private fun homeTutorial(target: View) {
         TapTargetView.showFor(
             this@MainActivity,
-            TapTarget.forView(target, "This is your home feed",
-                "The posts of the people you follow will show up here. No algorithms, just chronological goodness. Only you decide what you want to see!")
+            TapTarget.forView(target,
+                getString(R.string.home_feed_tutorial_title),
+                getString(R.string.home_feed_tutorial_explanation))
                 .transparentTarget(true)
                 .targetRadius(60),  // Specify the target radius (in dp)
             object : TapTargetView.Listener() {
@@ -314,8 +317,8 @@ class MainActivity : BaseActivity() {
     private fun createTutorial(target: View) {
         TapTargetView.showFor(
             this@MainActivity,
-            TapTarget.forView(target, "This is where everything begins",
-                "First, let's navigate to the create tab. Click here")
+            TapTarget.forView(target, getString(R.string.create_tutorial_title),
+                getString(R.string.create_tutorial_explanation))
                 .transparentTarget(true)
                 .targetRadius(60),  // Specify the target radius (in dp)
             object : TapTargetView.Listener() {
@@ -332,8 +335,9 @@ class MainActivity : BaseActivity() {
                         }
                         TapTargetView.showFor(
                             this@MainActivity,
-                            TapTarget.forView(targetCamera, "Take a picture to share",
-                                "It doesn't have to be very good for now")
+                            TapTarget.forView(targetCamera,
+                                getString(R.string.create_tutorial_title_2),
+                                getString(R.string.create_tutorial_explanation_2))
                                 .transparentTarget(true)
                                 .targetRadius(60),
                             object : TapTargetView.Listener() {
