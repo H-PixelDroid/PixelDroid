@@ -368,4 +368,6 @@ For more info about Pixelfed, you can check here: https://pixelfed.org"</string>
     <string name="tutorial_choice">What could you use some help with?</string>
     <string name="dm_tutorial">Direct Messages: keep in touch!</string>
     <string name="custom_tabs_tutorial">Customize what tabs show up on the main PixelDroid screen!</string>
+    <string name="first_time_question">It seems like it might be your first time using PixelDroid. Do you want to open a tutorial? You can always find the tutorials in the settings.</string>
+    <string name="skip_tutorial">No, continue</string>
 </resources>

@@ -50,7 +50,10 @@ class LoginActivityViewModel @Inject constructor(
     private val _loadingState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState(LoginState.LoadingState.Resting))
     val loadingState = _loadingState.asStateFlow()
 
-    private val _finishedLogin = MutableStateFlow(false)
+    enum class FinishedLogin {
+        NotFinished, Finished, FinishedFirstTime
+    }
+    private val _finishedLogin = MutableStateFlow(FinishedLogin.NotFinished)
     val finishedLogin = _finishedLogin.asStateFlow()
 
     private val _promptOauth: MutableStateFlow<PromptOAuth?> = MutableStateFlow(null)
@@ -207,6 +210,7 @@ class LoginActivityViewModel @Inject constructor(
 
     private suspend fun storeUser(accessToken: String, refreshToken: String?, clientId: String, clientSecret: String, instance: String) {
         try {
+            val firstTime = db.userDao().getActiveUser() == null
             val user = pixelfedAPI.verifyCredentials("Bearer $accessToken")
             db.userDao().deActivateActiveUsers()
             addUser(
@@ -220,12 +224,14 @@ class LoginActivityViewModel @Inject constructor(
                 clientSecret = clientSecret
             )
             apiHolder.setToCurrentUser()
+
+            fetchNotifications()
+
+            _finishedLogin.value = if(firstTime) FinishedLogin.FinishedFirstTime else FinishedLogin.Finished
         } catch (exception: Exception) {
             return failedRegistration(R.string.verify_credentials)
         }
 
-        fetchNotifications()
-        _finishedLogin.value = true
     }
 
     // Fetch the latest notifications of this account, to avoid launching old notifications
@@ -278,6 +284,10 @@ class LoginActivityViewModel @Inject constructor(
     fun dialogNegativeButtonClicked() {
         wipeSharedSettings()
         _loadingState.value = LoginState(LoginState.LoadingState.Resting)
+    }
+
+    fun finishLogin() {
+        _finishedLogin.value = FinishedLogin.Finished
     }
 
 }

@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
 import org.pixeldroid.app.main.MainActivity
+import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.setThemeFromPreferences
 import org.pixeldroid.common.ThemedActivity
 
@@ -45,6 +46,20 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
             .replace(R.id.settings, SettingsFragment(), "topsettingsfragment")
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val showTutorial = intent.getBooleanExtra(START_TUTORIAL, false)
+
+        if(showTutorial){
+            lifecycleScope.launch {
+                var target =
+                    (supportFragmentManager.findFragmentByTag("topsettingsfragment") as? SettingsFragment)?.scrollToArrangeTabs(10)
+                while (target == null) {
+                    target = (supportFragmentManager.findFragmentByTag("topsettingsfragment") as? SettingsFragment)?.scrollToArrangeTabs(10)
+                    delay(100)
+                }
+                target.performClick()
+            }
+        }
 
         onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
             // Handle the back button event
@@ -111,9 +126,9 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
     fun customTabsTutorial(){
         lifecycleScope.launch {
             var target =
-                (supportFragmentManager.findFragmentByTag("topsettingsfragment") as? SettingsFragment)?.scrollToArrangeTabs()
+                (supportFragmentManager.findFragmentByTag("topsettingsfragment") as? SettingsFragment)?.scrollToArrangeTabs(5)
             while (target == null) {
-                target = (supportFragmentManager.findFragmentByTag("topsettingsfragment") as? SettingsFragment)?.scrollToArrangeTabs()
+                target = (supportFragmentManager.findFragmentByTag("topsettingsfragment") as? SettingsFragment)?.scrollToArrangeTabs(5)
                 delay(100)
             }
             TapTargetView.showFor(
@@ -157,9 +172,8 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
                 super.onDisplayPreferenceDialog(preference)
             }
         }
-        fun scrollToArrangeTabs(): View? {
-            //Hardcoded because it's too annoying to find!
-            val position = 5
+        fun scrollToArrangeTabs(position: Int): View? {
+            //Hardcoded positions because it's too annoying to find!
 
             if (listView != null && position != -1) {
                 listView.post {
