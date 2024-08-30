@@ -117,15 +117,18 @@ fdroid build:
     paths:
       - signed/
     when: always
-  only:
-    - tags
+  #only:
+   # - tags
   cache:
     key: "$CI_JOB_NAME"
     paths:
       - .android
       - .gradle
   script:
-      # Put the correct versionName and versionCode in the .fdroid.yml
+    - apt-get update
+    - apt-get install -y openjdk-17-jdk-headless
+    - update-alternatives --auto java
+    # Put the correct versionName and versionCode in the .fdroid.yml
     - sed -e "s/\${versionName}/$(./gradlew -q printVersionName)/" -e "s/\${versionCode}/$(./gradlew -q printVersionCode)/" .fdroid.yml.template > .fdroid.yml
     - rm .fdroid.yml.template
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
