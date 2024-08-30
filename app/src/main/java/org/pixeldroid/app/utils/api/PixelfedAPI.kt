@@ -469,4 +469,11 @@ interface PixelfedAPI {
         @Field("forward") forward: Boolean = true
     ) : Report
 
+    @POST("/api/pixelfed/v1/app/settings")
+    suspend fun setSettings(
+        @Body account_id: CommonWrapper,
+    ) : PixelfedAppSettings
+
+    @GET("/api/pixelfed/v1/app/settings")
+    suspend fun getSettings() : PixelfedAppSettings
 }

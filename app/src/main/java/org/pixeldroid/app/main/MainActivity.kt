@@ -32,6 +32,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.ExperimentalPagingApi
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -553,6 +554,12 @@ class MainActivity : BaseActivity() {
 
                     val account = api.verifyCredentials()
                     updateUserInfoDb(db, account)
+
+                    val show = api.getSettings().common.media.always_show_cw
+                    launch {
+                        PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                            .edit().putBoolean("always_show_nsfw", show).commit()
+                    }
 
                     //No need to update drawer account info here, the ViewModel listens to db updates
                 } catch (exception: Exception) {
