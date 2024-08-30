@@ -166,6 +166,17 @@ android {
     }
 }
 
+tasks.register('printVersionName') {
+    doLast {
+        println android.defaultConfig.versionName
+    }
+}
+tasks.register('printVersionCode') {
+    doLast {
+        println android.defaultConfig.versionCode
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.hilt:hilt-common:1.2.0'
