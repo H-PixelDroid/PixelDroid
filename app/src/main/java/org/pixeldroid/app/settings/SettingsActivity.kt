@@ -4,11 +4,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -22,12 +24,14 @@ import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.SettingsBinding
 import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
+import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.api.PixelfedAPI
+import org.pixeldroid.app.utils.api.objects.CommonWrapper
 import org.pixeldroid.app.utils.setThemeFromPreferences
-import org.pixeldroid.common.ThemedActivity
 
 
 @AndroidEntryPoint
-class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var restartMainOnExit = false
     private lateinit var binding: SettingsBinding
@@ -105,6 +109,27 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
                 "themeColor" -> {
                     recreateWithRestartStatus()
                 }
+
+                "always_show_nsfw" -> {
+                    lifecycleScope.launch {
+                        val api: PixelfedAPI = apiHolder.api ?: apiHolder.setToCurrentUser()
+                        try {
+                            // Get old settings and modify just the nsfw one
+                            val settings = api.getSettings().let { settings ->
+                                settings.common.copy(
+                                    media = settings.common.media.copy(
+                                        always_show_cw = sharedPreferences.getBoolean(key, settings.common.media.always_show_cw)
+                                    )
+                                )
+                            }
+                            api.setSettings(CommonWrapper(settings))
+                        } catch (e: Exception) {
+                            Log.e("Pixelfed API settings", e.toString())
+                        }
+                    }
+                }
+
+                else -> {}
             }
         }
     }
@@ -189,6 +214,16 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
                 it.setSummaryProvider {
                     val locale = AppCompatDelegate.getApplicationLocales().get(0)
                     locale?.getDisplayName(locale) ?: getString(R.string.default_system)
+                }
+            }
+            findPreference<CheckBoxPreference>("always_show_nsfw")?.let {
+                lifecycleScope.launch {
+                    val api: PixelfedAPI = (requireActivity() as SettingsActivity).apiHolder.api ?: (requireActivity() as SettingsActivity).apiHolder.setToCurrentUser()
+
+                    try {
+                        val show = api.getSettings().common.media.always_show_cw
+                        it.isChecked = show
+                    } catch (_: Exception){}
                 }
             }
 

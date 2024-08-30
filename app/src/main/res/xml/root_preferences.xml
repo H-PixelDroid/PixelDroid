@@ -33,7 +33,9 @@
             android:summary="@string/arrange_tabs_description"
             android:icon="@drawable/outline_bottom_navigation" />
 
-        <CheckBoxPreference app:key="always_show_nsfw" app:title="@string/always_show_nsfw"
+        <CheckBoxPreference
+            app:key="always_show_nsfw"
+            app:title="@string/always_show_nsfw"
             app:icon="@drawable/eye_black_24dp" android:defaultValue="false"
             android:summary="@string/summary_always_show_nsfw"/>
 
