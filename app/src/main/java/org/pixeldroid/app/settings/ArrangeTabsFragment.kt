@@ -120,7 +120,7 @@ class ArrangeTabsFragment: DialogFragment() {
             fun callbackOnClickListener(tabNew: Tab, isCheckedNew: Boolean, hashtag: String? = null) {
                 tabNew.filter = hashtag?.split("#")?.filter { it.isNotBlank() }?.get(0)?.trim()
                 model.tabsCheckReplace(position, Pair(tabNew, isCheckedNew))
-                checkBox.isChecked = isCheckedNew
+                checkBox.isChecked = model.uiState.value.tabsChecked[position].second
 
                 val hashtagWithHashtag = tabNew.filter?.let {
                     StringBuilder("#").append(it).toString()
@@ -176,6 +176,7 @@ class ArrangeTabsFragment: DialogFragment() {
         fun onItemMove(from: Int, to: Int) {
             val previous = model.tabsCheckedRemove(from)
             model.tabsCheckedAdd(to, previous)
+            model.swapTabsButtons(from, to)
             notifyItemMoved(from, to)
             notifyItemChanged(to) // necessary to avoid checkBox issues
         }
