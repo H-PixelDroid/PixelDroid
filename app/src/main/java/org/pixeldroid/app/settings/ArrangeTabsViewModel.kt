@@ -118,6 +118,18 @@ class ArrangeTabsViewModel @Inject constructor(
     fun getTabsButtons(position: Int): String? {
         return _uiState.value.tabsButtons[position]
     }
+
+    fun swapTabsButtons(from: Int, to: Int) {
+        oldTabsButtons = _uiState.value.tabsButtons.toMutableList()
+        val fromText = oldTabsButtons[from]
+        oldTabsButtons[from] = oldTabsButtons[to]
+        oldTabsButtons[to] = fromText
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                tabsButtons = oldTabsButtons.toList()
+            )
+        }
+    }
 }
 
 data class ArrangeTabsUiState(
