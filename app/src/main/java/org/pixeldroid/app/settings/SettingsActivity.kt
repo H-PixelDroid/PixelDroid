@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceManager
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -133,7 +132,7 @@ class SettingsActivity : ThemedActivity(), SharedPreferences.OnSharedPreferenceC
             }
             TapTargetView.showFor(
                 this@SettingsActivity,
-                TapTarget.forView(target, """First open the "Arrange tabs" settings""")
+                TapTarget.forView(target, getString(R.string.arrange_tabs_tutorial_title))
                     .transparentTarget(true)
                     .targetRadius(60),  // Specify the target radius (in dp)
                 object : TapTargetView.Listener() {
