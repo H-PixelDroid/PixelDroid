@@ -73,7 +73,6 @@ import org.pixeldroid.app.posts.feeds.uncachedFeeds.UncachedPostsFragment
 import org.pixeldroid.app.profile.ProfileActivity
 import org.pixeldroid.app.searchDiscover.SearchDiscoverFragment
 import org.pixeldroid.app.settings.SettingsActivity
-import org.pixeldroid.app.settings.SettingsActivity.SettingsFragment
 import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.Tab
@@ -704,7 +703,9 @@ class MainActivity : BaseActivity() {
                         }
                 } }
                 Tab.SEARCH_DISCOVER_FEED -> { { SearchDiscoverFragment() } }
-                Tab.CREATE_FEED -> { { CameraFragment() } }
+                Tab.CREATE_FEED -> { { CameraFragment().apply {
+                    arguments = Bundle().apply { putInt(START_TUTORIAL, intent.getIntExtra(START_TUTORIAL, -1)) }
+                } } }
                 Tab.NOTIFICATIONS_FEED -> { { NotificationsFragment() } }
                 Tab.PUBLIC_FEED -> { {
                     PostFeedFragment<PublicFeedStatusDatabaseEntity>()
