@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityPostCreationBinding
+import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.BaseActivity
 
 class PostCreationActivity : BaseActivity() {
@@ -66,7 +67,7 @@ class PostCreationActivity : BaseActivity() {
         navController = navHostFragment.navController
         navController.setGraph(R.navigation.post_creation_graph)
 
-        lifecycleScope.launch {
+        if(intent.getBooleanExtra(START_TUTORIAL, false)) lifecycleScope.launch {
             var targetCamera = findViewById<View>(R.id.toggleStoryPost)
             while (targetCamera == null) {
                 targetCamera = findViewById(R.id.toggleStoryPost)
