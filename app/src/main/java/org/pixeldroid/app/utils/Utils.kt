@@ -148,8 +148,8 @@ fun setThemeFromPreferences(preferences: SharedPreferences, resources: Resources
         themes[1] -> {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-        //Dark
-        themes[2] -> {
+        //Dark or AMOLED dark
+        themes[2], themes[3] -> {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
         else -> {

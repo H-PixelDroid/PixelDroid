@@ -35,6 +35,10 @@
     <!-- Theme Preferences: dark theme option -->
     <string name="dark_theme">Dark</string>
 
+    <!-- Theme Preferences: dark theme option, "true" dark (100% black, turns pixels off on AMOLED screens)-->
+    <string name="dark_amoled_theme">\"True\" Dark (AMOLED) (experimental)</string>
+
+
     <string name="always_show_nsfw">Always show sensitive content</string>
 
     <!-- Notifications: follow notification -->
