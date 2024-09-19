@@ -288,4 +288,5 @@
     <string name="comment_noun">Kommentar</string>
     <string name="my_story">Meine Story</string>
     <string name="summary_always_show_nsfw">NSFW/CW-Beiträge werden nicht unscharf dargestellt und werden standardmäßig angezeigt.</string>
+    <string name="continue_post_creation">Fortfahren</string>
 </resources>
