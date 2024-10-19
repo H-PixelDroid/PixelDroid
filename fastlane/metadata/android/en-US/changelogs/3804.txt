@@ -1,0 +1,3 @@
+* AMOLED dark mode
+* Sync NSFW setting with server
+* Update dependencies and translations
