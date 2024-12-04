@@ -1,0 +1,1 @@
+Rozdělení souborů APK dle architektury CPU, díky čemuž jsou soubory APK mnohem menší (z 100 MB na 25 MB)

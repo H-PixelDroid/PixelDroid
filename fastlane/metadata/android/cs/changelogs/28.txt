@@ -1,0 +1,7 @@
+Oprava chyby při otevírání alba přes celou obrazovku
+
+Používání hardwarové akcelerace pro úpravu obrázků (OpenGL! Shaders!). Momentálně se jen snažíme napodobit předchozí implementaci, ale později poskytneme možnosti pro mnohem hustější věci :)
+
+Řekněte nám, pokud něco nefunguje správně! (e-mail, Mastodon)
+
+V tomto vydání jsou také aktualizace překladu :)

@@ -1,0 +1,4 @@
+* Podpora příběhů!
+* Aktualizace závislostí
+* Hardwarově akcelerované kódování videa
+* Spousta práce v zákulisí :)

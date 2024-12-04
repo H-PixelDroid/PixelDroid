@@ -1,0 +1,3 @@
+* Oprava pádu při sdílení obrázku z galerie atd. do aplikace
+
+* Oprava problém s oprávněním, který způsoboval, že obrázky házely chybu oprávnění odepřeno

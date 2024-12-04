@@ -1,0 +1,9 @@
+* Odstranění metadat fotografií před nahráním
+* Záložky!
+* Zobrazení profilu jako výpis nebo mřížku
+* Nastavení šablony pro vaše popisy
+* Odznak na ikoně oznámení, pokud máte nová oznámení
+* Více funkcí pro úpravu videa: oříznutí, změna rychlosti, přidání stabilizace
+* Implementace dynamických barev: můžete nastavit PixelDroid, aby následoval barvu vašeho pozadí (Android 12 a vyšší)
+* Opravy chyb
+* Aktualizace překladů
