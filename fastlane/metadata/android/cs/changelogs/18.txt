@@ -1,0 +1,11 @@
+* Přidání vlastní chybové grafiky červené pandy
+
+* Povolit volné oříznutí při úpravách obrázků
+
+* Vylepšená metadata F-Droid
+
+* Aktualizace překladu
+
+* Aktualizace závislostí
+
+* Oprava chyb

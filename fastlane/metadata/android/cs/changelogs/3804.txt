@@ -1,0 +1,3 @@
+* Tmavý režim AMOLED
+* Synchronizace nastavení NSFW se serverem
+* Aktualizace závislostí a překladů

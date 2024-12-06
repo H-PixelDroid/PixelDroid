@@ -1,0 +1,4 @@
+* Podpora pro tablety a rotace všech obrazovek. Stále se mohou objevovat nějaké problémy, pokud existují, pošlete nám zprávu
+* Opravy chyb: zejména oprava oznámení, která narušovala několik verzí.
+* Aktualizace překladů
+* Aktualizace závislostí

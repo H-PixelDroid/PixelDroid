@@ -1,0 +1,4 @@
+- Odstranění a přepsání existujících příspěvků
+- Sbírky vlastních příspěvků lze nyní prohlížet a upravovat
+- Vytvoření příspěvku se nyní provádí ve dvou krocích s novou podporou pro: NSFW, přepínání účtů
+- Mnoho dalších změn a vylepšení :)

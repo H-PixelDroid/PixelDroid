@@ -1,0 +1,4 @@
+* Méně agresivní varovné zprávy, pokud deaktivujete oprávnění fotoaparátu nebo souboru
+* Aktualizace překladů
+* Oprava přerušování nahrávání videa
+* Vylepšené zpracování chyb
