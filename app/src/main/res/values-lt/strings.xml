@@ -64,4 +64,6 @@
     <string name="upload_post_error">Įrašo įkėlimo klaida</string>
     <string name="description">Aprašymas…</string>
     <string name="request_format_error">Įkėlimo klaida: blogas užklausos formatas.</string>
+    <string name="post">Skelbti</string>
+    <string name="upload_next_step">Sekantis žingsnis</string>
 </resources>
