@@ -85,10 +85,10 @@
     <string name="instance_not_pixelfed_warning">Non semella ser unha instancia Pixelfed, polo que a app podería non funcionar correctamente.</string>
     <string name="instance_not_pixelfed_continue">Ok, adiante igualmente</string>
     <string name="instance_not_pixelfed_cancel">Cancelar o acceso</string>
-    <string name="about_pixeldroid">Acerca de PixelDroid</string>
+    <string name="about_pixeldroid">Sobre PixelDroid</string>
     <string name="dependencies_licenses">Dependencias e licenzas</string>
     <string name="project_website">Web do proxecto: https://pixeldroid.org</string>
-    <string name="about">Acerca de</string>
+    <string name="about">Sobre</string>
     <string name="post_title">publicación de %1$s</string>
     <string name="add_photo">Engade unha foto</string>
     <string name="unfollow">Deixar de seguir</string>
@@ -162,13 +162,7 @@
         <item quantity="other">A descrición ten que ter %d caracteres como moito.</item>
     </plurals>
     <string name="api_not_enabled_dialog">O API non está activado nesta instancia. Contacta coa administración e pídelle que o activen.</string>
-    <string name="whats_an_instance_explanation">Pode que o campo de texto pedíndoche o dominio da túa \'instancia\' sexa confuso.
-\n
-\nPixelfed é unha plataforma federada, parte do \'fediverso\', e isto significa que pode comunicarse con outras plataformas que utilizan a mesma linguaxe, como Mastodon (see https://joinmastodon.org).
-\n
-\nTamén significa que tes que escoller un servidor, ou \'instancia\' de Pixelfed para utilizar. Se non coñeces ningunha, mira aquí: https://pixelfed.org/join
-\n
-\nPara saber máis acerca de Pixelfed, podes mirar aquí: https://pixelfed.org</string>
+    <string name="whats_an_instance_explanation">Pode que o campo de texto pedíndoche o dominio da túa \'instancia\' sexa confuso.\n\nPixelfed é unha plataforma federada, parte do \'fediverso\', e isto significa que pode comunicarse con outras plataformas que utilizan a mesma linguaxe, como Mastodon (see https://joinmastodon.org).\n\nTamén significa que tes que escoller un servidor, ou \'instancia\' de Pixelfed para utilizar. Se non coñeces ningunha, mira aquí: https://pixelfed.org/join\n\nPara saber máis sobre Pixelfed, podes mirar aquí: https://pixelfed.org</string>
     <string name="delete_post_failed_io_except">Non se puido eliminar a publicación, tes conexión a internet\?</string>
     <string name="delete_post_failed_error">Non se puido eliminar a publicación, erro %1$d</string>
     <string name="dialog_message_cancel_follow_request">Cancelar a solicitude de seguimento\?</string>
@@ -304,4 +298,53 @@
     <string name="arrange_tabs_description">Cambiar a visibilidade e ordenar as pestanas</string>
     <string name="content_header">Contido</string>
     <string name="extraneous_pictures_stories">Desbotáronse as imaxes que seguen á primeira pero poden restablecerse volvendo atras e creando unha Publicación</string>
+    <string name="dm_instruction">Completa o identificador desexado e a mensaxe a enviar</string>
+    <string name="new_dm">Mensaxe a enviar. Saúda!</string>
+    <string name="new_dm_error">Erro ao enviar a mensaxe! Comproba o identificador</string>
+    <string name="dm_title">MD para %1$s</string>
+    <string name="direct_messages">Mensaxes Directas</string>
+    <string name="dm_target">Correspondente</string>
+    <string name="feeds_tutorial">Canles, como funcionan? De onde sae iso?</string>
+    <string name="create_tutorial">Vexamos como crear publicacións</string>
+    <string name="tutorial_choice">Que podería axudarche?</string>
+    <string name="dm_tutorial">Mensaxes Directas: mantén o contacto!</string>
+    <string name="skip_tutorial">Non, continúa</string>
+    <string name="dm_tutorial_text">Envía mensaxes a outras usuarias de Pixelfed: na túa instancia ou outras</string>
+    <string name="notifications_tutorial_title">Notificacións que te teñen ao día</string>
+    <string name="notifications_tutorial_explanation">PixelDroid envía notificacións tipo push para que non perdas nada do que pasa!</string>
+    <string name="home_feed_tutorial_title">Esta é a canle de inicio</string>
+    <string name="create_tutorial_title">Aquí comeza todo</string>
+    <string name="create_tutorial_explanation">Primeiro, imos á pestana de publicación. Preme aquí</string>
+    <string name="create_tutorial_title_2">Fai unha foto para compartila</string>
+    <string name="story_tutorial_title">Historia ou Publicación?</string>
+    <string name="story_tutorial_explanation">As historias son temporais: conecta coas túas seguidoras e tenas pendentes de ti. Ponas a proba!</string>
+    <string name="edit_tutorial_title">Edita a foto e fai que destaque ✨</string>
+    <string name="media_description_tutorial_title">Non esquezas escribir a descrición do multimedia!</string>
+    <string name="media_description_tutorial_explanation">Isto fai que Pixelfed sexa accesible por todas as persoas, e tamén axuda a entender o que pretendes mostrar coa imaxe ;)</string>
+    <string name="picture_tutorial_title">Fai unha foto para compartir</string>
+    <string name="picture_tutorial_explanation">Non fai falta que sexa unha marabilla</string>
+    <string name="switch_accounts_tutorial_title">Cambia de conta!</string>
+    <string name="post_button_tutorial_title">Xa case está! Publica a imaxe</string>
+    <string name="post_button_tutorial_explanation">Divírtete compartindo as túas fotos con todo o mundo! Preme en calquera outra parte para desbotar e seguir mirando :)</string>
+    <string name="drag_customtabs_tutorial">Arrastra isto para cambiar a orde das pestanas</string>
+    <string name="de_activate_tabs_tutorial">Desactiva as pestanas que non precises</string>
+    <string name="custom_feed_tutorial_explanation">Gústanche os gatos? Proba con #caturday! Lagos? #lake! Ou #sendeirismo? Aparecerá nunha pestana</string>
+    <string name="arrange_tabs_tutorial_title">Primeiro abre o axuste \"Ordenar pestanas\"</string>
+    <string name="discover_tutorial_explanation">Pode tamén mirar as publicacións que son tendencia 📈, ou descubrir publicacións ao chou cada día para ampliar horizontes e atopais verdadeiras xoias! 💎</string>
+    <string name="dm_tutorial_drawer">Primeiro abre o menú de debuxo</string>
+    <string name="feed_hashtag">Cronoloxía dun Cancelo</string>
+    <string name="new_dm_conversation">Crea unha nova conversa directa</string>
+    <string name="tutorial">Titorial</string>
+    <string name="tutorial_explanation">Instruccións sobre como usar PixelDroid e Pixelfed</string>
+    <string name="custom_tabs_tutorial">Personaliza as pestanas que aparecen la pantalla principal de PixelDroid!</string>
+    <string name="public_feed_tutorial_explanation">Esta canle contén todas as publicacións da túa instancia! Seguramente atopes cousas interesantes por aquí :)</string>
+    <string name="discover_tutorial_title">Esta pestana axúdache a comezar atopando contas interesantes que seguir</string>
+    <string name="dark_amoled_theme">Escuro \"Real\" (AMOLED) (experimental)</string>
+    <string name="feed_hashtag_description">Escribe un único cancelo</string>
+    <string name="first_time_question">Semella a primeira vez que usas PixelDroid. Queres abrir o titorial? Sempre poderás atopalo nos axustes.</string>
+    <string name="home_feed_tutorial_explanation">As publicacións das persoas que segues aparecerán aquí. Sen algoritmos, só en orde cronolóxica. Ti decides o que queres ver!</string>
+    <string name="create_tutorial_explanation_2">Tampouco fai falta que sexa moi boa, ti dalle!</string>
+    <string name="edit_tutorial_explanation">Podes engadir filtros, debuxar ou engadir texto, editar vídeo, e máis! 📷</string>
+    <string name="switch_accounts_tutorial_explanation">PixelDroid permite usar varias contas de Pixelfed. Pon coidado en que non publicas fotos de gatos nunha instancia de só-cans! 😱</string>
+    <string name="custom_feed_tutorial_title">Crear unha cronoloxía propia co cancelo que queiras</string>
 </resources>
