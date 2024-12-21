@@ -64,4 +64,89 @@
     <string name="upload_post_error">Įrašo įkėlimo klaida</string>
     <string name="description">Aprašymas…</string>
     <string name="request_format_error">Įkėlimo klaida: blogas užklausos formatas.</string>
+    <string name="post">Skelbti</string>
+    <string name="upload_next_step">Sekantis žingsnis</string>
+    <plurals name="nb_followers">
+        <item quantity="one">%d\nsekėjas</item>
+        <item quantity="few">%d\nsekėjai</item>
+        <item quantity="other">%d\nsekėjų</item>
+    </plurals>
+    <string name="add_details">Pridėti šiek tiek išsamios informacijos</string>
+    <string name="add_photo">Pridėti nuotrauką</string>
+    <string name="post_image">Vienas iš vaizdų įraše</string>
+    <string name="switch_to_grid">Perjungti į tinklelio rodinį</string>
+    <string name="switch_to_carousel">Perjungti į karuselę</string>
+    <string name="save_image_description">Išsaugoti vaizdo aprašymą</string>
+    <string name="no_media_description">Čia pridėkite medijos aprašymą…</string>
+    <string name="total_exceeds_album_limit">Pasirinkote daugiau vaizdų, nei leidžia jūsų serveris (%1$s). Vaizdai, viršijantys ribą, buvo ignoruojami.</string>
+    <string name="video_not_supported">Jūsų naudojamas serveris nepalaiko vaizdo įrašų įkėlimo, todėl gali būti, kad negalėsite įkelti šiame įraše įtrauktų vaizdo įrašų.</string>
+    <string name="upload_error">Serverio grąžinamas klaidos kodas: %1$d.</string>
+    <string name="capture_button_alt">Nufotografuoti</string>
+    <string name="switch_camera_button_alt">Perjungti fotoaparatą</string>
+    <string name="gallery_button_alt">Galerija</string>
+    <string name="loading_toast">Įkeliant kažkas nutiko ne taip.</string>
+    <string name="feed_failed">Nepavyko gauti srautą.</string>
+    <string name="unknown_error_in_error">Nežinoma klaida. Patikrinkite, ar serveris neveikia: %1$s.</string>
+    <string name="share_picture">Bendrinti nuotrauką…</string>
+    <string name="save_to_gallery">Išsaugoti į galeriją…</string>
+    <string name="image_download_downloading">Atsisiunčiama…</string>
+    <string name="image_download_success">Vaizdas sėkmingai atsisiųstas</string>
+    <plurals name="items_load_success">
+        <item quantity="one">%d elementas sėkmingai įkeltas</item>
+        <item quantity="few">%d elementai sėkmingai įkelti</item>
+        <item quantity="other">%d elementų sėkmingai įkelta</item>
+    </plurals>
+    <string name="no_description">Nėra aprašymo</string>
+    <plurals name="likes">
+        <item quantity="one">%d patiktukas</item>
+        <item quantity="few">%d patiktukai</item>
+        <item quantity="other">%dpatiktukų</item>
+    </plurals>
+    <string name="posted_on">Paskelbta %1$s</string>
+    <string name="NoCommentsToShow">Nėra komentarų šiame įraše…</string>
+    <string name="empty_comment">Komentaras neturi būti tuščias.</string>
+    <plurals name="number_comments">
+        <item quantity="one">%d komentaras</item>
+        <item quantity="few">%d komentarai</item>
+        <item quantity="other">%d komentarų</item>
+    </plurals>
+    <string name="search">Paieška</string>
+    <string name="posts">ĮRAŠAI</string>
+    <string name="accounts">PASKYROS</string>
+    <string name="hashtags">SAITAŽODŽIAI</string>
+    <string name="cw_nsfw_hidden_media_n_click_to_show">TĮ / NSD / paslėpta medija\n (spauskite, kad rodyti)</string>
+    <string name="about_pixeldroid">Apie „PixelDroid“</string>
+    <string name="fetching_profile">Gaunamas jūsų profilis…</string>
+    <string name="saving_profile">Išsaugomas jūsų profilis</string>
+    <string name="save">Išsaugoti</string>
+    <string name="replyToStory">Atsakyti į %1$s</string>
+    <string name="content_header">Susisiekti</string>
+    <string name="type_story">Istorija</string>
+    <string name="type_post">Įrašas</string>
+    <string name="continue_post_creation">Tęsti</string>
+    <string name="my_story">Mano istorija</string>
+    <string name="size_exceeds_instance_limit">Albume esančio vaizdo numeris %1$d dydis viršija didžiausią leistiną serverio dydį (%2$d kB, bet riba yra %3$d kB). Gali būti, kad negalėsite jo įkelti.</string>
+    <string name="image_download_failed">Atsisiųsti nepavyko. Bandykite dar kartą.</string>
+    <plurals name="shares">
+        <item quantity="one">%d pasidalinimas</item>
+        <item quantity="few">%d pasidalinimai</item>
+        <item quantity="other">%d pasidalinimų</item>
+    </plurals>
+    <string name="edit">Redaguoti</string>
+    <string name="media_upload_completed">Medijos įkėlimas baigtas</string>
+    <string name="profile_save_changes">Pakeitimų neišsaugojote. Išeiti?</string>
+    <string name="write_permission_download_pic">Kad atsisiųstumėte nuotraukas, turite suteikti įrašymo leidimą.</string>
+    <plurals name="nb_posts">
+        <item quantity="one">%d\nįrašas</item>
+        <item quantity="few">%d\nįrašai</item>
+        <item quantity="other">%d\nįrašų</item>
+    </plurals>
+    <plurals name="nb_following">
+        <item quantity="one">%d\nsekimas</item>
+        <item quantity="few">%d\nsekimai</item>
+        <item quantity="other">%d\nsekimų</item>
+    </plurals>
+    <string name="new_dm_error">Klaida siunčiant žinutę. Patikrinkite naudotojo vardą.</string>
+    <string name="add_story">Pridėti istoriją</string>
+    <string name="story_image">Istorijos vaizdas</string>
 </resources>
