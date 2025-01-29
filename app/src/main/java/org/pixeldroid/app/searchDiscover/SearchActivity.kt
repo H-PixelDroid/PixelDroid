@@ -3,6 +3,7 @@ package org.pixeldroid.app.searchDiscover
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -19,6 +20,7 @@ import org.pixeldroid.app.utils.api.objects.Results
 class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val binding = ActivitySearchBinding.inflate(layoutInflater)
 

@@ -3,6 +3,7 @@ package org.pixeldroid.app.posts
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -20,6 +21,7 @@ class AlbumActivity : AppCompatActivity() {
     private val model: AlbumViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         val binding = ActivityAlbumBinding.inflate(layoutInflater)

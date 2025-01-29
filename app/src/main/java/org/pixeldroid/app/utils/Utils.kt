@@ -12,6 +12,7 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.util.DisplayMetrics
+import android.view.View
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import androidx.annotation.AttrRes
@@ -19,6 +20,8 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.view.WindowInsetsCompat.Type
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -198,6 +201,28 @@ fun <T> Fragment.bindingLifecycleAware(): ReadWriteProperty<Fragment, T> =
         }
     }
 
+fun View.insetsListener() {
+    setOnApplyWindowInsetsListener { view, insets ->
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val insets = insets.getInsets(Type.systemBars() or Type.ime())
+            view.updatePadding(
+                top = insets.top,
+                bottom = insets.bottom,
+                left = insets.left,
+                right = insets.right
+            )
+        } else {
+            view.updatePadding(
+                bottom = insets.systemWindowInsetBottom,
+                top = insets.systemWindowInsetTop,
+                left = insets.systemWindowInsetLeft,
+                right = insets.systemWindowInsetRight,
+            )
+        }
+        insets
+    }
+}
+
 fun loadDbMenuTabs(tabsDbEntry: List<TabsDatabaseEntity>): List<Pair<Tab, Boolean>> {
     return tabsDbEntry.map {
         val tab = Tab.fromName(it.tab)
@@ -231,10 +256,6 @@ enum class Tab(var filter: String? = null) {
         }
     }
 
-    fun toName(): String {
-        return this.name
-    }
-
     fun getDrawable(ctx: Context): Drawable? {
         val resId = when (this) {
             HOME_FEED -> R.drawable.selector_home_feed
@@ -249,19 +270,6 @@ enum class Tab(var filter: String? = null) {
     }
 
     companion object {
-        fun fromLanguageString(ctx: Context, name: String): Tab {
-            return when (name) {
-                ctx.getString(R.string.home_feed) -> HOME_FEED
-                ctx.getString(R.string.search_discover_feed) -> SEARCH_DISCOVER_FEED
-                ctx.getString(R.string.create_feed) -> CREATE_FEED
-                ctx.getString(R.string.notifications_feed) -> NOTIFICATIONS_FEED
-                ctx.getString(R.string.public_feed) -> PUBLIC_FEED
-                ctx.getString(R.string.direct_messages) -> DIRECT_MESSAGES
-                ctx.getString(R.string.feed_hashtag) -> HASHTAG_FEED
-                else -> HOME_FEED
-            }
-        }
-
         fun fromName(name: String): Tab {
             return entries.filter { it.name == name }.getOrElse(0) { HOME_FEED }
         }

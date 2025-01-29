@@ -4,17 +4,22 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.media.AudioManager.STREAM_MUSIC
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat.getInsetsController
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsCompat.Type
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import androidx.media.AudioAttributesCompat
 import androidx.media2.common.MediaMetadata
 import androidx.media2.common.UriMediaItem
 import androidx.media2.player.MediaPlayer
 import org.pixeldroid.app.databinding.ActivityMediaviewerBinding
 import org.pixeldroid.app.utils.BaseActivity
+import org.pixeldroid.app.utils.insetsListener
 
 class MediaViewerActivity : BaseActivity() {
 
@@ -34,9 +39,21 @@ class MediaViewerActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityMediaviewerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.videoView.insetsListener()
+//
+//        setOnApplyWindowInsetsListener { view, insets ->
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                view.updatePadding(bottom = insets.getInsets(Type.systemBars() or Type.ime()).bottom)
+//            } else {
+//                view.updatePadding(bottom = insets.systemWindowInsetBottom)
+//            }
+//            insets
+//        }
 
         val uri: String = intent.getStringExtra(VIDEO_URL_TAG).orEmpty()
         val description: String? = intent.getStringExtra(VIDEO_DESCRIPTION_TAG)

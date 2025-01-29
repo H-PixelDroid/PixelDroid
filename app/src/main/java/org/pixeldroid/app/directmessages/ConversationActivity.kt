@@ -1,9 +1,13 @@
 package org.pixeldroid.app.directmessages
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowInsetsCompat.Type
+import androidx.core.view.updatePadding
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import org.pixeldroid.app.R
@@ -12,6 +16,7 @@ import org.pixeldroid.app.directmessages.ConversationFragment.Companion.CONVERSA
 import org.pixeldroid.app.directmessages.ConversationFragment.Companion.PROFILE_ID
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
+import org.pixeldroid.app.utils.insetsListener
 
 class ConversationActivity : BaseActivity() {
     lateinit var binding: ActivityConversationBinding
@@ -23,8 +28,19 @@ class ConversationActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityConversationBinding.inflate(layoutInflater)
+
+        binding.constraintPost.insetsListener()
+//        setOnApplyWindowInsetsListener { view, insets ->
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                view.updatePadding(bottom = insets.getInsets(Type.ime() or Type.systemBars()).bottom)
+//            } else {
+//                view.updatePadding(bottom = insets.systemWindowInsetBottom)
+//            }
+//            insets
+//        }
 
         conversationFragment = ConversationFragment()
 

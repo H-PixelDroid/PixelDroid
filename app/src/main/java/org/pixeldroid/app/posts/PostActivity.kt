@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +31,7 @@ class PostActivity : BaseActivity() {
     private lateinit var status: Status
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
 

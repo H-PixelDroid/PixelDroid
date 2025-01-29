@@ -17,6 +17,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.addCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,8 +26,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
+import androidx.core.view.WindowInsetsCompat.Type
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -83,6 +86,7 @@ import org.pixeldroid.app.utils.db.entities.PublicFeedStatusDatabaseEntity
 import org.pixeldroid.app.utils.db.entities.UserDatabaseEntity
 import org.pixeldroid.app.utils.db.updateUserInfoDb
 import org.pixeldroid.app.utils.hasInternet
+import org.pixeldroid.app.utils.insetsListener
 import org.pixeldroid.app.utils.loadDbMenuTabs
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.INSTANCE_NOTIFICATION_TAG
 import org.pixeldroid.app.utils.notificationsWorker.NotificationsWorker.Companion.SHOW_NOTIFICATION_TAG
@@ -111,6 +115,7 @@ class MainActivity : BaseActivity() {
         installSplashScreen().setOnExitAnimationListener {
             it.remove()
         }
+        enableEdgeToEdge()
 
         // Workaround for dynamic colors not applying due to splash screen?
         DynamicColors.applyToActivityIfAvailable(this)
@@ -118,6 +123,16 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.mainDrawerButton?.insetsListener()
+//        setOnApplyWindowInsetsListener { view, insets ->
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                view.updatePadding(bottom = insets.getInsets(Type.ime() or Type.systemBars()).bottom)
+//            } else {
+//                view.updatePadding(bottom = insets.systemWindowInsetBottom)
+//            }
+//            insets
+//        }
 
         //get the currently active user
         user = db.userDao().getActiveUser()
