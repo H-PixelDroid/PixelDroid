@@ -7,48 +7,51 @@
     android:layout_height="match_parent"
     tools:context="org.pixeldroid.app.main.MainActivity">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/main_activity_main_linear_layout"
-            android:layout_width="match_parent"
+        <View
+            android:id="@+id/drawer_button_background"
+            android:layout_width="48dp"
+            android:layout_height="0dp"
+            android:background="?attr/colorSurfaceContainer"
+            android:fitsSystemWindows="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tabs"
+            app:layout_constraintHeight_default="wrap" />
+
+        <ImageButton
+            android:id="@+id/main_drawer_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:orientation="horizontal"
+            android:background="?attr/colorSurfaceContainer"
+            android:contentDescription="@string/open_drawer_menu"
+            android:padding="12dp"
+            android:src="@drawable/ic_baseline_menu_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_pager"
+            app:layout_constraintBottom_toBottomOf="@id/tabs"
+            android:fitsSystemWindows="true"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/tabs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <ImageButton
-                android:id="@+id/main_drawer_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="?attr/colorSurfaceContainer"
-                android:contentDescription="@string/open_drawer_menu"
-                android:padding="12dp"
-                android:src="@drawable/ic_baseline_menu_24" />
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/tabs"
-                app:elevation="0dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:menu="@menu/navigation_main" />
-        </LinearLayout>
+            app:layout_constraintStart_toEndOf="@id/main_drawer_button"
+            tools:menu="@menu/navigation_main" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/main_activity_main_linear_layout"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tabs"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +28,7 @@ import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORI
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.CommonWrapper
+import org.pixeldroid.app.utils.insetsListener
 import org.pixeldroid.app.utils.setThemeFromPreferences
 
 
@@ -38,9 +40,11 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = SettingsBinding.inflate(layoutInflater)
 
+        binding.settings.insetsListener(disableTop = true)
         setContentView(binding.root)
         setSupportActionBar(binding.topBar)
 

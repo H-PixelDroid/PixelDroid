@@ -3,6 +3,7 @@ package org.pixeldroid.app.postCreation.camera
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.enableEdgeToEdge
 import org.pixeldroid.app.main.MainActivity
 import org.pixeldroid.app.R
 import org.pixeldroid.app.databinding.ActivityCameraBinding
@@ -15,6 +16,7 @@ class CameraActivity : BaseActivity() {
     private lateinit var binding: ActivityCameraBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         binding = ActivityCameraBinding.inflate(layoutInflater)

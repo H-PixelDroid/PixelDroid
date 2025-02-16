@@ -1,6 +1,7 @@
 package org.pixeldroid.app.posts.feeds.uncachedFeeds.hashtags
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import org.pixeldroid.app.R
@@ -14,6 +15,7 @@ class HashTagActivity : BaseActivity() {
     private lateinit var binding: ActivityFollowersBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityFollowersBinding.inflate(layoutInflater)
         setContentView(binding.root)

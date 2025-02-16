@@ -1,10 +1,13 @@
 package org.pixeldroid.app.posts.feeds
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.view.WindowInsetsCompat.Type
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
@@ -26,6 +29,7 @@ import org.pixeldroid.app.posts.feeds.uncachedFeeds.FeedViewModel
 import org.pixeldroid.app.stories.StoriesAdapter
 import org.pixeldroid.app.utils.api.objects.FeedContent
 import org.pixeldroid.app.utils.api.objects.Status
+import org.pixeldroid.app.utils.insetsListener
 import retrofit2.HttpException
 
 /**
@@ -55,7 +59,15 @@ internal fun <T: Any> initAdapter(
     adapter: PagingDataAdapter<T, RecyclerView.ViewHolder>,
     header: StoriesAdapter? = null
 ) {
-
+    recyclerView.insetsListener()
+//    setOnApplyWindowInsetsListener { view, insets ->
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            view.updatePadding(top = insets.getInsets(Type.systemBars()).top)
+//        } else {
+//            view.updatePadding(top = insets.systemWindowInsetTop)
+//        }
+//        insets
+//    }
 
     val footer = ReposLoadStateAdapter { adapter.retry() }
 
