@@ -4,13 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.core.view.WindowInsetsCompat.Type
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,6 +29,7 @@ import org.pixeldroid.app.settings.SettingsActivity
 import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORIAL
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
+import org.pixeldroid.app.utils.insetsListener
 import org.pixeldroid.app.utils.openUrl
 
 /**
@@ -57,9 +62,20 @@ class LoginActivity : BaseActivity() {
     val model: LoginActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.scrollLogin.insetsListener()
+//        setOnApplyWindowInsetsListener { view, insets ->
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                view.updatePadding(bottom = insets.getInsets(Type.ime() or Type.systemBars()).bottom)
+//            } else {
+//                view.updatePadding(bottom = insets.systemWindowInsetBottom)
+//            }
+//            insets
+//        }
 
         oauthScheme = getString(R.string.auth_scheme)
         preferences = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)

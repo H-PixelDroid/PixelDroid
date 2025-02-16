@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View.OnClickListener
 import android.view.View.OnTouchListener
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -43,6 +44,7 @@ class StoriesActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //force night mode always
         delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+        enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
 
