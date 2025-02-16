@@ -201,23 +201,31 @@ fun <T> Fragment.bindingLifecycleAware(): ReadWriteProperty<Fragment, T> =
         }
     }
 
-fun View.insetsListener() {
+fun View.insetsListener(disableTop: Boolean = false) {
     setOnApplyWindowInsetsListener { view, insets ->
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val insets = insets.getInsets(Type.systemBars() or Type.ime())
             view.updatePadding(
-                top = insets.top,
                 bottom = insets.bottom,
                 left = insets.left,
                 right = insets.right
             )
+            if (!disableTop) {
+                view.updatePadding(
+                    top = insets.top
+                )
+            }
         } else {
             view.updatePadding(
                 bottom = insets.systemWindowInsetBottom,
-                top = insets.systemWindowInsetTop,
                 left = insets.systemWindowInsetLeft,
                 right = insets.systemWindowInsetRight,
             )
+            if (!disableTop) {
+                view.updatePadding(
+                    top = insets.systemWindowInsetTop
+                )
+            }
         }
         insets
     }

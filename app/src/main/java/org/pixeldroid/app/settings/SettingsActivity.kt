@@ -28,6 +28,7 @@ import org.pixeldroid.app.settings.TutorialSettingsDialog.Companion.START_TUTORI
 import org.pixeldroid.app.utils.BaseActivity
 import org.pixeldroid.app.utils.api.PixelfedAPI
 import org.pixeldroid.app.utils.api.objects.CommonWrapper
+import org.pixeldroid.app.utils.insetsListener
 import org.pixeldroid.app.utils.setThemeFromPreferences
 
 
@@ -43,6 +44,7 @@ class SettingsActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceCha
         super.onCreate(savedInstanceState)
         binding = SettingsBinding.inflate(layoutInflater)
 
+        binding.settings.insetsListener(disableTop = true)
         setContentView(binding.root)
         setSupportActionBar(binding.topBar)
 
