@@ -16,7 +16,7 @@
     <string name="notifications_settings_summary">A kapott értesítések kezelése</string>
     <string name="notifications_settings">Értesítési beállítások</string>
     <string name="file_not_found">A(z) %1$s fájl nem található</string>
-    <string name="delete_post_failed_io_except">A bejegyzés törlése sikertelen, ellenőrizze a kapcsolatot.</string>
+    <string name="delete_post_failed_io_except">A bejegyzés törlése sikertelen. Kapcsolat ellenőrzése?</string>
     <string name="delete_post_failed_error">A bejegyzés törlése sikertelen, hibakód: %1$d</string>
     <string name="mascot_description">A kép egy vörös pandát ábrázol, a Pixelfed kabalaállatát, amely telefont használ</string>
     <string name="issues_contribute">Jelentse a problémákat, vagy működjön közre az alkalmazásban:</string>
@@ -26,11 +26,11 @@
     <string name="delete">Törlés</string>
     <string name="panda_pull_to_refresh_to_try_again">Ez a panda nem boldog. Húzza le a frissítéshez.</string>
     <string name="something_went_wrong">Valami hiba történt…</string>
-    <string name="discover">FELFEDEZÉS</string>
+    <string name="discover">Felfedezés</string>
     <string name="open_drawer_menu">Fiókmenü megnyitása</string>
     <string name="profile_picture">Profilkép</string>
     <string name="report_error">A jelentés elküldése sikertelen</string>
-    <string name="reported">Jelentve {gmd_check_circle}</string>
+    <string name="reported">Bejegyzés jelentve</string>
     <string name="report_target">\@%1$s bejegyzésének jelentése</string>
     <string name="optional_report_comment">Nem kötelező üzenet a moderátoroknak/adminisztrátoroknak</string>
     <string name="share_link">Megosztási hivatkozás</string>
@@ -152,8 +152,8 @@
         <item quantity="one">A leírás legfeljebb %d karakteres lehet.</item>
         <item quantity="other">A leírás legfeljebb %d karakteres lehet.</item>
     </plurals>
-    <string name="save_image_success">A kép mentése sikeres</string>
-    <string name="save_image_failed">A kép nem menthető</string>
+    <string name="save_image_success">Sikeres mentés</string>
+    <string name="save_image_failed">Sikertelen mentés</string>
     <string name="add_account_description">Másik Pixelfed-fiók hozzáadása</string>
     <string name="add_account_name">Fiók hozzáadása</string>
     <string name="logout">Kijelentkezés</string>
@@ -209,4 +209,33 @@
     <string name="menu_settings">Beállítások</string>
     <string name="menu_account">Saját profil</string>
     <string name="app_name">PixelDroid</string>
+    <string name="home_feed">Kezdőlap</string>
+    <string name="create_feed">Létrehozás</string>
+    <string name="notifications_feed">Frissítések</string>
+    <string name="add_details">Adjon hozzá részleteket</string>
+    <string name="unknown_error_in_error">Ismeretlen hiba, ellenőrizze a szerver elérhetőségét: %1$s</string>
+    <string name="comment_noun">hozzászólás</string>
+    <string name="redraft">Átdolgozás</string>
+    <string name="redraft_dialog_launch">Átdolgozásakor szerkeszthetők a képek és a bejegyzés szövege, de törölve lesz minden eddigi hozzászólás és kedvelés. Folytatja?</string>
+    <string name="redraft_dialog_cancel">Ha megszakítja az átdolgozást, akkor az eredeti bejegyzés nem lesz többé elérhető a fiókjában. Megszakítja újraküldés nélkül?</string>
+    <string name="always_show_nsfw">Mindig mutassa az érzékeny tartalmat</string>
+    <plurals name="items_load_success">
+        <item quantity="one">%d elem sikeresen betöltve</item>
+        <item quantity="other">%d elem sikeresen betöltve</item>
+    </plurals>
+    <string name="dark_amoled_theme">„valódi” sötét (AMOLED) (kísérleti)</string>
+    <string name="unbookmark">Könyvjelző törlése</string>
+    <string name="bookmark">Könyvjelző</string>
+    <string name="redraft_post_failed_error">Nem lehet átdolgozni a bejegyzést, hibakód: %1$d</string>
+    <string name="accentColorSummary">Válasszon egy színt</string>
+    <string name="color_chosen">Kiválasztott színséma</string>
+    <string name="upload_next_step">Tovább</string>
+    <string name="collection_title">%1$s kollekciója</string>
+    <string name="bookmark_post_failed_error">Nem lehet a könyvjelzőt kezelni, hibakód: %1$d</string>
+    <string name="redraft_post_failed_io_except">Nem lehet átdolgozni a bejegyzést. Kapcsolat ellenőrzése?</string>
+    <string name="search_discover_feed">Keresés</string>
+    <string name="public_feed">Helyi</string>
+    <string name="accentColorTitle">Színséma</string>
+    <string name="new_collection_link_failed">Nem sikerült megnyitni az oldalt a kollekció létrehozásához</string>
+    <string name="bookmark_post_failed_io_except">Nem lehet a könyvjelzőt kezelni. Kapcsolat ellenőrzése?</string>
 </resources>
