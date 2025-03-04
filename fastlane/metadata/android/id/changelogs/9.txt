@@ -1,0 +1,3 @@
+* Memperbaiki kerusakan saat menampilkan daftar lisensi
+* Sangat meningkatkan kinerja dalam aktivitas profil
+* Perbarui dependensi

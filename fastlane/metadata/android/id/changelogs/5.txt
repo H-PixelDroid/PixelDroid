@@ -1,0 +1,5 @@
+* Pembaruan terjemahan
+* Cara yang lebih ringan untuk melihat informasi lisensi
+* Memperbaiki masalah izin di tab kamera
+* Memperbaiki penguraian tautan
+* Memperbaiki tampilan penemuan (mungkin perlu pembaruan contoh)

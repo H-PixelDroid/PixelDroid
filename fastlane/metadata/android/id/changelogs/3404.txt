@@ -1,0 +1,4 @@
+* Dukungan untuk tablet, dan rotasi semua layar. Mungkin masih ada beberapa masalah, silakan kirim pesan kepada kami jika ada
+* Perbaikan bug: terutama, memperbaiki notifikasi yang rusak pada beberapa rilis sebelumnya.
+* Pembaruan terjemahan
+* Memperbarui ketergantungan

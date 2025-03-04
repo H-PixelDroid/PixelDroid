@@ -1,0 +1,3 @@
+* Mode gelap AMOLED
+* Sinkronisasi pengaturan NSFW dengan server
+* Perbarui ketergantungan dan terjemahan

@@ -1,0 +1,3 @@
+* Pengeditan video! Membisukan, memotong video
+* Membuka gambar dalam layar penuh dan memperbesar serta menggesernya :)
+* Pembaruan terjemahan

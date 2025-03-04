@@ -1,0 +1,4 @@
+* Pesan peringatan yang tidak terlalu agresif jika Anda menonaktifkan izin kamera atau file
+* Perbarui terjemahan
+* Memperbaiki kerusakan unggahan video
+* Penanganan kesalahan yang lebih baik

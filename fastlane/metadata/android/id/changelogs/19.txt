@@ -1,0 +1,9 @@
+* Menghapus metadata foto sebelum mengunggah
+* Penanda!
+* Melihat profil sebagai umpan atau kisi
+* Mengatur templat untuk deskripsi Anda
+* Lencana pada ikon notifikasi jika Anda mendapat notifikasi baru
+* Lebih banyak fitur pengeditan video: pangkas, ubah kecepatan, tambahkan stabilisasi
+* Menerapkan warna dinamis: Anda dapat membuat PixelDroid mengikuti warna latar belakang Anda (Android 12 dan lebih tinggi)
+* Perbaikan bug
+* Perbarui terjemahan

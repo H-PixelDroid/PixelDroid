@@ -1,0 +1,4 @@
+* Menambahkan dukungan untuk pemutaran dan pengunggahan video
+* Perbaikan pemberitahuan
+* Pembaruan terjemahan
+* Memperbarui ketergantungan

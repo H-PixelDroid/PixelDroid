@@ -1,0 +1,8 @@
+* Perbaikan komentar: sekarang dapat membuka komentar untuk melihat balasan, menyukainya, komentar menampilkan avatar penulisnya, dll.
+* Pembaruan terjemahan. Terima kasih para penerjemah :). Bantu menerjemahkan ke bahasa Anda di weblate.pixeldroid.org
+* Keamanan: verifikasi ketergantungan memastikan ketergantungan yang disertakan dalam aplikasi belum dirusak, sekarang akan menolak koneksi non-HTTPS
+* sekarang menggunakan Agen Pengguna "PixelDroid", bukan yang ada di perpustakaan OkHttp.
+* Semua string yang dikodekan telah dihapus dari aplikasi, biasanya sekarang semuanya dapat diterjemahkan.
+* Beberapa perbaikan pada kode
+* Memperbaiki penyimpanan gambar yang berasal dari perpustakaan atau dibagikan ke aplikasi
+* Memperbaiki kerusakan saat menggunakan Mastodon

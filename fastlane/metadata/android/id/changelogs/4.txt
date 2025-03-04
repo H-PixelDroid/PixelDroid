@@ -1,0 +1,9 @@
+- Dukungan pemberitahuan! Masih agak belum sempurna, masih perlu perbaikan :)
+- Memperbaiki masalah yang menyebabkan rotasi EXIF diabaikan, membuat foto tampak diputar ke arah yang salah
+- Perbaikan #300
+- Memperbaiki browser webview yg menampilkan kesalahan saat login karena URL mengandung spasi yang tidak dikodekan dengan URI
+- Memperbaiki masalah yg menyebabkan cache di-flush dan membuat feed menjadi kosong pada setiap peluncuran aplikasi, dan menyebabkan masalah kinerja
+- Tambahkan bahasa Ceko, perbarui terjemahan lainnya
+- Perbaiki gambar profil
+- Perbaiki kamera yang tidak berfungsi setelah berpindah tab
+- Perbarui ketergantungan

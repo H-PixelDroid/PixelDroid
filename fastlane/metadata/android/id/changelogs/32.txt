@@ -1,0 +1,1 @@
+Membagi APK per arsitektur CPU, membuat APK jauh lebih kecil (100MB hingga 25MB)

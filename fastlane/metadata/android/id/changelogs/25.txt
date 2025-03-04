@@ -1,0 +1,4 @@
+* Dukungan cerita!
+* Pembaruan ketergantungan
+* Pengkodean video yang dipercepat dengan perangkat keras
+* Banyak pekerjaan di belakang layar :)
