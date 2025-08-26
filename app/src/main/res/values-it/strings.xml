@@ -35,10 +35,10 @@
     <string name="invalid_domain">Dominio non valido</string>
     <string name="edit">Modifica</string>
     <string name="instance_error">Impossibile ottenere informazioni sull\'istanza</string>
-    <string name="save_image_failed">Impossibile salvare l\'immagine</string>
+    <string name="save_image_failed">Impossibile salvare</string>
     <string name="light_theme">Chiaro</string>
     <string name="dark_theme">Scuro</string>
-    <string name="save_image_success">Immagine salvata correttamente</string>
+    <string name="save_image_success">Salvataggio completato</string>
     <string name="upload_picture_failed">Errore caricamento immagine!</string>
     <string name="picture_format_error">Errore di caricamento: formato immagine errato.</string>
     <string name="add_account_name">Aggiungi Account</string>
@@ -313,4 +313,6 @@
     <string name="continue_post_creation">Continua</string>
     <string name="extraneous_pictures_stories">Le immagini successive alla prima sono state rimosse, ma possono essere ripristinate tornando indietro alla creazione di un Post</string>
     <string name="story_duration">Durata della Storia</string>
+    <string name="content_header">Contenuti</string>
+    <string name="dark_amoled_theme">Scuro profondo (AMOLED) (sperimentale)</string>
 </resources>
