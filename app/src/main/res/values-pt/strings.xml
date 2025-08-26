@@ -147,7 +147,7 @@
     <string name="something_went_wrong">Algo correu mal…</string>
     <string name="panda_pull_to_refresh_to_try_again">Este panda não está contente. Puxe para atualizar para tentar novamente.</string>
     <string name="delete_dialog">Eliminar esta publicação\?</string>
-    <string name="delete">Eliminar</string>
+    <string name="delete">Apagar</string>
     <string name="language">Língua</string>
     <string name="help_translate">Ajude a traduzir PixelDroid para a sua língua:</string>
     <string name="issues_contribute">Reportar problemas ou contribuir para a aplicação:</string>
