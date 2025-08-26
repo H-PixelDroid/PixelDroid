@@ -1,0 +1,4 @@
+* Unterstützung für Tablets und Rotation aller Bildschirme. Es könnte noch einige Probleme geben, bitte schickt uns eine Nachricht, wenn es welche gibt
+* Fehlerkorrekturen: insbesondere die Behebung von Benachrichtigungen, die vor einigen Versionen nicht funktionierten.
+* Übersetzungs-Updates
+* Aktualisierung der Abhängigkeiten

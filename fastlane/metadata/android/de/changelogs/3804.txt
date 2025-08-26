@@ -1,0 +1,3 @@
+* AMOLED-Dunkelmodus
+* NSFW-Einstellung mit Server synchronisieren
+* Aktualisieren von Abhängigkeiten und Übersetzungen

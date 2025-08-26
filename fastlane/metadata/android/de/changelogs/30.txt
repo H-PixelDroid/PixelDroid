@@ -1,0 +1,1 @@
+Behebung eines Fehlers, der die Bildbearbeitungsfunktion im Freigabemodus beeinträchtigte

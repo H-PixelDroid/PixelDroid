@@ -1,9 +1,9 @@
-- Unterstützung von Benachrichtigungen eingeführt! (Noch in der Entwicklungsphase, wird zukünftig verbessert)
-- Dependencies aktualisiert
-- Neue Sprache: Tschechisch; weitere Übersetzungen aktualisiert
-- Fotos sollten jetzt in der richtigen Richtung erscheinen
-- Fix #300
-- Browserproblem beim Login bei URLs mit Leerzeichen
-- Der Cache sollte jetzt nicht mehr bei jedem Appstart neu gelöscht werden
-- Profilbilder
-- Kamera funktionierte nach dem Wechseln von Tabs nicht
+- Unterstützung für Benachrichtigungen! Noch etwas rudimentär, etwas Feinschliff ist in Arbeit :)
+- Behebung eines Problems, das dazu führte, dass die EXIF-Drehung ignoriert wurde und die Fotos falsch herum angezeigt wurden
+- Fehlerbehebung #300
+- Fix für Webview-Browser, die beim Login einen Fehler anzeigen, weil die URL Leerzeichen enthält, die nicht URI-codiert sind
+- Behebung eines Problems, das dazu führte, dass die Caches geleert wurden und die Feeds bei jedem App-Start leer geblitzt wurden, was zu Leistungsproblemen führte
+- Tschechisch hinzugefügt, andere Übersetzungen aktualisiert
+- Profilbilder korrigiert
+- Behebung des Problems, dass die Kamera nach dem Wechsel der Tabs nicht funktioniert
+- Aktualisieren von Abhängigkeiten
