@@ -1,0 +1,1 @@
+Perbaikan terbaru untuk kerusakan pada aktivitas edit yang hanya terjadi dalam mode rilis

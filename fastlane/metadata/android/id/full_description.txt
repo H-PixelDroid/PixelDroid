@@ -1,0 +1,11 @@
+PixelDroid adalah klien Android Gratis dan Sumber Terbuka untuk Pixelfed, platform berbagi gambar federasi.
+
+Jelajahi feed dan profil, unggah kiriman baru, temukan kiriman, berinteraksi dengan orang lain di fediverse.
+
+- Dukungan Multi-Akun
+- Tema gelap dan terang
+- Menerapkan filter, memotong, mengubah kecerahan/kontras/kejenuhan
+- Mempertimbangkan konfigurasi server Pixelfed Anda
+- 100% perangkat lunak Gratis dan Sumber Terbuka. Tidak ada ketergantungan kepemilikan.
+
+Kunjungi https://pixelfed.org untuk mempelajari lebih lanjut tentang Pixelfed.
