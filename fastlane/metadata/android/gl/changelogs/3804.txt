@@ -1,0 +1,3 @@
+* Modo escuro AMOLED
+* Sincronizar o axuste NSFW co servidor
+* Actualización de dependencias e traducións

@@ -1,0 +1,2 @@
+* Pembaruan terjemahan
+* Izinkan gambar jarak jauh dalam unggahan (misalnya Nextcloud)

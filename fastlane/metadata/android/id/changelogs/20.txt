@@ -1,0 +1,4 @@
+Menghapus dan menyusun ulang postingan yang ada
+- Koleksi postingan yang telah dibuat kini dapat dilihat dan diedit
+- Pembuatan postingan kini dilakukan dalam dua langkah, dengan dukungan baru untuk: Sensitivitas NSFW, pengalihan akun
+- Banyak perubahan dan peningkatan lainnya :)

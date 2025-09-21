@@ -1,0 +1,4 @@
+* Menambahkan aturan gson proguard untuk memperbaiki kerusakan pada instance Mastodon
+* Menambahkan tema warna dengan 4 tema yang berbeda
+* Pindah ke Materi 3
+* Meningkatkan konsistensi UI

@@ -1,0 +1,3 @@
+* Memperbaiki kerusakan saat berbagi gambar dari galeri dll ke aplikasi
+
+* Memperbaiki masalah izin yang menyebabkan gambar melemparkan kesalahan penolakan izin

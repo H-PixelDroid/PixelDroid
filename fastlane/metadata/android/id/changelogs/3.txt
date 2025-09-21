@@ -1,0 +1,7 @@
+* Menambahkan bahasa (Malayalam)
+
+* Perbaikan bug untuk beberapa respons API yang buruk
+
+* Perbarui dependensi
+
+* Perbarui terjemahan

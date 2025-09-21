@@ -1,0 +1,3 @@
+* Behebung des Absturzes bei der Freigabe eines Bildes aus einer Galerie etc. an die App
+
+* Behebt ein Problem mit den Zugriffsrechten, das dazu führt, dass Bilder einen Fehler "Zugriff verweigert" auslösen

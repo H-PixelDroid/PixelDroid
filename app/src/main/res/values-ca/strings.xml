@@ -19,7 +19,7 @@
     <string name="save_to_gallery">Desar a la galeria…</string>
     <string name="logout">Tancar sessió</string>
     <string name="whats_an_instance">Què és una instància\?</string>
-    <string name="post">enviar</string>
+    <string name="post">Publica</string>
     <string name="description">Descripció…</string>
     <string name="liked_notification">%1$s ha dona\'t m\'agrada a la teva publicació</string>
     <string name="theme_title">Tema de l\'aplicació</string>
@@ -72,8 +72,8 @@
     <string name="request_format_error">Error d\'enviament: format de sol·licitud dolent</string>
     <string name="picture_format_error">Error d\'enviament: format d\'imatge erroni.</string>
     <string name="upload_picture_failed">Error d\'enviament d\'imatges!</string>
-    <string name="save_image_success">La imatge s\'ha desat correctament</string>
-    <string name="save_image_failed">No es pot desar la imatge</string>
+    <string name="save_image_success">S\'ha desat correctament</string>
+    <string name="save_image_failed">No s\'ha pogut desar</string>
     <string name="dark_theme">Fosc</string>
     <string name="light_theme">Clar</string>
     <string name="default_system">Per defecte (seguint el sistema)</string>
@@ -191,4 +191,27 @@
     <string name="notifications_settings">Configuració de notificacions</string>
     <string name="notifications_settings_summary">Gestiona quines notificacions vols rebre</string>
     <string name="login_notifications">No s\'han pogut obtenir les últimes notificacions</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s i %4$d altres</string>
+    <string name="video_not_supported">El servidor que utilitzeu no admet pujar-hi vídeo, potser no podreu pujar els vídeos d\'aquesta publicació</string>
+    <string name="notification_summary_small">%1$s i %2$s</string>
+    <plurals name="items_load_success">
+        <item quantity="one">s\'ha carregat %d element</item>
+        <item quantity="many">s\'han carregat %d elements</item>
+        <item quantity="other">s\'han carregat %d elements</item>
+    </plurals>
+    <string name="unknown_error_in_error">S\'ha produït un error indefinit, reviseu si el servidor funciona: %1$s</string>
+    <plurals name="notification_title_summary">
+        <item quantity="one">%d notificació nova</item>
+        <item quantity="many">%d notificacions noves</item>
+        <item quantity="other">%d notificacions noves</item>
+    </plurals>
+    <string name="comment_noun">Això es mostra al camp de text com a pista, és un nom</string>
+    <string name="post_is_video">Aquesta publicació és un vídeo</string>
+    <string name="add_details">Afegeix alguns detalls</string>
+    <string name="dark_amoled_theme">\"True\" Fosc (AMOLED) (experimental)</string>
+    <string name="always_show_nsfw">Mostra sempre el contingut sensible</string>
+    <string name="notification_summary_medium">%1$s, %2$s i %3$s</string>
+    <string name="upload_next_step">Següent pas</string>
+    <string name="collection_title">col·lecció de %1$s</string>
+    <string name="new_collection_link_failed">No s\'ha pogut obrir la pàgina de creació de col·lecions</string>
 </resources>

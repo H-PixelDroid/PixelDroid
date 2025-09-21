@@ -1,0 +1,1 @@
+Aufteilung der APKs nach CPU-Architektur, macht die APKs viel kleiner (100MB bis 25MB)

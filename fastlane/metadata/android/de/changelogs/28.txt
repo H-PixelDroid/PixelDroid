@@ -1,0 +1,7 @@
+Fehlerbehebung für das Öffnen von Alben im Vollbildmodus
+
+Verwendung von Hardware-Beschleunigung (OpenGL! Shader!) für die Bildbearbeitung. Momentan versuche ich nur, die vorherige Implementierung zu imitieren, aber das wird Bausteine für viel coolere Dinge später bereitstellen :)
+
+Sag uns, wenn etwas nicht richtig funktioniert! (E-Mail, Mastodon)
+
+In dieser Version gibt es auch Übersetzungs-Updates :)

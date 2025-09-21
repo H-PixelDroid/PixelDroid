@@ -1,0 +1,11 @@
+* Menambahkan panda merah grafis kesalahan khusus
+
+* Izinkan pemangkasan gaya bebas dalam pengeditan gambar
+ 
+* Memperbaiki metadata F-Droid
+
+* Pembaruan terjemahan
+
+* Perbarui ketergantungan
+
+* Memperbaiki bug

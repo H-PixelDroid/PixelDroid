@@ -1,0 +1,7 @@
+Perbaikan bug untuk membuka album yang mogok di layar penuh
+
+Gunakan akselerasi perangkat keras (OpenGL! Shader!) untuk pengeditan gambar. Saat ini hanya mencoba meniru implementasi sebelumnya, tetapi ini akan menjadi dasar untuk hal-hal yang lebih keren di kemudian hari :)
+
+Beritahu kami jika ada sesuatu yang tidak berjalan dengan baik! (email, Mastodon)
+
+Ada juga pembaruan terjemahan dalam rilis ini :)

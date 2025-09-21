@@ -1,0 +1,7 @@
+* Pembaruan terjemahan: string baru & pembaruan untuk string lainnya. Terima kasih penerjemah ❤️! Kunjungi weblate kami jika Anda ingin membantu penerjemahan ke dalam bahasa Anda.
+
+* #️⃣ Dukungan tagar. Anda sekarang dapat menelusuri tagar, bukan hanya menampilkan pesan bersulang 😜
+
+* Klik tab untuk menggulir ke atas. Tidak perlu lagi menggulir dengan susah payah untuk kembali ke atas. Cukup klik tab tempat Anda berada lagi dan itu akan bergulir ke atas :)
+
+* Mencoba untuk memperbaiki beberapa bug yang membuat aplikasi crash. Terima kasih banyak atas laporan kerusakan yang telah Anda kirimkan! ♥️

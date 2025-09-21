@@ -1,0 +1,1 @@
+Kliento programa, skirta „Pixelfed“. Federacinė vaizdų bendrinimo platforma.

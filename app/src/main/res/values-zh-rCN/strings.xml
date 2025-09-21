@@ -76,8 +76,8 @@
     <string name="request_format_error">上传错误：错误的请求格式</string>
     <string name="picture_format_error">上传错误：图片格式错误。</string>
     <string name="upload_picture_failed">图片上传错误！</string>
-    <string name="save_image_success">图片成功保存</string>
-    <string name="save_image_failed">无法保存图像</string>
+    <string name="save_image_success">成功保存</string>
+    <string name="save_image_failed">无法保存</string>
     <string name="default_system">默认（跟随系统设置）</string>
     <string name="light_theme">浅色</string>
     <string name="dark_theme">深色</string>
@@ -106,7 +106,7 @@
     <string name="delete_post_failed_io_except">法删除帖子，请检查你的连接\?</string>
     <string name="delete_post_failed_error">无法删除帖子，错误 %1$d</string>
     <string name="mascot_description">图片显示的是一只小熊猫，Pixelfed的吉祥物，正在用手机</string>
-    <string name="issues_contribute">报告问题或为这个应用程序作贡献：</string>
+    <string name="issues_contribute">报告问题或为这个应用作贡献：</string>
     <string name="help_translate">帮助将 PixelDroid 翻译到你的语言：</string>
     <string name="language">语言</string>
     <string name="delete_dialog">删除这则帖子？</string>
