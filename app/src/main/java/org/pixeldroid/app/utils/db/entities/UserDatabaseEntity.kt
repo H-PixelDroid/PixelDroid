@@ -31,4 +31,17 @@ data class UserDatabaseEntity(
 ): Serializable {
     val fullHandle: String
         get() = "@${username}@${instance_uri.removePrefix("https://")}"
+
+    // We need a long for the drawer account list
+    fun stableId(): Long = fnv1a32("$user_id|$instance_uri")
+}
+
+fun fnv1a32(input: String): Long {
+    var hash = 0x811c9dc5L
+    val prime = 0x01000193L
+    for (c in input) {
+        hash = hash xor c.code.toLong()
+        hash *= prime
+    }
+    return hash
 }

@@ -460,7 +460,12 @@ class MainActivity : BaseActivity() {
             headerBackgroundScaleType = ImageView.ScaleType.CENTER_CROP
             currentHiddenInList = true
             onAccountHeaderListener = { _: View?, profile: IProfile, current: Boolean ->
-                val userId: String? = if (profile.identifier == ADD_ACCOUNT_IDENTIFIER) null else profile.identifier.toString()
+                val profileIdentifier: Long? = if (profile.identifier == ADD_ACCOUNT_IDENTIFIER) null else profile.identifier
+
+                val userId = model.users.value.find {
+                    it.stableId() == profileIdentifier
+                }?.user_id
+
                 clickProfile(userId, profile.tag?.toString(), current)
             }
             addProfile(ProfileSettingDrawerItem().apply {
@@ -647,7 +652,7 @@ class MainActivity : BaseActivity() {
                             nameText = user.display_name
                             iconUrl = user.avatar_static
                             isNameShown = true
-                            identifier = user.user_id.toLong()
+                            identifier = user.stableId()
                             descriptionText = user.fullHandle
                             tag = user.instance_uri
                         }
@@ -661,7 +666,7 @@ class MainActivity : BaseActivity() {
 
                     header.clear()
                     header.profiles = profiles
-                    header.setActiveProfile(account.toLong())
+                    header.setActiveProfile(users.indexOfFirst { it.user_id == account }.toLong())
                 }
             }
         }
