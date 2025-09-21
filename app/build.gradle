@@ -27,7 +27,7 @@ android.applicationVariants.configureEach { variant ->
 android {
 
     namespace 'org.pixeldroid.app'
-    compileSdk 35
+    compileSdk 36
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -44,9 +44,9 @@ android {
         freeCompilerArgs += ["-opt-in=kotlin.RequiresOptIn"]
     }
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 35
-        versionCode 40
+        versionCode 41
         versionName "1.0.beta" + versionCode
 
         //TODO add resConfigs("en", "fr", "ja",...) ?
@@ -73,7 +73,6 @@ android {
         }
         staging {
             initWith debug
-            testCoverageEnabled true
 
             // These values are first looked for in the env variables, and, if not found there,
             // in the local.properties file (which is not checked into version control of course!).
@@ -92,6 +91,9 @@ android {
             buildConfigField "String", "REFRESH_TOKEN", System.getenv("REFRESH_TOKEN") ?: localProperties['REFRESH_TOKEN'] ?: '""'
             buildConfigField "String", "CLIENT_ID", System.getenv("CLIENT_ID") ?: localProperties['CLIENT_ID'] ?: '""'
             buildConfigField "String", "CLIENT_SECRET", System.getenv("CLIENT_SECRET") ?: localProperties['CLIENT_SECRET'] ?: '""'
+
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
         }
         release {
             minifyEnabled true
@@ -179,43 +181,43 @@ tasks.register('printVersionCode') {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.hilt:hilt-common:1.2.0'
-    implementation 'androidx.hilt:hilt-work:1.2.0'
+    implementation 'androidx.hilt:hilt-common:1.3.0'
+    implementation 'androidx.hilt:hilt-work:1.3.0'
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
     /**
      * AndroidX dependencies:
      */
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.core:core-splashscreen:1.0.1'
-    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.preference:preference-ktx:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.7'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.7'
-    implementation "androidx.browser:browser:1.8.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.4'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.9.4'
+    implementation "androidx.browser:browser:1.9.0"
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.7'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.7'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.4'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.9.4'
     implementation 'androidx.paging:paging-runtime-ktx:3.3.6'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.8.7"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.9.4"
     implementation "androidx.annotation:annotation:1.9.1"
-    implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation "androidx.activity:activity-ktx:1.10.0"
-    implementation 'androidx.fragment:fragment-ktx:1.8.6'
-    implementation 'androidx.work:work-runtime-ktx:2.10.0'
+    implementation 'androidx.gridlayout:gridlayout:1.1.0'
+    implementation "androidx.activity:activity-ktx:1.11.0"
+    implementation 'androidx.fragment:fragment-ktx:1.8.9'
+    implementation 'androidx.work:work-runtime-ktx:2.10.4'
     implementation 'androidx.media2:media2-widget:1.3.0'
     implementation 'androidx.media2:media2-player:1.3.0'
 
 
     // Use the most recent version of CameraX
-    def cameraX_version = '1.4.1'
+    def cameraX_version = '1.5.0'
     implementation "androidx.camera:camera-core:$cameraX_version"
     implementation "androidx.camera:camera-camera2:$cameraX_version"
     // CameraX Lifecycle library
@@ -224,7 +226,7 @@ dependencies {
     // CameraX View class
     implementation "androidx.camera:camera-view:$cameraX_version"
 
-    def room_version = "2.6.1"
+    def room_version = "2.8.0"
     implementation "androidx.room:room-runtime:$room_version"
     ksp "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
@@ -238,41 +240,41 @@ dependencies {
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 
     //Interactive tutorial
-    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.14.0'
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.15.0'
 
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.google.android.material:material:1.13.0'
 
     //Dagger (dependency injection)
-    implementation 'com.google.dagger:dagger:2.55'
-    ksp 'com.google.dagger:dagger-compiler:2.55'
+    implementation 'com.google.dagger:dagger:2.57.1'
+    ksp 'com.google.dagger:dagger-compiler:2.57.1'
 
-    implementation('com.google.dagger:hilt-android:2.55')
-    ksp 'com.google.dagger:hilt-compiler:2.55'
+    implementation('com.google.dagger:hilt-android:2.57.1')
+    ksp 'com.google.dagger:hilt-compiler:2.57.1'
 
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.11.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.9'
+    implementation 'com.squareup.okhttp3:okhttp:5.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
+    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.11'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'com.github.connyduck:sparkbutton:4.1.0'
 
-    implementation 'org.pixeldroid.pixeldroid:android-media-editor:4.5'
+    implementation 'org.pixeldroid.pixeldroid:android-media-editor:4.7'
     implementation project(path: ':scrambler')
     implementation project(path: ':pixel_common')
 
-    implementation('com.github.bumptech.glide:glide:4.16.0') {
+    implementation('com.github.bumptech.glide:glide:5.0.5') {
         exclude group: "com.android.support"
     }
 
-    implementation 'com.github.bumptech.glide:okhttp3-integration:4.16.0'
-    implementation('com.github.bumptech.glide:recyclerview-integration:4.16.0') {
+    implementation 'com.github.bumptech.glide:okhttp3-integration:5.0.5'
+    implementation('com.github.bumptech.glide:recyclerview-integration:5.0.5') {
         // Excludes the support library because it's already included by Glide.
         transitive = false
     }
-    implementation 'com.github.bumptech.glide:annotations:4.16.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
-    ksp 'com.github.bumptech.glide:ksp:4.16.0'
+    implementation 'com.github.bumptech.glide:annotations:5.0.5'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
+    ksp 'com.github.bumptech.glide:ksp:5.0.5'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
@@ -294,23 +296,23 @@ dependencies {
     androidTestImplementation 'com.linkedin.testbutler:test-butler-library:2.2.1'
     androidTestUtil 'com.linkedin.testbutler:test-butler-app:2.2.1'
 
-    androidTestImplementation 'androidx.work:work-testing:2.10.0'
-    testImplementation 'org.wiremock:wiremock:3.9.1'
+    androidTestImplementation 'androidx.work:work-testing:2.10.4'
+    testImplementation 'org.wiremock:wiremock:3.13.1'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$room_version"
 
 
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
-    androidTestImplementation 'androidx.test:runner:1.6.2'
-    androidTestImplementation 'androidx.test:rules:1.6.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test:runner:1.6.2'
-    androidTestImplementation 'androidx.test:rules:1.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.6.1'
+    androidTestImplementation 'androidx.test:runner:1.7.0'
+    androidTestImplementation 'androidx.test:rules:1.7.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test:runner:1.7.0'
+    androidTestImplementation 'androidx.test:rules:1.7.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.7.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
-    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:5.1.0'
 
 }
 
