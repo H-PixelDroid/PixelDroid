@@ -1,10 +1,8 @@
 package org.pixeldroid.app.utils.api.objects
 
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
