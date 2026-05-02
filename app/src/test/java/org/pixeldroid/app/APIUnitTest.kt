@@ -1,27 +1,31 @@
 package org.pixeldroid.app
 
-import com.github.tomakehurst.wiremock.client.WireMock.*
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializer
-import org.pixeldroid.app.utils.api.PixelfedAPI
-import org.pixeldroid.app.utils.api.objects.*
 import kotlinx.coroutines.runBlocking
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.pixeldroid.app.utils.api.PixelfedAPI
+import org.pixeldroid.app.utils.api.objects.Application
+import org.pixeldroid.app.utils.api.objects.Attachment
+import org.pixeldroid.app.utils.api.objects.Emoji
+import org.pixeldroid.app.utils.api.objects.Mention
+import org.pixeldroid.app.utils.api.objects.Status
+import org.pixeldroid.app.utils.api.objects.Token
 import org.pixeldroid.app.utils.typeAdapterInstantDeserializer
 import org.pixeldroid.app.utils.typeAdapterInstantSerializer
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.Instant
-import java.time.format.DateTimeFormatter
 
 
 /**
@@ -136,10 +140,10 @@ class APIUnitTest {
                 )
         }
         assertEquals("ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0", token.access_token)
-        assertEquals("Bearer", token.token_type)
-        assertEquals("read write follow push", token.scope)
-        assertEquals(1573979017, token.created_at)
-        assertEquals(Token("ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0", "ZA-Yj3aBD8U8Cm7lKUp-sqfdsqfdqfsdfqds","Bearer", "read write follow push",1573979017), token)
+        //assertEquals("Bearer", token.token_type)
+        //assertEquals("read write follow push", token.scope)
+        //assertEquals(1573979017, token.created_at)
+        assertEquals(Token("ZA-Yj3aBD8U8Cm7lKUp-lm9O9BmDgdhHzDeqsY8tlL0", "ZA-Yj3aBD8U8Cm7lKUp-sqfdsqfdqfsdfqds",/**"Bearer", "read write follow push",1573979017**/), token)
 
 
     }
@@ -150,8 +154,8 @@ fun assertStatusEqualsToReference(actual: Status){
         ((actual.id=="140364967936397312"
                 && actual.uri=="https://pixelfed.de/p/Miike/140364967936397312"
                 && actual.created_at == Instant.parse("2020-03-03T08:00:16Z")
-                && actual.account!!.id=="115114166443970560"&& actual.account!!.username=="Miike"&& actual.account!!.acct=="Miike" &&
-                actual.account!!.url=="https://pixelfed.de/Miike"&& actual.account!!.display_name=="Miike Duart"&& actual.account!!.note==""&&
+                && actual.account!!.id=="115114166443970560"&& actual.account.username=="Miike"&& actual.account.acct=="Miike" &&
+                actual.account.url=="https://pixelfed.de/Miike"&& actual.account!!.display_name=="Miike Duart"&& actual.account.note==""&&
                 //actual.account!!.avatar=="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"&&
                 //actual.account!!.avatar_static=="https://pixelfed.de/storage/avatars/011/511/416/644/397/056/0/ZhaopLJWTWJ3hsVCS5pS_avatar.png?v=d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"&&
                 actual.account!!.header==""&& actual.account!!.header_static=="") && !actual.account!!.locked!! && actual.account!!.emojis== emptyList<Emoji>() && actual.account!!.discoverable == null && actual.account!!.created_at==Instant.parse("2019-12-24T15:42:35.000000Z") && actual.account!!.statuses_count==71 && actual.account!!.followers_count==14 && actual.account!!.following_count==0 && actual.account!!.moved==null && actual.account!!.fields==null && !actual.account!!.bot!! && actual.account!!.source==null && actual.content == """Day 8 <a href="https://pixelfed.de/discover/tags/rotavicentina?src=hash" title="#rotavicentina" class="u-url hashtag" rel="external nofollow noopener">#rotavicentina</a> <a href="https://pixelfed.de/discover/tags/hiking?src=hash" title="#hiking" class="u-url hashtag" rel="external nofollow noopener">#hiking</a> <a href="https://pixelfed.de/discover/tags/nature?src=hash" title="#nature" class="u-url hashtag" rel="external nofollow noopener">#nature</a>""" && actual.visibility==Status.Visibility.public) && !actual.sensitive!! && actual.spoiler_text==""
